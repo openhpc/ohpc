@@ -12,7 +12,7 @@
 #
 # CONTRIBUTORS
 #
-#   Karl W. Schulz <karl.w.schulz@intel.com>
+#   Karl W. Schulz <karl@utexas.edu>
 
 AC_DEFUN([OHPC_COMPILER_FAMILY],
 [
@@ -29,16 +29,19 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xgnu7"; then
    CXX=g++
    FC=gfortran
    AC_MSG_RESULT([gnu7])
+   AC_SUBST(OHPC_BLAS,[-L${OPENBLAS_LIB} -lopenblas])
 elif test "x$LMOD_FAMILY_COMPILER" = "xgnu8"; then
    CC=gcc
    CXX=g++
    FC=gfortran
    AC_MSG_RESULT([gnu8])
+   OHPC_BLAS="-L${OPENBLAS_LIB} -lopenblas"
 elif test "x$LMOD_FAMILY_COMPILER" = "xgnu9"; then
    CC=gcc
    CXX=g++
    FC=gfortran
    AC_MSG_RESULT([gnu9])
+   OHPC_BLAS="-L${OPENBLAS_LIB} -lopenblas"
 elif test "x$LMOD_FAMILY_COMPILER" = "xllvm9"; then
    CC=clang
    CXX=clang++
@@ -55,10 +58,19 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
    CXX=icpc
    FC=ifort
    AC_MSG_RESULT([intel])
+   OHPC_BLAS="-L${MKLROOT}/lib/intel64 -lmkl_rt"
+elif test "x$LMOD_FAMILY_COMPILER" = "xarm1"; then
+   CC=armclang
+   CXX=armclang++
+   FC=armflang
+   AC_MSG_RESULT([arm])
+   OHPC_BLAS="-larmpl_lp64"
 else
    AC_MSG_RESULT([unknown])
    echo
    AC_ERROR([Unknown compiler family - please load a compiler toolchain.])
 fi
+
+AC_SUBST(OHPC_BLAS)
 
 ])

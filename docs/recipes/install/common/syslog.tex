@@ -9,12 +9,13 @@ forward their logs to the SMS, and to allow the SMS to accept these log requests
 % ohpc_comment_header Configure rsyslog on SMS and computes \ref{sec:add_syslog}
 \begin{lstlisting}[language=bash,keywords={}]
 # Configure SMS to receive messages and reload rsyslog configuration
-[sms](*\#*) perl -pi -e "s/\\#\\\$ModLoad imudp/\\\$ModLoad imudp/" /etc/rsyslog.conf
-[sms](*\#*) perl -pi -e "s/\\#\\\$UDPServerRun 514/\\\$UDPServerRun 514/" /etc/rsyslog.conf
+[sms](*\#*) echo 'module(load="imudp")' >> /etc/rsyslog.d/ohpc.conf
+[sms](*\#*) echo 'input(type="imudp" port="514")' >> /etc/rsyslog.d/ohpc.conf
 [sms](*\#*) systemctl restart rsyslog
 
 # Define compute node forwarding destination
 [sms](*\#*) echo "*.* @${sms_ip}:514" >> $CHROOT/etc/rsyslog.conf
+[sms](*\#*) echo "Target=\"${sms_ip}\" Protocol=\"udp\"" >> $CHROOT/etc/rsyslog.conf
 
 # Disable most local logging on computes. Emergency and boot logs will remain on the compute nodes
 [sms](*\#*) perl -pi -e "s/^\*\.info/\\#\*\.info/" $CHROOT/etc/rsyslog.conf

@@ -25,10 +25,6 @@ example configuration.
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfs-server
 [sms](*\#*) systemctl enable nfs-server
-
-# Enable NTP time service on computes and identify master host as local NTP server
-[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
-[sms](*\#*) cp /etc/ntp.keys $CHROOT/etc/ntp.keys
 \end{lstlisting}
 % end_ohpc_run
 

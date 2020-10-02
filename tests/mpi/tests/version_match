@@ -27,6 +27,15 @@ family=${LMOD_FAMILY_MPI}
     module list $family >& .cmd_output || exit 1
     local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
 
+    # strip of ucx|ofi if present in module version string (e.g. for mpich variants)
+    if [[ $my_mod_version =~ "-ucx" ]];then
+	my_mod_version=`echo $my_mod_version | awk -F '-ucx' '{print $1}'`
+    fi
+
+    if [[ $my_mod_version =~ "-ofi" ]];then
+	my_mod_version=`echo $my_mod_version | awk -F '-ofi' '{print $1}'`
+    fi
+
     local mpi_version=""
 
     if [[ $family =~ "openmpi" ]];then

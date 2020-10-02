@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS8.1}
-\newcommand{\OSRepo}{CentOS\_8.1}
+\newcommand{\baseOS}{CentOS8.2}
+\newcommand{\OSRepo}{CentOS\_8.2}
 \newcommand{\OSTree}{CentOS\_8}
 \newcommand{\OSTag}{el8}
-\newcommand{\baseos}{centos8.1}
+\newcommand{\baseos}{centos8.2}
 \newcommand{\baseosshort}{centos8}
 \newcommand{\provisioner}{xCAT}
 \newcommand{\provheader}{xCAT (stateful)}
@@ -38,7 +38,7 @@
 \newcommand{\upgrade}{yum -y upgrade}
 \newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
-\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7\_1/dists/beegfs-rhel7.repo}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2/dists/beegfs-rhel8.repo}
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
@@ -222,7 +222,6 @@ issue the following
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Optionally add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
 [sms](*\#*) psh compute systemctl enable rdma
 [sms](*\#*) psh compute systemctl start rdma
 \end{lstlisting}

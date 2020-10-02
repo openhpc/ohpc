@@ -23,6 +23,7 @@ BuildArch: aarch64
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
 
+Requires: arm-compiler-for-linux >= 20.2.1
 Requires: lmod%{PROJ_DELIM}
 
 %description
@@ -33,65 +34,14 @@ Provides OpenHPC-style module compatibility for use with the Arm HPC compiler su
 
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/arm1
 
-
-%pre
-
-# Verify Arm HPC compilers are installed. Punt if not detected.
-
-arm_subpath="aarch64-linux/bin/armclang$"
-
-echo "Checking for local Arm HPC compiler installation(s)."
-
-versions_all=`rpm -qal | grep ${arm_subpath}`
-
-if [ $? -eq 1 ];then
-    echo ""
-    echo "Error: Unable to detect local Arm compiler installation. The toolchain"
-    echo "       providing ${arm_subpath} must be installed prior to this compatibility package"
-    echo " "
-    exit 1
-fi
-
-# Verify min version expectations
-
-min_ver="20.0.51"
-versions=""
-for file in ${versions_all}; do
-    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
-    echo "--> Version ${version} detected"
-    echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
-    if [ $? -ne 0 ];then
-        echo "Warning: skipping version ${version}"
-    else
-        versions="${versions} ${version}"
-    fi
-done
-if [ -z "${versions}" ]; then
-    echo ""
-    echo "Error: local Arm compiler compatibility support is for versions > ${min_ver}"
-    echo " "
-    exit 1
-fi
-
 %post
-
-arm_subpath="aarch64-linux/bin/armclang$"
-packages=`rpm -qal | grep ${arm_subpath}`
-
-if [ $? -eq 1 ];then
-    echo ""
-    echo "Error: Unable to detect local Arm compiler installation. The toolchain"
-    echo "       providing ${arm_subpath} must be installed prior to this compatibility package"
-    exit 1
-fi
 
 echo "Creating OpenHPC compatibility modulefile for local Arm compiler installation(s)."
 
 # Create a top-level arm/compat module which appends the lmod modulepath to see
 # modulefiles provided by Arm installation
 
-package=`echo ${packages} | awk '{print $1}'`
-modpath=`rpm -ql -f ${package} | grep modulefiles$`
+modpath=`rpm -ql arm-compiler-for-linux | grep modulefiles$`
 
 if [ ! -n "${modpath}" ];then
     echo ""
@@ -100,7 +50,6 @@ if [ ! -n "${modpath}" ];then
 fi
 
 # cache path to generic compiler modulename
-
 generic=`find $modpath/Generic-AArch64/ -name arm-linux-compiler | awk -F "$modpath/" '{print $2}'`
 if [ ! -n "${generic}" ];then
     echo ""
@@ -108,6 +57,16 @@ if [ ! -n "${generic}" ];then
     exit 1
 else
     echo "--> Setting generic variant path to: $generic"
+fi
+
+# cache path to generic armpl modulename
+armpl_generic=`find $modpath/Generic-AArch64/ -name armpl | grep arm-linux-compiler | awk -F "$modpath/" '{print $2}'`
+if [ ! -n "${generic}" ];then
+    echo ""
+    echo "Error: Unable to determine path to Generic Performance Library modulefile provided by Arm compiler toolchain"
+    exit 1
+else
+    echo "--> Setting ARM PL generic variant to: $armpl_generic"
 fi
 
 # Module header
@@ -134,6 +93,7 @@ setenv ARM_GENERIC \$ARM_GENERIC
 prepend-path    MODULEPATH          ${modpath}:%{OHPC_MODULEDEPS}/arm1
 # load generic variant
 depends-on      \$ARM_GENERIC
+depends-on      ${armpl_generic}
 family "compiler"
 EOF
 

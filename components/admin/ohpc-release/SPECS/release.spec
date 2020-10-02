@@ -81,13 +81,6 @@ name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
-
-[OpenHPC-Sources]
-name=OpenHPC-%{ohpc_version} - Sources
-baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/sources/%{_repository}
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
-enabled=0
 EOF
 
 # repository GPG key

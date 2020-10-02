@@ -13,12 +13,13 @@ sub usage {
     print "     -h --help                      generate help message and exit\n";
     print "        --version  [version]        desired version to analyze\n";
     print "        --category [name]           update provided category table only\n";
+    print "        --package  [plist]          add hard-coded package (category|name|url) format\n";
     print "\n";
     
     exit(0);
 }
 
-my @ohpcCategories       = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
+my @ohpcCategories       = ("admin","compiler-families","dev-tools","io-libs","lustre","mpi-families",
 			    "parallel-libs","perf-tools","provisioning","rms", "runtimes","serial-libs");
 my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			    'compiler-families' => 'Compiler Families',
@@ -26,7 +27,7 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			    'distro-packages' => 'Updates of Distro-provided packages',
 			    'io-libs' => 'IO Libraries',
 			    'lustre' => 'Lustre packages',
-			    'mpi-families' => 'MPI Runtime Families',
+			    'mpi-families' => 'MPI Runtime/Transport Families',
 			    'parallel-libs' => 'Parallel Libraries',
 			    'perf-tools' => 'Performance Tools',
 			    'provisioning' => 'Provisioning Tools',
@@ -35,12 +36,13 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			    'serial-libs' => 'Serial / Threaded Libraries');
 			
 			 
-my @compiler_familes = ("gnu","gnu7","intel","gnu8");
-my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
+my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9","arm1");
+my @mpi_families     = ("mvapich2","openmpi","openmpi3","openmpi4","impi","mpich");
 
 my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
-                    "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
-                     "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py");
+                    "openpbs-client","openpbs-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
+		     "warewulf-common-ohpc-localdb","lmod-defaults-gnu9-mpich-ofi","lmod-defaults-gnu9-mpich-ucx",
+                     "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py","python3-Cython");
 
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "gnu8-compilers" => "Gnu Compiler Suite",
@@ -48,7 +50,7 @@ my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "llvm4-compilers" => "LLVM Compiler Suite",
 		     "llvm5-compilers" => "LLVM Compiler Suite",
                      "intel-mpi-devel" => "Intel MPI Compatibility Package",
-                     "pbspro-server" => "PBSPro",
+                     "openpbs-server" => "OpenPBS",
 		     "openmpi3" => "openmpi",
 		     "openmpi3-pmix-slurm" => "openmpi",
                      "warewulf-common" => "warewulf",
@@ -59,10 +61,12 @@ my @package_uniq_delim = ("slurm");
 my $help;
 my $category_single;
 my $version;
+my $addlpackages;
 my $i;
 
 GetOptions("h"          => \$help,
 	   "version=s"  => \$version,
+	   "package=s"  => \$addlpackages,
            "category=s" => \$category_single ) || usage();
 
 if($help) {usage()};
@@ -74,14 +78,24 @@ if($category_single) {
 if($version) {
     print "--> using version=$version for analysis\n";
 } else {
-    die("Please specify desired version to analyzie with --version");
+    die("Please specify desired version to analyze with --version");
+}
+
+
+my @addons=();
+
+if($addlpackages) {
+    print "--> Included hard-coded components: $addlpackages\n";
+    @addons=split(',',$addlpackages);
 }
 
 # version-specific packages to skip (ie. when new variants introduced)
 
 if( versioncmp($version,"1.3.1") >= 0 ) {
-    push(@package_skip,"gnu-compilers")
+    push(@package_skip,"gnu-compilers");
 }
+
+
 
 my $REMOVE_HTTP=0;
 my $component_cnt=0;
@@ -191,6 +205,19 @@ foreach my $category (@ohpcCategories) {
     }
 
     close(IN);
+
+    # include any hard-coded additions
+    if ($addlpackages) {
+	foreach my $addon (@addons) {
+	    my @entry = split('\|',$addon);
+	    if ( $entry[0] eq $category ) {
+		push(@nameData,$entry[1]);
+		push(@versionData,'unknown');
+		push(@urlData,$entry[2]);
+	    }
+	}
+    }
+
 
     $i = 0;
     foreach my $name (@nameData) {

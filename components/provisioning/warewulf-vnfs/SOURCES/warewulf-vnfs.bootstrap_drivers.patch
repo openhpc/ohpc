@@ -1,6 +1,6 @@
 --- vnfs/etc/bootstrap.conf	2020-05-03 11:16:45.000000000 -0500
 +++ vnfs/etc/bootstrap.conf	2020-05-03 11:20:43.000000000 -0500
-@@ -33,10 +33,11 @@
+@@ -33,10 +33,12 @@
  modprobe += xhci-hcd, sl811-hcd, sd_mod
  # modprobe += ib_ipoib
  
@@ -13,3 +13,4 @@
  drivers += nfs_acl, nfsv3, nfsv4, coretemp
  drivers += msr
 +drivers += overlay, squashfs
++drivers += kernel/drivers/infiniband/

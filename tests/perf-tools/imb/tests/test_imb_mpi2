@@ -11,8 +11,7 @@ else
 fi
 
 CMD_TIMEOUT="10:00"
-TEST_NUM_RANKS=8
-TEST_NUM_THREADS=4
+TEST_NUM_RANKS=2
 
 check_rms
 rm=$RESOURCE_MANAGER
@@ -21,7 +20,6 @@ NODES=2
 TASKS=$((NODES*TEST_NUM_RANKS))
 
 # set global env settings
-export OMP_NUM_THREADS=$TEST_NUM_THREADS
 if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
     export MV2_ENABLE_AFFINITY=0
     export IPATH_NO_CPUAFFINITY=1
@@ -29,7 +27,12 @@ fi
 
 @test "[Libs/IMB] run IMB-EXT on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=$IMB_DIR/bin/IMB-EXT
-    ARGS="Bidir_Get Bidir_Put"
+    ARGS="-npmin 100 -msglog 1:4 Window"
+
+    if [[ "$LMOD_FAMILY_MPI" =~ "openmpi" ]];then
+        export OMPI_MCA_osc="^ucx"
+        export OMPI_MCA_pml="^ucx"
+    fi
 
     if [ ! -x $EXE ];then
         flunk "missing $EXE"
@@ -41,7 +44,7 @@ fi
 
 @test "[Libs/IMB] run IMB-IO on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=$IMB_DIR/bin/IMB-IO
-    ARGS="Open_Close"
+    ARGS="-npmin 100 Open_Close"
 
     if [ ! -x $EXE ];then
         flunk "missing $EXE"

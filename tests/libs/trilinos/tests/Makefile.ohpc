@@ -18,7 +18,7 @@ all: lesson_kokkos_memspace.exe lesson_tpetra_init.exe lesson_tpetra_dataredist.
      lesson_teuchos_pl.exe lesson_teuchos_sdm.exe lesson_teuchos_blas.exe lesson_teuchos_lapack.exe
 
 %.exe : %.o
-	$(CXX) $(CXX_FLAGS) $< -o $@ $(LINK_FLAGS) $(LIBRARY_DIRS) $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) $< -o $@ $(LINK_FLAGS) $(LIBRARY_DIRS) $(LIBRARIES) -L$(TRILINOS_LIB)
 
 %.o : %.cpp
 	$(CXX) -c -o $@ $(CXX_FLAGS) $(INCLUDE_DIRS) $<

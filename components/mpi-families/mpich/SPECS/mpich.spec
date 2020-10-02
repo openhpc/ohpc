@@ -8,10 +8,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# MPICH MPI stack that is dependent on compiler toolchain
+# MPICH MPI stack that is dependent on compiler toolchain 
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
+%{!?FABRIC_DELIM: %global FABRIC_DELIM %{nil}}
 
 %define with_slurm 0
 %{!?with_slurm: %define with_slurm 0}
@@ -25,17 +26,30 @@ BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
 %endif
 
-%{!?with_ucx: %define with_ucx 1}
+%{!?with_ucx: %define with_ucx 0}
 %if 0%{with_ucx}
 BuildRequires: ucx%{PROJ_DELIM}
 Requires: ucx%{PROJ_DELIM}
+Requires: ucx-ib%{PROJ_DELIM}
+%define FABRIC_DELIM -ucx
+%endif
+
+%{!?with_ofi: %define with_ofi 1}
+%if 0%{with_ofi}
+BuildRequires: libfabric%{PROJ_DELIM}
+BuildRequires: rdma-core-devel
+%ifarch x86_64
+BuildRequires: libpsm2-devel
+%endif
+Requires: libfabric%{PROJ_DELIM}
+%define FABRIC_DELIM -ofi
 %endif
 
 # Base package name
 %define pname mpich
 
 Summary:   MPICH MPI implementation
-Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
+Name:      %{pname}%{RMS_DELIM}%{FABRIC_DELIM}-%{compiler_family}%{PROJ_DELIM}
 Version:   3.3.2
 Release:   1%{?dist}
 License:   BSD
@@ -57,6 +71,9 @@ BuildRequires: numactl-devel
 %endif
 
 %if "%{RMS_DELIM}" != "%{nil}"
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if "%{FABRIC_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
@@ -88,8 +105,12 @@ export CPATH=${PMIX_INC}
 %if 0%{with_ucx}
 module load ucx
 %endif
+%if 0%{with_ofi}
+module load libfabric
+%endif
 
 ./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
@@ -99,6 +120,9 @@ module load ucx
 %if 0%{with_ucx}
             --with-device=ch4:ucx --with-ucx=$UCX_DIR \
 %endif
+%if 0%{with_ofi}
+            --with-device=ch4:ofi --with-libfabric=$LIBFABRIC_DIR \
+%endif
     || { cat config.log && exit 1; }
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
@@ -106,7 +130,7 @@ module load ucx
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
 
-make %{?_smp_mflags}
+make V=1 %{?_smp_mflags}
 
 %install
 # OpenHPC compiler designation
@@ -119,7 +143,7 @@ rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}%{FABRIC_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -150,15 +174,18 @@ prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 %if 0%{with_ucx}
 depends-on ucx
 %endif
+%if 0%{with_ofi}
+depends-on libfabric
+%endif
 family "MPI"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version%{FABRIC_DELIM}.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{FABRIC_DELIM}"
 EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}

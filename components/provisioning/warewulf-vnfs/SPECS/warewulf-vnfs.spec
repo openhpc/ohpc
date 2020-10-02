@@ -23,6 +23,7 @@ Summary: Warewulf - Virtual Node File System support
 License: US Dept. of Energy (BSD-like)
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
+Source1: opensuse-15.2.tmpl
 Patch0:  warewulf-vnfs.aarch64.bootstrap.patch
 Patch1:  warewulf-vnfs.aarch64.bootstrap_usb.patch
 Patch2:  warewulf-vnfs.bootstrap_msr.patch
@@ -38,6 +39,7 @@ Patch11: warewulf-vnfs.wwbootstrap.vmlinuz.patch
 Patch12: warewulf-vnfs.bootstrap_qlogic.patch
 Patch13: warewulf-vnfs.leap.patch
 Patch14: warewulf-vnfs.bootstrap_drivers.patch
+Patch15: warewulf-vnfs.hybridize.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -85,6 +87,7 @@ cd %{_builddir}
 %patch12 -p1
 %patch13 -p2
 %patch14 -p1
+%patch15 -p1
 
 %build
 ./autogen.sh
@@ -94,6 +97,7 @@ cd %{_builddir}
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+install -D -m 0644 %SOURCE1 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/opensuse-15.2.tmpl
 
 
 %files

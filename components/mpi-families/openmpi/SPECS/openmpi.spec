@@ -15,7 +15,7 @@
 
 # Base package name/config
 %define pname openmpi4
-%define with_openib 1
+%define with_openib 0
 
 %ifarch aarch64 || ppc64le
 %define with_psm 0
@@ -24,21 +24,23 @@
 %if 0%{?rhel}
 %define with_psm 0
 %else
-%define with_psm 1
+%define with_psm 0
 %endif
-%define with_psm2 1
+%define with_psm2 0
 %endif
 
 %{!?with_lustre: %define with_lustre 0}
 %{!?with_slurm: %define with_slurm 0}
 %{!?with_tm: %global with_tm 1}
 %{!?with_pmix: %define with_pmix 0}
+%{!?with_ofi: %define with_ofi 1}
+%{!?with_ucx: %define with_ucx 1}
 
 Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   4.0.2
+Version:   4.0.4
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
@@ -62,6 +64,17 @@ BuildRequires:  numactl
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires:  libevent-devel
+%endif
+%if 0%{with_ofi}
+BuildRequires:  libfabric%{PROJ_DELIM}
+%ifarch x86_64
+BuildRequires:  libpsm2-devel
+%endif
+%endif
+%if 0%{with_ucx}
+BuildRequires:  ucx%{PROJ_DELIM}
+Requires: ucx%{PROJ_DELIM}
+Requires: ucx-ib%{PROJ_DELIM}
 %endif
 BuildRequires:  hwloc-devel
 %if 0%{?rhel}
@@ -93,7 +106,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
 %if %{with_tm}
-BuildRequires:  pbspro-server%{PROJ_DELIM}
+BuildRequires:  openpbs-server%{PROJ_DELIM} openpbs-devel%{PROJ_DELIM}
 BuildRequires:  openssl-devel
 %endif
 
@@ -142,6 +155,16 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
 module load pmix
 BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
 BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
+%endif
+
+%if 0%{with_ofi}
+module load libfabric
+BASEFLAGS="$BASEFLAGS --with-libfabric=${LIBFABRIC_DIR}"
+%endif
+
+%if 0%{with_ucx}
+module load ucx
+BASEFLAGS="$BASEFLAGS --with-ucx=${UCX_DIR} --without-verbs"
 %endif
 
 %if %{with_psm}
@@ -215,6 +238,12 @@ prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
+%if 0%{with_ucx}
+depends-on ucx
+%endif
+%if 0%{with_ofi}
+depends-on libfabric
+%endif
 family "MPI"
 EOF
 

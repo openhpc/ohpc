@@ -51,6 +51,9 @@ unset OMP_NUM_THREADS
 }
 
 @test "[libs/TAU] Hybrid OpenMP/MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ "$LMOD_FAMILY_COMPILER" == "intel" ];then
+	skip "intel"
+    fi
     if [ "x$ARCH" == "xx86_64" ];then
 	export TAU_METRICS=PAPI_L1_DCM
     fi

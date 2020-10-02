@@ -1,0 +1,32 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+@test "[ntp] check for chronyc binary" {
+    run which chronyc
+    assert_success
+}
+
+@test "[ntp] verify local time in sync on SMS" {
+    run chronyc tracking
+    assert_success
+
+    run ./check_time.sh
+    assert_success
+}
+
+@test "[ntp] verify local time in sync on compute" {
+
+    run_serial_binary ./check_time.sh
+    assert_success
+}
+

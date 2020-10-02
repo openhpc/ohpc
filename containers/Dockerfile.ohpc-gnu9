@@ -1,0 +1,23 @@
+FROM registry.centos.org/centos/centos:8
+
+MAINTAINER The OpenHPC Project
+
+# This is based on https://gist.github.com/chuckatkins/994c8d88fb88f15433b08539162e8ac6
+# Put these in the OpenHPC base image:
+#   z01_lmod_load_default.sh - Load the default modules in the profile
+#   bash-login-wrapper.sh    - Here's where the magic happens; Use as the entrypoint to wrap
+#                              all commands in a login shell
+COPY z01_lmod_load_default.sh /etc/profile.d/
+COPY bash-login-wrapper.sh /usr/bin/
+
+RUN yum -y install http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm
+
+RUN yum install -y 'dnf-command(config-manager)' && \
+    yum config-manager --set-enabled PowerTools && \
+    yum upgrade -y && \
+    yum -y install gnu9-compilers-ohpc lmod-ohpc && \
+    yum clean all
+
+RUN echo 'export LMOD_SYSTEM_DEFAULT_MODULES="gnu9"' > /etc/profile.d/a01_lmod_set_default.sh
+
+ENTRYPOINT ["/usr/bin/bash-login-wrapper.sh"]

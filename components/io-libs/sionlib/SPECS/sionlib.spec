@@ -56,7 +56,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %if %{compiler_family} == intel
 CONFIGURE_OPTIONS="--compiler=intel --disable-parutils "
 %endif
-%if %{compiler_family} == arm
+%if %{compiler_family} == arm1
 CONFIGURE_OPTIONS="--compiler=arm "
 %endif
 %if %{compiler_family} == llvm

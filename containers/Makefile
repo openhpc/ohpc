@@ -1,13 +1,13 @@
-COMPILER := gnu8
-MPIS := openmpi3 mpich mvapich2
+COMPILER := gnu9
+MPIS := openmpi4 mpich mvapich2
 CONTAINERS := $(COMPILER) $(addprefix $(COMPILER)-,$(MPIS))
 CONTAINER_RUNTIME := podman
 CONTAINERS_PUSH := $(addsuffix -push,$(CONTAINERS))
 COMPILER_CHECK := $(addsuffix -check,$(COMPILER))
 MPIS_CHECK := $(addsuffix -check,$(addprefix $(COMPILER)-,$(MPIS)))
 
-DEST ?= quay.io/adrianreber/
-VERSION ?= 1.3.9
+DEST ?= quay.io/ohpc/
+VERSION ?= 2.0.0
 
 .PHONY: all $(CONTAINERS) push $(CONTAINERS_PUSH) $(COMPILER_CHECK) $(MPIS_CHECK) clean
 

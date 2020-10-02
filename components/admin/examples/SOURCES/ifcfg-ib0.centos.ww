@@ -1,7 +1,12 @@
+NAME=ib0
+TYPE=Infiniband
 DEVICE=ib0
 BOOTPROTO=static
 IPADDR=%{NETDEVS::IB0::IPADDR}
 NETMASK=%{NETDEVS::IB0::NETMASK}
 ONBOOT=yes
-NM_CONTROLLED=no
+NM_CONTROLLED=yes
 DEVTIMEOUT=5
+MTU=%{NETDEVS::IB0::MTU}
+# Uncomment the next line to enable MTU settings on Intel(R) Omni-Path HFIs
+#CONNECTED_MODE=yes
