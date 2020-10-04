@@ -31,6 +31,7 @@ BuildRequires: libevent-devel
 
 %{!?with_ucx: %define with_ucx 0}
 %if 0%{with_ucx}
+%define with_ofi 0
 BuildRequires: ucx%{PROJ_DELIM}
 Requires: ucx%{PROJ_DELIM}
 Requires: ucx-ib%{PROJ_DELIM}
