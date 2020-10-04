@@ -1,11 +1,11 @@
-dimemas-gnu9-impi-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-gnu9-mpich-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-gnu9-mvapich2-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-gnu9-openmpi4-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-impi-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-mpich-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-mvapich2-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-openmpi4-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu9-impi-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu9-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu9-mvapich2-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu9-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-impi-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-mvapich2-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 extrae-gnu9-impi-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu9-mpich-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu9-mvapich2-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
@@ -18,6 +18,10 @@ geopm-gnu9-impi-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extens
 geopm-gnu9-mpich-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
 geopm-gnu9-mvapich2-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
 geopm-gnu9-openmpi4-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-impi-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-mpich-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-mvapich2-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-openmpi4-ohpc 1.1.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
 imb-gnu9-impi-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu9-mpich-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu9-mvapich2-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)

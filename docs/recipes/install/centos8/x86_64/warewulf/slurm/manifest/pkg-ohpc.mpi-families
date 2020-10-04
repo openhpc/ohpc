@@ -8,6 +8,6 @@ mvapich2-gnu9-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU
 mvapich2-intel-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-gnu9-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-intel-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
-openmpi4-gnu9-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
-openmpi4-intel-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-gnu9-ohpc 4.0.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-intel-ohpc 4.0.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 ucx-ohpc 1.8.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging
