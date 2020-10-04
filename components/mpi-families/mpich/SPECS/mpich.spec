@@ -26,16 +26,17 @@ BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
 %endif
 
+# note: a libfabric based build is the default, but can be overriden by
+# specifying with_ucx=1
+
 %{!?with_ucx: %define with_ucx 0}
 %if 0%{with_ucx}
 BuildRequires: ucx%{PROJ_DELIM}
 Requires: ucx%{PROJ_DELIM}
 Requires: ucx-ib%{PROJ_DELIM}
 %define FABRIC_DELIM -ucx
-%endif
-
-%{!?with_ofi: %define with_ofi 1}
-%if 0%{with_ofi}
+%else
+%define with_ofi 1
 BuildRequires: libfabric%{PROJ_DELIM}
 BuildRequires: rdma-core-devel
 %ifarch x86_64
