@@ -283,7 +283,7 @@ slurm-slurmctld-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Slurm controlle
 slurm-slurmd-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
 slurm-slurmdbd-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
 slurm-torque-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
-spack-ohpc 0.13.4 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
+spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 superlu-gnu9-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-intel-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu9-impi-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations

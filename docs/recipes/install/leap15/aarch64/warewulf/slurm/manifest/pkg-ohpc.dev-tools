@@ -9,5 +9,5 @@ python3-scipy-gnu9-openmpi4-ohpc 1.5.1 http://www.scipy.org ohpc/dev-tools Scien
 python3-numpy-gnu9-ohpc 1.19.0 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python3-mpi4py-gnu9-mpich-ohpc 3.0.3 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-gnu9-openmpi4-ohpc 3.0.3 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
-spack-ohpc 0.13.4 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
+spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 valgrind-ohpc 3.15.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger
