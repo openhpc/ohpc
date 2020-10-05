@@ -85,7 +85,7 @@ if [[ "${arch}" == "aarch64" ]];then
     skip="mvapich2|impi-ohpc|lmod-defaults-intel"
 fi
 
-repobase="http://repos.openhpc.community/OpenHPC/${major_ver}/${baseos}"
+repobase="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/${baseos}"
 if [[ $micro_ver -gt 0 ]];then
     repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}/${baseos}"
 fi
