@@ -64,8 +64,6 @@ grep -rl '#!/bin/env ' . | xargs -i@ sed -i 's|#!/bin/env|#!/usr/bin/env|g' @
 mkdir -p %{buildroot}%{install_path}
 rsync -av --exclude=.gitignore {etc,bin,lib,var,share} %{buildroot}%{install_path}
 
-sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/lib/spack/external/pyqver2.py
-
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack
 %{__cat} << EOF > %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack/%{version}
