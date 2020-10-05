@@ -3,6 +3,6 @@ mpich-ofi-arm1-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI imple
 mpich-ofi-gnu9-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ucx-arm1-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ucx-gnu9-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-openmpi4-arm1-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
-openmpi4-gnu9-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-arm1-ohpc 4.0.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-gnu9-ohpc 4.0.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 ucx-ohpc 1.8.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging

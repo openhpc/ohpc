@@ -1,5 +1,5 @@
-dimemas-gnu9-mpich-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-gnu9-openmpi4-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu9-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu9-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 extrae-gnu9-mpich-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu9-openmpi4-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
 imb-gnu9-mpich-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
