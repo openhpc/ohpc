@@ -20,7 +20,6 @@ ohpc-gnu9-python-libs Collection of python related library builds for use with G
 ohpc-gnu9-python3-libs Collection of python3 related library builds for use with GNU compiler toolchain
 ohpc-gnu9-runtimes Collection of runtimes for use with GNU compiler toolchain
 ohpc-gnu9-serial-libs Collection of serial library builds for use with GNU compiler toolchain
-ohpc-nagios Collection of Nagios monitoring and metrics packages
 ohpc-slurm-client Collection of client packages for SLURM
 ohpc-slurm-server Collection of server packages for SLURM
 ohpc-warewulf Collection of base packages for Warewulf provisioning

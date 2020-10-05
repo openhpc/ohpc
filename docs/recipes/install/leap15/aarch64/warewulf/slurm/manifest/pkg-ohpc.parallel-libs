@@ -1,7 +1,7 @@
-boost-arm1-mpich-ohpc 1.71.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-arm1-openmpi4-ohpc 1.71.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu9-mpich-ohpc 1.71.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu9-openmpi4-ohpc 1.71.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-arm1-mpich-ohpc 1.73.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-arm1-openmpi4-ohpc 1.73.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu9-mpich-ohpc 1.73.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu9-openmpi4-ohpc 1.73.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 fftw-arm1-mpich-ohpc 3.3.8 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-arm1-openmpi4-ohpc 3.3.8 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu9-mpich-ohpc 3.3.8 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
@@ -10,8 +10,8 @@ hypre-arm1-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs 
 hypre-arm1-openmpi4-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu9-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu9-openmpi4-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
-mfem-gnu9-mpich-ohpc 4.0 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-gnu9-openmpi4-ohpc 4.0 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu9-mpich-ohpc 4.1 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu9-openmpi4-ohpc 4.1 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mumps-arm1-mpich-ohpc 5.2.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-arm1-openmpi4-ohpc 5.2.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu9-mpich-ohpc 5.2.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
@@ -34,5 +34,5 @@ superlu_dist-arm1-mpich-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ oh
 superlu_dist-arm1-openmpi4-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu9-mpich-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu9-openmpi4-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-trilinos-gnu9-mpich-ohpc 12.18.1 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-openmpi4-ohpc 12.18.1 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-mpich-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-openmpi4-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
