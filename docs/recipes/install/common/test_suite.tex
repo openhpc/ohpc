@@ -50,14 +50,15 @@ checking whether build environment is sane... yes
 ...
 ---------------------------------------------- SUMMARY ---------------------------------------------
 
-Package version............... : test-suite-1.3.0
+Package version............... : test-suite-2.0.0
 
 Build user.................... : ohpc-test
 Build host.................... : sms001
-Configure date................ : 2017-03-24 15:41
+Configure date................ : 2020-10-05 08:22
 Build architecture............ : ARCH
-Compiler Families............. : gnu
-MPI Families.................. : mpich mvapich2 openmpi
+Compiler Families............. : gnu9
+MPI Families.................. : mpich mvapich2 openmpi4
+Python Families............... : python3
 Resource manager ............. : RMS
 Test suite configuration...... : short
 ...
@@ -86,7 +87,7 @@ execution of the FFTW related tests that were enabled in the previous step.
 make --no-print-directory check-TESTS
 PASS: libs/fftw/ohpc-tests/test_mpi_families
 ============================================================================
-Testsuite summary for test-suite 1.3.0
+Testsuite summary for test-suite 2.0.0
 ============================================================================
 # TOTAL: 1
 # PASS:  1
@@ -96,20 +97,20 @@ Testsuite summary for test-suite 1.3.0
 # XPASS: 0
 # ERROR: 0
 ============================================================================
-[test@sms ~]$ cat libs/fftw/tests/family-gnu-*/rm_execution.log 
+[test@sms ~]$ cat libs/fftw/tests/family-gnu*/rm_execution.log 
 1..3
-ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/mpich)
-ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/mpich)
-ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/mpich)
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu9/mpich)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu9/mpich)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu9/mpich)
 PASS rm_execution (exit status: 0)
 1..3
-ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/mvapich2)
-ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/mvapich2)
-ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/mvapich2)
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu9/mvapich2)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu9/mvapich2)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu9/mvapich2)
 PASS rm_execution (exit status: 0)
 1..3
-ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/openmpi)
-ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/openmpi)
-ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/openmpi)
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu9/openmpi4)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu9/openmpi4)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu9/openmpi4)
 PASS rm_execution (exit status: 0)
 \end{lstlisting}
