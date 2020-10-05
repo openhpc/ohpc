@@ -17,5 +17,5 @@ python3-mpi4py-intel-impi-ohpc 3.0.3 https://bitbucket.org/mpi4py/mpi4py ohpc/de
 python3-mpi4py-intel-mpich-ohpc 3.0.3 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-intel-mvapich2-ohpc 3.0.3 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-intel-openmpi4-ohpc 3.0.3 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
-spack-ohpc 0.13.4 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
+spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 valgrind-ohpc 3.15.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger
