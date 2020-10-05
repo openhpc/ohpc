@@ -156,6 +156,7 @@
 \end{lstlisting}
 % end_ohpc_run
 
+\vspace*{0.6cm}
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 \input{common/warewulf_chroot_customize_sles}
 
@@ -189,10 +190,10 @@
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
+\vspace*{0.5cm}
 \paragraph{Add \beegfs{}} \label{sec:add_beegfs}
 \input{common/install_beegfs_client_sles}
 
-%\vspace*{1.1cm}
 %\clearpage
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
@@ -248,7 +249,7 @@
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
 
-%\clearpage
+
 \section{Install \OHPC{} Development Components}
 \input{common/dev_intro.tex}
 
@@ -261,6 +262,7 @@
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{common/mpi}
 
+\clearpage
 \subsection{Performance Tools} \label{sec:install_perf_tools}
 \input{common/perf_tools_with_geopm}
 \input{common/perf_tools_sles}
