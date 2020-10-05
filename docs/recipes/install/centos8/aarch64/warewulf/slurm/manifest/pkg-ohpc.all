@@ -138,7 +138,7 @@ slurm-slurmctld-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Slurm controlle
 slurm-slurmd-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
 slurm-slurmdbd-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
 slurm-torque-ohpc 20.02.5 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
-spack-ohpc 0.13.4 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
+spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 superlu-arm1-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-gnu9-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu_dist-arm1-mpich-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
@@ -160,13 +160,13 @@ warewulf-common-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Scalable s
 warewulf-common-ohpc-localdb 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Install local database server
 warewulf-ipmi-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - IPMI support
 warewulf-ipmi-ohpc-initramfs-aarch64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Add IPMI to aarch64 initramfs
-warewulf-ipmi-ohpc-initramfs-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Add IPMI to x86\_64 initramfs
+warewulf-ipmi-ohpc-initramfs-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Add IPMI to x86_64 initramfs
 warewulf-provision-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - System provisioning core
 warewulf-provision-ohpc-gpl_sources 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - GPL sources used in Warewulf provisioning
 warewulf-provision-ohpc-initramfs-aarch64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for aarch64
-warewulf-provision-ohpc-initramfs-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for x86\_64
+warewulf-provision-ohpc-initramfs-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for x86_64
 warewulf-provision-ohpc-server 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - System provisioning server
 warewulf-provision-ohpc-server-ipxe-aarch64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - iPXE Bootloader for aarch64
-warewulf-provision-ohpc-server-ipxe-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - iPXE Bootloader for x86\_64
+warewulf-provision-ohpc-server-ipxe-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - iPXE Bootloader for x86_64
 warewulf-vnfs-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Virtual Node File System support
 ohpc-release 2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC release files
