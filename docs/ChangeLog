@@ -25,10 +25,9 @@ Version 2.0 (06 October 2020)
       the aarch64 recipes for details on available builds.
   * 2.x package repositories are now hosted on a new site: http://repos.openhpc.community
 
-[General]
+[General Updates]
 
   * updates to support CentOS8.2 and Leap 15.2
-
   * re-enabled optional BeeGFS client installation in installation recipes
   * update IPoIB example for use with CentOS8 (https://github.com/openhpc/ohpc/pull/1187)
   * update rsyslog configuration (https://github.com/openhpc/ohpc/pull/1229)
