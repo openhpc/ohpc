@@ -17,6 +17,8 @@ Version 2.0 (06 October 2020)
   * MPICH builds now use the newer ch4 interface
   * 2.x introduces the use of two related transport layers for MPICH and OpenMPI family builds that support a variety of
     underlying fabrics: UCX (Unified Communication X) and OFI (OpenFabrics interfaces)
+  * PBS-related name change: relevant packages and associated recipes have been updated to use OpenPBS (instead of PBS
+    Professional) to reflect upstream change (https://www.openpbs.org)
   * 2.x also introduces initial 3rd party builds against the Arm Linux compiler for aarch64
      o A compiler compatibility package (`arm1-compilers-devel-ohpc`) is provided to enable the `arm1` compiler variant. 
      o Initially, only a subset of development packages are available for use with the `arm1` variant. See Appendix E in
@@ -26,7 +28,7 @@ Version 2.0 (06 October 2020)
 [General]
 
   * updates to support CentOS8.2 and Leap 15.2
-  * switch to using source from OpenPBS (instead of PBS Professional) for PBS-related builds
+
   * re-enabled optional BeeGFS client installation in installation recipes
   * update IPoIB example for use with CentOS8 (https://github.com/openhpc/ohpc/pull/1187)
   * update rsyslog configuration (https://github.com/openhpc/ohpc/pull/1229)
