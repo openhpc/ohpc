@@ -75,6 +75,7 @@
 
 % Base Operating System --------------------------------------------
 
+\vspace*{0.2cm}
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
@@ -119,6 +120,7 @@ distributions. To enable for local use, issue the following:
 \subsection{Define {\em compute} image for provisioning}
 \input{common/xcat_init_os_images_centos}
 
+\clearpage
 \subsection{Add compute nodes into \xCAT{} database} \label{sec:xcat_add_nodes}
 \input{common/add_xcat_hosts_intro}
 
@@ -272,7 +274,6 @@ issue the following
 \paragraph{Add \genders{}}
 \input{common/genders}
 
-\clearpage
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
@@ -316,10 +317,10 @@ issue the following
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_x86}
 
+\vspace*{.6cm}
 \subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
 \input{common/psxe_enabled_builds}
 
-\vspace*{0.2cm}
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup_stateful}
 
