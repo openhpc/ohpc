@@ -1,4 +1,4 @@
-Here we configure NTP for compute resources and set up \NFS{}  mounting of a
+Here we set up \NFS{}  mounting of a
 \$HOME file system and the public \OHPC{} install path (\texttt{/opt/ohpc/pub})
 that will be hosted by the {\em master} host in this  example configuration.
 
@@ -24,12 +24,6 @@ that will be hosted by the {\em master} host in this  example configuration.
 [sms](*\#*) psh compute mount /home
 [sms](*\#*) psh compute mkdir -p /opt/ohpc/pub
 [sms](*\#*) psh compute mount /opt/ohpc/pub
-
-
-# Enable NTP time service on computes and identify master host as local NTP server
-[sms](*\#*) psh compute echo "\""server ${sms_ip}"\"" \>\> /etc/ntp.conf
-[sms](*\#*) psh compute systemctl enable ntpd
-[sms](*\#*) psh compute systemctl start ntpd
 
 \end{lstlisting}
 % end_ohpc_run
