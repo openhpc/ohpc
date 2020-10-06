@@ -1,5 +1,128 @@
 # -*- mode: sh; fill-column: 120; -*-
 
+Version 2.0 (06 October 2020)
+
+* This 2.0 release supersedes the previous 2.0RC1 version. Users who are using 2.0RC1 can upgrade their local packages
+  to the final release.
+
+[Important Highlights/Notices for 2.x series]
+
+  * the 2.x series targets support for two new major OS distro versions: CentOS8 and OpenSUSE Leap 15.
+     o As the OpenHPC 2.x series targets major new distro versions, please note that the 2.x series 
+       is **not** backwards compatible with the OpenHPC 1.3.x series.
+     o OpenHPC 2.x is intended for fresh installs with the newer distro versions (or containers based 
+       on these distro versions).
+     o Note that 2.x builds for SUSE based systems are now performed against Leap instead of SLES.  Leap 15 is
+       intended to be compatible with SLES 15.
+  * MPICH builds now use the newer ch4 interface
+  * 2.x introduces the use of two related transport layers for MPICH and OpenMPI family builds that support a variety of
+    underlying fabrics: UCX (Unified Communication X) and OFI (OpenFabrics interfaces)
+  * 2.x also introduces initial 3rd party builds against the Arm Linux compiler for aarch64
+     o A compiler compatibility package (`arm1-compilers-devel-ohpc`) is provided to enable the `arm1` compiler variant. 
+     o Initially, only a subset of development packages are available for use with the `arm1` variant. See Appendix E in
+      the aarch64 recipes for details on available builds.
+  * 2.x package repositories are now hosted on a new site: http://repos.openhpc.community
+
+[General]
+
+  * updates to support CentOS8.2 and Leap 15.2
+  * switch to using source from OpenPBS (instead of PBS Professional) for PBS-related builds
+  * re-enabled optional BeeGFS client installation in installation recipes
+  * update IPoIB example for use with CentOS8 (https://github.com/openhpc/ohpc/pull/1187)
+  * update rsyslog configuration (https://github.com/openhpc/ohpc/pull/1229)
+  * lmod-ohpc now conflicts the lmod version available in EPEL to avoid confusion
+    (https://github.com/openhpc/ohpc/issues/1251)
+  * update chronyc configuration (https://github.com/openhpc/ohpc/issues/1265)
+  * removed duplicate addition of overlay drivers for Warewulf recipes (https://github.com/openhpc/ohpc/issues/1267)
+  * enabled lustre-client for Centos8 (note that Lustre is not yet available for Leap 15)
+  * resolved several additional builds missing from 2.0RC1
+  * enable additional installation recipes (xCAT and OpenPBS on CentOS8)
+  * introduce 3rd party builds against the Arm Linux compiler for aarch64 (arm1 compiler variant); please note that only
+    a subset of packages are available for this variant - we hope to add more during subsequent releases
+  * variety of component version updates and other additions highlighted below:
+
+[Component Additions]
+
+  * boost-intel-impi-ohpc                    (1.73.0)
+  * boost-intel-mpich-ohpc                   (1.73.0)
+  * boost-intel-mvapich2-ohpc                (1.73.0)
+  * boost-intel-openmpi4-ohpc                (1.73.0)
+  * geopm-intel-impi-ohpc                    (1.1.0)
+  * geopm-intel-mpich-ohpc                   (1.1.0)
+  * geopm-intel-mvapich2-ohpc                (1.1.0)
+  * geopm-intel-openmpi4-ohpc                (1.1.0)
+  * kmod-lustre-client-ohpc                  (2.12.5)
+  * kmod-lustre-client-ohpc-tests            (2.12.5)
+  * lmod-defaults-arm1-mpich-ohpc            (2.0)
+  * lmod-defaults-arm1-openmpi4-ohpc         (2.0)
+  * lustre-client-ohpc                       (2.12.5)
+  * lustre-client-ohpc-tests                 (2.12.5)
+  * openpbs-client-ohpc                      (20.0.0)
+  * openpbs-devel-ohpc                       (20.0.0)
+  * openpbs-execution-ohpc                   (20.0.0)
+  * openpbs-server-ohpc                      (20.0.0)
+  * trilinos-intel-impi-ohpc                 (13.0.0)
+  * trilinos-intel-mpich-ohpc                (13.0.0)
+  * trilinos-intel-mvapich2-ohpc             (13.0.0)
+  * trilinos-intel-openmpi4-ohpc             (13.0.0)
+
+[Component Version Changes]
+
+  * EasyBuild-ohpc                           (4.2.0 -> 4.3.0)
+  * boost-arm1-mpich-ohpc                    (1.71.0 -> 1.73.0)
+  * boost-arm1-openmpi4-ohpc                 (1.71.0 -> 1.73.0)
+  * boost-gnu9-impi-ohpc                     (1.71.0 -> 1.73.0)
+  * boost-gnu9-mpich-ohpc                    (1.71.0 -> 1.73.0)
+  * boost-gnu9-mvapich2-ohpc                 (1.71.0 -> 1.73.0)
+  * boost-gnu9-openmpi4-ohpc                 (1.71.0 -> 1.73.0)
+  * dimemas-arm1-mpich-ohpc                  (5.4.1 -> 5.4.2)
+  * dimemas-arm1-openmpi4-ohpc               (5.4.1 -> 5.4.2)
+  * dimemas-gnu9-impi-ohpc                   (5.4.1 -> 5.4.2)
+  * dimemas-gnu9-mpich-ohpc                  (5.4.1 -> 5.4.2)
+  * dimemas-gnu9-mvapich2-ohpc               (5.4.1 -> 5.4.2)
+  * dimemas-gnu9-openmpi4-ohpc               (5.4.1 -> 5.4.2)
+  * dimemas-intel-impi-ohpc                  (5.4.1 -> 5.4.2)
+  * dimemas-intel-mpich-ohpc                 (5.4.1 -> 5.4.2)
+  * dimemas-intel-mvapich2-ohpc              (5.4.1 -> 5.4.2)
+  * dimemas-intel-openmpi4-ohpc              (5.4.1 -> 5.4.2)
+  * gnu9-compilers-ohpc                      (9.2.0 -> 9.3.0)
+  * mfem-gnu9-impi-ohpc                      (4.0 -> 4.1)
+  * mfem-gnu9-mpich-ohpc                     (4.0 -> 4.1)
+  * mfem-gnu9-mvapich2-ohpc                  (4.0 -> 4.1)
+  * mfem-gnu9-openmpi4-ohpc                  (4.0 -> 4.1)
+  * mfem-intel-impi-ohpc                     (4.0 -> 4.1)
+  * mfem-intel-mpich-ohpc                    (4.0 -> 4.1)
+  * mfem-intel-mvapich2-ohpc                 (4.0 -> 4.1)
+  * mfem-intel-openmpi4-ohpc                 (4.0 -> 4.1)
+  * openmpi4-arm1-ohpc                       (4.0.3 -> 4.0.4)
+  * openmpi4-gnu9-ohpc                       (4.0.3 -> 4.0.4)
+  * openmpi4-intel-ohpc                      (4.0.3 -> 4.0.4)
+  * python3-Cython-ohpc                      (0.29.14 -> 0.29.21)
+  * python3-numpy-gnu9-ohpc                  (1.17.4 -> 1.19.0)
+  * python3-numpy-intel-ohpc                 (1.17.4 -> 1.19.0)
+  * python3-scipy-gnu9-mpich-ohpc            (1.3.3 -> 1.5.1)
+  * python3-scipy-gnu9-mvapich2-ohpc         (1.3.3 -> 1.5.1)
+  * python3-scipy-gnu9-openmpi4-ohpc         (1.3.3 -> 1.5.1)
+  * slurm-contribs-ohpc                      (20.02.1 -> 20.02.5)
+  * slurm-devel-ohpc                         (20.02.1 -> 20.02.5)
+  * slurm-example-configs-ohpc               (20.02.1 -> 20.02.5)
+  * slurm-libpmi-ohpc                        (20.02.1 -> 20.02.5)
+  * slurm-ohpc                               (20.02.1 -> 20.02.5)
+  * slurm-openlava-ohpc                      (20.02.1 -> 20.02.5)
+  * slurm-pam_slurm-ohpc                     (20.02.1 -> 20.02.5)
+  * slurm-perlapi-ohpc                       (20.02.1 -> 20.02.5)
+  * slurm-slurmctld-ohpc                     (20.02.1 -> 20.02.5)
+  * slurm-slurmd-ohpc                        (20.02.1 -> 20.02.5)
+  * slurm-slurmdbd-ohpc                      (20.02.1 -> 20.02.5)
+  * slurm-torque-ohpc                        (20.02.1 -> 20.02.5)
+  * spack-ohpc                               (0.13.4 -> 0.15.0)
+  * trilinos-gnu9-impi-ohpc                  (12.18.1 -> 13.0.0)
+  * trilinos-gnu9-mpich-ohpc                 (12.18.1 -> 13.0.0)
+  * trilinos-gnu9-mvapich2-ohpc              (12.18.1 -> 13.0.0)
+  * trilinos-gnu9-openmpi4-ohpc              (12.18.1 -> 13.0.0)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 2.0 RC1 (05 June 2020)
 
 [2.x Series]
