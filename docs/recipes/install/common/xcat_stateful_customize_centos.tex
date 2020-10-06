@@ -6,6 +6,10 @@ that will be hosted by the {\em master} host in this  example configuration.
 % begin_ohpc_run
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Disable /tftpboot and /install export entries
+[sms](*\#*) perl -pi -e "s|/tftpboot|#/tftpboot|" /etc/exports
+[sms](*\#*) perl -pi -e "s|/install|#/install|" /etc/exports
+
 # Export /home and OpenHPC public packages from master server
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
