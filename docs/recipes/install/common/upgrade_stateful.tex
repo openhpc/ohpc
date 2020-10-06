@@ -27,7 +27,7 @@ substitute \texttt{x.x.x} with the desired version number.
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
 	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1 
         {VER2}{\OHPCVersion{}}1]
-[sms](*\#*) wget http://build.openhpc.community/dist/x.x.x/OpenHPC-x.x.x.OSREPO.ARCH.tar
+[sms](*\#*) wget http://repos.openhpc.community/dist/x.x.x/OpenHPC-x.x.x.OSREPO.ARCH.tar
 [sms](*\#*) mv $ohpc_repo_dir "$ohpc_repo_dir"_old
 [sms](*\#*) mkdir -p $ohpc_repo_dir
 [sms](*\#*) tar xvf OpenHPC-x.x.x.OSREPO.ARCH.tar -C $ohpc_repo_dir
