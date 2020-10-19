@@ -40,6 +40,7 @@ Patch12: warewulf-vnfs.bootstrap_qlogic.patch
 Patch13: warewulf-vnfs.leap.patch
 Patch14: warewulf-vnfs.bootstrap_drivers.patch
 Patch15: warewulf-vnfs.hybridize.patch
+Patch16: warewulf-vnfs.boot_fw_symlink.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -88,6 +89,7 @@ cd %{_builddir}
 %patch13 -p2
 %patch14 -p1
 %patch15 -p1
+%patch16 -p1
 
 %build
 ./autogen.sh
