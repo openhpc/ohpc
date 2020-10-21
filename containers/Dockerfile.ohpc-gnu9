@@ -1,4 +1,4 @@
-FROM registry.centos.org/centos/centos:8
+FROM registry.centos.org/centos/centos:centos8
 
 MAINTAINER The OpenHPC Project
 
@@ -15,6 +15,7 @@ RUN yum -y install http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc
 RUN yum install -y 'dnf-command(config-manager)' && \
     yum config-manager --set-enabled PowerTools && \
     yum upgrade -y && \
+    yum -y install openssh-clients && \
     yum -y install gnu9-compilers-ohpc lmod-ohpc && \
     yum clean all
 
