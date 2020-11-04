@@ -15,24 +15,27 @@ admin         = ["clustershell","conman","docs","examples","ganglia","genders","
 	         "losf","meta-packages","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe",
 		 "ohpc-filesystem","ohpc-release",
 		 "pdsh","prun","test-suite"]
-dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","python-mpi4py","python-numpy",
-	         "python-scipy","spack","valgrind"]
+dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","mpi4py","numpy",
+	         "scipy","spack","valgrind"]
+distro-packages = ["python-Cython","flex"]
+fs            = ["lustre-client"]
 io-libs       = ["hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","openpbs","pmix","munge"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
-parallel-libs = ["boost","fftw","hypre","mumps","opencoarrays","petsc","scalapack","ptscotch","slepc","superlu_dist"]
-perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","paraver","pdtoolkit",
+parallel-libs = ["boost","fftw","hypre","mumps","opencoarrays","petsc","scalapack","ptscotch",
+                 "slepc","superlu_dist","trilinos"]
+perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","papi","paraver","pdtoolkit",
                  "scalasca","scorep","tau"]
 
 compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel"]
-mpi-families=["mpich","mvapich2","openmpi"]
+mpi-families=["mpich","mvapich2","openmpi","libfabric","ucx"]
 
 
 [2.0.0]
 
 # define patterns for a given arch in which to disable builds
-skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","geopm",
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
             "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
 skip_x86  = ["-arm1"]
 
@@ -40,26 +43,32 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu9","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-
-standalone = ["arm-compilers-devel","autoconf","automake","clustershell","cmake","conman",
-              "docs","examples","genders","gnu-compilers","hwloc","intel-compilers-devel","libtool",
-	      "lmod","losf","meta-packages","mrsh","ohpc-filesystem","papi","paraver","openpbs",
-	      "pdsh","pmix","prun","slurm","test-suite","valgrind"]
+standalone = ["arm-compilers-devel","autoconf","automake","charliecloud","cmake","conman",
+              "docs","examples","flex","genders","gnu-compilers","hwloc","intel-compilers-devel","libfabric","libtool",
+	      "lmod","losf","lustre-client","meta-packages","mrsh","msr-safe","nhc",
+	      "ohpc-filesystem","openpbs","papi","paraver","pdsh","pmix","prun","python-Cython",
+	      "singularity","slurm","test-suite","ucx","valgrind"]
               
 
 # define (compiler dependent) packages
-compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","!likwid",
+compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","numpy","likwid",
                       "openblas","openmpi","pdtoolkit","plasma","R","scotch","superlu"]
 
 # overdefault compiler families for any desired components
 R_compiler=["gnu9"]
 #gsl_compiler=["gnu9"]
 openblas_compiler=["gnu9"]
+#numpy_compiler=["gnu9","arm1"]
 
-#opencoarrays_compiler=["gnu9"]
+opencoarrays_compiler=["gnu9"]
 
-mpi_dependent = ["adios","boost","dimemas","extrae","fftw","!geopm","hypre","mumps","netcdf","netcdf-cxx",
-                 "netcdf-fortran","!opencoarrays","omb","petsc","phdf5","scalapack","scalasca","scorep","sionlib","slepc","ptscotch"]
+mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb","lmod-defaults",
+                 "mpi4py","mumps","netcdf","netcdf-cxx","netcdf-fortran","omb","opencoarrays",
+                 "petsc","phdf5","pnetcdf","ptscotch","scalapack","scalasca","scipy","scorep",
+		 "sionlib","slepc","superlu_dist","tau","trilinos"]
 
 fftw_compiler=["gnu9","arm1"]
-scalapack_compiler=["gnu9","arm1"]
+#scalapack_compiler=["gnu9","arm1"]
+scipy_compiler=["gnu9","arm1"]
+scipy_mpi=["openmpi4","mpich","mvapich2"]
+lmod-defaults_mpi=["openmpi4","mvapich2","impi"]
