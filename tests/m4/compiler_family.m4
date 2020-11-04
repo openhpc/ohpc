@@ -24,12 +24,6 @@ if test "x$LMOD_FAMILY_COMPILER" = "xgnu"; then
    CXX=g++
    FC=gfortran
    AC_MSG_RESULT([gnu])
-elif test "x$LMOD_FAMILY_COMPILER" = "xgnu7"; then
-   CC=gcc
-   CXX=g++
-   FC=gfortran
-   AC_MSG_RESULT([gnu7])
-   AC_SUBST(OHPC_BLAS,[-L${OPENBLAS_LIB} -lopenblas])
 elif test "x$LMOD_FAMILY_COMPILER" = "xgnu8"; then
    CC=gcc
    CXX=g++
@@ -42,17 +36,18 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xgnu9"; then
    FC=gfortran
    AC_MSG_RESULT([gnu9])
    OHPC_BLAS="-L${OPENBLAS_LIB} -lopenblas"
+elif test "x$LMOD_FAMILY_COMPILER" = "xllvm10"; then
+   CC=clang
+   CXX=clang++
+   # Use placeholder again; flang(f18) added to LLVM11 [JCS 9/15/20]
+   FC=gfortran
+   AC_MSG_RESULT([llvm10])
 elif test "x$LMOD_FAMILY_COMPILER" = "xllvm9"; then
    CC=clang
    CXX=clang++
-# Use placeholder until F18 is added to LLVM [JCS 11/19/19]
+   # Use placeholder until F18 is added to LLVM [JCS 11/19/19]
    FC=gfortran
    AC_MSG_RESULT([llvm9])
-elif test "x$LMOD_FAMILY_COMPILER" = "xllvm5"; then
-   CC=clang
-   CXX=clang++
-   FC=flang
-   AC_MSG_RESULT([llvm5])
 elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
    CC=icc
    CXX=icpc
