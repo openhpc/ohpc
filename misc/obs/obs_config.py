@@ -361,8 +361,8 @@ class ohpc_obs_tool(object):
         mpi_families = self.MPIFamilies
         
         # check if any override options
-        if self.buildConfig.has_option(self.vip + "/" + package,"mpi_families"):
-            mpi_families = ast.literal_eval(self.buildConfig.get(self.vip + "/" + package,"mpi_families"))
+        if self.buildConfig.has_option(self.vip, package + "_mpi"):
+            mpi_families = ast.literal_eval(self.buildConfig.get(self.vip,package+"_mpi"))
             logging.info("\n--> override of default mpi families requested for package = %s" % package)
             logging.info("--> families %s\n" % mpi_families)
 
