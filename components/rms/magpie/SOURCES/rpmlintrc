@@ -1,0 +1,9 @@
+addFilter("shlib-policy-name-error");
+addFilter("devel-file-in-non-devel-package");
+addFilter("spurious-executable-perm");
+addFilter("library-without-ldconfig-postin")
+addFilter("script-without-shebang");
+addFilter("suse-filelist-forbidden-opt");
+addFilter("shared-lib-calls-exit");
+addFilter("no-changelogname-tag");
+addFilter("library-without-ldconfig-postun");
