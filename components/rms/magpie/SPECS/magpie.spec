@@ -44,6 +44,7 @@ Source0: https://github.com/LLNL/magpie/archive/%{version}.tar.gz
 
 # Java 8 or greater required on all cluster nodes.
 # Java development package added to head node.
+BuildRequires: python-rpm-macros
 Requires: java-devel >= 1.8
 Requires: python2
 
@@ -62,34 +63,24 @@ manager support for Slurm, Moab, Torque, and LSF.
 %setup -q -n %{pname}-%{version}
 
 %build
-# Fix-up file permissions and shebang data that cause warnings/errors in CentOS 8
-# Not using `install` command in next section due to large file count
+# Fix-up file permissions and shebang data that cause warnings/errors in OBS
+# Not using `install` command in next section due to very large file count
+find doc -type f -exec %{__chmod} -R -x {} \;
+find conf -type f -exec %{__chmod} -R -x {} \;
+find examples -type f -exec %{__chmod} -R -x {} \;
+find patches -type f -exec %{__chmod} -R -x {} \;
 %{__chmod} -x magpie/job/magpie-job-ray-rayips.py
 %{__chmod} -x magpie/job/magpie-job-tensorflow-horovod-synthetic-benchmark.py
 %{__chmod} -x magpie/job/magpie-job-tensorflow-tfadd.py
 %{__chmod} -x submission-scripts/script-templates/magpie-hive
-%{__chmod} -x doc/README.hive
-%{__chmod} -x conf/zookeeper/zookeeper-env.sh
-%{__chmod} -x conf/zookeeper/zookeeper-master-env.sh
-%{__chmod} -x conf/hive/hive-env.sh
-%{__chmod} -x conf/hive/hive-log4j2.properties
-%{__chmod} -x conf/hive/hive-site.xml
-%{__chmod} -x conf/hive/postgresql.conf
-%{__chmod} -x conf/hive/spark-hive-site.xml
-%{__chmod} -x conf/hive/tez-site.xml
-%{__chmod} -x conf/storm/storm-daemon-env.sh
-%{__chmod} -x conf/hadoop/hadoop-env-2.X.sh
-%{__chmod} -x conf/hadoop/yarn-env-2.X.sh
-%{__chmod} -x conf/zeppelin/zeppelin-site.xml
 %{__chmod} -x testsuite/testscripts/test-ray.py
 %{__chmod} -x testsuite/testscripts/test-tensorflow.py
 %{__chmod} +x testsuite/test-config.sh
-%{__chmod} -x examples/example-environment-extra
-%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/hadoop/hadoop-user-functions-3-X.sh
-%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/spark/spark-env-0.X.sh
-%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/spark/spark-env-1.X.sh
-%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/spark/spark-env-2.X.sh
-%{__sed} -i "s#/usr/bin/env python#%{__python2}#" magpie/job/magpie-job-zeppelin-checkzeppelinup.py
+for script in $(grep "^#!/usr/bin/env bash" conf); do
+   %{__sed} -i "s#/usr/bin/env bash#/bin/bash#" $script
+   %{__chmod} +x $script
+done
+%{__sed} -i "s#/usr/bin/env python#%{?__python2}%{!?__python2:/usr/bin/python2}#" magpie/job/magpie-job-zeppelin-checkzeppelinup.py
 find . -name \.gitignore -type f -delete
 %{__rm} .travis.yml
 
@@ -116,6 +107,7 @@ module-whatis "Category: Resource Managers"
 module-whatis "Description: Scripts for running Big Data in HPC environments"
 module-whatis "URL: https://github.com/LLNL/magpie"
 
+# JAVA_HOME must be set; locate "javac" in PATH and confirm it's the correct version
 set     java_check                  [exec which javac]
 if { [catch {exec \$java_check -version 2> /dev/null}] } {
    puts stderr "ERROR: Java not available."
@@ -139,7 +131,6 @@ EOF
 
 
 %files
-%dir %{install_path}
 %{install_path}
 %doc doc/* NEWS README.md TODO VERSION
 %license COPYING DISCLAIMER
