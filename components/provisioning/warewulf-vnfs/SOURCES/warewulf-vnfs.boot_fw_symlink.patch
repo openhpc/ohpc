@@ -1,0 +1,12 @@
+--- a/bin/wwbootstrap    2020-10-13 03:52:07.305832400 -0500
++++ b/bin/wwbootstrap  2020-10-13 03:52:18.631290013 -0500
+@@ -282,7 +282,7 @@
+     foreach my $f ($config->get("firmware")) {
+         if ($f and $f =~ /^([a-zA-Z0-9\/\*_\-\.]+)/) {
+             my $f_clean = $1;
+-            open(FIND, "cd $opt_chroot; find lib/firmware/$f_clean -type f 2>/dev/null |");
++            open(FIND, "cd $opt_chroot; find lib/firmware/$f_clean -type f -o -type l 2>/dev/null |");
+             while(my $firmware = <FIND>) {
+                 chomp($firmware);
+                 if ($firmware =~ /([a-zA-Z0-9\/_\-\.]+)/) {
+
