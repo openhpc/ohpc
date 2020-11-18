@@ -25,6 +25,7 @@ rms           = ["slurm","openpbs","pmix","munge"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
 parallel-libs = ["boost","fftw","hypre","mumps","opencoarrays","petsc","scalapack","ptscotch",
                  "slepc","superlu_dist","trilinos"]
+provisioning  = ["warewulf-vnfs"]
 perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","papi","paraver","pdtoolkit",
                  "scalasca","scorep","tau"]
 
@@ -42,7 +43,7 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu9","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["llvm-compilers"]
+standalone = ["llvm-compilers","easybuild","warewulf-vnfs"]
 
 
 
