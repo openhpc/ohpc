@@ -1,7 +1,7 @@
 FROM centos:8
 
-ARG TRAVIS_COMMIT_RANGE
-ENV TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE
+ARG COMMIT_RANGE
+ENV COMMIT_RANGE=$COMMIT_RANGE
 ENV PYTHON_BINARY=python3
 
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
@@ -10,4 +10,4 @@ RUN yum install -y git ${PYTHON_BINARY}
 COPY . /ohpc
 WORKDIR /ohpc
 
-RUN ${PYTHON_BINARY} tests/travis/check_spec.py ${TRAVIS_COMMIT_RANGE}
+RUN ${PYTHON_BINARY} tests/ci/check_spec.py ${COMMIT_RANGE}
