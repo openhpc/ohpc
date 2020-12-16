@@ -24,6 +24,7 @@ BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
 %global __brp_mangle_shebangs_exclude bats
+%undefine __brp_mangle_shebangs
 
 %if 0%{?suse_version}
 Requires(pre):  shadow
