@@ -74,6 +74,25 @@ EOF
 # not. If not, then we enable factory for the initial minor release. If it is a
 # micro update, we enable factory for the update instead.
 
+%if 0%{?ohpc_micro_update}
+
+cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
+[OpenHPC]
+name=OpenHPC-%{ohpc_version} - Base
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/%{_repository}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
+
+[OpenHPC-updates]
+name=OpenHPC-%{ohpc_version} - Updates
+baseurl=%{ohpc_factory_repo}/OpenHPC:/%{ohpc_version}%{ohpc_micro_update}:/Factory/%{_repository}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
+enabled=1
+EOF
+
+%else
+
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
 name=OpenHPC-%{ohpc_version} - Base
@@ -88,6 +107,8 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 enabled=0
 EOF
+
+%endif
 
 
 # repository GPG key
