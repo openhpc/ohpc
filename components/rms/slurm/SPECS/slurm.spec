@@ -346,6 +346,17 @@ support daemons and software for the Cray SMW.  Includes slurmsmwd which
 notifies slurm about failed nodes.
 %endif
 
+%package -n %{pname}-sview%{PROJ_DELIM}
+Summary: Graphical user interface to view and modify Slurm state
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
+BuildRequires: gtk2-devel
+Requires: gtk2
+%description  -n %{pname}-sview%{PROJ_DELIM}
+This package provides sview, which can be used to view Slurm configuration, job,
+step, node and partitions state information. Authorized users can also modify
+select information.
+
 #############################################################################
 
 %prep
@@ -574,6 +585,7 @@ fi
 %exclude %{_bindir}/sjobexitmod
 %exclude %{_bindir}/sjstat
 %exclude %{_bindir}/smail
+%exclude %{_bindir}/sview
 %exclude %{_libdir}/libpmi*
 %{_libdir}/*.so*
 %{_libdir}/slurm/src/*
@@ -584,6 +596,7 @@ fi
 %{_mandir}
 %exclude %{_mandir}/man1/sjobexit*
 %exclude %{_mandir}/man1/sjstat*
+%exclude %{_mandir}/man1/sview*
 %dir %{_libdir}/slurm/src
 %if %{with cray}
 %dir /opt/modulefiles/slurm
@@ -707,6 +720,11 @@ fi
 %{_sbindir}/slurmsmwd
 %{_unitdir}/slurmsmwd.service
 %endif
+#############################################################################
+
+%files -n %{pname}-sview%{PROJ_DELIM}
+%{_mandir}/man1/sview*
+%{_bindir}/sview
 #############################################################################
 
 %pre
