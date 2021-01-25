@@ -14,8 +14,8 @@
 [sms](*\#*) systemctl enable httpd.service
 [sms](*\#*) systemctl restart httpd
 [sms](*\#*) systemctl enable dhcpd.service
-[sms](*\#*) systemctl enable tftp
-[sms](*\#*) systemctl restart tftp
+[sms](*\#*) systemctl enable tftp.socket
+[sms](*\#*) systemctl start tftp.socket
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run
