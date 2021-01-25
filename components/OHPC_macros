@@ -31,7 +31,10 @@
 
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
+# Update package docs location to include version info (to allow
+# possibility of coinstall of multiple package versions)
 DocDir:    %{OHPC_PUB}/doc/contrib
+%global _docdir_fmt     %{name}-%{version}
 
 # Define PNAME which can be used in modulefile generation for env vars (derived
 # from pname defined in each component .spec file)
