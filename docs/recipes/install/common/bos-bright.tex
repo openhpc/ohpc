@@ -1,0 +1,37 @@
+In an external setting, installing the desired BOS and Bright on a
+{\em master} SMS host typically involves booting from a DVD ISO image on a new
+server. With this approach, insert the Bright/\baseOS{} DVD, power cycle the host, and
+follow the Bright provided directions to install the BOS on your chosen {\em
+master} host.  Alternatively, if choosing to use a pre-installed server, please
+verify that it is provisioned with the required \baseOS{} distribution. If Bright
+is not already installed on the {\em master} host, please follow the steps in the Bright
+installation manual on performing an addon installation \\
+
+In depth instructions of installing Bright/\baseOS{} are covered in the Bright 
+\href{https://support.brightcomputing.com/manuals/9.0/installation-manual.pdf}{\color{blue}{Installation Manual}}.
+
+If the SLURM workload manager is not selected during the Bright {\em master} installation
+and you intend to install SLURM afterwards, please refer to the
+\href{https://support.brightcomputing.com/manuals/9.0/admin-manual.pdf#section.7.3}{\color{blue}{Installation of Workload Managers}}
+section of the Bright administration manual.
+
+Prior to beginning the installation process of \OHPC{} components, several additional
+considerations are noted here for the SMS host configuration. First,
+the installation recipe herein assumes that
+the SMS host name is resolvable locally. Since Bright manages this part of the
+\path{/etc/hosts} file automatically, it should not be required to make manual modifications
+to the \path{/etc/hosts} file.
+
+While it is theoretically possible to enable SELinux on a cluster provisioned
+with \provisioner{},
+doing so is beyond the scope of this document. Even the use of
+permissive mode can be problematic and we therefore recommend keeping SELinux disabled on the {\em
+master} SMS host. If SELinux components are installed locally,
+the \texttt{selinuxenabled} command can be used to determine if SELinux is
+currently enabled. If enabled, consult the distro documentation for information
+on how to disable. \\
+
+Finally, the Bright node-installer provisioning rely on DHCP, TFTP, HTTP and rsync
+(or optionally rsync over SSH) network protocols. For the internal network, Bright
+is automatically configured to allow these protocols to the {\em master}, so out of
+the box, no additional manual configuration should be required.

@@ -1,0 +1,45 @@
+Prior to booting the {\em compute} hosts, we configure them to use PXE as their
+next boot mode. After the initial PXE, since Bright installs iPXE on the node 
+disk drive, ensuing boots will continue to attempt to PXE boot from the network.
+
+During the initial boot of the nodes, when the Bright node installer runs,
+you will be asked to assign each of the compute nodes an identity. This only
+needs to occur on the initial boot as Bright will record the node MAC address
+in it's database so that on subsequent boots, Bright will know which node is
+being provisioned. For more information regarding the node boot process,
+please refer to the
+\href{https://support.brightcomputing.com/manuals/9.0/admin-manual.pdf#section.5.4}{\color{blue}{Node-Installer}}
+section of the Bright admin manual.
+
+If you wish to define additional compute nodes than what was defined during
+the {\em master} installation, the steps to add additional compute nodes to Bright
+can be found in the
+\href{https://support.brightcomputing.com/manuals/9.0/admin-manual.pdf#section.5.7}{\color{blue}{Adding New Nodes}}
+section of the Bright admin manual.
+
+After the initial boot, providing the nodes BMC interfaces have been configured 
+per section 3.7 of the Bright administration manual, the {\em master} server 
+should be able to boot the compute nodes. This is done by using the \texttt{power} 
+Bright command leverging IPMI protocol. The following power cycles a Bright
+node.
+
+% begin_ohpc_run
+% ohpc_comment_header Power cycle a single compute node
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) cmsh
+% device use <node_name>
+% power reset
+\end{lstlisting} 
+% end_ohpc_run
+
+It is also possible to power cycle multiple nodes at once, for example,
+to power cycle all nodes in the default category, the following can be performed.
+
+% begin_ohpc_run
+% ohpc_comment_header Power cycle multiple compute nodes in a category
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) cmsh
+% device
+% power reset -c default
+\end{lstlisting} 
+% end_ohpc_run
