@@ -38,8 +38,7 @@ Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{ver
 Patch0:    mvapich2-get_cycles.patch
 # karl.w.schulz@intel.com (05/21/2017)
 Patch1:    mpidimpl.opt.patch
-# karl@oden.utexas.edu (11/5/2019)
-Patch2:    winptr.patch
+
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -86,7 +85,6 @@ across multiple networks.
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 %ohpc_setup_compiler
