@@ -1,7 +1,7 @@
 !
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  SLEPc - Scalable Library for Eigenvalue Problem Computations
-!  Copyright (c) 2002-2017, Universitat Politecnica de Valencia, Spain
+!  Copyright (c) 2002-2020, Universitat Politecnica de Valencia, Spain
 !
 !  This file is part of SLEPc.
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
@@ -175,7 +175,7 @@
         call PEPErrorView(pep,PEP_ERROR_BACKWARD,PETSC_NULL_VIEWER,ierr)
       else
         call PetscViewerPushFormat(PETSC_VIEWER_STDOUT_WORLD,PETSC_VIEWER_ASCII_INFO_DETAIL,ierr)
-        call PEPReasonView(pep,PETSC_VIEWER_STDOUT_WORLD,ierr)
+        call PEPConvergedReasonView(pep,PETSC_VIEWER_STDOUT_WORLD,ierr)
         call PEPErrorView(pep,PEP_ERROR_BACKWARD,PETSC_VIEWER_STDOUT_WORLD,ierr)
         call PetscViewerPopFormat(PETSC_VIEWER_STDOUT_WORLD,ierr)
       endif
@@ -186,3 +186,11 @@
       call SlepcFinalize(ierr)
       end
 
+!/*TEST
+!
+!   test:
+!      suffix: 1
+!      args: -pep_nev 4 -pep_ncv 19 -terse
+!      requires: !complex
+!
+!TEST*/

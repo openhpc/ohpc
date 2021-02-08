@@ -1,7 +1,7 @@
 /*
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    SLEPc - Scalable Library for Eigenvalue Problem Computations
-   Copyright (c) 2002-2018, Universitat Politecnica de Valencia, Spain
+   Copyright (c) 2002-2020, Universitat Politecnica de Valencia, Spain
 
    This file is part of SLEPc.
    SLEPc is distributed under a 2-clause BSD license (see LICENSE).
@@ -86,7 +86,7 @@ int main(int argc,char **argv)
     ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_INFO_DETAIL);CHKERRQ(ierr);
     ierr = EPSGetConvergedReason(eps,&reason);CHKERRQ(ierr);
     if (reason!=EPS_CONVERGED_USER) {
-      ierr = EPSReasonView(eps,viewer);CHKERRQ(ierr);
+      ierr = EPSConvergedReasonView(eps,viewer);CHKERRQ(ierr);
       ierr = EPSErrorView(eps,EPS_ERROR_RELATIVE,viewer);CHKERRQ(ierr);
     } else {
       ierr = EPSGetConverged(eps,&nconv);CHKERRQ(ierr);
@@ -185,3 +185,10 @@ PetscErrorCode MyStoppingTest(EPS eps,PetscInt its,PetscInt max_it,PetscInt ncon
   PetscFunctionReturn(0);
 }
 
+/*TEST
+
+   test:
+      suffix: 1
+      args: -m 350 -seconds 0.6
+
+TEST*/
