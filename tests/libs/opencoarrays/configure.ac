@@ -4,6 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(opencoarrays, 2.2.0, [https://github.com/openhpc/ohpc])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -14,8 +15,11 @@ if test "x$OPENCOARRAYS_DIR" = "x"; then
    echo
    AC_ERROR([OPENCOARRAYS_DIR not defined - please load opencoarrays environment.])
 else
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
+   LMOD_PACKAGE_VER([opencoarrays])
 fi
+
+
 
 # set compilers to use MPI toolchain.  
 # note that the caf compiler wrapper hard-codes paths to MPI libraries and is
@@ -55,7 +59,7 @@ AC_OUTPUT()
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
-echo Package version............... : $PACKAGE-$VERSION
+echo Package version............... : $PACKAGE-$MODVERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo

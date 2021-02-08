@@ -4,6 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(slepc, 3.7.4, [https://github.com/openhpc/ohpc])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -14,7 +15,8 @@ if test "x$SLEPC_DIR" = "x"; then
    echo
    AC_ERROR([SLEPC_DIR not defined - please load slepc environment.])
 else
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
+   LMOD_PACKAGE_VER([slepc])
 fi
 
 # set compilers to use MPI toolchain 
@@ -52,7 +54,7 @@ AC_OUTPUT()
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
-echo Package version............... : $PACKAGE-$VERSION
+echo Package version............... : $PACKAGE-$MODVERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
