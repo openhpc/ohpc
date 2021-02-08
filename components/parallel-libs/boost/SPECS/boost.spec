@@ -40,10 +40,10 @@ Patch1: boost-fenv_suse.patch
 %endif
 
 # Patch included from Fedora project 
-# Downloaded from https://src.fedoraproject.org/rpms/boost/blob/master/f/boost-1.73.0-build-optflags.patch
+# Downloaded from https://src.fedoraproject.org/rpms/boost/raw/rawhide/f/boost-1.75.0-build-optflags.patch
 # After download, all patch line numbers were all adjusted by +3
 # Resolves https://bugzilla.redhat.com/show_bug.cgi?id=1190039 - boost package doesn't honor optflags
-Patch2: boost-1.73.0-build-optflags.patch
+Patch2: boost-1.75.0-build-optflags.patch
 
 %if 0%{?rhel}
 BuildRequires:  bzip2-devel
