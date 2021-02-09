@@ -93,6 +93,7 @@ across multiple networks.
 	    --enable-cxx \
 	    --enable-g=dbg \
             --with-device=ch3:mrail \
+	    --disable-ibv-dlopen \
 %if 0%{?with_pwm} || 0%{?with_psm2}
             --with-device=ch3:psm \
 %endif
