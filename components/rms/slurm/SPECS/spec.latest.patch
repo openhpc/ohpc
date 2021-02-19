@@ -1,6 +1,6 @@
---- slurm.spec	2020-03-26 16:44:05.000000000 -0500
-+++ slurm.spec	2020-04-23 16:38:42.000000000 -0500
-@@ -1,21 +1,42 @@
+--- slurm.spec	2020-11-12 11:29:23.000000000 -0600
++++ slurm.spec	2021-02-19 14:28:32.000000000 -0600
+@@ -1,28 +1,48 @@
 -Name:		slurm
 +#----------------------------------------------------------------------------bh-
 +# This RPM .spec file is part of the OpenHPC project.
@@ -23,7 +23,7 @@
 +# $Id$
 +#
 +Name:		%{pname}%{PROJ_DELIM}
- Version:	20.02.3
+ Version:	20.11.3
 -%define rel	1
 +%global rel	1
  Release:	%{rel}%{?dist}
@@ -49,7 +49,23 @@
  
  # build options		.rpmmacros options	change to default action
  # ====================  ====================	========================
-@@ -52,6 +73,9 @@
+ # --prefix		%_prefix path		install path for commands, libraries, etc.
+-# --with cray		%_with_cray 1		build for a Cray Aries system
++# --with cray		%_with_cray 1		build for a Native-Slurm Cray system
+ # --with cray_network	%_with_cray_network 1	build for a non-Cray system with a Cray network
+-# --with cray_shasta	%_with_cray_shasta 1	build for a Cray Shasta system
+ # --with slurmrestd	%_with_slurmrestd 1	build slurmrestd
+ # --with slurmsmwd      %_with_slurmsmwd 1      build slurmsmwd
+ # --without debug	%_without_debug 1	don't compile with debugging symbols
+@@ -39,7 +59,6 @@
+ #  Options that are off by default (enable with --with <opt>)
+ %bcond_with cray
+ %bcond_with cray_network
+-%bcond_with cray_shasta
+ %bcond_with slurmrestd
+ %bcond_with slurmsmwd
+ %bcond_with multiple_slurmd
+@@ -54,6 +73,9 @@
  %bcond_with numa
  %bcond_with pmix
  
@@ -59,7 +75,7 @@
  # Use debug by default on all systems
  %bcond_without debug
  
-@@ -68,19 +92,22 @@
+@@ -70,19 +92,22 @@
  
  %{?systemd_requires}
  BuildRequires: systemd
@@ -89,7 +105,7 @@
  %else
  BuildRequires: mariadb-devel >= 5.0.0
  %endif
-@@ -98,23 +125,26 @@
+@@ -100,23 +125,26 @@
  %endif
  
  %if %{with cray_network}
@@ -121,17 +137,17 @@
  %endif
  
  %if %{with hwloc}
-@@ -130,15 +160,14 @@
+@@ -132,15 +160,14 @@
  %endif
  
- %if %{with pmix}
+ %if %{with pmix} && "%{_with_pmix}" == "--with-pmix"
 -BuildRequires: pmix
 -%global pmix_version %(rpm -q pmix --qf "%{VERSION}")
 +BuildRequires: pmix%{PROJ_DELIM}
 +Requires: pmix%{PROJ_DELIM}
  %endif
  
- %if %{with ucx}
+ %if %{with ucx} && "%{_with_ucx}" == "--with-ucx"
  BuildRequires: ucx-devel
 -%global ucx_version %(rpm -q ucx-devel --qf "%{VERSION}")
 -%endif
@@ -140,7 +156,7 @@
  #  Allow override of sysconfdir via _slurm_sysconfdir.
  #  Note 'global' instead of 'define' needed here to work around apparent
  #   bug in rpm macro scoping (or something...)
-@@ -160,7 +189,6 @@
+@@ -162,7 +189,6 @@
  #  into non-standard locations (e.g. /usr/local)
  #
  %define __os_install_post /usr/lib/rpm/brp-compress
@@ -148,7 +164,7 @@
  
  #
  # Should unpackaged files in a build root terminate a build?
-@@ -189,88 +217,89 @@
+@@ -191,88 +217,89 @@
  Components include machine status, partition management,
  job management, scheduling and accounting modules
  
@@ -207,11 +223,11 @@
 +Group: %{PROJ_NAME}/rms
 +Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 +%description -n %{pname}-slurmd%{PROJ_DELIM}
- %if %{with pmix}
+ %if %{with pmix} && "%{_with_pmix}" == "--with-pmix"
 -Requires: pmix = %{pmix_version}
 +Requires: pmix%{PROJ_DELIM}
  %endif
- %if %{with ucx}
+ %if %{with ucx} && "%{_with_ucx}" == "--with-ucx"
 -Requires: ucx = %{ucx_version}
 +Requires: ucx
  %endif
@@ -281,7 +297,7 @@
  seff is a mail program used directly by the Slurm daemons. On completion of a
  job, wait for it's accounting information to be available and include that
  information in the email body.
-@@ -283,13 +312,13 @@
+@@ -285,13 +312,13 @@
  utilities will provide more information and greater depth of understanding.
  
  %if %{with pam}
@@ -300,7 +316,37 @@
  This module restricts access to compute nodes in a cluster where Slurm is in
  use.  Access is granted to root, any user with an Slurm-launched job currently
  running on the node, or any user who has allocated resources on the node
-@@ -322,8 +351,15 @@
+@@ -303,12 +330,7 @@
+ Summary: Slurm REST API translator
+ Group: System Environment/Base
+ Requires: %{name}%{?_isa} = %{version}-%{release}
+-BuildRequires: http-parser-devel
+-%if %{defined suse_version}
+-BuildRequires: libjson-c-devel
+-%else
+-BuildRequires: json-c-devel
+-%endif
++BuildRequires: json-c-devel, http-parser-devel
+ %description slurmrestd
+ Provides a REST interface to Slurm.
+ %endif
+@@ -324,13 +346,31 @@
+ notifies slurm about failed nodes.
+ %endif
+ 
++%package -n %{pname}-sview%{PROJ_DELIM}
++Summary: Graphical user interface to view and modify Slurm state
++Group: %{PROJ_NAME}/rms
++Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
++BuildRequires: gtk2-devel
++Requires: gtk2
++%description  -n %{pname}-sview%{PROJ_DELIM}
++This package provides sview, which can be used to view Slurm configuration, job,
++step, node and partitions state information. Authorized users can also modify
++select information.
++
+ #############################################################################
+ 
  %prep
  # when the rel number is one, the tarball filename does not include it
  %setup -n %{slurm_source_dir}
@@ -316,7 +362,7 @@
  %configure \
  	%{?_without_debug:--disable-debug} \
  	%{?_with_pam_dir} \
-@@ -345,6 +381,9 @@
+@@ -352,6 +392,9 @@
  make %{?_smp_mflags}
  
  %install
@@ -326,7 +372,7 @@
  
  # Ignore redundant standard rpaths and insecure relative rpaths,
  # for RHEL based distros which use "check-rpaths" tool.
-@@ -359,7 +398,6 @@
+@@ -366,7 +409,6 @@
  %global _use_internal_dependency_generator 0
  %global __find_requires %{_builddir}/%{buildsubdir}/find-requires.sh
  
@@ -334,7 +380,21 @@
  make install DESTDIR=%{buildroot}
  make install-contrib DESTDIR=%{buildroot}
  
-@@ -401,8 +439,36 @@
+@@ -377,12 +419,9 @@
+ # Do not package Slurm's version of libpmi on Cray systems in the usual location.
+ # Cray's version of libpmi should be used. Move it elsewhere if the site still
+ # wants to use it with other MPI stacks.
+-%if %{with cray} || %{with cray_shasta}
++%if %{with cray}
+    mkdir %{buildroot}/%{_libdir}/slurmpmi
+    mv %{buildroot}/%{_libdir}/libpmi* %{buildroot}/%{_libdir}/slurmpmi
+-%endif
+-
+-%if %{with cray}
+    install -D -m644 contribs/cray/plugstack.conf.template %{buildroot}/%{_sysconfdir}/plugstack.conf.template
+    install -D -m644 contribs/cray/slurm.conf.template %{buildroot}/%{_sysconfdir}/slurm.conf.template
+    mkdir -p %{buildroot}/opt/modulefiles/slurm
+@@ -411,8 +450,38 @@
  install -D -m644 etc/layouts.d.unit.conf.example %{buildroot}/%{_sysconfdir}/layouts.d/unit.conf.example
  install -D -m644 etc/slurm.conf.example %{buildroot}/%{_sysconfdir}/slurm.conf.example
  install -D -m600 etc/slurmdbd.conf.example %{buildroot}/%{_sysconfdir}/slurmdbd.conf.example
@@ -344,17 +404,19 @@
  
 +# 9/8/14 karl.w.schulz@intel.com - provide starting config file
 +%if 0%{?OHPC_BUILD}
-+head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example | grep -v ReturnToService > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-+echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
++head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example | grep -v ReturnToService > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
++echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 +# 10/2/18 brad.geltz@intel.com - Enabling the task/affinity plugin to add the --cpu-bind option to srun for GEOPM
-+echo "TaskPlugin=task/affinity" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-+echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-+echo "AccountingStorageType=accounting_storage/filetxt" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-+echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-+echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-+echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
++echo "TaskPlugin=task/affinity" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
++echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
++echo "AccountingStorageType=accounting_storage/filetxt" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
++echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
++echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
++echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP Oversubscribe=EXCLUSIVE" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
++# 5/5/2020 karl@oden.utexas.edu - enable configless option
++echo "SlurmctldParameters=enable_configless" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 +# 6/3/16 nirmalasrjn@gmail.com - Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
-+echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
++echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 +# 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
 +sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (OpenHPC)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
 +
@@ -371,7 +433,7 @@
  # Delete unpackaged files:
  find %{buildroot} -name '*.a' -exec rm {} \;
  find %{buildroot} -name '*.la' -exec rm {} \;
-@@ -464,7 +530,7 @@
+@@ -474,7 +543,7 @@
  Cflags: -I\${includedir}
  Libs: -L\${libdir} -lslurm
  Description: Slurm API
@@ -380,7 +442,7 @@
  Version: %{version}
  EOF
  
-@@ -489,14 +555,17 @@
+@@ -499,20 +568,24 @@
      test -f %{buildroot}/lib64/security/pam_slurm_adopt.so		&&
  	echo /lib64/security/pam_slurm_adopt.so		>>$LIST
  %endif
@@ -403,7 +465,21 @@
  %{_datadir}/doc
  %{_bindir}/s*
  %exclude %{_bindir}/seff
-@@ -519,23 +588,32 @@
+ %exclude %{_bindir}/sjobexitmod
+ %exclude %{_bindir}/sjstat
+ %exclude %{_bindir}/smail
++%exclude %{_bindir}/sview
+ %exclude %{_libdir}/libpmi*
+ %{_libdir}/*.so*
+ %{_libdir}/slurm/src/*
+@@ -523,26 +596,36 @@
+ %{_mandir}
+ %exclude %{_mandir}/man1/sjobexit*
+ %exclude %{_mandir}/man1/sjstat*
++%exclude %{_mandir}/man1/sview*
+ %dir %{_libdir}/slurm/src
+ %if %{with cray}
+ %dir /opt/modulefiles/slurm
  %endif
  #############################################################################
  
@@ -422,13 +498,10 @@
 +
 +# 9/8/14 karl.w.schulz@intel.com - provide starting config file
 +%if 0%{?OHPC_BUILD}
-+%config (noreplace) %{_sysconfdir}/slurm.conf
++%config (noreplace) %{_sysconfdir}/slurm.conf.ohpc
 +%endif
 +
  %config %{_sysconfdir}/cgroup.conf.example
- %config %{_sysconfdir}/layouts.d/power.conf.example
- %config %{_sysconfdir}/layouts.d/power_cpufreq.conf.example
- %config %{_sysconfdir}/layouts.d/unit.conf.example
  %config %{_sysconfdir}/slurm.conf.example
 +%config %{_sysconfdir}/slurm.epilog.clean
  %config %{_sysconfdir}/slurmdbd.conf.example
@@ -440,7 +513,7 @@
  %dir %attr(0755,root,root)
  %dir %{_prefix}/include/slurm
  %{_prefix}/include/slurm/*
-@@ -543,8 +621,7 @@
+@@ -553,8 +636,7 @@
  %{_libdir}/pkgconfig/slurm.pc
  #############################################################################
  
@@ -450,7 +523,7 @@
  %{_perldir}/Slurm.pm
  %{_perldir}/Slurm/Bitstr.pm
  %{_perldir}/Slurm/Constant.pm
-@@ -555,31 +632,26 @@
+@@ -565,40 +647,34 @@
  %{_perldir}/auto/Slurmdb/Slurmdb.so
  %{_perldir}/auto/Slurmdb/autosplit.ix
  %{_perlman3dir}/Slurm*
@@ -482,11 +555,12 @@
  
 -%files libpmi
 -%defattr(-,root,root)
+-%if %{with cray} || %{with cray_shasta}
 +%files -n %{pname}-libpmi%{PROJ_DELIM}
- %if %{with cray}
++%if %{with cray}
  %{_libdir}/slurmpmi/*
  %else
-@@ -587,8 +659,7 @@
+ %{_libdir}/libpmi*
  %endif
  #############################################################################
  
@@ -496,7 +570,7 @@
  %{_bindir}/pbsnodes
  %{_bindir}/qalter
  %{_bindir}/qdel
-@@ -603,17 +674,14 @@
+@@ -613,17 +689,14 @@
  %{_libdir}/slurm/spank_pbs.so
  #############################################################################
  
@@ -516,7 +590,7 @@
  %{_bindir}/seff
  %{_bindir}/sjobexitmod
  %{_bindir}/sjstat
-@@ -622,8 +690,7 @@
+@@ -632,8 +705,7 @@
  #############################################################################
  
  %if %{with pam}
@@ -526,8 +600,15 @@
  %endif
  #############################################################################
  
-@@ -642,31 +709,56 @@
+@@ -650,33 +722,63 @@
+ %endif
+ #############################################################################
  
++%files -n %{pname}-sview%{PROJ_DELIM}
++%{_mandir}/man1/sview*
++%{_bindir}/sview
++#############################################################################
++
  %pre
  
 +# provide specific uid/gid to ensure that it is the same across the cluster
