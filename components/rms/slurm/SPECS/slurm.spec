@@ -462,7 +462,6 @@ echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.c
 # 10/2/18 brad.geltz@intel.com - Enabling the task/affinity plugin to add the --cpu-bind option to srun for GEOPM
 echo "TaskPlugin=task/affinity" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-echo "AccountingStorageType=accounting_storage/filetxt" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP Oversubscribe=EXCLUSIVE" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
