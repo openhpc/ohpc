@@ -9,6 +9,7 @@ if [ -s ./common/TEST_ENV ];then
 fi
 
 @test "[slurm] check for working sacct" {
+    skip "Temporarily skip sacct check"
     run which sacct
     assert_success
 
