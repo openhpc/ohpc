@@ -110,29 +110,32 @@ export NO_BRP_CHECK_RPATH=true
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
-#%Module1.0#####################################################################
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}.lua
+help (
+[[
 
-proc ModulesHelp { } {
+This module loads the %{pname} utility
 
-        puts stderr " "
-        puts stderr "This module loads the %{pname} utility"
-        puts stderr "\nVersion %{version}\n"
+Version %{version}
 
-}
-module-whatis "Name: %{pname}"
-module-whatis "Version: %{version}"
-module-whatis "Category: runtime"
-module-whatis "Description: %{summary}"
-module-whatis "URL %{url}"
+]])
 
-set     version             %{version}
+whatis ("Name: %{pname}")
+whatis ("Version: %{version}")
+whatis ("Category: runtime")
+whatis ("Description: %{summary}")
+whatis ("URL: %{url}")
 
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
+prepend_path("PATH","%{install_path}/bin")
+prepend_path("MANPATH","%{install_path}/share/man")
 
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv ("%{PNAME}_DIR","%{install_path}")
+setenv ("%{PNAME}_BIN","%{install_path}/bin")
+
+-- Load bash completion
+if (myShellName() == "bash") then
+   execute{cmd="source %{instal_path}/etc/bash_completion.d/singularity", modeA={"load"}}
+end
 
 EOF
 
@@ -150,11 +153,6 @@ EOF
 %doc singularity-ohpc-%{version}/gopath/%{singgopath}/examples singularity-ohpc-%{version}/gopath/%{singgopath}/*.md
 %dir %{install_path}/etc/singularity
 %config(noreplace) %{install_path}/etc/singularity/*
-%attr(755, root, root) %{install_path}/etc/singularity/actions/exec
-%attr(755, root, root) %{install_path}/etc/singularity/actions/run
-%attr(755, root, root) %{install_path}/etc/singularity/actions/shell
-%attr(755, root, root) %{install_path}/etc/singularity/actions/start
-%attr(755, root, root) %{install_path}/etc/singularity/actions/test
 %{OHPC_PUB}
 #SUID programs
 %attr(4755, root, root) %{install_path}/libexec/singularity/bin/starter-suid
