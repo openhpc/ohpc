@@ -55,7 +55,7 @@ BuildRequires: libuuid-devel
 BuildRequires: libseccomp-devel
 Requires: file
 %if 0%{?suse_version}
-BuildRequires: go1.12
+BuildRequires: go1.14
 BuildRequires: binutils-gold
 Requires: squashfs
 %else
