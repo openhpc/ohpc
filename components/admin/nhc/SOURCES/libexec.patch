@@ -1,0 +1,27 @@
+--- nhc	2021-02-23 20:28:04.000000000 -0600
++++ nhc	2021-02-23 20:28:41.000000000 -0600
+@@ -181,8 +181,22 @@
+ 
+     # Static variables
+     PATH="/sbin:/usr/sbin:/bin:/usr/bin"
+-    SYSCONFIGDIR="/etc/sysconfig"
+-    LIBEXECDIR="/usr/libexec"
++    if [[ -d "/etc/sysconfig" ]]; then
++	SYSCONFIGDIR="/etc/sysconfig"
++    elif [[ -d "/etc/default" ]]; then
++	SYSCONFIGDIR="/etc/default"
++    else
++	SYSCONFIGDIR="/etc/nhc/sysconfig"
++	# We could auto-create here, but that may cause RPM removal issues.
++	#if [[ ! -d "${SYSCONFIGDIR}" ]]; then
++	#    mkdir -p -m 0700 "${SYSCONFIGDIR}" >&/dev/null
++	#fi
++    fi
++    if [[ -d "/usr/libexec" ]]; then
++	LIBEXECDIR="/usr/libexec"
++    else
++	LIBEXECDIR="/usr/lib"
++    fi
+     if [[ -r /proc/sys/kernel/hostname ]]; then
+         read HOSTNAME < /proc/sys/kernel/hostname
+     elif [[ -z "$HOSTNAME" ]]; then
