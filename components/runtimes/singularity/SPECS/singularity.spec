@@ -133,7 +133,7 @@ setenv ("%{PNAME}_BIN","%{install_path}/bin")
 
 -- Load bash completion
 if (myShellName() == "bash") then
-   execute{cmd="source %{instal_path}/etc/bash_completion.d/singularity", modeA={"load"}}
+   execute{cmd="source %{install_path}/etc/bash_completion.d/singularity", modeA={"load"}}
 end
 
 EOF
