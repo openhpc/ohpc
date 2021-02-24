@@ -28,6 +28,7 @@ module load $python_module_prefix-mpi4py
 
     if [ "$LMOD_FAMILY_MPI" == "mvapich2" ];then
         export MV2_SUPPORT_DPM=1
+	export MV2_ENABLE_AFFINITY=0
     fi
 
 
