@@ -126,8 +126,15 @@ function launch_mpich () {
         return $?
 }
 
+function setupenv_mvapich () {
+    # quiet job launch nonhomogeneous warning
+    set_variable MV2_SUPPRESS_JOB_STARTUP_PERFORMANCE_WARNING  1
+}
+
 function launch_mvapich2 () {
     if [ $MODE == "native" ];then
+
+	setup_mvapich
 
         LAUNCHER="mpiexec.hydra"
         verify_launcher_avail $LAUNCHER
