@@ -136,7 +136,7 @@
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
-[sms](*\#*) chroot $CHROOT systemctl enable chrony
+[sms](*\#*) chroot $CHROOT systemctl enable chronyd
 # Identify master host as local NTP server
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
