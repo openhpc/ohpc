@@ -34,7 +34,9 @@ for compiler in $COMPILER_FAMILIES ; do
 	make clean            || exit 1
 	make -k check         || status=1
 
-        save_logs_mpi_family tests $compiler $mpi
+        save_logs_mpi_family tests          $compiler $mpi
+	save_logs_mpi_family tests/serial   $compiler $mpi
+	save_logs_mpi_family tests/parallel $compiler $mpi
 	make distclean
     done
 done
