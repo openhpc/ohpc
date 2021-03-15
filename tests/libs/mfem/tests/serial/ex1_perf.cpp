@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
    const char *mesh_file = "../../data/fichera.mesh";
-   int ref_levels = -1;
+   int ref_levels = 3;
    int order = sol_p;
    const char *basis_type = "G"; // Gauss-Lobatto
    bool static_cond = false;
