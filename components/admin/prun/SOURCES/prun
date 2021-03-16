@@ -134,7 +134,7 @@ function setupenv_mvapich () {
 function launch_mvapich2 () {
     if [ $MODE == "native" ];then
 
-	setup_mvapich
+	setupenv_mvapich
 
         LAUNCHER="mpiexec.hydra"
         verify_launcher_avail $LAUNCHER
