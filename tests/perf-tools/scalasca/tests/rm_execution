@@ -17,6 +17,10 @@ TASKS=8
 ARGS=8
 
 @test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
+	skip "scorep not working with mvapich 2.3.4"
+    fi
+
     if [ ! -s C_mpi_test ];then
 	flunk "C_mpi_test binary does not exist"
     fi
@@ -31,6 +35,10 @@ ARGS=8
 }
 
 @test "[perf-tools/Scalasca] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
+	skip "scorep not working with mvapich 2.3.4"
+    fi
+
     if [ ! -s CXX_mpi_test ];then
 	flunk "CXX_mpi_test binary does not exist"
     fi
@@ -59,6 +67,10 @@ ARGS=8
 #}
 
 @test "[perf-tools/Scalasca] MPI FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
+	skip "scorep not working with mvapich 2.3.4"
+    fi
+
     if [ ! -s F_test ];then
 	flunk "F_test binary does not exist"
     fi
