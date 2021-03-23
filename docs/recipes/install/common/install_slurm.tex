@@ -17,6 +17,17 @@ the corresponding compute image in a subsequent step.
 \end{lstlisting}
 % end_ohpc_run
 
+There are a wide variety of configuration options and plugins available
+for \SLURM{} and the example config file illustrated above targets a fairly
+basic installation. In particular, job completion data will be stored in a text
+file (\texttt{/var/log/slurm\_jobcomp.log)} that can be used to log simple
+accounting information. Sites who desire more detailed information, or want to
+aggregate accounting data from multiple clusters, will likely want to enable the
+database accounting back-end.  This requires a number of additional local modifications
+(on top of installing \texttt{slurm-slurmdbd-ohpc}), and users are advised to
+consult the online \href{https://slurm.schedmd.com/accounting.html}{\color{blue}{documentation}}
+for more detailed information on setting up a database configuration for \SLURM{}.
+
 \begin{center}
 \begin{tcolorbox}[]
   \small SLURM requires enumeration of the physical hardware characteristics
