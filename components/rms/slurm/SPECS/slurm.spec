@@ -462,6 +462,7 @@ echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.c
 # 10/2/18 brad.geltz@intel.com - Enabling the task/affinity plugin to add the --cpu-bind option to srun for GEOPM
 echo "TaskPlugin=task/affinity" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
+echo "JobCompType=jobcomp/filetxt" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP Oversubscribe=EXCLUSIVE" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
@@ -738,10 +739,10 @@ exit 0
 
 %post
 
-# 3/31/17 karl.w.schulz@intel.com - fix perm for txt accounting file possibility
-if [ ! -f /var/log/slurm_jobacct.log ];then
-    touch /var/log/slurm_jobacct.log
-    chown slurm: /var/log/slurm_jobacct.log
+# 3/23/21 karl@oden.utexas.edu - fix perm for txt job accounting possibility
+if [ ! -f /var/log/slurm_jobcomp.log ];then
+    touch /var/log/slurm_jobcomp.log
+    chown slurm: /var/log/slurm_jobcomp.log
 fi
 
 # 8/8/17 karl.w.schulz@intel.com - create StateSaveLocation
