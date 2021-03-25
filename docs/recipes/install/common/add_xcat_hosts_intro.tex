@@ -52,18 +52,6 @@ but the password is required for kickstarting the stateful install.
 % end_ohpc_run
 \fi
 
-\noindent \xCAT{} requires a network domain name specification for system-wide name
-resolution. This value can be set to match your local DNS schema or given a
-unique identifier such as ``local''. In this recipe, we leverage the
-\texttt{\$domain\_name} variable to define as follows:
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Define local domainname
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
-[sms](*\#*) chdef -t site domain=${domain_name}
-\end{lstlisting}
-
 %\clearpage
 If enabling {\em optional} IPoIB functionality (e.g. to support Lustre over \InfiniBand{}), additional
 settings are required to define the IPoIB network with \xCAT{} and specify
