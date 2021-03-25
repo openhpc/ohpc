@@ -40,9 +40,12 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
 [sms](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network-scripts/ifcfg-ib0
 
-# Verify NetworkManager is running and initiate ib0
+# configure NetworkManager to *not* override local /etc/resolv.conf
+[sms](*\#*) echo "[main]"   >  /etc/NetworkManager/conf.d/90-dns-none.conf
+[sms](*\#*) echo "dns=none" >> /etc/NetworkManager/conf.d/90-dns-none.conf
+# Start up NetworkManager to initiate ib0
 [sms](*\#*) systemctl start NetworkManager
-[sms](*\#*) ifup ib0
+
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
