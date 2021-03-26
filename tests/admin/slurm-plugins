@@ -22,3 +22,16 @@ fi
     run srun --x11 --pty /bin/bash
     assert_output "srun: error: No DISPLAY variable set, cannot setup x11 forwarding."
 }
+
+@test "[slurm] check for sview rpm availability" {
+    if [ "x$DISTRO_FAMILY" == "xCentOS" ];then
+	run yum info slurm-sview-ohpc
+	assert_success
+    elif [ "x$DISTRO_FAMILY" == "xSLES" ];then
+	run zypper info slurm-sview-ohpc
+	assert_success
+    else
+	echo "unsupported distro"
+	false
+    fi
+}
