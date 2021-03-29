@@ -163,6 +163,7 @@ my $tmp_dir = File::Temp::tempdir(CLEANUP => 1, DIR=> $tmp_path) || MYERROR("Una
 print "\nStaging dist creation in $tmp_dir...\n";
 
 if( !$skipCopy) {
+    local $File::Copy::Recursive::CopyLink  = 0;
 
     # copy base repo contents
     print "\nCopying base repo contents from OBS...\n";
@@ -171,11 +172,14 @@ if( !$skipCopy) {
             die "Unable to copy $base_repo_path/$base_release:/Factory to $tmp_dir: $!";
         }
     } else {
-	print "--> copying from $base_repo_path/$base_release\n";
-        unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
-            die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
+	foreach my $distro (@distros) {
+	    print "--> copying from $base_repo_path/$base_release/$distro\n";
+	    unless(dircopy("$base_repo_path/$base_release/$distro", "$tmp_dir/$distro")) {
+            die "Unable to copy $base_repo_path/$base_release/$distro to $tmp_dir/$distro: $!";
+	    }
         }
     }
+
     print "--> base repo copy complete\n";
 
    # build update repo
@@ -193,13 +197,20 @@ if( !$skipCopy) {
                 die "Unable to copy $base_repo_path/$base_release/update.$major.$minor repo: $!";
         }
     }
+
 }
 
 # build dist
 
 foreach my $distro (@distros) {
     if ($minor > 0) {
-	dircopy("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
+	# why copy instead of move? (ks updating Mar. 2021)
+	#dircopy("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
+	if ( -l "$tmp_dir/updates/$distro" ) {
+	    die "Not expecting $tmp_dir/updates/$distro to be a soft link";
+	}
+	print "moving $tmp_dir/updates/$distro -> $tmp_dir/$distro/updates for assembly\n";
+	rename("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
     }
     my @n_distros = grep { $_ ne $distro } @distros;
     # generate binary tarballs
@@ -207,7 +218,6 @@ foreach my $distro (@distros) {
 	my $dist_filename = "$dest_dir/OpenHPC-$release.$distro.$arch.tar";
 	my $tar_args = "-cvf $dist_filename \\\n";
 
-	
 	# exclude other arches, iso and src dirs
 	my @n_arches = grep { $_ ne $arch } @arches;
 	for my $n_arch (@n_arches) {
