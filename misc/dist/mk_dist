@@ -43,7 +43,7 @@ sub usage {
 
 sub add_repo_file {
     my $repoFile     = shift;
-    my $micro        = shift;
+    my $minor        = shift;
     my $base_release = shift;
     my $release      = shift;
     my $distro       = shift;
@@ -52,7 +52,7 @@ sub add_repo_file {
     print "Adding [base] repofile contents -> $repoFile\n";
 
     File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
-    if($micro) {
+    if($minor > 0) {
 	print "Appending [update] repo\n";
 	open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
 	open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
@@ -178,7 +178,7 @@ if( !$skipCopy) {
     print "--> base repo copy complete\n";
 
    # build update repo
-    if ($micro) {
+    if ($minor > 0) {
         #TODO: support update repo merge
         print "\nCopying updates\n";
         unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
@@ -187,8 +187,8 @@ if( !$skipCopy) {
             dircopy("$base_repo_path/$base_release:/Update$micro:/Factory/*", "$tmp_dir/updates") ||
                 die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
         } else {
-            dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
-                die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
+            dircopy("$base_repo_path/$base_release:/update.$major.$minor/*", "$tmp_dir/updates") ||
+                die "Unable to copy $base_repo_path/$base_release:/update.$major.$minor repo: $!";
         }
     }
 }
@@ -196,7 +196,7 @@ if( !$skipCopy) {
 # build dist
 
 foreach my $distro (@distros) {
-    if ($micro) {
+    if ($minor > 0) {
 	dircopy("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
     }
     my @n_distros = grep { $_ ne $distro } @distros;
@@ -210,7 +210,7 @@ foreach my $distro (@distros) {
 	my @n_arches = grep { $_ ne $arch } @arches;
 	for my $n_arch (@n_arches) {
 	    $tar_args .= "--exclude $distro/$n_arch \\\n";
-	    if ($micro) {
+	    if ($minor > 0) {
 		    $tar_args .= "--exclude $distro/updates/$n_arch \\\n";
 	    }
 	}
@@ -218,7 +218,7 @@ foreach my $distro (@distros) {
 	$tar_args .= "--exclude $distro/src \\\n";
 	
 	# exclude any other distro updates
-	if ($micro) {
+	if ($minor > 0) {
 	    for my $n_distro (@n_distros) {
 		$tar_args .= "--exclude $distro/updates/$n_distro \\\n";
 		$tar_args .= "--exclude $distro/updates/src \\\n";
@@ -243,7 +243,7 @@ foreach my $distro (@distros) {
 
 	# add binary .repo file
 	my $isSrcRepo=0;
-	add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
+	add_repo_file("$tmp_dir/OpenHPC.local.repo",$minor,$base_release,$release,$distro,$isSrcRepo);
 
 	# add README file
 	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
@@ -271,7 +271,7 @@ foreach my $distro (@distros) {
 	$tar_args .= "--exclude $distro/noarch \\\n";
 
     # exclude any other distro/arch updates
-    if ($micro) {
+    if ($minor > 0) {
 	for my $arch (@arches) {
 	    $tar_args .= "--exclude $distro/updates/$arch \\\n";
 	}
