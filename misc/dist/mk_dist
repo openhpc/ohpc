@@ -171,6 +171,7 @@ if( !$skipCopy) {
             die "Unable to copy $base_repo_path/$base_release:/Factory to $tmp_dir: $!";
         }
     } else {
+	print "--> copying from $base_repo_path/$base_release\n";
         unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
             die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
         }
@@ -187,8 +188,9 @@ if( !$skipCopy) {
             dircopy("$base_repo_path/$base_release:/Update$micro:/Factory/*", "$tmp_dir/updates") ||
                 die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
         } else {
-            dircopy("$base_repo_path/$base_release:/update.$major.$minor/*", "$tmp_dir/updates") ||
-                die "Unable to copy $base_repo_path/$base_release:/update.$major.$minor repo: $!";
+	    print "--> copying from $base_repo_path/update.$major.$minor/*\n";
+            dircopy("$base_repo_path/$base_release/update.$major.$minor/*", "$tmp_dir/updates") ||
+                die "Unable to copy $base_repo_path/$base_release/update.$major.$minor repo: $!";
         }
     }
 }
