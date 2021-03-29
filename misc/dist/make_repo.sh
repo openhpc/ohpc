@@ -6,6 +6,7 @@ repodir=""
 
 if [ -s "/etc/os-release" ];then
     [[ `grep "CentOS"  /etc/os-release` ]] && repodir=/etc/yum.repos.d
+    [[ `grep "el8"     /etc/os-release` ]] && repodir=/etc/yum.repos.d
     [[ `grep "Red Hat" /etc/os-release` ]] && repodir=/etc/yum.repos.d
     [[ `grep "SLES"    /etc/os-release` ]] && repodir=/etc/zypp/repos.d
     [[ `grep "Leap"    /etc/os-release` ]] && repodir=/etc/zypp/repos.d
