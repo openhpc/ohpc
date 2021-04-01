@@ -27,6 +27,8 @@ major_ver=`echo ${version} | cut -d '.' -f1`
 minor_ver=`echo ${version} | cut -d '.' -f1,2`
 micro_ver=`echo ${version} | cut -d '.' -f3`
 
+minor_dig=`echo ${version} | cut -d '.' -f2`
+
 if [[ -z $micro_ver ]];then
     micro_ver=0
 fi
@@ -86,8 +88,8 @@ if [[ "${arch}" == "aarch64" ]];then
 fi
 
 repobase="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/${baseos}"
-if [[ $micro_ver -gt 0 ]];then
-    repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}/${baseos}"
+if [[ $minor_dig -gt 0 ]];then
+    repoupdate="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/update.${version}/${baseos}"
 fi
 
 # include noarch in query
@@ -97,7 +99,7 @@ arch="$arch,noarch"
 export LC_COLLATE=C
 
 # query repo for ohpc packages
-if [[ $micro_ver -eq 0 ]];then
+if [[ $minor_dig -eq 0 ]];then
     if [ -z "$skip" ];then
 	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
 	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort >> ${logfile}.all
@@ -112,11 +114,11 @@ if [[ $micro_ver -eq 0 ]];then
 
 else
     if [ -z "$skip" ];then
-	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
+	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a --latest-limit 1 \
 	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
 	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort  >> ${logfile}.all
     else
-	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
+	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a --latest-limit 1 \
 	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
 	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
     fi
