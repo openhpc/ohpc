@@ -1,0 +1,52 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+
+module=magpie
+PKG=MAGPIE
+testname=magpie
+
+@test "[$testname] check for RPM" {
+    run check_if_rpm_installed "magpie${DELIM}"
+    assert_success
+}
+
+
+@test "[$testname] Verify $PKG module is loaded and matches rpm version" {
+    module load $module
+    assert_success
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output
+    assert_success
+
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' magpie-ohpc)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists" {
+    DIR=${PKG}_DIR
+
+    module load $module
+    assert_success
+    
+    if [ -z ${!DIR} ];then
+	flunk "${PKG}_DIR directory not defined"
+    fi
+
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+	flunk "directory ${!DIR} does not exist"
+    fi
+}
+
+
+
