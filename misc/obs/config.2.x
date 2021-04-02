@@ -21,9 +21,9 @@ distro-packages = ["python-Cython","flex"]
 fs            = ["lustre-client"]
 io-libs       = ["hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib"]
 runtimes      = ["singularity","ocr","charliecloud"]
-rms           = ["slurm","openpbs","pmix","munge"]
+rms           = ["slurm","openpbs","pmix","munge","magpie"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
-parallel-libs = ["boost","fftw","hypre","mumps","opencoarrays","petsc","scalapack","ptscotch",
+parallel-libs = ["boost","fftw","hypre","mfem","mumps","opencoarrays","petsc","scalapack","ptscotch",
                  "slepc","superlu_dist","trilinos"]
 provisioning  = ["warewulf-vnfs"]
 perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","papi","paraver","pdtoolkit",
@@ -43,9 +43,14 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu9","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["llvm-compilers","easybuild","warewulf-vnfs"]
+standalone = ["cmake","docs","easybuild","libfabric","llvm-compilers","lustre-client","magpie",
+              "meta-packages","prun","singularity","slurm","test-suite","warewulf-vnfs","ucx","valgrind"]
+compiler_dependent = ["!gsl","!hdf5","!metis","!mpich","mvapich2","!numpy","!likwid",
+                      "!openblas","openmpi","!pdtoolkit","!plasma","!R","!scotch","!superlu"]
 
+mpi_dependent = ["boost","mfem","opencoarrays","petsc","slepc"]
 
+opencoarrays_compiler=["gnu9"]
 
 [2.0.0]
 
