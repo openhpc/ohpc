@@ -41,6 +41,7 @@ Collection of GNU autotools packages
 
 %package -n %{PROJ_NAME}-base
 Summary:   OpenHPC base
+Requires:  bash-completion
 Requires:  bc
 Requires:  conman%{PROJ_DELIM}
 Requires:  cmake%{PROJ_DELIM}
