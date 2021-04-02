@@ -1,0 +1,19 @@
+Magpie contains a number of scripts to aid in running a variety of big data software
+frameworks within HPC queuing environments. Examples include Hadoop, Spark, Hbase, Storm, Pig,
+Mahout, Phoenix, Kafka, Zeppelin, and Zookeeper.  Consult the online
+\href{https://github.com/LLNL/magpie}{\color{blue}repository} for
+more information on using these scripts; basic installation is outlined as follows:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_magpie} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Install magpie
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install magpie
+[sms](*\#*) (*\install*) magpie-ohpc
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
