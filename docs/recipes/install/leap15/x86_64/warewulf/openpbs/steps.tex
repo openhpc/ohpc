@@ -164,14 +164,13 @@
 \paragraph{Enable \InfiniBand{} drivers}
 \input{common/ibsupport_compute_sles.tex}
 
-\vspace*{-.1cm}
 \paragraph{Enable \OmniPath{} drivers}
 \input{common/opasupport_compute_sles.tex}
 
-\vspace*{-.1cm}
 \paragraph{Increase locked memory limits}
 \input{common/memlimits} 
 
+\vspace*{0.1cm}
 \paragraph{Add \beegfs{}} \label{sec:add_beegfs}
 \input{common/install_beegfs_client_sles}
 
@@ -200,13 +199,17 @@
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
+\vspace*{-0.1cm}
 \paragraph{Add \nhc{}} \label{sec:add_nhc}
 \input{common/nhc}
 
-%\clearpage
+\vspace*{-0.2cm}
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 \input{common/import_ww_files_ib_sles}
+
+%\clearpage
+\vspace*{-0.2cm}
 \input{common/finalize_provisioning}
 %\vspace*{0.1cm}
 \input{common/add_ww_hosts_intro}

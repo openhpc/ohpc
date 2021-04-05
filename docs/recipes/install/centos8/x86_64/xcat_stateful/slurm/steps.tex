@@ -156,7 +156,7 @@ necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base OS and EPEL repositories for which mirrors are freely available online:
 
 \begin{itemize*}
-\item CentOS-8 - Base 8.2.2004
+\item CentOS-8 - Base 8.3.2011
   (e.g. \href{http://mirror.centos.org/centos-8/8/BaseOS/x86\_64/os}
              {\color{blue}{http://mirror.centos.org/centos-8/8/BaseOS/x86\_64/os}} )
 \item EPEL 8 (e.g. \href{http://download.fedoraproject.org/pub/epel/8/Everything/x86\_64}
@@ -193,11 +193,12 @@ issue the following
 
 \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_centos}
-
+\vspace*{0.3cm}
 \subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
 \input{common/opasupport_sms_centos}
 
-\vspace*{-0.2cm}
+%\vspace*{0.5cm}
+\clearpage
 \subsubsection{Add \OHPC{} components to {\em compute} nodes} \label{sec:add_components}
 \input{common/add_to_compute_stateful_xcat_intro}
 
