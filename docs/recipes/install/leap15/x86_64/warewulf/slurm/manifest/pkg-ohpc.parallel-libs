@@ -38,10 +38,6 @@ opencoarrays-gnu9-impi-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs
 opencoarrays-gnu9-mpich-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu9-mvapich2-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu9-openmpi4-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-impi-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-mpich-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-mvapich2-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-openmpi4-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 petsc-gnu9-impi-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu9-mpich-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu9-mvapich2-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation

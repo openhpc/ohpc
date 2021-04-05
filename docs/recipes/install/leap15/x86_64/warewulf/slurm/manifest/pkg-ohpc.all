@@ -167,10 +167,6 @@ opencoarrays-gnu9-impi-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs
 opencoarrays-gnu9-mpich-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu9-mvapich2-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu9-openmpi4-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-impi-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-mpich-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-mvapich2-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-intel-openmpi4-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 openmpi4-gnu9-ohpc 4.0.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-intel-ohpc 4.0.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openpbs-client-ohpc 20.0.0 http://www.openpbs.org ohpc/rms OpenPBS for a client host
