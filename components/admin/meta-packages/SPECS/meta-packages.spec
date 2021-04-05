@@ -91,6 +91,7 @@ Requires:  libpciaccess
 Requires:  libseccomp
 Requires:  librdmacm
 Requires:  NetworkManager
+Requires:  perl-interpreter
 %ifarch x86_64
 Requires:  libpsm2
 %endif
