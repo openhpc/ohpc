@@ -85,8 +85,6 @@ libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU P
 likwid-gnu9-ohpc 5.0.1 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Performance tools for the Linux console
 likwid-intel-ohpc 5.0.1 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Performance tools for the Linux console
 llvm10-compilers-ohpc 10.0.1 http://www.llvm.org ohpc/compiler-families LLVM (An Optimizing Compiler Infrastructure)
-lmod-defaults-arm1-mpich-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-defaults-arm1-openmpi4-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu9-impi-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu9-mpich-ofi-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu9-mpich-ucx-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments

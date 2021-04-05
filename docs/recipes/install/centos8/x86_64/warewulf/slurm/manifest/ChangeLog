@@ -1,10 +1,6 @@
 [Component Additions]
   * llvm10-compilers-ohpc                    (10.0.1)
   * magpie-ohpc                              (2.5)
-  * opencoarrays-intel-impi-ohpc             (2.9.2)
-  * opencoarrays-intel-mpich-ohpc            (2.9.2)
-  * opencoarrays-intel-mvapich2-ohpc         (2.9.2)
-  * opencoarrays-intel-openmpi4-ohpc         (2.9.2)
   * slurm-sview-ohpc                         (20.11.3)
  
 [Component Version Changes]
