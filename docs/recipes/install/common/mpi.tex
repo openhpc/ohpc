@@ -107,7 +107,11 @@ variant of MVAPICH2 instead:
 % ohpc_command fi
 % end_ohpc_run
 
-An additional OpenMPI build variant is listed in Table~\ref{table:mpi} which
-enables \href{https://pmix.github.io/pmix/}{\color{blue}{PMIx}} job launch
-support for use with \SLURM{}. This optional variant is
-available as \texttt{openmpi4-pmix-slurm-gnu9-ohpc}.
+%%--
+%% https://github.com/openhpc/ohpc/issues/1273
+%% disabling until we can get pmix/openmpi/slurm to play nicely
+%%--
+%% An additional OpenMPI build variant is listed in Table~\ref{table:mpi} which
+%% enables \href{https://pmix.github.io/pmix/}{\color{blue}{PMIx}} job launch
+%% support for use with \SLURM{}. This optional variant is
+%% available as \texttt{openmpi4-pmix-slurm-gnu9-ohpc}.
