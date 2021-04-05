@@ -1,0 +1,13 @@
+--- a/initramfs/Makefile.am	2020-03-05 08:37:25.000000000 -0600
++++ b/initramfs/Makefile.am	2021-04-04 21:07:22.399940081 -0500
+@@ -134,8 +134,10 @@
+ 	fi
+ 	if [ -n "@local_e2fsprogs_path@" -a -f "@local_e2fsprogs_path@" ]; then \
+ 		cp -av "@local_e2fsprogs_path@" rootfs/sbin/mkfs.ext4 ;\
++		cp -av "/etc/mke2fs.conf" rootfs/etc/mke2fs.conf ;\
+ 	else \
+ 		cp -av _work/$(E2FSPROGS_DIR)/misc/mke2fs rootfs/sbin/mkfs.ext4 ;\
++		cp -av _work/$(E2FSPROGS_DIR)/misc/mke2fs.conf rootfs/etc/mkfs.ext4 ;\
+ 	fi
+ 	ln -s mkfs.ext4 rootfs/sbin/mkfs.ext3
+ 	if [ -n "@local_libarchive_path@" -a -f "@local_libarchive_path@" ]; then \

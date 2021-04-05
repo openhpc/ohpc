@@ -32,6 +32,7 @@ Patch5:  warewulf-provision.sle_tftpboot.patch
 Patch6:  warewulf-provision.wwgetfiles.patch
 Patch7:  warewulf-provision.noquiet.patch
 Patch8:  c5a90be.patch
+Patch9:  warewulf-provision.mke2fs.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -124,6 +125,7 @@ cd %{_builddir}
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 
 %build
