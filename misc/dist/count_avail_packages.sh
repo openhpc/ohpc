@@ -59,7 +59,7 @@ for os in ${oses}; do
 
     echo " "
     echo "repo base = ${repobase}"
-    if [[ $micro_ver -gt 0 ]];then
+    if [[ $micro_dig -gt 0 ]];then
 	echo "repo update = ${repoupdate}"
     fi
 
