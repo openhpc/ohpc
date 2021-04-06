@@ -1,6 +1,6 @@
 # -*- mode: sh; fill-column: 120; -*-
 
-Version 2.1 (xx April 2021)
+Version 2.1 (06 April 2021)
 
 [General Updates]
 
@@ -18,7 +18,7 @@ Version 2.1 (xx April 2021)
 [Important Highlights/Notices for v2.1]
 
   * the newer version of SLURM included in this release deprecates the accounting_storage/filetxt option. If you were
-    using this option locally, you will need to comment out this plugin in slurm.conf or will encounter an error on
+    using this configuration locally, you will need to comment out this plugin in slurm.conf or will encounter an error on
     startup. Sites previously dependent on this functionality for simple accounting mechanisms may want to consider
     replacing with the ascii job completion file option (JobCompType=jobcomp/filetxt).
   * the Arm Compiler for Linux v21.0 is incompatible with the OpenHPC 2.x series
