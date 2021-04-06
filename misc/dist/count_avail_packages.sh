@@ -20,6 +20,7 @@ oses="CentOS_8 Leap_15"
 major_ver=`echo ${version} | cut -d '.' -f1`
 minor_ver=`echo ${version} | cut -d '.' -f1,2`
 micro_ver=`echo ${version} | cut -d '.' -f3`
+minor_dig=`echo ${version} | cut -d '.' -f2`
 
 if [[ -z $micro_ver ]];then
     micro_ver=0
@@ -48,8 +49,12 @@ for os in ${oses}; do
 	repobase="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/${os}"
     fi
 
-    if [[ $micro_ver -gt 0 ]];then
-	repoupdate="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
+    if [[ $micro_dig -gt 0 ]];then
+	if [[ ${USE_FACTORY} -eq 1 ]]; then
+	    repoupdate="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
+	else
+	    repoupdate="http://repos.openhpc.community/.staging/OpenHPC/${mmajor_ver}/update.${minor_ver}/${os}"
+	fi
     fi
 
     echo " "
@@ -63,7 +68,7 @@ for os in ${oses}; do
     for arch in ${arches}; do
 	echo -n "  ${arch}: "
 
-	if [[ $micro_ver -eq 0 ]];then
+	if [[ $micro_dig -eq 0 ]];then
 	    numrpms=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' | wc -l`
 	    echo $numrpms
 	    let "total=$total+$numrpms"
