@@ -49,11 +49,11 @@ for os in ${oses}; do
 	repobase="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/${os}"
     fi
 
-    if [[ $micro_dig -gt 0 ]];then
+    if [[ $minor_dig -gt 0 ]];then
 	if [[ ${USE_FACTORY} -eq 1 ]]; then
 	    repoupdate="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
 	else
-	    repoupdate="http://repos.openhpc.community/.staging/OpenHPC/${mmajor_ver}/update.${minor_ver}/${os}"
+	    repoupdate="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/update.${minor_ver}/${os}"
 	fi
     fi
 
@@ -68,7 +68,7 @@ for os in ${oses}; do
     for arch in ${arches}; do
 	echo -n "  ${arch}: "
 
-	if [[ $micro_dig -eq 0 ]];then
+	if [[ $minor_dig -eq 0 ]];then
 	    numrpms=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' | wc -l`
 	    echo $numrpms
 	    let "total=$total+$numrpms"
