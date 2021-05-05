@@ -24,6 +24,7 @@ License: US Dept. of Energy (BSD-like)
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Source1: opensuse-15.2.tmpl
+Source2: rocky-8.tmpl
 Patch0:  warewulf-vnfs.aarch64.bootstrap.patch
 Patch1:  warewulf-vnfs.aarch64.bootstrap_usb.patch
 Patch2:  warewulf-vnfs.bootstrap_msr.patch
@@ -100,7 +101,7 @@ cd %{_builddir}
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 install -D -m 0644 %SOURCE1 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/opensuse-15.2.tmpl
-
+install -D -m 0644 %SOURCE2 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/rocky-8.tmpl
 
 %files
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
