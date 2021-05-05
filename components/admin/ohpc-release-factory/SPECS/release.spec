@@ -85,6 +85,12 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 [OpenHPC-updates]
 name=OpenHPC-%{ohpc_version} - Updates
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/updates/%{_repository}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
+
+[OpenHPC-updates-factory]
+name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_factory_repo}/OpenHPC:/%{ohpc_version}.%{ohpc_micro_update}:/Factory/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
