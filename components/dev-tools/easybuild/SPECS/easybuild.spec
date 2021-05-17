@@ -110,5 +110,36 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+# This is for the OpenHPC EasyBuild integration
+mkdir -p %{buildroot}/etc/easybuild.d
+%{__cat} << EOF > %{buildroot}/etc/easybuild.d/ohpc.cfg
+[config]
+external-modules-metadata=%{OHPC_EB_META}/*.cfg
+robot-paths=%%(DEFAULT_ROBOT_PATHS)s:%{OHPC_EB_ROBOT}
+EOF
+
+mkdir -p %{buildroot}/%{OHPC_EB_ROBOT}
+# This sets up the OpenHPC toolchain in EasyBuild
+# Unfortunately some parts are hardcoded.
+%{__cat} << EOF > %{buildroot}/%{OHPC_EB_ROBOT}/GCC-9.2.0-ohpc-gnu9.eb
+easyblock = 'Toolchain'
+
+homepage = 'https://github.com/openhpc/ohpc'
+name = 'GCC'
+version = '9.2.0'
+versionsuffix = '-ohpc-gnu9'
+
+description = """Toolchain provided by OpenHPC\n"""
+
+toolchain = SYSTEM
+
+dependencies = [
+    ('gnu9/9.2.0', EXTERNAL_MODULE),
+]
+
+moduleclass = 'toolchain'
+EOF
+
 %files
 %{OHPC_HOME}
+/etc/easybuild.d

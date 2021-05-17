@@ -42,6 +42,9 @@ builds.
 %install
 # The ohpc-filesystems owns all the common directories
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/{apps,doc,compiler,libs,moduledeps,modulefiles,mpi}
+# This are the easybuild directories OpenHPC drops its
+# EasyBuild configuration files into.
+mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/easybuild/{metadata,robot}
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs
 
@@ -78,6 +81,9 @@ EOF
 %dir /opt/ohpc/pub/apps/
 %dir /opt/ohpc/pub/doc/
 %dir /opt/ohpc/pub/compiler/
+%dir /opt/ohpc/pub/easybuild/
+%dir /opt/ohpc/pub/easybuild/metadata
+%dir /opt/ohpc/pub/easybuild/robot
 %dir /opt/ohpc/pub/libs/
 %dir /opt/ohpc/pub/moduledeps/
 %dir /opt/ohpc/pub/modulefiles/
