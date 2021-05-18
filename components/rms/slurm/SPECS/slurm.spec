@@ -19,7 +19,7 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	20.11.3
+Version:	20.11.7
 %global rel	1
 Release:	%{rel}%{?dist}
 Summary:	Slurm Workload Manager
@@ -449,8 +449,11 @@ install -D -m644 etc/slurmrestd.service  %{buildroot}/%{_unitdir}/slurmrestd.ser
 %endif
 
 install -D -m644 etc/cgroup.conf.example %{buildroot}/%{_sysconfdir}/cgroup.conf.example
+install -D -m644 etc/prolog.example %{buildroot}/%{_sysconfdir}/prolog.example
+install -D -m644 etc/job_submit.lua.example %{buildroot}/%{_sysconfdir}/job_submit.lua.example
 install -D -m644 etc/slurm.conf.example %{buildroot}/%{_sysconfdir}/slurm.conf.example
 install -D -m600 etc/slurmdbd.conf.example %{buildroot}/%{_sysconfdir}/slurmdbd.conf.example
+install -D -m644 etc/cli_filter.lua.example %{buildroot}/%{_sysconfdir}/cli_filter.lua.example
 # 2/11/19 karl@ices.utexas.edu - include epilog cleanup file that shipped with 17.x releases
 install -D -m755 %{SOURCE1} %{buildroot}/%{_sysconfdir}/slurm.epilog.clean
 install -D -m755 contribs/sjstat %{buildroot}/%{_bindir}/sjstat
@@ -621,9 +624,12 @@ fi
 %endif
 
 %config %{_sysconfdir}/cgroup.conf.example
+%config %{_sysconfdir}/job_submit.lua.example
+%config %{_sysconfdir}/prolog.example
 %config %{_sysconfdir}/slurm.conf.example
 %config %{_sysconfdir}/slurm.epilog.clean
 %config %{_sysconfdir}/slurmdbd.conf.example
+%config %{_sysconfdir}/cli_filter.lua.example
 #############################################################################
 
 %files -n %{pname}-devel%{PROJ_DELIM}
