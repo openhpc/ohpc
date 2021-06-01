@@ -1,5 +1,37 @@
 # -*- mode: sh; fill-column: 120; -*-
 
+Version 2.2 (02 June 2021)
+
+[General Updates]
+
+  * updated SLURM version to address CVE-2021-31215
+  * updated CentOS installation docs to use newer name for the powertools repository
+    (see https://wiki.centos.org/Manuals/ReleaseNotes/CentOS8.2011#Yum_repo_file_and_repoid_changes)
+  * addition of Rocky 8 template for Warewulf provisioning. Although not officially supported, a template to create
+    images using the Rocky 8.3 release candidate is included in the latest warewulf-vnfs package.  Users interested in
+    provisioning a Rocky-based system can follow the existing OpenHPC CentOS recipes and use the "rocky-8" template
+    instead of "centos-8" when calling `wwmkchroot` 
+
+[Component Version Changes]
+
+  * EasyBuild-ohpc                           (4.3.3 -> 4.3.4)
+  * docs-ohpc                                (2.1.0 -> 2.2.0)
+  * slurm-contribs-ohpc                      (20.11.3 -> 20.11.7)
+  * slurm-devel-ohpc                         (20.11.3 -> 20.11.7)
+  * slurm-example-configs-ohpc               (20.11.3 -> 20.11.7)
+  * slurm-libpmi-ohpc                        (20.11.3 -> 20.11.7)
+  * slurm-ohpc                               (20.11.3 -> 20.11.7)
+  * slurm-openlava-ohpc                      (20.11.3 -> 20.11.7)
+  * slurm-pam_slurm-ohpc                     (20.11.3 -> 20.11.7)
+  * slurm-perlapi-ohpc                       (20.11.3 -> 20.11.7)
+  * slurm-slurmctld-ohpc                     (20.11.3 -> 20.11.7)
+  * slurm-slurmd-ohpc                        (20.11.3 -> 20.11.7)
+  * slurm-slurmdbd-ohpc                      (20.11.3 -> 20.11.7)
+  * slurm-sview-ohpc                         (20.11.3 -> 20.11.7)
+  * slurm-torque-ohpc                        (20.11.3 -> 20.11.7)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 2.1 (06 April 2021)
 
 [General Updates]
