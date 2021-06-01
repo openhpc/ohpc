@@ -1,4 +1,4 @@
-libfabric-ohpc 1.11.2 http://www.github.com/ofiwg/libfabric ohpc/mpi-families User-space RDMA Fabric Interfaces
+libfabric-ohpc 1.12.1 http://www.github.com/ofiwg/libfabric ohpc/mpi-families User-space RDMA Fabric Interfaces
 mpich-ofi-arm1-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ofi-gnu9-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ucx-arm1-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation

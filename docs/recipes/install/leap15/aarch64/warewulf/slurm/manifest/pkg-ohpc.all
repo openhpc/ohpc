@@ -1,4 +1,4 @@
-EasyBuild-ohpc 4.3.3 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
+EasyBuild-ohpc 4.3.4 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
 R-gnu9-ohpc 3.6.3 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 adios-gnu9-mpich-ohpc 1.13.1 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
 adios-gnu9-openmpi4-ohpc 1.13.1 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
@@ -16,7 +16,7 @@ dimemas-arm1-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-arm1-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu9-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu9-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-docs-ohpc 2.1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+docs-ohpc 2.3.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 extrae-gnu9-mpich-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu9-openmpi4-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
@@ -39,9 +39,8 @@ hypre-gnu9-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs 
 hypre-gnu9-openmpi4-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 imb-gnu9-mpich-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu9-openmpi4-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
-libfabric-ohpc 1.11.2 http://www.github.com/ofiwg/libfabric ohpc/mpi-families User-space RDMA Fabric Interfaces
+libfabric-ohpc 1.12.1 http://www.github.com/ofiwg/libfabric ohpc/mpi-families User-space RDMA Fabric Interfaces
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
-llvm10-compilers-ohpc 10.0.1 http://www.llvm.org ohpc/compiler-families LLVM (An Optimizing Compiler Infrastructure)
 lmod-defaults-arm1-mpich-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-arm1-openmpi4-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu9-mpich-ofi-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
@@ -81,10 +80,10 @@ opencoarrays-gnu9-mpich-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-lib
 opencoarrays-gnu9-openmpi4-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 openmpi4-arm1-ohpc 4.0.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-gnu9-ohpc 4.0.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
-openpbs-client-ohpc 20.0.0 http://www.openpbs.org ohpc/rms OpenPBS for a client host
-openpbs-devel-ohpc 20.0.0 http://www.openpbs.org Development/System OpenPBS Development Package
-openpbs-execution-ohpc 20.0.0 http://www.openpbs.org ohpc/rms OpenPBS for an execution host
-openpbs-server-ohpc 20.0.0 http://www.openpbs.org ohpc/rms OpenPBS for a server host
+openpbs-client-ohpc 20.0.1 http://www.openpbs.org ohpc/rms OpenPBS for a client host
+openpbs-devel-ohpc 20.0.1 http://www.openpbs.org Development/System OpenPBS Development Package
+openpbs-execution-ohpc 20.0.1 http://www.openpbs.org ohpc/rms OpenPBS for an execution host
+openpbs-server-ohpc 20.0.1 http://www.openpbs.org ohpc/rms OpenPBS for a server host
 papi-ohpc 5.7.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 paraver-ohpc 4.8.2 https://tools.bsc.es ohpc/perf-tools Paraver
 pdsh-mod-genders-ohpc 2.34 https://github.com/chaos/pdsh System Environment/Base Provides libgenders support for pdsh
@@ -133,19 +132,19 @@ sionlib-gnu9-mpich-ohpc 1.7.4 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supp
 sionlib-gnu9-openmpi4-ohpc 1.7.4 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 slepc-gnu9-mpich-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu9-openmpi4-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slurm-contribs-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-devel-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
-slurm-example-configs-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
-slurm-libpmi-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
-slurm-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
-slurm-openlava-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
-slurm-pam_slurm-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
-slurm-perlapi-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
-slurm-slurmctld-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
-slurm-slurmd-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
-slurm-slurmdbd-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
-slurm-sview-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
-slurm-torque-ohpc 20.11.3 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
+slurm-contribs-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-devel-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-example-configs-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
+slurm-libpmi-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
+slurm-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-openlava-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
+slurm-pam_slurm-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-slurmctld-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
+slurm-slurmd-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
+slurm-slurmdbd-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-sview-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
+slurm-torque-ohpc 20.11.7 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
 spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 superlu-arm1-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-gnu9-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
@@ -155,7 +154,7 @@ superlu_dist-gnu9-mpich-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ oh
 superlu_dist-gnu9-openmpi4-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 tau-gnu9-mpich-ohpc 2.29 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu9-openmpi4-ohpc 2.29 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-test-suite-ohpc 2.1.0 https://github.com/openhpc/ohpc/tests ohpc/admin Integration test suite for OpenHPC
+test-suite-ohpc 2.3.0 https://github.com/openhpc/ohpc/tests ohpc/admin Integration test suite for OpenHPC
 trilinos-gnu9-mpich-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu9-openmpi4-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 ucx-cma-ohpc 1.9.0 http://www.openucx.org System Environment/Libraries UCX CMA support
