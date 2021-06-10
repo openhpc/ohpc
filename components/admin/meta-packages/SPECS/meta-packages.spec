@@ -351,7 +351,6 @@ Collection of python3 related library builds for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-%{compiler_family}-runtimes
 Summary:   OpenHPC runtimes for GNU
 Requires:  charliecloud%{PROJ_DELIM}
-Requires:  singularity%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-runtimes
 Collection of runtimes for use with GNU compiler toolchain
 
@@ -703,7 +702,6 @@ Collection of python3 related library builds for use with Intel(R) Parallel Stud
 %package -n %{PROJ_NAME}-intel-runtimes
 Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
 Requires:  charliecloud%{PROJ_DELIM}
-Requires:  singularity%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-runtimes
 Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
 
