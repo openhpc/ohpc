@@ -59,10 +59,6 @@ if MODULES_ENABLED
    SUBDIRS += modules 
 endif
 
-if SINGULARITY_ENABLED
-   SUBDIRS += runtimes/singularity
-endif
-
 if UCX_ENABLED
    SUBDIRS += libs/ucx
 endif

@@ -381,12 +381,6 @@ AC_ARG_ENABLE([scotch],
    [AX_OPTION_DEFAULT(type=long,enable_scotch,yes)])
 AM_CONDITIONAL(SCOTCH_ENABLED,test "x$enable_scotch" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# Singularity
-AC_ARG_ENABLE([singularity],
-     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes)])],[],
-     [AX_OPTION_DEFAULT(type=long,enable_singularity,yes)])
-AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
-#------------------------------------------------------------------------------------------
 # SLEPC
 AC_ARG_ENABLE([slepc],
    [AS_HELP_STRING([--enable-slepc],[Enable slepc tests (default=yes)])],[],
@@ -503,7 +497,6 @@ AC_OUTPUT( Makefile
        perf-tools/tau/Makefile
        oob/Makefile
        runtimes/charliecloud/Makefile
-       runtimes/singularity/Makefile
        fs/beegfs/Makefile
        fs/lustre/Makefile
        dev-tools/easybuild/Makefile
@@ -904,12 +897,6 @@ echo    Runtimes:
        echo '    'Charliecloud.............. : enabled
     else
        echo '    'Charliecloud.............. : disabled
-    fi
-
-    if test "x$enable_singularity" = "xyes"; then
-       echo '    'Singularity............... : enabled
-    else
-       echo '    'Singularity............... : disabled
     fi
 
 echo    User Environment:
