@@ -39,11 +39,9 @@ echo "-------------------------------------------------------"
     assert_success
 }
 
-@test "[charliecloud] check for singularity RPM (needed for alpine image)" {
-    check_if_rpm_installed "singularity"
-}
-
 @test "[charliecloud] build alpine image from Docker (using singularity)" {
+
+    check_if_rpm_installed "singularity"
 
     if [ -d alpine ];then
        	rm -rf ./alpine
