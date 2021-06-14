@@ -84,14 +84,15 @@ export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
 ./configure --prefix=%{install_path} \
-    --enable-shared \
-    --enable-netcdf-4 \
-    --enable-dap \
-    --enable-ncgen4 \
-    --with-pic \
-    --disable-doxygen \
-    --disable-filter-testing \
-    --disable-static || { cat config.log && exit 1; }
+            --libdir=%{install_path}/lib \
+            --enable-shared \
+            --enable-netcdf-4 \
+            --enable-dap \
+            --enable-ncgen4 \
+            --with-pic \
+            --disable-doxygen \
+            --disable-filter-testing \
+            --disable-static || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
 
