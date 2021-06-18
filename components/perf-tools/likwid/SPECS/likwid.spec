@@ -17,7 +17,7 @@
 
 Summary:   Performance tools for the Linux console
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   5.1.0
+Version:   5.2.0
 Release:   1%{?dist}
 License:   GPL-3.0+
 Group:     %{PROJ_NAME}/perf-tools
@@ -77,12 +77,19 @@ It consists of:
           PREFIX="%{install_path}" \
           LIBDIR="%{install_path}/lib" \
           MANPREFIX="%{install_path}/man" \
+%ifarch x86_64
 %if "%{compiler_family}" == "intel"
           COMPILER="ICC" \
           FC="ifort" \
           FCFLAGS="-module ./" \
 %else
           COMPILER="GCC" \
+          FC="gfortran" \
+          FCFLAGS="-J ./ -fsyntax-only" \
+%endif
+%endif
+%ifarch aarch64
+          COMPILER="GCCARMv8" \
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
@@ -99,6 +106,7 @@ It consists of:
           PREFIX="%{buildroot}%{install_path}" \
           LIBDIR="%{buildroot}%{install_path}/lib" \
           MANPREFIX="%{buildroot}%{install_path}/man" \
+%ifarch x86_64
 %if "%{compiler_family}" == "intel"
           COMPILER="ICC" \
           FC="ifort" \
@@ -108,12 +116,23 @@ It consists of:
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
+%endif
+%ifarch aarch64
+          COMPILER="GCCARMv8" \
+          FC="gfortran" \
+          FCFLAGS="-J ./ -fsyntax-only" \
+          BUILDDAEMON="false" \
+          BUILDFREQ="false" \
+          ACCESSMODE="perf_event"
+%endif
           INSTALL_CHOWN="" \
           OPTFLAGS="%{optflags}" \
           Q="" install
 
+%ifarch x86_64
 chmod 755 $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
 chmod 755 $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
+%endif
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -158,8 +177,10 @@ EOF
 
 %post
 /sbin/ldconfig
+%ifarch x86_64
 chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
 chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
+%endif
 
 %postun
 /sbin/ldconfig
