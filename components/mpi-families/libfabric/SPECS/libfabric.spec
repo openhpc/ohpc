@@ -15,7 +15,7 @@
 %define pname libfabric
 
 Name: libfabric%{PROJ_DELIM}
-Version: 1.11.2
+Version: 1.12.1
 Release: 1%{?dist}
 Summary: User-space RDMA Fabric Interfaces
 Group:   %{PROJ_NAME}/mpi-families
