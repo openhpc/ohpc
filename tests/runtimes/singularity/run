@@ -12,7 +12,6 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 module purge || exit 1
-module load singularity || exit 1
 ARCH=`uname -m`
 echo $ARCH > foo.out
 if [ "$ARCH" == "aarch64" ];then
