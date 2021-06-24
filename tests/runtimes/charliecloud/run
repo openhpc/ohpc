@@ -41,11 +41,12 @@ echo "-------------------------------------------------------"
 
 @test "[charliecloud] build alpine image from Docker (using singularity)" {
 
+    check_if_rpm_installed "singularity"
+
     if [ -d alpine ];then
        	rm -rf ./alpine
     fi 
 
-    module load singularity
     run timeout 30s singularity build --sandbox alpine docker://alpine:3
     assert_success
 }
