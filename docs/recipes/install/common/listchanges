@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #t_old="obs/OpenHPC_1.3.9_Factory"
-t_old="v2.1.GA"
-t_new="2.2"
+t_old="v2.2.GA"
+t_new="2.3"
 
 f_all=pkg-ohpc.all
 f_add=pkg-ohpc.chglog-add
