@@ -1,5 +1,32 @@
 # -*- mode: sh; fill-column: 120; -*-
 
+Version 2.3 (25 June 2021)
+
+[General Updates]
+
+  * package updates to support RHEL8.4 variants. Note that changes in the distro provided hwloc required rebuilds of
+    both OpenPBS and SLURM (https://github.com/openhpc/ohpc/issues/1324)
+  * addition of a Rocky 8.4 recipe. The `docs-ohpc` rpm includes a Rocky based recipe that mimics the CentOS
+    Warewulf variant but uses an alternative "rocky-8" template when calling `wwmkchroot`
+
+[Known Issues]
+
+  * At present, a Lustre-client build is not available for a RHEL 8.4 kernel.  If Lustre client functionality is desired,
+    users are encouraged to stick with a RHEL 8.3 kernel until a newer Lustre version is released upstream.
+
+[Component Version Changes]
+
+  * EasyBuild-ohpc                           (4.3.3 -> 4.3.4)
+  * docs-ohpc                                (2.1.0 -> 2.3.0)
+  * libfabric-ohpc                           (1.11.2 -> 1.12.1)
+  * openpbs-client-ohpc                      (20.0.0 -> 20.0.1)
+  * openpbs-devel-ohpc                       (20.0.0 -> 20.0.1)
+  * openpbs-execution-ohpc                   (20.0.0 -> 20.0.1)
+  * openpbs-server-ohpc                      (20.0.0 -> 20.0.1)
+  * test-suite-ohpc                          (2.1.0 -> 2.3.0)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 2.2 (01 June 2021)
 
 [General Updates]
