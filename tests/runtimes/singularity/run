@@ -12,7 +12,6 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 module purge || exit 1
-module load singularity || exit 1
 ARCH=`uname -m`
 echo $ARCH > foo.out
 if [ "$ARCH" == "aarch64" ];then
@@ -23,7 +22,7 @@ DISTRO=ubuntu
 IMAGE=./${DISTRO}.sif
 
 @test "[singularity] check for RPM" {
-    check_if_rpm_installed "singularity${DELIM}"
+    check_if_rpm_installed "singularity"
 }
 
 @test "[singularity] pull down $DISTRO docker image" {

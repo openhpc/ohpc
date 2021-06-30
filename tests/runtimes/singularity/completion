@@ -10,7 +10,6 @@ if [ -s ./common/TEST_ENV ];then
 fi
 
 module purge || exit 1
-module load singularity || exit 1
 
 # function to capture bash tab completion
 # thank you wise ol' internet:
