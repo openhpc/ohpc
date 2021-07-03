@@ -18,48 +18,54 @@
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.29
+Version:   2.31.1
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
-Patch1:    tau-add-explicit-linking-option.patch
-Patch2:    tau-shared_libpdb.patch
-Patch3:    tau-disable_examples.patch
-Patch4:    tau-ucontext.patch
-Patch5:    tau-testplugins_makefile.patch
-Patch6:    paraprof.patch
-Patch7:    c7b3c18-pomp2_begin.diff
+Patch1:    tau-2.31.1-add-explicit-linking-option.patch
+Patch2:    tau-2.31.1-shared_libpdb.patch
+Patch3:    tau-2.31.1-disable_examples.patch
+Patch4:    tau-2.31.1-ucontext.patch
+Patch5:    tau-2.31.1-testplugins_makefile.patch
+Patch6:    tau-2.31.1-paraprof.patch
+Patch7:    tau-2.31.1-python2to3.patch
+Patch8:    tau-2.31.1-profileparam_argc.patch
 
-Provides:  lib%PNAME.so()(64bit)(%PROJ_NAME)
+Provides:  lib%{PNAME}.so()(64bit)(%{PROJ_NAME})
 Provides:  perl(ebs2otf)
-Conflicts: lib%pname < %version-%release
-Obsoletes: lib%pname < %version-%release
+Conflicts: lib%{pname} < %{version}-%{release}
+Obsoletes: lib%{pname} < %{version}-%{release}
 
-%if 0%{?suse_version}
+%if 0%{?suse_version} || 0%{?sle_version}
 BuildRequires: libgomp1
 %else
 BuildRequires: libgomp
 %endif
 
-BuildRequires: curl
-BuildRequires: postgresql-devel binutils-devel
-Requires: binutils-devel
-BuildRequires: zlib-devel python2-devel
-Requires:      lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
 %endif
+
+BuildRequires: curl chrpath sed grep which make
+BuildRequires: postgresql-devel binutils-devel
+BuildRequires: zlib-devel python3-devel
+BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires: binutils-devel
+Requires: java
+Requires: python3
+Requires: perl
 
 #!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define module_path %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 
 %description
 TAU is a program and performance analysis tool framework being developed for
@@ -76,7 +82,7 @@ automatic instrumentation tool.
 %prep
 %setup -q -n %{pname}-%{version}
 
-%global _default_patch_fuzz 2
+%global _default_patch_fuzz 1
 
 %patch1 -p1
 %patch2 -p1
@@ -85,37 +91,21 @@ automatic instrumentation tool.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 %endif
 
-%install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-%ifarch x86_64
-module load papi
-%endif
-module load pdtoolkit
-
-%if "%{compiler_family}" == "intel"
-export fcomp=ifort
-%else
-export fcomp=gfortran
-%endif
-
-%if "%{mpi_family}" == "impi"
-export MPI_INCLUDE_DIR=$I_MPI_ROOT/intel64/include
-export MPI_LIB_DIR=$I_MPI_ROOT/intel64/lib
-%else
-export MPI_INCLUDE_DIR=$MPI_DIR/include
-export MPI_LIB_DIR=$MPI_DIR/lib
-%endif
-
-export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
-export BUILDROOT=%buildroot
-export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
-export TAUROOT=`pwd`
+# Fix errors with unversioned python shebangs
+# and change others to preferred usage
+# Need to also pre-capture generated files
+for f in $(grep -Ilr "#! */usr/bin/env" *); do
+   sed -i "s,n/env python\b,n/python3,g" $f
+   sed -i "s,n/env python3,n/python3,g" $f
+   sed -i "s,n/env sh,n/sh,g" $f
+   sed -i "s,n/env perl,n/perl,g" $f
+done
 
 # override with newer config.guess for aarch64
 %ifarch aarch64 || ppc64le
@@ -128,228 +118,162 @@ cp /usr/lib/rpm/config.sub utils/opari2/build-config/.
 %endif
 %endif
 
-# Fix errors above unversioned python shebangs
-for file in \
-	apex/src/scripts/task_scatterplot.py \
-	examples/test.py \
-	examples/gpu/pycuda/matmult.py \
-	examples/sos/pycoolrgui/pycoolr-plot/clr_utils.py \
-	examples/sos/pycoolrgui/pycoolr-plot/coolr-sos-db.py \
-	examples/sos/pycoolrgui/pycoolr-plot/listrotate.py \
-	examples/sos/pycoolrgui/pycoolr-plot/coolr.py \
-	examples/sos/pycoolrgui/pycoolr-plot/layout.py \
-	examples/sos/pycoolrgui/pycoolr-plot/init_coolr.py \
-	examples/sos/pycoolrgui/pycoolr-plot/coolr-launch.py \
-	examples/sos/pycoolrgui/pycoolr-plot/coolr-back.py \
-	examples/python/auto.py \
-	examples/python/firstprime.py \
-	examples/python/cpi.py \
-	examples/python/manual.py \
-	examples/python/hello-mpi.py \
-	src/Profile/ltau.py \
-	src/Profile/tau.py \
-	src/Profile/tau_pyspark_wrapper.py \
-	tau_validate \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/clr_utils.py \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-sos-db.py \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/listrotate.py \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr.py \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/layout.py \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/init_coolr.py \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-launch.py \
-	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-back.py \
-	tools/src/tau_resolve_addresses.py \
-	tools/src/perfexplorer/examples/MicroLoadImbalance/trunc.py \
-	tools/src/tau_prof2json.py \
-	tools/src/tau_portal/bin/portal.py.skel \
-	tools/src/tau_portal/bin/tau_portal.py \
-	tools/src/tau_prof_to_json.py \
-	tools/src/tau_baseline; do
-		sed -e "s,/env python,/env python2,g" -i $file;
-done
-
-# Fix using the right compiler
+# Fix to use the correct compilers
 sed -e "s,/usr/bin/g++,g++,g" -i utils/include/Makefile.skel
+sed -e "s,/usr/bin/gcc,gcc,g" -i utils/include/Makefile.skel
+
+
+%build
+export TAUROOT=$(pwd)
+export INSTALLROOT=${TAUROOT}/TAUBUILD%{install_path}
+
+# OpenHPC compiler/mpi designation
+%ohpc_setup_compiler
+%ifarch x86_64
+module load papi
+%endif
+module load pdtoolkit
+
+export OMPI_LDFLAGS="-Wl,--as-needed -L${MPI_LIB_DIR}"
+export FFLAGS="$FFLAGS -I${MPI_INCLUDE_DIR}"
 
 # Try and figure out architecture
-detectarch=unknown
-detectarch=`./utils/archfind`
-if [ "x$detectarch" = "x" ]
-  then
-    detectarch=unknown
+if [ -n "$detectarch" ]; then
+   CONFIG_ARCH="${detectarch}"
+else
+   CONFIG_ARCH=$(./utils/archfind)
+   if [ "x${CONFIG_ARCH}" = "x" ]; then
+      CONFIG_ARCH="unknown"
+   fi
 fi
-%global machine `echo $detectarch`
-export CONFIG_ARCH=%{machine}
+export CONFIG_ARCH
+
+# Build the final package directly in the source root
+mkdir -p ${TAUROOT}/TAUBUILD
 
 ./configure \
-    -arch=%{machine} \
-    -prefix=/tmp%{install_path} \
+    -arch=${CONFIG_ARCH} \
+    -prefix=${INSTALLROOT} \
     -exec-prefix= \
-    -c++=$CXX \
-    -cc=$CC \
-    -fortran=$fcomp \
-    -iowrapper \
-    -slog2 \
-    -CPUTIME \
-    -PROFILE \
-    -PROFILECALLPATH \
-    -PROFILEPARAM \
-%ifarch x86_64
-    -papi=$PAPI_DIR \
-%endif
-    -pdt=$PDTOOLKIT_DIR \
-    -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
-    -openmp \
-%if "%{compiler_family}" != "intel"
-    -opari \
-%endif
-    -extrashlibopts="-fPIC -L/tmp%{install_path}/lib"
-
-make install
-make exports
-make clean
-
-./configure \
-    -arch=%{machine} \
-    -prefix=/tmp%{install_path} \
-    -exec-prefix= \
-    -c++=mpicxx \
-    -cc=mpicc \
-    -fortran=$fcomp \
     -iowrapper \
     -mpi \
-    -mpiinc=$MPI_INCLUDE_DIR \
-    -mpilib=$MPI_LIB_DIR \
+    -mpiinc=${MPI_INCLUDE_DIR} \
+    -mpilib=${MPI_LIB_DIR} \
+%if "%{compiler_family}" == "intel"
+    -fortran=ifort \
+%if %{mpi_family} == impi
+    -c++=mpiicpc \
+    -cc=mpiicc \
+%else
+    -c++=mpicxx \
+    -cc=mpicc \
+%endif
+%else
+    -fortran=gfortran \
+    -c++=mpicxx \
+    -cc=mpicc \
+    -opari \
+%endif
+%ifarch x86_64
+    -papi=${PAPI_DIR} \
+%endif
     -slog2 \
     -CPUTIME \
     -PROFILE \
     -PROFILECALLPATH \
     -PROFILEPARAM \
-%ifarch x86_64
-    -papi=$PAPI_DIR \
-%endif
-    -pdt=$PDTOOLKIT_DIR \
-    -useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
+    -pdt=${PDTOOLKIT_DIR} \
+    -useropt="%optflags -I${MPI_INCLUDE_DIR} -I${TAUROOT}/include -fno-strict-aliasing" \
     -openmp \
-%if "%{compiler_family}" != "intel"
-    -opari \
-%endif
-    -extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib"
+    -extrashlibopts="-fPIC -L${MPI_LIB_DIR} -lmpi -L${INSTALLROOT}/lib"
 
-make install
-make exports
+make clean install
 
+# remove static libs and directories
+find ${INSTALLROOT}/lib -name '*.a' -delete
+find ${INSTALLROOT}/lib -type d -name 'static-*' -delete
 
-# move from tmp install dir to %install_path
-# dirname removes the last directory
-mkdir -p `dirname %{buildroot}%{install_path}`
-pushd /tmp
-export tmp_path=%{install_path}
-mv ${tmp_path#*/} `dirname %{buildroot}%{install_path}`
-popd
+# Replace hard paths with env vars and remove absolute BUILDDIR path
+# Use find/replace function -- easy to add more as needed
+# Two stage, using much faster grep to target specific files
+replace_all() {
+    for f in $(grep -Ilr "$1" ${INSTALLROOT}); do
+      sed -i "s|$1|$2|g" $f
+    done
+}
 
-# clean up
-pushd %{buildroot}%{install_path}/bin
-sed -i 's|/tmp/opt|/opt|g' $(egrep -IR '/tmp/opt' ./|awk -F : '{print $1}')
-popd
-pushd %{buildroot}%{install_path}/lib
-rm -f libjogl*
-popd
-sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
-sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
-sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
-sed -i 's|/tmp||g' $(egrep -R '%buildroot' ./ |\
-egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
-sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
-egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
-sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" %buildroot%{install_path}|awk -F : '{print $1}')
-
-# fix tau lib arch location
-sed -i "s|/x86_64/lib|/lib|g" $(egrep -IR "/x86_64/lib" %buildroot%{install_path}|awk -F : '{print $1}')
-
-# replace hard paths with env vars
-%if "%{mpi_family}" == "impi"
-sed -i "s|$I_MPI_ROOT|\$\{I_MPI_ROOT\}|g" $(egrep -IR "$I_MPI_ROOT" %buildroot%{install_path}|awk -F : '{print $1}')
-%else
-sed -i "s|$MPI_DIR|\$\{MPI_DIR\}|g" $(egrep -IR "$MPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
+replace_all "${TAUROOT}/TAUBUILD" ""
+replace_all "${TAUROOT}" ""
+replace_all "${MPI_DIR}" "\${MPI_DIR}"
+replace_all "${PDTOOLKIT_DIR}" "\${PDTOOLKIT_DIR}"
+%if %{mpi_family} == impi
+replace_all "${I_MPI_ROOT}" "\${I_MPI_ROOT}"
 %endif
 %ifarch x86_64
-sed -i "s|$PAPI_DIR|\$\{PAPI_DIR\}|g" $(egrep -IR "$PAPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
+replace_all "${PAPI_DIR}" "\${PAPI_DIR}"
+replace_all "/x86_64/lib" "/lib"
 %endif
-sed -i "s|$PDTOOLKIT_DIR|\$\{PDTOOLKIT_DIR\}|g" $(egrep -IR "$PDTOOLKIT_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
 
-# link other bindings
-pushd %{buildroot}%{install_path}/lib
-%if %{compiler_family} == intel
-ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
-ln -s libTAUsh-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace.so
-%else
-%ifarch x86_64
-ln -s shared-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace shared-mpi
-ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so
-%else
-ln -s shared-callpath-param-mpi-pdt-openmp-opari-profile-trace shared-mpi
-ln -s libTAUsh-callpath-param-mpi-pdt-openmp-opari-profile-trace.so libTauMpi-callpath-param-mpi-pdt-openmp-opari-profile-trace.so
-%endif
-%endif
-popd
+# Remove RUNPATH entries. Use LMOD environment config instead.
+find ${INSTALLROOT}/lib -type f -name '*.so' -exec chrpath -d {} \;
 
-# remove static libs
-pushd %{buildroot}%{install_path}/lib
-rm -rf *\.a static-*
-popd
+# Link other bindings
+cd ${INSTALLROOT}/lib
+ln -s shared-callpath-*-trace ${INSTALLROOT}/lib/shared-mpi
+for f in libTAUsh-callpath-*-trace.so; do
+  ln -s $f ${INSTALLROOT}/lib/${f/libTAUsh/libTauMpi}
+done
+
+
+%install
+mkdir -p %{buildroot}/%{_docdir}
+
+# Copy the install tree to BUILDROOT
+cp -a TAUBUILD/* %{buildroot} 
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
-#%Module1.0#####################################################################
+mkdir -p %{buildroot}%{module_path}
+cat << EOF > %{buildroot}/%{module_path}/%{version}.lua
+help([[
+This module loads the %{pname} library built with the %{compiler_family}
+compiler toolchain and the %{mpi_family} MPI stack.
 
-proc ModulesHelp { } {
+Version %{version}
+]])
 
-    puts stderr " "
-    puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-    puts stderr "toolchain and the %{mpi_family} MPI stack."
-    puts stderr "\nVersion %{version}\n"
+whatis("Name: %{pname} built with %{compiler_family} compiler")
+whatis("Version: %{version}")
+whatis("Category: runtime library")
+whatis("Description: %{summary}")
+whatis("URL %{url}")
 
-}
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
-module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
-module-whatis "Description: %{summary}"
-module-whatis "URL %{url}"
+local version = "%{version}"
 
-set     version                     %{version}
+prepend_path("PATH",            "%{install_path}/bin")
+prepend_path("MANPATH",         "%{install_path}/man")
+prepend_path("INCLUDE",         "%{install_path}/include")
+prepend_path("LD_LIBRARY_PATH", "%{install_path}/lib")
 
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+setenv("%{PNAME}_DIR",      "%{install_path}")
+setenv("%{PNAME}_BIN",      "%{install_path}/bin")
+setenv("%{PNAME}_LIB",      "%{install_path}/lib")
+setenv("%{PNAME}_INC",      "%{install_path}/include")
+setenv("%{PNAME}_MAKEFILE", "%{install_path}/include/Makefile")
+setenv("%{PNAME}_OPTIONS",  "-optRevert -optShared -optNoTrackGOMP")
 
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
-setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
-setenv          %{PNAME}_OPTIONS    "-optRevert -optShared -optNoTrackGOMP"
-
-depends-on pdtoolkit
-
+depends_on("pdtoolkit")
 EOF
 
 %ifarch x86_64
-echo "depends-on papi" >> %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+echo 'depends_on("papi")' >> %{buildroot}/%{module_path}/%{version}.lua
 %endif
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
-#%Module1.0#####################################################################
-##
-## version file for %{pname}-%{version}
-##
-set     ModulesVersion      "%{version}"
-EOF
+# Set default version
+ln -s %{version}.lua %{buildroot}/%{module_path}/default
 
-%{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%{OHPC_PUB}
-%doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
+%{install_path}
+%{module_path}
+%doc Changes CREDITS INSTALL README*
+%license COPYRIGHT LICENSE

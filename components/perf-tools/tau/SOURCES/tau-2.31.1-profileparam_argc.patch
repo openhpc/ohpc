@@ -1,0 +1,11 @@
+--- a/src/Profile/ProfileParam.cpp	2020-11-17 22:10:08.000000000 +0000
++++ b/src/Profile/ProfileParam.cpp	2022-10-12 22:39:25.308179353 +0000
+@@ -164,7 +164,7 @@
+     
+     FunctionInfo *fnew = new FunctionInfo(name, " ", 
+ 					  f->GetProfileGroup(),
+-					  (const char *)grname.c_str(), true, tid); 
++					  (const char *)grname.c_str(), true); 
+     TheTimerProfileParamMap().insert(map<TAU_PROFILE_PARAM_TYPE >::value_type(ary, fnew)); /* Add it to the map */
+     return fnew; 
+   } else { 
