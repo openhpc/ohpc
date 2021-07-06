@@ -92,7 +92,7 @@ sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 # Fix errors with unversioned python shebangs
 # and change others to preferred usage
 # Need to also pre-capture generated files
-for f in $(grep -Ilr "#!/usr/bin/env" *); do
+for f in $(grep -Ilr "#! */usr/bin/env" *); do
    sed -i "s,n/env python\b,n/python2,g" $f 
    sed -i "s,n/env python3,n/python3,g" $f 
    sed -i "s,n/env sh,n/sh,g" $f
