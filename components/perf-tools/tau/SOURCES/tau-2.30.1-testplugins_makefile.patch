@@ -1,0 +1,22 @@
+--- a/plugins/testplugins/Makefile	2017-11-06 18:05:39.000000000 -0800
++++ b/plugins/testplugins/Makefile	2018-05-16 15:30:48.000000000 -0700
+@@ -15,7 +15,7 @@
+ 
+ CFLAGS = $(TAU_MPI_COMPILE_INCLUDE) $(TAU_INCLUDE) $(TAU_DEFS) $(USER_OPT) $(TAU_INTERNAL_FLAGS) -fPIC
+ 
+-LDFLAGS = $(TAU_MPI_LIB)
++LDFLAGS = -L$(TAU_PREFIX_INSTALL_DIR)/lib $(TAU_MPI_LIB)
+ 
+ OBJS = libtau_plugin_phases.so libtau_plugin_function_registration_complete.so libtau_plugin_atomic_event_trigger.so libtau_plugin_atomic_event_registration_complete.so libtau_plugin_end_of_execution.so libtau_plugin_interrupt_trigger.so tau_plugin_function_registration_complete.o tau_plugin_phases.o tau_plugin_atomic_event_trigger.o tau_plugin_atomic_event_registration_complete.o tau_plugin_end_of_execution.o tau_plugin_interrupt_trigger.o
+ 
+--- a/plugins/examples/Makefile.skel	2021-07-02 19:52:00.000000000 -0700
++++ b/plugins/examples/Makefile.skel	2021-07-02 20:23:45.000000000 -0700
+@@ -21,7 +21,7 @@
+ TAU_MONITORING_PLUGIN_USING_JSON=libTAU-monitoring-plugin$(TAU_SHLIBX)
+ #FX_AARCH64#TAU_MONITORING_PLUGIN_USING_JSON=  #ENDIF#
+ 
+-LDFLAGS = $(TAU_MPI_LIB) -L$(PLUGININSTALLDIR) -Wl,-rpath,$(PLUGININSTALLDIR) -lTAU
++LDFLAGS = -L$(TAU_PREFIX_INSTALL_DIR)/lib $(TAU_MPI_LIB) -L$(PLUGININSTALLDIR) -Wl,-rpath,$(PLUGININSTALLDIR) -lTAU
+ 
+ OBJS = Tau_plugin_example_disable_instrumentation_runtime.o Tau_plugin_example_mpit_recommend_sharp_usage.o Tau_plugin_example_free_unused_vbufs.o Tau_plugin_skel.o Tau_plugin_sos.o Tau_plugin_thread_summary.o Tau_plugin_example_selective_tracing.o Tau_plugin_example_profile_snapshot_trigger.o Tau_plugin_example_mpit_exchange_pvar_data.o Tau_plugin_example_analyze_profile_snapshots.o Tau_plugin_example_load_balance_async.o Tau_plugin_example_load_balance.o Tau_plugin_example_analyze_node_profile_snapshots.o Tau_plugin_example_analyze_node_profile_snapshots_async.o Tau_plugin_example_emulate_profile_snapshots_analysis_async.o Tau_plugin_example_memory_usage_async.o Tau_plugin_example_atomic_trigger.o
+ 
