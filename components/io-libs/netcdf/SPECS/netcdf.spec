@@ -8,22 +8,19 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Build that is dependent on compiler/mpi toolchains
+# Build depends on compiler/mpi toolchains
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
-
 %define pname netcdf
-
-%define ncdf_so_major 7
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.7.3
+Version:        4.8.0
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
@@ -41,77 +38,73 @@ Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-NetCDF (network Common Data Form) is an interface for array-oriented
-data access and a freely-distributed collection of software libraries
-for C, Fortran, C++, and perl that provides an implementation of the
-interface.  The NetCDF library also defines a machine-independent
-format for representing scientific data.  Together, the interface,
-library, and format support the creation, access, and sharing of
-scientific data. The NetCDF software was developed at the Unidata
-Program Center in Boulder, Colorado.
+The Unidata network Common Data Form (netCDF) is an interface for scientific
+data access and a freely-distributed software library that provides an
+implementation of the interface. The netCDF library also defines a
+machine-independent format for representing scientific data. Together, the
+interface,library, and format support the creation, access, and sharing of
+scientific data.
 
-NetCDF data is:
+NetCDF files are self-describing, network-transparent, directly accessible, and
+extendible. Self-describing means that a netCDF file includes information about
+the data it contains. Network-transparent means that a netCDF file is
+represented in a form that can be accessed by computers with different ways of
+storing integers, characters, and floating-point numbers. Direct-access means
+that a small subset of a large dataset may be accessed efficiently, without
+first reading through all the preceding data. Extendible means that data can be
+appended to a netCDF dataset without copying it or redefining its structure.
 
-   o Self-Describing: A NetCDF file includes information about the
-     data it contains.
-
-   o Network-transparent:  A NetCDF file is represented in a form that
-     can be accessed by computers with different ways of storing
-     integers, characters, and floating-point numbers.
-
-   o Direct-access:  A small subset of a large dataset may be accessed
-     efficiently, without first reading through all the preceding
-     data.
-
-   o Appendable:  Data can be appended to a NetCDF dataset along one
-     dimension without copying the dataset or redefining its
-     structure. The structure of a NetCDF dataset can be changed,
-     though this sometimes causes the dataset to be copied.
-
-   o Sharable:  One writer and multiple readers may simultaneously
-     access the same NetCDF file.
+This software package provides C interfaces for applications and data.
 
 
 %prep
 %setup -q -n %{pname}-c-%{version}
+
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
 module load phdf5
+
+mkdir -p ./build
+cd build
+
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 export CC=mpicc
 
-./configure --prefix=%{install_path} \
-    --enable-shared \
-    --enable-netcdf-4 \
-    --enable-dap \
-    --with-pic \
-    --disable-doxygen \
-    --disable-static || { cat config.log && exit 1; }
+cmake -DCMAKE_PREFIX_PATH="%{install_path}" \
+      -DCMAKE_INSTALL_PREFIX="%{buildroot}%{install_path}" \
+      -DCMAKE_INSTALL_LIBDIR:PATH=lib \
+      -DENABLE_NETCDF_4=ON \
+      -DENABLE_HDF5=ON \
+      -DENABLE_DAP=ON \
+      -DENABLE_DOXYGEN=OFF \
+      -DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC" \
+      -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE \
+      -DCMAKE_BUILD_TYPE:STRING=RELEASE \
+      -DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES \
+      -DCMAKE_SKIP_RPATH:BOOL=YES \
+      -DBUILD_UTILITIES=ON \
+      -DBUILD_SHARED_LIBS=ON ..
 
-# karl@ices.utexas.edu (5/17/18) - switching to serial make to avoid
-# problems. Others also reporing error with parallel build.
-#
-# https://github.com/Unidata/netcdf-c/issues/896
-make
-#make %{?_smp_mflags}
+# Reported problems with parallel build on older versions
+# Tested this at -j16 with no errors (JCS-7/8/21)
+make %{?_smp_mflags}
+
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load phdf5
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
-
-make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+cd build
+make install
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+mkdir -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+cat << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -159,9 +152,11 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+mkdir -p ${buildroot}/%{_docdir}
+
 
 %files
-%{OHPC_PUB}
-%doc COPYRIGHT
+%{install_path}
+%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%license COPYRIGHT
 %doc README.md
