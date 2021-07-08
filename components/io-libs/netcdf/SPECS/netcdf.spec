@@ -25,9 +25,9 @@ Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
 
-BuildRequires:  curl-devel
+BuildRequires:  curl-devel m4 make
 BuildRequires:  zlib-devel >= 1.2.5
-BuildRequires:  m4
+BuildRequires:  cmake%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -65,14 +65,15 @@ This software package provides C interfaces for applications and data.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+module load cmake
 module load phdf5
 
 mkdir -p ./build
 cd build
 
-export CPPFLAGS="-I$HDF5_INC"
+export CPPFLAGS="-I$HDF5_INC -I$MPI_DIR/include"
 export LDFLAGS="-L$HDF5_LIB"
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
+export CFLAGS="$CPPFLAGS $LDFLAGS"
 export CC=mpicc
 
 cmake -DCMAKE_PREFIX_PATH="%{install_path}" \
@@ -85,7 +86,6 @@ cmake -DCMAKE_PREFIX_PATH="%{install_path}" \
       -DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC" \
       -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE \
       -DCMAKE_BUILD_TYPE:STRING=RELEASE \
-      -DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES \
       -DCMAKE_SKIP_RPATH:BOOL=YES \
       -DBUILD_UTILITIES=ON \
       -DBUILD_SHARED_LIBS=ON ..
@@ -144,7 +144,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+cat << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}

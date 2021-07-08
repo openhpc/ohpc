@@ -26,6 +26,8 @@ Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 
 BuildRequires:  zlib-devel >= 1.2.5
+BuildRequires:  make
+BuildRequires:  cmake%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -65,6 +67,7 @@ depends on the netCDF-4 C library, which must be installed first.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+module load cmake
 module load phdf5
 module load netcdf
 

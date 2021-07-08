@@ -26,7 +26,8 @@ Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
 
 BuildRequires:  zlib-devel >= 1.2.5
-BuildRequires:  libcurl-devel m4
+BuildRequires:  libcurl-devel m4 make
+BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -66,6 +67,7 @@ netCDF data. It depends on the netCDF C library, which must be installed first.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+module load cmake
 module load phdf5
 module load netcdf
 
