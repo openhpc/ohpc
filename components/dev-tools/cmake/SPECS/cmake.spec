@@ -12,19 +12,16 @@
 
 %define pname cmake
 
-%define major_version 3.19
-%define minor_version 4
-
 Summary: CMake is an open-source, cross-platform family of tools designed to build, test and package software.
 Name:    %{pname}%{PROJ_DELIM}
-Version: %{major_version}.%{minor_version}
+Version: 3.20.5
 Release: 1%{?dist}
-# https://spdx.org/licenses/BSD-3-Clause.html
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 URL:            https://cmake.org/
-Source0:        https://cmake.org/files/v%{major_version}/cmake-%{version}.tar.gz
+Source0:        https://github.com/Kitware/CMake/releases/download/v%{version}/cmake-%{version}.tar.gz
 BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  curl-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  xz-devel
@@ -35,7 +32,8 @@ BuildRequires:  pkgconfig
 BuildRequires:  expat-devel
 BuildRequires:  bzip2-devel
 %endif
-%if 0%{?suse_version}
+
+%if 0%{?suse_version} || 0%{?sle_version}
 BuildRequires:  libexpat-devel
 BuildRequires:  libbz2-devel
 %endif
@@ -43,31 +41,40 @@ BuildRequires:  libbz2-devel
 %define install_path %{OHPC_UTILS}/%{pname}/%version
 
 %description
-CMake is used to control the software compilation process using simple
-platform and compiler independent configuration files, and generate native
-makefiles and workspaces that can be used in the compiler environment
-of your choice.
+CMake is an open-source, cross-platform family of tools designed to build,
+test and package software. CMake is used to control the software compilation
+process using simple platform and compiler independent configuration files,
+and generate native makefiles and workspaces that can be used in the compiler
+environment of your choice. 
+
+CMake is maintained and supported by Kitware and developed in collaboration
+with a productive community of contributors.
+
 
 %prep
 %setup -q -n %{pname}-%{version}
 
-./bootstrap --system-libs \
---no-system-librhash \
---no-system-libuv \
---no-system-libarchive \
---no-system-jsoncpp \
---no-qt-gui \
---prefix=%{install_path}
-
 %build
-%{__make} %{?_smp_mflags}
+SMP_COUNT=$(echo "%{?_smp_mflags}" | sed "s/-j//")
+
+./bootstrap --system-libs \
+            --parallel=$SMP_COUNT \
+            --no-system-librhash \
+            --no-system-libuv \
+            --no-system-libarchive \
+            --no-system-jsoncpp \
+            --no-qt-gui \
+            --prefix=%{install_path}
+
+make %{?_smp_mflags}
+
 
 %install
-%{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+make install DESTDIR=%{buildroot} %{?mflags_install}
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+mkdir -p %{buildroot}%{OHPC_MODULES}/%{pname}
+cat << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -84,13 +91,12 @@ module-whatis "Keywords: System, Utility"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
-set     version             %{version}
+set           version %{version}
 
-prepend-path    PATH                %{install_path}/bin
-
+prepend-path  PATH    %{install_path}/bin
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
+cat << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -98,7 +104,13 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+
 %files
-%dir %{OHPC_UTILS}
-%{OHPC_UTILS}/%{pname}
+%{install_path}
+%doc %{install_path}/doc
+%license %{install_path}/doc/cmake-3.20/Copyright.txt
+%license %{install_path}/doc/cmake-3.20/cmlibarchive/COPYING
+%license %{install_path}/doc/cmake-3.20/cmlibrhash/COPYING
+%license %{install_path}/doc/cmake-3.20/cmlibuv/LICENSE
+%license %{install_path}/doc/cmake-3.20/cmsys/Copyright.txt
 %{OHPC_MODULES}/%{pname}
