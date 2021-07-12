@@ -107,8 +107,10 @@ EOF
 
 
 %files
+%dir %{OHPC_UTILS}
+%dir %{OHPC_UTILS}/%{pname}
 %{install_path}
-%doc %{install_path}/doc/*
+%docdir %{install_path}/doc
 %license %{install_path}/doc/cmake-3.20/Copyright.txt
 %license %{install_path}/doc/cmake-3.20/cmlibarchive/COPYING
 %license %{install_path}/doc/cmake-3.20/cmlibrhash/COPYING
