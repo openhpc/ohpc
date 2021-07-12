@@ -96,6 +96,11 @@ make %{?_smp_mflags}
 cd build
 make install
 
+# Clear absolute paths added during make install
+for f in $(grep -Ilr "BUILDROOT" %{buildroot}%{install_path}); do
+   sed -i "s,%{buildroot},," $f
+done
+
 # OpenHPC module file
 mkdir -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 cat << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}

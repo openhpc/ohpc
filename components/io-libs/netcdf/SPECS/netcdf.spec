@@ -102,6 +102,13 @@ make %{?_smp_mflags}
 cd build
 make install
 
+# Correct absolute paths added during make install
+sed -i "s,%{_builddir}/,," %{buildroot}/%{install_path}/lib/*.settings
+sed -i "s,%{_builddir}/,," %{buildroot}/%{install_path}/usr/local/lib/*.settings
+for f in $(grep -Ilr "BUILDROOT" %{buildroot}%{install_path}); do
+   sed -i "s,%{buildroot},," $f
+done
+
 # OpenHPC module file
 mkdir -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 cat << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
