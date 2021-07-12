@@ -54,6 +54,7 @@ with a productive community of contributors.
 %prep
 %setup -q -n %{pname}-%{version}
 
+
 %build
 SMP_COUNT=$(echo "%{?_smp_mflags}" | sed "s/-j//")
 
@@ -107,7 +108,7 @@ EOF
 
 %files
 %{install_path}
-%doc %{install_path}/doc
+%doc %{install_path}/doc/*
 %license %{install_path}/doc/cmake-3.20/Copyright.txt
 %license %{install_path}/doc/cmake-3.20/cmlibarchive/COPYING
 %license %{install_path}/doc/cmake-3.20/cmlibrhash/COPYING
