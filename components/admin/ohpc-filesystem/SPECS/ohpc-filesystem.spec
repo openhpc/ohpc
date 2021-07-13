@@ -8,12 +8,17 @@
 #
 #----------------------------------------------------------------------------eh-
 
-Name: ohpc-filesystem
-Version: 2.0
+%define ohpc_bootstrap 1
+%include %{_sourcedir}/OHPC_macros
+
+%define pname filesystem
+
+Name: %{PROJ_NAME}-%{pname}
+Version: 2.0.1
 Release: 1%{?dist}
 Summary: Common top-level OpenHPC directories
 
-Group: ohpc/admin
+Group: %{PROJ_NAME}/admin
 License: ASL 2.0
 Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
@@ -27,33 +32,25 @@ This administrative package is used to define top level OpenHPC installation
 directories. It is utilized by most packages that do not install into system
 default paths.
 
-%package -n ohpc-buildroot
-Summary: Common build scripts used in OpenHPC packaging
-Group: ohpc/admin
-Requires: lmod-ohpc
-Requires: ohpc-filesystem
 
-%description -n ohpc-buildroot
-
-This administrative package is used to provide RPM dependency analysis tools
-and common compiler and MPI family convenience scripts used during OpenHPC
-builds.
-
+%prep
+%build
 %install
 # The ohpc-filesystems owns all the common directories
-mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/{apps,doc,compiler,libs,moduledeps,modulefiles,mpi}
-mkdir -p $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
-mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs
+mkdir -p $RPM_BUILD_ROOT/%{OHPC_ADMIN}/ohpc
+mkdir -p $RPM_BUILD_ROOT/{%{OHPC_APPS},%{OHPC_COMPILERS},%{OHPC_LIBS},%{OHPC_MODULES},%{OHPC_MODULEDEPS},%{OHPC_MPI_STACKS},%{OHPC_UTILS}}
+mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 
-install -p -m 644 %{SOURCE0} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
-install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
+# Install compiler and MPI setup scripts
+install -p -m 644 %{SOURCE0} $RPM_BUILD_ROOT/%{OHPC_ADMIN}/ohpc
+install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{OHPC_ADMIN}/ohpc
 
 # rpm dependency plugins
+mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs
 install -p -m 755 %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/rpm
 install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 
-%{__mkdir_p} %{buildroot}/usr/lib/rpm/fileattrs/
-%{__cat} <<EOF > %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
+cat <<EOF > $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs/ohpc.attr
 %%__ohpc_provides        /usr/lib/rpm/ohpc-find-provides
 %%__ohpc_requires        /usr/lib/rpm/ohpc-find-requires %%{buildroot} %{OHPC_HOME}
 
@@ -62,33 +59,35 @@ install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 
 %%__ohpc_magic           ^ELF (32|64)-bit.*$
 %%__ohpc_flags           magic_and_path
-EOF
-
-%if 0%{?sles_version} || 0%{?suse_version}
-%{__cat} <<EOF >> %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
+%if 0%{?sle_version} || 0%{?suse_version}
 %%__elflib_exclude_path  ^%{OHPC_HOME}
-EOF
 %endif
+EOF
 
 
 %files
-%dir /opt/ohpc/
-%dir /opt/ohpc/admin/
-%dir /opt/ohpc/pub/
-%dir /opt/ohpc/pub/apps/
-%dir /opt/ohpc/pub/doc/
-%dir /opt/ohpc/pub/compiler/
-%dir /opt/ohpc/pub/libs/
-%dir /opt/ohpc/pub/moduledeps/
-%dir /opt/ohpc/pub/modulefiles/
-%dir /opt/ohpc/pub/mpi/
+%dir %{OHPC_HOME}
+%dir %{OHPC_ADMIN}
+%{OHPC_PUB}
 
-%files -n ohpc-buildroot
-%dir /opt/ohpc/admin/ohpc/
-%dir /usr/lib/rpm/
-%dir /usr/lib/rpm/fileattrs/
-/opt/ohpc/admin/ohpc/OHPC_setup_compiler
-/opt/ohpc/admin/ohpc/OHPC_setup_mpi
+
+#######################################
+
+%package -n %{PROJ_NAME}-buildroot
+Summary: Common build scripts used in OpenHPC packaging
+Group: %{PROJ_NAME}/admin
+Requires: lmod%{PROJ_DELIM}
+Requires: %{PROJ_NAME}-filesystem
+
+%description -n %{PROJ_NAME}-buildroot
+
+This administrative package is used to provide RPM dependency analysis tools
+and common compiler and MPI family convenience scripts used during OpenHPC
+builds.
+
+
+%files -n %{PROJ_NAME}-buildroot
+%{OHPC_ADMIN}/ohpc
 /usr/lib/rpm/ohpc-find-provides
 /usr/lib/rpm/ohpc-find-requires
 /usr/lib/rpm/fileattrs/ohpc.attr
