@@ -13,13 +13,14 @@
 
 %define pname filesystem
 
-Name: %{PROJ_NAME}-%{pname}
+Name:    %{PROJ_NAME}-%{pname}
 Version: 2.0.1
 Release: 1%{?dist}
 Summary: Common top-level OpenHPC directories
 
-Group: %{PROJ_NAME}/admin
+Group:   %{PROJ_NAME}/admin
 License: ASL 2.0
+URL:     https://github.com/openhpc/ohpc
 Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
 Source2: ohpc-find-requires
