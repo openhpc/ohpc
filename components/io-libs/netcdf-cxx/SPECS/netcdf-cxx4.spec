@@ -96,7 +96,7 @@ make %{?_smp_mflags}
 cd build
 make install
 
-# Clear absolute paths added during make install
+# Correct absolute paths added during make install
 for f in $(grep -Ilr "BUILDROOT" %{buildroot}%{install_path}); do
    sed -i "s,%{buildroot},," $f
 done
@@ -154,6 +154,7 @@ mkdir -p ${buildroot}/%{_docdir}
 
 
 %files
+%dir %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}
 %install_path
 %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %license COPYRIGHT
