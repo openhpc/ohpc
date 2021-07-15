@@ -28,6 +28,7 @@ Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  make
 BuildRequires:  cmake%{PROJ_DELIM}
+BuildRequires:  libcurl-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -61,7 +62,6 @@ depends on the netCDF-4 C library, which must be installed first.
 
 %prep
 %setup -q -n %{pname}4-%{version}
-
 
 %build
 # OpenHPC compiler/mpi designation
