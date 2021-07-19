@@ -77,7 +77,6 @@ done
 
 echo " "
 echo "# OpenHPC machine generated from `basename $inFile`"
-echo " "
 
 while read var ; do 
     varName=`echo $var | awk -F = '{print $1}'` || exit 1
@@ -99,7 +98,6 @@ while read var ; do
     fi
 done < $OUTFILE
 
-echo " "
 echo "# end of machine generated"
 echo " "
 
