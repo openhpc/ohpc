@@ -205,14 +205,14 @@ find %{OHPC_MODULEDEPS}/oneapi/* -empty -type d -delete
 
 ################################################################################
 
-%package -n intel-compilers-release%{PROJ_DELIM}
+%package -n intel-oneapi-toolkit-release%{PROJ_DELIM}
 Summary:   Intel(R) oneAPI HPC Toolkit Respository Setup
 
-%description -n intel-compilers-release%{PROJ_DELIM}
+%description -n intel-oneapi-toolkit-release%{PROJ_DELIM}
 Installs and configures the online repository for the Intel(R) oneAPI Toolkit.
 
 
-%files -n intel-compilers-release%{PROJ_DELIM}
+%files -n intel-oneapi-toolkit-release%{PROJ_DELIM}
 %{_sysconfdir}/pki/rpm-gpg/%{keyname}
 %{repodir}/%{basename:%{SOURCE2}}
 
