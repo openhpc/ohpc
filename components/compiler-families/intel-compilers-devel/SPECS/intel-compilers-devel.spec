@@ -128,6 +128,7 @@ if { ![info exists ::env(ACL_SKIP_BSP_CONF)] } {
 }
 
 module load "compiler/\$version"
+module load "mkl"
 
 family "compiler"
 EOF
