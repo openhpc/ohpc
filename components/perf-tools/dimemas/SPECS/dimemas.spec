@@ -24,21 +24,14 @@ License:	GNU
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
+Source1:        https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
-%if 0%{?rhel}
-BuildRequires: flex-devel
-BuildRequires: flex
-%endif
-%if 0%{?suse_version}
-BuildRequires: libfl-devel
-BuildRequires: flex%{PROJ_DELIM}
-%endif
-BuildRequires: autoconf
-BuildRequires: automake
+BuildRequires: autoconf automake
 BuildRequires: libtool
+BuildRequires: gettext gettext-devel help2man
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -55,25 +48,34 @@ target architecture classes include networks of workstations, single and
 clustered SMPs, distributed memory parallel computers, and even heterogeneous
 systems.
 
+
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -a1 -q -n %{pname}-%{version}
 
 
 %build
+# Build temporary copy of flex to provide static libs
+HOME=$(pwd)
+cd flex-2.6.4
+./configure --prefix=$HOME --enable-static=yes --enable-shared=no CFLAGS="-fPIC" || cat config.log
+make %{?_smp_mflags}
+make install
+cd $HOME
+
 %ohpc_setup_compiler
 module load boost
 
-#./bootstrap
-
-%if 0%{?suse_version}
-module load flex
-export LDFLAGS="-L$FLEX_LIB"
-%endif
+# Add libfl.a to the library path
+CFLAGS="-L${HOME}/lib"
+CPPFLAGS="-L${HOME}/lib"
+LDFLAGS="-L${HOME}/lib"
 
 ./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --enable-static=no \
+            --enable-shared=yes \
             --with-boost=$BOOST_DIR || cat config.log
 
-make %{?_smp_mflags}
 
 %install
 export NO_BRP_CHECK_RPATH=true
@@ -81,27 +83,25 @@ export NO_BRP_CHECK_RPATH=true
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-make DESTDIR=$RPM_BUILD_ROOT install
+make DESTDIR=%{buildroot} install
 
-# don't package static libs
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.a
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/dimemas/*.la
+cp AUTHORS %{buildroot}%{install_path}
+cp COPYING %{buildroot}%{install_path}
+cp ChangeLog %{buildroot}%{install_path}
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+mkdir -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+cat << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
-
-puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain and the %{mpi_family} MPI stack."
+puts stderr "\nThis module loads the %{pname} library"
+puts stderr "built with the %{compiler_family} compiler"
+puts stderr "and %{mpi_family} MPI library toolchain."
 puts stderr "\nVersion %{version}\n"
-
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
+
+module-whatis "Name: %{pname} (%{compiler_family} compiler/%{mpi_family})"
 module-whatis "Version: %{version}"
 module-whatis "Category: performance tool"
 module-whatis "Description: %{summary}"
@@ -109,7 +109,7 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-# Require boost
+# This build requires the boost library
 depends-on boost
 
 prepend-path    PATH                %{install_path}/bin
@@ -117,10 +117,9 @@ prepend-path    PATH                %{install_path}/bin
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
-
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+cat << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -128,8 +127,11 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%{OHPC_PUB}
-%doc
+%{install_path}
+%doc AUTHORS
+%doc ChangeLog
+%license COPYING
+%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+
