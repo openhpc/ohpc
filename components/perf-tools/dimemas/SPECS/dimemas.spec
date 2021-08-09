@@ -28,7 +28,7 @@ Source1:        https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: bison
+BuildRequires: bison flex
 BuildRequires: autoconf automake
 BuildRequires: libtool
 BuildRequires: gettext gettext-devel help2man
@@ -66,9 +66,9 @@ cd $HOME
 module load boost
 
 # Add libfl.a to the library path
-CFLAGS="-L${HOME}/lib"
-CPPFLAGS="-L${HOME}/lib"
-LDFLAGS="-L${HOME}/lib"
+CFLAGS="-L${HOME}/lib ${CFLAGS}"
+CXXFLAGS="-L${HOME}/lib ${CXXFLAGS}"
+LDFLAGS="-L${HOME}/lib ${LDFLAGS}"
 
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
