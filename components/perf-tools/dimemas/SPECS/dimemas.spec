@@ -19,12 +19,13 @@
 Summary:	Dimemas tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:	5.4.2
-Release:	1
+Release:	1%{?dist}
 License:	GNU
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 Source1:        https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+Source2:        Flex-COPYING 
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -57,9 +58,10 @@ systems.
 # Build temporary copy of flex to provide static libs
 HOME=$(pwd)
 cd flex-2.6.4
-./configure --prefix=$HOME --enable-static=yes --enable-shared=no CFLAGS="-fPIC" || cat config.log
+./configure --prefix=$HOME -docdir=$HOME/doc --enable-static=yes --enable-shared=no CFLAGS="-fPIC" || cat config.log
 make %{?_smp_mflags}
 make install
+cp $HOME/doc/COPYING $HOME/Flex_COPYING
 cd $HOME
 
 %ohpc_setup_compiler
@@ -85,6 +87,7 @@ export NO_BRP_CHECK_RPATH=true
 
 make DESTDIR=%{buildroot} install
 
+cp Flex_COPYING %{buildroot}%{install_path}
 cp AUTHORS %{buildroot}%{install_path}
 cp COPYING %{buildroot}%{install_path}
 cp ChangeLog %{buildroot}%{install_path}
@@ -130,8 +133,7 @@ EOF
 
 %files
 %{install_path}
-%doc AUTHORS
-%doc ChangeLog
-%license COPYING
+%doc AUTHORS ChangeLog
+%license Flex_COPYING COPYING
 %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 
