@@ -25,7 +25,7 @@ Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 Source1:        https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
-Source2:        Flex-COPYING 
+Source2:        Flex_COPYING 
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
