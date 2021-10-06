@@ -20,9 +20,9 @@
 %define pname boost
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.75.0
+Version:        1.77.0
 
-%define version_exp 1_75_0
+%define version_exp 1_77_0
 
 Release:        1%{?dist}
 License:        BSL-1.0
