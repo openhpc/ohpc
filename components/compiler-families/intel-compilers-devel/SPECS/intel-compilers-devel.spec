@@ -17,7 +17,7 @@
 
 Summary:   OpenHPC integration package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2021.3.0
+Version:   2021.4.0
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -32,8 +32,9 @@ Source2: oneAPI.repo
 #!BuildIgnore: post-build-checks
 
 Requires: gcc libstdc++-devel cmake
-Requires(pre): intel-hpckit >= %{version}
-Requires: intel-hpckit = %{version}
+Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{version}
+Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{version}
+Recommends: intel-hpckit = %{version}
 
 %description
 Integrates oneAPI HPC Toolkit modulefiles into OpenHPC.

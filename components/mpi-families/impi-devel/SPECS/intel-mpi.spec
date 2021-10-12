@@ -18,7 +18,7 @@
 
 Summary:   OpenHPC integration package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2021.3.0
+Version:   2021.4.0
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -31,7 +31,10 @@ Source1:   mod_generator_impi.sh
 #!BuildIgnore: post-build-checks
 
 Requires: sed
+Requires(pre): intel-compilers-devel%{PROJ_DELIM} = %{version}
+Requires(pre): intel-oneapi-mpi-devel = %{version}
 Requires: intel-compilers-devel%{PROJ_DELIM} = %{version}
+Requires: intel-oneapi-mpi-devel = %{version}
 Requires: prun%{PROJ_DELIM}
 
 %description
