@@ -32,6 +32,18 @@ Requires: subversion
 Requires: hg
 Requires: patch
 Requires: python3-mock
+Requires: gcc
+Requires: gcc-c++
+Requires: make
+Requires: tar
+Requires: gzip
+Requires: unzip
+Requires: bzip2
+Requires: zstd
+Requires: file
+Requires: gnupg2
+Requires: git
+
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%version
 # Turn off the brp-python-bytecompile script
