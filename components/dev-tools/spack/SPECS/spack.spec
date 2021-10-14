@@ -44,6 +44,7 @@ Requires: zstd
 Requires: file
 Requires: gnupg2
 Requires: git
+Requires: curl
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%version
 # Turn off the brp-python-bytecompile script
