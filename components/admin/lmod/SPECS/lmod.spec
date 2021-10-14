@@ -182,6 +182,12 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
+#install a modulecmd soft link
+# to allow use of scl-utils, among other dependencies
+%{__mkdir_p} %{buildroot}/%{_bindir}
+
+%{__ln_s} %{OHPC_ADMIN}/lmod/lmod/libexec/lmod %{buildroot}/%{_bindir}/modulecmd
+
 %files
 %dir %{OHPC_HOME}
 %dir %{OHPC_ADMIN}
@@ -190,3 +196,4 @@ EOF
 %config %{_sysconfdir}/profile.d/lmod.csh
 %{OHPC_PUB}
 %doc License README.md README_lua_modulefiles.txt INSTALL
+%{_bindir}/modulecmd
