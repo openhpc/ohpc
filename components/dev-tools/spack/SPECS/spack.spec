@@ -39,6 +39,7 @@ Requires: tar
 Requires: gzip
 Requires: unzip
 Requires: bzip2
+Requires: xz
 Requires: zstd
 Requires: file
 Requires: gnupg2
