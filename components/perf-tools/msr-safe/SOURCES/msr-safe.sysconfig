@@ -1,2 +1,2 @@
-# Override the whitelist
-# WHITELIST=/usr/share/msr-safe/whitelists/wl_0655
+# Override the allowlist
+# ALLOWLIST=/usr/share/msr-safe/allowlists/al_0655

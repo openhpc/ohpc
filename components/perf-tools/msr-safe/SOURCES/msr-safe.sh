@@ -5,24 +5,24 @@ set -o pipefail
 
 . /etc/sysconfig/msr-safe
 
-wl_cpu() {
-  printf 'wl_%.2x%x\n' \
-  $( tr -d "\t " < /proc/cpuinfo | grep -m1 'cpufamily:' | cut -f2 -d:) \
-  $( tr -d "\t " < /proc/cpuinfo | grep -m1 'model:' | cut -f2 -d:)
+al_cpu() {
+  printf 'al_%.2x%x\n' \
+  $(grep -m1 'cpu family' /proc/cpuinfo | cut -f2 -d: | tr -d ' ') \
+  $(grep -m1 'model' /proc/cpuinfo | cut -f2 -d: | tr -d ' ')
 }
 
 start() {
-  if [ -z "${WL_CPU:-}" ]; then
-    WL_CPU=$(wl_cpu)
+  if [ -z "${AL_CPU:-}" ]; then
+    AL_CPU=$(al_cpu)
   fi
 
-  if [ -z "${WHITELIST:-}" ]; then
-    WHITELIST="/usr/share/msr-safe/whitelists/${WL_CPU}" 
+  if [ -z "${ALLOWLIST:-}" ]; then
+    ALLOWLIST="/usr/share/msr-safe/allowlists/${AL_CPU}"
   fi
 
-  if [ -f "/usr/share/msr-safe/whitelists/${WL_CPU}" ]; then
+  if [ -f "${ALLOWLIST}" ]; then
     /sbin/modprobe msr-safe && \
-    cat "${WHITELIST}" > /dev/cpu/msr_whitelist
+    cat "${ALLOWLIST}" > /dev/cpu/msr_allowlist
 
     return $?
   else
@@ -31,7 +31,7 @@ start() {
 }
 
 stop() {
-    echo > /dev/cpu/msr_whitelist && \
+    echo > /dev/cpu/msr_allowlist && \
     /sbin/rmmod msr-safe
 
     return $?
@@ -40,7 +40,6 @@ stop() {
 rc=0
 
 case "${1:-}" in
-  
   start)
       start
       rc=$?

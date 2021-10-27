@@ -1,12 +1,12 @@
-# /etc/systemd/system/llnl-whitelist.service
+# /etc/systemd/system/llnl-allowlist.service
 # (C) 2015 Steve Sylvester (steve.s.sylvester <at> intel.com)
 #
 # msr-safe systemd unit file:
-#	 Set a default MSR whitelist via /dev/cpu/msr_whitelist.
+#	 Set a default MSR allowlist via /dev/cpu/msr_allowlist.
 
 [Unit]
-Description=Sets default MSR whitelist
-After=nss-user-lookup.target nslcd.service
+Description=Sets default MSR allowlist
+After=nss-user-lookup.target nslcd.service network.target
 
 [Service]
 Type=oneshot
