@@ -44,7 +44,7 @@ Patch1: boost-fenv_suse.patch
 # After download, all patch line numbers were all adjusted by +3
 # Resolves https://bugzilla.redhat.com/show_bug.cgi?id=1190039 - boost package doesn't honor optflags
 #Patch2: boost-1.75.0-build-optflags.patch
-Pathc2: boost-1.76.0-b2-build-flags.patch
+Patch2: boost-1.76.0-b2-build-flags.patch
 
 %if 0%{?rhel}
 BuildRequires:  bzip2-devel
