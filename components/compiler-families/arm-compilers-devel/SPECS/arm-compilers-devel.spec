@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%global arm_compt_version arm2
+%global arm_compt_version arm1
 %global pname %{arm_compt_version}-compilers-devel
 # Currently, the Arm compiler version number is included in the Arm compiler
 # package name. 
