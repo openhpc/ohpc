@@ -35,7 +35,8 @@ BuildArch: aarch64
 #!BuildIgnore: post-build-checks
 
 # We need to ensure the installed version is >=21.0
-Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-RHEL-8-aarch64-linux >= 21.0
+#Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-RHEL-8-aarch64-linux >= 21.0
+Requires: arm-linux-compiler >= 21.0
 Requires: lmod%{PROJ_DELIM}
 
 %description
