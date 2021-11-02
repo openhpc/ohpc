@@ -24,8 +24,8 @@
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.0
-Release:   13.1.ohpc.2.0
+Version:   2.4
+Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
