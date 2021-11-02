@@ -148,7 +148,7 @@ BuildRequires: pkgconfig(lua) >= %{luaver}
 %endif
 
 %if %{with hwloc}
-BuildRequires: hwloc-devel
+BuildRequires: hwloc-ohpc
 %endif
 
 %if %{with numa}
@@ -387,6 +387,7 @@ export PATH="$PWD/bin:$PATH"
 	%{!?_with_slurmrestd:--disable-slurmrestd} \
 	%{?_without_x11:--disable-x11} \
 	%{?_with_ucx} \
+	--with-hwloc=%{OHPC_LIBS}/hwloc \
 	%{?_with_cflags}
 
 make %{?_smp_mflags}
