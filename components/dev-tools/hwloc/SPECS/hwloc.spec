@@ -13,13 +13,13 @@
 %define pname hwloc
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        2.1.0
+Version:        2.5.0
 Release:        1%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        https://download.open-mpi.org/release/hwloc/v2.1/%{pname}-%{version}.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v2.5/%{pname}-%{version}.tar.bz2
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -48,7 +48,11 @@ BuildRequires:  numactl-devel
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{pname}/%version
+# note that this install path is purposefully not including a version
+# so that RMS packages that do not rely on Lmod environments can
+# access in a fixed location. As a result, this package does not support
+# multi-version coinstalls.
+%define install_path %{OHPC_LIBS}/%{pname}
 
 %description
 The Portable Hardware Locality (hwloc) software package provides 
