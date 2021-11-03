@@ -375,7 +375,7 @@ Requires:  slurm-contribs%{PROJ_DELIM}
 Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
 %if 0%{?rhel}
-Requires:  hwloc-libs
+Requires:  hwloc%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-slurm-client
 Collection of client packages for SLURM
