@@ -13,8 +13,9 @@ Version: 2.1
 Release: 1%{?dist}
 Summary: Common top-level OpenHPC directories
 
-Group: ohpc/admin
+Group:   ohpc/admin
 License: ASL 2.0
+URL:     https://github.com/openhpc/ohpc
 Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
 Source2: ohpc-find-requires
