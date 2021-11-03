@@ -10,7 +10,7 @@
 -        [hwloc_lib="${hwloc_dir}/lib/libhwloc_embedded.a"],
 -        AC_MSG_ERROR([hwloc library not found.])
 +    AS_IF([test -r "${hwloc_dir}/lib/libhwloc.so"],
-+      [[hwloc_lib="-L${hwloc_dir}/lib -Wl,-rpath,${hwloc_dir} -lhwloc"]],
++      [[hwloc_lib="-L${hwloc_dir}/lib -Wl,-rpath,${hwloc_dir}/lib -lhwloc"]],
 +      AC_MSG_ERROR([hwloc library not found.])
        )
      )
