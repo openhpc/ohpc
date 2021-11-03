@@ -76,7 +76,7 @@ from the OpenHPC software stack.
 pushd docs/recipes/install/centos8/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/centos8/x86_64/warewulf/openpbs
+pushd docs/recipes/install/rocky8/x86_64/warewulf/openpbs
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 pushd docs/recipes/install/centos8/x86_64/xcat/slurm
