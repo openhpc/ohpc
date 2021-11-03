@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 Name: ohpc-filesystem
-Version: 2.0
+Version: 2.1
 Release: 1%{?dist}
 Summary: Common top-level OpenHPC directories
 
@@ -57,8 +57,8 @@ install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 %%__ohpc_provides        /usr/lib/rpm/ohpc-find-provides
 %%__ohpc_requires        /usr/lib/rpm/ohpc-find-requires %%{buildroot} %{OHPC_HOME}
 
-%%__ohpc_path            ^%{OHPC_HOME}
-%%__elf_exclude_path     ^%{OHPC_HOME}
+%%__ohpc_path            ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)$
+%%__elf_exclude_path     ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)$
 
 %%__ohpc_magic           ^ELF (32|64)-bit.*$
 %%__ohpc_flags           magic_and_path
