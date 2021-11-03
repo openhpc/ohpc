@@ -71,7 +71,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
-BuildRequires: hwloc-devel
+BuildRequires: hwloc-ohpc
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
@@ -136,7 +136,7 @@ Requires: smtpdaemon
 Requires: hostname
 %endif
 %if 0%{?rhel} >= 7
-Requires: hwloc-libs
+Requires: hwloc-ohpc
 %endif
 Requires: libical
 Autoreq: 1
@@ -173,7 +173,7 @@ Requires: net-tools
 Requires: hostname
 %endif
 %if 0%{?rhel} >= 7
-Requires: hwloc-libs
+Requires: hwloc-ohpc
 %endif
 Autoreq: 1
 
@@ -266,6 +266,7 @@ cd build
 ../configure CFLAGS="-fPIC" \
 	PBS_VERSION=%{pbs_version} \
 	--prefix=%{pbs_prefix} \
+        --with-hwloc=%{OHPC_LIBS}/hwloc \
 %if %{with ptl}
 	--enable-ptl \
 %endif
