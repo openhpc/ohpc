@@ -188,7 +188,7 @@ BuildRequires: ucx-devel
 # Note that brp-compress does not compress man pages installed
 #  into non-standard locations (e.g. /usr/local)
 #
-#define __os_install_post /usr/lib/rpm/brp-compress
+%define __os_install_post /usr/lib/rpm/brp-compress
 
 #
 # Should unpackaged files in a build root terminate a build?
@@ -403,12 +403,12 @@ export QA_RPATHS=0x5
 
 # Strip out some dependencies
 
-cat > find-requires.sh <<'EOF'
-exec %{__find_requires} "$@" | egrep -v '^libpmix.so|libevent|libnvidia-ml'
-EOF
-chmod +x find-requires.sh
-%global _use_internal_dependency_generator 0
-%global __find_requires %{_builddir}/%{buildsubdir}/find-requires.sh
+# cat > find-requires.sh <<'EOF'
+# exec %{__find_requires} "$@" | egrep -v '^libpmix.so|libevent|libnvidia-ml'
+# EOF
+# chmod +x find-requires.sh
+# global _use_internal_dependency_generator 0
+# global __find_requires %{_builddir}/%{buildsubdir}/find-requires.sh
 
 make install DESTDIR=%{buildroot}
 make install-contrib DESTDIR=%{buildroot}
