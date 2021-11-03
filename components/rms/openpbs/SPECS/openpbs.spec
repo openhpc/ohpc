@@ -61,6 +61,8 @@ URL: http://www.openpbs.org
 Vendor: Altair Engineering, Inc.
 Prefix: %{?pbs_prefix}%{!?pbs_prefix:%{_prefix}}
 
+Patch1: hwloc.patch
+
 %bcond_with alps
 %bcond_with ptl
 
@@ -257,6 +259,7 @@ functionality of PBS.
 
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
+%patch1 -p0
 
 %build
 [ -f configure ] || ./autogen.sh

@@ -1,0 +1,21 @@
+--- m4/with_hwloc.m4	2021-11-03 12:30:56.580000000 +0000
++++ m4/with_hwloc.m4	2021-11-03 12:30:49.270000000 +0000
+@@ -66,14 +66,11 @@
+       AC_MSG_ERROR([hwloc shared object library not found.])
+     ),
+     # Using developer installed hwloc
+-    AS_IF([test -r "${hwloc_dir}/lib64/libhwloc_embedded.a"],
+-      [hwloc_lib="${hwloc_dir}/lib64/libhwloc_embedded.a"],
+-      AS_IF([test -r "${hwloc_dir}/lib/libhwloc_embedded.a"],
+-        [hwloc_lib="${hwloc_dir}/lib/libhwloc_embedded.a"],
+-        AC_MSG_ERROR([hwloc library not found.])
++    AS_IF([test -r "${hwloc_dir}/lib/libhwloc.so"],
++      [[hwloc_lib="-L${hwloc_dir}/lib -Wl,-rpath,${hwloc_dir} -lhwloc"]],
++      AC_MSG_ERROR([hwloc library not found.])
+       )
+     )
+-  )
+   AC_MSG_RESULT([$hwloc_dir])
+   AS_CASE([x$target_os],
+     [xlinux*],
+
