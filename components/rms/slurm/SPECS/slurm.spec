@@ -188,7 +188,7 @@ BuildRequires: ucx-devel
 # Note that brp-compress does not compress man pages installed
 #  into non-standard locations (e.g. /usr/local)
 #
-%define __os_install_post /usr/lib/rpm/brp-compress
+#define __os_install_post /usr/lib/rpm/brp-compress
 
 #
 # Should unpackaged files in a build root terminate a build?
