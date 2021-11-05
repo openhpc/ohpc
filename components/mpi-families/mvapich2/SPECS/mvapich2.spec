@@ -27,7 +27,7 @@
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
-Version:   2.3.4
+Version:   2.3.6
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
