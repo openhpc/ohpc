@@ -95,7 +95,6 @@ Message Passing Interface (MPI) standard.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p0
-%patch1 -p1
 
 %build
 # OpenHPC compiler designation
