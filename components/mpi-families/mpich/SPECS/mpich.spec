@@ -52,7 +52,7 @@ Requires: libfabric%{PROJ_DELIM}
 
 Summary:   MPICH MPI implementation
 Name:      %{pname}%{RMS_DELIM}%{FABRIC_DELIM}-%{compiler_family}%{PROJ_DELIM}
-Version:   3.3.2
+Version:   3.4.2
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
