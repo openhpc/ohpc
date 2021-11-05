@@ -45,7 +45,7 @@ Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v4.0/downloads/openmpi-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v4.1/downloads/openmpi-%{version}.tar.bz2
 Source3:   pbs-config
 Patch0:    openmpi-4.0-pbs-config.patch
 
