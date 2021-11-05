@@ -18,7 +18,7 @@
 
 %global gmp_version 6.2.1
 %global mpc_version 1.2.1
-%global mpfr_version 4.1.1
+%global mpfr_version 4.1.0
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
