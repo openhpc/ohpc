@@ -243,6 +243,7 @@ prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
+depends-on hwloc
 %if 0%{with_ucx}
 depends-on ucx
 %endif
