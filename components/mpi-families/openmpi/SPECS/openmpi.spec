@@ -76,7 +76,7 @@ BuildRequires:  ucx%{PROJ_DELIM}
 Requires: ucx%{PROJ_DELIM}
 Requires: ucx-ib%{PROJ_DELIM}
 %endif
-BuildRequires:  hwloc-devel
+BuildRequires:  hwloc%{PROJ_DELIM}
 %if 0%{?rhel}
 BuildRequires: libtool-ltdl
 %endif
@@ -150,11 +150,13 @@ communication techniques.
 
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 
+# build against ohpc-variant of hwloc                                                                                  BASEFLAGS="$BASEFLAGS --with-hwloc=%{OHPC_LIBS}/hwloc"
+
 # build against external pmix and libevent
 %if 0%{with_pmix}
 module load pmix
 BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
-BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
+BASEFLAGS="$BASEFLAGS --with-libevent=external"
 %endif
 
 %if 0%{with_ofi}
