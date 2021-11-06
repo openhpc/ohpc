@@ -67,6 +67,9 @@ BuildRequires:  libevent-devel
 %endif
 %if 0%{with_ofi}
 BuildRequires:  libfabric%{PROJ_DELIM}
+%if 0%{?rhel}
+BuildRequires:  libibverbs-devel
+%endif
 %ifarch x86_64
 BuildRequires:  libpsm2-devel
 %endif
