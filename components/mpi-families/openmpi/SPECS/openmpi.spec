@@ -147,10 +147,10 @@ communication techniques.
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 
-# build against ohpc-variant of hwloc                                                                                  BASEFLAGS="$BASEFLAGS --with-hwloc=%{OHPC_LIBS}/hwloc"
+# build against ohpc-variant of hwloc
+BASEFLAGS="$BASEFLAGS --with-hwloc=%{OHPC_LIBS}/hwloc"
 
 # build against external pmix and libevent
 %if 0%{with_pmix}
