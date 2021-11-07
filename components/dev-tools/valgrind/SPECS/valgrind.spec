@@ -37,7 +37,8 @@ AMD64/MacOSX.
 %setup -q -n %{pname}-%{version}
 
 %build
-./configure --prefix=%{install_path} || { cat config.log && exit 1; }
+./configure --prefix=%{install_path} \
+	    --libexecdir=%{install_path}/lib/valgrind || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install
@@ -63,7 +64,7 @@ module-whatis "Description: Memory debugging utilities"
 prepend-path    PATH             %{install_path}/bin
 prepend-path    MANPATH          %{install_path}/share/man
 prepend-path    PKG_CONFIG_PATH  %{install_path}/lib/pkgconfig
-prepend-path    LD_LIBRARY_PATH  %{install_path}/lib/pkgconfig
+prepend-path    LD_LIBRARY_PATH  %{install_path}/lib
 
 setenv          %{PNAME}_DIR     %{install_path}
 setenv          %{PNAME}_LIB     %{install_path}/lib/valgrind
