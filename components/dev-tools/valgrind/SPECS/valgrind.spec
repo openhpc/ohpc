@@ -38,7 +38,7 @@ AMD64/MacOSX.
 
 %build
 ./configure --prefix=%{install_path} \
-	    --libexecdir=%{install_path}/lib/valgrind || { cat config.log && exit 1; }
+	    --libexecdir=%{install_path}/lib || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install
