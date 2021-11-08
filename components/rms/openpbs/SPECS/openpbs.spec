@@ -523,8 +523,6 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %defattr(-,root,root, -)
 %{pbs_prefix}/lib*/*.a
 %{pbs_prefix}/include/*
-%doc README.md
-%license LICENSE
 
 %if %{with ptl}
 %files %{pbs_ptl}
