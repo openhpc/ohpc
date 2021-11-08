@@ -29,6 +29,7 @@ Version:        3.16.1
 Release:        1%{?dist}
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
 Patch1:         petsc.rpath.patch
+Patch2:         py3_tests.patch
 Url:            http://www.mcs.anl.gov/petsc/
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -57,6 +58,7 @@ differential equations.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
+%patch2 -p1
 
 
 %build

@@ -1,0 +1,8 @@
+--- petsc-3.16.1/config/query_tests.py.orig	2021-11-08 11:37:38.000000000 -0600
++++ petsc-3.16.1/config/query_tests.py	2021-11-08 11:37:41.000000000 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ import fnmatch
+ import glob
+ import inspect
