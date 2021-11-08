@@ -108,16 +108,9 @@ unset FCFLAGS
         --with-f77=mpiifort \
 %else
 %if "%{compiler_family}" == "gnu"
-        --with-cc=mpicc   \
-        --with-cxx=mpicxx \
-        --with-fc=mpif90  \
         --FFLAGS=-I$I_MPI_ROOT/include64/gfortran/4.9.0/ \
 %endif
 %endif
-%else
-        --with-cc=mpicc   \
-        --with-cxx=mpicxx \
-        --with-fc=mpif90  \
 %endif
 %if 0%{?OHPC_BUILD}
         --with-make-np=3 \
