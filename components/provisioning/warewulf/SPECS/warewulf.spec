@@ -126,5 +126,3 @@ rm -f %{tftpdir}/%{pname}/*
 %endif
 %attr(-, root, root) %{_unitdir}/warewulfd.service
 %attr(-, root, root) %{_mandir}/man1/wwctl*
-
-%changelog
