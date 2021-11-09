@@ -7,12 +7,12 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS8.4}
-\newcommand{\OSRepo}{CentOS\_8.4}
+\newcommand{\baseOS}{Rocky 8.4}
+\newcommand{\OSRepo}{Rocky\_8.4}
 \newcommand{\OSTree}{CentOS\_8}
 \newcommand{\OSTag}{el8}
-\newcommand{\baseos}{centos8.4}
-\newcommand{\baseosshort}{centos8}
+\newcommand{\baseos}{rocky8.4}
+\newcommand{\baseosshort}{rocky8}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
@@ -98,7 +98,7 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
-\input{common/centos_repos}
+\input{common/rocky_repos}
 \input{common/automation}
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
@@ -119,7 +119,7 @@
 \input{common/warewulf_setup_centos}
 
 \subsection{Define {\em compute} image for provisioning}
-\input{common/warewulf_mkchroot_centos}
+\input{common/warewulf_mkchroot_rocky}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/add_to_compute_chroot_intro}
