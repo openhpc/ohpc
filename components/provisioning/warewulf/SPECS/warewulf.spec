@@ -23,6 +23,7 @@ Summary: A provisioning system for large clusters of bare metal and/or virtual s
 Version: 4.2.0
 Release: 1
 License: BSD-3-Clause
+Group:   %{PROJ_NAME}/provisioning
 URL:     https://github.com/hpcng/warewulf
 Source:  https://github.com/hpcng/warewulf/archive/refs/tags/v%{version}.tar.gz
 Patch0:  warewulf-4.2.0-rpm.patch
