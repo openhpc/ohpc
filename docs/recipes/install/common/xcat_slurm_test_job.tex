@@ -48,7 +48,7 @@ the underlying native job launch mechanism being used):
 [test@sms ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
 
 # Submit interactive job request and use prun to launch executable
-[test@sms ~]$ srun -n 8 -N 2 --pty /bin/bash
+[test@sms ~]$ salloc -n 8 -N 2 
 
 [test@c1 ~]$ prun ./a.out
 
