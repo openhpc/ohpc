@@ -98,10 +98,10 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 # aarch64-based recipes
 #----------------------
 
-pushd docs/recipes/install/centos8/aarch64/warewulf/slurm
+pushd docs/recipes/install/rocky8/aarch64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/centos8/aarch64/warewulf/openpbs
+pushd docs/recipes/install/rocky8/aarch64/warewulf/openpbs
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 pushd docs/recipes/install/leap15/aarch64/warewulf/slurm
@@ -149,11 +149,11 @@ install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHP
 
 # aarch64 guides
 
-%define lpath centos8/aarch64/warewulf/slurm
+%define lpath rocky8/aarch64/warewulf/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
-%define lpath centos8/aarch64/warewulf/openpbs
+%define lpath rocky8/aarch64/warewulf/openpbs
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
