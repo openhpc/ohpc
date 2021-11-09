@@ -1,0 +1,124 @@
+diff -Naru A/etc/warewulf.conf B/etc/warewulf.conf
+--- A/etc/warewulf.conf	2021-10-25 14:10:15.000000000 -0700
++++ B/etc/warewulf.conf	2021-11-08 16:37:18.813000000 -0800
+@@ -14,10 +14,10 @@
+   systemd name: dhcpd
+ tftp:
+   enabled: true
+-  tftproot: /var/lib/tftpboot
++  tftproot: /srv/tftp
+   systemd name: tftp
+ nfs:
+   systemd name: nfs-server
+   exports:
+   - /home
+-  - /var/warewulf
+\ No newline at end of file
++  - /srv/warewulf
+\ No newline at end of file
+diff -Naru A/internal/app/wwctl/configure/nfs/main.go B/internal/app/wwctl/configure/nfs/main.go
+--- A/internal/app/wwctl/configure/nfs/main.go	2021-10-25 14:10:15.000000000 -0700
++++ B/internal/app/wwctl/configure/nfs/main.go	2021-11-08 16:39:26.521000000 -0800
+@@ -40,7 +40,7 @@
+ 		}
+ 		defer exports.Close()
+ 
+-		fstab, err := os.OpenFile("/var/warewulf/overlays/system/default/etc/fstab", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
++		fstab, err := os.OpenFile("/srv/warewulf/overlays/system/default/etc/fstab", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+ 		if err != nil {
+ 			wwlog.Printf(wwlog.ERROR, "%s\n", err)
+ 			os.Exit(1)
+diff -Naru A/internal/pkg/config/config.go B/internal/pkg/config/config.go
+--- A/internal/pkg/config/config.go	2021-10-25 14:10:15.000000000 -0700
++++ B/internal/pkg/config/config.go	2021-11-08 16:40:47.641000000 -0800
+@@ -9,7 +9,7 @@
+ )
+ 
+ const (
+-	LocalStateDir = "/var/warewulf"
++	LocalStateDir = "/srv/warewulf"
+ )
+ 
+ func OverlayDir() string {
+diff -Naru A/internal/pkg/oci/cache.go B/internal/pkg/oci/cache.go
+--- A/internal/pkg/oci/cache.go	2021-10-25 14:10:15.000000000 -0700
++++ B/internal/pkg/oci/cache.go	2021-11-08 16:42:52.635000000 -0800
+@@ -10,7 +10,7 @@
+ )
+ 
+ const (
+-	defaultCachePath = "/var/warewulf/container-cache/oci/"
++	defaultCachePath = "/srv/warewulf/container-cache/oci/"
+ 	blobPrefix       = "blobs"
+ 	rootfsPrefix     = "rootfs"
+ )
+diff -Naru A/Makefile B/Makefile
+--- A/Makefile	2021-11-08 16:47:46.360000000 -0800
++++ B/Makefile	2021-11-08 16:37:57.265000000 -0800
+@@ -2,6 +2,9 @@
+ 
+ VERSION := 4.2.0
+ 
++WWSHAREDIR := /srv/warewulf
++WWTFTPDIR := /srv/tftp/warewulf
++
+ # auto installed tooling
+ TOOLS_DIR := .tools
+ TOOLS_BIN := $(TOOLS_DIR)/bin
+@@ -52,11 +55,11 @@
+ 
+ files: all
+ 	install -d -m 0755 $(DESTDIR)/usr/bin/
+-	install -d -m 0755 $(DESTDIR)/var/warewulf/
+-	install -d -m 0755 $(DESTDIR)/var/warewulf/chroots
++	install -d -m 0755 $(DESTDIR)$(WWSHAREDIR)
++	install -d -m 0755 $(DESTDIR)$(WWSHAREDIR)/chroots
+ 	install -d -m 0755 $(DESTDIR)/etc/warewulf/
+ 	install -d -m 0755 $(DESTDIR)/etc/warewulf/ipxe
+-	install -d -m 0755 $(DESTDIR)/var/lib/tftpboot/warewulf/ipxe/
++	install -d -m 0755 $(DESTDIR)$(WWTFTPDIR)/ipxe/
+ 	install -d -m 0755 $(DESTDIR)/etc/bash_completion.d/
+ 	install -d -m 0755 $(DESTDIR)/usr/share/man/man1
+ 	test -f $(DESTDIR)/etc/warewulf/warewulf.conf || install -m 644 etc/warewulf.conf $(DESTDIR)/etc/warewulf/
+@@ -64,12 +67,12 @@
+ 	test -f $(DESTDIR)/etc/warewulf/nodes.conf || install -m 640 etc/nodes.conf $(DESTDIR)/etc/warewulf/
+ 	cp -r etc/dhcp $(DESTDIR)/etc/warewulf/
+ 	cp -r etc/ipxe $(DESTDIR)/etc/warewulf/
+-	cp -r overlays $(DESTDIR)/var/warewulf/
+-	chmod +x $(DESTDIR)/var/warewulf/overlays/system/default/init
+-	chmod 600 $(DESTDIR)/var/warewulf/overlays/system/default/etc/ssh/ssh*
+-	chmod 644 $(DESTDIR)/var/warewulf/overlays/system/default/etc/ssh/ssh*.pub.ww
+-	mkdir -p $(DESTDIR)/var/warewulf/overlays/system/default/warewulf/bin/
+-	cp wwclient $(DESTDIR)/var/warewulf/overlays/system/default/warewulf/bin/
++	cp -r overlays $(DESTDIR)$(WWSHAREDIR)
++	chmod +x $(DESTDIR)$(WWSHAREDIR)/overlays/system/default/init
++	chmod 600 $(DESTDIR)$(WWSHAREDIR)/overlays/system/default/etc/ssh/ssh*
++	chmod 644 $(DESTDIR)$(WWSHAREDIR)/overlays/system/default/etc/ssh/ssh*.pub.ww
++	mkdir -p $(DESTDIR)$(WWSHAREDIR)/overlays/system/default/warewulf/bin/
++	cp wwclient $(DESTDIR)$(WWSHAREDIR)/overlays/system/default/warewulf/bin/
+ 	cp wwctl $(DESTDIR)/usr/bin/
+ 	mkdir -p $(DESTDIR)/usr/lib/firewalld/services
+ 	install -c -m 0644 include/firewalld/warewulf.xml $(DESTDIR)/usr/lib/firewalld/services
+@@ -80,15 +83,15 @@
+ 
+ init:
+ 	systemctl daemon-reload
+-	cp -r tftpboot/* /var/lib/tftpboot/warewulf/ipxe/
+-	restorecon -r /var/lib/tftpboot/warewulf
++	cp -r tftpboot/* $(WWTFTPDIR)/ipxe/
++	restorecon -r $(WWTFTPDIR)
+ 
+ debfiles: debian
+-	chmod +x $(DESTDIR)/var/warewulf/overlays/system/debian/init
+-	chmod 600 $(DESTDIR)/var/warewulf/overlays/system/debian/etc/ssh/ssh*
+-	chmod 644 $(DESTDIR)/var/warewulf/overlays/system/debian/etc/ssh/ssh*.pub.ww
+-	mkdir -p $(DESTDIR)/var/warewulf/overlays/system/debian/warewulf/bin/
+-	cp wwclient $(DESTDIR)/var/warewulf/overlays/system/debian/warewulf/bin/
++	chmod +x $(DESTDIR)$(WWSHAREDIR)/overlays/system/debian/init
++	chmod 600 $(DESTDIR)$(WWSHAREDIR)/overlays/system/debian/etc/ssh/ssh*
++	chmod 644 $(DESTDIR)$(WWSHAREDIR)/overlays/system/debian/etc/ssh/ssh*.pub.ww
++	mkdir -p $(DESTDIR)$(WWSHAREDIR)/overlays/system/debian/warewulf/bin/
++	cp wwclient $(DESTDIR)$(WWSHAREDIR)/overlays/system/debian/warewulf/bin/
+ 
+ wwctl:
+ 	cd cmd/wwctl; GOOS=linux go build -mod vendor -tags "$(WW_BUILD_GO_BUILD_TAGS)" -o ../../wwctl

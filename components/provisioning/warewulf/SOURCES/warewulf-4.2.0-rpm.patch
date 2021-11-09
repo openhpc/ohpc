@@ -1,0 +1,482 @@
+From de2c882ba1ee729138b32364c4b20ad645012824 Mon Sep 17 00:00:00 2001
+From: jcsiadal <jeremy.c.siadal@intel.com>
+Date: Thu, 28 Oct 2021 17:48:16 -0700
+Subject: [PATCH 1/3] Replace HTML in help
+
+Signed-off-by: jcsiadal <jeremy.c.siadal@intel.com>
+---
+ internal/app/wwctl/overlay/build/root.go  | 2 +-
+ internal/app/wwctl/overlay/chmod/root.go  | 2 +-
+ internal/app/wwctl/overlay/chown/root.go  | 2 +-
+ internal/app/wwctl/overlay/create/root.go | 2 +-
+ internal/app/wwctl/overlay/delete/root.go | 2 +-
+ internal/app/wwctl/overlay/edit/root.go   | 2 +-
+ internal/app/wwctl/overlay/imprt/root.go  | 2 +-
+ internal/app/wwctl/overlay/list/root.go   | 2 +-
+ internal/app/wwctl/overlay/mkdir/root.go  | 2 +-
+ internal/app/wwctl/overlay/show/root.go   | 2 +-
+ internal/app/wwctl/power/cycle/root.go    | 2 +-
+ internal/app/wwctl/profile/add/root.go    | 2 +-
+ internal/app/wwctl/profile/delete/root.go | 2 +-
+ internal/app/wwctl/profile/set/root.go    | 2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/internal/app/wwctl/overlay/build/root.go b/internal/app/wwctl/overlay/build/root.go
+index a6901f87..197c9f5e 100644
+--- a/internal/app/wwctl/overlay/build/root.go
++++ b/internal/app/wwctl/overlay/build/root.go
+@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "build [flags] <overlay kind> <overlay name>",
++		Use:   "build [flags] (overlay kind) (overlay name)",
+ 		Short: "(Re)build an overlay",
+ 		Long:  "This command will build a system or runtime overlay.",
+ 		RunE:  CobraRunE,
+diff --git a/internal/app/wwctl/overlay/chmod/root.go b/internal/app/wwctl/overlay/chmod/root.go
+index b9a254d6..d9755157 100644
+--- a/internal/app/wwctl/overlay/chmod/root.go
++++ b/internal/app/wwctl/overlay/chmod/root.go
+@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "chmod [flags] <overlay kind> <overlay name> <path> <mode>",
++		Use:   "chmod [flags] (overlay kind) (overlay name) (path) (mode)",
+ 		Short: "Change file permissions within an overlay",
+ 		Long: "This command will allow you to change the permissions of a file within an\n" +
+ 			"overlay.",
+diff --git a/internal/app/wwctl/overlay/chown/root.go b/internal/app/wwctl/overlay/chown/root.go
+index 941328f0..970434dd 100644
+--- a/internal/app/wwctl/overlay/chown/root.go
++++ b/internal/app/wwctl/overlay/chown/root.go
+@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "chown [flags] <overlay kind> <overlay name> <path> <UID> [<GID>]",
++		Use:   "chown [flags] (overlay kind) (overlay name) (path) (UID) [(GID)]",
+ 		Short: "Change file ownership within an overlay",
+ 		Long: "This command will allow you to change the ownership of a file within an\n" +
+ 			"overlay.",
+diff --git a/internal/app/wwctl/overlay/create/root.go b/internal/app/wwctl/overlay/create/root.go
+index 15242009..9b671b3b 100644
+--- a/internal/app/wwctl/overlay/create/root.go
++++ b/internal/app/wwctl/overlay/create/root.go
+@@ -6,7 +6,7 @@ import (
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "create [flags] <overlay kind> <overlay name>",
++		Use:   "create [flags] (overlay kind) (overlay name)",
+ 		Short: "Initialize a new Overlay",
+ 		Long:  "This command will create a new empty overlay.",
+ 		RunE:  CobraRunE,
+diff --git a/internal/app/wwctl/overlay/delete/root.go b/internal/app/wwctl/overlay/delete/root.go
+index bfe9299c..da636e8d 100644
+--- a/internal/app/wwctl/overlay/delete/root.go
++++ b/internal/app/wwctl/overlay/delete/root.go
+@@ -6,7 +6,7 @@ import (
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "delete [flags] <overlay kind> <overlay name> [overlay file]",
++		Use:   "delete [flags] (overlay kind) (overlay name) [overlay file]",
+ 		Short: "Delete Warewulf Overlay or files",
+ 		Long: "This command will delete files within an overlay or an entire overlay if no\n" +
+ 			"files are given to remove (use with caution).",
+diff --git a/internal/app/wwctl/overlay/edit/root.go b/internal/app/wwctl/overlay/edit/root.go
+index 3ec6add2..e1b5c2cf 100644
+--- a/internal/app/wwctl/overlay/edit/root.go
++++ b/internal/app/wwctl/overlay/edit/root.go
+@@ -6,7 +6,7 @@ import (
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "edit [flags] <overlay kind> <overlay name> <file path>",
++		Use:   "edit [flags] (overlay kind) (overlay name) (file path)",
+ 		Short: "Edit/Create a file within a Warewulf Overlay",
+ 		Long: "This command will allow you to edit or create a new file within a given\n" +
+ 			"overlay. Note: when creating files ending in a '.ww' suffix this will always be\n" +
+diff --git a/internal/app/wwctl/overlay/imprt/root.go b/internal/app/wwctl/overlay/imprt/root.go
+index 983052b8..c0fcbad9 100644
+--- a/internal/app/wwctl/overlay/imprt/root.go
++++ b/internal/app/wwctl/overlay/imprt/root.go
+@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:     "import [flags] <overlay kind> <overlay name> <host source> [overlay target]",
++		Use:     "import [flags] (overlay kind) (overlay name) (host source) [overlay target]",
+ 		Short:   "Import a file into a Warewulf Overlay",
+ 		Long:    "This command will import a file into a given Warewulf overlay.",
+ 		RunE:    CobraRunE,
+diff --git a/internal/app/wwctl/overlay/list/root.go b/internal/app/wwctl/overlay/list/root.go
+index 9643845b..ea2310e9 100644
+--- a/internal/app/wwctl/overlay/list/root.go
++++ b/internal/app/wwctl/overlay/list/root.go
+@@ -6,7 +6,7 @@ import (
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "list [flags] <overlay kind> [overlay name]",
++		Use:   "list [flags] (overlay kind) [overlay name]",
+ 		Short: "List Warewulf Overlays and files",
+ 		Long: "This command will show you information about Warewulf overlays and the\n" +
+ 			"files contained within.",
+diff --git a/internal/app/wwctl/overlay/mkdir/root.go b/internal/app/wwctl/overlay/mkdir/root.go
+index 8a557079..148d0514 100644
+--- a/internal/app/wwctl/overlay/mkdir/root.go
++++ b/internal/app/wwctl/overlay/mkdir/root.go
+@@ -6,7 +6,7 @@ import (
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "mkdir [flags] <overlay kind> <overlay name> <directory path>",
++		Use:   "mkdir [flags] (overlay kind) (overlay name) (directory path)",
+ 		Short: "Create a new directory within an Overlay",
+ 		Long:  "This command will allow you to create a new file within a given Warewulf overlay.",
+ 		RunE:  CobraRunE,
+diff --git a/internal/app/wwctl/overlay/show/root.go b/internal/app/wwctl/overlay/show/root.go
+index a8c51efc..fe58f714 100644
+--- a/internal/app/wwctl/overlay/show/root.go
++++ b/internal/app/wwctl/overlay/show/root.go
+@@ -6,7 +6,7 @@ import (
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "show [flags] <overlay kind> <overlay name> <overlay file>",
++		Use:   "show [flags] (overlay kind) (overlay name) (overlay file)",
+ 		Short: "Show (cat) a file within a Warewulf Overlay",
+ 		Long: "This command will output the contents of a file within a given\n" +
+ 			"Warewulf overlay.",
+diff --git a/internal/app/wwctl/power/cycle/root.go b/internal/app/wwctl/power/cycle/root.go
+index e89899fc..fcd9093d 100644
+--- a/internal/app/wwctl/power/cycle/root.go
++++ b/internal/app/wwctl/power/cycle/root.go
+@@ -6,7 +6,7 @@ import (
+ 
+ var (
+ 	powerCmd = &cobra.Command{
+-		Use:   "cycle [flags] <node pattern>...",
++		Use:   "cycle [flags] (node pattern)...",
+ 		Short: "Power cycle the given node(s)",
+ 		Long:  "This command will cycle the power for a given set of nodes.",
+ 		RunE:  CobraRunE,
+diff --git a/internal/app/wwctl/profile/add/root.go b/internal/app/wwctl/profile/add/root.go
+index 85d1ac42..f560128c 100644
+--- a/internal/app/wwctl/profile/add/root.go
++++ b/internal/app/wwctl/profile/add/root.go
+@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "add <profile name>",
++		Use:   "add (profile name)",
+ 		Short: "Add a new node profile",
+ 		Long:  "This command will add a new node profile.",
+ 		RunE:  CobraRunE,
+diff --git a/internal/app/wwctl/profile/delete/root.go b/internal/app/wwctl/profile/delete/root.go
+index 44f3afe0..aaf92662 100644
+--- a/internal/app/wwctl/profile/delete/root.go
++++ b/internal/app/wwctl/profile/delete/root.go
+@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "delete [flags] <profile pattern>",
++		Use:   "delete [flags] (profile pattern)",
+ 		Short: "Delete a node profile",
+ 		Long:  "This command will delete a node profile.",
+ 		RunE:  CobraRunE,
+diff --git a/internal/app/wwctl/profile/set/root.go b/internal/app/wwctl/profile/set/root.go
+index cb0b765a..6e533b5f 100644
+--- a/internal/app/wwctl/profile/set/root.go
++++ b/internal/app/wwctl/profile/set/root.go
+@@ -12,7 +12,7 @@ import (
+ 
+ var (
+ 	baseCmd = &cobra.Command{
+-		Use:   "set [flags] <profile pattern>...",
++		Use:   "set [flags] (profile pattern)...",
+ 		Short: "Configure node profile properties",
+ 		Long: "This command will allow you to set configuration properties for node profiles.\n\n" +
+ 			"Note: use the string 'UNSET' to remove a configuration",
+
+From f7396ae5bebc75eb8566ca7e87112030160a238f Mon Sep 17 00:00:00 2001
+From: jcsiadal <jeremy.c.siadal@intel.com>
+Date: Mon, 1 Nov 2021 11:32:59 -0700
+Subject: [PATCH 2/3] Updates to build an RPM
+
+Signed-off-by: jcsiadal <jeremy.c.siadal@intel.com>
+---
+ Makefile                           | 23 ++++++---
+ etc/nodes.conf                     |  4 ++
+ internal/pkg/node/datastructure.go | 23 ++-------
+ warewulf.spec.in                   | 81 +++++++++++++++++++++---------
+ 4 files changed, 80 insertions(+), 51 deletions(-)
+ create mode 100644 etc/nodes.conf
+
+diff --git a/Makefile b/Makefile
+index 0babd543..053a7d94 100644
+--- a/Makefile
++++ b/Makefile
+@@ -61,6 +61,7 @@ files: all
+ 	install -d -m 0755 $(DESTDIR)/usr/share/man/man1
+ 	test -f $(DESTDIR)/etc/warewulf/warewulf.conf || install -m 644 etc/warewulf.conf $(DESTDIR)/etc/warewulf/
+ 	test -f $(DESTDIR)/etc/warewulf/hosts.tmpl || install -m 644 etc/hosts.tmpl $(DESTDIR)/etc/warewulf/
++	test -f $(DESTDIR)/etc/warewulf/nodes.conf || install -m 640 etc/nodes.conf $(DESTDIR)/etc/warewulf/
+ 	cp -r etc/dhcp $(DESTDIR)/etc/warewulf/
+ 	cp -r etc/ipxe $(DESTDIR)/etc/warewulf/
+ 	cp -r overlays $(DESTDIR)/var/warewulf/
+@@ -74,12 +75,13 @@ files: all
+ 	install -c -m 0644 include/firewalld/warewulf.xml $(DESTDIR)/usr/lib/firewalld/services
+ 	mkdir -p $(DESTDIR)/usr/lib/systemd/system
+ 	install -c -m 0644 include/systemd/warewulfd.service $(DESTDIR)/usr/lib/systemd/system
+-	./bash_completion  $(DESTDIR)/etc/bash_completion.d/warewulf
+-	./man_page $(DESTDIR)/usr/share/man/man1
+-	gzip --force $(DESTDIR)/usr/share/man/man1/wwctl*1
+-#	systemctl daemon-reload
+-#	cp -r tftpboot/* /var/lib/tftpboot/warewulf/ipxe/
+-#	restorecon -r /var/lib/tftpboot/warewulf
++	cp etc/bash_completion.d/warewulf $(DESTDIR)/etc/bash_completion.d/
++	cp usr/share/man/man1/* $(DESTDIR)/usr/share/man/man1/
++
++init:
++	systemctl daemon-reload
++	cp -r tftpboot/* /var/lib/tftpboot/warewulf/ipxe/
++	restorecon -r /var/lib/tftpboot/warewulf
+ 
+ debfiles: debian
+ 	chmod +x $(DESTDIR)/var/warewulf/overlays/system/debian/init
+@@ -95,10 +97,15 @@ wwclient:
+ 	cd cmd/wwclient; CGO_ENABLED=0 GOOS=linux go build -mod vendor -a -ldflags '-extldflags -static' -o ../../wwclient
+ 
+ bash_completion:
+-	cd cmd/bash_completion; go build -mod vendor -tags "$(WW_BUILD_GO_BUILD_TAGS)" -o ../../bash_completion
++	cd cmd/bash_completion && go build -mod vendor -tags "$(WW_BUILD_GO_BUILD_TAGS)" -o ../../bash_completion
++	install -d -m 0755 ./etc/bash_completion.d/
++	./bash_completion  ./etc/bash_completion.d/warewulf
+ 
+ man_page:
+-	cd cmd/man_page; go build -mod vendor -tags "$(WW_BUILD_GO_BUILD_TAGS)" -o ../../man_page
++	cd cmd/man_page && go build -mod vendor -tags "$(WW_BUILD_GO_BUILD_TAGS)" -o ../../man_page
++	install -d -m 0755 ./usr/share/man/man1
++	./man_page ./usr/share/man/man1
++	gzip --force ./usr/share/man/man1/wwctl*1
+ 
+ dist: vendor
+ 	rm -rf _dist/warewulf-$(VERSION)
+diff --git a/etc/nodes.conf b/etc/nodes.conf
+new file mode 100644
+index 00000000..3999a8cd
+--- /dev/null
++++ b/etc/nodes.conf
+@@ -0,0 +1,4 @@
++nodeprofiles:
++  default:
++    comment: This profile is automatically included for each node
++nodes: {}
+diff --git a/internal/pkg/node/datastructure.go b/internal/pkg/node/datastructure.go
+index a7f55ae6..17be4d41 100644
+--- a/internal/pkg/node/datastructure.go
++++ b/internal/pkg/node/datastructure.go
+@@ -1,9 +1,6 @@
+ package node
+ 
+ import (
+-	"fmt"
+-	"os"
+-
+ 	"github.com/hpcng/warewulf/internal/pkg/util"
+ 	"github.com/hpcng/warewulf/internal/pkg/wwlog"
+ )
+@@ -104,22 +101,10 @@ type NetDevEntry struct {
+ }
+ 
+ func init() {
+-	//TODO: Check to make sure nodes.conf is found
++	// Check that nodes.conf is found
+ 	if !util.IsFile(ConfigFile) {
+-		c, err := os.OpenFile(ConfigFile, os.O_RDWR|os.O_CREATE, 0644)
+-		if err != nil {
+-			wwlog.Printf(wwlog.ERROR, "Could not create new configuration file: %s\n", err)
+-			// just return silently, as init is also called for bash_completion
+-			return
+-		}
+-
+-		fmt.Fprintf(c, "nodeprofiles:\n")
+-		fmt.Fprintf(c, "  default:\n")
+-		fmt.Fprintf(c, "    comment: This profile is automatically included for each node\n")
+-		fmt.Fprintf(c, "nodes: {}\n")
+-
+-		c.Close()
+-
+-		wwlog.Printf(wwlog.INFO, "Created default node configuration\n")
++		wwlog.Printf(wwlog.WARN, "Missing node configuration file\n")
++		// just return silently, as init is also called for bash_completion
++		return
+ 	}
+ }
+
+diff --git a/warewulf.spec.in b/warewulf.spec.in
+index 7e771cc1..eca239a7 100644
+--- a/warewulf.spec.in
++++ b/warewulf.spec.in
+@@ -1,74 +1,107 @@
++%global wwgroup warewulf
++%{!?wwshared: %global wwshared %{_localstatedir}}
+ %define debug_package %{nil}
+ 
+ Name: warewulf
+-Summary: A suite of tools for bare metal provisioning of containers
++Summary: A provisioning system for large clusters of bare metal and/or virtual systems
+ Version: @VERSION@
+-Release: 1%{?dist}
+-License: BSD
+-Source: https://github.com/hpcng/warewulf/archive/refs/tags/%{name}-%{version}.tar.gz
++Release: 1
++License: BSD-3-Clause
++URL:     https://github.com/hpcng/warewulf
++Source:  https://github.com/hpcng/warewulf/archive/refs/tags/v%{version}.tar.gz
++
+ ExclusiveOS: linux
+ 
++Conflicts: warewulf < 4
++Conflicts: warewulf-common
++Conflicts: warewulf-cluster
++Conflicts: warewulf-vnfs
++Conflicts: warewulf-provision
++Conflicts: warewulf-ipmi
++
+ BuildRequires: make
+-BuildRequires: golang
+ 
+ %if 0%{?rhel}
+ BuildRequires: systemd
++BuildRequires: golang
++Requires: tftp-server
++Requires: nfs-utils
+ %else
++# sle_version
+ BuildRequires: systemd-rpm-macros
++BuildRequires: go
++Requires: tftp
++Requires: nfs-kernel-server
+ %endif
+ 
+-%if 0%{?rhel} > 7
++%if 0%{?rhel} >= 8 || 0%{?sle_version}
+ Requires: dhcp-server
+ %else
++# rhel < 8
+ Requires: dhcp
+ %endif
+ 
+-Requires: tftp-server
+-Requires: nfs-utils
+-
+ %description
+-Warewulf is a bare metal container provisioning system.
++Warewulf is a stateless and diskless container operating system provisioning
++system for large clusters of bare metal and/or virtual systems.
++
+ 
+ %prep
+-%setup -q
++%setup -q -n %{name}-%{version}
++
+ 
+ %build
+ make all
+ 
++
+ %install
+ %make_install DESTDIR=%{buildroot} %{?mflags_install}
+ 
++
+ %pre
+-getent group warewulf >/dev/null || groupadd -r warewulf
++getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
++
+ 
+ %post
+ %systemd_post warewulfd.service
+ 
++
+ %preun
+ %systemd_preun warewulfd.service
+ 
++
+ %postun
+ %systemd_postun_with_restart warewulfd.service
+ 
++
+ %files
+-%attr(0755, root, warewulf) %dir %{_sysconfdir}/%{name}
++%defattr(-, root, %{wwgroup})
++%dir %{_sysconfdir}/%{name}
+ %config(noreplace) %{_sysconfdir}/%{name}/*
+-
++%config(noreplace) %attr(0640,-,-) %{_sysconfdir}/%{name}/nodes.conf
+ %{_sysconfdir}/bash_completion.d/warewulf
+ 
+-%{_bindir}/wwctl
+-
+-%{_prefix}/lib/firewalld/services/warewulf.xml
++%dir %{wwshared}/%{name}
++%{wwshared}/%{name}/overlays/runtime/*
++%{wwshared}/%{name}/overlays/system/*
+ 
+-%{_unitdir}/warewulfd.service
+-
+-%attr(0755, root, warewulf) %dir %{_localstatedir}/%{name}
+-%{_localstatedir}/%{name}/overlays/runtime/*
+-%{_localstatedir}/%{name}/overlays/system/*
+-
+-%{_mandir}/man1/wwctl*
++%attr(-, root, root) %{_bindir}/wwctl
++%if 0%{?rhel}
++%attr(-, root, root) %{_prefix}/lib/firewalld/services/warewulf.xml
++%else
++# sle_version
++%attr(-, root, root) %{_libexecdir}/firewalld/services/warewulf.xml
++%endif
++%attr(-, root, root) %{_unitdir}/warewulfd.service
++%attr(-, root, root) %{_mandir}/man1/wwctl*
+ 
+ %changelog
++* Mon Nov 1 2021 Jeremy Siadal <jeremy.c.siadal@intel.com> - 4.2.0-1
++- Add support for OpenSUSE
++- Update file attribs
++- Update license string
++- Make shared store relocatable
++
+ * Fri Sep 24 2021 Michael L. Young <myoung@ciq.co> - 4.2.0-1
+ - Update spec file to use systemd macros
+ - Use macros to refer to system paths
+
+From 9b2f47ed9587704ca30afc4b7975a743b1899cc5 Mon Sep 17 00:00:00 2001
+From: jcsiadal <jeremy.c.siadal@intel.com>
+Date: Tue, 2 Nov 2021 08:36:20 -0700
+Subject: [PATCH 3/3] Add dist macro back
+
+Signed-off-by: jcsiadal <jeremy.c.siadal@intel.com>
+---
+ warewulf.spec.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/warewulf.spec.in b/warewulf.spec.in
+index eca239a7..0a9e877b 100644
+--- a/warewulf.spec.in
++++ b/warewulf.spec.in
+@@ -5,7 +5,7 @@
+ Name: warewulf
+ Summary: A provisioning system for large clusters of bare metal and/or virtual systems
+ Version: @VERSION@
+-Release: 1
++Release: 1%{?dist}
+ License: BSD-3-Clause
+ URL:     https://github.com/hpcng/warewulf
+ Source:  https://github.com/hpcng/warewulf/archive/refs/tags/v%{version}.tar.gz
