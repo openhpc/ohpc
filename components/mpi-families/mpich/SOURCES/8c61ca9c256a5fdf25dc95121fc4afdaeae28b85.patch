@@ -1,0 +1,37 @@
+From 3b37839b5a33416f1de07c3b72e7d922f5c614a5 Mon Sep 17 00:00:00 2001
+From: Hui Zhou <hzhou321@anl.gov>
+Date: Mon, 8 Nov 2021 15:39:41 -0600
+Subject: [PATCH] hydra: fix slurm nodelist parsing
+
+Fix for simple patterns e.g. c[1-2].
+---
+ src/pm/hydra/maint/slurm_nodelist_parse.c                     | 2 +-
+ src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/pm/hydra/maint/slurm_nodelist_parse.c b/src/pm/hydra/maint/slurm_nodelist_parse.c
+index b5db37d7ac0..58054df892c 100644
+--- a/src/pm/hydra/maint/slurm_nodelist_parse.c
++++ b/src/pm/hydra/maint/slurm_nodelist_parse.c
+@@ -89,7 +89,7 @@ void list_to_nodes(char *str, struct list **node_list)
+     regcomp(&ematch_old, "([a-z]+[0-9]+)", REG_EXTENDED | REG_ICASE);
+ 
+     /* compile group-0 regex for new format: "h00-[00-12,14] | h00[00-12,14] | h00-14 | h0014" */
+-    regcomp(&gmatch_new[0], "(,|^)([a-z0-9][\\.a-z0-9-]+)(\\[[-,0-9]+\\])?(,|$)",
++    regcomp(&gmatch_new[0], "(,|^)([a-z0-9][\\.a-z0-9-]*)(\\[[-,0-9]+\\])?(,|$)",
+             REG_EXTENDED | REG_ICASE);
+ 
+     /* compile group-1 regex for new format: "00-12 | 14" */
+diff --git a/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c b/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c
+index f941346100e..869d38b7add 100644
+--- a/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c
++++ b/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c
+@@ -108,7 +108,7 @@ static HYD_status list_to_nodes(char *str)
+     regcomp(&ematch_old, "([a-z]+[0-9]+)", REG_EXTENDED | REG_ICASE);
+ 
+     /* compile group-0 regex for new format: "h00-[00-12,14] | h00[00-12,14] | h00-14 | h0014" */
+-    regcomp(&gmatch_new[0], "(,|^)([a-z0-9][\\.a-z0-9-]+)(\\[[-,0-9]+\\])?(,|$)",
++    regcomp(&gmatch_new[0], "(,|^)([a-z0-9][\\.a-z0-9-]*)(\\[[-,0-9]+\\])?(,|$)",
+             REG_EXTENDED | REG_ICASE);
+ 
+     /* compile group-1 regex for new format: "00-12 | 14" */
