@@ -73,13 +73,9 @@ make config \
     MFEM_USE_NETCDF=YES NETCDF_OPT=-I$NETCDF_INC NETCDF_LIB="-L$NETCDF_LIB -lnetcdf" \
     MFEM_USE_PETSC=YES PETSC_OPT=-I$PETSC_INC PETSC_LIB="-L$PETSC_LIB -lpetsc" \
     MFEM_USE_SUPERLU=YES SUPERLU_OPT=-I$SUPERLU_DIST_INC SUPERLU_LIB="-L$SUPERLU_DIST_LIB -lsuperlu_dist" \
-    STATIC=YES SHARED=YES MFEM_DEBUG=NO
+    STATIC=NO SHARED=YES MFEM_DEBUG=NO
 
 make %{?_smp_mflags}
-
-mkdir tmp
-(cd tmp; ar -x ../libmfem.a)
-mpicxx -shared -Wl,-soname,libmfem.so.3 -o libmfem.so tmp/*.o
 
 %install
 # OpenHPC compiler/mpi designation
@@ -96,10 +92,6 @@ make PREFIX=%{buildroot}%{install_path} install
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/share/mfem/config.mk
 
 install -m 644 libmfem.so %{buildroot}%{install_path}/lib/libmfem.so.%{version}
-pushd %{buildroot}%{install_path}/lib
-ln -s libmfem.so.%{version} libmfem.so.3
-rm -f libmfem.a
-popd
 
 find %{buildroot}%{install_path}/. -type f -exec chmod 644 -- {} +
 
