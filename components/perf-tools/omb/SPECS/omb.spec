@@ -18,7 +18,7 @@
 
 Summary:   OSU Micro-benchmarks
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   5.6.2
+Version:   5.8
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
