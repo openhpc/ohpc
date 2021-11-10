@@ -1,7 +1,7 @@
 !
 !  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  SLEPc - Scalable Library for Eigenvalue Problem Computations
-!  Copyright (c) 2002-2019, Universitat Politecnica de Valencia, Spain
+!  Copyright (c) 2002-2021, Universitat Politecnica de Valencia, Spain
 !
 !  This file is part of SLEPc.
 !  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
@@ -43,9 +43,11 @@
       PetscInt           m, n, i, Istart
       PetscInt           col(2), its, Iend
       PetscScalar        val(2)
+      SVDProblemType     ptype
       PetscMPIInt        rank
       PetscErrorCode     ierr
       PetscBool          flg, tmode
+      PetscViewerAndFormat vf
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !     Beginning of program
@@ -96,16 +98,24 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       call SVDCreate(PETSC_COMM_WORLD,svd,ierr)
-      call SVDSetOperator(svd,A,ierr)
+      call SVDSetOperators(svd,A,PETSC_NULL_MAT,ierr)
 
 !     ** test some interface functions
-      call SVDGetOperator(svd,B,ierr)
+      call SVDGetOperators(svd,B,PETSC_NULL_MAT,ierr)
       call MatView(B,PETSC_VIEWER_STDOUT_WORLD,ierr)
       call SVDSetConvergenceTest(svd,SVD_CONV_ABS,ierr)
       call SVDSetStoppingTest(svd,SVD_STOP_BASIC,ierr)
-      call SVDSetFromOptions(svd,ierr)
 
 !     ** query properties and print them
+      call SVDGetProblemType(svd,ptype,ierr)
+      if (rank .eq. 0) then
+        write(*,105) ptype
+      endif
+ 105  format (/' Problem type = ',I2)
+      call SVDIsGeneralized(svd,flg,ierr)
+      if (flg .and. rank .eq. 0) then
+        write(*,*) 'generalized'
+      endif
       call SVDGetImplicitTranspose(svd,tmode,ierr)
       if (rank .eq. 0) then
         if (tmode) then
@@ -114,7 +124,7 @@
           write(*,110) 'explicit'
         endif
       endif
- 110  format (/' Transpose mode is',A9)
+ 110  format (' Transpose mode is',A9)
       call SVDGetConvergenceTest(svd,conv,ierr)
       if (rank .eq. 0) then
         write(*,120) conv
@@ -135,7 +145,18 @@
       endif
  140  format (' Which =',A9)
 
+      call PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,        &
+     &                   PETSC_VIEWER_DEFAULT,vf,ierr)
+      call SVDMonitorSet(svd,SVDMONITORFIRST,vf,                        &
+     &                   PetscViewerAndFormatDestroy,ierr)
+      call SVDMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD,         &
+     &                   PETSC_VIEWER_DEFAULT,PETSC_NULL_VEC,vf,ierr)
+      call SVDMonitorSet(svd,SVDMONITORCONVERGED,vf,                    &
+     &                   SVDMonitorConvergedDestroy,ierr)
+      call SVDMonitorCancel(svd,ierr)
+
 !     ** call the solver
+      call SVDSetFromOptions(svd,ierr)
       call SVDSolve(svd,ierr)
       call SVDGetConvergedReason(svd,reason,ierr)
       if (rank .eq. 0) then
@@ -163,5 +184,7 @@
 !
 !   test:
 !      suffix: 1
+!      args: -svd_type {{lanczos trlanczos cross cyclic randomized}}
+!      filter: sed -e 's/2.99255/2.99254/'
 !
 !TEST*/
