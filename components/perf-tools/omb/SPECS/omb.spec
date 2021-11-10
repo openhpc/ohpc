@@ -23,7 +23,7 @@ Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://mvapich.cse.ohio-state.edu/benchmarks/
-Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-%{version}.tar.gz
+Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-%{version}.tgz
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
