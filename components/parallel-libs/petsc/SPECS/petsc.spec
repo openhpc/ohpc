@@ -137,7 +137,6 @@ cd %{buildroot}%{install_path}
 for file in \
 	lib/petsc/bin/petsc_gen_xdmf.py \
 	lib/petsc/bin/PetscBinaryIOTrajectory.py \
-	lib/petsc/bin/petsc_tas_analysis.py \
 	lib/petsc/bin/petsc-performance-view \
 	lib/petsc/bin/petscnagfor \
 	lib/petsc/bin/taucc.py \
