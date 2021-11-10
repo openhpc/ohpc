@@ -447,6 +447,7 @@ check_rms
 }
 
 @test "[$testname] Verify h5ex_t_objref ($LMOD_FAMILY_COMPILER)" {
+    skip
     binary=h5ex_t_objref
     if [ ! -x "$binary" ];then
         flunk "$binary binary not available"
@@ -471,6 +472,7 @@ check_rms
 }
 
 @test "[$testname] Verify h5ex_t_objrefatt ($LMOD_FAMILY_COMPILER)" {
+    skip
     binary=h5ex_t_objrefatt
     if [ ! -x "$binary" ];then
         flunk "$binary binary not available"
@@ -495,6 +497,7 @@ check_rms
 }
 
 @test "[$testname] Verify h5ex_t_regref ($LMOD_FAMILY_COMPILER)" {
+    skip
     binary=h5ex_t_regref
     if [ ! -x "$binary" ];then
         flunk "$binary binary not available"
@@ -519,6 +522,7 @@ check_rms
 }
 
 @test "[$testname] Verify h5ex_t_regrefatt ($LMOD_FAMILY_COMPILER)" {
+    skip
     binary=h5ex_t_regrefatt
     if [ ! -x "$binary" ];then
         flunk "$binary binary not available"

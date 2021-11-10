@@ -1,7 +1,7 @@
 HDF5 "h5ex_d_nbit.h5" {
 GROUP "/" {
    DATASET "DS1" {
-      DATATYPE  32-bit little-endian integer
+      DATATYPE  32-bit little-endian integer 16-bit precision
       DATASPACE  SIMPLE { ( 32, 64 ) / ( 32, 64 ) }
       DATA {
       (0,0): 0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14,

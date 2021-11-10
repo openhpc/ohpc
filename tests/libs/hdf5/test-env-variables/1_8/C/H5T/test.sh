@@ -41,11 +41,14 @@ dumpout() {
 
 topics="int intatt float floatatt enum enumatt bit bitatt opaque opaqueatt \
 array arrayatt vlen vlenatt string stringatt vlstring vlstringatt \
-cmpd cmpdatt objref objrefatt regref regrefatt"
+cmpd cmpdatt"
 
 
 return_val=0
 
+if [ -z $srcdir ];then
+    srcdir="./"
+fi
 
 for topic in $topics
 do

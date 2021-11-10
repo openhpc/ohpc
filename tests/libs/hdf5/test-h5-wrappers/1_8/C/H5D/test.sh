@@ -45,6 +45,9 @@ unlimmod unlimgzip checksum shuffle fillval alloc"
 
 return_val=0
 
+if [ -z $srcdir ];then
+    srcdir="./"
+fi
 
 for topic in $topics
 do

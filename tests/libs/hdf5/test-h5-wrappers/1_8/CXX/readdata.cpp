@@ -19,11 +19,7 @@
 //      information about the dataset in the SDS.h5 file is obtained.
 //
 
-#ifdef OLD_HEADER_FILENAME
-#include <iostream.h>
-#else
 #include <iostream>
-#endif
 #include <string>
 
 #ifndef H5_NO_NAMESPACE
