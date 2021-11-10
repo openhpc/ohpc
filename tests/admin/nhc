@@ -25,7 +25,11 @@ fi
 
 @test "[nhc] service failure detection and restart" {
     grep rsyslog /etc/nhc/nhc.conf.auto > /etc/nhc/nhc.conf.rsyslog
-    killall -w -s SIGTERM rsyslogd
+    if [ "$DISTRO_FAMILY" == "SLES" ];then
+	systemctl  stop syslog.socket
+    else
+	killall -w -s SIGTERM rsyslogd
+    fi
     run nhc -c /etc/nhc/nhc.conf.rsyslog
     assert_failure
     run systemctl status rsyslog
