@@ -22,7 +22,7 @@ default location for this example is in
 [sms](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
 [sms](*\#*) mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
 [sms](*\#*) mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
-[sms](*\#*) wwmkchroot -v opensuse-15.2 $CHROOT            # create base image
+[sms](*\#*) wwmkchroot -v opensuse-15.3 $CHROOT            # create base image
 # Enable OpenHPC repo in chroot
 [sms](*\#*) cp -p /etc/zypp/repos.d/OpenHPC*.repo $CHROOT/etc/zypp/repos.d
 # Import GPG keys for chroot repository usage
