@@ -75,9 +75,10 @@ CXX=mpicxx
 
 AC_PROG_CXX
 
-CXXFLAGS="-I${MFEM_INC} -I${HYPRE_INC} -I${METIS_INC} -I${NETCDF_INC} -I${PETSC_INC} -I${SUPERLU_DIST_INC} ${CXXFLAGS} -std=c++11"
-LDFLAGS="-L${MFEM_LIB} -L${HYPRE_LIB} -L${METIS_LIB} -L${NETCDF_LIB} -L${PETSC_LIB} -L${SUPERLU_DIST_LIB}"
-LIBS="-lmfem -lHYPRE -lmetis -lnetcdf -lpetsc -lsuperlu_dist"
+CXXFLAGS="-I${HYPRE_INC} -I${MFEM_INC} -I${PETSC_INC} -I${SUPERLU_DIST_INC} ${CXXFLAGS} -std=c++11"
+LDFLAGS="-L${MFEM_LIB}"
+#LDFLAGS="-L${MFEM_LIB} -L${HYPRE_LIB} -L${METIS_LIB} -L${NETCDF_LIB} -L${PETSC_LIB} -L${SUPERLU_DIST_LIB}"
+#LIBS="-lpetsc -lHYPRE -lsuperlu_dist -lnetcdf -lmfem"
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile tests/serial/Makefile tests/parallel/Makefile )
