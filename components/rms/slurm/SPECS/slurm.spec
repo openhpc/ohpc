@@ -473,7 +473,7 @@ echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP Ov
 # 5/5/2020 karl@oden.utexas.edu - enable configless option
 echo "SlurmctldParameters=enable_configless" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 # 11/9/2021 karl@oden.utexas.edu - setup interactive jobs for salloc
-LaunchParameters=use_interactive_step
+LaunchParameters=use_interactive_step >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 # 6/3/16 nirmalasrjn@gmail.com - Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
 echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 # 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
