@@ -55,18 +55,18 @@ void test_sub_match(const boost::sub_match<BidirectionalIterator>& sub, Bidirect
    }
    else
    {
-      if(boost::BOOST_REGEX_DETAIL_NS::distance(base, sub.first) != answer_table[2*i])
+      if(std::distance(base, sub.first) != answer_table[2*i])
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in start location of sub-expression " 
-            << i << ", found " << boost::BOOST_REGEX_DETAIL_NS::distance(base, sub.first) 
+            << i << ", found " << std::distance(base, sub.first) 
             << ", expected " << answer_table[2*i] << ".", charT);
       }
-      if(boost::BOOST_REGEX_DETAIL_NS::distance(base, sub.second) != answer_table[1+ 2*i])
+      if(std::distance(base, sub.second) != answer_table[1+ 2*i])
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in end location of sub-expression " 
-            << i << ", found " << boost::BOOST_REGEX_DETAIL_NS::distance(base, sub.second) 
+            << i << ", found " << std::distance(base, sub.second) 
             << ", expected " << answer_table[1 + 2*i] << ".", charT);
       }
    }
@@ -291,21 +291,21 @@ void test_regex_token_iterator(boost::basic_regex<charT, traits>& r)
 #pragma warning(push)
 #pragma warning(disable:4244)
 #endif
-      if(boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->first) != last_end2)
+      if(std::distance(search_text.begin(), start2->first) != last_end2)
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in location of start of field split, found: " 
-            << boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->first)
+            << std::distance(search_text.begin(), start2->first)
             << ", expected: "
             << last_end2
             << ".", charT);
       }
       int expected_end = static_cast<int>(answer_table[0] < 0 ? search_text.size() : answer_table[0]);
-      if(boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->second) != expected_end)
+      if(std::distance(search_text.begin(), start2->second) != expected_end)
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in location of end2 of field split, found: "
-            << boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->second)
+            << std::distance(search_text.begin(), start2->second)
             << ", expected: "
             << expected_end
             << ".", charT);
@@ -350,21 +350,21 @@ void test_regex_token_iterator(boost::basic_regex<charT, traits>& r)
 #pragma warning(push)
 #pragma warning(disable:4244)
 #endif
-      if(boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->first) != last_end2)
+      if(std::distance(search_text.begin(), start2->first) != last_end2)
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in location of start of field split, found: " 
-            << boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->first)
+            << std::distance(search_text.begin(), start2->first)
             << ", expected: "
             << last_end2
             << ".", charT);
       }
       int expected_end = static_cast<int>(answer_table[0] < 0 ? search_text.size() : answer_table[0]);
-      if(boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->second) != expected_end)
+      if(std::distance(search_text.begin(), start2->second) != expected_end)
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in location of end2 of field split, found: "
-            << boost::BOOST_REGEX_DETAIL_NS::distance(search_text.begin(), start2->second)
+            << std::distance(search_text.begin(), start2->second)
             << ", expected: "
             << expected_end
             << ".", charT);

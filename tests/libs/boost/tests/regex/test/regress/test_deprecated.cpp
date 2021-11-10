@@ -99,7 +99,7 @@ void test_deprecated(const char&, const test_regex_search_tag&)
       BOOST_REGEX_TEST_ERROR("Expression : \"" << expression.c_str() << "\" did not compile with the POSIX C API.", char);
       return;
    }
-   // try and find the first occurance:
+   // try and find the first occurrence:
    static const unsigned max_subs = 100;
    boost::regmatch_t matches[max_subs];
    if(boost::regexecA(&re, search_text.c_str(), max_subs, matches, posix_match_options) == 0)
@@ -131,76 +131,11 @@ void test_deprecated(const char&, const test_regex_search_tag&)
    // clean up whatever:
    boost::regfreeA(&re);
 
-   //
-   // now try the RegEx class:
-   //
-   if(test_info<char>::syntax_options() & ~boost::regex::icase)
-      return;
-#ifndef BOOST_NO_EXCEPTIONS
-   try
-#endif
-   {
-      boost::RegEx e(expression, (test_info<char>::syntax_options() & boost::regex::icase) != 0);
-      if(e.error_code())
-      {
-         BOOST_REGEX_TEST_ERROR("Expression did not compile when it should have done, error code = " << e.error_code(), char);
-      }
-      if(e.Search(search_text, test_info<char>::match_options()))
-      {
-         int i = 0;
-         while(results[i*2] != -2)
-         {
-            if(e.Matched(i))
-            {
-               if(results[2*i] != static_cast<int>(e.Position(i)))
-               {
-                  BOOST_REGEX_TEST_ERROR("Mismatch in start of subexpression " << i << " found with the RegEx class (found " << e.Position(i) << " expected " << results[2*i] << ").", char);
-               }
-               if(results[2*i+1] != static_cast<int>(e.Position(i) + e.Length(i)))
-               {
-                  BOOST_REGEX_TEST_ERROR("Mismatch in end of subexpression " << i << " found with the RegEx class (found " << e.Position(i) + e.Length(i) << " expected " << results[2*i+1] << ").", char);
-               }
-            }
-            else
-            {
-               if(results[2*i] >= 0)
-               {
-                  BOOST_REGEX_TEST_ERROR("Mismatch in start of subexpression " << i << " found with the RegEx class (found " << e.Position(i) << " expected " << results[2*i] << ").", char);
-               }
-               if(results[2*i+1] >= 0)
-               {
-                  BOOST_REGEX_TEST_ERROR("Mismatch in end of subexpression " << i << " found with the RegEx class (found " << e.Position(i) + e.Length(i) << " expected " << results[2*i+1] << ").", char);
-               }
-            }
-            ++i;
-         }
-      }
-      else
-      {
-         if(results[0] >= 0)
-         {
-            BOOST_REGEX_TEST_ERROR("Expression : \"" << expression.c_str() << "\" was not found with class RegEx.", char);
-         }
-      }
-   }
-#ifndef BOOST_NO_EXCEPTIONS
-   catch(const boost::bad_expression& r)
-   {
-      BOOST_REGEX_TEST_ERROR("Expression did not compile with RegEx class: " << r.what(), char);
-   }
-   catch(const std::runtime_error& r)
-   {
-      BOOST_REGEX_TEST_ERROR("Unexpected std::runtime_error : " << r.what(), char);
-   }
-   catch(const std::exception& r)
-   {
-      BOOST_REGEX_TEST_ERROR("Unexpected std::exception: " << r.what(), char);
-   }
-   catch(...)
-   {
-      BOOST_REGEX_TEST_ERROR("Unexpected exception of unknown type", char);
-   }
-#endif
+}
+
+std::string to_narrow_string(std::wstring const& w)
+{
+   return std::string(w.begin(), w.end());
 }
 
 void test_deprecated(const wchar_t&, const test_regex_search_tag&)
@@ -224,10 +159,10 @@ void test_deprecated(const wchar_t&, const test_regex_search_tag&)
    boost::regex_tW re;
    if(boost::regcompW(&re, expression.c_str(), posix_options) != 0)
    {
-      BOOST_REGEX_TEST_ERROR("Expression : \"" << expression.c_str() << "\" did not compile with the POSIX C API.", wchar_t);
+      BOOST_REGEX_TEST_ERROR("Expression : \"" << to_narrow_string(expression.c_str()) << "\" did not compile with the POSIX C API.", wchar_t);
       return;
    }
-   // try and find the first occurance:
+   // try and find the first occurrence:
    static const unsigned max_subs = 100;
    boost::regmatch_t matches[max_subs];
    if(boost::regexecW(&re, search_text.c_str(), max_subs, matches, posix_match_options) == 0)
@@ -253,7 +188,7 @@ void test_deprecated(const wchar_t&, const test_regex_search_tag&)
    {
       if(results[0] >= 0)
       {
-         BOOST_REGEX_TEST_ERROR("Expression : \"" << expression.c_str() << "\" was not found with the POSIX C API.", wchar_t);
+         BOOST_REGEX_TEST_ERROR("Expression : \"" << to_narrow_string(expression.c_str()) << "\" was not found with the POSIX C API.", wchar_t);
       }
    }
    // clean up whatever:
@@ -300,46 +235,6 @@ void test_deprecated(const char&, const test_invalid_regex_tag&)
          }
       }
    }
-   //
-   // now try the RegEx class:
-   //
-   if(test_info<char>::syntax_options() & ~boost::regex::icase)
-      return;
-   bool have_catch = false;
-#ifndef BOOST_NO_EXCEPTIONS
-   try
-#endif
-   {
-      boost::RegEx e(expression, (test_info<char>::syntax_options() & boost::regex::icase) != 0);
-      if(e.error_code())
-         have_catch = true;
-   }
-#ifndef BOOST_NO_EXCEPTIONS
-   catch(const boost::bad_expression&)
-   {
-      have_catch = true;
-   }
-   catch(const std::runtime_error& r)
-   {
-      have_catch = true;
-      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::runtime_error instead: " << r.what(), char);
-   }
-   catch(const std::exception& r)
-   {
-      have_catch = true;
-      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but a std::exception instead: " << r.what(), char);
-   }
-   catch(...)
-   {
-      have_catch = true;
-      BOOST_REGEX_TEST_ERROR("Expected a bad_expression exception, but got an exception of unknown type instead", char);
-   }
-#endif
-   if(!have_catch)
-   {
-      // oops expected exception was not thrown:
-      BOOST_REGEX_TEST_ERROR("Expected an exception, but didn't find one.", char);
-   }
 }
 
 void test_deprecated(const wchar_t&, const test_invalid_regex_tag&)
@@ -358,7 +253,7 @@ void test_deprecated(const wchar_t&, const test_invalid_regex_tag&)
    if(code == 0)
    {
       boost::regfreeW(&re);
-      BOOST_REGEX_TEST_ERROR("Expression : \"" << expression.c_str() << "\" unexpectedly compiled with the POSIX C API.", wchar_t);
+      BOOST_REGEX_TEST_ERROR("Expression : \"" << to_narrow_string(expression.c_str()) << "\" unexpectedly compiled with the POSIX C API.", wchar_t);
    }
    else
    {
