@@ -11,31 +11,32 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-compilers-devel
-%define keyname GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
+%define keyname GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
 %define oneapi_manifest %{OHPC_MODULES}/intel/.rpm-manifest
 %define psxe_manifest %{OHPC_MODULES}/intel/.manifest
-%define year 2021
+%define min_intel_ver 2021.4.0
+
 
 Summary:   OpenHPC compatability package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   %{year}
+Version:   2.4
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 AutoReq:   no
+Source0:   %{keyname}
+Source1:   mod_generator.sh
+Source2:   oneAPI.repo
 
-Source0: https://yum.repos.intel.com/intel-gpg-keys/%{keyname}
-Source1: mod_generator.sh
-Source2: oneAPI.repo
 
 #!BuildIgnore: post-build-checks
 
-Requires: gcc libstdc++-devel cmake
-Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{version}
-Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{version}
-Recommends: intel-hpckit = %{version}
+Requires: gcc libstdc++-devel
+Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{min_intel_ver}
+Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{min_intel_ver}
+Recommends: intel-hpckit = %{min_intel_vers}
 
 %description
 Provides OpenHPC-style compatible modules for use with the Intel(R) oneAPI
@@ -210,7 +211,7 @@ find %{OHPC_MODULEDEPS}/oneapi/* -empty -type d -delete
 ################################################################################
 
 %package -n intel-oneapi-toolkit-release%{PROJ_DELIM}
-Summary:   Intel(R) oneAPI HPC Toolkit Respository Setup
+Summary:   Intel(R) oneAPI HPC Toolkit Repository Setup
 
 %description -n intel-oneapi-toolkit-release%{PROJ_DELIM}
 Installs and configures the online repository for the Intel(R) oneAPI Toolkit.
