@@ -14,10 +14,11 @@
 %define keyname GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
 %define oneapi_manifest %{OHPC_MODULES}/intel/.rpm-manifest
 %define psxe_manifest %{OHPC_MODULES}/intel/.manifest
+%define year 2021
 
-Summary:   OpenHPC integration package for Intel(R) oneAPI HPC Toolkit
+Summary:   OpenHPC compatability package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2021.4.0
+Version:   %{year}
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -37,7 +38,8 @@ Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{version}
 Recommends: intel-hpckit = %{version}
 
 %description
-Integrates oneAPI HPC Toolkit modulefiles into OpenHPC.
+Provides OpenHPC-style compatible modules for use with the Intel(R) oneAPI
+HPC Toolkit.
 
 
 %prep
