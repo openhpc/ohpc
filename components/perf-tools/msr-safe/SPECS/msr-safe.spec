@@ -36,11 +36,10 @@ BuildRequires:  kernel-default-devel
 #!BuildIgnore: post-build-checks
 %endif
 
-%if 0%{?centos_version} == 800
+%if 0%{?rhel}
 BuildRequires: kernel
 BuildRequires: kernel-devel
 BuildRequires: kernel-abi-whitelists kernel-rpm-macros elfutils-libelf-devel
-BuildRequires: kernel-rpm-macros
 %endif
 
 %kernel_module_package default
