@@ -38,8 +38,11 @@ Most components can be tested individually, but a default configuration is
 setup to enable collective testing. To test an isolated component, use the
 \texttt{configure} option to disable all tests, then re-enable the desired test
 to run. The \texttt{--help} option to \texttt{configure} will display all
-possible tests. Example output is shown below (some output is omitted for the
-sake of brevity).
+possible tests. By default, the test suite will endeavor to run tests for
+multiple MPI stacks where applicable. To restrict tests to only a subset of MPI
+families, use the \texttt{--with-mpi-families} option
+(e.g. \texttt{--with-mpi-families="openmpi4"}). Example output is shown below
+(some output is omitted for the sake of brevity).
 
 \begin{lstlisting}[literate={RMS}{\rms{}}1 {ARCH}{\arch{}}1]
 [sms](*\#*) su - ohpc-test
