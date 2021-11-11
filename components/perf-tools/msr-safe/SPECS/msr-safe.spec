@@ -17,7 +17,7 @@
 
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        1.4.0
+Version:        1.6.0
 Release:        1
 License:        GPLv3+
 Summary:        Allows safer access to model specific registers (MSRs)
@@ -66,7 +66,7 @@ before the compute node is returned to the pool available to other
 users of the system.  The msr-safe kernel module is targeting HPC
 systems that enforce single user occupancy per compute node, and is
 not appropriate for systems where compute nodes are shared between
-users.  The modifications that one user makes to whitelisted registers
+users.  The modifications that one user makes to allowlisted registers
 may impact subsequent users of the processor if not restored.
 
 
@@ -87,8 +87,8 @@ done
 %{__make} install DESTDIR=%{buildroot} prefix=%{_prefix} sbindir=%{_sbindir} mandir=%{_mandir}
 %{__make} install-spank DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
 
-install -d %{buildroot}/%{_datadir}/msr-safe/whitelists
-install -m 0644 whitelists/* %{buildroot}/%{_datadir}/msr-safe/whitelists/
+install -d %{buildroot}/%{_datadir}/msr-safe/allowlists
+install -m 0644 allowlists/* %{buildroot}/%{_datadir}/msr-safe/allowlists/
 install -d %{buildroot}%{_unitdir}
 install -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/msr-safe.service
 install -d %{buildroot}/%{_sysconfdir}/sysconfig
@@ -111,7 +111,9 @@ exit 0
 
 %post
 /usr/bin/udevadm control --reload-rules
-echo /lib/modules/%{latest_kernel}/extra/msr-safe/msr-safe.ko | weak-modules --add-modules
+if which weak-modules >/dev/null 2>&1; then
+    echo /lib/modules/%{latest_kernel}/extra/msr-safe/msr-safe.ko | weak-modules --add-modules
+fi
 /usr/bin/systemctl daemon-reload >/dev/null 2>&1
 /usr/bin/systemctl enable msr-safe >/dev/null 2>&1 || :
 
@@ -120,7 +122,9 @@ if [ $1 -eq 0 ] ; then
     /usr/bin/systemctl stop msr-safe >/dev/null 2>&1
     /usr/bin/systemctl disable msr-safe >/dev/null 2>&1
 fi
-echo /lib/modules/%{latest_kernel}/extra/msr-safe/msr-safe.ko | weak-modules --remove-modules
+if which weak-modules >/dev/null 2>&1; then
+    echo /lib/modules/%{latest_kernel}/extra/msr-safe/msr-safe.ko | weak-modules --remove-modules
+fi
 
 %postun
 if [ "$1" -ge "1" ] ; then
@@ -129,8 +133,8 @@ fi
 
 %files
 %dir %{_datadir}/msr-safe
-%dir %{_datadir}/msr-safe/whitelists
-%{_datadir}/msr-safe/whitelists/*
+%dir %{_datadir}/msr-safe/allowlists
+%{_datadir}/msr-safe/allowlists/*
 %{_unitdir}/msr-safe.service
 %{_udevrulesdir}/10-msr-safe.rules
 %config %{_sysconfdir}/sysconfig/msr-safe
