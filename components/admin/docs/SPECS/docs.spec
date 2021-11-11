@@ -73,25 +73,25 @@ from the OpenHPC software stack.
 # x86_64-based recipes
 #----------------------
 
-pushd docs/recipes/install/centos8/x86_64/warewulf/slurm
+#pushd docs/recipes/install/centos8/x86_64/warewulf/slurm
+#make ; %{parser} steps.tex > recipe.sh ; popd
+
+pushd docs/recipes/install/rocky8/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 pushd docs/recipes/install/rocky8/x86_64/warewulf/openpbs
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/centos8/x86_64/xcat/slurm
+pushd docs/recipes/install/rocky8/x86_64/xcat/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/centos8/x86_64/xcat_stateful/slurm
+pushd docs/recipes/install/rocky8/x86_64/xcat_stateful/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 pushd docs/recipes/install/leap15/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 pushd docs/recipes/install/leap15/x86_64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky8/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 #----------------------
@@ -119,7 +119,7 @@ install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_N
 
 # x86_64 guides
 
-%define lpath centos8/x86_64/warewulf/slurm
+%define lpath rocky8/x86_64/warewulf/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
@@ -127,17 +127,14 @@ install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHP
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
-%define lpath centos8/x86_64/xcat/slurm
+%define lpath rocky8/x86_64/xcat/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
-%define lpath centos8/x86_64/xcat_stateful/slurm
+%define lpath rocky8/x86_64/xcat_stateful/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
-%define lpath rocky8/x86_64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
 %define lpath leap15/x86_64/warewulf/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
@@ -166,7 +163,7 @@ install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHP
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
 # input file templates
-install -m 0644 -p docs/recipes/install/centos8/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos8/input.local
+#install -m 0644 -p docs/recipes/install/centos8/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos8/input.local
 install -m 0644 -p docs/recipes/install/rocky8/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/rocky8/input.local
 install -m 0644 -p docs/recipes/install/leap15/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/leap15/input.local
 
