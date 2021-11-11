@@ -1,6 +1,8 @@
-FROM registry.centos.org/centos/centos:centos8
+FROM quay.io/centos/centos:centos8
 
 MAINTAINER The OpenHPC Project
+
+ARG arch
 
 # This is based on https://gist.github.com/chuckatkins/994c8d88fb88f15433b08539162e8ac6
 # Put these in the OpenHPC base image:
@@ -10,10 +12,10 @@ MAINTAINER The OpenHPC Project
 COPY z01_lmod_load_default.sh /etc/profile.d/
 COPY bash-login-wrapper.sh /usr/bin/
 
-RUN yum -y install http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm
+RUN yum -y install http://repos.openhpc.community/OpenHPC/2/CentOS_8/$arch/ohpc-release-2-1.el8.$arch.rpm
 
 RUN yum install -y 'dnf-command(config-manager)' && \
-    yum config-manager --set-enabled PowerTools && \
+    yum config-manager --set-enabled powertools && \
     yum upgrade -y && \
     yum -y install openssh-clients && \
     yum -y install gnu9-compilers-ohpc lmod-ohpc && \

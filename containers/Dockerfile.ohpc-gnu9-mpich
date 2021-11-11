@@ -1,4 +1,4 @@
-FROM ohpc-gnu9:2.0.0
+FROM ohpc-gnu9:2.3.0
 
 MAINTAINER The OpenHPC Project
 
