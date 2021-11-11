@@ -40,6 +40,7 @@ BuildRequires:  kernel-default-devel
 BuildRequires: kernel
 BuildRequires: kernel-devel
 BuildRequires: kernel-abi-whitelists kernel-rpm-macros elfutils-libelf-devel
+BuildRequires: kernel-rpm-macros
 %endif
 
 %kernel_module_package default
