@@ -62,6 +62,10 @@ rpmbuild --showrc
 umask 0077
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
+# tweak ssh check for Leap
+%if 0%{?suse_version}
+perl -pi -e "s/check_ps_service -u root -S sshd/check_ps_service -m 'sshd:' -u root -S sshd/" $RPM_BUILD_ROOT/etc/nhc/nhc.conf
+%endif
 
 %triggerpostun -p /bin/bash -- warewulf-nhc <= 1.4.2-1
 if [ $1 -gt 0 -a $2 -eq 0 ]; then
