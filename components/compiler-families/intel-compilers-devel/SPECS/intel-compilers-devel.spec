@@ -218,7 +218,6 @@ Installs and configures the online repository for the Intel(R) oneAPI Toolkit.
 
 
 %files -n intel-oneapi-toolkit-release%{PROJ_DELIM}
-%{_sysconfdir}/pki/rpm-gpg/%{keyname}
 %{repodir}/%{basename:%{SOURCE2}}
 
 ################################################################################
