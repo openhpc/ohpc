@@ -26,7 +26,6 @@ URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 AutoReq:   no
-Source0:   %{keyname}
 Source1:   mod_generator.sh
 Source2:   oneAPI.repo
 
@@ -57,7 +56,6 @@ HPC Toolkit.
 %endif
 
 # Install RPM key and yum repo
-install -Dp -m644 %{SOURCE0} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/%{keyname}
 install -D -m644 %{SOURCE2} -t %{buildroot}%{repodir}/
 
 # Mod generator for PSXE support
