@@ -89,10 +89,6 @@ Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.3.0
 %endif # gnu8
 
 %if "%{compiler_family}" == "intel"
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-BuildRequires: psxe%{PROJ_DELIM}
-%endif # OHPC_BUILD
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif # intel
