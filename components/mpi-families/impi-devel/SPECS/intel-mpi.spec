@@ -14,11 +14,12 @@
 %define gnu_major_ver 9
 %define oneapi_manifest %{OHPC_MODULEDEPS}/intel/impi/.rpm-manifest
 %define psxe_manifest %{OHPC_MODULEDEPS}/intel/impi/.manifest
+%define min_intel_ver 2021.4.0
 
 
-Summary:   OpenHPC integration package for Intel(R) oneAPI MPI Library
+Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2021.4.0
+Version:   2021
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -31,10 +32,10 @@ Source1:   mod_generator_impi.sh
 #!BuildIgnore: post-build-checks
 
 Requires: sed
-Requires(pre): intel-compilers-devel%{PROJ_DELIM} = %{version}
-Requires(pre): intel-oneapi-mpi-devel = %{version}
-Requires: intel-compilers-devel%{PROJ_DELIM} = %{version}
-Requires: intel-oneapi-mpi-devel = %{version}
+Requires(pre): intel-compilers-devel%{PROJ_DELIM} >= 2021
+Requires(pre): intel-oneapi-mpi-devel >= %{min_intel_ver}
+Requires: intel-oneapi-mpi-devel >= %{min_intel_ver}
+Requires: intel-compilers-devel%{PROJ_DELIM} >= 2021
 Requires: prun%{PROJ_DELIM}
 
 %description
