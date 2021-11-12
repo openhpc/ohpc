@@ -19,7 +19,7 @@
 
 Summary:   OpenHPC compatability package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.4
+Version:   2021
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
