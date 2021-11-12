@@ -37,6 +37,7 @@ Requires: gcc libstdc++-devel
 Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{min_intel_ver}
 Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{min_intel_ver}
 Requires: intel-oneapi-mkl
+Requires: intel-oneapi-compiler-fortran
 Recommends: intel-hpckit >= %{min_intel_vers}
 
 %description
