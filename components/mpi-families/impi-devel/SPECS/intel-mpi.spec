@@ -79,6 +79,10 @@ testfile () {
 # Create an OpenHPC module file for each version found in compilers
 rm -f %{oneapi_manifest}
 
+# Regenerate the oneAPI modules directory (since MPI may have just been added)
+echo "Generating new oneAPI modulefiles"
+/opt/intel/oneapi/modulefiles-setup.sh --ignore-latest --force --output-dir=%{OHPC_MODULEDEPS}/oneapi/ > /dev/null
+
 # Create an OpenHPC module file for each MPI version found
 echo "Creating OpenHPC-style modulefiles for local oneAPI MPI installation(s)."
 for mpis in %{OHPC_MODULEDEPS}/oneapi/mpi/2*; do
