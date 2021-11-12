@@ -23,6 +23,10 @@ family=$LMOD_FAMILY_COMPILER
 
     if [[ "$family" =~ "llvm" ]];then
 	run $CXX -help
+    elif [[ "$family" =~ "intel" ]];then
+	# intel oneapi now only provides one man page (icc)
+	run man -w $CC
+	assert_success
     else
 	run man -w $CXX
 	assert_success

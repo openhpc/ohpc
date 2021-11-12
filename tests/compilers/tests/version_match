@@ -28,7 +28,8 @@ family=$LMOD_FAMILY_COMPILER
 
     if [[ "$family" = "intel" ]];then
 	compiler=`which icc`
-	version=`rpm -q --qf '%{VERSION}.%{RELEASE}' -f $compiler`
+	version=`icc --version | head -1 | awk '{print $3}'`
+#	version=`rpm -q --qf '%{VERSION}.%{RELEASE}' -f $compiler`
 	assert_equal "$my_mod_version" "$version"
   elif [[ "$family" =~ "arm" ]];then
 	assert_equal "$my_mod_version" "compat"

@@ -11,7 +11,7 @@ family=$LMOD_FAMILY_COMPILER
         run man -w gdb
         assert_success
     elif [ "$family" = "intel" ];then
-        run man -w gdb-ia
+        run man -w gdb-oneapi
         assert_success
     fi
 }
@@ -24,10 +24,10 @@ family=$LMOD_FAMILY_COMPILER
         run gdb --version
         assert_success
     elif [ "$family" = "intel" ];then
-        run which gdb-ia
+        run which gdb-oneapi
         assert_success
 
-        run gdb-ia --version
+        run gdb-oneapi --version
         assert_success
     fi
 }
