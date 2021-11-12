@@ -41,7 +41,7 @@ BuildRequires:  xdg-utils
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
 BuildRequires:  xz-devel
-BuildRequires:  pcre-devel
+BuildRequires:  pcre2-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  tk-devel
 %if 0%{?rhel}
