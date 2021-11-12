@@ -90,7 +90,6 @@ Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.3.0
 
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-BuildRequires: intel-oneapi-compiler-fortran
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif # intel
 
