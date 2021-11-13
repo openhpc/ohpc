@@ -541,8 +541,8 @@ Requires:  ptscotch-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  ptscotch-intel-impi%{PROJ_DELIM}
 Requires:  superlu_dist-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
-Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  trilinos-intel-impi%{PROJ_DELIM}
+## Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
+## Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-parallel-libs
 Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the Intel(R) MPI Library
 
