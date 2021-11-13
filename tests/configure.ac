@@ -437,14 +437,14 @@ AM_CONDITIONAL(CMAKE_ENABLED,test "x$enable_cmake" = "xyes" )
 #------------------------------------------------------------------------------------------
 # TBB
 AC_ARG_ENABLE([tbb],
-   [AS_HELP_STRING([--enable-tbb],[Enable tbb tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_tbb,yes)])
+   [AS_HELP_STRING([--enable-tbb],[Enable tbb tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_tbb,no)])
 AM_CONDITIONAL(TBB_ENABLED,test "x$enable_tbb" = "xyes" )
 #------------------------------------------------------------------------------------------
 # CILK
 AC_ARG_ENABLE([cilk],
-   [AS_HELP_STRING([--enable-cilk],[Enable cilk tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_cilk,yes)])
+   [AS_HELP_STRING([--enable-cilk],[Enable cilk tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_cilk,no)])
 AM_CONDITIONAL(CILK_ENABLED,test "x$enable_cilk" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Trilinos
@@ -473,7 +473,7 @@ AM_CONDITIONAL(MINIFE_ENABLED,test "x$enable_minife" = "xyes" )
 #------------------------------------------------------------------------------------------
 # MiniDFT
 AC_ARG_ENABLE([minidft],
-   [AS_HELP_STRING([--enable-minidft],[Enable MiniDFT tests (default=yes)])],[],
+   [AS_HELP_STRING([--enable-minidft],[Enable MiniDFT tests (default=no)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_minidft,no)])
 AM_CONDITIONAL(MINIDFT_ENABLED,test "x$enable_minidft" = "xyes" )
 #------------------------------------------------------------------------------------------
@@ -485,7 +485,7 @@ AM_CONDITIONAL(HPCG_ENABLED,test "x$enable_hpcg" = "xyes" )
 #------------------------------------------------------------------------------------------
 # PRK
 AC_ARG_ENABLE([prk],
-   [AS_HELP_STRING([--enable-prk],[Enable PRK tests (default=yes)])],[],
+   [AS_HELP_STRING([--enable-prk],[Enable PRK tests (default=no)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_prk,no)])
 AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 #------------------------------------------------------------------------------------------
