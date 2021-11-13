@@ -20,7 +20,7 @@
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        6.1.1
+Version:        6.4.0
 Release:        1%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
@@ -72,7 +72,7 @@ calculate the relative backward error, and estimate error bounds for the refined
 solutions.
 
 %prep
-%setup -q -n SuperLU_DIST_%{version}
+%setup -q -n superlu_dist-%{version}
 %patch1 -p1
 # disable build of examples which don't get installed (karl@ices.utexas.edu - 3/6/19)
 %patch2 -p0
