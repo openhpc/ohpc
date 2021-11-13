@@ -35,7 +35,7 @@ Source2:   oneAPI.repo
 Requires: gcc libstdc++-devel
 Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{min_intel_ver}
 Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{min_intel_ver}
-Requires: intel-oneapi-mkl
+Requires: intel-oneapi-mkl intel-oneapi-mkl-devel
 Requires: intel-oneapi-compiler-fortran
 Recommends: intel-hpckit >= %{min_intel_vers}
 
