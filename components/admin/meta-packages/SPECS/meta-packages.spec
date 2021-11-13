@@ -535,8 +535,8 @@ Requires:  petsc-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  petsc-intel-impi%{PROJ_DELIM}
 Requires:  scalapack-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  scalapack-intel-impi%{PROJ_DELIM}
-### Requires:  slepc-%{compiler_family}-impi%{PROJ_DELIM}
-### Requires:  slepc-intel-impi%{PROJ_DELIM}
+Requires:  slepc-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  slepc-intel-impi%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  ptscotch-intel-impi%{PROJ_DELIM}
 ### Requires:  superlu_dist-%{compiler_family}-impi%{PROJ_DELIM}
@@ -554,7 +554,7 @@ Requires:  hypre-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
 Requires:  petsc-intel-mpich%{PROJ_DELIM}
 Requires:  scalapack-intel-mpich%{PROJ_DELIM}
-### Requires:  slepc-intel-mpich%{PROJ_DELIM}
+Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 ### Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
 ### Requires:  trilinos-intel-mpich%{PROJ_DELIM}
@@ -569,7 +569,7 @@ Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
 Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
-### Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
+Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 ### Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
 ### Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
@@ -584,7 +584,7 @@ Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  petsc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
-### Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 ### Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
 ### Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
