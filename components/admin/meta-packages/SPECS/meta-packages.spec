@@ -410,17 +410,17 @@ Collection of base packages for Warewulf provisioning
 # x86_64 specific groups
 %ifnarch aarch64
 %package -n %{PROJ_NAME}-intel-geopm
-Summary:   OpenHPC GEOPM power management for Intel(R) Parallel Studio XE
+Summary:   OpenHPC GEOPM power management for Intel(R) oneAPI Toolkit
 Requires:  geopm-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  geopm-intel-impi%{PROJ_DELIM}
 Requires:  geopm-intel-mpich%{PROJ_DELIM}
 Requires:  geopm-intel-mvapich2%{PROJ_DELIM}
 Requires:  geopm-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-geopm
-Global Extensible Open Power Manager for use with Intel(R) Parallel Studio XE software suite
+Global Extensible Open Power Manager for use with Intel(R) oneAPI Toolkit
 
 %package -n %{PROJ_NAME}-intel-io-libs
-Summary:   OpenHPC IO libraries for Intel(R) Parallel Studio XE
+Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit
 Requires:  adios-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  adios-intel-impi%{PROJ_DELIM}
 Requires:  adios-intel-mpich%{PROJ_DELIM}
@@ -453,10 +453,10 @@ Requires:  phdf5-intel-mpich%{PROJ_DELIM}
 Requires:  phdf5-intel-mvapich2%{PROJ_DELIM}
 Requires:  phdf5-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-io-libs
-Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite
+Collection of IO library builds for use with Intel(R) oneAPI Toolkit
 
 %package -n %{PROJ_NAME}-intel-impi-io-libs
-Summary:   OpenHPC IO libraries for Intel(R) Parallel Studio XE and Intel(R) MPI runtime
+Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and Intel(R) MPI runtime
 Requires:  adios-intel-impi%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-impi%{PROJ_DELIM}
@@ -465,10 +465,10 @@ Requires:  netcdf-intel-impi%{PROJ_DELIM}
 Requires:  phdf5-intel-impi%{PROJ_DELIM}
 Requires:  pnetcdf-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-io-libs
-Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and Intel(R) MPI runtime
+Collection of IO library builds for use with Intel(R) oneAPI Toolkit and Intel(R) MPI runtime
 
 %package -n %{PROJ_NAME}-intel-mpich-io-libs
-Summary:   OpenHPC IO libraries for Intel(R) Parallel Studio XE and MPICH
+Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and MPICH
 Requires:  adios-intel-mpich%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-mpich%{PROJ_DELIM}
@@ -477,10 +477,10 @@ Requires:  netcdf-intel-mpich%{PROJ_DELIM}
 Requires:  phdf5-intel-mpich%{PROJ_DELIM}
 Requires:  pnetcdf-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-io-libs
-Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and MPICH runtime
+Collection of IO library builds for use with Intel(R) oneAPI Toolkit and MPICH runtime
 
 %package -n %{PROJ_NAME}-intel-mvapich2-io-libs
-Summary:   OpenHPC IO libraries for Intel(R) Parallel Studio XE and MVAPICH2
+Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and MVAPICH2
 Requires:  adios-intel-mvapich2%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-mvapich2%{PROJ_DELIM}
@@ -489,10 +489,10 @@ Requires:  netcdf-intel-mvapich2%{PROJ_DELIM}
 Requires:  phdf5-intel-mvapich2%{PROJ_DELIM}
 Requires:  pnetcdf-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-io-libs
-Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and MVAPICH2 runtime
+Collection of IO library builds for use with Intel(R) oneAPI Toolkit and MVAPICH2 runtime
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-io-libs
-Summary:   OpenHPC IO libraries for Intel(R) Parallel Studio XE and OpenMPI
+Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and OpenMPI
 Requires:  adios-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-%{mpi_family}%{PROJ_DELIM}
@@ -501,7 +501,7 @@ Requires:  netcdf-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  phdf5-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  pnetcdf-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-io-libs
-Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and OpenMPI runtime
+Collection of IO library builds for use with Intel(R) oneAPI Toolkit and OpenMPI runtime
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mvapich2-parallel-libs
 Summary:   OpenHPC parallel libraries for GNU and MVAPICH2
@@ -521,7 +521,7 @@ Requires:  trilinos-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Collection of parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
 
 %package -n %{PROJ_NAME}-intel-impi-parallel-libs
-Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
+Summary:   OpenHPC parallel libraries for Intel(R) oneAPI Toolkit and Intel(R) MPI Library
 Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  boost-intel-impi%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-impi%{PROJ_DELIM}
@@ -544,10 +544,10 @@ Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-parallel-libs
-Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
+Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the Intel(R) MPI Library
 
 %package -n %{PROJ_NAME}-intel-mpich-parallel-libs
-Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
+Summary:   OpenHPC parallel libraries for Intel(R) oneAPI Toolkit and MPICH
 Requires:  boost-intel-mpich%{PROJ_DELIM}
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
 Requires:  mfem-intel-mpich%{PROJ_DELIM}
@@ -557,12 +557,12 @@ Requires:  scalapack-intel-mpich%{PROJ_DELIM}
 Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
-Requires:  trilinos-intel-mpich%{PROJ_DELIM}
+### Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
-Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
+Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the MPICH runtime
 
 %package -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
-Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
+Summary:   OpenHPC parallel libraries for Intel(R) oneAPI Toolkit and MVAPICH2
 Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
@@ -572,12 +572,12 @@ Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
 Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
-Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
+### Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
-Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
+Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the MVAPICH2 runtime
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
-Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
+Summary:   OpenHPC parallel libraries for Intel(R) oneAPI Toolkit and OpenMPI
 Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
@@ -587,12 +587,12 @@ Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
+### Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
-Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
+Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the OpenMPI runtime
 
 %package -n %{PROJ_NAME}-intel-perf-tools
-Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
+Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit
 %if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  dimemas-intel-impi%{PROJ_DELIM}
@@ -633,10 +633,10 @@ Requires:  scorep-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
 Requires:  scorep-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-perf-tools
-Collection of performance tool builds for use with Intel(R) Parallel Studio XE toolchain
+Collection of performance tool builds for use with Intel(R) oneAPI Toolkit
 
 %package -n %{PROJ_NAME}-intel-impi-perf-tools
-Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and Intel(R) MPI
+Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and Intel(R) MPI
 Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-impi%{PROJ_DELIM}
@@ -645,10 +645,10 @@ Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scorep-intel-impi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-perf-tools
-Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the Intel(R) MPI runtime
+Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the Intel(R) MPI runtime
 
 %package -n %{PROJ_NAME}-intel-mpich-perf-tools
-Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MPICH
+Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and MPICH
 Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-mpich%{PROJ_DELIM}
@@ -657,10 +657,10 @@ Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-perf-tools
-Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the MPICH runtime
+Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the MPICH runtime
 
 %package -n %{PROJ_NAME}-intel-mvapich2-perf-tools
-Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MVAPICH2
+Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and MVAPICH2
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-mvapich2%{PROJ_DELIM}
@@ -669,10 +669,10 @@ Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
 Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-perf-tools
-Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the MVAPICH2 runtime
+Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the MVAPICH2 runtime
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-perf-tools
-Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and OpenMPI
+Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and OpenMPI
 Requires:  imb-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-%{mpi_family}%{PROJ_DELIM}
@@ -681,16 +681,16 @@ Requires:  scalasca-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-perf-tools
-Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the OpenMPI runtime
+Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the OpenMPI runtime
 
 %package -n %{PROJ_NAME}-intel-python-libs
-Summary:   OpenHPC python libraries for Intel(R) Parallel Studio XE
+Summary:   OpenHPC python libraries for Intel(R) oneAPI Toolkit
 Requires:  %{PROJ_NAME}-intel-python3-libs
 %description -n %{PROJ_NAME}-intel-python-libs
-Collection of python related library builds for use with Intel(R) Parallel Studio XE toolchain
+Collection of python related library builds for use with Intel(R) oneAPI Toolkit
 
 %package -n %{PROJ_NAME}-intel-python3-libs
-Summary:   OpenHPC python3 libraries for Intel(R) Parallel Studio XE
+Summary:   OpenHPC python3 libraries for Intel(R) oneAPI Toolkit
 Requires:  %{python_prefix}-numpy-intel%{PROJ_DELIM}
 Requires:  %{python_prefix}-mpi4py-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  %{python_prefix}-mpi4py-intel-impi%{PROJ_DELIM}
@@ -698,23 +698,16 @@ Requires:  %{python_prefix}-mpi4py-intel-mpich%{PROJ_DELIM}
 Requires:  %{python_prefix}-mpi4py-intel-mvapich2%{PROJ_DELIM}
 Requires:  %{python_prefix}-mpi4py-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-python3-libs
-Collection of python3 related library builds for use with Intel(R) Parallel Studio XE toolchain
-
-%package -n %{PROJ_NAME}-intel-runtimes
-Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
-Requires:  charliecloud%{PROJ_DELIM}
-Requires:  singularity%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-intel-runtimes
-Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
+Collection of python3 related library builds for use with Intel(R) oneAPI Toolkit
 
 %package -n %{PROJ_NAME}-intel-serial-libs
-Summary:   OpenHPC serial libraries for Intel(R) Parallel Studio XE
+Summary:   OpenHPC serial libraries for Intel(R) oneAPI Toolkit
 Requires:  metis-intel%{PROJ_DELIM}
 Requires:  plasma-intel%{PROJ_DELIM}
 Requires:  scotch-intel%{PROJ_DELIM}
 Requires:  superlu-intel%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-serial-libs
-Collection of serial library builds for use with Intel(R) Parallel Studio XE toolchain
+Collection of serial library builds for use with Intel(R) oneAPI Toolkit
 
 %endif  # <-- end non-aarch64 only
 
