@@ -26,7 +26,7 @@ Summary:        A general purpose library for the direct solution of linear equa
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
-Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
+Source0:        https://github.com/xiaoyeli/superlu_dist/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
 Source2:        superlu_dist-make.inc
 Source3:        superlu_dist-intel-make.inc
 Source4:        superlu_dist-arm1-make.inc
