@@ -859,7 +859,6 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-intel-mvapich2-perf-tools
 %files -n %{PROJ_NAME}-intel-%{mpi_family}-perf-tools
 %files -n %{PROJ_NAME}-intel-python3-libs
-%files -n %{PROJ_NAME}-intel-runtimes
 %files -n %{PROJ_NAME}-intel-serial-libs
 %endif
 
