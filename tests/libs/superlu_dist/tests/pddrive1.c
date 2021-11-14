@@ -14,7 +14,7 @@ at the top-level directory.
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 4.1) --
+ * -- Distributed SuperLU routine (version 6.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * March 15, 2003
  * April 5, 2015
@@ -22,7 +22,6 @@ at the top-level directory.
  */
 
 #include <math.h>
-#include <superlu_dist_config.h>
 #include "superlu_ddefs.h"
 
 /*! \brief
@@ -50,16 +49,17 @@ int main(int argc, char *argv[])
     superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
-    ScalePermstruct_t ScalePermstruct;
-    LUstruct_t LUstruct;
-    SOLVEstruct_t SOLVEstruct;
+    dScalePermstruct_t ScalePermstruct;
+    dLUstruct_t LUstruct;
+    dSOLVEstruct_t SOLVEstruct;
     gridinfo_t grid;
     double   *berr;
     double   *b, *xtrue, *b1;
     int    i, j, m, n;
     int    nprow, npcol;
     int    iam, info, ldb, ldx, nrhs;
-    char     **cpp, c;
+    char     **cpp, c, *postfix;
+    int ii, omp_mpi_level;
     FILE *fp, *fopen();
     int cpp_defs();
 
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     /* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 
        ------------------------------------------------------------*/
-    MPI_Init( &argc, &argv );
+    MPI_Init_thread( &argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level); 
 
     /* Parse command line argv[]. */
     for (cpp = argv+1; *cpp; ++cpp) {
@@ -107,6 +107,11 @@ int main(int argc, char *argv[])
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
 	int v_major, v_minor, v_bugfix;
+#ifdef __INTEL_COMPILER
+	printf("__INTEL_COMPILER is defined\n");
+#endif
+	printf("__STDC_VERSION__ %ld\n", __STDC_VERSION__);
+
 	superlu_dist_GetVersionNumber(&v_major, &v_minor, &v_bugfix);
 	printf("Library version:\t%d.%d.%d\n", v_major, v_minor, v_bugfix);
 
@@ -123,10 +128,17 @@ int main(int argc, char *argv[])
     CHECK_MALLOC(iam, "Enter main()");
 #endif
 
+    for(ii = 0;ii<strlen(*cpp);ii++){
+	if((*cpp)[ii]=='.'){
+		postfix = &((*cpp)[ii+1]);
+	}
+    }	
+    // printf("%s\n", postfix);
+
     /* ------------------------------------------------------------
        GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
        ------------------------------------------------------------*/
-    dcreate_matrix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, &grid);
+    dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid);
     if ( !(b1 = doubleMalloc_dist(ldb * nrhs)) )
         ABORT("Malloc fails for b1[]");
     for (j = 0; j < nrhs; ++j)
@@ -143,7 +155,7 @@ int main(int argc, char *argv[])
         options.Fact = DOFACT;
         options.Equil = YES;
         options.ColPerm = METIS_AT_PLUS_A;
-        options.RowPerm = LargeDiag;
+        options.RowPerm = LargeDiag_MC64;
         options.ReplaceTinyPivot = NO;
         options.Trans = NOTRANS;
         options.IterRefine = DOUBLE;
@@ -152,7 +164,6 @@ int main(int argc, char *argv[])
         options.PrintStat = YES;
      */
     set_default_options_dist(&options);
-    printf("options.ColPerm = %d\n", options.ColPerm);
 
     if (!iam) {
 	print_sp_ienv_dist(&options);
@@ -164,8 +175,8 @@ int main(int argc, char *argv[])
     n = A.ncol;
 
     /* Initialize ScalePermstruct and LUstruct. */
-    ScalePermstructInit(m, n, &ScalePermstruct);
-    LUstructInit(n, &LUstruct);
+    dScalePermstructInit(m, n, &ScalePermstruct);
+    dLUstructInit(n, &LUstruct);
 
     /* Initialize the statistics variables. */
     PStatInit(&stat);
@@ -207,9 +218,9 @@ int main(int argc, char *argv[])
        ------------------------------------------------------------*/
     PStatFree(&stat);
     Destroy_CompRowLoc_Matrix_dist(&A);
-    ScalePermstructFree(&ScalePermstruct);
-    Destroy_LU(n, &grid, &LUstruct);
-    LUstructFree(&LUstruct);
+    dScalePermstructFree(&ScalePermstruct);   
+    dDestroy_LU(n, &grid, &LUstruct);
+    dLUstructFree(&LUstruct);
     if ( options.SolveInitialized ) {
         dSolveFinalize(&options, &SOLVEstruct);
     }
@@ -217,6 +228,7 @@ int main(int argc, char *argv[])
     SUPERLU_FREE(b1);
     SUPERLU_FREE(xtrue);
     SUPERLU_FREE(berr);
+    fclose(fp);
 
     /* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRID.

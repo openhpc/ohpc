@@ -14,16 +14,16 @@ at the top-level directory.
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 4.1) --
+ * -- Distributed SuperLU routine (version 6.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * November 1, 2007
- * April 5, 2015
+ * December 6, 2018
  * </pre>
  */
 
 #include <math.h>
-#include <superlu_dist_config.h>
 #include "superlu_ddefs.h"
+//#include "superlu_zdefs.h"
 
 /*! \brief
  *
@@ -53,18 +53,19 @@ int main(int argc, char *argv[])
     superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
-    ScalePermstruct_t ScalePermstruct;
-    LUstruct_t LUstruct;
-    SOLVEstruct_t SOLVEstruct;
+    dScalePermstruct_t ScalePermstruct;
+    dLUstruct_t LUstruct;
+    dSOLVEstruct_t SOLVEstruct;
     gridinfo_t grid;
     double   *berr;
     double   *b, *xtrue;
     int    m, n;
     int      nprow, npcol;
     int      iam, info, ldb, ldx, nrhs;
-    char     **cpp, c;
+    char     **cpp, c, *postfix;;
     FILE *fp, *fopen();
     int cpp_defs();
+    int ii, omp_mpi_level;
 
     nprow = 1;  /* Default process rows.      */
     npcol = 1;  /* Default process columns.   */
@@ -73,8 +74,18 @@ int main(int argc, char *argv[])
     /* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 
        ------------------------------------------------------------*/
-    MPI_Init( &argc, &argv );
+    //MPI_Init( &argc, &argv );
+    MPI_Init_thread( &argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level); 
+	
 
+#if ( VAMPIR>=1 )
+    VT_traceoff(); 
+#endif
+
+#if ( VTUNE>=1 )
+	__itt_pause();
+#endif
+	
     /* Parse command line argv[]. */
     for (cpp = argv+1; *cpp; ++cpp) {
 	if ( **cpp == '-' ) {
@@ -104,12 +115,39 @@ int main(int argc, char *argv[])
        INITIALIZE THE SUPERLU PROCESS GRID. 
        ------------------------------------------------------------*/
     superlu_gridinit(MPI_COMM_WORLD, nprow, npcol, &grid);
-
+	
+    if(grid.iam==0){
+	MPI_Query_thread(&omp_mpi_level);
+    switch (omp_mpi_level) {
+      case MPI_THREAD_SINGLE:
+		printf("MPI_Query_thread with MPI_THREAD_SINGLE\n");
+		fflush(stdout);
+	break;
+      case MPI_THREAD_FUNNELED:
+		printf("MPI_Query_thread with MPI_THREAD_FUNNELED\n");
+		fflush(stdout);
+	break;
+      case MPI_THREAD_SERIALIZED:
+		printf("MPI_Query_thread with MPI_THREAD_SERIALIZED\n");
+		fflush(stdout);
+	break;
+      case MPI_THREAD_MULTIPLE:
+		printf("MPI_Query_thread with MPI_THREAD_MULTIPLE\n");
+		fflush(stdout);
+	break;
+    }
+	}
+	
     /* Bail out if I do not belong in the grid. */
     iam = grid.iam;
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
 	int v_major, v_minor, v_bugfix;
+#ifdef __INTEL_COMPILER
+	printf("__INTEL_COMPILER is defined\n");
+#endif
+	printf("__STDC_VERSION__ %ld\n", __STDC_VERSION__);
+
 	superlu_dist_GetVersionNumber(&v_major, &v_minor, &v_bugfix);
 	printf("Library version:\t%d.%d.%d\n", v_major, v_minor, v_bugfix);
 
@@ -126,10 +164,17 @@ int main(int argc, char *argv[])
     CHECK_MALLOC(iam, "Enter main()");
 #endif
 
+    for(ii = 0;ii<strlen(*cpp);ii++){
+	if((*cpp)[ii]=='.'){
+		postfix = &((*cpp)[ii+1]);
+	}
+    }
+    // printf("%s\n", postfix);
+	
     /* ------------------------------------------------------------
        GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
        ------------------------------------------------------------*/
-    dcreate_matrix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, &grid);
+    dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid);
 
     if ( !(berr = doubleMalloc_dist(nrhs)) )
 	ABORT("Malloc fails for berr[].");
@@ -143,21 +188,26 @@ int main(int argc, char *argv[])
         options.Equil             = YES;
         options.ParSymbFact       = NO;
         options.ColPerm           = METIS_AT_PLUS_A;
-        options.RowPerm           = LargeDiag;
+        options.RowPerm           = LargeDiag_MC64;
         options.ReplaceTinyPivot  = NO;
         options.IterRefine        = DOUBLE;
         options.Trans             = NOTRANS;
         options.SolveInitialized  = NO;
         options.RefineInitialized = NO;
         options.PrintStat         = YES;
+	options.DiagInv           = NO;
      */
     set_default_options_dist(&options);
-#if 0
-    options.ColPerm = PARMETIS;
-    options.ParSymbFact = YES;
-    options.RowPerm = NOROWPERM;
+
+    options.ReplaceTinyPivot = YES;
     options.IterRefine = NOREFINE;
+
+#if 0
+    options.RowPerm = LargeDiag_HWPM;
+    options.IterRefine = NOREFINE;
+    options.ColPerm = NATURAL;
     options.Equil = NO; 
+    options.ReplaceTinyPivot = YES;
 #endif
 
     if (!iam) {
@@ -170,8 +220,8 @@ int main(int argc, char *argv[])
     n = A.ncol;
 
     /* Initialize ScalePermstruct and LUstruct. */
-    ScalePermstructInit(m, n, &ScalePermstruct);
-    LUstructInit(n, &LUstruct);
+    dScalePermstructInit(m, n, &ScalePermstruct);
+    dLUstructInit(n, &LUstruct);
 
     /* Initialize the statistics variables. */
     PStatInit(&stat);
@@ -193,15 +243,16 @@ int main(int argc, char *argv[])
 
     PStatFree(&stat);
     Destroy_CompRowLoc_Matrix_dist(&A);
-    ScalePermstructFree(&ScalePermstruct);
-    Destroy_LU(n, &grid, &LUstruct);
-    LUstructFree(&LUstruct);
+    dScalePermstructFree(&ScalePermstruct);
+    dDestroy_LU(n, &grid, &LUstruct);
+    dLUstructFree(&LUstruct);
     if ( options.SolveInitialized ) {
         dSolveFinalize(&options, &SOLVEstruct);
     }
     SUPERLU_FREE(b);
     SUPERLU_FREE(xtrue);
     SUPERLU_FREE(berr);
+    fclose(fp);
 
     /* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRID.

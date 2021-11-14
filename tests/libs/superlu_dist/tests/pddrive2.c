@@ -14,7 +14,7 @@ at the top-level directory.
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 5.1.3) --
+ * -- Distributed SuperLU routine (version 6.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * March 15, 2003
  * April 5, 2015
@@ -23,7 +23,6 @@ at the top-level directory.
  */
 
 #include <math.h>
-#include <superlu_dist_config.h>
 #include "superlu_ddefs.h"
 
 /*! \brief
@@ -53,9 +52,9 @@ int main(int argc, char *argv[])
     SuperLUStat_t stat;
     SuperMatrix A;
     NRformat_loc *Astore;
-    ScalePermstruct_t ScalePermstruct;
-    LUstruct_t LUstruct;
-    SOLVEstruct_t SOLVEstruct;
+    dScalePermstruct_t ScalePermstruct;
+    dLUstruct_t LUstruct;
+    dSOLVEstruct_t SOLVEstruct;
     gridinfo_t grid;
     double   *berr;
     double   *b, *b1, *xtrue, *xtrue1;
@@ -63,7 +62,8 @@ int main(int argc, char *argv[])
     int_t    i, j, m, n, nnz_loc, m_loc;
     int      nprow, npcol;
     int      iam, info, ldb, ldx, nrhs;
-    char     **cpp, c;
+    char     **cpp, c, *postfix;
+    int ii, omp_mpi_level;
     FILE *fp, *fopen();
     int cpp_defs();
 
@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
     extern int dcreate_matrix_perturbed
         (SuperMatrix *, int, double **, int *, double **, int *,
          FILE *, gridinfo_t *);
+    extern int dcreate_matrix_perturbed_postfix
+        (SuperMatrix *, int, double **, int *, double **, int *,
+         FILE *, char *, gridinfo_t *);
 
     nprow = 1;  /* Default process rows.      */
     npcol = 1;  /* Default process columns.   */
@@ -79,7 +82,7 @@ int main(int argc, char *argv[])
     /* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 
        ------------------------------------------------------------*/
-    MPI_Init( &argc, &argv );
+    MPI_Init_thread( &argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level); 
 
     /* Parse command line argv[]. */
     for (cpp = argv+1; *cpp; ++cpp) {
@@ -116,6 +119,11 @@ int main(int argc, char *argv[])
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
 	int v_major, v_minor, v_bugfix;
+#ifdef __INTEL_COMPILER
+	printf("__INTEL_COMPILER is defined\n");
+#endif
+	printf("__STDC_VERSION__ %ld\n", __STDC_VERSION__);
+
 	superlu_dist_GetVersionNumber(&v_major, &v_minor, &v_bugfix);
 	printf("Library version:\t%d.%d.%d\n", v_major, v_minor, v_bugfix);
 
@@ -128,10 +136,17 @@ int main(int argc, char *argv[])
     CHECK_MALLOC(iam, "Enter main()");
 #endif
 
+    for(ii = 0;ii<strlen(*cpp);ii++){
+	if((*cpp)[ii]=='.'){
+	    postfix = &((*cpp)[ii+1]);
+	}
+    }	
+    // printf("%s\n", postfix);
+
     /* ------------------------------------------------------------
        GET THE MATRIX FROM FILE AND SETUP THE RIGHT-HAND SIDE. 
        ------------------------------------------------------------*/
-    dcreate_matrix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, &grid);
+    dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid);
 
     if ( !(berr = doubleMalloc_dist(nrhs)) )
 	ABORT("Malloc fails for berr[].");
@@ -148,7 +163,7 @@ int main(int argc, char *argv[])
         options.Fact = DOFACT;
         options.Equil = YES;
         options.ColPerm = METIS_AT_PLUS_A;
-        options.RowPerm = LargeDiag;
+        options.RowPerm = LargeDiag_MC64;
         options.ReplaceTinyPivot = NO;
         options.Trans = NOTRANS;
         options.IterRefine = DOUBLE;
@@ -165,8 +180,8 @@ int main(int argc, char *argv[])
     }
 
     /* Initialize ScalePermstruct and LUstruct. */
-    ScalePermstructInit(m, n, &ScalePermstruct);
-    LUstructInit(n, &LUstruct);
+    dScalePermstructInit(m, n, &ScalePermstruct);
+    dLUstructInit(n, &LUstruct);
 
     /* Initialize the statistics variables. */
     PStatInit(&stat);
@@ -180,8 +195,8 @@ int main(int argc, char *argv[])
     
     PStatPrint(&options, &stat, &grid);        /* Print the statistics. */
     PStatFree(&stat);
-    Destroy_CompRowLoc_Matrix_dist(&A); /* Deallocate storage of matrix A.  */
-    Destroy_LU(n, &grid, &LUstruct); /* Deallocate storage associated with 
+    Destroy_CompRowLoc_Matrix_dist(&A); /* Deallocate storage of matrix A.  */ 
+    dDestroy_LU(n, &grid, &LUstruct); /* Deallocate storage associated with 
 					the L and U matrices.               */
     SUPERLU_FREE(b);                 /* Free storage of right-hand side.    */
     SUPERLU_FREE(xtrue);             /* Free storage of the exact solution. */
@@ -203,7 +218,7 @@ int main(int argc, char *argv[])
     /* Get the matrix from file, perturbed some diagonal entries to force
        a different perm_r[]. Set up the right-hand side.   */
     if ( !(fp = fopen(*cpp, "r")) ) ABORT("File does not exist");
-    dcreate_matrix_perturbed(&A, nrhs, &b1, &ldb, &xtrue1, &ldx, fp, &grid);
+    dcreate_matrix_perturbed_postfix(&A, nrhs, &b1, &ldb, &xtrue1, &ldx, fp, postfix, &grid);
 
     PStatInit(&stat); /* Initialize the statistics variables. */
 
@@ -229,17 +244,17 @@ int main(int argc, char *argv[])
        ------------------------------------------------------------*/
     PStatFree(&stat);
     Destroy_CompRowLoc_Matrix_dist(&A); /* Deallocate storage of matrix A.  */
-    Destroy_LU(n, &grid, &LUstruct); /* Deallocate storage associated with    
+    dDestroy_LU(n, &grid, &LUstruct); /* Deallocate storage associated with    
 					the L and U matrices.               */
-    ScalePermstructFree(&ScalePermstruct);
-    LUstructFree(&LUstruct);         /* Deallocate the structure of L and U.*/
+    dScalePermstructFree(&ScalePermstruct);
+    dLUstructFree(&LUstruct);         /* Deallocate the structure of L and U.*/
     if ( options.SolveInitialized ) {
         dSolveFinalize(&options, &SOLVEstruct);
     }
     SUPERLU_FREE(b1);	             /* Free storage of right-hand side.    */
     SUPERLU_FREE(xtrue1);             /* Free storage of the exact solution. */
     SUPERLU_FREE(berr);
-
+    fclose(fp);
 
     /* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRID.

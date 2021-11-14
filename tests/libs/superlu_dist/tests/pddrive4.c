@@ -14,7 +14,7 @@ at the top-level directory.
  * \brief This example illustrates how to divide up the processes into subgroups
  *
  * <pre>
- * -- Distributed SuperLU routine (version 4.1) --
+ * -- Distributed SuperLU routine (version 6.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * March 15, 2003
  * April 5, 2015
@@ -52,9 +52,9 @@ int main(int argc, char *argv[])
     superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
-    ScalePermstruct_t ScalePermstruct;
-    LUstruct_t LUstruct;
-    SOLVEstruct_t SOLVEstruct;
+    dScalePermstruct_t ScalePermstruct;
+    dLUstruct_t LUstruct;
+    dSOLVEstruct_t SOLVEstruct;
     gridinfo_t grid1, grid2;
     double   *berr;
     double   *a, *b, *xtrue;
@@ -64,7 +64,8 @@ int main(int argc, char *argv[])
     int_t    usermap[6];
     int      iam, info, ldb, ldx, nprocs;
     int      nrhs = 1;   /* Number of right-hand side. */
-    char     **cpp, c;
+    int ii, omp_mpi_level;
+    char     **cpp, c, *postfix;
     FILE *fp, *fopen();
     int cpp_defs();
 
@@ -72,7 +73,8 @@ int main(int argc, char *argv[])
     /* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 
        ------------------------------------------------------------*/
-    MPI_Init( &argc, &argv );
+    MPI_Init_thread( &argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level); 
+
     MPI_Comm_size( MPI_COMM_WORLD, &nprocs );
     if ( nprocs < 10 ) {
 	fprintf(stderr, "Requires at least 10 processes\n");
@@ -134,13 +136,20 @@ int main(int argc, char *argv[])
     CHECK_MALLOC(iam, "Enter main()");
 #endif
 
+    for(ii = 0;ii<strlen(*cpp);ii++){
+	if((*cpp)[ii]=='.'){
+	    postfix = &((*cpp)[ii+1]);
+	}
+    }
+    // printf("%s\n", postfix);
+
     if ( iam >= 0 && iam < 6 ) { /* I am in grid 1. */
 	iam = grid1.iam;  /* Get the logical number in the new grid. */
 
         /* ------------------------------------------------------------
            GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
            ------------------------------------------------------------*/
-        dcreate_matrix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, &grid1);
+        dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid1);
 	
 	if ( !(berr = doubleMalloc_dist(nrhs)) )
 	    ABORT("Malloc fails for berr[].");
@@ -153,7 +162,7 @@ int main(int argc, char *argv[])
             options.Fact = DOFACT;
             options.Equil = YES;
             options.ColPerm = METIS_AT_PLUS_A;
-            options.RowPerm = LargeDiag;
+            options.RowPerm = LargeDiag_MC64;
             options.ReplaceTinyPivot = NO;
             options.Trans = NOTRANS;
             options.IterRefine = DOUBLE;
@@ -172,8 +181,8 @@ int main(int argc, char *argv[])
         n = A.ncol;
 
 	/* Initialize ScalePermstruct and LUstruct. */
-	ScalePermstructInit(m, n, &ScalePermstruct);
-	LUstructInit(n, &LUstruct);
+	dScalePermstructInit(m, n, &ScalePermstruct);
+	dLUstructInit(n, &LUstruct);
 
 	/* Initialize the statistics variables. */
 	PStatInit(&stat);
@@ -194,9 +203,9 @@ int main(int argc, char *argv[])
 	   ------------------------------------------------------------*/
 	PStatFree(&stat);
         Destroy_CompRowLoc_Matrix_dist(&A);
-        ScalePermstructFree(&ScalePermstruct);
-	Destroy_LU(n, &grid1, &LUstruct);
-	LUstructFree(&LUstruct);
+        dScalePermstructFree(&ScalePermstruct);
+	dDestroy_LU(n, &grid1, &LUstruct);
+	dLUstructFree(&LUstruct);
         if ( options.SolveInitialized ) {
             dSolveFinalize(&options, &SOLVEstruct);
         }
@@ -210,7 +219,7 @@ int main(int argc, char *argv[])
         /* ------------------------------------------------------------
            GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
            ------------------------------------------------------------*/
-        dcreate_matrix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, &grid2);
+        dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid2);
 
 	if ( !(berr = doubleMalloc_dist(nrhs)) )
 	    ABORT("Malloc fails for berr[].");
@@ -223,7 +232,7 @@ int main(int argc, char *argv[])
             options.Fact = DOFACT;
             options.Equil = YES;
             options.ColPerm = MMD_AT_PLUS_A;
-            options.RowPerm = LargeDiag;
+            options.RowPerm = LargeDiag_MC64;
             options.ReplaceTinyPivot = YES;
             options.Trans = NOTRANS;
             options.IterRefine = DOUBLE;
@@ -237,8 +246,8 @@ int main(int argc, char *argv[])
         n = A.ncol;
 
 	/* Initialize ScalePermstruct and LUstruct. */
-	ScalePermstructInit(m, n, &ScalePermstruct);
-	LUstructInit(n, &LUstruct);
+	dScalePermstructInit(m, n, &ScalePermstruct);
+	dLUstructInit(n, &LUstruct);
 
 	/* Initialize the statistics variables. */
 	PStatInit(&stat);
@@ -259,9 +268,9 @@ int main(int argc, char *argv[])
 	   ------------------------------------------------------------*/
 	PStatFree(&stat);
         Destroy_CompRowLoc_Matrix_dist(&A);
-        ScalePermstructFree(&ScalePermstruct);
-	Destroy_LU(n, &grid2, &LUstruct);
-	LUstructFree(&LUstruct);
+        dScalePermstructFree(&ScalePermstruct);
+	dDestroy_LU(n, &grid2, &LUstruct);
+	dLUstructFree(&LUstruct);
         if ( options.SolveInitialized ) {
             dSolveFinalize(&options, &SOLVEstruct);
         }
@@ -269,6 +278,9 @@ int main(int argc, char *argv[])
 	SUPERLU_FREE(xtrue);
 	SUPERLU_FREE(berr);
     }
+
+    fclose(fp);
+
 
     /* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRIDS.

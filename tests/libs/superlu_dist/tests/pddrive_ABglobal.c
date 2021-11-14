@@ -51,8 +51,8 @@ int main(int argc, char *argv[])
     superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
-    ScalePermstruct_t ScalePermstruct;
-    LUstruct_t LUstruct;
+    dScalePermstruct_t ScalePermstruct;
+    dLUstruct_t LUstruct;
     gridinfo_t grid;
     double   *berr;
     double   *a, *b, *xtrue;
@@ -64,11 +64,6 @@ int main(int argc, char *argv[])
     char     **cpp, c;
     FILE *fp, *fopen();
     extern int cpp_defs();
-
-    /* prototypes */
-    extern void LUstructInit(const int_t, LUstruct_t *);
-    extern void LUstructFree(LUstruct_t *);
-    extern void Destroy_LU(int_t, gridinfo_t *, LUstruct_t *);
 
     nprow = 1;  /* Default process rows.      */
     npcol = 1;  /* Default process columns.   */
@@ -182,7 +177,7 @@ int main(int argc, char *argv[])
         options.Fact = DOFACT;
         options.Equil = YES;
         options.ColPerm = METIS_AT_PLUS_A;
-        options.RowPerm = LargeDiag;
+        options.RowPerm = LargeDiag_MC64;
         options.ReplaceTinyPivot = YES;
         options.Trans = NOTRANS;
         options.IterRefine = DOUBLE;
@@ -198,8 +193,8 @@ int main(int argc, char *argv[])
     }
 
     /* Initialize ScalePermstruct and LUstruct. */
-    ScalePermstructInit(m, n, &ScalePermstruct);
-    LUstructInit(n, &LUstruct);
+    dScalePermstructInit(m, n, &ScalePermstruct);
+    dLUstructInit(n, &LUstruct);
 
     /* Initialize the statistics variables. */
     PStatInit(&stat);
@@ -219,12 +214,13 @@ int main(int argc, char *argv[])
        ------------------------------------------------------------*/
     PStatFree(&stat);
     Destroy_CompCol_Matrix_dist(&A);
-    Destroy_LU(n, &grid, &LUstruct);
-    ScalePermstructFree(&ScalePermstruct);
-    LUstructFree(&LUstruct);
+    dDestroy_LU(n, &grid, &LUstruct);
+    dScalePermstructFree(&ScalePermstruct);
+    dLUstructFree(&LUstruct);
     SUPERLU_FREE(b);
     SUPERLU_FREE(xtrue);
     SUPERLU_FREE(berr);
+    fclose(fp);
 
     /* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRID.

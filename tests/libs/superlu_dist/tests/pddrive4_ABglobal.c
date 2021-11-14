@@ -52,8 +52,8 @@ int main(int argc, char *argv[])
     superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
-    ScalePermstruct_t ScalePermstruct;
-    LUstruct_t LUstruct;
+    dScalePermstruct_t ScalePermstruct;
+    dLUstruct_t LUstruct;
     gridinfo_t grid1, grid2;
     double   *berr;
     double   *a, *b, *xtrue;
@@ -66,11 +66,6 @@ int main(int argc, char *argv[])
     char     trans[1];
     char     **cpp, c;
     FILE *fp, *fopen();
-
-    /* prototypes */
-    extern void LUstructInit(const int_t, LUstruct_t *);
-    extern void LUstructFree(LUstruct_t *);
-    extern void Destroy_LU(int_t, gridinfo_t *, LUstruct_t *);
 
     /* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 
@@ -90,8 +85,8 @@ int main(int argc, char *argv[])
 	    switch (c) {
 	      case 'h':
 		  printf("Options:\n");
-		  printf("\t-r <int>: process rows    (default %d)\n", nprow);
-		  printf("\t-c <int>: process columns (default %d)\n", npcol);
+		  printf("\t-r <int>: process rows    (default " IFMT ")\n", nprow);
+		  printf("\t-c <int>: process columns (default " IFMT ")\n", npcol);
 		  exit(0);
 		  break;
 	      case 'r': nprow = atoi(*cpp);
@@ -148,7 +143,7 @@ int main(int argc, char *argv[])
 	    /* Read the matrix stored on disk in Harwell-Boeing format. */
 	    dreadhb_dist(iam, fp, &m, &n, &nnz, &a, &asub, &xa);
 	
-	    printf("\tDimension\t%dx%d\t # nonzeros %d\n", m, n, nnz);
+	    printf("\tDimension\t" IFMT "x" IFMT "\t # nonzeros " IFMT "\n", m, n, nnz);
 	    printf("\tProcess grid\t%d X %d\n", (int) grid1.nprow, (int) grid1.npcol);
 
 	    /* Broadcast matrix A to the other PEs. */
@@ -196,7 +191,7 @@ int main(int argc, char *argv[])
             options.Fact = DOFACT;
             options.Equil = YES;
             options.ColPerm = METIS_AT_PLUS_A;
-            options.RowPerm = LargeDiag;
+            options.RowPerm = LargeDiag_MC64;
             options.ReplaceTinyPivot = YES;
             options.Trans = NOTRANS;
             options.IterRefine = DOUBLE;
@@ -212,8 +207,8 @@ int main(int argc, char *argv[])
         }
 
 	/* Initialize ScalePermstruct and LUstruct. */
-	ScalePermstructInit(m, n, &ScalePermstruct);
-	LUstructInit(n, &LUstruct);
+	dScalePermstructInit(m, n, &ScalePermstruct);
+	dLUstructInit(n, &LUstruct);
 
 	/* Initialize the statistics variables. */
 	PStatInit(&stat);
@@ -236,9 +231,9 @@ int main(int argc, char *argv[])
 	   ------------------------------------------------------------*/
 	PStatFree(&stat);
 	Destroy_CompCol_Matrix_dist(&A); 
-	Destroy_LU(n, &grid1, &LUstruct);
-	ScalePermstructFree(&ScalePermstruct);
-	LUstructFree(&LUstruct);
+	dDestroy_LU(n, &grid1, &LUstruct);
+	dScalePermstructFree(&ScalePermstruct);
+	dLUstructFree(&LUstruct);
 	SUPERLU_FREE(b);
 	SUPERLU_FREE(xtrue);
 	SUPERLU_FREE(berr);
@@ -254,7 +249,7 @@ int main(int argc, char *argv[])
 	    /* Read the matrix stored on disk in Harwell-Boeing format. */
 	    dreadhb_dist(iam, fp, &m, &n, &nnz, &a, &asub, &xa);
 	
-	    printf("\tDimension\t%dx%d\t # nonzeros %d\n", m, n, nnz);
+	    printf("\tDimension\t" IFMT "x" IFMT "\t # nonzeros " IFMT "\n", m, n, nnz);
 	    printf("\tProcess grid\t%d X %d\n", (int) grid2.nprow, (int) grid2.npcol);
 
 	    /* Broadcast matrix A to the other PEs. */
@@ -302,7 +297,7 @@ int main(int argc, char *argv[])
             options.Fact = DOFACT;
             options.Equil = YES;
             options.ColPerm = MMD_AT_PLUS_A;
-            options.RowPerm = LargeDiag;
+            options.RowPerm = LargeDiag_MC64;
             options.ReplaceTinyPivot = YES;
             options.Trans = NOTRANS;
             options.IterRefine = DOUBLE;
@@ -313,8 +308,8 @@ int main(int argc, char *argv[])
 	set_default_options_dist(&options);
 	
 	/* Initialize ScalePermstruct and LUstruct. */
-	ScalePermstructInit(m, n, &ScalePermstruct);
-	LUstructInit(n, &LUstruct);
+	dScalePermstructInit(m, n, &ScalePermstruct);
+	dLUstructInit(n, &LUstruct);
 
 	/* Initialize the statistics variables. */
 	PStatInit(&stat);
@@ -337,13 +332,15 @@ int main(int argc, char *argv[])
 	   ------------------------------------------------------------*/
 	PStatFree(&stat);
 	Destroy_CompCol_Matrix_dist(&A); 
-	Destroy_LU(n, &grid2, &LUstruct);
-	ScalePermstructFree(&ScalePermstruct);
-	LUstructFree(&LUstruct);
+	dDestroy_LU(n, &grid2, &LUstruct);
+	dScalePermstructFree(&ScalePermstruct);
+	dLUstructFree(&LUstruct);
 	SUPERLU_FREE(b);
 	SUPERLU_FREE(xtrue);
 	SUPERLU_FREE(berr);
     }
+
+    fclose(fp);
 
     /* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRIDS.
