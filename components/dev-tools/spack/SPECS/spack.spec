@@ -41,9 +41,14 @@ Requires: bzip2
 Requires: xz
 Requires: zstd
 Requires: file
-Requires: gnupg2
 Requires: git
 Requires: curl
+%if 0%{?rhel}
+Requires: gnupg2
+%endif
+%if 0%{?suse_version}
+Requires: gpg2
+%endif
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%version
 # Turn off the brp-python-bytecompile script
