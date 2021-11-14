@@ -19,7 +19,7 @@
 %define ver_exp 13-0-0
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        13.0.0
+Version:        13.2.0
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 # Trilinos is licensed on a per-package basis. Refer to https://trilinos.github.io/license.html
