@@ -86,10 +86,13 @@ query_rpm_release () {
 
     for repo in $repos; do
 	for arch in $arches; do
-	    release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep $arch.rpm | head -1 | perl -pe "s/.*binary filename=\S+-(\d+)\.(\d+)\.$arch\.rpm\".*\$/\$1/")
+	    echo "osc api -X GET /build/$branchCurrent/$repo/$arch/$package/ | grep $arch.rpm"
+	    # example package query
+	    #  <binary filename="openpbs-client-ohpc-20.0.1-2.1.ohpc.2.3.x86_64.rpm" size="1641396" mtime="1624632083"/>
+	    release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep $arch.rpm | head -1 | perl -pe "s/.*binary filename=\S+-(\d+)\.(\d+)\.ohpc.*\.$arch\.rpm\".*\$/\$1/")
 
-            if [[ "${package}" == "losf" ]];then
-		release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep noarch.rpm | head -1 | perl -pe "s/.*binary filename=\S+-(\d+)\.(\d+)\.noarch\.rpm\".*\$/\$1/")
+            if [[ ("${package}" == "losf") || (${package} == "warewulf-vnfs") || (${package} == "warewulf-common") || (${package} == "nhc") ]];then
+		release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep noarch.rpm | head -1 | perl -pe "s/.*binary filename=\S+-(\d+)\.(\d+)\.ohpc.*\.noarch\.rpm\".*\$/\$1/")
 	    fi
 	    if [ -n "$release" ];then
 		if [ $release -gt $maxRelease ];then
@@ -176,7 +179,7 @@ update_pkg_if_service () {
 
     echo "${SKIP_SERVICE_UPDATES}" | grep -q $1
     if [ $? -eq 1 ];then
-	perl -i -pe "s!revision\">(\S+)<!revision\">$revision<!"  ${localdir}/_service || ERROR "unable to update revision in _service for $1"
+	perl -i -pe "s!revision\">(\S+)<!revision\">2.x<!"  ${localdir}/_service || ERROR "unable to update revision in _service for $1"
     fi
 
     osc ci ${localdir} -m "committing updated _service file for $1"
