@@ -16,6 +16,8 @@ testname="libs/superLU_dist"
 NODES=2
 TASKS=4
 
+export MV2_ENABLE_AFFINITY=0
+
 @test "[$testname] PDGSSVX with full (default) options ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive ];then
 	flunk "pddrive binary does not exist"
