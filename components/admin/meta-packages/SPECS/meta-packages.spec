@@ -526,8 +526,8 @@ Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  boost-intel-impi%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  hypre-intel-impi%{PROJ_DELIM}
-### Requires:  mfem-%{compiler_family}-impi%{PROJ_DELIM}
-### Requires:  mfem-intel-impi%{PROJ_DELIM}
+Requires:  mfem-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  mfem-intel-impi%{PROJ_DELIM}
 Requires:  mumps-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  mumps-intel-impi%{PROJ_DELIM}
 Requires:  opencoarrays-%{compiler_family}-impi%{PROJ_DELIM}
@@ -550,7 +550,7 @@ Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and t
 Summary:   OpenHPC parallel libraries for Intel(R) oneAPI Toolkit and MPICH
 Requires:  boost-intel-mpich%{PROJ_DELIM}
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
-### Requires:  mfem-intel-mpich%{PROJ_DELIM}
+Requires:  mfem-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
 Requires:  petsc-intel-mpich%{PROJ_DELIM}
 Requires:  scalapack-intel-mpich%{PROJ_DELIM}
@@ -565,7 +565,7 @@ Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and t
 Summary:   OpenHPC parallel libraries for Intel(R) oneAPI Toolkit and MVAPICH2
 Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
-### Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
+Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
 Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
@@ -580,7 +580,7 @@ Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and t
 Summary:   OpenHPC parallel libraries for Intel(R) oneAPI Toolkit and OpenMPI
 Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
-### Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  petsc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
