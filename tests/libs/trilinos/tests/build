@@ -5,19 +5,20 @@ load ../../../common/test_helper_functions || exit 1
 source ../../../common/functions || exit 1
 
 @test "[Trilinos] verify availability of Makefile.export.Trilinos ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-run test -e $TRILINOS_DIR/include/Makefile.export.Trilinos
-assert_success
-
-cp $TRILINOS_DIR/include/Makefile.export.Trilinos .
-run test ./Makefile.export.Trilinos
-assert_success
-
-# amend for intel family to remove hard-coded path
-
-if [ "$LMOD_FAMILY_COMPILER" == "intel" ];then
-    run perl -pi -e 's/\S+libmkl(\S+).so//g' Makefile.export.Trilinos
+    skip "deprecated with newer Trilinos"
+    run test -e $TRILINOS_DIR/include/Makefile.export.Trilinos
     assert_success
-fi
+
+    cp $TRILINOS_DIR/include/Makefile.export.Trilinos .
+    run test ./Makefile.export.Trilinos
+    assert_success
+
+    # amend for intel family to remove hard-coded path
+    
+    if [ "$LMOD_FAMILY_COMPILER" == "intel" ];then
+	run perl -pi -e 's/\S+libmkl(\S+).so//g' Makefile.export.Trilinos
+	assert_success
+    fi
 
 }
 
