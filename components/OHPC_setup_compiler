@@ -99,7 +99,7 @@ if [ "$toolset" == "gcc" ];then
 	DEFAULT_OPTS="$DEFAULT_OPTS -m64"
     fi
 elif [ "$toolset" == "intel" ];then
-    DEFAULT_OPTS="-O3 -g -m64 -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
+    DEFAULT_OPTS="-O3 -g -m64 -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
 elif [ "$toolset" == "arm" ];then
     DEFAULT_OPTS="-O3 -g -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
 fi
