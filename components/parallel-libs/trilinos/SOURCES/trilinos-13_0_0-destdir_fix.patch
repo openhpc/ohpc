@@ -1,11 +1,11 @@
---- a/cmake/tribits/core/installation/set_installed_group_and_permissions.cmake.in	2020-08-05 18:22:40.000000000 -0700
-+++ b/cmake/tribits/core/installation/set_installed_group_and_permissions.cmake.in	2020-09-09 09:57:51.407553935 -0700
+-- a/cmake/tribits/core/installation/set_installed_group_and_permissions.cmake.in	2021-10-29 15:03:17.000000000 -0500
++++ b/cmake/tribits/core/installation/set_installed_group_and_permissions.cmake.in	2021-11-14 21:01:35.527549019 -0600
 @@ -5,7 +5,7 @@
  #
  
  # Base install dir and subdirs where last element in array gives CMAKE_INSTALL_PREFIX
--SET(projectInstallBaseDir "@PROJECT_SET_GROUP_AND_PERMISSIONS_ON_INSTALL_BASE_DIR@")
-+SET(projectInstallBaseDir "$ENV{DESTDIR}/@PROJECT_SET_GROUP_AND_PERMISSIONS_ON_INSTALL_BASE_DIR@")
- SET(projectSubdirPathsArray "@PROJECT_SUBDIR_PATHS_ARRAY@")
+-set(projectInstallBaseDir "@PROJECT_SET_GROUP_AND_PERMISSIONS_ON_INSTALL_BASE_DIR@")
++set(projectInstallBaseDir "$ENV{DESTDIR}/@PROJECT_SET_GROUP_AND_PERMISSIONS_ON_INSTALL_BASE_DIR@")
+ set(projectSubdirPathsArray "@PROJECT_SUBDIR_PATHS_ARRAY@")
  # Group and permissions
- SET(PROJECT_MAKE_INSTALL_GROUP "@PROJECT_MAKE_INSTALL_GROUP@")
+ set(PROJECT_MAKE_INSTALL_GROUP "@PROJECT_MAKE_INSTALL_GROUP@")
