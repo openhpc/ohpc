@@ -28,6 +28,7 @@ Group:          %{PROJ_NAME}/parallel-libs
 Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-13_0_0-destdir_fix.patch
+Patch1:         trilinos-13_2_0-lapack_nothrow.patch
 
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python3
@@ -71,6 +72,7 @@ For a summary of included packages see https://trilinos.github.io/packages.html
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
 %patch0 -p1
+%patch1 -p1
 
 %build
 # OpenHPC compiler/mpi designation

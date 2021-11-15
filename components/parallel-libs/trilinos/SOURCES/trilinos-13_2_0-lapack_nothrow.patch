@@ -1,0 +1,11 @@
+--- a/packages/stokhos/src/Stokhos_SDMUtils.hpp	2021-10-29 15:03:17.000000000 -0500
++++ b/packages/stokhos/src/Stokhos_SDMUtils.hpp	2021-11-14 23:50:52.479708251 -0600
+@@ -52,7 +52,7 @@
+ #define DGEQP3_F77  F77_BLAS_MANGLE(dgeqp3,DGEQP3)
+ extern "C" {
+ void DGEQP3_F77(const int*, const int*, double*, const int*, int*,
+-                double*, double*, const int*, int*);
++                double*, double*, const int*, int*) noexcept;
+ }
+ 
+ #include "Stokhos_ConfigDefs.h"
