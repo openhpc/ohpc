@@ -65,6 +65,7 @@ echo $version | egrep -q "^2."
 if [ $? -eq 0 ];then
     pwd | grep -q leap15  && baseos="Leap_15"
     pwd | grep -q centos8 && baseos="CentOS_8"
+    pwd | grep -q rocky8 && baseos="EL_8"
 fi
 
 pwd | grep -q aarch64 && arch="aarch64"
