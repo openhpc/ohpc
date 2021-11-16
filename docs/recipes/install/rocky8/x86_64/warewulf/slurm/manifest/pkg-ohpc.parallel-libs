@@ -78,10 +78,10 @@ superlu_dist-intel-impi-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ oh
 superlu_dist-intel-mpich-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-intel-mvapich2-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-intel-openmpi4-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-trilinos-gnu9-impi-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-mpich-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-mvapich2-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-openmpi4-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-openmpi4-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-impi-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-mpich-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-mvapich2-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-impi-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-mpich-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-mvapich2-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms

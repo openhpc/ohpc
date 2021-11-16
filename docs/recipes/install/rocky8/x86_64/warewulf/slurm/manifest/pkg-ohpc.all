@@ -312,10 +312,10 @@ tau-intel-mpich-ohpc 2.29 http://www.cs.uoregon.edu/research/tau/home.php ohpc/p
 tau-intel-mvapich2-ohpc 2.29 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-intel-openmpi4-ohpc 2.29 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 test-suite-ohpc 2.4.0 https://github.com/openhpc/ohpc/tests ohpc/admin Integration test suite for OpenHPC
-trilinos-gnu9-impi-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-mpich-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-mvapich2-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-openmpi4-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-impi-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-mpich-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-mvapich2-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-openmpi4-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-impi-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-mpich-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-mvapich2-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
