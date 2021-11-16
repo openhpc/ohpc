@@ -7,9 +7,9 @@ packages provide a similar hierarchical user
 environment experience as other compiler and MPI families present in \OHPC{}.
 
 To take advantage of the available builds, \OHPC{} provides a convenience
-package to enable the oneAPI repository locally along with compatability
+package to enable the oneAPI repository locally along with compatibility
 packages that integrate oneAPI-generated compiler and MPI modulefiles within
-the standard \OHPC{} user environment. To enable and the \IntelR{} oneAPI
+the standard \OHPC{} user environment. To enable the \IntelR{} oneAPI
 repository and install minimum compiler and MPI requirements for \OHPC{}
 packaging, issue the following:
 
@@ -38,7 +38,7 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 \end{center}
 
 \noindent To enable all 3rd party builds available in \OHPC{} that are compatible with
-\IntelR{}~Parallel Studio, issue the following:
+the \IntelR{}~oneAPI classic compiler suite, issue the following:
 
 
 % ohpc_command if [[ ${enable_opa} -eq 1 ]];then
@@ -50,7 +50,7 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 % ohpc_indent 5
 % ohpc_command fi
 
-\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
+%\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Install 3rd party libraries/tools meta-packages built with Intel toolchain
