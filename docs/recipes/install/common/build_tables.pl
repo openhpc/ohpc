@@ -38,6 +38,10 @@ push @exclude, "lmod-defaults-gnu-impi-ohpc";
 push @exclude, "lmod-defaults-gnu-mpich-ohpc";
 push @exclude, "lmod-defaults-gnu-mvapich2-ohpc";
 push @exclude, "lmod-defaults-gnu-openmpi-ohpc";
+if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
+    push @exclude, "lmod-defaults-arm1-mpich-ohpc";
+    push @exclude, "lmod-defaults-arm1-openmpi4-ohpc";
+}
 
 my $help;
 my $category_single;
