@@ -9,9 +9,6 @@
 # Configure DHCP server to use desired internal interface
 [sms](*\#*) perl -pi -e "s/^DHCPD_INTERFACE=\S+/DHCPD_INTERFACE=${sms_eth_internal}/" /etc/sysconfig/dhcpd
 
-# Enable tftp service for compute node image distribution
-[sms](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
-
 # Configure Warewulf to use the default SLES tftp location
 [sms](*\#*) perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
 
