@@ -32,16 +32,16 @@ imb-intel-mvapich2-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-m
 imb-intel-openmpi4-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 likwid-gnu9-ohpc 5.0.1 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Performance tools for the Linux console
 likwid-intel-ohpc 5.0.1 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Performance tools for the Linux console
-msr-safe-ohpc 1.4.0 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
-msr-safe-ohpc-kmp-default 1.4.0_k5.3.18_lp152.19 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
-omb-gnu9-impi-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-gnu9-mpich-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-gnu9-mvapich2-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-gnu9-openmpi4-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-intel-impi-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-intel-mpich-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-intel-mvapich2-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-intel-openmpi4-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+msr-safe-ohpc 1.6.0 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
+msr-safe-ohpc-kmp-default 1.6.0_k5.3.18_57 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
+omb-gnu9-impi-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu9-mpich-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu9-mvapich2-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu9-openmpi4-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-impi-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-mpich-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-mvapich2-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-openmpi4-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 paraver-ohpc 4.8.2 https://tools.bsc.es ohpc/perf-tools Paraver
 papi-ohpc 5.7.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 pdtoolkit-gnu9-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code

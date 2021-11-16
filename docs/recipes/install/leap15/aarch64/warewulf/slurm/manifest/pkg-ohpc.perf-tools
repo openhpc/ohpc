@@ -8,8 +8,8 @@ imb-gnu9-mpich-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-b
 imb-gnu9-openmpi4-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 omb-arm1-mpich-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 omb-arm1-openmpi4-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-gnu9-mpich-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
-omb-gnu9-openmpi4-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu9-mpich-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu9-openmpi4-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 paraver-ohpc 4.8.2 https://tools.bsc.es ohpc/perf-tools Paraver
 papi-ohpc 5.7.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 pdtoolkit-arm1-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code

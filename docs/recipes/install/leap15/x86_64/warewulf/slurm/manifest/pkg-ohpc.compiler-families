@@ -1,2 +1,4 @@
-gnu9-compilers-ohpc 9.3.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
-intel-compilers-devel-ohpc 2020 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE
+gnu9-compilers-ohpc 9.4.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+intel-oneapi-toolkit-release-ohpc 2021 https://github.com/openhpc/ohpc ohpc/compiler-families Intel(R) oneAPI HPC Toolkit Repository Setup
+intel-compilers-devel-ohpc 2021 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatability package for Intel(R) oneAPI HPC Toolkit
+intel-psxe-compilers-devel-ohpc 2021 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE

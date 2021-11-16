@@ -1,11 +1,11 @@
-boost-gnu9-impi-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu9-mpich-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu9-mvapich2-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu9-openmpi4-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-impi-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-mpich-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-mvapich2-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi4-ohpc 1.75.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu9-impi-ohpc 1.76.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu9-mpich-ohpc 1.76.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu9-mvapich2-ohpc 1.76.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu9-openmpi4-ohpc 1.76.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 fftw-gnu9-impi-ohpc 3.3.8 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu9-mpich-ohpc 3.3.8 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu9-mvapich2-ohpc 3.3.8 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
@@ -18,14 +18,14 @@ hypre-intel-impi-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs 
 hypre-intel-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-intel-mvapich2-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-intel-openmpi4-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
-mfem-gnu9-impi-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-gnu9-mpich-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-gnu9-mvapich2-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-gnu9-openmpi4-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-intel-impi-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-intel-mpich-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-intel-mvapich2-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mfem-intel-openmpi4-ohpc 4.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu9-impi-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu9-mpich-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu9-mvapich2-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu9-openmpi4-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-intel-impi-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-intel-mpich-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-intel-mvapich2-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-intel-openmpi4-ohpc 4.3 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mumps-gnu9-impi-ohpc 5.2.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu9-mpich-ohpc 5.2.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu9-mvapich2-ohpc 5.2.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
@@ -38,14 +38,14 @@ opencoarrays-gnu9-impi-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs
 opencoarrays-gnu9-mpich-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu9-mvapich2-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu9-openmpi4-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-petsc-gnu9-impi-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu9-mpich-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu9-mvapich2-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu9-openmpi4-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-intel-impi-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-intel-mpich-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-intel-mvapich2-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-intel-openmpi4-ohpc 3.14.4 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu9-impi-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu9-mpich-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu9-mvapich2-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu9-openmpi4-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-impi-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-mpich-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-mvapich2-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-openmpi4-ohpc 3.16.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 ptscotch-gnu9-impi-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 ptscotch-gnu9-mpich-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 ptscotch-gnu9-mvapich2-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
@@ -62,27 +62,27 @@ scalapack-intel-impi-ohpc 2.1.0 http://www.netlib.org/lapack-dev/ ohpc/parallel-
 scalapack-intel-mpich-ohpc 2.1.0 http://www.netlib.org/lapack-dev/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogenous computing
 scalapack-intel-mvapich2-ohpc 2.1.0 http://www.netlib.org/lapack-dev/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogenous computing
 scalapack-intel-openmpi4-ohpc 2.1.0 http://www.netlib.org/lapack-dev/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogenous computing
-slepc-gnu9-impi-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-gnu9-mpich-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-gnu9-mvapich2-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-gnu9-openmpi4-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-intel-impi-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-intel-mpich-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-intel-mvapich2-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-intel-openmpi4-ohpc 3.14.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-superlu_dist-gnu9-impi-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-gnu9-mpich-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-gnu9-mvapich2-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-gnu9-openmpi4-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-intel-impi-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-intel-mpich-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-intel-mvapich2-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-intel-openmpi4-ohpc 6.1.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-trilinos-gnu9-impi-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-mpich-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-mvapich2-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu9-openmpi4-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-intel-impi-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-intel-mpich-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-intel-mvapich2-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-intel-openmpi4-ohpc 13.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+slepc-gnu9-impi-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-gnu9-mpich-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-gnu9-mvapich2-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-gnu9-openmpi4-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-intel-impi-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-intel-mpich-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-intel-mvapich2-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-intel-openmpi4-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+superlu_dist-gnu9-impi-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu9-mpich-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu9-mvapich2-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu9-openmpi4-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-impi-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-mpich-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-mvapich2-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-openmpi4-ohpc 6.4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+trilinos-gnu9-impi-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-mpich-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-mvapich2-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu9-openmpi4-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-intel-impi-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-intel-mpich-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-intel-mvapich2-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-intel-openmpi4-ohpc 13.2.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms

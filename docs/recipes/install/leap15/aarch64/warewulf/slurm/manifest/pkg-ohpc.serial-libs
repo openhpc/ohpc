@@ -1,6 +1,6 @@
-R-gnu9-ohpc 3.6.3 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
+R-gnu9-ohpc 4.1.2 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 gsl-arm1-ohpc 2.6 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
-gsl-gnu9-ohpc 2.6 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
+gsl-gnu9-ohpc 2.7 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 metis-arm1-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-gnu9-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 openblas-gnu9-ohpc 0.3.7 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
