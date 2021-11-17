@@ -47,7 +47,7 @@ echo "Creating OpenHPC compatibility modulefile for local Arm compiler installat
 latest_installed_ver=$(rpm -qa --queryformat "%%{VERSION} %%{NAME}\\n" | grep " arm-linux-compiler" | sort -rn | cut -d " " -f 1)
 major_version=$(echo "${latest_installed_ver}" | cut -d '.' -f 1)
 
-echo "Using latest installed version: %{latest_installed_ver}"
+echo "Using latest installed version: ${latest_installed_ver}"
 modpath=`rpm -qa | grep -i arm-linux-compiler-${latest_installed_ver} | xargs rpm -ql | grep \/modulefiles$`
 
 if [ ! -n "${modpath}" ];then
