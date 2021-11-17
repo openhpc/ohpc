@@ -6,24 +6,23 @@ Version 2.4 (16 Nov 2021)
 
   * updated target distro support to EL 8.5 and Leap 15.3 
   * packaging update for hwloc - resource managers are now configured to rely directly on ohpc variant
-  * updated ohpc compatability packages and software rebuilds to support Intel oneAPI packaging (https://github.com/openhpc/ohpc/issues/1317)
+  * updated ohpc compatibility packages and software rebuilds to support Intel oneAPI packaging (https://github.com/openhpc/ohpc/issues/1317)
   * removal of `rdma.service` usage for EL8 recipes (https://github.com/openhpc/ohpc/issues/1347)
   * added modulecmd wrapper to lmod (https://github.com/openhpc/ohpc/issues/1346)
   * spack packaging updates (https://github.com/openhpc/ohpc/pull/1365)
   * EL8 installation recipes transitioned to Rocky Linux (https://rockylinux.org) - with the announcement that CentOS8
     is being discontinued at the end of 2021, the OpenHPC project is migrating example installation recipes and
     associated testing to use Rocky8. Note that OpenHPC packages builds are performed against RHEL8 packaging and should
-    be compabible with any binary compatabile clone. 
+    be usable with any binary compatible clone. 
   * variety of component version updates highlighted further below
 
 [Known Issues]
 
-  * RHEL 8.5:
-    * At present, BeeGFS and Lustre-clients are not available for a RHEL 8.5 kernel.  If this functionality is desired,
-      users are encouraged to stick with a RHEL 8.4 kernel until newer client versions are released upstream.
-    * xCAT recipes are unavailable for Rocky8 - we expect to re-enable xCAT-based recipes in a future release when this
-    support is enabled upstre
-  * a Lustre client is not yet available for Leap 15.3  
+  * RHEL 8.5: At present, BeeGFS and Lustre-clients are not available for a RHEL 8.5 kernel.  If this functionality is desired,
+    users are encouraged to stick with a RHEL 8.4 kernel until newer client versions are released upstream.
+  * Leap 15.3: BeeGFS and Lustre-clients are not yet available.
+  * xCAT recipes are unavailable for Rocky8 - we expect to re-enable xCAT-based recipes in a future release when this
+    support is enabled upstream.
 
 [Component Version Changes]
   * boost-gnu9-impi-ohpc                     (1.75.0 -> 1.76.0)
