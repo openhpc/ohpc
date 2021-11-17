@@ -93,6 +93,10 @@ sub add_readme_file {
         $package_manager = "yum";
         $package_manager_dir = "/etc/yum.repos.d";
     }
+    if ($distro =~ m/EL_*/) {
+        $package_manager = "yum";
+        $package_manager_dir = "/etc/yum.repos.d";
+    }    
     if ($distro =~ m/SLE_*/) {
         $package_manager = "zypper";
         $package_manager_dir = "/etc/zypp/repos.d";
