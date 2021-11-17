@@ -11,16 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 %global arm_compt_version arm1
 %global pname %{arm_compt_version}-compilers-devel
-# Currently, the Arm compiler version number is included in the Arm compiler
-# package name. 
-# Arm include the version number to easily allow multiple versions of the 
-# compiler to be installed simultaneously. However, a version number in the 
-# package name is undesirable for integration with OpenHPC.
-# This compatibility layer avoids the problem of a version number in the package
-# name by discovering latest_installed_ver here and uses it throughtout
-# to mitigate the problem of including the version in the package name.
-%global latest_installed_ver %(rpm -qa --queryformat "%%{VERSION} %%{NAME}\\n" | grep " arm-linux-compiler" | sort -rn | cut -d " " -f 1)
-%global major_version() $(echo %1 | cut -d '.' -f 1)
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
@@ -53,8 +43,12 @@ echo "Creating OpenHPC compatibility modulefile for local Arm compiler installat
 
 # Create a top-level arm/compat module which appends the lmod modulepath to see
 # modulefiles provided by Arm installation
+
+latest_installed_ver=$(rpm -qa --queryformat "%%{VERSION} %%{NAME}\\n" | grep " arm-linux-compiler" | sort -rn | cut -d " " -f 1)
+major_version=$(echo "${latest_installed_ver}" | cut -d '.' -f 1)
+
 echo "Using latest installed version: %{latest_installed_ver}"
-modpath=`rpm -qa | grep -i arm-linux-compiler-%{latest_installed_ver} | xargs rpm -ql | grep \/modulefiles$`
+modpath=`rpm -qa | grep -i arm-linux-compiler-${latest_installed_ver} | xargs rpm -ql | grep \/modulefiles$`
 
 if [ ! -n "${modpath}" ];then
     echo ""
@@ -63,7 +57,7 @@ if [ ! -n "${modpath}" ];then
 fi
 
 # path to generic compiler modulename
-generic=arm%{major_version %latest_installed_ver}/${latest_installed_ver}
+generic=arm${major_version}/${latest_installed_ver}
 
 # Module header
 
