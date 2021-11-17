@@ -23,7 +23,7 @@ if(defined $ENV{'OverWritePrevoius'} ) {
 } 
 
 my @arches = ('aarch64', 'x86_64');
-my @distros = ('Leap_15','EL_8');
+my @distros = ('Leap_15','CentOS_8');
 
 my $base_repo_path = "/repos/.staging/OpenHPC";
 my $dest_dir = "/repos/dist/$release";
@@ -200,6 +200,8 @@ if( !$skipCopy) {
             dircopy("$base_repo_path/$base_release/update.$major.$minor/*", "$tmp_dir/updates") ||
                 die "Unable to copy $base_repo_path/$base_release/update.$major.$minor repo: $!";
         }
+
+	print "--> update repo copy complete\n";
     }
 
 }
