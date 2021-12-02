@@ -1,0 +1,8 @@
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Finalize NFS config and restart
+[sms](*\#*) exportfs -a
+[sms](*\#*) systemctl restart nfs-server
+[sms](*\#*) systemctl enable nfs-server
+\end{lstlisting}
+% end_ohpc_run

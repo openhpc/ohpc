@@ -1,0 +1,14 @@
+% begin_ohpc_run
+\noindent If planning to install the \IntelR{} oneAPI compiler runtime
+(see~\S\ref{sec:3rdparty_intel}), register the
+following additional path (\texttt{/opt/intel}) to share with computes:
+% ohpc_command if [[ ${enable_intel_packages} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# (Optional) Setup NFS mount for /opt/intel if planning to install oneAPI packages
+[sms](*\#*) mkdir /opt/intel
+[sms](*\#*) echo "/opt/intel *(ro,no_subtree_check,fsid=12)" >> /etc/exports
+[sms](*\#*) echo "${sms_ip}:/opt/intel /opt/intel nfs nfsvers=3,nodev 0 0" >> $CHROOT/etc/fstab
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi

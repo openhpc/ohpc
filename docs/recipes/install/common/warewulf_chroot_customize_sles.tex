@@ -23,25 +23,4 @@ example configuration.
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 \end{lstlisting}
-
-\noindent If planning to install the \IntelR{} oneAPI compiler runtime
-(see~\S\ref{sec:3rdparty_intel}), register the
-following additional path (\texttt{/opt/intel}) to share with computes:
-
-% ohpc_command if [[ ${enable_intel_packages} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-# (Optional) Setup NFS mount for /opt/intel if planning to install oneAPI packages
-[sms](*\#*) mkdir /opt/intel
-[sms](*\#*) echo "/opt/intel *(ro,no_subtree_check,fsid=12)" >> /etc/exports
-[sms](*\#*) echo "${sms_ip}:/opt/intel /opt/intel nfs nfsvers=3,nodev 0 0" >> $CHROOT/etc/fstab
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Finalize NFS config and restart
-[sms](*\#*) exportfs -a
-[sms](*\#*) systemctl restart nfs-server
-[sms](*\#*) systemctl enable nfs-server
-\end{lstlisting}
 % end_ohpc_run
