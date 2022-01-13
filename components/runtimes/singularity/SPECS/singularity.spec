@@ -53,6 +53,7 @@ BuildRequires: git
 BuildRequires: openssl-devel
 BuildRequires: libuuid-devel
 BuildRequires: libseccomp-devel
+BuildRequires: make
 Requires: file
 %if 0%{?suse_version}
 BuildRequires: go1.14
