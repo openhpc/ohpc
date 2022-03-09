@@ -54,7 +54,6 @@ of your choice.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
 
 ./bootstrap --system-libs \
 %if 0%{?sles_version} || 0%{?suse_version}
