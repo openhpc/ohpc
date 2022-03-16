@@ -72,10 +72,10 @@ rm -f config.cache
 
 for i in %{precision_list} ; do
 	LOOPBASEFLAGS=${BASEFLAGS}
-	if [[ "${i} == "single" || "${i} == "double" ]]; then
+	if [[ "${i}" == "single" || "${i}" == "double" ]]; then
 		# taken from https://src.fedoraproject.org/rpms/fftw/blob/master/f/fftw.spec
 %ifarch x86_64
-		LOOPBASEFLAGS="${LOOPBASEFLAGS} --enable-sse2 --enable-avx"
+		LOOPBASEFLAGS="${LOOPBASEFLAGS} --enable-sse2 --enable-avx --enable-avx2"
 %endif
 %ifarch aarch64
 		LOOPBASEFLAGS="${LOOPBASEFLAGS} --enable-neon"
