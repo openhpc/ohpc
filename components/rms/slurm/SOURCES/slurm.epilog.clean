@@ -12,13 +12,13 @@ if [ x$SLURM_UID = "x" ] ; then
 	exit 0
 fi
 if [ x$SLURM_JOB_ID = "x" ] ; then 
-        exit 0
+	exit 0
 fi
 
 #
 # Don't try to kill user root or system daemon jobs
 #
-if [ $SLURM_UID -lt 100 ] ; then
+if [ $SLURM_UID -lt 1000 ] ; then
 	exit 0
 fi
 
@@ -31,7 +31,11 @@ do
 done
 
 #
-# No other SLURM jobs, purge all remaining processes of this user
+# No other SLURM jobs, purge all remaining processes of this user if and only
+# if the SLURM controller is not running on the same server as the running job,
+# to avoid killing the login session
 #
-pkill -KILL -U $SLURM_UID
+if ! pgrep -x slurmctld > /dev/null ; then
+	pkill -KILL -U $SLURM_UID
+fi
 exit 0
