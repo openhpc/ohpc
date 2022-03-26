@@ -1,16 +1,16 @@
-admins: [root]			            # users listed here can see all workspaces with ws_list
-clustername:                	  # some name for the cluster
+admins: [root]                  # users listed here can see all workspaces with ws_list
+clustername:                    # some name for the cluster
 smtphost:                       # (my smtp server for sending mails)
-dbuid: 85			                  # a user id, this is the owner of some directories
-dbgid: 85			                  # a group id, this is the group of some directories
-default: ws1			              # the default workspace location to use for everybody
+dbuid: 85                       # TYPICALLY DON'T CHANGE. a user id, this is the owner of some directories
+dbgid: 85                       # TYPICALLY DON'T CHANGE. a group id, this is the group of some directories
+default: ws1                    # the default workspace location to use for everybody
 duration: 10                    # (maximum duration in days, default for all workspaces)
 maxextensions: 1                # (maximum number of times a user can ask for a extension)
 workspaces:
-  ws1:				                  # name of the workspace location
-    database: /tmp/ws/ws1-db	  # DB directory
-    deleted: .removed		        # name of the subdirectory used for expired workspaces
-    duration: 30		            # max lifetime of a workspace in days
-    keeptime: 7			            # days to keep deleted data after expiration
-    maxextensions: 3		        # maximum number of times a user can ask for a extension
-    spaces: [/tmp/ws/ws1]	      # paths where workspaces are created, this is a list and path is picked randomly or based on uid or guid
+  ws1:                          # name of the workspace location
+    database:                   # DB directory
+    deleted: .removed           # name of the subdirectory used for expired workspaces
+    duration: 30                # max lifetime of a workspace in days
+    keeptime: 7                 # days to keep deleted data after expiration
+    maxextensions: 3            # maximum number of times a user can ask for a extension
+    spaces: []                  # paths where workspaces are created, this is a list and path is picked randomly or based on uid or guid

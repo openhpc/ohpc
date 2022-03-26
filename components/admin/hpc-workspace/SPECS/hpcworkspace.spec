@@ -23,29 +23,94 @@ Group:   %{PROJ_NAME}/admin
 URL:     https://github.com/holgerBerger/hpc-workspace
 
 BuildRequires: gcc-c++
-BuildRequires: python3
 BuildRequires: python3-devel
-BuildRequires: boost-system
-BuildRequires: boost-filesystem
-BuildRequires: boost-regex
-BuildRequires: boost-program-options
-BuildRequires: yaml-cpp
-BuildRequires: python3-pyyaml
-BuildRequires: ncurses
-BuildRequires: libcap
-BuildRequires: lua5.1
+BuildRequires: boost-devel
+BuildRequires: yaml-cpp-devel
+BuildRequires: ncurses-devel
 BuildRequires: cmake
 Requires: python3
 Requires: python3-pyyaml
 Requires: lua5.1
+Requires: boost-system
+Requires: boost-filesystem
+Requires: boost-regex
+Requires: boost-program-options
+Requires: ncurses
+Requires: libcap
+Requires: yaml-cpp
+
 
 # Default library install path
-%define install_path %{OHPC_ADMIN}/%{pname}/%version
-
+%define install_path %{OHPC_ADMIN}/%{pname}/%{version}
 
 %description
 HPC Workspace provides tools to provision temporaty workspaces on scratch or 
 working filesystems in an HPC environment.
+
+%prep
+%setup -q -n %{pname}-%{version}
+
+%build
+cmake \
+  -DCMAKE_INSTALL_PREFIX=%{install_path} \
+  .
+make -j 4
+
+%install
+make DESTDIR=%{buildroot} install
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/cron.daily
+%{__mkdir_p} %{buildroot}%{_localstatedir}/log/%{pname}
+cp %{SOURCE1} %{buildroot}%{_sysconfdir}
+%{__cat} << EOF > %{buildroot}%{_sysconfdir}/cron.daily/%{pname}
+#!/bin/sh
+
+# Daily cleanup script for %{pname}
+%{install_path}/sbin/ws_expirer -c > %{_localstatedir}/log/%{pname}/expirer-`date +%y.%m.%d`
+find %{_localstatedir}/log/%{pname} -type f -ctime +90 -exec rm {} \;
+EOF
+
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+#%Module1.0#####################################################################
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the HPC Workspace utility"
+puts stderr " "
+puts stderr "Version %{version}"
+puts stderr " "
+
+}
+
+module-whatis "Name: HPC Workspace utility"
+module-whatis "Version: %{version}"
+module-whatis "Category: resource manager tools"
+module-whatis "Description: %{Summary}"
+
+set     version                 %{version}
+
+prepend-path    PATH            %{install_path}/bin
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{version}"
+EOF
+
+%files 
+%config %{_sysconfdir}/ws.conf.template
+%dir %{OHPC_ADMIN}
+%dir %{OHPC_MODULES}
+%dir %{_localstatedir}/log/%{pname}
+%dir %{_sysconfdir}/cron.daily
+%{OHPC_ADMIN}/%{pname}
+%{OHPC_MODULES}/%{pname}
+%{_sysconfdir}/cron.daily/%{pname}
+%attr(4755, root, root) %{install_path}/bin/ws_allocate
+%attr(4755, root, root) %{install_path}/bin/ws_release
+%attr(4755, root, root) %{install_path}/bin/ws_restore
+
 
 %pre
 # provide specific uid/gid to ensure that it is the same across the cluster
@@ -55,18 +120,3 @@ working filesystems in an HPC environment.
   /usr/sbin/useradd -c "HPC Workspace manager" \
   -d %{_sysconfdir} -g hpcws -s /sbin/nologin -r hpcws -u 85
 exit 0
-
-%setup -q -n %{pname}-%{version}
-
-%build
-cmake \
-  -DCMAKE_INSTALL_PREFIX=%{install_path} \
-  -DLUACALLOUTS=TRUE \
-  .
-make -j 4
-
-%install
-make DESTDIR=$RPM_BUILD_ROOT install
-cp %{SOURCE1} $RPM_BUILD_ROOT/etc/
-
-%files 
