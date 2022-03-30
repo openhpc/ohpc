@@ -81,6 +81,35 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/share
 %endif
 
+# Based on https://git.centos.org/rpms/gcc/blob/c8/f/SPECS/gcc.spec
+ln -sf gcc %{buildroot}%{install_path}/bin/cc
+ln -sf gfortran %{buildroot}%{install_path}/bin/f95
+
+cat > %{buildroot}%{install_path}/bin/c89 <<"EOF"
+#!/bin/sh
+fl="-std=c89"
+for opt; do
+  case "$opt" in
+    -ansi|-std=c89|-std=iso9899:1990) fl="";;
+    -std=*) echo "`basename $0` called with non ANSI/ISO C option $opt" >&2
+	    exit 1;;
+  esac
+done
+exec gcc $fl ${1+"$@"}
+EOF
+cat > %{buildroot}%{install_path}/bin/c99 <<"EOF"
+#!/bin/sh
+fl="-std=c99"
+for opt; do
+  case "$opt" in
+    -std=c99|-std=iso9899:1999) fl="";;
+    -std=*) echo "`basename $0` called with non ISO C99 option $opt" >&2
+	    exit 1;;
+  esac
+done
+exec gcc $fl ${1+"$@"}
+EOF
+chmod 755 %{buildroot}%{install_path}/bin/c?9
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/gnu%{gnu_major_ver}
