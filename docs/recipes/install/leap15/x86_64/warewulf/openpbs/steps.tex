@@ -138,7 +138,7 @@
 [sms](*\#*) (*\chrootinstall*) chrony
 [sms](*\#*) chroot $CHROOT systemctl enable chronyd
 # Identify master host as local NTP server
-[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
+[sms](*\#*) echo "server ${sms_ip} iburst" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers
 [sms](*\#*) (*\chrootinstall*) kernel-default

@@ -142,7 +142,7 @@
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
 # Identify master host as local NTP server
-[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
+[sms](*\#*) echo "server ${sms_ip} iburst" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers (matching kernel version on SMS node)
 [sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
