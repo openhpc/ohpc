@@ -8,6 +8,7 @@ issue the following:
 % ohpc_validation_comment Enable NTP services on SMS host
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 [sms](*\#*) systemctl enable chronyd.service
+[sms](*\#*) echo "local stratum 10" >> /etc/chrony.conf
 [sms](*\#*) echo "server ${ntp_server}" >> /etc/chrony.conf
 [sms](*\#*) echo "allow all" >> /etc/chrony.conf
 [sms](*\#*) systemctl restart chronyd
