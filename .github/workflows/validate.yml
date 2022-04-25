@@ -1,0 +1,40 @@
+name: Validate
+
+on: [push, pull_request]
+
+jobs:
+  check_spec:
+
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/library/rockylinux:8
+
+    steps:
+    - name: Setup
+      run: |
+        dnf install -y epel-release git python3
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Validate Changes
+      run: |
+        tests/ci/check_spec.py ${{ github.event.before }}..${{ github.event.after }}
+
+
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/library/rockylinux:8
+    steps:
+    - name: Setup
+      run: |
+        dnf install -y epel-release dnf-plugins-core git python3 http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm findutils rpm-build wget gawk
+        dnf config-manager --set-enabled powertools
+        dnf install -y lmod-ohpc
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Validate Build
+      run: |
+        . /etc/profile.d/lmod.sh
+        tests/ci/run_build.py ${{ github.event.before }}..${{ github.event.after }}
