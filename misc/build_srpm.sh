@@ -15,6 +15,12 @@
 
 PATTERN=$1
 
+if [ $# -eq 2 ]; then
+	MPI_FAMILY=$2
+else
+	MPI_FAMILY=openmpi4
+fi
+
 MACROS=components/OHPC_macros
 
 if [ ! -e ${MACROS} ]; then
@@ -37,7 +43,7 @@ for i in `find . -name "*${PATTERN}*spec"`; do
 	prepare_git_tree ${DIR}
 
 	# Try to build the SRPM
-	SRPM=`build_srpm ${i}`
+	SRPM=`build_srpm ${i} ${MPI_FAMILY}`
 	RESULT=$?
 	if [ "$RESULT" == "1" ]; then
 		echo "Building the SRPM for ${BASE} failed."
@@ -46,7 +52,7 @@ for i in `find . -name "*${PATTERN}*spec"`; do
 	fi
 
 	# Let's hope fetching the sources worked and retry building the SRPM
-	SRPM=`build_srpm ${i}`
+	SRPM=`build_srpm ${i} ${MPI_FAMILY}`
 	RESULT=$?
 
 	if [ "$RESULT" == "1" ]; then
