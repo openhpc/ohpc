@@ -36,6 +36,7 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: python3
 # petsc requires python2 to build
 BuildRequires: python2
+BuildRequires: make
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
