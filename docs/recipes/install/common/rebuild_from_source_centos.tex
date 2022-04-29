@@ -7,14 +7,14 @@ flags and MPI family. A brief example using
 the FFTW library is highlighted below.  Note that the source RPMs can be downloaded from the
 community repository server at \href{http://repos.openhpc.community}
 {\color{blue}{http://repos.openhpc.community}} via a web browser or directly
-via \texttt{yum} as highlighted below. In this example we make an explicit
+via \texttt{dnf} as highlighted below. In this example we make an explicit
 change to FFTW's configuration, as well as modifying the CFLAGS environment
 variable. The package is also tagged with an additional delimiter to allow easy
 co-installation and use. 
 
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
     literate={ARCH}{\arch{}}1 {-}{-}1]
-# Install rpm-build package and yum tools from base OS distro
+# Install rpm-build package and dnf tools from base OS distro
 [test@sms ~]$ sudo (*\install*) rpm-build yum-utils
 
 # Install FFTW's build dependencies

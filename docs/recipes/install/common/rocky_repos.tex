@@ -20,6 +20,6 @@ enabled by default.  In contrast, the PowerTools repository is typically
 disabled in a standard install, but can be enabled from EPEL as follows:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) yum install dnf-plugins-core
-[sms](*\#*) yum config-manager --set-enabled powertools
+[sms](*\#*) dnf install dnf-plugins-core
+[sms](*\#*) dnf config-manager --set-enabled powertools
 \end{lstlisting}

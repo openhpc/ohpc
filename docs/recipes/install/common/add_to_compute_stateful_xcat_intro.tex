@@ -18,7 +18,7 @@ To avoid this, we disable the online repositories:
 % ohpc_comment_header Setup nodes repositories and Install OHPC components \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Install yum-utils to have yum-config-manager available
-[sms](*\#*) psh compute yum --setopt=\*.skip_if_unavailable=1 -y install yum-utils perl
+[sms](*\#*) psh compute dnf --setopt=\*.skip_if_unavailable=1 -y install yum-utils perl
 
 # Enable CentOS-PowerTools repository
 [sms](*\#*) psh compute yum-config-manager --enable PowerTools
