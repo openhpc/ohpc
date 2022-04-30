@@ -51,9 +51,9 @@ of EPEL mirror.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Create directory holding EPEL packages
 [sms](*\#*) mkdir -p $epel_repo_dir
-[sms](*\#*) (*\install*) yum-utils createrepo
+[sms](*\#*) (*\install*) createrepo
 # Download required EPEL packages
-[sms](*\#*) yumdownloader --destdir $epel_repo_dir fping libconfuse libunwind
+[sms](*\#*) dnf download --destdir $epel_repo_dir fping libconfuse libunwind
 # Create a repository from the downloaded packages
 [sms](*\#*) createrepo $epel_repo_dir
 

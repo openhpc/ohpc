@@ -21,7 +21,7 @@ co-installation and use.
 [test@sms ~]$ sudo yum-builddep fftw-gnu9-openmpi4-ohpc
 
 # Download SRPM from OpenHPC repository and install locally
-[test@sms ~]$ yumdownloader --source fftw-gnu9-openmpi4-ohpc
+[test@sms ~]$ dnf download --source fftw-gnu9-openmpi4-ohpc
 [test@sms ~]$ rpm -i ./fftw-gnu9-openmpi4-ohpc-3.3.8-5.1.ohpc.2.0.src.rpm
 
 # Modify spec file as desired
