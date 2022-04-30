@@ -17,11 +17,8 @@ To avoid this, we disable the online repositories:
 % begin_ohpc_run
 % ohpc_comment_header Setup nodes repositories and Install OHPC components \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Install yum-utils to have yum-config-manager available
-[sms](*\#*) psh compute dnf --setopt=\*.skip_if_unavailable=1 -y install yum-utils perl
-
 # Enable CentOS-PowerTools repository
-[sms](*\#*) psh compute yum-config-manager --enable PowerTools
+[sms](*\#*) psh compute dnf config-manager --enable PowerTools
 \end{lstlisting}
 % end_ohpc_run
 
@@ -31,7 +28,7 @@ setup in on the SMS in \S\ref{sec:enable_repo}
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add OpenHPC repo mirror hosted on SMS
-[sms](*\#*) psh compute yum-config-manager --add-repo=http://$sms_ip/$ohpc_repo_dir/OpenHPC.local.repo
+[sms](*\#*) psh compute dnf config-manager --add-repo=http://$sms_ip/$ohpc_repo_dir/OpenHPC.local.repo
 # Replace local path with SMS URL
 [sms](*\#*) psh compute "perl -pi -e 's/file:\/\/\@PATH\@/http:\/\/$sms_ip\/"${ohpc_repo_dir//\//"\/"}"/s' \
         /etc/yum.repos.d/OpenHPC.local.repo"
@@ -61,7 +58,7 @@ of EPEL mirror.
 [sms](*\#*) createrepo $epel_repo_dir
 
 # Setup access to the repo from the compute hosts
-[sms](*\#*) psh compute yum-config-manager --add-repo=http://$sms_ip/$epel_repo_dir
+[sms](*\#*) psh compute dnf config-manager --add-repo=http://$sms_ip/$epel_repo_dir
 [sms](*\#*) psh compute "echo gpgcheck=0 >> /etc/yum.repos.d/${sms_ip}_"${epel_repo_dir//\//"_"}.repo
 \end{lstlisting}
 % end_ohpc_run
