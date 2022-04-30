@@ -15,10 +15,10 @@ co-installation and use.
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
     literate={ARCH}{\arch{}}1 {-}{-}1]
 # Install rpm-build package and dnf tools from base OS distro
-[test@sms ~]$ sudo (*\install*) rpm-build yum-utils
+[test@sms ~]$ sudo (*\install*) rpm-build
 
 # Install FFTW's build dependencies
-[test@sms ~]$ sudo yum-builddep fftw-gnu9-openmpi4-ohpc
+[test@sms ~]$ sudo dnf builddep fftw-gnu9-openmpi4-ohpc
 
 # Download SRPM from OpenHPC repository and install locally
 [test@sms ~]$ dnf download --source fftw-gnu9-openmpi4-ohpc
