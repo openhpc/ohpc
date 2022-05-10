@@ -64,7 +64,7 @@ BuildRequires: kernel-abi-whitelists
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.12.7}
+%{!?version: %global version 2.12.8}
 %if 0%{?suse_version}
 %{!?kver:    %global kver    %(readlink /usr/src/linux | sed 's/linux-//' | sed 's/$/-default/')}
 %else
