@@ -22,9 +22,9 @@ BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 %endif
 %if 0%{?rhel}
-BuildRequires: kernel-4.18.0-348.23.1.el8_5
-BuildRequires: kernel-devel-4.18.0-348.23.1.el8_5
-BuildRequires: kernel-abi-whitelists-4.18.0-348.23.1.el8_5
+BuildRequires: kernel
+BuildRequires: kernel-devel
+BuildRequires: kernel-abi-whitelists
 %endif
 #!BuildIgnore: post-build-checks
 %endif
