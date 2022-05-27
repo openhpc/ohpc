@@ -158,10 +158,8 @@ EOF
 # Starting with RHEL 8, load OS provided modules
 mkdir -p %{buildroot}/%{OHPC_MODULES}
 cat << EOF > %{buildroot}/%{OHPC_MODULES}/os.lua
-######################################################################
-
 help([[
-Enable operating system provided modules"
+Enable operating system provided modules
 ]])
 
 whatis("Name: Operating System provided modules")
