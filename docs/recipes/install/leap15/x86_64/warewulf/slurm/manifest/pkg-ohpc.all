@@ -29,7 +29,7 @@ dimemas-intel-impi-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-intel-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-intel-mvapich2-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-intel-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-docs-ohpc 2.4.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+docs-ohpc 2.5.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 extrae-gnu9-impi-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu9-mpich-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
@@ -275,19 +275,19 @@ slepc-intel-impi-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library fo
 slepc-intel-mpich-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-mvapich2-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-openmpi4-ohpc 3.16.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slurm-contribs-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-devel-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
-slurm-example-configs-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
-slurm-libpmi-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
-slurm-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
-slurm-openlava-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
-slurm-pam_slurm-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
-slurm-perlapi-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
-slurm-slurmctld-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
-slurm-slurmd-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
-slurm-slurmdbd-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
-slurm-sview-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
-slurm-torque-ohpc 20.11.8 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
+slurm-contribs-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-devel-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-example-configs-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
+slurm-libpmi-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
+slurm-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-openlava-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
+slurm-pam_slurm-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-slurmctld-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
+slurm-slurmd-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
+slurm-slurmdbd-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-sview-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
+slurm-torque-ohpc 20.11.9 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
 spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 spack-ohpc 0.17.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 superlu-gnu9-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
