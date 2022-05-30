@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #t_old="obs/OpenHPC_1.3.9_Factory"
-t_old="v2.2.GA"
+t_old="v2.4.GA"
 t_new="2.3"
 
 f_all=pkg-ohpc.all
@@ -28,7 +28,10 @@ rm -f ${f_dif} ${f_old} ${f_new}
 #git diff $t_old:docs/recipes/install/centos7/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
 
 # updated for RC1 -> 2.0 release (ks 10/5/20)
-git diff $t_old:docs/recipes/install/centos8/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
+#git diff $t_old:docs/recipes/install/centos8/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
+
+# updated for 2.4-> 2.5 release (ks 5/29/22)
+git diff $t_old:docs/recipes/install/rocky8/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
 
 # revert back to normal diff (ks 6/7/17)
 #git diff ${t_old} ${t_new} ${f_all} >${f_dif}
