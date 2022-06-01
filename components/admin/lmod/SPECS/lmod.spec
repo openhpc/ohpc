@@ -174,6 +174,8 @@ ln -s %{OHPC_ADMIN}/lmod/lmod/libexec/lmod %{buildroot}/%{_bindir}/modulecmd
 
 
 %files
+%dir %{OHPC_HOME}
+%dir %{OHPC_ADMIN}
 %{OHPC_ADMIN}/lmod
 %{_sysconfdir}/profile.d/lmod.sh
 %{_sysconfdir}/profile.d/lmod.csh
