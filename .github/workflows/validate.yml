@@ -20,7 +20,7 @@ jobs:
       uses: jitterbit/get-changed-files@v1
     - name: Validate Changes
       run: |
-        tests/ci/check_spec.py ${{ steps.files.outputs.all }}
+        tests/ci/check_spec.py ${{ steps.files.outputs.added_modified }}
 
 
   build:
@@ -41,4 +41,4 @@ jobs:
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
-        tests/ci/run_build.py ${{ steps.files.outputs.all }}
+        tests/ci/run_build.py ${{ steps.files.outputs.added_modified }}
