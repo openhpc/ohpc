@@ -9,11 +9,9 @@ admin/conman/SOURCES/conman-*.tar.gz
 admin/genders/SOURCES/genders-*.tar.gz
 admin/lmod/SOURCES/lmod-*.tar.gz
 admin/losf/SOURCES/losf-*.tar.gz
-admin/mrsh/SOURCES/mrsh-2.*.tar.gz
+admin/mrsh/SOURCES/mrsh-*.tar.gz
 admin/nhc/SOURCES/nhc-*.tar.gz
 admin/nrpe/SOURCES/nrpe-*.tar.gz
-admin/ohpc-release-rcs/RC1/SOURCES/
-admin/ohpc-release-rcs/RC2/SOURCES/
 admin/pdsh/SOURCES/pdsh-*.tar.gz
 admin/powerman/SOURCES/powerman-*.tar.gz
 compiler-families/gnu-compilers/SOURCES/gcc-*.tar.xz
@@ -21,7 +19,6 @@ compiler-families/gnu-compilers/SOURCES/gmp-*.tar.bz2
 compiler-families/gnu-compilers/SOURCES/mpc-*.tar.gz
 compiler-families/gnu-compilers/SOURCES/mpfr-*.tar.gz
 compiler-families/llvm-compilers/SOURCES/llvm-project-*.tar.xz
-dev-tools/annobin/SOURCES/
 dev-tools/autoconf/SOURCES/autoconf-*.tar.gz
 dev-tools/automake/SOURCES/automake-*.tar.gz
 dev-tools/cmake/SOURCES/cmake-*.tar.gz
@@ -37,7 +34,7 @@ dev-tools/python/SOURCES/Python-*.tar.xz.asc
 dev-tools/scipy/SOURCES/scipy-*.tar.gz
 dev-tools/spack/SOURCES/v*.tar.gz
 dev-tools/valgrind/SOURCES/valgrind-*.tar.bz2
-distro-packages/confuse/SOURCES/confuse-2.*.tar.gz
+distro-packages/confuse/SOURCES/confuse-*.tar.gz
 distro-packages/flex/SOURCES/flex-*.tar.gz
 distro-packages/ipmiutil/SOURCES/ipmiutil-*.tar.gz
 distro-packages/python-Cython/SOURCES/Cython-*.tar.gz
