@@ -25,7 +25,6 @@ Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
 BuildRequires: rsync
 BuildRequires: python3
 Requires: bash
-Requires: curl
 Requires: coreutils
 Requires: subversion
 Requires: hg
