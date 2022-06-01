@@ -7,25 +7,9 @@ import os
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
-if len(sys.argv) != 2:
-    logging.info("SKIP. Needs a git range as parameter")
+if len(sys.argv) <= 1:
+    print("SKIP. Needs a list of files to check")
     sys.exit(0)
-
-command = [
-    'git',
-    'diff',
-    '--diff-filter=ACMRTUXB',
-    '--name-only',
-    sys.argv[1],
-]
-
-logging.info("About to run command %s" % ' '.join(command))
-
-result = subprocess.run(command, stdout=subprocess.PIPE)
-
-if result.returncode != 0:
-    logging.info("Running git failed with %s" % result)
-    sys.exit(1)
 
 error = False
 spec_found = False
@@ -107,7 +91,7 @@ def build_srpm_and_rpm(command, family=None):
     return True
 
 
-for spec in result.stdout.decode('utf-8').split('\n'):
+for spec in sys.argv[1:]:
     if not spec.endswith('.spec'):
         continue
     spec_found = True

@@ -31,15 +31,9 @@ regex_required = [
     '(^URL:.*$|Url:.*$)',
     ]
 
-if len(sys.argv) != 2:
-    print("SKIP. Needs a git range as parameter")
+if len(sys.argv) <= 1:
+    print("SKIP. Needs a list of files to check")
     sys.exit(0)
-
-command = ['git', 'diff', '--diff-filter=ACMRTUXB', '--name-only', sys.argv[1]]
-
-print("About to run command %s" % ' '.join(command))
-
-result = subprocess.run(command, stdout=subprocess.PIPE)
 
 regex_wrong_string = '(' + '|'.join(regex_wrong) + ')'
 
@@ -47,13 +41,10 @@ print("Checking that %s does not exist" % regex_wrong_string)
 
 pattern = re.compile(regex_wrong_string)
 
-if result.returncode != 0:
-    sys.exit(1)
-
 error = False
 spec_found = False
 
-for spec in result.stdout.decode('utf-8').split('\n'):
+for spec in sys.argv[1:]:
     if not spec.endswith('.spec'):
         continue
     spec_found = True
