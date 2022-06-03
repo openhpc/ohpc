@@ -40,6 +40,9 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # from pname defined in each component .spec file)
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
+# Definition to replace dots in %version with underscores
+%define version_exp %(tr "." "_" <<< %{version})
+
 # Instead of having Source[1-9]: OHPC_macros in every SPEC file,
 # this sets Source42 for all SPEC files which include OHPC_macros.
 Source42: OHPC_macros
@@ -199,4 +202,3 @@ Requires:      %{python_prefix}
 
 %{?OHPC_CUSTOM_DELIM: %global OHPC_CUSTOM_PKG_DELIM -%{OHPC_CUSTOM_DELIM}}
 %{?OHPC_CUSTOM_DELIM: %global PROJ_DELIM -%{OHPC_CUSTOM_DELIM}%{PROJ_DELIM}}
-

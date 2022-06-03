@@ -1,0 +1,11 @@
+--- a/tools/build/src/tools/intel-linux.jam	2022-04-06 14:02:49.000000000 -0700
++++ b/tools/build/src/tools/intel-linux.jam	2022-07-18 12:24:53.573373699 -0700
+@@ -276,7 +276,7 @@
+ #
+ actions compile.c++.pch
+ {
+-    rm -f "$(<)" && LD_LIBRARY_PATH="$(RUN_PATH)" "$(CONFIG_COMMAND)" -x c++-header $(OPTIONS) $(USER_OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -pch-create "$(<)" "$(>)"
++rm -f "$(<)" && LD_LIBRARY_PATH="$(RUN_PATH)" "$(CONFIG_COMMAND)" -x c++-header $(OPTIONS) $(USER_OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -c -Xclang -emit-pch -o "$(<)" "$(>)"
+ }
+ 
+ actions compile.fortran
