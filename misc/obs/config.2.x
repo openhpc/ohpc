@@ -11,7 +11,7 @@ dry_run=True  # do not make changes to OBS, just do a dry-run
 
 [groups]
 # used to identify where components reside in ohpc Github repo
-admin         = ["clustershell","conman","docs","examples","ganglia","genders","lmod-defaults","lmod",
+admin         = ["conman","docs","examples","ganglia","genders","lmod-defaults","lmod",
 	         "losf","meta-packages","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe",
 		 "ohpc-filesystem","ohpc-release",
 		 "pdsh","prun","test-suite"]
