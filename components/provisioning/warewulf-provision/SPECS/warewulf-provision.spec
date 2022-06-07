@@ -41,14 +41,15 @@ Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 Conflicts: warewulf < 3
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: which
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel, libacl-devel, libattr-devel
 BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
 BuildRequires: libtirpc-devel
 
 # charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
-%if 0%{?suse_version}
-BuildRequires: openSUSE-release
+%if 0%{?suse_version} || 0%{?sle_version}
+BuildRequires: distribution-release
 %endif
 
 %if 0%{?rhel:1}
@@ -58,16 +59,18 @@ BuildRequires: openSUSE-release
 %if %{rhel} >= 8
 BuildRequires: systemd
 %global dhcpsrv dhcp-server
-%else # rhel < 8
+%else
+# rhel < 8
 %global dhcpsrv dhcp
-%endif # rhel 8
-%else # sle_version
+%endif
+%else
+# sle_version
 BuildRequires: systemd-rpm-macros
 %global httpsvc apache2
 %global httpgrp www
 %global tftpsvc tftp
 %global dhcpsrv dhcp-server
-%endif # rhel
+%endif
 
 # If multiple architectures are needed, set
 # --define="cross_compile 1" as an rpmbuild option
@@ -86,11 +89,17 @@ BuildRequires: gcc-x86_64-linux-gnu
 # New RHEL and SLE include the required FS tools
 %if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
 %global localtools 1
-BuildRequires: parted, e2fsprogs bsdtar
+BuildRequires: parted, e2fsprogs, bsdtar
 Requires: parted, autofs, e2fsprogs
 BuildRequires: libarchive.so.13()(64bit)
 Requires: libarchive.so.13()(64bit)
 %global CONF_FLAGS --with-local-e2fsprogs --with-local-libarchive --with-local-parted --with-local-partprobe
+# The included Busybox will not build on OpenSUSE 15.4
+%if 0%{?sle_version} >= 150400
+BuildRequires: busybox
+Requires: busybox
+%global CONF_FLAGS %{CONF_FLAGS} --with-local-busybox
+%endif
 %else
 %global localtools 0
 Requires: %{name}-gpl_sources = %{version}-%{release}
@@ -131,10 +140,8 @@ cd %{_builddir}
 %build
 ./autogen.sh
 
-# update search path for suse to resolve mkfs binaries (karl@oden.utexas.edu)
-%if 0%{?suse_version}
+# Configure needs to locate mkfs.ext4
 export PATH=/usr/sbin:$PATH
-%endif
 
 %configure --localstatedir=%{wwsrvdir} %{?CONF_FLAGS} %{?CROSS_FLAG}
 %{__make} %{?mflags}
