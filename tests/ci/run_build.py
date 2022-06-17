@@ -2,17 +2,19 @@
 
 import subprocess
 import logging
+import shutil
 import sys
 import os
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
-if len(sys.argv) <= 1:
-    print("SKIP. Needs a list of files to check")
+if len(sys.argv) <= 2:
+    print("Usage: %s <non-root-user> <list of files to check>" % sys.argv[0])
     sys.exit(0)
 
 error = False
 spec_found = False
+build_user = sys.argv[1]
 
 
 def build_srpm_and_rpm(command, family=None):
@@ -64,10 +66,14 @@ def build_srpm_and_rpm(command, family=None):
 
     logging.info(result.stdout.decode('utf-8'))
 
+    shutil.move(src_rpm, '/tmp/')
+    src_rpm = '/tmp/' + os.path.basename(src_rpm)
+
     rebuild_command = [
-        'rpmbuild',
-        '--rebuild',
-        src_rpm,
+        'su',
+        build_user,
+        '-c',
+        'rpmbuild --rebuild %s' % src_rpm,
     ]
 
     if family is not None:
