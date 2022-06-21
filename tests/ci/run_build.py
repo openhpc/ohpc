@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import csv
 import subprocess
 import logging
 import shutil
@@ -15,6 +16,17 @@ if len(sys.argv) <= 2:
 error = False
 spec_found = False
 build_user = sys.argv[1]
+dnf_based = False
+
+# Check which base OS we are using
+reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
+
+for row in reader:
+    key = row.pop('NAME')
+    if key == 'ID_LIKE':
+        for item in list(row.items())[0]:
+            if 'fedora' in item:
+                dnf_based = True
 
 
 def build_srpm_and_rpm(command, family=None):
@@ -48,12 +60,22 @@ def build_srpm_and_rpm(command, family=None):
 
     logging.info(src_rpm)
 
-    builddep_command = [
-        'dnf',
-        '-y',
-        'builddep',
-        src_rpm,
-    ]
+    if dnf_based:
+        builddep_command = [
+            'dnf',
+            '-y',
+            'builddep',
+            src_rpm,
+        ]
+    else:
+        builddep_command = [
+            'zypper',
+            '-n',
+            '--no-gpg-checks',
+            'source-install',
+            src_rpm,
+        ]
+
     logging.info("About to run command %s" % ' '.join(builddep_command))
     result = subprocess.run(
         builddep_command,
@@ -66,8 +88,14 @@ def build_srpm_and_rpm(command, family=None):
 
     logging.info(result.stdout.decode('utf-8'))
 
+    tmp_src_rpm = os.path.join('/tmp', os.path.basename(src_rpm))
+
+    try:
+        os.unlink(tmp_src_rpm)
+    except FileNotFoundError:
+        pass
     shutil.move(src_rpm, '/tmp/')
-    src_rpm = '/tmp/' + os.path.basename(src_rpm)
+    src_rpm = tmp_src_rpm
 
     rebuild_command = [
         'su',
