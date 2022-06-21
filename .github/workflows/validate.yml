@@ -23,7 +23,7 @@ jobs:
         tests/ci/check_spec.py ${{ steps.files.outputs.added_modified }}
 
 
-  build:
+  build_on_rhel:
     runs-on: ubuntu-latest
     container:
       image: docker.io/library/rockylinux:8
@@ -34,6 +34,27 @@ jobs:
         dnf config-manager --set-enabled powertools
         dnf install -y lmod-ohpc
         adduser ohpc
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - id: files
+      uses: jitterbit/get-changed-files@v1
+    - name: Validate Build
+      run: |
+        . /etc/profile.d/lmod.sh
+        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
+
+  build_on_leap:
+    runs-on: ubuntu-latest
+    container:
+      image: registry.opensuse.org/opensuse/leap:latest
+    steps:
+    - name: Setup
+      run: |
+        zypper -n install awk rpmbuild wget python3
+        zypper -n --no-gpg-checks install http://repos.openhpc.community/OpenHPC/2/Leap_15/x86_64/ohpc-release-2-1.leap15.x86_64.rpm
+        zypper -n --no-gpg-checks install lmod-ohpc
+        useradd -m ohpc
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
