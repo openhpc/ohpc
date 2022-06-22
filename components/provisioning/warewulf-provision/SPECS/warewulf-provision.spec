@@ -42,6 +42,7 @@ Conflicts: warewulf < 3
 BuildRequires: autoconf
 BuildRequires: automake, make
 BuildRequires: which
+BuildRequires: gcc
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel, libacl-devel, libattr-devel
 BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
