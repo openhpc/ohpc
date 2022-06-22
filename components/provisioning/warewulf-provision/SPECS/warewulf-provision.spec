@@ -40,7 +40,7 @@ Requires: perl-CGI
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 Conflicts: warewulf < 3
 BuildRequires: autoconf
-BuildRequires: automake
+BuildRequires: automake, make
 BuildRequires: which
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel, libacl-devel, libattr-devel
