@@ -33,6 +33,7 @@ jobs:
         dnf install -y epel-release dnf-plugins-core git python3 http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm findutils rpm-build wget gawk
         dnf config-manager --set-enabled powertools
         dnf install -y lmod-ohpc
+        adduser ohpc
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -41,4 +42,4 @@ jobs:
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
-        tests/ci/run_build.py ${{ steps.files.outputs.added_modified }}
+        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
