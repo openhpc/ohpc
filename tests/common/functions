@@ -45,11 +45,6 @@ check_exe() {
 # export python family variables
 get_python_vars() {
     local __python_family=$1
-    if [ "x$__python_family" == "xpython2" ]; then
-        export _python=python
-        export python_module_prefix=py2
-        export python_package_prefix=python
-    fi
     if [ "x$__python_family" == "xpython3" ]; then
         export _python=python3
         export python_module_prefix=py3
@@ -158,11 +153,7 @@ check_compiler_family()
 	myCC=gcc
 	myCXX=g++
 	myFC=gfortran
-    elif [ $LMOD_FAMILY_COMPILER == "gnu7" ];then
-	myCC=gcc
-	myCXX=g++
-	myFC=gfortran
-    elif [ $LMOD_FAMILY_COMPILER == "gnu8" ];then
+    elif [ $LMOD_FAMILY_COMPILER == "gnu12" ];then
 	myCC=gcc
 	myCXX=g++
 	myFC=gfortran
@@ -174,10 +165,6 @@ check_compiler_family()
 	myCC=clang
 	myCXX=clang++
 	myFC=gfortran
-    elif [[ $LMOD_FAMILY_COMPILER == "llvm5" ]];then
-	myCC=clang
-	myCXX=clang++
-	myFC=flang
     else
 	ERROR "Unknown compiler family"
 	exit 1

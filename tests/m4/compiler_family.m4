@@ -24,11 +24,11 @@ if test "x$LMOD_FAMILY_COMPILER" = "xgnu"; then
    CXX=g++
    FC=gfortran
    AC_MSG_RESULT([gnu])
-elif test "x$LMOD_FAMILY_COMPILER" = "xgnu8"; then
+elif test "x$LMOD_FAMILY_COMPILER" = "xgnu12"; then
    CC=gcc
    CXX=g++
    FC=gfortran
-   AC_MSG_RESULT([gnu8])
+   AC_MSG_RESULT([gnu12])
    OHPC_BLAS="-L${OPENBLAS_LIB} -lopenblas"
 elif test "x$LMOD_FAMILY_COMPILER" = "xgnu9"; then
    CC=gcc
