@@ -58,12 +58,12 @@ AC_ARG_ENABLE([psxe],
 # Default MPI families to test
 if test x$enable_psxe = xyes ;then
    AC_MSG_RESULT([yes])
-   AC_SUBST(COMPILER_FAMILIES,["gnu9 intel"])
+   AC_SUBST(COMPILER_FAMILIES,["gnu12 intel"])
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi4 impi"])
    AC_SUBST(PYTHON_FAMILIES,["python3"])
 else
    AC_MSG_RESULT([no])
-   AC_SUBST(COMPILER_FAMILIES,[gnu9])
+   AC_SUBST(COMPILER_FAMILIES,[gnu12])
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi4"])
    AC_SUBST(PYTHON_FAMILIES,["python3"])
 fi
