@@ -35,6 +35,7 @@
 # possibility of coinstall of multiple package versions)
 DocDir:    %{OHPC_PUB}/doc/contrib
 %global _docdir_fmt     %{name}-%{version}
+%global _licensedir     %{OHPC_PUB}/doc/licenses
 
 # Define PNAME which can be used in modulefile generation for env vars (derived
 # from pname defined in each component .spec file)
