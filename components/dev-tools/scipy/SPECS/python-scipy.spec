@@ -14,8 +14,6 @@
 %define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu9
-
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires: openblas-%{compiler_family}%{PROJ_DELIM}

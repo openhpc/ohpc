@@ -109,16 +109,11 @@ module load ucx
 module load libfabric
 %endif
 
-%if "%{compiler_family}" == "gnu12"
-# configure fails with:
-#   The Fortran compiler gfortran does not accept programs that
-#   call the same routine with arguments of different types without
-#   the option -fallow-argument-mismatch.
-#   Rerun configure with FFLAGS=-fallow-argument-mismatch
-# This seems to fix the build.
-export FFLAGS=-fallow-argument-mismatch
-%endif
-./configure --prefix=%{install_path} \
+./configure \
+%if %{compiler_family} == "gnu12"
+        FFLAGS="$FFLAGS -fallow-argument-mismatch" \
+%endif 
+            --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \

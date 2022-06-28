@@ -106,7 +106,6 @@ def build_srpm_and_rpm(command, family=None):
         build_user,
         '-l',
         '-c',
-        'rpmbuild --rebuild %s' % src_rpm,
     ]
 
     if family is not None:

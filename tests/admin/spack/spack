@@ -21,7 +21,7 @@ setup() {
 }
 
 @test "[spack] add compiler" {
-    module load  gnu9
+    module load  gnu12
     spack compiler find
     assert_success
 }
