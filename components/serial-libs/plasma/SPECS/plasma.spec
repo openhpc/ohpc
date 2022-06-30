@@ -10,226 +10,159 @@
 
 # plasma - Parallel Linear Algebra Software for Multicore Architectures
 
-%define ohpc_compiler_dependent 1
+%global ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-# Build requires
-BuildRequires: python2
+%global pname plasma
+%global lapack_ver 3.10.1
+
+Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
+Version: 21.8.29
+Release: 1%{?dist}
+Summary: Parallel Linear Algebra Software for Multicore Architectures
+License: BSD-3-Clause
+Group:   %{PROJ_NAME}/serial-libs
+URL:     https://icl.utk.edu/plasma/overview/index.html
+Source0: https://github.com/icl-utk-edu/plasma/releases/download/%{version}/plasma-%{version}.tar.gz
+Source1: https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v%{lapack_ver}.tar.gz
+Source2: make.inc
+Patch0:  plasma-21.8.29-configure.patch
+Patch1:  plasma-21.8.29-tools.patch
+Patch2:  plasma-21.8.29-makefile.patch
+
+#!BuildIgnore: post-build-checks
+
+BuildRequires: python3
+BuildRequires: doxygen
+BuildRequires: make
+BuildRequires: sed
+BuildRequires: lua-devel >= 5.3
+%if 0%{?rhel_version}
+BuildRequires: lua-static >= 5.3
+%endif
+Requires: lua >= 5.3
+Requires: lmod%{PROJ_DELIM} >= 8.7.3
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-# Base package name
-%define pname plasma
-
-Name:	%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version: 2.8.0
-Release: 1%{?dist}
-Summary: Parallel Linear Algebra Software for Multicore Architectures
-License: BSD-3-Clause
-Group:     %{PROJ_NAME}/serial-libs
-URL: https://bitbucket.org/icl/%{pname}
-Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.tar.gz
-Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
-Source2: http://www.netlib.org/lapack/lapack-3.8.0.tar.gz
-Source3: %{pname}-rpmlintrc
-Patch1:  plasma-lapack_version.patch
-Requires: lmod%{PROJ_DELIM} >= 7.6.1
-
-#!BuildIgnore: post-build-checks
-
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
+%global install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
+%global module_path %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 
 %description
-PLASMA is a software package for solving problems in dense linear algebra using
-multicore processors and Xeon Phi coprocessors. PLASMA provides implementations
-of state-of-the-art algorithms using cutting-edge task scheduling
-techniques. PLASMA currently offers a collection of routines for solving linear
-systems of equations, least squares problems, eigenvalue problems, and singular
-value problems.
+PLASMA is a software package for solving problems in dense linear algebra
+using OpenMP. PLASMA provides implementations of state-of-the-art
+algorithms using cutting-edge task scheduling techniques. PLASMA currently
+offers a collection of routines for solving linear systems of equations,
+least squares problems, eigenvalue problems, and singular value problems.
+
 
 %prep
-%setup -q -a 1 -n %{pname}_%{version}
-%patch1 -p 0
-mkdir bin
-ln -s /usr/bin/python2 bin/python
+%setup -q -a 1 -n %{pname}-%{version}
+cp %{SOURCE2} .
+# Convert scripts to Python3; clean up indentation first
+# Patches created using 2to3
+sed -i "s/\t/    /g;s/^\s*$//;1s|^#!.*env.*python.*$|#!/usr/bin/python3|" \
+    configure.py config/*.py tools/*.py
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+
 
 %build
-export PATH="$PWD/bin:$PATH"
-mkdir -p build/download
-
-cp %{SOURCE0} build/download
-cp %{SOURCE2} build/download
-%if "%{compiler_family}" == "arm1"
-cp %{SOURCE2} build/download/lapack-3.8.0.tgz
-%endif
-
-# OpenHPC compiler designation
 %ohpc_setup_compiler
 
-#%if "%{compiler_family}" != "intel" 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
 
-export SHARED_OPT=-shared
-
-%if %{compiler_family} == gnu9
-export PIC_OPT=-fPIC
-export SONAME_OPT="-Wl,-soname"
+make prefix=%{install_path} \
+%if 0%{?sle_version} || 0%{?suse_version}
+     lua_dir=/usr/include/lua%{luaver} \
+     lua_lib=/usr/lib64/liblua%{luaver}.a \
+%else
+     lua_dir=/usr/include \
+     lua_lib=/usr/lib64/liblua.a \
 %endif
-
-%if %{compiler_family} == intel
-export PIC_OPT=-fpic
-export SONAME_OPT="-Xlinker -soname"
+%if %{compiler_family} == "intel"
+   CFLAGS="-fPIC -std=c99 -I${MKLROOT}/include -fopenmp \
+     -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY -DHAVE_MKL \
+     -DBLAS_RETURN_COMPLEX_AS_ARGUMENT -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR" \
+   FCFLAGS="-fPIC -std=f2008 -fopenmp" \
+   LDFLAGS="-fPIC -L${MKLROOT}/lib/intel64 -L${CMPLR_ROOT}/linux/compiler/lib/intel64_lin -fopenmp" \
+   LIBS="-lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lifcore -lm" \
+%else
+%if %{compiler_family} == "arm"
+   CFLAGS="-fPIC -std=c99 -fopenmp \
+     -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY  \
+     -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR" \
+   FCFLAGS="-fPIC -std=f2008 -fopenmp" \
+   LDFLAGS="-fPIC -fopenmp" \
+   LIBS="-armpl -lm" \
+%else
+   CFLAGS="-fPIC -std=c99 -I${OPENBLAS_DIR}/include -fopenmp -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY -DHAVE_OPENBLAS -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR -DHAVE_LAPACKE_DLASSQ" \
+   FCFLAGS="-fPIC -std=f2008 -fopenmp" \
+   LDFLAGS="-fPIC -L${OPENBLAS_DIR}/lib -fopenmp" \
+   LIBS="-lopenblas -lm" \
 %endif
-
-%if "%{compiler_family}" == "arm1" || "%{compiler_family}" == "llvm"
-export PIC_OPT="-fPIC -DPIC"
-export SONAME_OPT="-Wl,-soname"
-export RPM_OPT_FLAGS="-O3 -fsimdmath"
 %endif
+     all
+make prefix=%{install_path} docs
 
-#%if "%{compiler_family}" == "arm1"
-#echo "d" | LAPACKE_WITH_TMG=1 \
-#%endif
-
-
-plasma-installer_%{version}/setup.py              \
-    --cc=${CC}                                    \
-    --fc=${FC}                                    \
-    --notesting                                   \
-%if "%{compiler_family}" == "gnu9" || "%{compiler_family}" == "llvm"
-    --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
-    --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
-    --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
-    --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
-    --ldflags_c="-fopenmp" \
-    --ldflags_fc="-fopenmp" \
-%endif
-%if %{compiler_family} == intel
-    --cflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
-    --fflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
-    --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --ldflags_c="-qopenmp" \
-    --ldflags_fc="-qopenmp" \
-%endif
-%if "%{compiler_family}" == "arm1"
-    --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT}" \
-    --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT}" \
-    --blaslib="-armpl"     \
-    --cblaslib="-armpl"     \
-    --ldflags_c="-fopenmp"                          \
-    --ldflags_fc="-fopenmp"                         \
-%endif
-    --downlapc
-
-#%if "%{compiler_family}" == "arm1"
-#%{__cat} build/log/lapackcwrapperlog
-#%endif
-
-#
-#Create shared libraries
-#
-pushd install/lib  2>&1 > /dev/null
-find . -name "*.a"|while read static_lib
-do
-    bname=`basename ${static_lib}`
-    libname=`basename ${static_lib} .a`
-    mkdir -p tmpdir
-    pushd tmpdir  2>&1 > /dev/null
-    ar xv ../${bname}
-    ${CC} ${SHARED_OPT} ${SONAME_OPT}=${libname}.so.0 -o ../${libname}.so *.o
-    popd  2>&1 > /dev/null
-    rm -fr tmpdir
-done
-popd 2>&1 > /dev/null
-
-#
-#Remove static libraries
-#
-rm -f install/lib/*.a
 
 %install
-export PATH="$PWD/bin:$PATH"
+# Compiler is needed on RHEL for make install
+%ohpc_setup_compiler
+
 mkdir -p %{buildroot}%{install_path}
+make prefix=%{buildroot}%{install_path} CFLAGS="-fPIC" LDFLAGS="-fPIC" install
+
+# Correct the paths in the config file
+sed -i "s|%{buildroot}||" %{buildroot}%{install_path}/lib/pkgconfig/plasma.pc
+
+# Remove static libraries
+rm -f %{buildroot}%{install_path}/lib/*.a
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
-#%Module1.0#####################################################################
+mkdir -p %{buildroot}%{module_path}
+cat << EOF > %{buildroot}/%{module_path}/%{version}%{OHPC_CUSTOM_PKG_DELIM}.lua
+help([[
+This module loads the %{PNAME} library built with the %{compiler_family}
+compiler toolchain.
+Version %{version}
+]])
 
-proc ModulesHelp { } {
+whatis("Name: %{PNAME} built with %{compiler_family} compiler")
+whatis("Version: %{version}")
+whatis("Category: runtime library")
+whatis("Description: %{summary}")
+whatis("URL %{url}")
 
-puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain."
-puts stderr "\nVersion %{version}\n"
-
-}
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
-module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
-module-whatis "Description: %{summary}"
-module-whatis "URL %{url}"
-
-set     version			    %{version}
+local version = "%{version}"
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
-# Require openblas for gnu and llvm compiler families
-depends-on openblas
+-- Require openblas for gnu and llvm compiler families
+depends_on("openblas")
 %endif
 
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
+prepend_path( "PATH",            "%{install_path}/bin")
+prepend_path( "MANPATH",         "%{install_path}/share/man")
+prepend_path( "INCLUDE",         "%{install_path}/include")
+prepend_path( "LD_LIBRARY_PATH", "%{install_path}/lib")
 
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
+setenv("%{PNAME}_DIR", "%{install_path}")
+setenv("%{PNAME}_LIB", "%{install_path}/lib")
+setenv("%{PNAME}_INC", "%{install_path}/include")
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
-#%Module1.0#####################################################################
-##
-## version file for %{pname}-%{version}
-##
-set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
-EOF
+ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM}.lua %{buildroot}%{module_path}/default
 
-pushd install 2>&1 > /dev/null
-
-#
-# Fix .pc files
-#
-find . -name "*.pc"|while read file
-do
-    echo "Fix ${file} up"
-    mv ${file} ${file}.tmp
-    cat ${file}.tmp | \
-        sed -e "s@${RPM_BUILD_DIR}/%{pname}_%{version}/install@%{install_path}@g" \
-        > ${file}
-    diff -u  ${file}.tmp  ${file} || :
-    rm -f ${file}.tmp
-done
-
-popd 2>&1 > /dev/null
-
-cp -a install/* %{buildroot}%{install_path}
-
-#
-#make links
-#
-pushd %{buildroot}%{install_path}/lib 2>&1 > /dev/null
-/sbin/ldconfig -N .
-popd 2>&1 > /dev/null
 
 %files
-%{OHPC_PUB}
-%doc LICENSE README ReleaseNotes docs/pdf/*.pdf
+%{install_path}
+%{module_path}
+%license LICENSE
+%doc README.md docs/html
