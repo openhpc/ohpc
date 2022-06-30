@@ -1,0 +1,458 @@
+--- plasma-21.8.29/configure.py	(original)
++++ plasma-21.8.29/configure.py	(refactored)
+@@ -4,7 +4,7 @@
+ # University of Tennessee, US,
+ # University of Manchester, UK.
+ 
+-from __future__ import print_function
++
+ 
+ import sys
+ import re
+@@ -52,7 +52,7 @@
+                       -L/opt/lapack/lib -llapacke -llapack -lcblas -lblas
+ 
+ [return to continue, q to quit] ''', end='' )
+-reply = raw_input()
++reply = input()
+ if (re.search( 'q|quit', reply, re.I )):
+     exit(1)
+ 
+@@ -84,6 +84,6 @@
+     config.output_files( 'make.inc' )
+     config.print_header( '' )
+ 
+-except Error, e:
++except Error as e:
+     config.print_error( 'Configuration aborted: ' + str(e) )
+     exit(1)
+--- plasma-21.8.29/config/config.py	(original)
++++ plasma-21.8.29/config/config.py	(refactored)
+@@ -2,7 +2,7 @@
+ # University of Tennessee, US,
+ # University of Manchester, UK.
+ 
+-from __future__ import print_function
++
+ 
+ # standard python modules
+ import os
+@@ -13,7 +13,7 @@
+ from   subprocess import PIPE
+ 
+ # local modules
+-from environment import Environment
++from .environment import Environment
+ 
+ 
+ # ==============================================================================
+@@ -270,7 +270,7 @@
+             openmp_priority( required=False )
+             #for flag in ('-O2', '-Wall', '-Wshadow', '-Wno-unused-function', '-pedantic'):
+             #    compiler_flag( flag, required=False )
+-        except Error, e:
++        except Error as e:
+             if (verbose): print( e )
+         env.pop()
+         #print()
+@@ -336,7 +336,7 @@
+             openmp_priority( required=False )
+             #for flag in ('-O2', '-Wall', '-Wshadow', '-Wno-unused-function', '-pedantic'):
+             #    compiler_flag( flag, required=False )
+-        except Error, e:
++        except Error as e:
+             if (verbose): print( e )
+         env.pop()
+         #print()
+@@ -421,7 +421,7 @@
+ 
+             #for flag in ('-O2', '-Wall', '-Wshadow', '-Wno-unused-function', '-pedantic'):
+             #    compiler_flag( flag, required=False )
+-        except Error, e:
++        except Error as e:
+             if (verbose): print( e )
+         env.pop()
+         #print()
+@@ -493,7 +493,7 @@
+             openmp_priority( required=False )
+             #for flag in ('-O2', '-Wall', '-Wshadow', '-Wno-unused-function', '-pedantic'):
+             #    compiler_flag( flag, required=False )
+-        except Error, e:
++        except Error as e:
+             if (verbose): print( e )
+         env.pop()
+         #print()
+@@ -526,7 +526,7 @@
+             found = True
+             print( str_yes )
+             break
+-        except Error, e:
++        except Error as e:
+             env['CFLAGS'] = save_cflags
+             print( str_no )
+     # end
+@@ -554,7 +554,7 @@
+             found = True
+             print( str_yes )
+             break
+-        except Error, e:
++        except Error as e:
+             env['CXXFLAGS'] = save_cxxflags
+             print( str_no )
+     # end
+@@ -598,7 +598,7 @@
+             found = True
+             print( str_yes )
+             break
+-        except Error, e:
++        except Error as e:
+             env['FCFLAGS'] = save_fcflags
+             print( str_no )
+     # end
+@@ -633,7 +633,7 @@
+         print_dots( '    Accepts ' + flag, subdots_width )
+         try_compile_obj( src )
+         print( str_yes )
+-    except Error, e:
++    except Error as e:
+         env[ flagname ] = save
+         print( str_no )
+         if (required):
+@@ -668,7 +668,7 @@
+             found = True
+             print( str_yes )
+             break
+-        except Error, e:
++        except Error as e:
+             print( str_no )
+         finally:
+             env[ flagname ] = save_flags
+@@ -704,7 +704,7 @@
+         try_compile_run( src )
+         env.append( 'DEFS', '-DHAVE_OPENMP_DEPEND' )  # todo compiler-specific DEFS?
+         print( str_yes )
+-    except Error, e:
++    except Error as e:
+         print( str_no )
+         if (required):
+             raise e
+@@ -737,7 +737,7 @@
+         try_compile_run( src )
+         env.append( 'DEFS', '-DHAVE_OPENMP_PRIORITY' )  # todo compiler-specific DEFS?
+         print( str_yes )
+-    except Error, e:
++    except Error as e:
+         print( str_no )
+         if (required):
+             raise e
+@@ -769,8 +769,8 @@
+                        '" and $LAPACK_LIBS="' + libs + '"' )
+         libs = re.sub( '-L +', '-L', libs )  # keep -Ldir together, not -L dir
+         libs = re.split( ' +', libs )
+-        libdir = filter( lambda x:     x.startswith( '-L' ), libs )
+-        libs   = filter( lambda x: not x.startswith( '-L' ), libs )
++        libdir = [x for x in libs if x.startswith( '-L' )]
++        libs   = [x for x in libs if not x.startswith( '-L' )]
+         libdir = join( *libdir )
+         libs   = join( *libs )
+         tests.append({
+@@ -884,7 +884,7 @@
+             try_compile_run( src )
+             choices.append( test )
+             print( str_yes )
+-        except Error, e:
++        except Error as e:
+             print( str_no )
+         finally:
+             restore_env( save )
+@@ -951,7 +951,7 @@
+             found = True
+             print( str_yes )
+             break
+-        except Error, e:
++        except Error as e:
+             print( str_no )
+             restore_env( save )
+     # end
+@@ -974,7 +974,7 @@
+         try_compile_run( src )
+         print( 'no' )
+         return
+-    except Exception, e:
++    except Exception as e:
+         pass
+     finally:
+         pop_lang()
+@@ -984,7 +984,7 @@
+         env.append( 'DEFS', '-DCBLAS_ADD_TYPEDEF' )
+         try_compile_run( src )
+         print( 'yes' )
+-    except Exception, e:
++    except Exception as e:
+         print_error( 'unknown' )
+         if (required):
+             raise e
+@@ -1029,7 +1029,7 @@
+             found = True
+             print( str_yes )
+             break
+-        except Error, e:
++        except Error as e:
+             print( str_no )
+             restore_env( save )
+     # end
+@@ -1078,7 +1078,7 @@
+             found = True
+             print( str_yes )
+             break
+-        except Error, e:
++        except Error as e:
+             print( str_no )
+             restore_env( save )
+     # end
+@@ -1101,7 +1101,7 @@
+         try_compile_run( src )
+         print( 'returns float (standard)' )
+         return
+-    except Exception, e:
++    except Exception as e:
+         pass
+     finally:
+         pop_lang()
+@@ -1112,7 +1112,7 @@
+         try_compile_run( src )
+         print( 'returns double (f2c, clapack, MacOS Accelerate)' )
+         env.append( 'DEFS', '-DBLAS_RETURN_FLOAT_AS_DOUBLE' )
+-    except Exception, e:
++    except Exception as e:
+         print_error( 'unknown' )
+         if (required):
+             raise e
+@@ -1131,7 +1131,7 @@
+         try_compile_run( src )
+         print( 'returns complex' )
+         return
+-    except Exception, e:
++    except Exception as e:
+         pass
+     finally:
+         pop_lang()
+@@ -1142,7 +1142,7 @@
+         try_compile_run( src )
+         print( 'complex result is first argument' )
+         env.append( 'DEFS', '-DBLAS_RETURN_COMPLEX_AS_ARGUMENT' )
+-    except Exception, e:
++    except Exception as e:
+         print_error( 'unknown' )
+         if (required):
+             raise e
+@@ -1160,7 +1160,7 @@
+         try_compile_run( src )
+         print( str_yes )
+         env.append( 'DEFS', '-DHAVE_LAPACKE_DLASCL' )
+-    except Exception, e:
++    except Exception as e:
+         print( str_no )
+         if (required):
+             raise e
+@@ -1178,7 +1178,7 @@
+         try_compile_run( src )
+         print( str_yes )
+         env.append( 'DEFS', '-DHAVE_LAPACKE_DLANTR' )
+-    except Exception, e:
++    except Exception as e:
+         print( str_no )
+         if (required):
+             raise e
+@@ -1196,7 +1196,7 @@
+         try_compile_run( src )
+         print( str_yes )
+         env.append( 'DEFS', '-DHAVE_LAPACKE_DLASSQ' )
+-    except Exception, e:
++    except Exception as e:
+         print( str_no )
+         if (required):
+             raise e
+@@ -1220,7 +1220,7 @@
+     '''
+     txt = ''
+     for var in variables:
+-        if (env2.has_key( var )):
++        if (var in env2):
+             txt += ' ' + env2[ var ]
+     txt = txt.strip()
+     if (not txt):
+@@ -1236,7 +1236,7 @@
+     map, to restore using restore_env.
+     '''
+     save = {}
+-    for key in env2.keys():
++    for key in list(env2.keys()):
+         if (key == 'LIBS'):
+             save[key] = env.prepend( key, env2[key] )
+         else:
+@@ -1250,7 +1250,7 @@
+     '''
+     Restores all key-value pairs in save to env.
+     '''
+-    for key in save.keys():
++    for key in list(save.keys()):
+         env[key] = save[key]
+ # end
+ 
+@@ -1313,7 +1313,7 @@
+     LD_LIBRARY_PATH = 'LD_LIBRARY_PATH'
+     if (sys.platform == 'darwin'):
+         LD_LIBRARY_PATH = 'DYLD_LIBRARY_PATH'
+-    if (mklroot and not os.environ.has_key( LD_LIBRARY_PATH )):
++    if (mklroot and LD_LIBRARY_PATH not in os.environ):
+         (inteldir, mkl) = os.path.split( mklroot )
+         intel_compiler = os.path.join( inteldir, 'compiler' )
+         if (os.path.exists( intel_compiler )):
+@@ -1383,7 +1383,7 @@
+         print_dots( '    compile and run test', subdots_width )
+         try_compile_run( src )
+         print( str_yes )
+-    except Error, e:
++    except Error as e:
+         print( str_no )
+         if (required):
+             raise e
+@@ -1496,12 +1496,12 @@
+         comment = ' [auto]'
+     else:
+         print( 'Available choices for', name +':' )
+-        for i in xrange(num):
++        for i in range(num):
+             print( '%3d) %s' % (i+1, choices[i][key]) )
+         # end
+         while (True):
+             print( 'Which', name, 'to use [1-%d, or quit]? ' % (num), end='' )  # no newline
+-            reply = raw_input()
++            reply = input()
+             if (re.search( 'q|quit', reply, re.I )):
+                 raise Error('cancelled')
+             try:
+@@ -1598,7 +1598,7 @@
+     Write g_test_files[ filename ] to file, the first time this is called with
+     that filename. Subsequent calls with the same filename do nothing.
+     '''
+-    if (not g_written.has_key( filename )):
++    if (filename not in g_written):
+         g_written[ filename ] = True
+         write( filename, g_test_files[ filename ] )
+     # end
+--- plasma-21.8.29/config/environment.py	(original)
++++ plasma-21.8.29/config/environment.py	(refactored)
+@@ -28,13 +28,13 @@
+     # compared to __getitem__, returns None if key doesn't exist
+     def get( self, key ):
+         for env in self.stack[::-1]:
+-            if (env.has_key( key )):
++            if (key in env):
+                 return env[key]
+         return None
+ 
+     def __getitem__( self, key ):
+         for env in self.stack[::-1]:
+-            if (env.has_key( key )):
++            if (key in env):
+                 return env[key]
+         return '' # or None?
+ 
+@@ -62,60 +62,60 @@
+ # ------------------------------------------------------------------------------
+ def test():
+     env = Environment()
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     CC  = env['CC']
+     CXX = env['CXX']
+-    print 'CC  <' + CC  + '>'
+-    print 'CXX <' + CXX + '>'
+-    print
++    print('CC  <' + CC  + '>')
++    print('CXX <' + CXX + '>')
++    print()
+ 
+     env.push()
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     env['CC'] = 'icc'
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     CC = env['CC']
+     env['CC'] += 'foo'
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     CXX = env['CXX']
+     env['CXX'] += 'foo'
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     save_CFLAGS = env.prepend( 'CFLAGS', '-O2' )
+-    print env.stack
++    print(env.stack)
+     env['CFLAGS'] = save_CFLAGS
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     save_CFLAGS = env.append( 'CFLAGS', '-O2' )
+-    print env.stack
++    print(env.stack)
+     env['CFLAGS'] = save_CFLAGS
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     save_CXXFLAGS = env.prepend( 'CXXFLAGS', '-O2' )
+-    print env.stack
++    print(env.stack)
+     env['CXXFLAGS'] = save_CXXFLAGS
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     save_CXXFLAGS = env.prepend( 'CXXFLAGS', '-g' )
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ 
+     save_CXXFLAGS = env.append( 'CXXFLAGS', '-Wshadow' )
+-    print env.stack
++    print(env.stack)
+     env['CXXFLAGS'] = save_CXXFLAGS
+-    print env.stack
+-    print
++    print(env.stack)
++    print()
+ # end
+ 
+ # ------------------------------------------------------------------------------
+--- plasma-21.8.29/config/__init__.py	(original)
++++ plasma-21.8.29/config/__init__.py	(refactored)
+@@ -2,4 +2,4 @@
+ # University of Tennessee, US,
+ # University of Manchester, UK.
+ 
+-from config import *
++from .config import *

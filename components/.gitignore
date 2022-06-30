@@ -101,9 +101,7 @@ serial-libs/R/SOURCES/R-*.tar.gz
 serial-libs/gsl/SOURCES/gsl-*.tar.gz
 serial-libs/metis/SOURCES/metis-*.tar.gz
 serial-libs/openblas/SOURCES/openblas-*.tar.gz
-serial-libs/plasma/SOURCES/lapack-*.tar.gz
-serial-libs/plasma/SOURCES/plasma-installer*.tar.gz
-serial-libs/plasma/SOURCES/plasma*.tar.gz
 serial-libs/plasma/SOURCES/v*.tar.gz
-serial-libs/scotch/SOURCES/scotch*.tar.gz
-serial-libs/superlu/SOURCES/superlu*.tar.gz
+serial-libs/plasma/SOURCES/plasma*.tar.gz
+serial-libs/scotch/SOURCES/scotch_*.tar.gz
+serial-libs/superlu/SOURCES/superlu_*.tar.gz
