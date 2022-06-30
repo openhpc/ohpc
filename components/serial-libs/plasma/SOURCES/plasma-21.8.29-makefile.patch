@@ -1,0 +1,91 @@
+--- a/Makefile	2022-06-29 15:27:00.441373699 -0700
++++ b/Makefile	2022-06-29 16:49:05.173373699 -0700
+@@ -40,7 +40,7 @@
+ 
+ # dependencies here interfere with manually edited make.inc
+ make.inc: #make.inc.in configure.py $(wildcard config/*.py)
+-	python configure.py
++	python3 configure.py
+ 
+ # GNU make doesn't have defaults for these
+ RANLIB    ?= ranlib
+@@ -63,11 +63,10 @@
+ 
+ codegen     := ./tools/codegen.py
+ 
+-lua_version := lua-5.3.4
+-lua_dir     := tools/$(lua_version)/src
+-lua_lib     := lib/liblua.a
++lua_inc     := /usr/include
++lua_lib     := /usr/lib64/liblua.a
+ 
+-PLASMA_INC  := -Iinclude -I$(lua_dir)
++PLASMA_INC  := -Iinclude -I$(lua_inc)
+ PLASMA_LIBS := -Llib -lplasma -lcoreblas -llua
+ 
+ .DELETE_ON_ERROR:
+@@ -120,25 +119,6 @@
+ endif
+ 
+ # ------------------------------------------------------------------------------
+-# Build dependencies (Lua)
+-
+-lua: $(lua_lib)
+-
+-$(lua_dir): tools/$(lua_version).tar.gz
+-	cd tools && tar -zxvf $(lua_version).tar.gz
+-
+-# clear TARGET_ARCH, which Intel's compilervars.sh script (erroneously?) sets to intel64
+-$(lua_lib): | $(lua_dir)
+-	cd $(lua_dir) && make $(lua_platform) MYCFLAGS="-fPIC" CC=$(CC) TARGET_ARCH=
+-	cp $(lua_dir)/liblua.a lib
+-
+-# plasma needs lua include files
+-$(plasma_obj):   | $(lua_dir)
+-$(coreblas_obj): | $(lua_dir)
+-
+-libfiles = $(lua_lib)
+-
+-# ------------------------------------------------------------------------------
+ # Create dependencies to generate Fortran interface.
+ fortran_gen := ./tools/fortran_gen.py
+ include/plasma_mod.f90: $(plasma_hdr)
+@@ -194,12 +174,12 @@
+        install_name =
+    endif
+ 
+-   lib/libplasma.so: $(plasma_obj) Makefile.plasma.gen lib/libcoreblas.so $(lua_lib)
++   lib/libplasma.so: $(plasma_obj) Makefile.plasma.gen lib/libcoreblas.so
+ 	$(quiet_CC) $(CC) -shared $(LDFLAGS) -o $@ $(plasma_obj) \
+ 	-Llib -lcoreblas -llua $(LIBS) \
+ 	$(install_name)
+ 
+-   lib/libcoreblas.so: $(coreblas_obj) Makefile.coreblas.gen $(lua_lib)
++   lib/libcoreblas.so: $(coreblas_obj) Makefile.coreblas.gen
+ 	$(quiet_CC) $(CC) -shared $(LDFLAGS) -o $@ $(coreblas_obj) \
+ 	-Llib -llua $(LIBS) \
+ 	$(install_name)
+@@ -295,7 +275,6 @@
+ 	rm -f $(prefix)/include/plasma.mod
+ 	rm -f $(prefix)/lib/libcoreblas*
+ 	rm -f $(prefix)/lib/libplasma*
+-	rm -f $(prefix)/lib/liblua*
+ 	rm -f $(prefix)/lib/pkgconfig/plasma.pc
+ 
+ 
+@@ -311,7 +290,6 @@
+ 	-rm -f $(fortran_interface_src) $(fortran_interface_obj) $(fortran_interface_mod)
+ 	-rm -f $(fortran_examples_exe)
+ endif
+-	-cd $(lua_dir) && make clean
+ 
+ # cleangen removes generated files if the template still exists;
+ # grep for any stale generated files without a template.
+@@ -320,7 +298,6 @@
+ 	-rm -f compute/*.o control/*.o core_blas/*.o test/*.o
+ 	-rm -f $(makefiles_gen)
+ 	-rm -rf docs/html
+-	-rm -rf tools/$(lua_version)
+ 
+ 
+ # ------------------------------------------------------------------------------
