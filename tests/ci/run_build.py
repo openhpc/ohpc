@@ -105,10 +105,7 @@ def build_srpm_and_rpm(command, family=None):
     ]
 
     if family is not None:
-        rebuild_command += [
-            '--define',
-            'mpi_family %s' % family,
-        ]
+        rebuild_command[-1] += " --define 'mpi_family %s'" % family
 
     logging.info("About to run command %s" % ' '.join(rebuild_command))
     result = subprocess.run(
