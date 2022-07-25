@@ -12,15 +12,17 @@
 %global ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %global pname metis
+%global dist_ver 0.5
 
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
-Version: 5.1.0
+Version: 5.1.1
 Release: 1%{?dist}
-License: Apache License 2.0
+License: ASL 2.0
 Group:   %{PROJ_NAME}/serial-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
-Source0: http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-%{version}.tar.gz
+Source0: https://github.com/KarypisLab/METIS/archive/refs/tags/v%{version}-DistDGL-v%{dist_ver}.tar.gz
+Source1: https://github.com/KarypisLab/GKlib/archive/refs/tags/METIS-v%{version}-DistDGL-%{dist_ver}.tar.gz
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
@@ -33,14 +35,17 @@ Provides:      libmetis0 = %{version}
 %global module_path %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 
 %description
-METIS is a family of programs for partitioning unstructured graphs and hypergraph
-and computing fill-reducing orderings of sparse matrices. The underlying algorithms
-used by METIS are based on the state-of-the-art multilevel paradigm that has been
-shown to produce high quality results and scale to very large problems.
+METIS is a set of serial programs for partitioning graphs, partitioning
+finite element meshes, and producing fill reducing orderings for sparse
+matrices. The algorithms implemented in METIS are based on the multilevel
+recursive-bisection, multilevel k-way, and multi-constraint partitioning
+schemes developed in our lab.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -b0 -a1 -n METIS-%{version}-DistDGL-v%{dist_ver}
+rmdir GKlib
+ln -s GKlib-METIS-v%{version}-DistDGL-%{dist_ver} GKlib
 
 
 %build
@@ -90,5 +95,5 @@ mkdir -p %{buildroot}%{_docdir}
 %files
 %{install_path}
 %{module_path}
-%doc BUILD.txt Changelog Install.txt
-%license LICENSE.txt
+%doc Changelog 
+%license LICENSE
