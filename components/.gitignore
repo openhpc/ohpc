@@ -16,6 +16,7 @@ admin/nrpe/SOURCES/nrpe-*.tar.gz
 admin/pdsh/SOURCES/pdsh-*.tar.gz
 admin/powerman/SOURCES/powerman-*.tar.gz
 admin/test-suite/SOURCES/tests-ohpc.tar
+admin/ohpc-release-rcs/RC*/SOURCES/
 compiler-families/gnu-compilers/SOURCES/gcc-*.tar.xz
 compiler-families/gnu-compilers/SOURCES/gmp-*.tar.bz2
 compiler-families/gnu-compilers/SOURCES/mpc-*.tar.gz
@@ -84,7 +85,6 @@ perf-tools/scalasca/SOURCES/scalasca-*.tar.gz
 perf-tools/scalasca/SPECS/wget-log
 perf-tools/scorep/SOURCES/scorep-*.tar.gz
 perf-tools/tau/SOURCES/tau-*.tar.gz
-perf-tools/tau/SOURCES/tau-*.tar.gz
 provisioning/warewulf-cluster/SOURCES/*.tar.gz
 provisioning/warewulf-common/SOURCES/*.tar.gz
 provisioning/warewulf-ipmi/SOURCES/*.tar.gz
@@ -99,7 +99,7 @@ rms/slurm/SOURCES/slurm-*.tar.bz2
 runtimes/charliecloud/SOURCES/charliecloud-*.tar.gz
 serial-libs/R/SOURCES/R-*.tar.gz
 serial-libs/gsl/SOURCES/gsl-*.tar.gz
-serial-libs/metis/SOURCES/metis-*.tar.gz
+serial-libs/metis/SOURCES/*.tar.gz
 serial-libs/openblas/SOURCES/openblas-*.tar.gz
 serial-libs/plasma/SOURCES/lapack-*.tar.gz
 serial-libs/plasma/SOURCES/plasma-installer*.tar.gz
