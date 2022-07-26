@@ -60,16 +60,7 @@ data, and of arbitrary input size.
 echo ==== STARTSET ====
 set
 echo ==== ENDSET ====
-#%ohpc_setup_compiler
-    export CC=gcc
-    export CXX=g++
-    export FC=gfortran
-    export F77=gfortran
-    module purge
-    module --debug=3 load %{compiler_family}
-	module --debug=3 load %{mpi_family}
-
-exit 1
+%ohpc_setup_compiler
 
 BASEFLAGS="--enable-shared --disable-dependency-tracking --enable-threads"
 %if %{openmp}

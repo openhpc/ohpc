@@ -102,10 +102,10 @@ def build_srpm_and_rpm(command, family=None):
     src_rpm = tmp_src_rpm
 
     rebuild_command = [
-        'su',
+        'su -',
         build_user,
         '-c',
-        'echo "*$PATH*" && module load gnu && echo "*$PATH*" && rpmbuild --rebuild %s' % src_rpm,
+        'rpmbuild --rebuild %s' % src_rpm,
     ]
 
     if family is not None:
