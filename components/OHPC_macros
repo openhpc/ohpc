@@ -160,24 +160,18 @@ Requires:      %{python_prefix}
 
 # Single-line macro for running compiler/MPI setup scripts
 # Script bodies are evaluated and stored in this macro definition
-%global ohpc_setup_compiler %{expand:\
-    %if 0%{?OHPC_CFLAGS:1} \
-         export OHPC_CFLAGS=%{OHPC_CFLAGS} \
-    %endif \
-    %if 0%{?OHPC_CXXFLAGS:1} \
-         export OHPC_CXXFLAGS=%{OHPC_CXXFLAGS} \
-    %endif \
-    %if 0%{?OHPC_FCFLAGS:1} \
-         export OHPC_FCFLAGS=%{OHPC_FCFLAGS} \
-    %endif \
-    %if 0%{?OHPC_F77FLAGS:1} \
-         export OHPC_F77FLAGS=%{OHPC_F77FLAGS} \
-    %endif \
-    . %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
-    %if 0%{?ohpc_mpi_dependent} == 1 \
-        . %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
-    %endif \
-}
+%global ohpc_setup_compiler %{expand:
+%{?OHPC_CFLAGS:export OHPC_CFLAGS=%{OHPC_CFLAGS}}
+%{?OHPC_CXXFLAGS:export OHPC_CXXFLAGS=%{OHPC_CXXFLAGS}}
+%{?OHPC_FCFLAGS:"export OHPC_FCFLAGS=%{OHPC_FCFLAGS}}
+%{?OHPC_F77FLAGS:"export OHPC_F77FLAGS=%{OHPC_F77FLAGS}}
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family}}
+
+%if 0%{?ohpc_mpi_dependent} == 01
+%global ohpc_setup_compiler %{expand:
+%{ohpc_setup_compiler}
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family}}
+%endif
 
 # Lua version
 %if 0%{!?luaver:1}
