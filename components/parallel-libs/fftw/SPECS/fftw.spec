@@ -16,6 +16,8 @@
 # Base package name
 %define pname fftw
 
+%dump
+
 # Not building quad-precision because: "quad precision is not supported in MPI"
 %global precision_list single double long-double
 
@@ -51,6 +53,7 @@ data, and of arbitrary input size.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1 
+
 
 %build
 # OpenHPC compiler/mpi designation
