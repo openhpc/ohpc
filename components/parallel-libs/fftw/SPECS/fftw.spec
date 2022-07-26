@@ -52,12 +52,24 @@ data, and of arbitrary input size.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1 
+%patch0 -p1
 
 
 %build
 # OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+echo ==== STARTSET ====
+set
+echo ==== ENDSET ====
+#%ohpc_setup_compiler
+    export CC=gcc
+    export CXX=g++
+    export FC=gfortran
+    export F77=gfortran
+    module purge
+    module --debug=3 load %{compiler_family}
+	module --debug=3 load %{mpi_family}
+
+exit 1
 
 BASEFLAGS="--enable-shared --disable-dependency-tracking --enable-threads"
 %if %{openmp}
