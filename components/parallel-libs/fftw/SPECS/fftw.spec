@@ -52,6 +52,7 @@ data, and of arbitrary input size.
 %setup -q -n %{pname}-%{version}
 %patch0 -p1 
 
+
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler

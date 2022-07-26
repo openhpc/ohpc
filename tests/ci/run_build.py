@@ -100,6 +100,7 @@ def build_srpm_and_rpm(command, family=None):
     rebuild_command = [
         'su',
         build_user,
+        '-l'
         '-c',
         'rpmbuild --rebuild %s' % src_rpm,
     ]

@@ -48,7 +48,7 @@ jobs:
   build_on_leap:
     runs-on: ubuntu-latest
     container:
-      image: registry.opensuse.org/opensuse/leap:latest
+      image: registry.opensuse.org/opensuse/leap:15.3
     steps:
     - name: Setup
       run: |
