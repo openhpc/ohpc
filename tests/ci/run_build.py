@@ -31,11 +31,13 @@ for row in reader:
 
 def build_srpm_and_rpm(command, family=None):
     logging.info("About to run command %s" % ' '.join(command))
+    logging.info("PATH = *%s*" % os.environ['PATH'])
     result = subprocess.run(
         command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
+    logging.info("PATH = *%s*" % os.environ['PATH'])
     if result.returncode != 0:
         logging.error("Running misc/build_srpm.sh failed with %s" % result)
         return False
@@ -77,11 +79,13 @@ def build_srpm_and_rpm(command, family=None):
         ]
 
     logging.info("About to run command %s" % ' '.join(builddep_command))
+    logging.info("PATH = *%s*" % os.environ['PATH'])
     result = subprocess.run(
         builddep_command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
+    logging.info("PATH = *%s*" % os.environ['PATH'])
     if result.returncode != 0:
         logging.error("Running 'dnf builddep' failed with %s" % result)
         return False
@@ -108,6 +112,7 @@ def build_srpm_and_rpm(command, family=None):
         rebuild_command[-1] += " --define 'mpi_family %s'" % family
 
     logging.info("About to run command %s" % ' '.join(rebuild_command))
+    logging.info("PATH = *%s*" % os.environ['PATH'])
     result = subprocess.run(
         rebuild_command,
         stdout=subprocess.PIPE,

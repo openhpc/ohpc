@@ -63,6 +63,7 @@ jobs:
       uses: jitterbit/get-changed-files@v1
     - name: Validate Build
       run: |
-        echo "PATH = $PATH"
+        echo "PATH = *$PATH*"
         . /etc/profile.d/lmod.sh
+        echo "PATH = *$PATH*"
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
