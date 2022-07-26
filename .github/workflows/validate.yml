@@ -48,7 +48,7 @@ jobs:
   build_on_leap:
     runs-on: ubuntu-latest
     container:
-      image: registry.opensuse.org/opensuse/leap:latest
+      image: registry.opensuse.org/opensuse/leap:15.3
     steps:
     - name: Setup
       run: |
@@ -63,5 +63,6 @@ jobs:
       uses: jitterbit/get-changed-files@v1
     - name: Validate Build
       run: |
+        echo "PATH = $PATH"
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
