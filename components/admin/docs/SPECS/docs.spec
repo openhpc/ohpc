@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.3.9
+Version:        1.3.10
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
