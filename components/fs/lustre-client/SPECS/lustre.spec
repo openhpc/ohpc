@@ -532,6 +532,7 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %{_mandir}/man?/*
 %endif
 %{_datadir}/lustre
+/usr/share/bash-completion/completions
 %{_includedir}/lustre
 %{_includedir}/linux/lnet
 %{_includedir}/linux/lustre
