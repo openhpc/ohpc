@@ -70,7 +70,6 @@ sed -i "s/\t/    /g;s/^\s*$//;1s|^#!.*env.*python.*$|#!/usr/bin/python3|" \
 %patch1 -p1
 %patch2 -p1
 
-
 %build
 %ohpc_setup_compiler
 
