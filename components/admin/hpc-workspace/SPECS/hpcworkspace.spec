@@ -54,7 +54,7 @@ working filesystems in an HPC environment.
 cmake \
   -DCMAKE_INSTALL_PREFIX=%{install_path} \
   .
-make -j 4
+make
 
 %install
 make DESTDIR=%{buildroot} install
