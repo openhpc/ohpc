@@ -25,16 +25,28 @@ URL:     https://github.com/holgerBerger/hpc-workspace
 BuildRequires: gcc-c++
 BuildRequires: python3-devel
 BuildRequires: boost-devel
+%if 0%{?suse_version}
+BuildRequires: libboost_system-devel
+BuildRequires: libboost_filesystem-devel
+BuildRequires: libboost_program_options-devel
+%endif
 BuildRequires: yaml-cpp-devel
 BuildRequires: ncurses-devel
 BuildRequires: cmake
 Requires: python3
 Requires: python3-pyyaml
 Requires: lua5.1
+%if 0%{?suse_version}
+Requires: libboost_system
+Requires: libboost_filesystem
+Requires: libboost_regex
+Requires: libboost_program_options
+%else
 Requires: boost-system
 Requires: boost-filesystem
 Requires: boost-regex
 Requires: boost-program-options
+%endif
 Requires: ncurses
 Requires: libcap
 Requires: yaml-cpp
