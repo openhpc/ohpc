@@ -10,7 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_version 9.4.0
+%global gnu_version 9.5.0
 %global gnu_major_ver 9
 %global pname gnu9-compilers
 
