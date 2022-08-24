@@ -40,7 +40,7 @@ Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   4.1.1
+Version:   4.1.4
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
@@ -57,6 +57,7 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
+BuildRequires:  make
 BuildRequires:  postfix
 BuildRequires:  opensm
 BuildRequires:  opensm-devel
