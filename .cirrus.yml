@@ -2,6 +2,8 @@ task:
   name: RHEL/Rocky on aarch64
   arm_container:
     image: docker.io/library/rockylinux:8
+    cpu: 4
+    memory: 12G
   script: uname -a
   setup_script: |
     dnf install -y epel-release dnf-plugins-core git python3 http://repos.openhpc.community/OpenHPC/2/CentOS_8/aarch64/ohpc-release-2-1.el8.aarch64.rpm findutils rpm-build wget gawk jq which
