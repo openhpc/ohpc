@@ -86,8 +86,8 @@ for all users with minimal restrictions.
 %endif
 
 %if "%{compiler_family}" == "arm"
-which_armclang=`which armclang`
-where_armclang=`dirname ${which_armclang}`
+which_armclang=$(which armclang)
+where_armclang=$(dirname ${which_armclang})
 export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
@@ -125,7 +125,11 @@ EOF
 # Perform the compilation
 ./b2 -d2 -q %{?_smp_mflags} --user-config=./rpm-config.jam \
      address-model="64" \
+%ifarch aarch64 %{arm} 
+     architecture="arm" \
+%else
      architecture="x86" \
+%endif
      threading="multi" \
      link="shared" \
      runtime-link="shared" \
@@ -139,8 +143,8 @@ EOF
 mkdir -p %{buildroot}/%{_docdir}
 
 %if "%{compiler_family}" == "arm"
-which_armclang=`which armclang`
-where_armclang=`dirname ${which_armclang}`
+which_armclang=$(which armclang)
+where_armclang=$(dirname ${which_armclang})
 export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
