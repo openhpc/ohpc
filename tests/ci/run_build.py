@@ -37,7 +37,9 @@ def build_srpm_and_rpm(command, family=None):
         stderr=subprocess.PIPE,
     )
     if result.returncode != 0:
-        logging.error("Running misc/build_srpm.sh failed with %s" % result)
+        logging.error("Running misc/build_srpm.sh failed")
+        logging.error(result.stdout.decode('utf-8'))
+        logging.error(result.stderr.decode('utf-8'))
         return False
 
     if result.stderr is not None:
@@ -83,7 +85,9 @@ def build_srpm_and_rpm(command, family=None):
         stderr=subprocess.PIPE,
     )
     if result.returncode != 0:
-        logging.error("Running 'dnf builddep' failed with %s" % result)
+        logging.error("Running 'dnf builddep' failed")
+        logging.error(result.stdout.decode('utf-8'))
+        logging.error(result.stderr.decode('utf-8'))
         return False
 
     logging.info(result.stdout.decode('utf-8'))
@@ -115,7 +119,9 @@ def build_srpm_and_rpm(command, family=None):
         stderr=subprocess.PIPE,
     )
     if result.returncode != 0:
-        logging.info("Running 'rpmbuild --rebuild' failed with %s" % result)
+        logging.info("Running 'rpmbuild --rebuild' failed")
+        logging.error(result.stdout.decode('utf-8'))
+        logging.error(result.stderr.decode('utf-8'))
         return False
 
     logging.info(result.stdout.decode('utf-8'))
@@ -143,7 +149,9 @@ for spec in sys.argv[1:]:
         stderr=subprocess.PIPE,
     )
     if result.returncode != 0:
-        logging.error("Running misc/get_source.sh failed with %s" % result)
+        logging.error("Running misc/get_source.sh failed")
+        logging.error(result.stdout.decode('utf-8'))
+        logging.error(result.stderr.decode('utf-8'))
         error = True
         continue
 
