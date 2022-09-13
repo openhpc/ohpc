@@ -38,7 +38,7 @@ Requires: lua-luafilesystem
 Requires: lua-luaposix
 Conflicts: Modules
 %else
-# If not SUSE, assume Fedora-based OS
+# If not SUSE, assume Fedora-based OS or openEuler OS
 BuildRequires: lua-libs
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
