@@ -32,7 +32,7 @@ BuildRequires: lua-devel
 BuildRequires: rsync
 BuildRequires: tcl tcl-devel
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: lua-libs
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
