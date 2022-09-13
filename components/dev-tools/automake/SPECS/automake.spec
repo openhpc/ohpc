@@ -20,6 +20,7 @@ License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/automake/
 Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
+Patch0:    fix-automake-build-error.patch
 
 %define install_path %{OHPC_UTILS}/autotools
 
@@ -27,6 +28,11 @@ Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 
 BuildRequires: perl(Thread::Queue) make
+
+%if 0%{?openEuler}
+BuildRequires: perl-Thread-Queue
+Requires: perl-Thread-Queue
+%endif
 
 %description
 Automake is a tool for automatically generating `Makefile.in'
