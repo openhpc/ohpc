@@ -13,7 +13,7 @@ Version: 2.6
 Release: 1%{?dist}
 Summary: Common top-level OpenHPC directories
 
-Group:   ohpc/admin
+Group:   %{PROJ_NAME}/admin
 License: ASL 2.0
 URL:     https://github.com/openhpc/ohpc
 Source0: OHPC_setup_compiler
@@ -65,7 +65,7 @@ install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 %%__ohpc_flags           magic_and_path
 EOF
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sles_version} || 0%{?suse_version} || 0%{?openEuler}
 %{__cat} <<EOF >> %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
 %%__elflib_exclude_path  ^%{OHPC_HOME}
 EOF
