@@ -41,7 +41,7 @@ provides: perl(LosF_history_utils)
 Requires: perl-Config-IniFiles >= 2.43
 Requires: perl-Log-Log4perl
 %else #rhel
-%if 0%{?rhel_version} < 800
+%if 0%{?rhel_version} && 0%{?rhel_version} < 800
 requires: yum-plugin-downloadonly
 %endif
 %endif
