@@ -59,7 +59,7 @@ rsh compatability package for mrcp/mrlogin/mrsh
 
 %prep
 %setup -q -n %{pname}-%{version}
-%if 0%{?suse_version}
+%if 0%{?suse_version} || 0%{?openEuler}
 %patch1 -p1
 %endif
 %patch2 -p1
