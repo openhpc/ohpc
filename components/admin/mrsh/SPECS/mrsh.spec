@@ -21,7 +21,7 @@ Summary: Remote shell program that uses munge authentication
 License: none
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/chaos/mrsh
-Source:    https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{version}.tar.gz
+Source0:    https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{version}.tar.gz
 Patch1: mrsh-pam-suse.patch
 Patch2: mrlogin-Don-t-use-union-wait.patch
 Patch3: Add-force-to-libtoolize.patch
