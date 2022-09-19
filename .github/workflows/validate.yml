@@ -1,6 +1,6 @@
 name: Validate
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   check_spec:
@@ -58,6 +58,18 @@ jobs:
         wget http://obs.openhpc.community:82/OpenHPC:/2.6:/Factory/Leap_15/OpenHPC:2.6:Factory.repo -O /etc/zypp/repos.d/obs.repo
         zypper -n --no-gpg-checks install lmod-ohpc
         useradd -m ohpc
+
+  build_on_openEuler:
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/openeuler/openeuler:22.03-lts
+    steps:
+    - name: Setup
+      run: |
+        dnf install -y http://121.36.3.168:82/home:/huangtianhua:/ohpc/standard_x86_64/x86_64/ohpc-release-2-1.oe2203.ohpc.2.0.0.x86_64.rpm openEuler-release dnf-plugins-core git python3 findutils rpm-build wget gawk
+
+        yum install -y lmod-ohpc
+        adduser ohpc
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0

@@ -15,3 +15,18 @@ task:
   build_script: |
     . /etc/profile.d/lmod.sh
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
+
+openeuler_task:
+  name: openEuler on aarch64
+  arm_container:
+    image: docker.io/openeuler/openeuler:22.03-lts
+    cpu: 4
+    memory: 12G
+  script: uname -a
+  setup_script: |
+    dnf install -y openEuler-release dnf-plugins-core git python3 http://121.36.3.168:82/home:/huangtianhua:/ohpc/standard_aarch64/aarch64/ohpc-release-2-1.oe2203.ohpc.2.0.0.aarch64.rpm findutils rpm-build wget gawk jq which
+    dnf install -y lmod-ohpc
+    adduser ohpc
+  build_script: |
+    . /etc/profile.d/lmod.sh
+    tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)

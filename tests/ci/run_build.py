@@ -23,9 +23,9 @@ reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
 
 for row in reader:
     key = row.pop('NAME')
-    if key == 'ID_LIKE':
+    if key in ['ID_LIKE', 'ID']:
         for item in list(row.items())[0]:
-            if 'fedora' in item:
+            if 'fedora' in item or 'openEuler' in item:
                 dnf_based = True
 
 

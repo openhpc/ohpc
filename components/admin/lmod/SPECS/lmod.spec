@@ -31,6 +31,7 @@ BuildRequires: lua
 BuildRequires: lua-devel
 BuildRequires: rsync
 BuildRequires: tcl tcl-devel
+BuildRequires: gcc-c++ make
 
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: lua-libs
