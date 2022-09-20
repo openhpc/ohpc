@@ -30,7 +30,7 @@ jobs:
     steps:
     - name: Setup
       run: |
-        dnf install -y epel-release dnf-plugins-core git python3 http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm findutils rpm-build wget gawk
+        dnf install -y epel-release dnf-plugins-core git python3 make http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm findutils rpm-build wget gawk
         dnf config-manager --set-enabled powertools
         dnf config-manager --set-enabled devel
         wget http://obs.openhpc.community:82/OpenHPC:/2.6:/Factory/EL_8/OpenHPC:2.6:Factory.repo -O /etc/yum.repos.d/obs.repo
@@ -53,7 +53,7 @@ jobs:
     steps:
     - name: Setup
       run: |
-        zypper -n install awk rpmbuild wget python3
+        zypper -n install awk rpmbuild wget python3 make
         zypper -n --no-gpg-checks install http://repos.openhpc.community/OpenHPC/2/Leap_15/x86_64/ohpc-release-2-1.leap15.x86_64.rpm
         wget http://obs.openhpc.community:82/OpenHPC:/2.6:/Factory/Leap_15/OpenHPC:2.6:Factory.repo -O /etc/zypp/repos.d/obs.repo
         zypper -n --no-gpg-checks install lmod-ohpc
@@ -66,7 +66,7 @@ jobs:
     steps:
     - name: Setup
       run: |
-        dnf install -y http://121.36.3.168:82/home:/huangtianhua:/ohpc/standard_x86_64/x86_64/ohpc-release-2-1.oe2203.ohpc.2.0.0.x86_64.rpm openEuler-release dnf-plugins-core git python3 findutils rpm-build wget gawk
+        dnf install -y http://121.36.3.168:82/home:/huangtianhua:/ohpc/standard_x86_64/x86_64/ohpc-release-2-1.oe2203.ohpc.2.0.0.x86_64.rpm openEuler-release dnf-plugins-core git python3 make findutils rpm-build wget gawk
 
         yum install -y lmod-ohpc
         adduser ohpc
