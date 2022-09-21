@@ -26,7 +26,7 @@ Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?openEuler}
 Requires: perl-Thread-Queue
 %endif
 
