@@ -24,7 +24,7 @@ Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
 %define install_path %{OHPC_UTILS}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
-BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
+BuildRequires: autoconf%{PROJ_DELIM} >= 2.69 make
 
 %if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?openEuler}
 Requires: perl-Thread-Queue
