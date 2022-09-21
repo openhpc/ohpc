@@ -26,9 +26,7 @@ Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
-Requires: perl-Thread-Queue
-%endif
+BuildRequires: perl(Thread::Queue) make
 
 %description
 Automake is a tool for automatically generating `Makefile.in'
@@ -40,7 +38,7 @@ Makefiles. If you install Automake, you will also need to install
 GNU's Autoconf package.
 
 %prep
-%setup -n automake-%{version}
+%setup -q -n automake-%{version}
 
 %build
 export PATH=%{install_path}/bin:$PATH
