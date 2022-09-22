@@ -6,7 +6,7 @@
 # build/install configurations, and supply additional files to support
 # desired integration conventions.
 #
-#----------------------------------------------------------------------------eh-
+#---test-------------------------------------------------------------------------eh-
 
 %{!?configure_options: %global configure_options %{nil}}
 %bcond_without cma
