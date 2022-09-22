@@ -31,7 +31,7 @@ BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  expat-devel
 BuildRequires:  bzip2-devel
 %endif
