@@ -42,7 +42,7 @@ Requires: zstd
 Requires: file
 Requires: git
 Requires: curl
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 Requires: gnupg2
 %endif
 %if 0%{?suse_version}
