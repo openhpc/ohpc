@@ -66,7 +66,7 @@ Patch1: hwloc.patch
 %bcond_with alps
 %bcond_with ptl
 
-BuildRequires: gcc
+BuildRequires: gcc gcc-c++
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: autoconf
