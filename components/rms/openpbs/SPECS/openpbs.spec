@@ -15,7 +15,7 @@
 %endif
 
 %if !%{defined pbs_version}
-%define pbs_version 20.0.1
+%define pbs_version 22.05.11
 %endif
 
 %if !%{defined pbs_release}
@@ -66,7 +66,7 @@ Patch1: hwloc.patch
 %bcond_with alps
 %bcond_with ptl
 
-BuildRequires: gcc
+BuildRequires: gcc gcc-c++
 BuildRequires: make
 BuildRequires: rpm-build
 BuildRequires: autoconf
@@ -257,8 +257,7 @@ functionality of PBS.
 %endif
 
 %prep
-%setup -q -n %{pbs_name}-%{pbs_version}
-%patch1 -p0
+%autosetup -n %{pbs_name}-%{pbs_version} -p1
 
 %build
 [ -f configure ] || ./autogen.sh
