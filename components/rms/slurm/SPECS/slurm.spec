@@ -391,7 +391,7 @@ export PATH="$PWD/bin:$PATH"
 	%{?_with_ucx} \
 	%{?_with_nvml} \
 	--with-hwloc=%{OHPC_LIBS}/hwloc \
-	%{?_with_cflags}
+	%{?_with_cflags} || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
 
