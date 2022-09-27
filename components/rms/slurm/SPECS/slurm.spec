@@ -55,6 +55,7 @@ Source1:	slurm.epilog.clean
 # --without x11		%_without_x11 1		disable internal X11 support
 # --with ucx		%_with_ucx path		require ucx support
 # --with pmix		%_with_pmix path	require pmix support
+# --with nvml           %_with_nvml path        require nvml support
 
 #  Options that are off by default (enable with --with <opt>)
 %bcond_with cray
@@ -72,6 +73,7 @@ Source1:	slurm.epilog.clean
 %bcond_with lua
 %bcond_with numa
 %bcond_with pmix
+%bcond_with nvml
 
 # 4/11/18 karl@ices.utexas.edu - enable lua bindings
 %bcond_without lua
@@ -387,6 +389,7 @@ export PATH="$PWD/bin:$PATH"
 	%{!?_with_slurmrestd:--disable-slurmrestd} \
 	%{?_without_x11:--disable-x11} \
 	%{?_with_ucx} \
+	%{?_with_nvml} \
 	--with-hwloc=%{OHPC_LIBS}/hwloc \
 	%{?_with_cflags}
 
@@ -496,6 +499,7 @@ rm -f %{buildroot}/%{_libdir}/slurm/job_submit_defaults.so
 rm -f %{buildroot}/%{_libdir}/slurm/job_submit_logging.so
 rm -f %{buildroot}/%{_libdir}/slurm/job_submit_partition.so
 rm -f %{buildroot}/%{_libdir}/slurm/auth_none.so
+rm -f %{buildroot}/%{_libdir}/slurm/cred_none.so
 rm -f %{buildroot}/%{_sbindir}/sfree
 rm -f %{buildroot}/%{_sbindir}/slurm_epilog
 rm -f %{buildroot}/%{_sbindir}/slurm_prolog
@@ -639,7 +643,6 @@ fi
 %dir %attr(0755,root,root)
 %dir %{_prefix}/include/slurm
 %{_prefix}/include/slurm/*
-%dir %{_libdir}/pkgconfig
 %{_libdir}/pkgconfig/slurm.pc
 #############################################################################
 
@@ -648,7 +651,6 @@ fi
 %{_perldir}/Slurm/Bitstr.pm
 %{_perldir}/Slurm/Constant.pm
 %{_perldir}/Slurm/Hostlist.pm
-%{_perldir}/Slurm/Stepctx.pm
 %{_perldir}/auto/Slurm/Slurm.so
 %{_perldir}/Slurmdb.pm
 %{_perldir}/auto/Slurmdb/Slurmdb.so
