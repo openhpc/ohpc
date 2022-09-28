@@ -22,6 +22,7 @@ Source0: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{versi
 
 BuildRequires: libevent-devel
 BuildRequires: gcc-c++
+BuildRequires: python3
 #!BuildIgnore: post-build-checks
 
 %global install_path %{OHPC_ADMIN}/%{pname}
