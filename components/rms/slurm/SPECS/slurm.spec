@@ -72,7 +72,7 @@ Source1:	slurm.epilog.clean
 %bcond_with hdf5
 %bcond_with lua
 %bcond_with numa
-%bcond_with pmix
+%bcond_without pmix
 %bcond_with nvml
 
 # 4/11/18 karl@ices.utexas.edu - enable lua bindings
