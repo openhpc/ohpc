@@ -21,7 +21,7 @@ License:        Apache-2.0
 Group:          %{PROJ_NAME}/distro-packages
 Source0:        https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: python3-libxml2
 Requires: python3-libxml2
 Requires(post): chkconfig
@@ -33,6 +33,7 @@ Requires(post): update-alternatives
 Requires(postun): update-alternatives
 %endif
 BuildRequires: gcc-c++
+BuildRequires: python3-devel
 Requires: python3-devel
 
 %description
