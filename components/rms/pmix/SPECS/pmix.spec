@@ -23,6 +23,7 @@ Source0: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{versi
 BuildRequires: libevent-devel
 BuildRequires: gcc-c++
 BuildRequires: python3
+BuildRequires: hwloc%{PROJ_DELIM}
 #!BuildIgnore: post-build-checks
 
 %global install_path %{OHPC_ADMIN}/%{pname}
@@ -50,7 +51,8 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %setup -q -n %{pname}-%{version}
 
 %build
-CFLAGS="%{optflags}" ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
+CFLAGS="%{optflags}" ./configure --prefix=%{install_path} \
+             --with-hwloc=%{OHPC_LIBS}/hwloc || { cat config.log && exit 1; }
 %{__make} %{?_smp_mflags}
 
 %install
