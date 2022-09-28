@@ -333,7 +333,13 @@ according to the Slurm
 Summary: Slurm REST API translator
 Group: System Environment/Base
 Requires: %{name}%{?_isa} = %{version}-%{release}
-BuildRequires: json-c-devel, http-parser-devel
+BuildRequires: http-parser-devel
+%if 0%{?rhel}
+BuildRequires: json-c-devel
+%endif
+%if 0%{?suse_version:1}
+BuildRequires:  libjson-c-devel
+%endif
 %description slurmrestd
 Provides a REST interface to Slurm.
 %endif
