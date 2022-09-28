@@ -72,7 +72,7 @@ Source1:	slurm.epilog.clean
 %bcond_with hdf5
 %bcond_with lua
 %bcond_with numa
-%bcond_without pmix
+%bcond_with pmix
 %bcond_with nvml
 
 # 4/11/18 karl@ices.utexas.edu - enable lua bindings
@@ -161,7 +161,7 @@ BuildRequires: numactl-devel
 %endif
 %endif
 
-%if %{with pmix} && "%{_with_pmix}" == "--with-pmix"
+%if %{with pmix}
 BuildRequires: pmix%{PROJ_DELIM}
 Requires: pmix%{PROJ_DELIM}
 %endif
@@ -256,7 +256,7 @@ Summary: Slurm compute node daemon
 Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 %description -n %{pname}-slurmd%{PROJ_DELIM}
-%if %{with pmix} && "%{_with_pmix}" == "--with-pmix"
+%if %{with pmix}
 Requires: pmix%{PROJ_DELIM}
 %endif
 %if %{with ucx} && "%{_with_ucx}" == "--with-ucx"
