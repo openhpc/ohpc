@@ -24,6 +24,7 @@ BuildRequires: libevent-devel
 BuildRequires: gcc-c++
 BuildRequires: python3
 BuildRequires: hwloc%{PROJ_DELIM}
+BuildRequires: libxml2-devel
 #!BuildIgnore: post-build-checks
 
 %global install_path %{OHPC_ADMIN}/%{pname}
