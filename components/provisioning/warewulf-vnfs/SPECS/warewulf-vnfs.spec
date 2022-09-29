@@ -47,7 +47,7 @@ Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 Requires: perl-IO-Compress
 %endif
 BuildRequires: autoconf
