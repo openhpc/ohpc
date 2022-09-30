@@ -101,12 +101,8 @@ make DESTDIR=$RPM_BUILD_ROOT install
 ########################################################################
 
 # NOOP if running under known resource manager
-if [ ! -z "\$SLURM_NODELIST" ];then
+if [ ! -z "\$SLURM_NODELIST" ] | [ ! -z "\$PBS_NODEFILE" ]; then
      return
-fi
-
-if [ ! -z "\$PBS_NODEFILE" ];then
-    return
 fi
 
 export LMOD_SETTARG_CMD=":"
@@ -131,7 +127,7 @@ module try-add ohpc
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
-#!/bin/sh
+#!/bin/csh
 # -*- shell-script -*-
 ########################################################################
 #  This is the system wide source file for setting up
