@@ -16,36 +16,41 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.7.3
+Version:   8.5.22
 Release:   1%{?dist}
 License:   MIT
 Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
-BuildRequires: lua > 5.1
-Requires: lua > 5.1
-BuildRequires: tcl tcl-devel
+# Known dependencies
+Requires: lua
 Requires: tcl
+
+BuildRequires: lua
 BuildRequires: lua-devel
 BuildRequires: rsync
+BuildRequires: tcl tcl-devel
 
-%if 0%{?suse_version} || 0%{?sle_version}
-BuildRequires: lua-luafilesystem
-BuildRequires: lua-luaposix
-BuildRequires: procps
-Requires: lua-luafilesystem
-Requires: lua-luaposix
-Conflicts: Modules
-%else
-# If not SUSE, assume Fedora-based OS
+%if 0%{?rhel}
 BuildRequires: lua-libs
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
 BuildRequires: procps-ng
 Requires: lua-filesystem
 Requires: lua-posix
-Conflicts: Lmod
+%endif
+%if 0%{?suse_version}
+BuildRequires: lua-luafilesystem
+BuildRequires: lua-luaposix
+BuildRequires: procps
+Requires: lua-luafilesystem
+Requires: lua-luaposix
+%endif
+
+%if 0%{?suse_version}
+Conflicts: Modules
+%else
 %if 0%{?rhel} > 7
 # Starting with RHEL8, packages in RHEL8 depending on
 # environment modules no longer depend on the package
@@ -60,47 +65,48 @@ Conflicts: environment-modules
 %endif
 %endif
 
-Patch1: lmod.site.patch
+# 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
+Patch1: lmod.consulting.patch
+Patch2: lmod.site.patch
+# 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
+%global _default_patch_fuzz 2
 
-%description
-Lmod is program to manage the user environment. It is a new implementation
-of environment modules, providing a convenient way to dynamically change 
-users’ environments. 
-
-Lmod is a Lua-based module system that easily manages hierarchical
-toolchains. All popular shells are supported.
-
+%description 
+Lmod: An Environment Module System based on Lua, Reads TCL Modules,
+Supports a Software Hierarchy
 
 %prep
 %setup -q -n Lmod-%{version}
 
 # OpenHPC patches
 %patch1 -p1
-
-# Remove statements about submitting a support ticket from help files
-sed -i "/ticket/d" messageDir/*.lua
-
+%patch2 -p1
 
 %build
 unset MODULEPATH
 ./configure --prefix=%{OHPC_ADMIN} --with-redirect=yes --with-autoSwap=no
 
-
 %install
 make DESTDIR=$RPM_BUILD_ROOT install
+# Customize startup script to suit
 
-# Profile scipts
-mkdir -p %{buildroot}/%{_sysconfdir}/profile.d
-cat << EOF > %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
-#!/bin/bash
+%{__mkdir_p} %{buildroot}/%{_sysconfdir}/profile.d
+%{__cat} << EOF > %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
+#!/bin/sh
 # -*- shell-script -*-
 ########################################################################
-#  This is the system wide source file for setting up modules
-#########################################################################
+#  This is the system wide source file for setting up
+#  modules:
+#
+########################################################################
 
 # NOOP if running under known resource manager
-if [ ! -z "\$SLURM_NODELIST" ] | [ ! -z "\$PBS_NODEFILE" ]; then
+if [ ! -z "\$SLURM_NODELIST" ];then
      return
+fi
+
+if [ ! -z "\$PBS_NODEFILE" ];then
+    return
 fi
 
 export LMOD_SETTARG_CMD=":"
@@ -125,14 +131,19 @@ module try-add ohpc
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
-#!/bin/csh
+#!/bin/sh
 # -*- shell-script -*-
 ########################################################################
-#  This is the system wide source file for setting up modules
+#  This is the system wide source file for setting up
+#  modules:
+#
 ########################################################################
 
-# NOOP if running under known resource manager
-if ( ! "\$?SLURM_NODELIST" == "" || ! "\$?PBS_NODEFILE" == "" ) then
+if ( \$?SLURM_NODELIST ) then
+    exit 0
+endif
+
+if ( \$?PBS_NODEFILE ) then
     exit 0
 endif
 
@@ -140,6 +151,7 @@ setenv LMOD_SETTARG_CMD ":"
 setenv LMOD_FULL_SETTARG_SUPPORT "no"
 setenv LMOD_COLORIZE "no"
 setenv LMOD_PREPEND_BLOCK "normal"
+
 
 if ( \`id -u\` == "0" ) then
    setenv MODULEPATH "%{OHPC_ADMIN}/modulefiles:%{OHPC_MODULES}"
@@ -155,32 +167,33 @@ module try-add ohpc
 
 EOF
 
-# Starting with RHEL 8, load OS provided modules
-mkdir -p %{buildroot}/%{OHPC_MODULES}
-cat << EOF > %{buildroot}/%{OHPC_MODULES}/os.lua
-help([[
-Enable operating system provided modules
-]])
+# Starting with RHEL 8 we can load OS provided modules
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/os
+#%Module1.0#####################################################################
 
-whatis("Name: Operating System provided modules")
+proc ModulesHelp { } { puts stderr "Enable operating system provided modules" }
 
-append_path("MODULEPATH", "/etc/modulefiles:/usr/share/modulefiles")
+module-whatis "Name: Operating System provided modules"
 
+append-path MODULEPATH /etc/modulefiles:/usr/share/modulefiles
 EOF
 
-# Add symlink to modulecmd to allow use of scl-utils
-mkdir -p %{buildroot}/%{_bindir}
-ln -s %{OHPC_ADMIN}/lmod/lmod/libexec/lmod %{buildroot}/%{_bindir}/modulecmd
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
+#install a modulecmd soft link
+# to allow use of scl-utils, among other dependencies
+%{__mkdir_p} %{buildroot}/%{_bindir}
+
+%{__ln_s} %{OHPC_ADMIN}/lmod/lmod/libexec/lmod %{buildroot}/%{_bindir}/modulecmd
 
 %files
 %dir %{OHPC_HOME}
 %dir %{OHPC_ADMIN}
-%{OHPC_PUB}
 %{OHPC_ADMIN}/lmod
-%{_sysconfdir}/profile.d/lmod.sh
-%{_sysconfdir}/profile.d/lmod.csh
-%{OHPC_MODULES}/os.lua
-%doc README.md README_lua_modulefiles.txt INSTALL
-%license License
+%config %{_sysconfdir}/profile.d/lmod.sh
+%config %{_sysconfdir}/profile.d/lmod.csh
+%{OHPC_PUB}
+%doc License README.md README_lua_modulefiles.txt INSTALL
 %{_bindir}/modulecmd
