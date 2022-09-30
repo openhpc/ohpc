@@ -14,17 +14,18 @@
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}
-Version:   3.18.1
+Version:   3.19.0
 Release:   1%{?dist}
 License:   GPL
 URL:       http://www.valgrind.org/
 Group:     %{PROJ_NAME}/dev-tools
 Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
+BuildRequires: gcc make
 
 # Default library install path
 %define install_path %{OHPC_UTILS}/%{pname}/%version
 
-%description 
+%description
 
 Valgrind is an award-winning instrumentation framework for building dynamic
 analysis tools. There are Valgrind tools that can automatically detect many
