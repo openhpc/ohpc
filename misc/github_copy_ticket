@@ -8,7 +8,8 @@ import argparse
 
 def main(argv):
     users_url='https://api.github.com/users'
-    user_auth=('your-github-id','your-github-auth')     # <---update here
+    user_auth=('your-github-id','your-github-auth')
+    user_auth=('koomie',"04006c34be9c6ce71fac2dd7e1f9ebe6236f647e")
     issue_url='https://api.github.com/repos/openhpc/ohpc/issues' 
 
     new_issue_url=issue_url
