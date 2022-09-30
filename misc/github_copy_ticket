@@ -4,12 +4,20 @@ import sys
 import requests
 import re
 import argparse
-#import oauth2
+import os
 
 def main(argv):
+
+    # get credentials from env
+    user=os.getenv("GITHUB_USER")
+    token=os.getenv("GITHUB_TOKEN")
+    if (user == None) or (token == None):
+        print("\nPlease provide access credentials via GITHUB_USER and GITHUB_TOKEN env variables\n")
+        exit(1)
+
     users_url='https://api.github.com/users'
-    user_auth=('your-github-id','your-github-auth')
-    issue_url='https://api.github.com/repos/openhpc/ohpc/issues' 
+    user_auth=(user,token)
+    issue_url='https://api.github.com/repos/openhpc/ohpc/issues'
 
     new_issue_url=issue_url
     repo_url=''
