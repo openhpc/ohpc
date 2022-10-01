@@ -23,7 +23,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
 Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Patch1:         openblas-libs.patch
 # PATCH-FIX-UPSTREAM openblas-noexecstack.patch
 Patch2:         openblas-noexecstack.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
@@ -41,7 +40,6 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %prep
 %setup -q -n OpenBLAS-%{version}
 
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 
