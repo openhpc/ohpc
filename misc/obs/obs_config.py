@@ -70,7 +70,7 @@ class ohpc_obs_tool(object):
         activeComponents = []
         for item in components:
             if item[0] == '!':
-                logging.warn("--> Skipping disabled component %s" % item)
+                logging.warning("--> Skipping disabled component %s" % item)
             else:
                 activeComponents.append(item)
         return activeComponents
@@ -379,7 +379,7 @@ class ohpc_obs_tool(object):
         if os.path.isfile(self.serviceFile):
             # use package-specific template if present, otherwise, use default serviceFile
             if os.path.isfile("%s/_service.%s" % (self.overrides,package)):
-                logging.warn(" " * pad + "--> package-specific _service file provided for %s" % package)
+                logging.warning(" " * pad + "--> package-specific _service file provided for %s" % package)
                 fileOverride = "%s/_service.%s" % (self.overrides,package)
                 with open(fileOverride,'r') as filehandle:
                     contents = filehandle.read()
@@ -409,21 +409,21 @@ class ohpc_obs_tool(object):
         # check skip pattern to define build architectures
         numEnabled = 0
         if self.disableBuild(package,'aarch64'):
-            logging.warn(" " * pad + "--> disabling aarch64 build per pattern match request")
+            logging.warning(" " * pad + "--> disabling aarch64 build per pattern match request")
             fp.writelines("<disable arch=\"aarch64\"/>\n")
         else:
             fp.writelines("<enable arch=\"aarch64\"/>\n")
             numEnabled += 1
 
         if self.disableBuild(package,'x86_64'):
-            logging.warn(" " * pad + "--> disabling x86_64 build per pattern match request")
+            logging.warning(" " * pad + "--> disabling x86_64 build per pattern match request")
             fp.writelines("<disable arch=\"x86_64\"/>\n")
         else:
             fp.writelines("<enable arch=\"x86_64\"/>\n")
             numEnabled += 1
 
         if numEnabled == 0:
-            logging.warn(" " * pad + "--> no remaining architectures enabled, skipping package add")
+            logging.warning(" " * pad + "--> no remaining architectures enabled, skipping package add")
             return
 
         fp.writelines("</build>\n")
@@ -464,7 +464,7 @@ class ohpc_obs_tool(object):
         
         # add a constraint file if present
         if os.path.isfile("constraints/%s" % package):
-            logging.warn(" " * pad + "--> constraint file provided for %s" % package)
+            logging.warning(" " * pad + "--> constraint file provided for %s" % package)
             constraintFile = "constraints/%s" % package
 
             command = ["osc","-A",obsurl,"api","-f",constraintFile,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + "_constraints"]  
@@ -671,8 +671,8 @@ def main():
 
         if compilers != Defcompilers:
             pad = 15
-            logging.warn(" " * pad + "--> override of default compiler families requested for %s" % package)
-            logging.warn(" " * pad + "--> families =  %s" % compilers)
+            logging.warning(" " * pad + "--> override of default compiler families requested for %s" % package)
+            logging.warning(" " * pad + "--> families =  %s" % compilers)
 
         # check on parent first (it must exist before any children are linked)
         if parent in obsPackages:
