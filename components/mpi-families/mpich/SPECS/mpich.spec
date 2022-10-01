@@ -52,20 +52,19 @@ Requires: libfabric%{PROJ_DELIM}
 
 Summary:   MPICH MPI implementation
 Name:      %{pname}%{RMS_DELIM}%{FABRIC_DELIM}-%{compiler_family}%{PROJ_DELIM}
-Version:   3.4.2
+Version:   3.4.3
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Patch0:    config.pmix.patch
-Patch1:    8c61ca9c256a5fdf25dc95121fc4afdaeae28b85.patch
 # 08/14/19 karl@ices.utexas.edu - upping patch fuzz factor for node.name patch
 %global _default_patch_fuzz 2
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
-BuildRequires: zlib-devel
+BuildRequires: zlib-devel make
 %if 0%{?suse_version}
 BuildRequires:  libnuma-devel
 %else
@@ -95,7 +94,6 @@ Message Passing Interface (MPI) standard.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p0
-%patch1 -p1
 
 %build
 # OpenHPC compiler designation
@@ -111,6 +109,15 @@ module load ucx
 module load libfabric
 %endif
 
+%if "%{compiler_family}" == "gnu12"
+# configure fails with:
+#   The Fortran compiler gfortran does not accept programs that
+#   call the same routine with arguments of different types without
+#   the option -fallow-argument-mismatch.
+#   Rerun configure with FFLAGS=-fallow-argument-mismatch
+# This seems to fix the build.
+export FFLAGS=-fallow-argument-mismatch
+%endif
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
 %if 0%{with_slurm}
