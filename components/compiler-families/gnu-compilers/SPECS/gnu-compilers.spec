@@ -44,6 +44,8 @@ BuildRequires:  fdupes
 %endif
 
 Requires: glibc >= 2.10.90
+Requires: glibc-devel
+Requires: binutils
 
 %global install_path %{OHPC_COMPILERS}/gcc/%{version}
 %global module_path %{OHPC_MODULES}/%{gnu_major_ver}
