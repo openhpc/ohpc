@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 Name: ohpc-filesystem
-Version: 2.1
+Version: 2.6
 Release: 1%{?dist}
 Summary: Common top-level OpenHPC directories
 
