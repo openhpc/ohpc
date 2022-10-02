@@ -15,8 +15,8 @@
 %global pname boost
 
 Summary:        Free peer-reviewed portable C++ source libraries
-Name:		 %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.79.0
+Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Version:        1.80.0
 Release:        1%{?dist}
 License:        Boost
 Group:          %{PROJ_NAME}/parallel-libs
@@ -125,7 +125,7 @@ EOF
 # Perform the compilation
 ./b2 -d2 -q %{?_smp_mflags} --user-config=./rpm-config.jam \
      address-model="64" \
-%ifarch aarch64 %{arm} 
+%ifarch aarch64 %{arm}
      architecture="arm" \
 %else
      architecture="x86" \
@@ -163,7 +163,7 @@ export MPICXX=$CXX
      link="shared" \
      runtime-link="shared" \
      variant="release" \
-     toolset=%{toolset} install 
+     toolset=%{toolset} install
 
 rm -rf %{buildroot}%{install_path}/lib/cmake
 
@@ -173,7 +173,7 @@ help([[
 This module loads the %{pname} library built with the %{compiler_family}
 compiler toolchain and the %{mpi_family} MPI stack.
 
-Version %{version}  
+Version %{version}
 ]])
 
 whatis("Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI")
