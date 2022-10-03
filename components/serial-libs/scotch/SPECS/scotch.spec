@@ -26,7 +26,7 @@ Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
 Source2:	%{pname}-rpmlintrc
 Patch0:		scotch-6.0.4-destdir.patch
 
-BuildRequires:	flex bison
+BuildRequires:	flex bison make
 %if 0%{?rhel}
 BuildRequires:  bzip2-devel
 Requires:       bzip2-devel
