@@ -17,6 +17,7 @@
 Summary:        Free peer-reviewed portable C++ source libraries
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.80.0
+%define version_exp 1_80_0
 Release:        1%{?dist}
 License:        Boost
 Group:          %{PROJ_NAME}/parallel-libs
