@@ -18,18 +18,18 @@
 %define pname pt%{base_pname}
 
 Name:	%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 6.0.6
+Version: 7.0.1
 Release: 1%{?dist}
 Summary: Graph, mesh and hypergraph partitioning library using MPI
 License: CeCILL-C
 Group: %{PROJ_NAME}/parallel-libs
 URL: http://www.labri.fr/perso/pelegrin/scotch/
-Source0: http://gforge.inria.fr/frs/download.php/file/37622/scotch_6.0.6.tar.gz
+Source0: https://gitlab.inria.fr/scotch/scotch/-/archive/v%{version}/scotch-v%{version}.tar.bz2
 Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
 Patch0:  scotch-6.0.4-destdir.patch
 
-BuildRequires:	flex bison
+BuildRequires:	flex bison make
 BuildRequires:  zlib-devel
 %if 0%{?rhel}
 BuildRequires:  bzip2-devel
@@ -47,7 +47,7 @@ Scotch is a software package for graph and mesh/hypergraph partitioning and
 sparse matrix ordering.
 
 %prep
-%setup -q -n %{base_pname}_%{version}
+%setup -q -n %{base_pname}-v%{version}
 %patch0 -p1
 sed s:@RPMFLAGS@:'%{optflags} -fPIC': < %SOURCE1 > src/Makefile.inc
 

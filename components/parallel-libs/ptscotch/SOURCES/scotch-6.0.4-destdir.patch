@@ -1,22 +1,26 @@
 diff -Nupr scotch_6.0.4.orig/src/Makefile scotch_6.0.4/src/Makefile
 --- scotch_6.0.4.orig/src/Makefile	2014-10-03 00:31:36.000000000 +0900
 +++ scotch_6.0.4/src/Makefile	2017-01-30 16:27:51.127814499 +0900
-@@ -55,12 +55,13 @@ Makefile.inc			:
+@@ -56,14 +56,15 @@
  
  include Makefile.inc
  
-+DESTDIR		?= 
++DESTDIR		?=
  prefix		?= /usr/local
 -bindir		?= $(prefix)/bin
 -includedir	?= $(prefix)/include
++bindir		?= $(DESTDIR)$(prefix)/bin
++includedir	?= $(DESTDIR)$(prefix)/include
+ includestub     ?= include_stub
+-includestubdir	?= $(prefix)/$(includestub)
 -libdir		?= $(prefix)/lib
 -datarootdir	?= $(prefix)/share
 -mandir		?= $(datarootdir)/man
-+bindir		?= $(DESTDIR)$(prefix)/bin
-+includedir	?= $(DESTDIR)$(prefix)/include
++includestubdir	?= $(DESTDIR)$(prefix)/$(includestub)
 +libdir		?= $(DESTDIR)$(prefix)/lib
 +datarootdir	?= $(DESTDIR)$(prefix)/share
-+mandir		?= $(datarootdir)/man
++mandir		?= $(DESTDIR)$(datarootdir)/man
  
  ../bin				:
  					-$(MKDIR) ../bin
+

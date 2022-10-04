@@ -12,10 +12,9 @@ CCD	= mpicc
 CFLAGS	= -O3 -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_FILE_COMPRESS_BZ2 -DCOMMON_PTHREAD -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -Drestrict=__restrict -DIDXSIZE64 -fsimdmath -fPIC
 LDFLAGS	= -lpthread -lz -lbz2 -lm -lrt
 CP	= cp -a
-LEX	= flex -Pscotchyy -olex.yy.c
+FLEX	= flex
 LN	= ln
 MKDIR	= mkdir -p
 MV	= mv
 RANLIB	= ranlib
-YACC	= bison -pscotchyy -y -b y
-
+BISON   = bison
