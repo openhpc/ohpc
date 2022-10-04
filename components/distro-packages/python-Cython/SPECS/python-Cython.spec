@@ -13,7 +13,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 Name:           python3-Cython%{PROJ_DELIM}
-Version:        0.29.21
+Version:        0.29.32
 Release:        1%{?dist}
 Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
