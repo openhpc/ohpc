@@ -13,12 +13,17 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-PATTERN=$1
+SPEC=$1
 
 if [ $# -eq 2 ]; then
 	MPI_FAMILY=$2
 else
 	MPI_FAMILY=openmpi4
+fi
+
+if [ ! -e ${SPEC} ]; then
+	echo "Spec file ${SPEC} does not exist. Exiting."
+	exit 1
 fi
 
 MACROS=components/OHPC_macros
@@ -35,31 +40,29 @@ fi
 
 ROOT=`pwd`
 
-for i in `find . -name "*${PATTERN}*spec"`; do
-	BASE=`basename $i`
-	DIR=`dirname $i`
-	echo "Building SRPM for ${i}"
+BASE=`basename ${SPEC}`
+DIR=`dirname ${SPEC}`
+echo "Building SRPM for ${SPEC}"
 
-	prepare_git_tree ${DIR}
+prepare_git_tree ${DIR}
 
-	# Try to build the SRPM
-	SRPM=`build_srpm ${i} ${MPI_FAMILY}`
-	RESULT=$?
-	if [ "$RESULT" == "1" ]; then
-		echo "Building the SRPM for ${BASE} failed."
-		echo "Trying to fetch Source0"
-		${ROOT}/misc/get_source.sh ${BASE}
-	fi
+# Try to build the SRPM
+SRPM=`build_srpm ${SPEC} ${MPI_FAMILY}`
+RESULT=$?
+if [ "$RESULT" == "1" ]; then
+	echo "Building the SRPM for ${BASE} failed."
+	echo "Trying to fetch Source0"
+	${ROOT}/misc/get_source.sh ${BASE}
+fi
 
-	# Let's hope fetching the sources worked and retry building the SRPM
-	SRPM=`build_srpm ${i} ${MPI_FAMILY}`
-	RESULT=$?
+# Let's hope fetching the sources worked and retry building the SRPM
+SRPM=`build_srpm ${SPEC} ${MPI_FAMILY}`
+RESULT=$?
 
-	if [ "$RESULT" == "1" ]; then
-		echo "Still got an error building SRPM for ${BASE}"
-		echo "Giving up, this needs to be fixed manually"
-		continue
-	fi
+if [ "$RESULT" == "1" ]; then
+	echo "Still got an error building SRPM for ${BASE}"
+	echo "Giving up, this needs to be fixed manually"
+	exit 1
+fi
 
-	echo ${SRPM}
-done
+echo ${SRPM}

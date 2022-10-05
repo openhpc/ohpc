@@ -23,14 +23,15 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.7.4
+Version:        4.9.0
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
 
 BuildRequires:  curl-devel
 BuildRequires:  zlib-devel >= 1.2.5
-BuildRequires:  m4
+BuildRequires:  libxml2-devel
+BuildRequires:  m4 make
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -82,7 +83,7 @@ NetCDF data is:
 module load phdf5
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
+export CFLAGS="-L$HDF5_LIB -I$HDF5_INC ${RPM_OPT_FLAGS}"
 export CC=mpicc
 
 ./configure --prefix=%{install_path} \
@@ -90,6 +91,7 @@ export CC=mpicc
     --enable-netcdf-4 \
     --enable-dap \
     --with-pic \
+    --with-plugin-dir=%{install_path}/plugins \
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
 
@@ -108,6 +110,9 @@ module load phdf5
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+
+# remove no install plugins
+rm -rf $RPM_BUILD_ROOT/$RPM_BUILD_DIR/%{pname}-c-%{version}
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
