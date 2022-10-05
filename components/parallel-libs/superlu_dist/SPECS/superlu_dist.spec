@@ -25,7 +25,7 @@ Release:        1%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
-URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
+URL:            https://portal.nersc.gov/project/sparse/superlu/
 Source0:        https://github.com/xiaoyeli/superlu_dist/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
 Source2:        superlu_dist-make.inc
 Source3:        superlu_dist-intel-make.inc
@@ -48,7 +48,7 @@ Requires:       bzip2
 BuildRequires:  libbz2-devel
 Requires:       libbz2-1
 %endif
-BuildRequires:  zlib-devel
+BuildRequires:  zlib-devel make
 Requires:       zlib
 
 #!BuildIgnore: post-build-checks
@@ -112,7 +112,7 @@ mkdir tmp
 (cd tmp; ar x ../SRC/libsuperlu_dist.a)
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
     -o ./%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
-    -L$PTSCOTCH_LIB -lptscotchparmetis \
+    -L$PTSCOTCH_LIB \
     -lptscotch -lptscotcherr -lscotch -lmetis %{blas_lib} \
     -lbz2 -lz %{?__global_ldflags}
 
