@@ -37,7 +37,7 @@ Requires:      zlib zlib-devel
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
-BuildRequires: libtool
+BuildRequires: libtool make
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -112,6 +112,9 @@ export MPICXX=mpicxx
 
 %if "%{compiler_family}" == "intel"
 export CFLAGS="-fp-model strict $CFLAGS"
+%endif
+%if "%{compiler_family}" == "gnu12"
+export FCFLAGS="-fallow-argument-mismatch $FCFLAGS"
 %endif
 
 # work around old config.guess on aarch64 systems
