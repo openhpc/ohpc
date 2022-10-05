@@ -21,7 +21,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Lightweight, general, scalable C++ library for finite element methods
 License:        LGPLv2.1
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        4.3
+Version:        4.4
 Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
 Url:            http://mfem.org
@@ -38,6 +38,7 @@ BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  make
 
 #!BuildIgnore: post-build-checks
 
@@ -65,7 +66,7 @@ module load superlu_dist
 
 make config \
     PREFIX=%{install_path} \
-    CXXFLAGS="-O3 -fPIC -std=c++11" \
+    CXXFLAGS="$CXXFLAGS -fPIC -std=c++11" \
     MFEM_USE_MPI=YES \
     MFEM_USE_LAPACK=NO \
     HYPRE_OPT=-I$HYPRE_INC HYPRE_LIB="-L$HYPRE_LIB -lHYPRE" \
