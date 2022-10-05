@@ -34,6 +34,14 @@ AutoReq: no
 BuildRequires: zlib-devel glib2-devel
 Requires:      zlib zlib-devel
 
+BuildRequires:  libxml2-devel
+%if 0%{?rhel}
+BuildRequires:  bzip2-devel
+%endif
+%if 0%{?suse_version}
+BuildRequires:  libbz2-devel
+%endif
+
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
