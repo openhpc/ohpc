@@ -61,14 +61,7 @@ BuildRequires:  slurm%{PROJ_DELIM}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 
 %description -n %{pname}-slurm%{PROJ_DELIM}
-The purpose of this slurm plugin is to ensure that MSRs modified
-within a user slurm job allocation are reset to their original state
-before the compute node is returned to the pool available to other
-users of the system.  The msr-safe kernel module is targeting HPC
-systems that enforce single user occupancy per compute node, and is
-not appropriate for systems where compute nodes are shared between
-users.  The modifications that one user makes to whitelisted registers
-may impact subsequent users of the processor if not restored.
+Allows safer access to model specific registers (MSRs)
 
 
 %prep
@@ -88,8 +81,8 @@ done
 %{__make} install DESTDIR=%{buildroot} prefix=%{_prefix} sbindir=%{_sbindir} mandir=%{_mandir}
 %{__make} install-spank DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
 
-install -d %{buildroot}/%{_datadir}/msr-safe/whitelists
-install -m 0644 whitelists/* %{buildroot}/%{_datadir}/msr-safe/whitelists/
+install -d %{buildroot}/%{_datadir}/msr-safe/allowlists
+install -m 0644 allowlists/* %{buildroot}/%{_datadir}/msr-safe/allowlists/
 install -d %{buildroot}%{_unitdir}
 install -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/msr-safe.service
 install -d %{buildroot}/%{_sysconfdir}/sysconfig
@@ -130,8 +123,8 @@ fi
 
 %files
 %dir %{_datadir}/msr-safe
-%dir %{_datadir}/msr-safe/whitelists
-%{_datadir}/msr-safe/whitelists/*
+%dir %{_datadir}/msr-safe/allowlists
+%{_datadir}/msr-safe/allowlists/*
 %{_unitdir}/msr-safe.service
 %{_udevrulesdir}/10-msr-safe.rules
 %config %{_sysconfdir}/sysconfig/msr-safe
