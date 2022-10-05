@@ -17,7 +17,7 @@
 
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        1.4.0
+Version:        1.5.0
 Release:        1
 License:        GPLv3+
 Summary:        Allows safer access to model specific registers (MSRs)
