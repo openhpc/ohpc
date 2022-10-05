@@ -173,7 +173,7 @@ for spec in sys.argv[1:]:
             # Build SRPM
             command = [
                 'misc/build_srpm.sh',
-                just_spec.split('.')[0],
+                spec,
                 family,
             ]
             if not build_srpm_and_rpm(command, family=family):
@@ -182,7 +182,7 @@ for spec in sys.argv[1:]:
         # Build SRPM
         command = [
             'misc/build_srpm.sh',
-            just_spec.split('.')[0],
+            spec,
         ]
         if not build_srpm_and_rpm(command):
             error = True
