@@ -18,12 +18,14 @@
 
 Summary:   OSU Micro-benchmarks
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   5.8
+Version:   6.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
-URL:       http://mvapich.cse.ohio-state.edu/benchmarks/
-Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-%{version}.tgz
+URL:       https://mvapich.cse.ohio-state.edu/benchmarks/
+Source0:   https://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-%{version}.tar.gz
+
+BuildRequires: make
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -31,7 +33,7 @@ Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmar
 %description
 
 The OSU micro-benchmarks feature a series of MPI benchmarks that
-measure the performances of various MPI operations including: 
+measure the performances of various MPI operations including:
 
 * Point-to-Point MPI Benchmarks: Latency, multi-threaded latency,
   multi-pair latency, multiple bandwidth / message rate test
