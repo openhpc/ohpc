@@ -1,0 +1,84 @@
+From 31eb3e3fb73475e860998c35299fb1569510dcdd Mon Sep 17 00:00:00 2001
+From: Lowren Lawson <lowren.h.lawson@intel.com>
+Date: Thu, 4 Jun 2020 10:49:44 -0700
+Subject: [PATCH 1/4] Added inclusion of string header as required by gcc10
+
+Signed-off-by: Lowren Lawson <lowren.h.lawson@intel.com>
+---
+ src/ProfileTable.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/ProfileTable.hpp b/src/ProfileTable.hpp
+index 4f7be1e69f..71656cd68a 100644
+--- a/src/ProfileTable.hpp
++++ b/src/ProfileTable.hpp
+@@ -36,6 +36,7 @@
+ #include <vector>
+ #include <map>
+ #include <set>
++#include <string>
+ 
+ #include "geopm_internal.h"
+ 
+
+From bec5639847909c3fceaf2ed40a08165fb9cbc4e3 Mon Sep 17 00:00:00 2001
+From: Lowren Lawson <lowren.h.lawson@intel.com>
+Date: Thu, 4 Jun 2020 11:22:48 -0700
+Subject: [PATCH 2/4] replaced nonstandard X with Z for hexidecimals
+
+Signed-off-by: Lowren Lawson <lowren.h.lawson@intel.com>
+---
+ examples/fft/randi8.f | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/examples/fft/randi8.f b/examples/fft/randi8.f
+index aa310cd6e8..f4451c4aaf 100644
+--- a/examples/fft/randi8.f
++++ b/examples/fft/randi8.f
+@@ -59,7 +59,7 @@ double precision function randlc(x, a)
+       parameter(d2m46=0.5d0**46)
+ 
+       save i246m1
+-      data i246m1/X'00003FFFFFFFFFFF'/
++      data i246m1/Z'00003FFFFFFFFFFF'/
+ 
+       Lx = X
+       La = A
+@@ -90,7 +90,7 @@ SUBROUTINE VRANLC (N, X, A, Y)
+       parameter(d2m46=0.5d0**46)
+ 
+       save i246m1
+-      data i246m1/X'00003FFFFFFFFFFF'/
++      data i246m1/Z'00003FFFFFFFFFFF'/
+ 
+ c Note that the v6 compiler on an R8000 does something stupid with
+ c the above. Using the following instead (or various other things)
+
+From dcf51de6f601ebdaa59c5d150e3a1f8262084bc4 Mon Sep 17 00:00:00 2001
+From: Lowren Lawson <lowren.h.lawson@intel.com>
+Date: Thu, 4 Jun 2020 11:23:38 -0700
+Subject: [PATCH 3/4] added -fallow-argument-mismatch to enable build with
+ GCC10 tools
+
+Signed-off-by: Lowren Lawson <lowren.h.lawson@intel.com>
+---
+ examples/fft/Makefile.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/examples/fft/Makefile.mk b/examples/fft/Makefile.mk
+index d7550547b1..d71bc74325 100644
+--- a/examples/fft/Makefile.mk
++++ b/examples/fft/Makefile.mk
+@@ -49,10 +49,10 @@ if ENABLE_OPENMP
+ 
+     examples_fft_nas_ft_LDADD = libgeopm.la libgeopmfort.la $(MPI_FCLIBS) $(MPI_CXXLIBS)
+     examples_fft_nas_ft_LDFLAGS = $(AM_LDFLAGS) $(MPI_LDFLAGS) $(OPENMP_CFLAGS)
+-    examples_fft_nas_ft_FCFLAGS = -fopenmp -msse4.2 $(MPI_FCFLAGS) $(OPENMP_CFLAGS) -O3
++    examples_fft_nas_ft_FCFLAGS = -fallow-argument-mismatch -fopenmp -msse4.2 $(MPI_FCFLAGS) $(OPENMP_CFLAGS) -O3
+     examples_fft_nas_ft_FFLAGS =  -fopenmp -msse4.2 $(MPI_FFLAGS) $(OPENMP_CFLAGS) -O3
+ if HAVE_IFORT
+-    examples_fft_nas_ft_FCFLAGS += -xAVX -shared-intel -mcmodel=medium -fpic
++    examples_fft_nas_ft_FCFLAGS += -fallow-argument-mismatch -xAVX -shared-intel -mcmodel=medium -fpic
+     examples_fft_nas_ft_FFLAGS += -xAVX -shared-intel -mcmodel=medium -fpic
+ endif
+ endif

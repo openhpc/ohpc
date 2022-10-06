@@ -28,10 +28,13 @@ License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/perf-tools
 URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
+# Based on https://patch-diff.githubusercontent.com/raw/geopm/geopm/pull/1141.patch
+Patch0:        gnu12.patch
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
+BuildRequires: make
 BuildRequires: python3
 BuildRequires: python3-devel
 BuildRequires: unzip
@@ -76,10 +79,12 @@ including support for static control.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p1
 
 %build
 %ohpc_setup_compiler
-test -f configure || ./autogen.sh
+export CFLAGS="$CFLAGS -Wno-error=stringop-truncation"
+./autogen.sh
 ./configure --prefix=%{install_path} \
             --with-python=python3 \
             --disable-ompt \
