@@ -40,16 +40,9 @@ fi
 
 ROOT=`pwd`
 
-<<<<<<< HEAD
 BASE=`basename ${SPEC}`
 DIR=`dirname ${SPEC}`
 echo "Building SRPM for ${SPEC}"
-=======
-for i in `find . -name "${PATTERN}.spec"`; do
-	BASE=`basename $i`
-	DIR=`dirname $i`
-	echo "Building SRPM for ${i}"
->>>>>>> 31a184887 (srpm_build script fix)
 
 prepare_git_tree ${DIR}
 
