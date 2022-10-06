@@ -47,6 +47,10 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # Definition to replace dots in %version with underscores
 %define version_exp %(tr "." "_" <<< %{version})
 
+# GNU provided by OpenHPC is used by several packages. 
+# Centralize the macro here and override in the package if needed.
+%global gnu_major_ver 12
+
 # Instead of having Source[1-9]: OHPC_macros in every SPEC file,
 # this sets Source42 for all SPEC files which include OHPC_macros.
 Source42: OHPC_macros
