@@ -23,13 +23,13 @@
 %define pname mpi4py
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.0.3
+Version:        3.1.3
 Release:        1%{?dist}
 Summary:        Python bindings for the Message Passing Interface (MPI) standard.
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
-Url:            https://bitbucket.org/mpi4py/mpi4py
-Source0:        https://bitbucket.org/mpi4py/mpi4py/downloads/%{pname}-%{version}.tar.gz
+Url:            https://github.com/mpi4py/mpi4py
+Source0:        https://github.com/mpi4py/mpi4py/releases/download/%{version}/mpi4py-%{version}.tar.gz
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # Default library install path
