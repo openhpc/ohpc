@@ -169,6 +169,8 @@ module-whatis "Category: library, runtime support"
 module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
+setenv MPI_DIR    "$MPIDIR"
+
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/oneapi
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 
