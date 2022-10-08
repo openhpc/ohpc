@@ -37,9 +37,6 @@ BuildRequires: doxygen
 BuildRequires: make
 BuildRequires: sed
 BuildRequires: lua-devel >= 5.3
-%if 0%{?rhel_version}
-BuildRequires: lua-static >= 5.3
-%endif
 Requires: lua >= 5.3
 Requires: lmod%{PROJ_DELIM} >= 8.7.3
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
@@ -80,10 +77,8 @@ module load openblas
 make prefix=%{install_path} \
 %if 0%{?sle_version} || 0%{?suse_version}
      lua_dir=/usr/include/lua%{luaver} \
-     lua_lib=/usr/lib64/liblua%{luaver}.a \
 %else
      lua_dir=/usr/include \
-     lua_lib=/usr/lib64/liblua.a \
 %endif
 %if %{compiler_family} == "intel"
    CFLAGS="-fPIC -std=c99 -I${MKLROOT}/include -fopenmp \
