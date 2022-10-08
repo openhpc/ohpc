@@ -35,7 +35,7 @@ BuildRequires:        perl
 BuildRequires:        util-linux
 BuildRequires:        make
 %if %{compiler_family} == "intel"
-BuildRequires:        autoconf, automake
+BuildRequires:        autoconf automake libtool
 %endif
 
 # Default library install path
