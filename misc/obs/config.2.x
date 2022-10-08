@@ -53,6 +53,7 @@ mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb"
                  "sionlib","slepc","superlu_dist","!tau","!trilinos"]
 
 openblas_compiler=["gnu12"]
+R_compiler=["gnu12"]
 
 [2.5.0]
 

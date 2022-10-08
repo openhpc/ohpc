@@ -57,7 +57,9 @@ module load papi
 
 %if  "%{compiler_family}" == "intel"
 %if  "%{mpi_family}" == "impi"
-export compiler_vars="CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
+export compiler_vars="CC=icc CXX=icpc MPICC=mpiicc MPIF90=mpiifort"
+which mpicc
+which mpiicc
 %endif
 %endif
 
