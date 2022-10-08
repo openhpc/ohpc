@@ -58,8 +58,6 @@ module load papi
 %if  "%{compiler_family}" == "intel"
 %if  "%{mpi_family}" == "impi"
 export compiler_vars="CC=icc CXX=icpc MPICC=mpiicc MPIF90=mpiifort"
-which mpicc
-which mpiicc
 %endif
 %endif
 
@@ -67,9 +65,6 @@ which mpiicc
 export LDFLAGS="$LDFLAGS -lz"
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
     --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR \
-%if  "%{mpi_family}" == "impi"
-    --with-mpi-libs=$MPI_DIR/lib/release \
-%endif
 %if  "%{compiler_family}" == "arm1"
     CFLAGS="-O3 -fsimdmath -fPIC" CXXFLAGS="-O3 -fsimdmath -fPIC" FCFLAGS="-O3 -fsimdmath -fPIC" \
 %endif
