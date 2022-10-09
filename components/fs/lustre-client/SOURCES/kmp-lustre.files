@@ -1,3 +1,4 @@
+%defattr(-,root,root)
 %{modules_fs_path}/%{lustre_name}/*
 %doc COPYING
 %doc ChangeLog-lustre

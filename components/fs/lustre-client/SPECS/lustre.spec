@@ -64,7 +64,7 @@ BuildRequires: kernel-abi-whitelists
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.12.8_6_g5457c37}
+%{!?version: %global version 2.15.1}
 %if 0%{?suse_version}
 %{!?kver:    %global kver    %(readlink /usr/src/linux | sed 's/linux-//' | sed 's/$/-default/')}
 %else
@@ -186,7 +186,7 @@ Source7: kmp-lustre-tests.files
 URL: https://wiki.whamcloud.com/
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
 Requires: %{requires_yaml_name}
-BuildRequires: libtool libyaml-devel zlib-devel
+BuildRequires: libtool libyaml-devel zlib-devel which
 %if %{with servers}
 Requires: lustre-osd
 Requires: lustre-osd-mount
@@ -482,6 +482,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/liblustreapi.la
 echo '%{_libdir}/lustre/tests/*' >>lustre-tests.files
 echo '%{_bindir}/mcreate' >>lustre-tests.files
 echo '%{_bindir}/munlink' >>lustre-tests.files
+echo '%{_bindir}/statx' >>lustre-tests.files
 echo '%{_sbindir}/wirecheck' >>lustre-tests.files
 echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
@@ -509,6 +510,7 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %{_bindir}/lfs
 %{_bindir}/lfs_migrate
 /sbin/mount.lustre
+%{_libdir}/pkgconfig/lustre.pc
 %if %{with static}
 %{_libdir}/liblustreapi.a
 %endif
