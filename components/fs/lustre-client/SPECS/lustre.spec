@@ -186,7 +186,7 @@ Source7: kmp-lustre-tests.files
 URL: https://wiki.whamcloud.com/
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
 Requires: %{requires_yaml_name}
-BuildRequires: libtool libyaml-devel zlib-devel which flex
+BuildRequires: libtool libyaml-devel zlib-devel which flex bison
 BuildRequires: python3-devel libmount-devel make libnl3-devel libaio-devel
 %if %{with servers}
 Requires: lustre-osd
