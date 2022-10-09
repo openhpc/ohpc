@@ -114,7 +114,7 @@ Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 %endif # llvm
 
 # Disable annobin on RHEL based systems
-%if 0%{?rhel} == 8
+%if 0%{?rhel} >= 8
 %undefine _annotated_build
 %endif
 
