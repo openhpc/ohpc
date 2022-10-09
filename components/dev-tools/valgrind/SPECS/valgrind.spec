@@ -19,7 +19,7 @@ Release:   1%{?dist}
 License:   GPL
 URL:       http://www.valgrind.org/
 Group:     %{PROJ_NAME}/dev-tools
-Source0:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
+Source0:   https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
 BuildRequires: gcc make
 
 # Default library install path
