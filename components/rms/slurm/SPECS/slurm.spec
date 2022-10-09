@@ -36,6 +36,11 @@ URL:		https://slurm.schedmd.com/
 %global slurm_source_dir %{pname}-%{version}-%{rel}
 %endif
 
+# Taken from https://github.com/SchedMD/slurm/commit/85efa455
+# https://bugs.schedmd.com/show_bug.cgi?id=14565
+# disable Link Time Optimization (LTO) (RHEL9)
+%define _lto_cflags %{nil}
+
 Source0:	https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 Source1:	slurm.epilog.clean
 
