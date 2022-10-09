@@ -220,6 +220,7 @@ Summary: OpenPBS Development Package
 Group: Development/System
 Conflicts: openpbs-devel
 Conflicts: pbspro-devel
+Requires: zlib-devel
 
 %description -n %{pbs_name}-%{pbs_devel}%{PROJ_DELIM}
 OpenPBS is a fast, powerful workload manager and
