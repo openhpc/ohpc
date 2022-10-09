@@ -20,7 +20,7 @@
 
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.12.2
+Version:   1.12.3
 %global    sonum 1
 Release:   1%{?dist}
 License:   NetCDF
@@ -29,6 +29,7 @@ URL:       http://cucis.ece.northwestern.edu/projects/PnetCDF
 Source0:   https://parallel-netcdf.github.io/Release/pnetcdf-%{version}.tar.gz
 
 BuildRequires:  grep
+BuildRequires:  make
 BuildRequires:  m4
 BuildRequires:  zlib-devel
 
@@ -120,4 +121,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc AUTHORS ChangeLog COPYRIGHT CREDITS INSTALL NEWS README RELEASE_NOTES 
+%doc AUTHORS ChangeLog COPYRIGHT CREDITS INSTALL NEWS README RELEASE_NOTES

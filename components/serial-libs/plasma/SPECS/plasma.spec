@@ -37,9 +37,6 @@ BuildRequires: doxygen
 BuildRequires: make
 BuildRequires: sed
 BuildRequires: lua-devel >= 5.3
-%if 0%{?rhel_version}
-BuildRequires: lua-static >= 5.3
-%endif
 Requires: lua >= 5.3
 Requires: lmod%{PROJ_DELIM} >= 8.7.3
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
@@ -80,10 +77,8 @@ module load openblas
 make prefix=%{install_path} \
 %if 0%{?sle_version} || 0%{?suse_version}
      lua_dir=/usr/include/lua%{luaver} \
-     lua_lib=/usr/lib64/liblua%{luaver}.a \
 %else
      lua_dir=/usr/include \
-     lua_lib=/usr/lib64/liblua.a \
 %endif
 %if %{compiler_family} == "intel"
    CFLAGS="-fPIC -std=c99 -I${MKLROOT}/include -fopenmp \
@@ -93,7 +88,7 @@ make prefix=%{install_path} \
    LDFLAGS="-fPIC -L${MKLROOT}/lib/intel64 -L${CMPLR_ROOT}/linux/compiler/lib/intel64_lin -fopenmp" \
    LIBS="-lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lifcore -lm" \
 %else
-%if %{compiler_family} == "arm"
+%if %{compiler_family} == "arm1"
    CFLAGS="-fPIC -std=c99 -fopenmp \
      -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY  \
      -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR" \

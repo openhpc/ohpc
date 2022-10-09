@@ -27,7 +27,7 @@ Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: bison
+BuildRequires: bison make
 %if 0%{?rhel}
 BuildRequires: flex-devel
 BuildRequires: flex

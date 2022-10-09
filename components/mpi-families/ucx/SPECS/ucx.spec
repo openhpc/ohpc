@@ -34,12 +34,12 @@ Summary: UCX is a communication library implementing high-performance messaging
 Group:   %{PROJ_NAME}/mpi-families
 License: BSD
 URL:     http://www.openucx.org
-Source:  https://github.com/openucx/%{pname}/releases/download/v%{version}/%{pname}-%{version}.tar.gz
+Source0: https://github.com/openucx/%{pname}/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 
 # UCX currently supports only the following architectures
 ExclusiveArch: aarch64 ppc64le x86_64
 
-BuildRequires: automake autoconf libtool gcc-c++
+BuildRequires: automake autoconf libtool gcc-c++ make
 %if "%{_vendor}" == "suse"
 BuildRequires: libnuma-devel
 %else
@@ -360,4 +360,3 @@ Provides java bindings for UCX.
 %files -n ucx-java%{PROJ_DELIM}
 %{_libdir}/jucx-*.jar
 %endif
-

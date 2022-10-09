@@ -25,14 +25,15 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogenous computing
 License:        netlib ScaLAPACK License
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        2.1.0
+Version:        2.2.0
 Release:        1%{?dist}
 # This is freely distributable without any restrictions.
-Url:            http://www.netlib.org/lapack-dev/
-Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
+Url:            https://netlib.org/scalapack/
+Source0:        https://github.com/Reference-ScaLAPACK/scalapack/archive/refs/tags/v%{version}.tar.gz
 Source1:        baselibs.conf
 Patch0:         scalapack-2.0.2-shared-lib.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  make
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset
@@ -79,7 +80,15 @@ cp SLmake.inc.example SLmake.inc
 module load openblas
 %endif
 %endif
-
+%if "%{compiler_family}" == "gnu12"
+# configure fails with:
+#   The Fortran compiler gfortran does not accept programs that
+#   call the same routine with arguments of different types without
+#   the option -fallow-argument-mismatch.
+#   Rerun configure with FFLAGS=-fallow-argument-mismatch
+# This seems to fix the build.
+export GNU12FCFLAGS=-fallow-argument-mismatch
+%endif
 make lib
 
 %install

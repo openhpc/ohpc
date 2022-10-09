@@ -10,16 +10,17 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
-%global _with_pmix --with-pmix=%{OHPC_ADMIN}/pmix
+#global _with_pmix --with-pmix=%{OHPC_ADMIN}/pmix
 %global _with_hwloc 1
 %global _with_numa 1
+%global _with_slurmrestd 1
 
 %define pname slurm
 
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	20.11.9
+Version:	22.05.2
 %global rel	1
 Release:	%{rel}%{?dist}
 Summary:	Slurm Workload Manager
@@ -55,6 +56,7 @@ Source1:	slurm.epilog.clean
 # --without x11		%_without_x11 1		disable internal X11 support
 # --with ucx		%_with_ucx path		require ucx support
 # --with pmix		%_with_pmix path	require pmix support
+# --with nvml           %_with_nvml path        require nvml support
 
 #  Options that are off by default (enable with --with <opt>)
 %bcond_with cray
@@ -72,6 +74,7 @@ Source1:	slurm.epilog.clean
 %bcond_with lua
 %bcond_with numa
 %bcond_with pmix
+%bcond_with nvml
 
 # 4/11/18 karl@ices.utexas.edu - enable lua bindings
 %bcond_without lua
@@ -159,7 +162,7 @@ BuildRequires: numactl-devel
 %endif
 %endif
 
-%if %{with pmix} && "%{_with_pmix}" == "--with-pmix"
+%if %{with pmix}
 BuildRequires: pmix%{PROJ_DELIM}
 Requires: pmix%{PROJ_DELIM}
 %endif
@@ -254,7 +257,7 @@ Summary: Slurm compute node daemon
 Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 %description -n %{pname}-slurmd%{PROJ_DELIM}
-%if %{with pmix} && "%{_with_pmix}" == "--with-pmix"
+%if %{with pmix}
 Requires: pmix%{PROJ_DELIM}
 %endif
 %if %{with ucx} && "%{_with_ucx}" == "--with-ucx"
@@ -330,7 +333,13 @@ according to the Slurm
 Summary: Slurm REST API translator
 Group: System Environment/Base
 Requires: %{name}%{?_isa} = %{version}-%{release}
-BuildRequires: json-c-devel, http-parser-devel
+BuildRequires: http-parser-devel
+%if 0%{?rhel}
+BuildRequires: json-c-devel
+%endif
+%if 0%{?suse_version:1}
+BuildRequires:  libjson-c-devel
+%endif
 %description slurmrestd
 Provides a REST interface to Slurm.
 %endif
@@ -387,8 +396,9 @@ export PATH="$PWD/bin:$PATH"
 	%{!?_with_slurmrestd:--disable-slurmrestd} \
 	%{?_without_x11:--disable-x11} \
 	%{?_with_ucx} \
+	%{?_with_nvml} \
 	--with-hwloc=%{OHPC_LIBS}/hwloc \
-	%{?_with_cflags}
+	%{?_with_cflags} || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
 
@@ -496,6 +506,7 @@ rm -f %{buildroot}/%{_libdir}/slurm/job_submit_defaults.so
 rm -f %{buildroot}/%{_libdir}/slurm/job_submit_logging.so
 rm -f %{buildroot}/%{_libdir}/slurm/job_submit_partition.so
 rm -f %{buildroot}/%{_libdir}/slurm/auth_none.so
+rm -f %{buildroot}/%{_libdir}/slurm/cred_none.so
 rm -f %{buildroot}/%{_sbindir}/sfree
 rm -f %{buildroot}/%{_sbindir}/slurm_epilog
 rm -f %{buildroot}/%{_sbindir}/slurm_prolog
@@ -639,7 +650,6 @@ fi
 %dir %attr(0755,root,root)
 %dir %{_prefix}/include/slurm
 %{_prefix}/include/slurm/*
-%dir %{_libdir}/pkgconfig
 %{_libdir}/pkgconfig/slurm.pc
 #############################################################################
 
@@ -648,7 +658,6 @@ fi
 %{_perldir}/Slurm/Bitstr.pm
 %{_perldir}/Slurm/Constant.pm
 %{_perldir}/Slurm/Hostlist.pm
-%{_perldir}/Slurm/Stepctx.pm
 %{_perldir}/auto/Slurm/Slurm.so
 %{_perldir}/Slurmdb.pm
 %{_perldir}/auto/Slurmdb/Slurmdb.so

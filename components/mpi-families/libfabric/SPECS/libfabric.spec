@@ -21,8 +21,9 @@ Summary: User-space RDMA Fabric Interfaces
 Group:   %{PROJ_NAME}/mpi-families
 License: GPLv2 or BSD
 Url:     http://www.github.com/ofiwg/libfabric
-Source:  https://github.com/ofiwg/%{pname}/releases/download/v%{version}/%{pname}-%{version}.tar.bz2
+Source0: https://github.com/ofiwg/%{pname}/releases/download/v%{version}/%{pname}-%{version}.tar.bz2
 
+BuildRequires: gcc make
 %if 0%{?suse_version}
 Buildrequires: ofed
 BuildRequires: rdma-core-devel infiniband-diags-devel
@@ -104,11 +105,6 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%clean
-rm -rf %{buildroot}
-
-%files 
-%defattr(-,root,root,-)
+%files
 %{OHPC_HOME}
 %doc AUTHORS COPYING README
-

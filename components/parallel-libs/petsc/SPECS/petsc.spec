@@ -25,17 +25,17 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.16.1
+Version:        3.18.0
 Release:        1%{?dist}
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
 Patch1:         petsc.rpath.patch
-Patch2:         py3_tests.patch
 Url:            http://www.mcs.anl.gov/petsc/
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  python2-devel
+BuildRequires:  python3-devel
 BuildRequires:  valgrind-devel
+BuildRequires:  make
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 %if 0%{?rhel}
@@ -58,7 +58,6 @@ differential equations.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
-%patch2 -p1
 
 
 %build
@@ -87,9 +86,13 @@ unset FCFLAGS
 
 # icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
-%{__python2} ./config/configure.py \
+%{__python3} ./config/configure.py \
         --prefix=%{install_path} \
+%if "%{compiler_family}" == "gnu12"
+        --FFLAGS="-fPIC -ffree-line-length-512" \
+%else
         --FFLAGS="-fPIC" \
+%endif
 %if %{compiler_family} == intel
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
@@ -137,7 +140,6 @@ cd %{buildroot}%{install_path}
 for file in \
 	lib/petsc/bin/petsc_gen_xdmf.py \
 	lib/petsc/bin/PetscBinaryIOTrajectory.py \
-	lib/petsc/bin/petsc-performance-view \
 	lib/petsc/bin/petscnagfor \
 	lib/petsc/bin/taucc.py \
 	lib/petsc/bin/petscnagupgrade.py \
@@ -147,7 +149,7 @@ for file in \
 	share/petsc/examples/config/gmakegen.py \
 	share/petsc/examples/config/gmakegentest.py \
 	share/petsc/examples/config/report_tests.py; do
-		sed -e "s,/env python,/python2,g" -i $file
+		sed -e "s,/env python.*,/python3,g" -i $file
 done
 
 # remove stock module file

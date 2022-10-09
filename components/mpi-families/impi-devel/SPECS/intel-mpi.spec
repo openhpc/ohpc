@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-mpi-devel
-%define gnu_major_ver 9
+%define gnu_major_ver 12
 %define oneapi_manifest %{OHPC_MODULEDEPS}/intel/impi/.rpm-manifest
 %define psxe_manifest %{OHPC_MODULEDEPS}/intel/impi/.manifest
 %define min_intel_ver 2021.4.0
@@ -117,7 +117,7 @@ module-whatis "Category: library, runtime support"
 module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library"
 
-# For convenience, redirect standard mpicc/mpicxx/mpifort 
+# For convenience, redirect standard mpicc/mpicxx/mpifort
 # to use oneAPI icc/icpc/ifort instead of gcc/g++/gfortran
 setenv I_MPI_CC   icc
 setenv I_MPI_CXX  icpc
@@ -135,7 +135,7 @@ module load "mpi/\$version"
 family "MPI"
 EOF
 
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 
     modname=$(testfile %{OHPC_MODULEDEPS}/intel/impi/.version.$ver)
 
@@ -144,7 +144,7 @@ EOF
 set     ModulesVersion      "$ver"
 EOF
 
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 
     modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/$ver)
 
@@ -169,6 +169,8 @@ module-whatis "Category: library, runtime support"
 module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
+setenv MPI_DIR    "$MPIDIR"
+
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/oneapi
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 
@@ -177,14 +179,14 @@ module load "mpi/\$version"
 family "MPI"
 EOF
 
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 
     # support for gnu major version
     orig_modname=$modname
     modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/$ver)
     cp ${orig_modname} ${modname}
     sed -i "s,%{OHPC_MODULEDEPS}/gnu-impi,%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}-impi," ${modname}
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 
     modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/.version.$ver)
 
@@ -193,13 +195,13 @@ EOF
 set     ModulesVersion      "$ver"
 EOF
 
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 
     # support for gnu major version
     orig_modname=$modname
     modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.$ver)
     cp ${orig_modname} ${modname}
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 done
 
 
@@ -333,8 +335,8 @@ for (( x=0; x < ${#versions[@]}; x++ )); do
 	    ln -sf ${mpiDir}/bin/mpiifort ${ohpcDir}/mpif77
     fi
 
-    echo "${ohpcDir}/" >> %{psxe_manifest}   
-	    
+    echo "${ohpcDir}/" >> %{psxe_manifest}
+
     # Main module
     cat << EOF > %{OHPC_MODULEDEPS}/intel/impi/${version}
 #%Module1.0#####################################################################
@@ -367,7 +369,7 @@ EOF
 
     # Append with environment vars parsed directlry from mpivars.sh
     ${scanner} ${topDir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/intel/impi/${version}
-    if [ $? -ne 0 ]; then 
+    if [ $? -ne 0 ]; then
         echo "ERROR: Could not generate content for %{OHPC_MODULEDEPS}/intel/impi/${version}"
         break
     fi
@@ -387,8 +389,8 @@ EOF
 set     ModulesVersion      "${version}"
 EOF
 
-    echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{psxe_manifest}   
-	
+    echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{psxe_manifest}
+
     # OpenHPC module file for GNU compiler toolchain
     cat << EOF > %{OHPC_MODULEDEPS}/gnu/impi/${version}
 #%Module1.0#####################################################################
@@ -421,7 +423,7 @@ EOF
 
     # Append with environment vars parsed directly from mpivars.sh
     ${scanner} ${topDir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/gnu/impi/${version}
-    if [ $? -ne 0 ]; then 
+    if [ $? -ne 0 ]; then
         echo "ERROR: Could not generate content for %{OHPC_MODULEDEPS}/gnu/impi/${version}"
         break
     fi
@@ -438,7 +440,7 @@ EOF
     cp %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}
     cp %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.${version}
     sed -i "s,%{OHPC_MODULEDEPS}/gnu-impi,%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}-impi," %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}
-    
+
     echo "%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}" >> %{psxe_manifest}
     echo "%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.${version}" >> %{psxe_manifest}
 

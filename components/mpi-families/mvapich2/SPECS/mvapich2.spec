@@ -27,15 +27,12 @@
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
-Version:   2.3.6
+Version:   2.3.7
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu
 Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
-Source1:   scanner.c
-Source2:   nodelist_scanner.c
-Source3:   tasklist_scanner.c
 
 # karl.w.schulz@intel.com (04/13/2016)
 Patch0:    mvapich2-get_cycles.patch
@@ -69,7 +66,7 @@ Buildrequires: rdma-core-devel libibmad-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
-BuildRequires: bison
+BuildRequires: bison make
 BuildRequires: zlib-devel
 
 # Default library install path
@@ -88,13 +85,18 @@ across multiple networks.
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
-# v2.3.4 is missing a few src code files; include versions from v2.3.3
-%{__cp} %SOURCE1 src/pm/mpirun/src/hostfile/
-%{__cp} %SOURCE2 src/pm/mpirun/src/slurm/
-%{__cp} %SOURCE3 src/pm/mpirun/src/slurm/
 
 %build
 %ohpc_setup_compiler
+%if "%{compiler_family}" == "gnu12"
+# configure fails with:
+#   The Fortran compiler gfortran does not accept programs that
+#   call the same routine with arguments of different types without
+#   the option -fallow-argument-mismatch.
+#   Rerun configure with FFLAGS=-fallow-argument-mismatch
+# This seems to fix the build.
+export FFLAGS=-fallow-argument-mismatch
+%endif
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
 	    --enable-cxx \

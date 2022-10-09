@@ -21,13 +21,12 @@
 
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.3.8
+Version:   3.3.10
 Release:   1%{?dist}
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
 Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
-Patch0:    fftw-icc_2020_fix.patch
 
 %define openmp        1
 %define mpi           1
@@ -36,7 +35,7 @@ BuildRequires:        perl
 BuildRequires:        util-linux
 BuildRequires:        make
 %if %{compiler_family} == "intel"
-BuildRequires:        autoconf, automake
+BuildRequires:        autoconf automake libtool
 %endif
 
 # Default library install path
@@ -47,11 +46,8 @@ FFTW is a C subroutine library for computing the Discrete Fourier
 Transform (DFT) in one or more dimensions, of both real and complex
 data, and of arbitrary input size.
 
-
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1 
-
 
 %build
 # OpenHPC compiler/mpi designation

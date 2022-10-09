@@ -19,7 +19,7 @@ dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","mp
 	         "scipy","spack","valgrind"]
 distro-packages = ["python-Cython","flex"]
 fs            = ["lustre-client"]
-io-libs       = ["hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib"]
+io-libs       = ["adios","hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","openpbs","pmix","munge","magpie"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
@@ -31,6 +31,31 @@ perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","pap
 
 compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel","llvm-compilers"]
 mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
+
+[2.6.0]
+
+# define patterns for a given arch in which to disable builds
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
+# define compiler/MPI families: first entry in list is defined to be parent in OBS
+compiler_families=["gnu12","intel","arm1"]
+mpi_families=["openmpi4","mpich","mvapich2","impi"]
+
+standalone = ["cmake","slurm","!docs","gnu-compilers","hwloc","lmod","!lustre-client","pmix","valgrind",
+              "easybuild","spack","ohpc-filesystem","libfabric","ucx","openpbs","python-Cython","papi",
+              "impi-devel"]
+compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","numpy","likwid",
+                      "openblas","openmpi","pdtoolkit","plasma","R","scotch","superlu"]
+mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb","!lmod-defaults","mfem",
+                 "mpi4py","mumps","netcdf","netcdf-cxx","netcdf-fortran","omb","opencoarrays",
+                 "petsc","phdf5","pnetcdf","ptscotch","scalapack","!scalasca","!scipy","scorep",
+                 "sionlib","slepc","superlu_dist","!tau","!trilinos"]
+
+openblas_compiler=["gnu12"]
+R_compiler=["gnu12"]
+opencoarrays_compiler=["gnu12"]
 
 [2.5.0]
 

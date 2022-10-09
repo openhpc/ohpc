@@ -92,9 +92,7 @@ ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM}.lua %{buildroot}%{module_path}/default
 
 mkdir -p %{buildroot}%{_docdir}
 
-
 %files
-%{install_path}
-%{module_path}
-%doc Changelog 
+%{OHPC_PUB}
+%doc Changelog
 %license LICENSE

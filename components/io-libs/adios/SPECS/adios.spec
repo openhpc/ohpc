@@ -34,10 +34,18 @@ AutoReq: no
 BuildRequires: zlib-devel glib2-devel
 Requires:      zlib zlib-devel
 
+BuildRequires:  libxml2-devel
+%if 0%{?rhel}
+BuildRequires:  bzip2-devel
+%endif
+%if 0%{?suse_version}
+BuildRequires:  libbz2-devel
+%endif
+
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
-BuildRequires: libtool
+BuildRequires: libtool make
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -112,6 +120,9 @@ export MPICXX=mpicxx
 
 %if "%{compiler_family}" == "intel"
 export CFLAGS="-fp-model strict $CFLAGS"
+%endif
+%if "%{compiler_family}" == "gnu12"
+export FCFLAGS="-fallow-argument-mismatch $FCFLAGS"
 %endif
 
 # work around old config.guess on aarch64 systems

@@ -43,11 +43,11 @@
 %if !%{defined _unitdir}
 %define _unitdir /usr/lib/systemd/system
 %endif
-%if %{_vendor} == debian && %(test -f /etc/os-release && echo 1 || echo 0)
+%if "%{_vendor}" == "debian" && %(test -f /etc/os-release && echo 1 || echo 0)
 %define _vendor_ver %(cat /etc/os-release | awk -F[=\\".] '/^VERSION_ID=/ {print \$3}')
 %define _vendor_id %(cat /etc/os-release | awk -F= '/^ID=/ {print \$2}')
 %endif
-%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7 || (x%{?_vendor_id} == xdebian && 0%{?_vendor_ver} >= 8) || (x%{?_vendor_id} == xubuntu && 0%{?_vendor_ver} >= 16)
+%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7 || ("x%{?_vendor_id}" == "xdebian" && 0%{?_vendor_ver} >= 8) || ("x%{?_vendor_id}" == "xubuntu" && 0%{?_vendor_ver} >= 16)
 %define have_systemd 1
 %endif
 
@@ -251,12 +251,13 @@ functionality of PBS.
 %if 0%{?opensuse_bs}
 # Do not specify debug_package for OBS builds.
 %else
-%if 0%{?suse_version} || x%{?_vendor_id} == xdebian || x%{?_vendor_id} == xubuntu
+%if 0%{?suse_version} || "x%{?_vendor_id}" == "xdebian" || "x%{?_vendor_id}" == "xubuntu"
 %debug_package
 %endif
 %endif
 
 %prep
+
 %autosetup -n %{pbs_name}-%{pbs_version} -p1
 
 %build

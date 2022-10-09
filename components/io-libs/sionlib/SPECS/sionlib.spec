@@ -18,11 +18,11 @@
 
 Summary:   Scalable I/O Library for Parallel Access to Task-Local Files
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.7.4
+Version:   1.7.7
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/io-libs
-URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
+URL:       https://apps.fz-juelich.de/jsc/sionlib/docu/index.html
 Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}#/%{pname}-%{version}.tar.gz
 Patch0:    sionlib-llvm-arm.patch
 
@@ -32,6 +32,8 @@ BuildRequires: gcc-gfortran
 %else
 BuildRequires: gcc-fortran
 %endif
+
+BuildRequires: make
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -61,6 +63,9 @@ CONFIGURE_OPTIONS="--compiler=arm "
 %endif
 %if %{compiler_family} == llvm
 CONFIGURE_OPTIONS="--compiler=llvm "
+%endif
+%if %{compiler_family} == gnu12
+CONFIGURE_OPTIONS="--compiler=gnu "
 %endif
 
 %if %{mpi_family} == impi
@@ -93,6 +98,19 @@ sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
 %if %{compiler_family} == intel
 sed -i 's|-g|-g -fpic|g' build-*/Makefile.defs
 %endif
+
+%if %{compiler_family} == gnu12
+sed -i 's/FFLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
+sed -i 's/F90FLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
+sed -i 's/F90 .*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
+%endif
+
+sed -i "s/CFLAGS.*/& $CFLAGS/g" build-*/Makefile.defs
+sed -i "s/CXXFLAGS.*/& $CXXLAGS/g" build-*/Makefile.defs
+sed -i "s/FFLAGS.*/& $FCFLAGS/g" build-*/Makefile.defs
+sed -i "s/F90FLAGS.*/& $FCFLAGS/g" build-*/Makefile.defs
+
+make %{?_smp_mflags}
 
 %install
 

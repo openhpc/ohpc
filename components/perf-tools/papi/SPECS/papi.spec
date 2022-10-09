@@ -15,7 +15,7 @@
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.7.0
+Version:   6.0.0
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
@@ -23,7 +23,7 @@ URL:       http://icl.cs.utk.edu/papi/
 Source0:   http://icl.cs.utk.edu/projects/papi/downloads/papi-%{version}.tar.gz
 Patch1:    papi.ldconfig.patch
 
-BuildRequires: ncurses-devel
+BuildRequires: ncurses-devel make
 %if 0%{?suse_version}
 BuildRequires: gcc-fortran
 %else
@@ -56,6 +56,8 @@ DBG="" CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" make
 cd src
 
 make DESTDIR=$RPM_BUILD_ROOT install
+
+sed -e "s,/usr/bin/python,/usr/bin/python3,g" -i $RPM_BUILD_ROOT/%{install_path}/bin/papi_hl_output_writer.py
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULES}/%{pname}
@@ -110,4 +112,4 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %files
 %{OHPC_PUB}
-%doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt
+%doc ChangeLog*.txt INSTALL.txt LICENSE.txt README.md RELEASENOTES.txt

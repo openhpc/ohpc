@@ -11,7 +11,7 @@ source ./common/functions || exit 1
 @test "[openmpi] check for no output to stderr with ompi_info" {
 
     module purge
-    module load gnu9
+    module load gnu12
     module load openmpi4
 
     run which ompi_info

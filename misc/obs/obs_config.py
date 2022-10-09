@@ -227,7 +227,7 @@ class ohpc_obs_tool(object):
         
         logging.info("[queryOBSPackages]: checking for packages currently defined in OBS (%s)" % self.vip)
 
-        command = ["osc","api","-X","GET","/source/" + self.obsProject]
+        command = ["osc","-A",obsurl,"api","-X","GET","/source/" + self.obsProject]
         try:
             s = subprocess.check_output(command)
         except:
@@ -431,7 +431,7 @@ class ohpc_obs_tool(object):
         fp.flush()
         
         logging.debug("[%s]: new package _metadata written to %s" % (fname,fp.name))
-        command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_meta"] 
+        command = ["osc","-A",obsurl,"api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_meta"] 
 
         if self.dryRun:
             logging.error(" " * pad + "--> (dryrun) requesting addition of package: %s" % package)
@@ -450,7 +450,7 @@ class ohpc_obs_tool(object):
             fp.flush()
 
             markerFile = "_obs_config_ready_for_build"
-            command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + markerFile]  
+            command = ["osc","-A",obsurl,"api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + markerFile]  
             if self.dryRun:
                 logging.debug(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % (markerFile,package))
                 
@@ -467,7 +467,7 @@ class ohpc_obs_tool(object):
             logging.warn(" " * pad + "--> constraint file provided for %s" % package)
             constraintFile = "constraints/%s" % package
 
-            command = ["osc","api","-f",constraintFile,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + "_constraints"]  
+            command = ["osc","-A",obsurl,"api","-f",constraintFile,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + "_constraints"]  
             if self.dryRun:
                 logging.debug(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % ('_constraints',package))
 
@@ -501,7 +501,7 @@ class ohpc_obs_tool(object):
             fp_serv.flush()
             logging.debug("--> _service file written to %s" % fp_serv.name)
 
-            command = ["osc","api","-f",fp_serv.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_service"]  
+            command = ["osc","-A",obsurl,"api","-f",fp_serv.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_service"]  
 
             if self.dryRun:
                 logging.error(" " * pad + "--> (dryrun) adding _service file for package: %s" % package)
@@ -546,7 +546,7 @@ class ohpc_obs_tool(object):
             fp_link.flush()
             logging.debug("--> _link file written to %s" % fp_link.name)
 
-            command = ["osc","api","-f",fp_link.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_link"]  
+            command = ["osc","-A",obsurl,"api","-f",fp_link.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_link"]  
 
             if self.dryRun:
                 logging.error(" " * pad + "--> (dryrun) adding _link file for package: %s (parent=%s)" % (package,parentName))
@@ -577,7 +577,7 @@ class ohpc_obs_tool(object):
             logging.info("--> will lock for now and GitHub trigger will unlock on first commit")
 
         for package in self.buildsToCancel:
-            command = ["osc","lock", self.obsProject,package]
+            command = ["osc","-A",obsurl,"lock", self.obsProject,package]
 
             if self.dryRun:
                 logging.info("--> (dryrun) requesting lock for package: %s" % package)

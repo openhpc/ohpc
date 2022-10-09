@@ -19,12 +19,14 @@
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2019.6
+Version:   2021.3
 Release:   1%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
 Source0:   https://github.com/intel/mpi-benchmarks/archive/IMB-v%{version}.tar.gz
+
+BuildRequires: make
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -36,7 +38,7 @@ point-to-point and global communication operations for a range of message sizes.
 The generated benchmark data fully characterizes:
    - Performance of a cluster system, including node performance, network latency,
      and throughput
-   - Efficiency of the MPI implementation used 
+   - Efficiency of the MPI implementation used
 
 %prep
 %setup -n mpi-benchmarks-IMB-v%{version}
@@ -109,4 +111,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc ReadMe_IMB.txt license/license.txt license/use-of-trademark-license.txt 
+%doc ReadMe_IMB.txt license/license.txt license/use-of-trademark-license.txt

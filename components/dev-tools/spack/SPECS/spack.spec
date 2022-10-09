@@ -13,14 +13,14 @@
 %define pname spack
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.17.0
+Version:	0.18.1
 Release:	1%{?dist}
 Summary:	HPC software package management
 
 Group:		%{PROJ_NAME}/dev-tools
 License:	LGPL
-URL:		https://github.com/LLNL/spack
-Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
+URL:		https://github.com/spack/spack
+Source0:	https://github.com/spack/%{pname}/archive/v%{version}.tar.gz
 
 BuildRequires: rsync
 BuildRequires: python3

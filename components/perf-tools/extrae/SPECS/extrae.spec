@@ -18,7 +18,7 @@
 
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	3.7.0
+Version:	4.0.1
 Release:	1%{?dist}
 License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
@@ -28,7 +28,7 @@ Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
 
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libtool
+BuildRequires:	libtool make which
 BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	papi%{PROJ_DELIM}
@@ -39,7 +39,10 @@ Requires:	papi%{PROJ_DELIM}
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-Extrae is the package devoted to generate Paraver trace-files for a post-mortem analysis. Extrae is a tool that uses different interposition mechanisms to inject probes into the target application so as to gather information regarding the application performance.
+Extrae is the package devoted to generate Paraver trace-files for a post-mortem
+analysis. Extrae is a tool that uses different interposition mechanisms to
+inject probes into the target application so as to gather information regarding
+the application performance.
 
 This is the %{compiler_family}-%{mpi_family} version.
 
@@ -54,13 +57,14 @@ module load papi
 
 %if  "%{compiler_family}" == "intel"
 %if  "%{mpi_family}" == "impi"
-export compiler_vars="CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
+export compiler_vars="CC=icc CXX=icpc MPICC=mpiicc MPIF90=mpiifort"
 %endif
 %endif
-
-
 
 ./bootstrap
+%if  "%{compiler_family}" == "gnu12"
+export LDFLAGS="$LDFLAGS -lz"
+%endif
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
     --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR \
 %if  "%{mpi_family}" == "impi"
@@ -82,6 +86,9 @@ export NO_BRP_CHECK_RPATH=true
 module load papi
 
 make DESTDIR=$RPM_BUILD_ROOT install
+
+# fix a path in one of the scripts
+sed -e "s,export EXTRAE_HOME=.*,export EXTRAE_HOME=%{install_path},g" -i $RPM_BUILD_ROOT/%{install_path}/share/tests/overhead/run_overhead_tests.sh
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
@@ -134,4 +141,3 @@ EOF
 
 %files
 %{OHPC_PUB}
-

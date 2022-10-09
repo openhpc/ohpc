@@ -13,7 +13,7 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu9
+%global gnu_family gnu12
 
 # Base package name
 %define pname mumps
@@ -24,7 +24,7 @@ Release:        1%{?dist}
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
 Group:          %{PROJ_NAME}/parallel-libs
-Url:            http://mumps.enseeiht.fr/
+Url:            http://graal.ens-lyon.fr/MUMPS/
 Source0:        http://graal.ens-lyon.fr/MUMPS/MUMPS_%{version}.tar.gz
 Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
@@ -41,6 +41,8 @@ BuildRequires: libgomp
 %else
 BuildRequires: libgomp1
 %endif
+
+BuildRequires: make
 
 # Every other family needs scalapack
 %if %{compiler_family} != "intel"
@@ -145,10 +147,14 @@ cp -f %{S:1} Makefile.inc
 %endif
 %endif
 
+%if "%{compiler_family}" == "gnu12"
+export FCFLAGS="$FCFLAGS -fallow-argument-mismatch"
+%endif
+
 make MUMPS_MPI=%{MUMPS_MPI} \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
-     OPTC="$RPM_OPT_FLAGS" all
+     OPTC="$RPM_OPT_FLAGS" OPTF="$FCFLAGS" all
 
 
 %install
