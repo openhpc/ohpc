@@ -29,7 +29,7 @@ Patch0:    h5cc.patch
 Patch1:    h5fc.patch
 Patch2:    h5cxx.patch
 
-BuildRequires: zlib-devel
+BuildRequires: zlib-devel make
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -57,7 +57,7 @@ sed "s/\(.*\)(void) HDF_NO_UBSAN/HDF_NO_UBSAN \1(void)/" -i src/H5detect.c
 # override with newer config.guess for aarch64
 %ifarch aarch64 || ppc64le
 %if 0%{?rhel} >= 9
-cp /usr/lib/redhat/config.guess bin
+cp /usr/lib/rpm/redhat/config.guess bin
 %else
 cp /usr/lib/rpm/config.guess bin
 %endif
