@@ -51,7 +51,7 @@ lends itself to being used in very high level languages (VHLLs).
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 

@@ -19,7 +19,7 @@ Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
 License:        Apache-2.0
 Group:          %{PROJ_NAME}/distro-packages
-Source:         https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
+Source0         https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 %if 0%{?rhel}
 BuildRequires: python3-libxml2
