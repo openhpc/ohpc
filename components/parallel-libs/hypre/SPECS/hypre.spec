@@ -51,7 +51,11 @@ phenomena in the defense, environmental, energy, and biological sciences.
 %build
 
 %ifarch aarch64 || ppc64le
+%if 0%{?rhel} >= 9
+cp /usr/lib/rpm/redhat/config.guess src/config
+%else
 cp /usr/lib/rpm/config.guess src/config
+%endif
 %endif
 
 %ohpc_setup_compiler
