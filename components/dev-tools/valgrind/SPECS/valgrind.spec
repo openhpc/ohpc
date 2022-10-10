@@ -19,8 +19,8 @@ Release:   1%{?dist}
 License:   GPL
 URL:       http://www.valgrind.org/
 Group:     %{PROJ_NAME}/dev-tools
-Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
-BuildRequires: gcc make
+Source0:   https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
+BuildRequires: gcc make perl
 
 # Default library install path
 %define install_path %{OHPC_UTILS}/%{pname}/%version
