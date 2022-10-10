@@ -80,7 +80,7 @@ make prefix=%{install_path} \
 %else
      lua_dir=/usr/include \
 %endif
-%if %{compiler_family} == "intel"
+%if %"{compiler_family}" == "intel"
    CFLAGS="-fPIC -std=c99 -I${MKLROOT}/include -fopenmp \
      -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY -DHAVE_MKL \
      -DBLAS_RETURN_COMPLEX_AS_ARGUMENT -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR" \
@@ -88,7 +88,7 @@ make prefix=%{install_path} \
    LDFLAGS="-fPIC -L${MKLROOT}/lib/intel64 -L${CMPLR_ROOT}/linux/compiler/lib/intel64_lin -fopenmp" \
    LIBS="-lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lifcore -lm" \
 %else
-%if %{compiler_family} == "arm1"
+%if "%{compiler_family}" == "arm1"
    CFLAGS="-fPIC -std=c99 -fopenmp \
      -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY  \
      -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR" \
