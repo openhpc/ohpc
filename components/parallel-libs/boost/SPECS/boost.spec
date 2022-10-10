@@ -76,7 +76,7 @@ for all users with minimal restrictions.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %global toolset clang
 %else
 %if "%{compiler_family}" == "intel"
@@ -86,13 +86,13 @@ for all users with minimal restrictions.
 %endif
 %endif
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 which_armclang=$(which armclang)
 where_armclang=$(dirname ${which_armclang})
 export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
-%if %{mpi_family} == "impi" && %{compiler_family} == "intel"
+%if "%{mpi_family}" == "impi" && %{compiler_family} == "intel"
 export CC=mpiicc
 export CXX=mpiicpc
 %else
@@ -149,7 +149,7 @@ where_armclang=$(dirname ${which_armclang})
 export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
-%if %{mpi_family} == "impi" && %{compiler_family} == "intel"
+%if "%{mpi_family}" == "impi" && %{compiler_family} == "intel"
 export CC=mpiicc
 export CXX=mpiicpc
 %else
