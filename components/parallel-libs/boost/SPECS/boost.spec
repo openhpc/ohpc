@@ -149,7 +149,7 @@ where_armclang=$(dirname ${which_armclang})
 export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
-%if "%{mpi_family}" == "impi" && %{compiler_family} == "intel"
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "intel"
 export CC=mpiicc
 export CXX=mpiicpc
 %else
