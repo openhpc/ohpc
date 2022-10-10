@@ -45,7 +45,7 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["cmake","slurm","!docs","gnu-compilers","hwloc","lmod","lustre-client","pmix","valgrind",
               "easybuild","spack","ohpc-filesystem","libfabric","ucx","openpbs","python-Cython","papi",
-              "impi-devel","meta-packages"]
+              "impi-devel","meta-packages","paraver"]
 compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","numpy","likwid",
                       "openblas","openmpi","pdtoolkit","plasma","R","scotch","superlu"]
 mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb","lmod-defaults","mfem",
@@ -58,6 +58,7 @@ R_compiler=["gnu12"]
 opencoarrays_compiler=["gnu12"]
 scipy_compiler=["gnu12","arm1"]
 scipy_mpi=["openmpi4","mpich","mvapich2"]
+lmod-defaults_mpi=["openmpi4","mvapich2","impi"]
 
 [2.5.0]
 

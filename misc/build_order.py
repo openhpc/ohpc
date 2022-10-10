@@ -66,8 +66,7 @@ for line in open(sys.argv[1]):
     if line[2].startswith('kmod'):
         continue
     # Ignore the nagios_plugins
-    if ((line[2].startswith('nagios-plugins')) and
-            (not line[2].startswith('nagios-plugins-ohpc'))):
+    if line[2].startswith('nagios'):
         continue
     # This tries to filter out versions with a "." or _isa with a "("
     if "." in line[2] or "(" in line[2]:
