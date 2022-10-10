@@ -34,7 +34,7 @@ Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 BuildRequires:        perl
 BuildRequires:        util-linux
 BuildRequires:        make
-%if %{compiler_family} == "intel"
+%if "%{compiler_family}" == "intel"
 BuildRequires:        autoconf automake libtool
 %endif
 
@@ -61,7 +61,7 @@ BASEFLAGS="$BASEFLAGS --enable-openmp"
 BASEFLAGS="$BASEFLAGS --enable-mpi"
 %endif
 
-%if %{compiler_family} == "intel"
+%if "%{compiler_family}" == "intel"
 rm -rf autom4te.cache
 autoreconf --verbose --install --symlink --force
 rm -f config.cache
