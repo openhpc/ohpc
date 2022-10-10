@@ -17,12 +17,12 @@ BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-%define 	pname R
+%define         pname R
 
-Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
-Release:	1%{?dist}
+Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
+Release:        1%{?dist}
 Version:        4.2.1
-Source:         https://cran.r-project.org/src/base/R-4/R-%{version}.tar.gz
+Source0         https://cran.r-project.org/src/base/R-4/R-%{version}.tar.gz
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
