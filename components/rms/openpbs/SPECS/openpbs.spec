@@ -47,7 +47,7 @@
 %define _vendor_ver %(cat /etc/os-release | awk -F[=\\".] '/^VERSION_ID=/ {print \$3}')
 %define _vendor_id %(cat /etc/os-release | awk -F= '/^ID=/ {print \$2}')
 %endif
-%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7 || ("x%{?_vendor_id}" == "xdebian" && 0%{?_vendor_ver} >= 8) || ("x%{?_vendor_id}" == "xubuntu" && 0%{?_vendor_ver} >= 16)
+%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7 || 0%{?openEuler} || ("x%{?_vendor_id}" == "xdebian" && 0%{?_vendor_ver} >= 8) || ("x%{?_vendor_id}" == "xubuntu" && 0%{?_vendor_ver} >= 16)
 %define have_systemd 1
 %endif
 
@@ -136,7 +136,7 @@ Requires: net-tools
 Requires: smtpdaemon
 Requires: hostname
 %endif
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} >= 7 || 0%{?openEuler}
 Requires: hwloc-ohpc
 %endif
 Requires: libical
@@ -173,7 +173,7 @@ Requires: net-tools
 %else
 Requires: hostname
 %endif
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} >= 7 || 0%{?openEuler}
 Requires: hwloc-ohpc
 %endif
 Autoreq: 1
