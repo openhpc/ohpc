@@ -45,10 +45,10 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["cmake","slurm","!docs","gnu-compilers","hwloc","lmod","lustre-client","pmix","valgrind",
               "easybuild","spack","ohpc-filesystem","libfabric","ucx","openpbs","python-Cython","papi",
-              "impi-devel"]
+              "impi-devel","meta-packages"]
 compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","numpy","likwid",
                       "openblas","openmpi","pdtoolkit","plasma","R","scotch","superlu"]
-mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb","!lmod-defaults","mfem",
+mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb","lmod-defaults","mfem",
                  "mpi4py","mumps","netcdf","netcdf-cxx","netcdf-fortran","omb","opencoarrays",
                  "petsc","phdf5","pnetcdf","ptscotch","scalapack","scalasca","scipy","scorep",
                  "sionlib","slepc","superlu_dist","tau","trilinos"]
