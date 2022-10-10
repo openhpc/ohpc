@@ -16,7 +16,7 @@
 
 Summary:       Paraver
 Name:          %{pname}%{PROJ_DELIM}
-Version:       4.8.2
+Version:       4.10.4
 Release:       1%{?dist}
 License:       LGPL-2.1
 Group:         %{PROJ_NAME}/perf-tools
@@ -31,18 +31,21 @@ BuildRequires: boost-devel
 BuildRequires: libfabric-devel
 BuildRequires: flex-devel
 BuildRequires: wxGTK3-devel
+BuildRequires: openssl-devel
 %else
 BuildRequires: libfabric1
 BuildRequires: flex
 BuildRequires: wxGTK3-3_2-devel
 BuildRequires: libboost_date_time-devel
 BuildRequires: libboost_serialization-devel
+BuildRequires: libopenssl-devel openssl
 %endif
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: binutils-devel
 BuildRequires: libxml2-devel
+BuildRequires: make
 
 %define __arch_install_post %{nil}
 
