@@ -84,7 +84,7 @@ automatic instrumentation tool.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1 
+%patch7 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
@@ -104,7 +104,7 @@ export fcomp=ifort
 export fcomp=gfortran
 %endif
 
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 export MPI_INCLUDE_DIR=$I_MPI_ROOT/intel64/include
 export MPI_LIB_DIR=$I_MPI_ROOT/intel64/lib
 %else
@@ -119,8 +119,13 @@ export TAUROOT=`pwd`
 
 # override with newer config.guess for aarch64
 %ifarch aarch64 || ppc64le
+%if 0%{?rhel} >= 9
+cp /usr/lib/rpm/redhat/config.guess utils/opari2/build-config/.
+cp /usr/lib/rpm/redhat/config.sub utils/opari2/build-config/.
+%else
 cp /usr/lib/rpm/config.guess utils/opari2/build-config/.
 cp /usr/lib/rpm/config.sub utils/opari2/build-config/.
+%endif
 %endif
 
 # Fix errors above unversioned python shebangs
@@ -195,7 +200,7 @@ export CONFIG_ARCH=%{machine}
     -pdt=$PDTOOLKIT_DIR \
     -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
     -openmp \
-%if %{compiler_family} != intel
+%if "%{compiler_family}" != "intel"
     -opari \
 %endif
     -extrashlibopts="-fPIC -L/tmp%{install_path}/lib"
@@ -226,7 +231,7 @@ make clean
     -pdt=$PDTOOLKIT_DIR \
     -useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
     -openmp \
-%if %{compiler_family} != intel
+%if "%{compiler_family}" != "intel"
     -opari \
 %endif
     -extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib"
@@ -263,7 +268,7 @@ sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" %buildroot%{install
 sed -i "s|/x86_64/lib|/lib|g" $(egrep -IR "/x86_64/lib" %buildroot%{install_path}|awk -F : '{print $1}')
 
 # replace hard paths with env vars
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 sed -i "s|$I_MPI_ROOT|\$\{I_MPI_ROOT\}|g" $(egrep -IR "$I_MPI_ROOT" %buildroot%{install_path}|awk -F : '{print $1}')
 %else
 sed -i "s|$MPI_DIR|\$\{MPI_DIR\}|g" $(egrep -IR "$MPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
