@@ -36,6 +36,7 @@ BuildRequires: openssl-devel
 BuildRequires: libfabric1
 BuildRequires: flex
 BuildRequires: wxGTK3-3_2-devel
+BuildRequires: libboost_system-devel
 BuildRequires: libboost_date_time-devel
 BuildRequires: libboost_serialization-devel
 BuildRequires: libopenssl-devel openssl
