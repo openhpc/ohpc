@@ -66,12 +66,12 @@ differential equations.
 
 module load phdf5
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 module load scalapack
 %endif
 
 # Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load scalapack openblas
 %endif
 
@@ -93,20 +93,20 @@ unset FCFLAGS
 %else
         --FFLAGS="-fPIC" \
 %endif
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
         --CFLAGS="-fPIC -DPIC" \
         --CXXFLAGS="-fPIC -DPIC" \
         --with-scalapack-dir=$SCALAPACK_DIR \
-%if %{compiler_family} == arm
+%if "%{compiler_family}" == "arm1"
         --with-blas-lapack-lib=$ARMPL_LIBRARIES/libarmpl.so \
 %else
         --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
 %endif
 %endif
-%if %{mpi_family} == impi
-%if %{compiler_family} == intel
+%if "%{mpi_family}" == "impi"
+%if "%{compiler_family}" == "intel"
         --with-cc=mpiicc    \
         --with-cxx=mpiicpc  \
         --with-fc=mpiifort  \
@@ -208,4 +208,3 @@ EOF
 %files
 %{OHPC_PUB}
 %doc CONTRIBUTING LICENSE
-
