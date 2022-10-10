@@ -62,4 +62,4 @@ for i in `find . -name *.spec`; do
 done
 
 # Dependencies are resolved in python
-python misc/build_order.py ${DEPLIST}
+python3 misc/build_order.py ${DEPLIST}
