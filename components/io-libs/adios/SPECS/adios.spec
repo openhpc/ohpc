@@ -132,7 +132,11 @@ export FCFLAGS="-fallow-argument-mismatch $FCFLAGS"
 
 # work around old config.guess on aarch64 systems
 %ifarch aarch64
+%if 0%{?rhel} >= 9
+cp /usr/lib/rpm/redhat/config.guess config
+%else
 cp /usr/lib/rpm/config.guess config
+%endif
 %endif
 
 ./configure --prefix=%{install_path} \
