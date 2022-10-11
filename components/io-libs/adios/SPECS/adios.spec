@@ -68,10 +68,10 @@ BuildRequires: fdupes libcurl4 libcurl-devel
 #!BuildIgnore: post-build-checks
 %else
 %if 0%{?rhel} >= 9
-BuildRequires: libcurl libcurl-devel
+BuildRequires: libcurl-minimal libcurl-devel
 %else
 # Workaround for OBS settings
-BuildRequires: libcurl-minimal libcurl-devel
+BuildRequires: libcurl libcurl-devel
 %endif
 %endif
 
