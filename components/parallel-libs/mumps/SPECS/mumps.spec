@@ -45,7 +45,7 @@ BuildRequires: libgomp1
 BuildRequires: make
 
 # Every other family needs scalapack
-%if %{compiler_family} != "intel"
+%if "%{compiler_family}" != "intel"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
@@ -72,7 +72,7 @@ module load scalapack
 %endif
 
 # Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load scalapack openblas
 %endif
 
@@ -86,7 +86,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -100,7 +100,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -114,7 +114,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -128,7 +128,7 @@ cp -f %{S:1} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:6} Makefile.inc
 %endif
 %endif
@@ -139,7 +139,7 @@ export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %else
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:6} Makefile.inc
 %else
 cp -f %{S:1} Makefile.inc
