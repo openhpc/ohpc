@@ -131,7 +131,7 @@ BuildRequires: kernel-abi-whitelists
 
 %global modules_fs_path /lib/modules/%{kversion}/%{kmoddir}
 
-%if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+%if "%{_vendor}"=="redhat" || "%{_vendor}"=="fedora"
 	%global requires_yaml_name libyaml
 	%global requires_kmod_name kmod-%{lustre_name}
 	%if %{with lustre_tests}
@@ -195,7 +195,7 @@ Obsoletes: lustre-client < %{version}
 Provides: lustre-client = %{version}-%{release}
 %endif
 # GSS requires this: BuildRequires: pkgconfig, libgssapi-devel >= 0.10
-%if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+%if "%{_vendor}"=="redhat" || "%{_vendor}"=="fedora"
 #suse don't support selinux
 BuildRequires: libselinux-devel
 Requires: libselinux
@@ -205,7 +205,7 @@ Requires: libselinux
 %if 0%{?rhel} >= 8
 BuildRequires: redhat-rpm-config kernel-rpm-macros elfutils-libelf-devel kmod
 %endif
-%if %{_vendor}=="redhat"
+%if "%{_vendor}"=="redhat"
 BuildRequires: redhat-rpm-config
 %endif
 %endif
@@ -421,7 +421,7 @@ echo '%{_sysconfdir}/ha.d/resource.d/Lustre' >>lustre.files
 echo '%{_unitdir}/lnet.service' >>lustre.files
 %endif
 
-%if %{_vendor}=="redhat"
+%if "%{_vendor}"=="redhat"
 # The following scripts are Red Hat specific
 %if %{with servers}
 echo '%{_sysconfdir}/init.d/lustre' >>lustre.files
