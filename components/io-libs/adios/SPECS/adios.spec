@@ -67,7 +67,12 @@ BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: fdupes libcurl4 libcurl-devel
 #!BuildIgnore: post-build-checks
 %else
+%if 0%{?rhel} >= 9
 BuildRequires: libcurl libcurl-devel
+%else
+# Workaround for OBS settings
+BuildRequires: libcurl-minimal libcurl-devel
+%endif
 %endif
 
 # Default library install path
