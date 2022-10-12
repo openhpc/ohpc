@@ -67,7 +67,9 @@ parallel-libs/mumps/SOURCES/MUMPS*.tar.gz
 parallel-libs/opencoarrays/SOURCES/OpenCoarrays-*.tar.gz
 parallel-libs/petsc/SOURCES/petsc-*.tar.gz
 parallel-libs/ptscotch/SOURCES/scotch*.tar.gz
+parallel-libs/ptscotch/SOURCES/scotch*.bz2
 parallel-libs/scalapack/SOURCES/scalapack-*.tgz
+parallel-libs/scalapack/SOURCES/v*.tar.gz
 parallel-libs/slepc/SOURCES/slepc-*.tar.gz
 parallel-libs/superlu_dist/SOURCES/superlu_dist-*.tar
 parallel-libs/trilinos/SOURCES/trilinos-release-*.tar.gz
@@ -78,6 +80,7 @@ perf-tools/imb/SOURCES/IMB-v*.tar.gz
 perf-tools/likwid/SOURCES/v*.tar.gz
 perf-tools/msr-safe/SOURCES/msr-safe-*.tar.gz
 perf-tools/omb/SOURCES/osu-micro-benchmarks-*.tgz
+perf-tools/omb/SOURCES/osu-micro-benchmarks-*.tar.gz
 perf-tools/papi/SOURCES/papi-*.tar.gz
 perf-tools/paraver/SOURCES/wxparaver-*-src.tar.bz2
 perf-tools/pdtoolkit/SOURCES/pdtoolkit-*.tar.gz
@@ -103,5 +106,6 @@ serial-libs/metis/SOURCES/*.tar.gz
 serial-libs/openblas/SOURCES/openblas-*.tar.gz
 serial-libs/plasma/SOURCES/v*.tar.gz
 serial-libs/plasma/SOURCES/plasma*.tar.gz
-serial-libs/scotch/SOURCES/scotch_*.tar.gz
+serial-libs/scotch/SOURCES/scotch*.tar.gz
+serial-libs/scotch/SOURCES/scotch*.bz2
 serial-libs/superlu/SOURCES/superlu_*.tar.gz
