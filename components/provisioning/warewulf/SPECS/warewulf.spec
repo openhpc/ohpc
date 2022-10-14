@@ -39,6 +39,7 @@ Conflicts: warewulf-provision
 Conflicts: warewulf-ipmi
 
 BuildRequires: make
+BuildRequires: /etc/os-release
 
 %if 0%{?suse_version} || 0%{?sle_version}
 BuildRequires: systemd-rpm-macros
@@ -97,6 +98,13 @@ make
 %install
 export NO_BRP_STALE_LINK_ERROR=yes
 make install DESTDIR=%{buildroot}
+
+# For SUSE, move dhcp.conf.ww to replace symlink
+%if 0%{?suse_version} || 0%{?sle_version}
+rm %{buildroot}%{statedir}/warewulf/overlays/host/etc/dhcpd.conf
+mv %{buildroot}%{statedir}/warewulf/overlays/host/etc/dhcp/dhcpd.conf.ww \
+    %{buildroot}%{statedir}/warewulf/overlays/host/etc/
+%endif
 
 
 %pre
