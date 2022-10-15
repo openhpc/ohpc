@@ -19,7 +19,7 @@
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2021
+Version:   2021.1
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc

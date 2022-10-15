@@ -4,7 +4,6 @@
 # subprocess.run()
 
 import re
-import subprocess
 import sys
 
 regex_wrong = [
@@ -19,14 +18,17 @@ regex_wrong = [
     # make sure there is no BuildRoot
     '^BuildRoot.*',
     # make sure there is no %defattr(-,root,root)
-    '^%defattr\(-,root,root\).*',
+    '^%defattr(-,root,root).*',
     # make sure there is no global definition of PROJ_DELIM
     '^.*%global.*PROJ_DELIM.*$',
     ]
 
 regex_required = [
-    # Group designation should include %{PROJ_NAME} delimiter and known component area
-    '^Group:.*%{PROJ_NAME}/(admin|compiler-families|dev-tools|distro-packages|io-libs|lustre|meta-package|mpi-families|parallel-libs|perf-tools|provisioning|rms|runtimes|serial-libs)$',
+    # Group designation should include %{PROJ_NAME} delimiter and
+    # known component area
+    '^Group:.*%{PROJ_NAME}/(admin|compiler-families|dev-tools|distro-packages|'
+    'io-libs|lustre|meta-package|mpi-families|parallel-libs|perf-tools|'
+    'provisioning|rms|runtimes|serial-libs)$',
     # Need a URL
     '(^URL:.*$|Url:.*$)',
     ]
@@ -63,7 +65,7 @@ for spec in sys.argv[1:]:
 
     # next, verify items which should be present
     for requirement in regex_required:
-        if not re.findall(requirement,contents,re.MULTILINE):
+        if not re.findall(requirement, contents, re.MULTILINE):
             print("    [-] Missing %s" % requirement)
             error = True
 
