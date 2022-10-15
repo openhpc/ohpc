@@ -25,7 +25,7 @@ rms           = ["slurm","openpbs","pmix","munge","magpie"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
 parallel-libs = ["boost","fftw","hypre","mfem","mumps","opencoarrays","petsc","scalapack","ptscotch",
                  "slepc","superlu_dist","trilinos"]
-provisioning  = ["warewulf-vnfs"]
+provisioning  = ["warewulf-vnfs","warewulf"]
 perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","papi","paraver","pdtoolkit",
                  "scalasca","scorep","tau"]
 
@@ -45,7 +45,7 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["cmake","slurm","!docs","gnu-compilers","hwloc","lmod","lustre-client","pmix","valgrind",
               "easybuild","spack","ohpc-filesystem","libfabric","ucx","openpbs","python-Cython","papi",
-              "impi-devel","meta-packages","paraver"]
+              "impi-devel","meta-packages","paraver","warewulf","intel-compilers-devel"]
 compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","numpy","likwid",
                       "openblas","openmpi","pdtoolkit","plasma","R","scotch","superlu"]
 mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb","lmod-defaults","mfem",
