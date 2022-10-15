@@ -50,7 +50,12 @@ BuildRequires: papi%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
 %endif
 
-BuildRequires: curl chrpath sed grep which make
+%if 0%{?rhel} >= 9
+BuildRequires: curl-minimal
+%else
+BuildRequires: curl
+%endif
+BuildRequires: chrpath sed grep which make
 BuildRequires: postgresql-devel binutils-devel
 BuildRequires: zlib-devel python3-devel
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
