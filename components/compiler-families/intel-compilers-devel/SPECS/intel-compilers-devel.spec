@@ -19,7 +19,7 @@
 
 Summary:   OpenHPC compatability package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2021
+Version:   2021.1
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -137,7 +137,7 @@ module load "mkl"
 family "compiler"
 EOF
 
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 
     modname=$(testfile %{OHPC_MODULES}/intel/.version.$ver)
 
@@ -147,7 +147,7 @@ EOF
 set     ModulesVersion      "$ver"
 EOF
 
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 
     # Provide standalone module for use with GNU toolchain
     modname=$(testfile  %{OHPC_MODULEDEPS}/gnu/mkl/$ver)
@@ -173,7 +173,7 @@ prepend-path  MODULEPATH       %{OHPC_MODULEDEPS}/oneapi
 module load   "mkl/\$version"
 EOF
 
-    md5sum ${modname} >> %{oneapi_manifest} 
+    md5sum ${modname} >> %{oneapi_manifest}
 done
 
 
