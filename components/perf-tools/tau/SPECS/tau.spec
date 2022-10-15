@@ -59,7 +59,8 @@ BuildRequires: chrpath sed grep which make
 BuildRequires: postgresql-devel binutils-devel
 BuildRequires: zlib-devel python3-devel
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-Requires:      lmod%{PROJ_DELIM} >= 7.6.1
+
+Requires: lmod%{PROJ_DELIM} >= 7.6.1
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires: binutils-devel
 Requires: java
@@ -166,7 +167,7 @@ mkdir -p ${TAUROOT}/TAUBUILD
     -mpilib=${MPI_LIB_DIR} \
 %if "%{compiler_family}" == "intel"
     -fortran=ifort \
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
     -c++=mpiicpc \
     -cc=mpiicc \
 %else
@@ -211,7 +212,7 @@ replace_all "${TAUROOT}/TAUBUILD" ""
 replace_all "${TAUROOT}" ""
 replace_all "${MPI_DIR}" "\${MPI_DIR}"
 replace_all "${PDTOOLKIT_DIR}" "\${PDTOOLKIT_DIR}"
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 replace_all "${I_MPI_ROOT}" "\${I_MPI_ROOT}"
 %endif
 %ifarch x86_64
@@ -234,7 +235,7 @@ done
 mkdir -p %{buildroot}/%{_docdir}
 
 # Copy the install tree to BUILDROOT
-cp -a TAUBUILD/* %{buildroot} 
+cp -a TAUBUILD/* %{buildroot}
 
 # OpenHPC module file
 mkdir -p %{buildroot}%{module_path}
