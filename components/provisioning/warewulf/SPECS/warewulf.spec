@@ -31,6 +31,7 @@ License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
 URL:     https://github.com/hpcng/warewulf
 Source:  https://github.com/hpcng/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
+Source2: go_vendor-4.3.tgz
 Patch0:  warewulf-4.3.0-network_type.patch
 Patch1:  warewulf-4.3.0-ssh_completion.patch
 
@@ -46,7 +47,7 @@ Conflicts: warewulf-ipmi
 %if 0%{?suse_version} || 0%{?sle_version}
 BuildRequires: distribution-release
 BuildRequires: systemd-rpm-macros
-BuildRequires: go
+BuildRequires: go > 1.16
 BuildRequires: firewall-macros
 BuildRequires: firewalld
 BuildRequires: tftp
@@ -57,12 +58,14 @@ Requires: firewalld
 # Assume Fedora-based OS if not SUSE-based
 BuildRequires: system-release
 BuildRequires: systemd
-BuildRequires: golang
+BuildRequires: golang > 1.16
 BuildRequires: firewalld-filesystem
 Requires: tftp-server
 Requires: nfs-utils
 %endif
 BuildRequires: make
+# git required for some go mod tidy downloads
+BuildRequires: git
 Requires: dhcp-server
 
 %description
@@ -71,9 +74,13 @@ system for large clusters of bare metal and/or virtual systems.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version} -b0 -a2
 %patch0 -p1
 %patch1 -p1
+
+# No network access in OBS, so module downloads will break builds
+sed -i "s/go mod tidy .*$//" Makefile
+sed -i "s/go mod vendor .*$//" Makefile
 
 
 %build
