@@ -85,12 +85,20 @@ including support for static control.
 %ohpc_setup_compiler
 export CFLAGS="$CFLAGS -Wno-error=stringop-truncation"
 ./autogen.sh
+
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu12"
+# The combination of impi and GCC 12 does not work as
+# expected and needs these additional fixes.
+sed -e 's,\sFFLAGS=$MPI_F77FLAGS,FFLAGS="-I$MPI_DIR/include $MPI_F77FLAGS",g' -i configure
+sed -e 's,\sFCFLAGS=$MPI_FFLAGS,FCFLAGS="-I$MPI_DIR/include/gfortran -I$MPI_DIR/include $MPI_FFLAGS",g' -i configure
+%endif
+
 ./configure --prefix=%{install_path} \
             --with-python=python3 \
             --disable-ompt \
             --disable-doc \
             || ( cat config.log && false )
-%{__make}
+%{__make} %{?_smp_mflags}
 
 
 %install
