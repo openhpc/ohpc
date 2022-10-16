@@ -55,9 +55,9 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 module load papi
 
-%if  "%{compiler_family}" == "intel"
-%if  "%{mpi_family}" == "impi"
-export compiler_vars="CC=icc CXX=icpc MPICC=mpiicc MPIF90=mpiifort"
+%if "%{compiler_family}" == "intel"
+%if "%{mpi_family}" == "impi"
+export compiler_vars="CC=icc CXX=icpc MPICC=$(which mpiicc) MPIF90=mpiifort"
 %endif
 %endif
 
