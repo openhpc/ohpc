@@ -74,6 +74,13 @@ export MPICC=mpicc
 export MPIFC=mpifc
 export MPICXX=mpicxx
 
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu12"
+# This is not really the perfect solution, but impi does not have
+# the necessary files for gfortran 12. It seems to work with
+# the files from gfortran 11.1.0.
+export FCFLAGS="-I $MPI_DIR/include/gfortran/11.1.0 $FCFLAGS"
+%endif
+
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
             --enable-static=no       \
@@ -85,6 +92,8 @@ export MPICXX=mpicxx
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
+
+make %{?_smp_mflags}
 
 %install
 
