@@ -47,6 +47,7 @@ BuildRequires:  texlive-ec
 BuildRequires:  texlive-cm-super
 BuildRequires:  texlive-dvips
 BuildRequires:  texlive-mfware
+BuildRequires:  tex
 BuildRequires:  latexmk
 %endif
 
