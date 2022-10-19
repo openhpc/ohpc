@@ -43,7 +43,7 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["cmake","slurm","!docs","gnu-compilers","hwloc","lmod","lustre-client","pmix","valgrind",
+standalone = ["docs","cmake","slurm","!docs","gnu-compilers","hwloc","lmod","lustre-client","pmix","valgrind",
               "easybuild","spack","ohpc-filesystem","libfabric","ucx","openpbs","python-Cython","papi",
               "impi-devel","meta-packages","paraver","warewulf","intel-compilers-devel"]
 compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","numpy","likwid",
