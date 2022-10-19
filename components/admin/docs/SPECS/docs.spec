@@ -26,7 +26,7 @@ BuildRequires:  texlive-colortbl
 BuildRequires:  texlive-fancyhdr
 BuildRequires:  texlive-mdwtools
 BuildRequires:  texlive-multirow
-BuildRequires:  texlive-draftwatermark
+#BuildRequires:  texlive-draftwatermark
 BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
 BuildRequires:  texlive-trimspaces
