@@ -46,6 +46,7 @@ BuildRequires:  texlive-helvetic
 BuildRequires:  texlive-ec
 BuildRequires:  texlive-cm-super
 BuildRequires:  texlive-dvips
+BuildRequires:  texlive-mfware
 BuildRequires:  latexmk
 %endif
 
