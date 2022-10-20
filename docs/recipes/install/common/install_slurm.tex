@@ -11,6 +11,8 @@ the corresponding compute image in a subsequent step.
 
 # Use ohpc-provided file for starting SLURM configuration
 [sms](*\#*) cp /etc/slurm/slurm.conf.ohpc /etc/slurm/slurm.conf
+# Setup default cgroups file
+[sms](*\#*) cp /etc/slurm/cgroup.conf.example /etc/slurm/cgroup.conf
 
 # Identify resource manager hostname on master host
 [sms](*\#*) perl -pi -e "s/SlurmctldHost=\S+/SlurmctldHost=${sms_name}/" /etc/slurm/slurm.conf
