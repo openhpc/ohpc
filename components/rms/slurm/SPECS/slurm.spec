@@ -768,11 +768,10 @@ if [ ! -f /var/log/slurm_jobcomp.log ];then
     chown slurm: /var/log/slurm_jobcomp.log
 fi
 
-# 8/8/17 karl.w.schulz@intel.com - create StateSaveLocation
-if [ ! -d /var/spool/slurm/ctld ];then
-   mkdir -p /var/spool/slurm/ctld
-   chown slurm: /var/spool/slurm
-   chown slurm: /var/spool/slurm/ctld
+# 10/20/22 - ohpc create spool directory
+if [ ! -d /var/spool/slurmctld ];then
+   mkdir -p /var/spool/slurmctld
+   chown slurm: /var/spool/slurmctld
 fi
 
 if [ -x /sbin/ldconfig ]; then
