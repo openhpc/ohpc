@@ -60,6 +60,13 @@ cp /usr/lib/rpm/config.guess bin
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if "%{compiler_family}" == "arm1"
+# For some reason the flag '-lmpi"' has a double quote at the end.
+# This tries to adapt the configure script to remove double quotes
+# from the linker options.
+%{__sed} -i -e 's,^  ac_cv_fc_libs="\$ac_cv_fc_libs $ac_arg,  ac_cv_fc_libs="\$ac_cv_fc_libs \$(echo \$ac_arg | sed "s/\\"//g"),g' configure
+%endif
+
 CC=mpicc \
 CXX=mpicxx \
 F77=mpif77 \
