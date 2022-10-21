@@ -45,7 +45,7 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["docs","cmake","slurm","!docs","gnu-compilers","hwloc","lmod","lustre-client","pmix","valgrind",
               "easybuild","spack","ohpc-filesystem","libfabric","ucx","openpbs","python-Cython","papi",
-              "impi-devel","meta-packages","paraver","warewulf","intel-compilers-devel"]
+              "impi-devel","meta-packages","paraver","warewulf","intel-compilers-devel","arm-compilers-devel"]
 compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","numpy","likwid",
                       "openblas","openmpi","pdtoolkit","plasma","R","scotch","superlu"]
 mpi_dependent = ["adios","boost","dimemas","extrae","fftw","geopm","hypre","imb","lmod-defaults","mfem",
