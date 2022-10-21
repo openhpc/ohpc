@@ -33,7 +33,7 @@ BuildRequires: gcc-gfortran
 BuildRequires: gcc-fortran
 %endif
 
-BuildRequires: make
+BuildRequires: make gcc-c++
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
