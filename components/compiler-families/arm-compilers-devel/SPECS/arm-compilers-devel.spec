@@ -14,7 +14,7 @@
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.4
+Version:   2.6
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -24,9 +24,16 @@ BuildArch: aarch64
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
 
-# We need to ensure the installed version is >=21.0
-#Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-RHEL-8-aarch64-linux >= 21.0
-Requires: arm-linux-compiler >= 21.0
+%define latest_installed_ver 22.1
+
+%if 0%{?rhel} == 8
+Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-RHEL-8-aarch64-linux
+Requires: armpl-%{latest_installed_ver}.0-AArch64-RHEL-8-arm-linux-compiler-aarch64-linux
+%endif
+%if 0%{?sle_version} || 0%{?suse_version}
+Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-SLES-15-aarch64-linux
+Requires: armpl-%{latest_installed_ver}.0-AArch64-SLES-15-arm-linux-compiler-aarch64-linux
+%endif
 Requires: lmod%{PROJ_DELIM}
 
 %description
@@ -45,7 +52,6 @@ echo "Creating OpenHPC compatibility modulefile for local Arm compiler installat
 # modulefiles provided by Arm installation
 
 latest_installed_ver=$(rpm -qa --queryformat "%%{VERSION} %%{NAME}\\n" | grep " arm-linux-compiler" | sort -rn | cut -d " " -f 1)
-major_version=$(echo "${latest_installed_ver}" | cut -d '.' -f 1)
 
 echo "Using latest installed version: ${latest_installed_ver}"
 modpath=`rpm -qa | grep -i arm-linux-compiler-${latest_installed_ver} | xargs rpm -ql | grep \/modulefiles$`
@@ -57,7 +63,7 @@ if [ ! -n "${modpath}" ];then
 fi
 
 # path to generic compiler modulename
-generic=arm${major_version}/${latest_installed_ver}
+generic=acfl/${latest_installed_ver}
 
 # Module header
 
@@ -82,13 +88,14 @@ setenv ARM_GENERIC \$ARM_GENERIC
 
 # update module path hierarchy
 prepend-path    MODULEPATH          ${modpath}
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/arm1
 # load generic variant
 depends-on      \$ARM_GENERIC
+# load performance libraries
+depends-on      armpl
 EOF
 
-
 %postun
-
 if [ $1 -eq 0 ];then
 
     if [ -s %{OHPC_MODULES}/%{arm_compt_version}/compat ];then
@@ -98,4 +105,3 @@ fi
 
 %files
 %{OHPC_MODULES}
-
