@@ -1,0 +1,11 @@
+--- src/tracer/wrappers/API/wrapper.c.orig	2022-10-17 13:35:09.303199326 -0400
++++ src/tracer/wrappers/API/wrapper.c	2022-10-17 13:33:19.442762171 -0400
+@@ -321,6 +321,8 @@
+ char tmp_dir[TMP_DIR_LEN];
+ 
+ 
++void Extrae_AddSyncEntryToLocalSYM(unsigned long long sync_time);
++
+ /*
+  * Checks if there is a CPU event waiting to be emitted.
+  * Returns 1 if the thread never emitted a CPU event or if the user specified

@@ -24,6 +24,7 @@ License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
+Patch0:		arm.function.definition.patch
 
 
 BuildRequires:	autoconf
@@ -48,6 +49,9 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%if "%{compiler_family}" == "arm1"
+%patch0 -p0
+%endif
 
 %build
 # OpenHPC compiler/mpi designation
@@ -55,22 +59,22 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 module load papi
 
+export compiler_vars="MPICC=$(which mpicc)"
+
 %if "%{compiler_family}" == "intel"
 %if "%{mpi_family}" == "impi"
-export compiler_vars="CC=icc CXX=icpc MPICC=$(which mpiicc) MPIF90=mpiifort"
+export compiler_vars="CC=icc CXX=icpc MPIF90=mpiifort $compiler_vars"
 %endif
 %endif
 
 ./bootstrap
-%if  "%{compiler_family}" == "gnu12"
 export LDFLAGS="$LDFLAGS -lz"
-%endif
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
     --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR \
-%if  "%{mpi_family}" == "impi"
+%if "%{mpi_family}" == "impi"
     --with-mpi-libs=$MPI_DIR/lib/release \
 %endif
-%if  "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "arm1"
     CFLAGS="-O3 -fsimdmath -fPIC" CXXFLAGS="-O3 -fsimdmath -fPIC" FCFLAGS="-O3 -fsimdmath -fPIC" \
 %endif
     || { cat config.log && exit 1; }
