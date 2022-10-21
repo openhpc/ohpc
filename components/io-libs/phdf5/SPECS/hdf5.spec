@@ -81,6 +81,13 @@ export MPICXX=mpicxx
 export FCFLAGS="-I $MPI_DIR/include/gfortran/11.1.0 $FCFLAGS"
 %endif
 
+%if "%{compiler_family}" == "arm1"
+# For some reason the flag '-lmpi"' has a double quote at the end.
+# This tries to adapt the configure script to remove double quotes
+# from the linker options.
+%{__sed} -i -e 's,^  ac_cv_fc_libs="\$ac_cv_fc_libs $ac_arg,  ac_cv_fc_libs="\$ac_cv_fc_libs \$(echo \$ac_arg | sed "s/\\"//g"),g' configure
+%endif
+
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
             --enable-static=no       \
