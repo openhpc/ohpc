@@ -99,6 +99,11 @@ export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 ./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
 
+%if "%{compiler_family}" == "arm1"
+%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' build-mpi/libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' build-mpi/libtool
+%endif
+
 make V=1 %{?_smp_mflags}
 
 %install
