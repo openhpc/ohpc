@@ -25,16 +25,14 @@ Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/scorep-%{version}/scorep-%{version}.tar.gz
 
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  fdupes
-%endif
+BuildRequires: fdupes
 BuildRequires: automake make which
 BuildRequires: binutils-devel
 Requires:      binutils-devel
 BuildRequires: libunwind-devel
 Requires:      libunwind-devel
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: zlib-devel
+BuildRequires: zlib-devel gcc-c++
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
 Requires:      papi%{PROJ_DELIM}
