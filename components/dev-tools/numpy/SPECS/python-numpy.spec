@@ -35,10 +35,8 @@ Patch3:         numpy-intelfcomp.patch
 Patch4:         numpy-llvm-arm.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  python3-Cython%{PROJ_DELIM}
-%if 0%{?suse_version}
-BuildRequires:  fdupes
+BuildRequires:  fdupes gcc
 #!BuildIgnore: post-build-checks
-%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -66,14 +64,6 @@ basic linear algebra and random number generation.
 COMPILER_FLAG="--compiler=intelem"
 %endif
 
-%if "%{compiler_family}" == "llvm"
-COMPILER_FLAG="--fcompiler=flang --compiler=clang"
-%endif
-
-%if "%{compiler_family}" == "arm1"
-COMPILER_FLAG="--fcompiler=armflang --compiler=armclang"
-%endif
-
 %if "%{compiler_family}" == "arm1"
 cat > site.cfg << EOF
 [openblas]
@@ -93,7 +83,7 @@ include_dirs = $OPENBLAS_INC
 EOF
 %endif
 
-CFLAGS="%{optflags} -fno-strict-aliasing" %__python setup.py build $COMPILER_FLAG
+CFLAGS="$CFLAGS -fno-strict-aliasing" %__python setup.py build $COMPILER_FLAG %{?_smp_mflags}
 
 
 %install
