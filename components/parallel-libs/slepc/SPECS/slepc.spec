@@ -36,7 +36,7 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: python3
 BuildRequires: make
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
