@@ -67,7 +67,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %build
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 module load scalapack
 %endif
 
