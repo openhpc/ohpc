@@ -139,6 +139,13 @@ cp /usr/lib/rpm/config.guess config
 %endif
 %endif
 
+%if "%{compiler_family}" == "arm1"
+# For some reason the flag '-lmpi"' has a double quote at the end.
+# This tries to adapt the configure script to remove double quotes
+# from the linker options.
+%{__sed} -i -e 's,^  ac_cv_fc_libs="\$ac_cv_fc_libs $ac_arg,  ac_cv_fc_libs="\$ac_cv_fc_libs \$(echo \$ac_arg | sed "s/\\"//g"),g' configure
+%endif
+
 ./configure --prefix=%{install_path} \
     --enable-shared=yes \
     --enable-static=no \
@@ -181,11 +188,12 @@ make DESTDIR=$RPM_BUILD_ROOT install
 export PPATH="/lib64/%{python_lib_dir}/site-packages"
 export PATH=$(pwd):$PATH
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
 module load %{python_module_prefix}numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
+export CFLAGS="$CFLAGS -I$MPI_DIR/include"
 pushd wrappers/numpy
 mkdir .bin
 ln -s /usr/bin/python3 .bin/python
