@@ -26,6 +26,7 @@ Source0:        https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/
 Patch1:         pdtoolkit-3.25-umask.patch
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
+BuildRequires:  gcc-c++
 
 #!BuildIgnore: post-build-checks
 

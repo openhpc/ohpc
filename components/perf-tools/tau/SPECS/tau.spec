@@ -175,7 +175,11 @@ mkdir -p ${TAUROOT}/TAUBUILD
     -cc=mpicc \
 %endif
 %else
+%if "%{compiler_family}" == "arm1"
+    -fortran=armflang \
+%else
     -fortran=gfortran \
+%endif
     -c++=mpicxx \
     -cc=mpicc \
     -opari \
