@@ -29,12 +29,12 @@ BuildArch: aarch64
 %if 0%{?rhel} == 8
 Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-RHEL-8-aarch64-linux
 Requires: armpl-%{latest_installed_ver}.0-AArch64-RHEL-8-arm-linux-compiler-aarch64-linux
-Requires: gcc-%{latest_installed_ver}.0-Generic-AArch64-RHEL-8-aarch64-linux-11
+Requires: gcc-11.2.0-Generic-AArch64-RHEL-8-aarch64-linux-11
 %endif
 %if 0%{?sle_version} || 0%{?suse_version}
 Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-SLES-15-aarch64-linux
 Requires: armpl-%{latest_installed_ver}.0-AArch64-SLES-15-arm-linux-compiler-aarch64-linux
-Requires: gcc-%{latest_installed_ver}.0-Generic-AArch64-SLES-15-aarch64-linux-11
+Requires: gcc-11.2.0-Generic-AArch64-SLES-15-aarch64-linux-11
 %endif
 Requires: lmod%{PROJ_DELIM}
 
