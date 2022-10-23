@@ -29,12 +29,20 @@ BuildArch: aarch64
 %if 0%{?rhel} == 8
 Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-RHEL-8-aarch64-linux
 Requires: armpl-%{latest_installed_ver}.0-AArch64-RHEL-8-arm-linux-compiler-aarch64-linux
+Requires: gcc-%{latest_installed_ver}.0-Generic-AArch64-RHEL-8-aarch64-linux-11
 %endif
 %if 0%{?sle_version} || 0%{?suse_version}
 Requires: arm-linux-compiler-%{latest_installed_ver}-Generic-AArch64-SLES-15-aarch64-linux
 Requires: armpl-%{latest_installed_ver}.0-AArch64-SLES-15-arm-linux-compiler-aarch64-linux
+Requires: gcc-%{latest_installed_ver}.0-Generic-AArch64-SLES-15-aarch64-linux-11
 %endif
 Requires: lmod%{PROJ_DELIM}
+
+# The package gcc-*.0-Generic-AArch64-SLES-15-aarch64-linux-11 does not
+# list all dependencies it has in its list of provides. Let's add them here:
+Provides: libstdc++.so.6(GLIBCXX_3.4.26)(64bit)
+Provides: libstdc++.so.6(GLIBCXX_3.4.29)(64bit)
+Provides: libstdc++.so.6(CXXABI_1.3.13)(64bit)
 
 %description
 
