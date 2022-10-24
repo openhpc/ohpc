@@ -14,7 +14,7 @@
 %define pname ipmiutil
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 2.9.6
+Version: 3.1.8
 Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
 License:   BSD 3-clause
@@ -41,6 +41,7 @@ BuildRequires: gcc gcc-c++ libtool
 %endif
 %define init_dir  %{_initrddir}
 
+BuildRequires: make wget
 %description
 The ipmiutil package provides easy-to-use utilities to view the SEL,
 perform an IPMI chassis reset, set up the IPMI LAN and Platform Event Filter
@@ -110,6 +111,8 @@ make install DESTDIR=%{buildroot}
 %{_sbindir}/ifirewall
 %{_sbindir}/ifwum
 %{_sbindir}/ihpm
+%{_sbindir}/iuser
+%{_libdir}/libipmiutil.so.1
 %{_datadir}/%{pname}/ipmiutil_evt
 %{_datadir}/%{pname}/ipmiutil_asy
 %{_datadir}/%{pname}/ipmiutil_wdt
@@ -120,7 +123,7 @@ make install DESTDIR=%{buildroot}
 %{systemd_fls}/ipmiutil_asy.service
 %{systemd_fls}/ipmiutil_wdt.service
 %{systemd_fls}/ipmi_port.service
-%{_datadir}/%{pname}/ipmiutil.env
+%{_datadir}/%{pname}/ipmiutil.env.template
 %{_datadir}/%{pname}/ipmiutil.pre
 %{_datadir}/%{pname}/ipmiutil.setup
 %{_datadir}/%{pname}/ipmi_if.sh
@@ -154,6 +157,8 @@ make install DESTDIR=%{buildroot}
 %{_mandir}/man8/iekanalyzer.8*
 %{_mandir}/man8/itsol.8*
 %{_mandir}/man8/idcmi.8*
+%{_mandir}/man8/iuser.8*
+%{_mandir}/man8/iseltime.8*
 %doc AUTHORS ChangeLog COPYING NEWS README TODO
 %doc doc/UserGuide
 
@@ -188,8 +193,15 @@ then
 %if 0%{?req_systemd}
 %service_add_post ipmi_port.service ipmiutil_evt.service ipmiutil_asy.service ipmiutil_wdt.service
 %else
-   if [ -x /bin/systemctl ]; then
-      echo "IINITDIR=%{init_dir}" >>%{_datadir}/%{pname}/ipmiutil.env
+   if [ -x /bin/systemctl ] && [ -d %{unit_dir} ]; then
+      # Replace if exists, append if not.
+      # Use # as the sed delimiter to prevent handling slash in the path.
+      if [ ! -f %{_datadir}/%{name}/ipmiutil.env ]; then
+         cp %{_datadir}/%{name}/ipmiutil.env.template %{_datadir}/%{name}/ipmiutil.env
+      fi
+      grep -q 'IINITDIR' %{_datadir}/%{name}/ipmiutil.env \
+         && sed -i 's#^IINITDIR=.*#IINITDIR=%{init_dir}#' %{_datadir}/%{name}/ipmiutil.env \
+         || echo "IINITDIR=%{init_dir}" >> %{_datadir}/%{name}/ipmiutil.env
       cp -f ${scr_dir}/ipmiutil_evt.service %{unit_dir}
       cp -f ${scr_dir}/ipmiutil_asy.service %{unit_dir}
       cp -f ${scr_dir}/ipmiutil_wdt.service %{unit_dir}
