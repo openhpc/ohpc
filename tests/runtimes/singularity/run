@@ -22,7 +22,9 @@ DISTRO=ubuntu
 IMAGE=./${DISTRO}.sif
 
 @test "[singularity] check for RPM" {
-    check_if_rpm_installed "singularity"
+#    check_if_rpm_installed "singularity"
+    run which singularity
+    assert_success    
 }
 
 @test "[singularity] pull down $DISTRO docker image" {
