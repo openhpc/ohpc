@@ -41,7 +41,9 @@ echo "-------------------------------------------------------"
 
 @test "[charliecloud] build alpine image from Docker (using singularity)" {
 
-    check_if_rpm_installed "singularity"
+#    check_if_rpm_installed "singularity"
+    run which singularity
+    assert_success
 
     if [ -d alpine ];then
        	rm -rf ./alpine
