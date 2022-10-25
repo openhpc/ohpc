@@ -163,7 +163,7 @@ function DirName(path)
     return tostring(path:match("(.*)/[^/]+$"))
 end
 
--- Concatonate all arguments into a path
+-- Concatenate all arguments into a path
 function PathCat(...)
     local path = ""
     local d = { ... }
@@ -189,7 +189,7 @@ function RunOSCommand(cmd)
     return cmdoutput:gsub("\n+$", ""), not handle:close()
 end
 
--- Convert mult-line string to array
+-- Convert multi-line string to array
 function StringtoArray(str)
     local splitstring = {}
     for l in str:gmatch("[^\n]*") do
@@ -334,7 +334,7 @@ local version = "]] .. version .. [["
     if modtype == "oneapi" then
         return ([[
 help("\nThis module makes all modules for oneAPI Toolkits\n" ..
-  "available to load. It does not local any oneAPI modules\n"
+  "available to load. It does not load any oneAPI modules\n"
 )
 
 whatis("Name: Intel(R) oneAPI Toolkit")
@@ -499,7 +499,7 @@ end
 local function md5sum(filename)
     local output, iserror = RunOSCommand("md5sum -z " .. filename)
     if iserror then
-        printformat("Unable to create md5sum for" .. filename, "error")
+        printformat("Unable to create md5sum for " .. filename, "error")
     end
     return output:sub(1, 32)
 end
@@ -597,7 +597,7 @@ local function read_manifest(modtype)
                     -- Include only valid versions
                     if checklist[c.file] == "OK" or
                         checklist[c.file] == "MOD" then
-                        -- Check that module type is recognozed
+                        -- Check that module type is recognized
                         if c.file == PathCat(C.MODPATH, "oneapi.lua") then
                             modlist:new("oneapi", c.file,
                                 c.md5, (checklist[c.file] == "MOD"))
