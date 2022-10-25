@@ -1,5 +1,15 @@
-COMPILER := gnu9
-MPIS := openmpi4 mpich mvapich2
+COMPILER := gnu12
+BUILD_ARCH := $(shell uname -m)
+
+ifeq ($(BUILD_ARCH), aarch64)
+	TAG_ARCH = arm64v8
+	MPIS := openmpi4 mpich
+endif
+ifeq ($(BUILD_ARCH), x86_64)
+	TAG_ARCH = amd64
+	MPIS := openmpi4 mpich mvapich2
+endif
+
 CONTAINERS := $(COMPILER) $(addprefix $(COMPILER)-,$(MPIS))
 CONTAINER_RUNTIME := podman
 CONTAINERS_PUSH := $(addsuffix -push,$(CONTAINERS))
@@ -11,15 +21,8 @@ BUILD_ARCH := $(shell uname -m)
 # For multiarch container images we need the arches as defined by the CONTAINER_RUNTIME
 ARCHES := arm64v8 amd64
 
-ifeq ($(BUILD_ARCH), aarch64)
-	TAG_ARCH = arm64v8
-endif
-ifeq ($(BUILD_ARCH), x86_64)
-	TAG_ARCH = amd64
-endif
-
 DEST ?= quay.io/ohpc/
-VERSION ?= 2.3.0
+VERSION ?= 2.6.0
 
 .PHONY: all $(CONTAINERS) push $(CONTAINERS_PUSH) $(COMPILER_CHECK) $(MPIS_CHECK) clean
 

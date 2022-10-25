@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:centos8
+FROM docker.io/library/rockylinux:8
 
 MAINTAINER The OpenHPC Project
 
@@ -13,14 +13,15 @@ COPY z01_lmod_load_default.sh /etc/profile.d/
 COPY bash-login-wrapper.sh /usr/bin/
 
 RUN yum -y install http://repos.openhpc.community/OpenHPC/2/CentOS_8/$arch/ohpc-release-2-1.el8.$arch.rpm
+RUN curl -s http://obs.openhpc.community:82/OpenHPC:/2.6:/Factory/EL_8/OpenHPC:2.6:Factory.repo > /etc/yum.repos.d/obs.repo
 
 RUN yum install -y 'dnf-command(config-manager)' && \
     yum config-manager --set-enabled powertools && \
     yum upgrade -y && \
     yum -y install openssh-clients && \
-    yum -y install gnu9-compilers-ohpc lmod-ohpc && \
+    yum -y install gnu12-compilers-ohpc lmod-ohpc && \
     yum clean all
 
-RUN echo 'export LMOD_SYSTEM_DEFAULT_MODULES="gnu9"' > /etc/profile.d/a01_lmod_set_default.sh
+RUN echo 'export LMOD_SYSTEM_DEFAULT_MODULES="gnu12"' > /etc/profile.d/a01_lmod_set_default.sh
 
 ENTRYPOINT ["/usr/bin/bash-login-wrapper.sh"]

@@ -1,0 +1,8 @@
+FROM ohpc-gnu12:2.6.0
+
+MAINTAINER The OpenHPC Project
+
+RUN yum -y install mvapich2-gnu12-ohpc && \
+    yum clean all
+
+RUN echo 'export LMOD_SYSTEM_DEFAULT_MODULES="gnu12 mvapich2"' > /etc/profile.d/a01_lmod_set_default.sh
