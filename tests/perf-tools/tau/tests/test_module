@@ -105,6 +105,7 @@ setup() {
 }
 
 @test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip "no longer checking for specific dynamic lib"
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
