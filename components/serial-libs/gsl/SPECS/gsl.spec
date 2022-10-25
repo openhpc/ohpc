@@ -55,7 +55,7 @@ lends itself to being used in very high level languages (VHLLs).
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-./configure --prefix=%{install_path} \
+./configure CFLAGS="-O2" --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
             --disable-static || { cat config.log && exit 1; }
 make %{?_smp_mflags}
