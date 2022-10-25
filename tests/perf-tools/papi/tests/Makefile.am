@@ -42,10 +42,10 @@ check_PROGRAMS      += fmultiplex1
 fmultiplex1_SOURCES     = fmultiplex1.F 
 fmultiplex1_LDADD       = libtestlib.a
 
-TESTS               += highlevel
-check_PROGRAMS      += highlevel
-highlevel_SOURCES     = highlevel.F 
-highlevel_LDADD       = libtestlib.a
+TESTS               += avail
+check_PROGRAMS      += avail
+avail_SOURCES     = avail.F f
+avail_LDADD       = libtestlib.a
 
 TESTS               += strtest
 check_PROGRAMS      += strtest

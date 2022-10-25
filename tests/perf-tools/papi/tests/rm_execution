@@ -89,12 +89,12 @@ ARGS=5
     assert_success
 }
 
-@test "[$testname] FORTRAN high-level APIs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s highlevel ];then
-	flunk "highlevel binary does not exist"
+@test "[$testname] FORTRAN avail under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s avail ];then
+	flunk "avail binary does not exist"
     fi
 
-    run_serial_binary ./highlevel
+    run_serial_binary ./avail
     assert_success
 }
 
