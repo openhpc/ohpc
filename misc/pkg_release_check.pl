@@ -41,12 +41,6 @@ foreach my $distro (@distros) {
 	my $base_version = $base_versions{$package}[0];
 	my $base_release = $base_versions{$package}[1];
 
-## # 	# for testing
-## 	if($package eq "vim-clustershell-ohpc") {
-## 	    $update_release="24.1";
-##  	}
-
-
 	# Sort the version strings...
 	my @versions = ($base_version,$update_version);
 	my @verSort = sort { versioncmp($a,$b) } @versions;
