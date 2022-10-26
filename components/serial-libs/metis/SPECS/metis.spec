@@ -16,13 +16,12 @@
 
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
-Version: 5.1.1
+Version: 5.1.0
 Release: 1%{?dist}
 License: ASL 2.0
 Group:   %{PROJ_NAME}/serial-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
-Source0: https://github.com/KarypisLab/METIS/archive/refs/tags/v%{version}-DistDGL-v%{dist_ver}.tar.gz
-Source1: https://github.com/KarypisLab/GKlib/archive/refs/tags/METIS-v%{version}-DistDGL-%{dist_ver}.tar.gz
+Source0: http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-%{version}.tar.gz
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
@@ -43,10 +42,7 @@ schemes developed in our lab.
 
 
 %prep
-%setup -q -b0 -a1 -n METIS-%{version}-DistDGL-v%{dist_ver}
-rmdir GKlib
-ln -s GKlib-METIS-v%{version}-DistDGL-%{dist_ver} GKlib
-
+%setup -q -n %{pname}-%{version}
 
 %build
 %ohpc_setup_compiler
@@ -95,4 +91,4 @@ mkdir -p %{buildroot}%{_docdir}
 %files
 %{OHPC_PUB}
 %doc Changelog
-%license LICENSE
+%license LICENSE.txt
