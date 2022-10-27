@@ -65,7 +65,7 @@ install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 %%__ohpc_flags           magic_and_path
 EOF
 
-%if 0%{?sles_version} || 0%{?suse_version} || 0%{?openEuler}
+%if 0%{?sles_version} || 0%{?suse_version}
 %{__cat} <<EOF >> %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
 %%__elflib_exclude_path  ^%{OHPC_HOME}
 EOF
