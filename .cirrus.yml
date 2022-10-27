@@ -25,7 +25,8 @@ openeuler_task:
   script: uname -a
   setup_script: |
     dnf install -y openEuler-release dnf-plugins-core git python3 make http://121.36.3.168:82/home:/huangtianhua:/ohpc/standard_aarch64/aarch64/ohpc-release-2-1.oe2203.ohpc.2.0.0.aarch64.rpm findutils rpm-build wget gawk jq which
-    dnf install -y lmod-ohpc
+    dnf install -y https://github.com/ohpc-openeuler/ohpc/releases/download/2.x-openEuler-gcc12-aarch64/gnu12-compilers-ohpc-12.2.0-1.ohpc.2.0.0.aarch64.rpm
+    dnf install -y lmod-ohpc ohpc-buildroot
     adduser ohpc
   build_script: |
     . /etc/profile.d/lmod.sh
