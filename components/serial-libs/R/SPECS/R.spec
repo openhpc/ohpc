@@ -44,14 +44,18 @@ BuildRequires:  xz-devel
 BuildRequires:  pcre2-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  tk-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  libXt-devel
 BuildRequires:  texinfo >= 5.1
 BuildRequires:  bzip2-devel
 %endif
 Requires:       cairo >= 1.2
 Requires:       fontconfig
+%if 0%{?openEuler}
+Requires:       freetype
+%else
 Requires:       freetype2
+%endif
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
