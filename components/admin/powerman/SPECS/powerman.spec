@@ -22,7 +22,7 @@ Group: %{PROJ_NAME}/admin
 Url: http://code.google.com/p/powerman/
 Source0: https://github.com/chaos/%{pname}/releases/download/%{version}/%{pname}-%{version}.tar.gz
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 %define _with_httppower 1
 %define _with_snmppower 1
 %define _with_genders 1
