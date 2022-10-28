@@ -1,6 +1,7 @@
 C  Ping-pong with MPI + I/O
 
-      include 'mpif.h'
+c      include 'mpif.h'
+      use mpi
 
       integer BUFFSIZE, MSGSIZE, error, rank, size, dest, i
       integer status(MPI_STATUS_SIZE), NITERS, retsize
