@@ -16,21 +16,22 @@
 Name:    %{pname}%{PROJ_DELIM}
 Version: 2.12
 Release: 1%{?dist}
-Epoch: 3
+Epoch:   3
 Summary: Remote shell program that uses munge authentication
 License: none
-Group: %{PROJ_NAME}/admin
-URL: https://github.com/chaos/mrsh
-Source:    https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{version}.tar.gz
-Patch1: mrsh-pam-suse.patch
-Patch2: mrlogin-Don-t-use-union-wait.patch
-Patch3: Add-force-to-libtoolize.patch
+Group:   %{PROJ_NAME}/admin
+URL:     https://github.com/chaos/mrsh
+Source0: https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{version}.tar.gz
+Patch1:  mrsh-pam-suse.patch
+Patch2:  mrlogin-Don-t-use-union-wait.patch
+Patch3:  Add-force-to-libtoolize.patch
 BuildRequires: ncurses-devel pam-devel munge-devel
 Requires: munge
 Provides: mrsh
 BuildRequires:  systemd-devel
 
 # support re-run of autogen
+BuildRequires: make
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool

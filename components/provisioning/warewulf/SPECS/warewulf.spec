@@ -30,7 +30,7 @@ Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
 URL:     https://github.com/hpcng/warewulf
-Source:  https://github.com/hpcng/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
+Source0: https://github.com/hpcng/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
 Source2: go_vendor-4.3.tgz
 Patch0:  warewulf-4.3.0-network_type.patch
 Patch1:  warewulf-4.3.0-ssh_completion.patch
