@@ -18,20 +18,20 @@ ARGS=8
 unset OMP_NUM_THREADS
 
 
-@test "[Extrae] MPI F77 trace under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s mpi_ping ];then
-	flunk "mpi_ping binary does not exist"
+@test "[Extrae] MPI C trace under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s heat_mpi ];then
+	flunk "heat_mpi binary does not exist"
     fi
 
     rm -f TRACE.mpits
-    rm -f mpi_ping.prv
+    rm -f heat_mpi.prv
     rm -rf set-0
     mkdir set-0
 
     mkdir -p .tmp.extrae
     export MPI2PRV_TMP_DIR=.tmp.extrae
 
-    run_mpi_binary "./tracef.sh ./mpi_ping" "" $NODES $TASKS
+    run_mpi_binary "./tracec.sh ./heat_mpi" "" $NODES $TASKS
     assert_success
 
     # allow for some job output lag from pbs
@@ -45,7 +45,7 @@ unset OMP_NUM_THREADS
 
     run mpi2prv -f TRACE.mpits 
 
-    run ls mpi_ping.prv
+    run ls heat_mpi.prv
     assert_success
 
 }

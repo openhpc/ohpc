@@ -1,10 +1,10 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
-check_PROGRAMS          = mpi_ping
-mpi_ping_LDFLAGS        = $(LDFLAGS)
-mpi_ping_SOURCES        = mpi_ping.f
+check_PROGRAMS          = heat_mpi
+heat_mpi_LDFLAGS        = $(LDFLAGS) -lm
+heat_mpi_SOURCES        = heat_mpi.c
 
-CLEANFILES              = pingtmp* mpi_ping.prv
+CLEANFILES              = pingtmp* heat_mpi.prv
 
 TESTS                   = test_module
 TESTS                  += rm_execution
