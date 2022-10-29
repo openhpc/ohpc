@@ -36,7 +36,7 @@ Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: libgomp
 %else
 BuildRequires: libgomp1
