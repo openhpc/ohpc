@@ -18,7 +18,7 @@
 
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	4.0.1
+Version:	3.8.3
 Release:	1%{?dist}
 License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
