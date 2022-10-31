@@ -3,13 +3,13 @@ toolchains mentioned in \S\ref{sec:3rdparty}, \OHPC{} also provides a subset of
 {\em optional} builds compatible with the Arm Compiler for Linux.
 These packages provide a similar hierarchical user environment experience as
 other compiler families present in \OHPC{}.  To take advantage of the
-available builds, the \OHPC{} variant of the Arm Compiler for Linux (and any
+available builds, the version 22.1 of the Arm Compiler for Linux (and any
 required licenses) must be downloaded and installed separately. See the
 following for more information on obtaining this toolchain:
 
 \begin{center}
-  \href{https://developer.arm.com/tools-and-software/server-and-hpc/downloads/arm-allinea-studio/openhpc}
-       {\color{blue}{https://developer.arm.com/tools-and-software/server-and-hpc/downloads/arm-allinea-studio/openhpc}}
+  \href{https://developer.arm.com/downloads/-/arm-compiler-for-linux}
+       {\color{blue}{https://developer.arm.com/downloads/-/arm-compiler-for-linux}}
 \end{center}
 
 
@@ -20,9 +20,7 @@ As noted in \S\ref{sec:master_customization}, the default installation path for
 \OHPC{} (\texttt{/opt/ohpc/pub}) is exported over NFS from the {\em master} to the 
 compute nodes, but the Arm Linux compiler installer defaults to a path of 
 \texttt{/opt/arm}. To make the Arm Linux compiler available to the compute 
-nodes one must either customize the installation path to be 
-within \texttt{/opt/ohpc/pub} (e.g. using the \texttt{-i /opt/ohpc/pub/arm}
-option with the Arm installer), or alternatively, add an additional NFS export
+nodes one must add an additional NFS export
 for \texttt{/opt/arm} that is mounted on desired compute nodes.
 \end{tcolorbox}
 \end{center}
@@ -49,6 +47,7 @@ Arm Linux Compiler, issue the following:
 [sms](*\#*) (*\install*) ohpc-arm1-serial-libs
 [sms](*\#*) (*\install*) ohpc-arm1-io-libs
 [sms](*\#*) (*\install*) ohpc-arm1-perf-tools
+[sms](*\#*) (*\install*) ohpc-arm1-python3-tools
 
 [sms](*\#*) (*\install*) ohpc-arm1-mpich-parallel-libs
 [sms](*\#*) (*\install*) ohpc-arm1-openmpi4-parallel-libs
