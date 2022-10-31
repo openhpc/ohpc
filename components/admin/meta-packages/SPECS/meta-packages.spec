@@ -102,6 +102,7 @@ Requires:  libcairo2
 Requires:  libpciaccess0
 Requires:  libatomic1
 Requires:  librdmacm1
+Requires:  libicu-suse65_1
 %ifarch x86_64
 Requires:  libpsm2-2
 %endif
