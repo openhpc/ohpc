@@ -195,11 +195,6 @@ export BASEFLAGS
 %{__cp} %{SOURCE3} .
 %{__chmod} 700 pbs-config
 export PATH="./:$PATH"
-
-# temporarily disable dynamic linkage for pbs
-if [ -e /opt/pbs/lib/libpbs.la ]; then
-    mv /opt/pbs/lib/libpbs.la /tmp
-fi
 %endif
 
 ./configure ${BASEFLAGS} || { cat config.log && exit 1; }
@@ -210,13 +205,6 @@ fi
 %endif
 
 make %{?_smp_mflags}
-
-# restore dynamic linkage for pbs
-%if %{with_tm}
-if [ -e /tmp/libpbs.la ]; then
-    mv /tmp/libpbs.la /opt/pbs/lib/libpbs.la
-fi
-%endif
 
 %install
 # OpenHPC compiler designation
@@ -247,6 +235,7 @@ module-whatis "URL: %{url}"
 set     version			    %{version}
 
 setenv          MPI_DIR             %{install_path}
+setenv          OMPI_MCA_mca_base_component_show_load_errors 0
 %if 0%{with_pmix}
 setenv          OHPC_MPI_LAUNCHERS  pmix
 %endif
