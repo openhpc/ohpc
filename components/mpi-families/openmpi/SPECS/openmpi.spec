@@ -195,6 +195,11 @@ export BASEFLAGS
 %{__cp} %{SOURCE3} .
 %{__chmod} 700 pbs-config
 export PATH="./:$PATH"
+
+# temporarily disable dynamic linkage for pbs
+if [ -e /opt/pbs/lib/libpbs.la ]; then
+    mv /opt/pbs/lib/libpbs.la /tmp
+fi
 %endif
 
 ./configure ${BASEFLAGS} || { cat config.log && exit 1; }
@@ -205,6 +210,13 @@ export PATH="./:$PATH"
 %endif
 
 make %{?_smp_mflags}
+
+# restore dynamic linkage for pbs
+%if %{with_tm}
+if [ -e /tmp/libpbs.la ]; then
+    mv /tmp/libpbs.la /opt/pbs/lib/libpbs.la
+fi
+%endif
 
 %install
 # OpenHPC compiler designation
