@@ -2,7 +2,7 @@
 !  Copyright (C) 2003, Northwestern University and Argonne National Laboratory
 !  See COPYRIGHT notice in top-level directory.
 !
-!  $Id: pnf_test.f 2224 2015-12-16 06:10:36Z wkliao $
+!  $Id$
 !
 !=============================================================================
 !
@@ -19,14 +19,10 @@
 ! ROUTINES
 !   Pnf_Test (Program)
 !
-! The purpose of this program is to test the Fortran interface to the
-! parallel netCDF library being developed at Argonne National Lab and
-! Northwestern Univ.
-!
 ! This code writes the array, tt(k)(j)(i), into the file 'pnf_test.nc'. It
 ! then reads the array from the file, and compares it with the original
 ! values.
-! 
+!
 ! i=longitude, j=latitude, k=level
 !
 !=============================================================================
@@ -43,7 +39,7 @@
 !     Parameter declarations.
 !     -----------------------
 
-      integer NREADS, NWRITES 
+      integer NREADS, NWRITES
       parameter (NREADS = 5, NWRITES = 5 )
       ! number of read samples
       ! number of write samples
@@ -56,30 +52,30 @@
 !     ----------------------
 
       logical reorder
-              
+
       logical isperiodic(3)
-              
+
       integer comm_cart                   ! Cartesian communicator
       integer ierr
       integer*8 istart, jstart, kstart ! offsets of 3D field
       integer*8 locsiz
       integer mype                        ! rank in comm_cart
       integer totpes                      ! total number of PEs
-              
+
       integer*8 locsiz_3d(3) ! local sizes of 3D fields
       integer pe_coords(3)                ! Cartesian PE coords
-              
+
       integer numpes(3)                      ! number of PEs along axes;
                                              !   determined by MPI where a
                                              !   zero is specified
 
       double precision  filsiz
-              
+
       real*4  rdt_g(2)
       real*4  rdt_l(2)
       real*4  wrt_g(2)
       real*4  wrt_l(2)
-              
+
       real*4  rrates_g(2)
       real*4  rrates_l(2)
       real*4  wrates_g(2)
@@ -209,7 +205,7 @@
         Write (6,920) totpes
         Write (6,922) wrt_g(1), wrt_g(2), wrates_g(2),
      &                rdt_g(1), rdt_g(2), rrates_g(2)
-      end if 
+      end if
 
  905  format ("File size: ", e10.3, " MB")
  910  format ("    Write: ", f9.3, " MB/s  (eff., ", f9.3, " MB/s)")
@@ -221,7 +217,6 @@
       call MPI_Comm_Free (comm_cart, ierr)
 
       call MPI_Finalize  (ierr)
-
 
       Stop
 
@@ -265,14 +260,14 @@
       integer ncid
       integer nw
       integer tt_id
-              
+
       integer*8 count_3d(3)
       integer*8 start_3d(3)
-              
+
       integer dim_id(3)
-              
+
       double precision  t1, t2, t3
-           
+
       integer max_loc_size
       parameter( max_loc_size = 20000000 )
       real*4  tt(max_loc_size)   ! Need tt(locsiz)
@@ -410,12 +405,12 @@
       integer nr
       integer tt_id
       integer ii
-              
+
       integer*8 count_3d(3)
       integer*8 start_3d(3)
-              
+
       double precision  t1, t2, t3
-              
+
       integer max_loc_size
       parameter( max_loc_size = 20000000 )
       real*4  buf(max_loc_size)
@@ -599,8 +594,8 @@
           do ii = 1, int(locsiz_3d(1))
 
              tt(ind) = real(
-     &         (istart-1 +(ii - 1) + 1 + totsiz_3d(3)*(jstart-1 + 
-     &                 (jj - 1) + totsiz_3d(2)*(kstart-1 + 
+     &         (istart-1 +(ii - 1) + 1 + totsiz_3d(3)*(jstart-1 +
+     &                 (jj - 1) + totsiz_3d(2)*(kstart-1 +
      &                 (kk-1)))) * 1.0d-3)
              ind = ind + 1
 
@@ -642,10 +637,10 @@
 
       integer ierr
       integer ii
-              
-      real*4  delmax, delmin, delta
+
+      real*4  delmax(1), delmin(1), delta
       real*4  diff
-              
+
       real*4  wr(5)
       real*4  ws(5)
 
@@ -657,8 +652,8 @@
       ws(1) = 0.0d0      ! diff
       ws(2) = 0.0d0      ! sumsq
       ws(3) = int(locsiz)     ! locsiz
-      ws(4) = 0.0d0      ! delmax
-      ws(5) = 1.0d38     ! Huge (ws)  ! delmin
+      ws(4) = 0.0d0      ! delmax(1)
+      ws(5) = 1.0d38     ! Huge (ws)  ! delmin(1)
 
 
       do ii = 1, int(locsiz)
@@ -673,17 +668,17 @@
       call MPI_Allreduce
      &  (ws,    wr,     3, MPI_REAL, MPI_SUM, comm_cart, ierr)
       call MPI_Allreduce
-     &  (ws(4), delmax, 1, MPI_REAL, MPI_MAX, comm_cart, ierr)
+     &  (ws(4), delmax(1), 1, MPI_REAL, MPI_MAX, comm_cart, ierr)
       call MPI_Allreduce
-     &  (ws(5), delmin, 1, MPI_REAL, MPI_MIN, comm_cart, ierr)
+     &  (ws(5), delmin(1), 1, MPI_REAL, MPI_MIN, comm_cart, ierr)
 
 
       diff   = Sqrt (wr(1) / wr(2))         ! normalized error
-      delmax = Sqrt (wr(3) * delmax/wr(2))  ! normalized max difference
-      delmin = Sqrt (wr(3) * delmin/wr(2))  ! normalized min difference
+      delmax(1) = Sqrt (wr(3) * delmax(1)/wr(2))  ! normalized max difference
+      delmin(1) = Sqrt (wr(3) * delmin(1)/wr(2))  ! normalized min difference
 
 
-      if (mype .EQ. 0) Write (6,990) diff, delmax, delmin
+      if (mype .EQ. 0) Write (6,990) diff, delmax(1), delmin(1)
 
  990  format ("diff, delmax, delmin = ",
      &        e10.3, 1x, e10.3, 1x, e10.3)
