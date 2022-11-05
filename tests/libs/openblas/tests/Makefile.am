@@ -2,13 +2,9 @@ TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 AM_FCFLAGS = "-I ./include"
 AM_CFLAGS = "-DADD_ -I ./include"
 
-TESTS                   = xscblat1
-check_PROGRAMS          = xscblat1
-xscblat1_SOURCES        = c_sblas1.c c_sblat1.f
-
-TESTS                  += xdcblat1
-check_PROGRAMS         += xdcblat1
-xdcblat1_SOURCES        = c_dblas1.c c_dblat1.f
+TESTS                   = dblat1
+check_PROGRAMS          = dblat1
+dblat1_SOURCES          = dblat1.f
 
 TESTS                  += xccblat1
 check_PROGRAMS         += xccblat1
