@@ -17,21 +17,12 @@ ARGS=0
 export GFORTRAN_UNBUFFERED_PRECONNECTED=1
 export OMP_NUM_THREADS=2
 
-@test "[$testname/xscblat1] xscblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xscblat1 ];then
-	flunk "xscblat1 binary does not exist"
+@test "[$testname/dblat1] dblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s dblat1 ];then
+        flunk "dblat1 binary does not exist"
     fi
 
-    run_serial_binary ./xscblat1 $ARGS
-    assert_success
-}
-
-@test "[$testname/xdcblat1] xdcblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xdcblat1 ];then
-	flunk "xdcblat1 binary does not exist"
-    fi
-
-    run_serial_binary ./xdcblat1 $ARGS
+    run_serial_binary ./dblat1 $ARGS
     assert_success
 }
 
