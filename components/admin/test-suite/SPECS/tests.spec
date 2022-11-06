@@ -66,6 +66,9 @@ find %{buildroot}/home/%{testuser}/tests -name .gitignore  -exec rm {} \;
 getent passwd %{testuser} >/dev/null || \
     /usr/sbin/useradd -U -c "OpenHPC integration test account" \
     -s /bin/bash -m -b /home %{testuser}
+%if 0%{?suse_version}
+usermod -a -G singularity ohpc-test
+%endif
 exit 0
 
 %files
