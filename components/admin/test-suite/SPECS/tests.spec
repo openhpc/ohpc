@@ -29,6 +29,7 @@ BuildRequires:  automake%{PROJ_DELIM}
 %if 0%{?suse_version}
 Requires(pre):  shadow
 Requires: python-base
+BuildRequires: singularity
 %endif
 
 %if 0%{?rhel_version}
