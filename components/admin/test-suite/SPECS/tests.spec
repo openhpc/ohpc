@@ -29,7 +29,6 @@ BuildRequires:  automake%{PROJ_DELIM}
 %if 0%{?suse_version}
 Requires(pre):  shadow
 Requires: python-base
-Requires: singularity
 %endif
 
 %if 0%{?rhel_version}
@@ -68,7 +67,9 @@ getent passwd %{testuser} >/dev/null || \
     /usr/sbin/useradd -U -c "OpenHPC integration test account" \
     -s /bin/bash -m -b /home %{testuser}
 %if 0%{?suse_version}
-usermod -a -G singularity ohpc-test
+if [ $(getent group singularity) ]; then
+    usermod -a -G singularity ohpc-test
+fi
 %endif
 exit 0
 
