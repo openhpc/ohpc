@@ -71,6 +71,7 @@ make
 %install
 make DESTDIR=%{buildroot} install
 %{__mkdir_p} %{buildroot}%{_localstatedir}/log/%{pname}
+%{__mkdir_p} %{buildroot}%{_sysconfdir}
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}
 
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
