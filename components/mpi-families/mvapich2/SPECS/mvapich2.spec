@@ -61,12 +61,12 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 Buildrequires: ofed
 BuildRequires: rdma-core-devel infiniband-diags-devel
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 Buildrequires: rdma-core-devel libibmad-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
-BuildRequires: bison make
+BuildRequires: bison make m4
 BuildRequires: zlib-devel
 
 # Default library install path
