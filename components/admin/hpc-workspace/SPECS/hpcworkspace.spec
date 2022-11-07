@@ -70,16 +70,8 @@ make
 
 %install
 make DESTDIR=%{buildroot} install
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/cron.daily
 %{__mkdir_p} %{buildroot}%{_localstatedir}/log/%{pname}
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}
-%{__cat} << EOF > %{buildroot}%{_sysconfdir}/cron.daily/%{pname}
-#!/bin/sh
-
-# Daily cleanup script for %{pname}
-%{install_path}/sbin/ws_expirer -c > %{_localstatedir}/log/%{pname}/expirer-`date +%y.%m.%d`
-find %{_localstatedir}/log/%{pname} -type f -ctime +90 -exec rm {} \;
-EOF
 
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
@@ -118,7 +110,6 @@ EOF
 %dir %{_sysconfdir}/cron.daily
 %{OHPC_ADMIN}/%{pname}
 %{OHPC_MODULES}/%{pname}
-%{_sysconfdir}/cron.daily/%{pname}
 %attr(4755, root, root) %{install_path}/bin/ws_allocate
 %attr(4755, root, root) %{install_path}/bin/ws_release
 %attr(4755, root, root) %{install_path}/bin/ws_restore
@@ -127,8 +118,8 @@ EOF
 %pre
 # provide specific uid/gid to ensure that it is the same across the cluster
 /usr/bin/getent group hpcws >/dev/null 2>&1 || \
-  /usr/sbin/groupadd -r hpcws -g 85
+  /usr/sbin/groupadd -r hpcws -g 203
 /usr/bin/getent passwd hpcws >/dev/null 2>&1 || \
   /usr/sbin/useradd -c "HPC Workspace manager" \
-  -d %{_sysconfdir} -g hpcws -s /sbin/nologin -r hpcws -u 85
+  -d %{_sysconfdir} -g hpcws -s /sbin/nologin -r hpcws -u 203
 exit 0
