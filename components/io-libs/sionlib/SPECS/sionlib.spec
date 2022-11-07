@@ -27,7 +27,7 @@ Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}
 Patch0:    sionlib-llvm-arm.patch
 
 # For pre-processor only:
-%if 0%{?rhel}
+%if 0%{?rhel} ||  0%{?openEuler}
 BuildRequires: gcc-gfortran
 %else
 BuildRequires: gcc-fortran
