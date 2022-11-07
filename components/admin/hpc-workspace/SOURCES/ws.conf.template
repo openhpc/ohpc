@@ -1,8 +1,8 @@
 admins: [root]                  # users listed here can see all workspaces with ws_list
 clustername:                    # some name for the cluster
 smtphost:                       # (my smtp server for sending mails)
-dbuid: 85                       # TYPICALLY DON'T CHANGE. a user id, this is the owner of some directories
-dbgid: 85                       # TYPICALLY DON'T CHANGE. a group id, this is the group of some directories
+dbuid: 203                       # TYPICALLY DON'T CHANGE. a user id, this is the owner of some directories
+dbgid: 203                       # TYPICALLY DON'T CHANGE. a group id, this is the group of some directories
 default: ws1                    # the default workspace location to use for everybody
 duration: 10                    # (maximum duration in days, default for all workspaces)
 maxextensions: 1                # (maximum number of times a user can ask for a extension)
