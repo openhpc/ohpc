@@ -107,7 +107,6 @@ EOF
 %dir %{OHPC_ADMIN}
 %dir %{OHPC_MODULES}
 %dir %{_localstatedir}/log/%{pname}
-%dir %{_sysconfdir}/cron.daily
 %{OHPC_ADMIN}/%{pname}
 %{OHPC_MODULES}/%{pname}
 %attr(4755, root, root) %{install_path}/bin/ws_allocate
