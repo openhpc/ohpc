@@ -116,7 +116,7 @@
 
 %\vspace*{.5cm}
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
-\input{common/add_to_compute_chroot_intro}
+\input{common/add_to_compute_chroot_intro_suse}
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
@@ -126,6 +126,9 @@
 # copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
 # install. Note that these will be synchronized with future updates via the provisioning system.
 [sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
+# Add OpenHPC base components
+[sms](*\#*) (*\chrootinstall*) ohpc-base-compute
 
 # Add SLURM client support meta-package and enable munge
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
