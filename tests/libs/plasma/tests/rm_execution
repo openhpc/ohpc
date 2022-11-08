@@ -25,6 +25,7 @@ ARGS=0
 }
 
 @test "[$testname/F_test] F_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    skip
     if [ ! -s F_test ];then
 	flunk "F_test binary does not exist"
     fi

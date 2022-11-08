@@ -26,15 +26,15 @@ AC_PROG_FC
 AC_C_CONST
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
-  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS}"
-  FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
+  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -fopenmp"
+  FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS} -fopenmp"
   FCFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblasqw -lcoreblas -lquark -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
 else
-  CFLAGS="-I ${PLASMA_INC} ${CFLAGS}"
-  FFLAGS="-I ${PLASMA_INC} ${FFLAGS}"
+  CFLAGS="-I ${PLASMA_INC} ${CFLAGS} -I${OPENBLAS_INC} -fopenmp"
+  FFLAGS="-I ${PLASMA_INC} ${FFLAGS} -fopenmp"
   FCFLAGS="-I ${PLASMA_INC} ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblasqw -lcoreblas -lquark -L${OPENBLAS_LIB} -lopenblas -lpthread -lm ${LDFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -L${OPENBLAS_LIB} -lopenblas -lpthread -lm ${LDFLAGS}"
 fi
 
 
