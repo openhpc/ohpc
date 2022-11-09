@@ -74,6 +74,7 @@ Requires:  NetworkManager
 %if 0%{?suse_version}
 Requires:  glibc-locale
 Requires:  nfs-kernel-server
+Requires:  singularity
 %endif
 %description -n %{PROJ_NAME}-base
 Collection of base packages
