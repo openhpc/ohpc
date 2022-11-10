@@ -114,13 +114,19 @@
 \input{common/warewulf_mkchroot_suse}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
-\input{common/add_to_compute_chroot_intro}
+\input{common/add_to_compute_chroot_intro_suse}
 
 %\clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Import GPG keys for chroot repository usage
-[sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
+  [sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
+
+# copy credential files into $CHROOT to ensure consistent uid/gids for package installs
+[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
+# Add OpenHPC base components
+[sms](*\#*) (*\chrootinstall*) ohpc-base-compute
 
 # Add OpenPBS client support
 [sms](*\#*) (*\chrootinstall*) openpbs-execution-ohpc
