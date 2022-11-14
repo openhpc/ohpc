@@ -16,6 +16,8 @@ my %page_breaks = ();
 if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"ohpc-gnu9-openmpi4-io-libs"} = 2;
     $page_breaks{"ohpc-intel-mvapich2-parallel-libs"} = 3;
+}  elsif ( $ENV{'PWD'} =~ /\S+\/aarch64\// ) {
+    $page_breaks{"ohpc-gnu9-openmpi4-parallel-libs"} = 2;
 }
 
 sub write_table_header {
