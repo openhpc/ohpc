@@ -83,7 +83,7 @@ if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"mumps-gnu12-impi-ohpc"} = 2;
     $page_breaks{"scalapack-gnu9-impi-ohpc"} = 3;
 } elsif ( $ENV{'PWD'} =~ /\S+\/aarch64\// ) {
-    $page_breaks{"slepc-gnu7-openmpi-ohpc"} = 2;
+    $page_breaks{"scalapack-gnu9-mpich-ohpc"} = 2;
 }
 
 my $longSummaryLine = 60;
