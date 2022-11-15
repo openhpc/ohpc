@@ -1,0 +1,34 @@
+Prior to assembling the image, it is advantageous to perform any additional
+customization within the chroot environment created for the desired {\em
+ compute} instance. The following steps document the process to add a local
+{\em ssh} key created by \Warewulf{} to support remote access, 
+%identify the resource manager server, configure NTP for compute resources, 
+and enable \NFS{}
+mounting of a \$HOME file system and the public \OHPC{} install path
+(\texttt{/opt/ohpc/pub}) that will be hosted by the {\em master} host in this
+example configuration.
+
+\iftoggleverb{isCentOS_ww_pbs_x86}
+\vspace*{0.15cm}
+%\clearpage
+\else
+\vspace*{0.15cm}
+\fi
+
+% begin_ohpc_run
+% ohpc_comment_header Customize system configuration \ref{sec:master_customization}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Initialize warewulf database and ssh_keys
+[sms](*\#*) wwinit database
+[sms](*\#*) wwinit ssh_keys
+
+# Add NFS client mounts of /home and /opt/ohpc/pub to base image
+[sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=4,nodev,nosuid 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0 0" >> $CHROOT/etc/fstab
+
+# Export /home and OpenHPC public packages from master server
+[sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+\end{lstlisting}
+% end_ohpc_run
+
