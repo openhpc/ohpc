@@ -6,13 +6,26 @@ Version 2.6 (16 Nov 2022)
 
   * updated target distro support to EL 8.6 and Leap 15.3
   * new compiler variant (gnu12) introduced with this release
-  * SLURM build updated to include REST API interface package
+  * SLURM build updated to include optional REST API interface package
   * updated SLURM recipes to include cgroups.conf
   * fix for Leap 15.3 provisioning with Warewulf (https://github.com/openhpc/ohpc/issues/1602)
   * tech preview build of Warewulf 4.x 
   * variety of component version updates and other additions highlighted further below  
 
-   [Component Additions]
+[Known Issues]
+
+  * Several package builds with the latest Intel classic compiler exhibited problems with the OpenHPC test
+    suite. Affected packages are: plasma, TAU, and superlu_dist. Users are advised to stick with the gcc (gnu12)
+    compiler variant if using these packages.
+  * We have encountered package checksum issues from upstream Rocky Linux when creating Warewulf VNFS images. If you
+    encounter issues installing the tzdata package for a Rocky8 VNFS image (similar to
+    https://bugs.rockylinux.org/view.php?id=694), consider specifying a preferred mirror URL via the YUM_MIRROR_BASE
+    variable and retry the `mkchroot` command. Available mirrors are listed at
+    ttps://mirrors.rockylinux.org/mirrormanager/mirrors. In the US, we have consistent success using the following:
+
+    export YUM_MIRROR_BASE=https://dfw.mirror.rackspace.com/rocky
+  
+[Component Additions]
       * R-gnu12-ohpc                             (v4.2.1)
       * adios-gnu12-impi-ohpc                    (v1.13.1)
       * adios-gnu12-mpich-ohpc                   (v1.13.1)
@@ -157,7 +170,7 @@ Version 2.6 (16 Nov 2022)
       * trilinos-gnu12-openmpi4-ohpc             (v13.4.0)
       * warewulf-ohpc                            (v4.3.0)
 
-   [Component Version Changes]
+[Component Version Changes]
       * EasyBuild-ohpc                           (v4.5.0 -> v4.6.2)
       * boost-intel-impi-ohpc                    (v1.75.0 -> v1.80.0)
       * boost-intel-mpich-ohpc                   (v1.75.0 -> v1.80.0)
@@ -308,20 +321,21 @@ Version 2.4 (16 Nov 2021)
 
   * updated target distro support to EL 8.5 and Leap 15.3 
   * packaging update for hwloc - resource managers are now configured to rely directly on ohpc variant
-  * updated ohpc compatibility packages and software rebuilds to support Intel oneAPI packaging (https://github.com/openhpc/ohpc/issues/1317)
+  * updated ohpc compatibility packages and software rebuilds to support Intel oneAPI packaging
+    (https://github.com/openhpc/ohpc/issues/1317)
   * removal of `rdma.service` usage for EL8 recipes (https://github.com/openhpc/ohpc/issues/1347)
   * added modulecmd wrapper to lmod (https://github.com/openhpc/ohpc/issues/1346)
   * spack packaging updates (https://github.com/openhpc/ohpc/pull/1365)
   * EL8 installation recipes transitioned to Rocky Linux (https://rockylinux.org) - with the announcement that CentOS8
     is being discontinued at the end of 2021, the OpenHPC project is migrating example installation recipes and
-    associated testing to use Rocky8. Note that OpenHPC packages builds are performed against RHEL8 packaging and should
-    be usable with any binary compatible clone. 
+    associated testing to use Rocky8. Note that OpenHPC packages builds are performed against RHEL8 packaging and
+    should be usable with any binary compatible clone.
   * variety of component version updates highlighted further below
 
 [Known Issues]
 
-  * RHEL 8.5: At present, BeeGFS and Lustre-clients are not available for a RHEL 8.5 kernel.  If this functionality is desired,
-    users are encouraged to stick with a RHEL 8.4 kernel until newer client versions are released upstream.
+  * RHEL 8.5: At present, BeeGFS and Lustre-clients are not available for a RHEL 8.5 kernel.  If this functionality is
+    desired, users are encouraged to stick with a RHEL 8.4 kernel until newer client versions are released upstream.
   * Leap 15.3: BeeGFS and Lustre-clients are not yet available.
   * xCAT recipes are unavailable for Rocky8 - we expect to re-enable xCAT-based recipes in a future release when this
     support is enabled upstream.
@@ -480,8 +494,8 @@ Version 2.3 (25 June 2021)
 
 [Known Issues]
 
-  * At present, a Lustre-client build is not available for a RHEL 8.4 kernel.  If Lustre client functionality is desired,
-    users are encouraged to stick with a RHEL 8.3 kernel until a newer Lustre version is released upstream.
+  * At present, a Lustre-client build is not available for a RHEL 8.4 kernel.  If Lustre client functionality is
+    desired, users are encouraged to stick with a RHEL 8.3 kernel until a newer Lustre version is released upstream.
 
 [Component Version Changes]
 
@@ -545,8 +559,8 @@ Version 2.1 (06 April 2021)
 [Important Highlights/Notices for v2.1]
 
   * the newer version of SLURM included in this release deprecates the accounting_storage/filetxt option. If you were
-    using this configuration locally, you will need to comment out this plugin in slurm.conf or will encounter an error on
-    startup. Sites previously dependent on this functionality for simple accounting mechanisms may want to consider
+    using this configuration locally, you will need to comment out this plugin in slurm.conf or will encounter an error
+    on startup. Sites previously dependent on this functionality for simple accounting mechanisms may want to consider
     replacing with the ascii job completion file option (JobCompType=jobcomp/filetxt).
   * the Arm Compiler for Linux v21.0 is incompatible with the OpenHPC 2.x series
 
@@ -643,14 +657,15 @@ Version 2.0 (06 October 2020)
      o Note that 2.x builds for SUSE based systems are now performed against Leap instead of SLES.  Leap 15 is
        intended to be compatible with SLES 15.
   * MPICH builds now use the newer ch4 interface
-  * 2.x introduces the use of two related transport layers for MPICH and OpenMPI family builds that support a variety of
-    underlying fabrics: UCX (Unified Communication X) and OFI (OpenFabrics interfaces)
+  * 2.x introduces the use of two related transport layers for MPICH and OpenMPI family builds that support a variety
+    of underlying fabrics: UCX (Unified Communication X) and OFI (OpenFabrics interfaces)
   * PBS-related name change: relevant packages and associated recipes have been updated to use OpenPBS (instead of PBS
     Professional) to reflect upstream change (https://www.openpbs.org)
   * 2.x also introduces initial 3rd party builds against the Arm Linux compiler for aarch64
-     o A compiler compatibility package (`arm1-compilers-devel-ohpc`) is provided to enable the `arm1` compiler variant. 
-     o Initially, only a subset of development packages are available for use with the `arm1` variant. See Appendix E in
-      the aarch64 recipes for details on available builds.
+     o A compiler compatibility package (`arm1-compilers-devel-ohpc`) is provided to enable the `arm1` compiler
+     variant.
+     o Initially, only a subset of development packages are available for use with the `arm1` variant. See Appendix E
+      in the aarch64 recipes for details on available builds.
   * 2.x package repositories are now hosted on a new site: http://repos.openhpc.community
 
 [General Updates]
@@ -666,8 +681,8 @@ Version 2.0 (06 October 2020)
   * enabled lustre-client for Centos8 (note that Lustre is not yet available for Leap 15)
   * resolved several additional builds missing from 2.0RC1
   * enable additional installation recipes (xCAT and OpenPBS on CentOS8)
-  * introduce 3rd party builds against the Arm Linux compiler for aarch64 (arm1 compiler variant); please note that only
-    a subset of packages are available for this variant - we hope to add more during subsequent releases
+  * introduce 3rd party builds against the Arm Linux compiler for aarch64 (arm1 compiler variant); please note that
+    only a subset of packages are available for this variant - we hope to add more during subsequent releases
   * variety of component version updates and other additions highlighted below:
 
 [Component Additions]
