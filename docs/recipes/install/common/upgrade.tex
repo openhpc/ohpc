@@ -39,20 +39,6 @@ rolling updates are pre-configured.
 [sms](*\#*)  (*\upgrade*) "ohpc-base"
 \end{lstlisting}
   
-\iftoggleverb{isWarewulf}
-\begin{center}
-\begin{tcolorbox}[]
-\small
-The version of \Warewulf{} included in \OHPC{} v1.3.6 added a new
-architecture-specific package containing iPXE files. Upgraders will need to
-install this package on the SMS node.
-\begin{lstlisting}[language=bash,keywords={},literate={-}{-}1 {ARCH}{\arch{}}1]
-[sms](*\#*)  (*\install*) warewulf-provision-server-ipxe-ARCH-ohpc
-\end{lstlisting}
-\end{tcolorbox}
-\end{center}
-\fi
-
 \item Upgrade packages in compute image
 
 \begin{lstlisting}[language=bash,keywords={}]
