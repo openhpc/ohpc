@@ -14,6 +14,7 @@
 %global _with_hwloc 1
 %global _with_numa 1
 %global _with_slurmrestd 1
+%global _with_multiple_slurmd 1
 
 %define pname slurm
 
@@ -150,6 +151,8 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 
 #needed to enable jobcomp_elasticsearch plugin
 BuildRequires: libcurl-devel
+
+BuildRequires: make gcc
 
 %if %{with lua}
 BuildRequires: pkgconfig(lua) >= %{luaver}
@@ -375,11 +378,7 @@ select information.
 
 %prep
 # when the rel number is one, the tarball filename does not include it
-%setup -n %{slurm_source_dir}
-%if 0%{?rhel}
-mkdir bin
-ln -s /usr/bin/python2 bin/python
-%endif
+%setup -q -n %{slurm_source_dir}
 
 %build
 %if 0%{?rhel}
