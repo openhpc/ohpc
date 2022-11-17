@@ -1,6 +1,10 @@
 name: Validate
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    branches:
+      - 2.x
 
 jobs:
   check_spec:
@@ -33,7 +37,6 @@ jobs:
         dnf install -y epel-release dnf-plugins-core git python3 http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm findutils rpm-build wget gawk
         dnf config-manager --set-enabled powertools
         dnf config-manager --set-enabled devel
-        wget http://obs.openhpc.community:82/OpenHPC:/2.6:/Factory/EL_8/OpenHPC:2.6:Factory.repo -O /etc/yum.repos.d/obs.repo
         dnf install -y lmod-ohpc
         adduser ohpc
     - uses: actions/checkout@v2
@@ -55,7 +58,6 @@ jobs:
       run: |
         zypper -n install awk rpmbuild wget python3
         zypper -n --no-gpg-checks install http://repos.openhpc.community/OpenHPC/2/Leap_15/x86_64/ohpc-release-2-1.leap15.x86_64.rpm
-        wget http://obs.openhpc.community:82/OpenHPC:/2.6:/Factory/Leap_15/OpenHPC:2.6:Factory.repo -O /etc/zypp/repos.d/obs.repo
         zypper -n --no-gpg-checks install lmod-ohpc
         useradd -m ohpc
     - uses: actions/checkout@v2
