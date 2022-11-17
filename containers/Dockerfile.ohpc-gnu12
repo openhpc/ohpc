@@ -13,7 +13,6 @@ COPY z01_lmod_load_default.sh /etc/profile.d/
 COPY bash-login-wrapper.sh /usr/bin/
 
 RUN yum -y install http://repos.openhpc.community/OpenHPC/2/CentOS_8/$arch/ohpc-release-2-1.el8.$arch.rpm
-RUN curl -s http://obs.openhpc.community:82/OpenHPC:/2.6:/Factory/EL_8/OpenHPC:2.6:Factory.repo > /etc/yum.repos.d/obs.repo
 
 RUN yum install -y 'dnf-command(config-manager)' && \
     yum config-manager --set-enabled powertools && \
