@@ -35,7 +35,7 @@ Conflicts: warewulf < 3
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 Warewulf Cluster contains tools and libraries to facilitate the
 configuration of a cluster and its nodes.

@@ -13,13 +13,23 @@ if len(sys.argv) <= 2:
     print("Usage: %s <non-root-user> <list of files to check>" % sys.argv[0])
     sys.exit(0)
 
-error = False
 spec_found = False
 build_user = sys.argv[1]
 dnf_based = False
 
 # Check which base OS we are using
 reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
+
+skip_ci_specs = []
+skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
+if skip_ci_specs_env:
+    if os.getenv('CIRRUS_CI'):
+        # CIRRUS CI splits multi-line evinronment variables
+        # with a '\n'.
+        skip_ci_specs = skip_ci_specs_env.rstrip().split('\n')
+    else:
+        # GitHub Actions with a space.
+        skip_ci_specs = skip_ci_specs_env.rstrip().split(' ')
 
 for row in reader:
     key = row.pop('NAME')
@@ -129,13 +139,22 @@ def build_srpm_and_rpm(command, family=None):
     return True
 
 
+skipped = []
+failed = []
+total = 0
+
 for spec in sys.argv[1:]:
     if not spec.endswith('.spec'):
         continue
-    spec_found = True
-    logging.info("\n--> Building RPM from spec file %s" % spec)
-
     just_spec = os.path.basename(spec)
+    total += 1
+    if spec in skip_ci_specs:
+        logging.info("--> Skipping spec file %s" % spec)
+        skipped.append(just_spec)
+        continue
+
+    spec_found = True
+    logging.info("--> Building RPM from spec file %s" % spec)
 
     command = [
         'misc/get_source.sh',
@@ -152,7 +171,7 @@ for spec in sys.argv[1:]:
         logging.error("Running misc/get_source.sh failed")
         logging.error(result.stdout.decode('utf-8'))
         logging.error(result.stderr.decode('utf-8'))
-        error = True
+        failed += 1
         continue
 
     # cache spec file contents
@@ -177,7 +196,7 @@ for spec in sys.argv[1:]:
                 family,
             ]
             if not build_srpm_and_rpm(command, family=family):
-                error = True
+                failed.append(just_spec)
     else:
         # Build SRPM
         command = [
@@ -185,15 +204,27 @@ for spec in sys.argv[1:]:
             spec,
         ]
         if not build_srpm_and_rpm(command):
-            error = True
+            failed.append(just_spec)
 
 
 if not spec_found:
-    logging.info("\nSKIP. Commit without changes to a SPEC file.")
+    logging.info("SKIP. Commit without changes to a SPEC file.")
 
-if error:
-    logging.error("\nERROR: Failure during RPM rebuild.")
+logging.info("Found %d spec file(s)" % total)
+logging.info("--> %d rebuild successfully" %
+             (total - len(failed) - len(skipped)))
+logging.info("--> %d rebuilds skipped" % len(skipped))
+
+for skip in skipped:
+    logging.info("----> %s skipped" % skip)
+
+if len(failed) > 0:
+    logging.error("--> %d rebuilds failed" % len(failed))
+    for fail in failed:
+        logging.info("----> %s failed" % fail)
+
+    logging.error("ERROR")
     sys.exit(1)
 
-logging.info("\nNo errors found. Exiting.")
+logging.info("No errors found. Exiting.")
 sys.exit(0)

@@ -257,7 +257,7 @@ versions_all=$(rpm -qal | grep "${icc_subpath}" | grep -v "oneapi")
 if [ $? -eq 1 ];then
     echo ""
     echo "Error: Unable to detect local Parallel Studio MPI installation. The toolchain"
-    echo "       providing ${icc_subpath} must be installed prior to this compatability package"
+    echo "       providing ${icc_subpath} must be installed prior to this compatibility package"
     echo " "
     exit 1
 fi

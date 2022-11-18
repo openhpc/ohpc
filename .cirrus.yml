@@ -1,3 +1,9 @@
+env:
+  SKIP_CI_SPECS: |
+    components/fs/lustre-client/SPECS/lustre.spec
+    components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec
+    components/mpi-families/impi-devel/SPECS/intel-mpi.spec
+
 task:
   name: RHEL/Rocky on aarch64
   arm_container:
@@ -13,4 +19,7 @@ task:
     adduser ohpc
   build_script: |
     . /etc/profile.d/lmod.sh
+    echo bla
+    echo $SKIP_CI_SPECS
+    echo blub
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)

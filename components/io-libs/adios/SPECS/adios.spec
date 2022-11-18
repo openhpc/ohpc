@@ -80,7 +80,7 @@ BuildRequires: libcurl libcurl-devel
 
 %description
 The Adaptable IO System (ADIOS) provides a simple, flexible way for
-scientists to desribe the data in their code that may need to be
+scientists to describe the data in their code that may need to be
 written, read, or processed outside of the running simulation. By
 providing an external to the code XML file describing the various
 elements, their types, and how you wish to process them this run, the

@@ -49,7 +49,7 @@ BuildRequires: openssl-devel
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 Warewulf IPMI adds required tools and libraries to support IPMI on
 cluster nodes. 
@@ -92,7 +92,7 @@ Requires: warewulf-provision%{PROJ_DELIM}-initramfs-%{_arch}
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 Warewulf IPMI-initramfs adds IPMI configuration to the %{_arch} cluster
 node boot image.

@@ -31,7 +31,7 @@ Patch2:         superlu-4.3-dont-opt-away.diff
 # PATCH-FIX-OPENSUSE superlu-5.1-remove-hsl.patch [bnc#796236]
 # The Harwell Subroutine Library (HSL) routine m64ad.c have been removed
 # from the original sources for legal reasons. This patch disables the inclusion of
-# this routine in the library which, however, remains fully functionnal
+# this routine in the library which, however, remains fully functional
 Patch3:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
