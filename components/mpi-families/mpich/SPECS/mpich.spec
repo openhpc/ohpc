@@ -26,7 +26,7 @@ BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
 %endif
 
-# note: a libfabric based build is the default, but can be overriden by
+# note: a libfabric based build is the default, but can be overridden by
 # specifying with_ucx=1
 
 %{!?with_ucx: %define with_ucx 0}

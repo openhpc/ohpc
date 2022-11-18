@@ -138,7 +138,7 @@ ninja %{?_smp_mflags} -v
 
 # STAGE 2
 # Rebuild all components with new clang.
-# Swtich to using libc++, compiler-rt, and libunwind only.
+# Switch to using libc++, compiler-rt, and libunwind only.
 # Several settings appear redundant. Configuration options are 
 #   inconsistent between projects. Setting all possible variables for each
 #   option appears to work.

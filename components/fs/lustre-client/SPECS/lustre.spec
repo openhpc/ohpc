@@ -261,7 +261,7 @@ Requires: lustre
 Requires: resource-agents
 
 %description resource-agents
-A set of scripts to operate Lustre resources in a High Availablity
+A set of scripts to operate Lustre resources in a High Availability
 environment for both Pacemaker and rgmanager.
 %endif
 
@@ -350,7 +350,7 @@ if [ -n "$CONFIGURE_ARGS" ]; then
 fi
 
 # we need to eval "configure" because $CONFIGURE_ARGS could have a quoted
-# string in it which we don't want word splitted by the shell
+# string in it which we don't want word split by the shell
 # also remove (build|host|target) options because they will be specified
 # inside $CONFIGURE_ARGS
 # kmod tools/scripts require %{name} directory with kernel modules

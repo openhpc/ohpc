@@ -69,7 +69,7 @@ NetCDF data is:
      structure. The structure of a NetCDF dataset can be changed,
      though this sometimes causes the dataset to be copied.
 
-   o Sharable:  One writer and multiple readers may simultaneously
+   o Shareable:  One writer and multiple readers may simultaneously
      access the same NetCDF file.
 
 
@@ -96,7 +96,7 @@ export CC=mpicc
     --disable-static || { cat config.log && exit 1; }
 
 # karl@ices.utexas.edu (5/17/18) - switching to serial make to avoid
-# problems. Others also reporing error with parallel build.
+# problems. Others also reporting error with parallel build.
 #
 # https://github.com/Unidata/netcdf-c/issues/896
 make

@@ -25,7 +25,7 @@ Source:    https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{versi
 Patch1: mrsh-pam-suse.patch
 Patch2: mrlogin-Don-t-use-union-wait.patch
 Patch3: Add-force-to-libtoolize.patch
-BuildRequires: ncurses-devel pam-devel munge-devel
+BuildRequires: ncurses-devel pam-devel munge-devel make
 Requires: munge
 Provides: mrsh
 BuildRequires:  systemd-devel
@@ -50,12 +50,12 @@ Requires(post): systemd
 Server daemons for remote access commands (mrsh, mrlogin, mrcp)
 
 %package -n %{pname}-rsh-compat%{PROJ_DELIM}
-Summary: rsh compatability package for mrcp/mrlogin/mrsh
+Summary: rsh compatibility package for mrcp/mrlogin/mrsh
 Group: System Environment/Base
 Requires: mrsh
 Provides: rsh
 %description -n %{pname}-rsh-compat%{PROJ_DELIM}
-rsh compatability package for mrcp/mrlogin/mrsh
+rsh compatibility package for mrcp/mrlogin/mrsh
 
 %prep
 %setup -q -n %{pname}-%{version}

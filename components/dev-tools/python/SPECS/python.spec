@@ -201,7 +201,7 @@ fi
 find . -name '*.py' -type f | grep -vE "^./Parser/|^./Python/" \
   | xargs grep -lE '^#! *(/usr/.*bin/(env +)?)?python' \
   | xargs sed -r -i -e '1s@^#![[:space:]]*(/usr/(local/)?bin/(env +)?)?python([0-9]+\.[0-9]+)?@#!/usr/bin/python@'
-# the grep inbetween makes it much faster
+# the grep between makes it much faster
 ########################################
 # install it
 ########################################

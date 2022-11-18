@@ -17,7 +17,7 @@
 %define min_intel_ver 2021.4.0
 
 
-Summary:   OpenHPC compatability package for Intel(R) oneAPI HPC Toolkit
+Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2021.1
 Release:   1

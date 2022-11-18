@@ -108,7 +108,7 @@ CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" LDFLAGS="%{?__global_ldflags}"
 	--with-nrpe-user=nrpe \
 	--with-nrpe-group=nrpe \
 	--bindir=%{_sbindir} \
-	--libdir=/doesnt/matter/ \
+	--libdir=/does/not/matter/ \
 	--libexecdir=%{_libdir}/nagios/plugins \
 	--datadir=%{_datadir}/nagios \
 	--sysconfdir=%{_sysconfdir}/nagios \

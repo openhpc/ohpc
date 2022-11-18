@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname scalapack
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Summary:        A subset of LAPACK routines redesigned for heterogenous computing
+Summary:        A subset of LAPACK routines redesigned for heterogeneous computing
 License:        netlib ScaLAPACK License
 Group:          %{PROJ_NAME}/parallel-libs
 Version:        2.2.0

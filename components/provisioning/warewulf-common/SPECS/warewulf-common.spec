@@ -55,7 +55,7 @@ Requires: %sql_name
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 Warewulf Common contains the core functionality of Warewulf. It provides
 the base libraries that are shared and utilized by the other Warewulf
@@ -126,7 +126,7 @@ Requires: %{sql_name}-server
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 This metapackage installs a local MySQL or MariaDB instance. It is not
 required for installs that will use an external database server.

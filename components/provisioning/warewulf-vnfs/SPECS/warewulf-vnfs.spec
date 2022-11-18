@@ -60,7 +60,7 @@ BuildArch: noarch
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 Warewulf utilizes a Virtual Node File System (VNFS) where each node can
 be managed using a chroot representing the root file system. The

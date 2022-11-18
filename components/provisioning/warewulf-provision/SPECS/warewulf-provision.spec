@@ -114,7 +114,7 @@ Provides: libarchive.so.13()(64bit)
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 Warewulf Provision contains the core components, extensions, and tools to
 administrate system provisioning.  To perform provisioning, the
@@ -191,7 +191,7 @@ Requires: warewulf-common%{PROJ_DELIM}
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 This package includes tools and files to create an initramfs
 image and to provide boot capability for %{_arch} architecture.
@@ -223,7 +223,7 @@ Requires(post): policycoreutils-python
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 This package contains the CGI scripts and event components to
 provision systems.  Systems used solely for administration of Warewulf
@@ -293,7 +293,7 @@ BuildArch: noarch
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 This package provides bundled iPXE binaries for x86_64.
 
@@ -315,7 +315,7 @@ BuildArch: noarch
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 This package provides bundled iPXE binaries for aarch64.
 
@@ -336,7 +336,7 @@ BuildArch: noarch
 Warewulf is an operating system management toolkit designed to facilitate
 large scale deployments of systems on physical, virtual and cloud-based
 infrastructures. It facilitates elastic and large deployments consisting
-of groups of homogenous systems.
+of groups of homogeneous systems.
 
 For user convenience, Warewulf is distributed with some third-party
 software.  While Warewulf itself is licensed under a DOE license

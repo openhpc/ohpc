@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-# this script needs at least python 3.5 for
-# subprocess.run()
-
+import os
 import re
 import sys
 
@@ -46,11 +44,19 @@ pattern = re.compile(regex_wrong_string)
 error = False
 spec_found = False
 
+skip_ci_specs = []
+skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
+if skip_ci_specs_env:
+    skip_ci_specs = skip_ci_specs_env.rstrip().split(' ')
+
 for spec in sys.argv[1:]:
     if not spec.endswith('.spec'):
         continue
+    if spec in skip_ci_specs:
+        print("--> Skipping spec file %s" % spec)
+        continue
     spec_found = True
-    print("\n--> Scanning spec file %s" % spec)
+    print("--> Scanning spec file %s" % spec)
 
     # cache spec file contents
     infile = open(spec)

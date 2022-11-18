@@ -66,7 +66,7 @@ NetCDF data is:
      structure. The structure of a NetCDF dataset can be changed,
      though this sometimes causes the dataset to be copied.
 
-   o Sharable:  One writer and multiple readers may simultaneously
+   o Shareable:  One writer and multiple readers may simultaneously
      access the same NetCDF file.
 
 
