@@ -6,7 +6,7 @@ codespell-lint:
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"
-	flake8 ../../tests/ci/check_spec.py
+	flake8 ../../tests/ci/check_spec.py ../../tests/ci/run_build.py ../../misc/build_order.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
