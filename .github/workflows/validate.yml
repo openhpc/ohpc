@@ -36,12 +36,14 @@ jobs:
       image: registry.fedoraproject.org/fedora:latest
     steps:
     - name: Setup
-      run: dnf -y install codespell make
+      run: dnf -y install codespell make python3-flake8
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
     - name: Run codespell
       run: make -C tests/ci/ codespell-lint
+    - name: Run flake8 (Pythton)
+      run: make -C tests/ci/ flake8-lint
 
   build_on_rhel:
     runs-on: ubuntu-latest

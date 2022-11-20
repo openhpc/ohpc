@@ -84,7 +84,7 @@ for v in dependency.values():
     for value in v:
         try:
             if spec_dict[value] not in dependency.keys():
-               additional[spec_dict[value]] = []
+                additional[spec_dict[value]] = []
         except KeyError as err:
             # Handle python_prefix rpm macro
             if '-numpy-' in value:
