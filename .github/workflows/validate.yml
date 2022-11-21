@@ -12,6 +12,9 @@ env:
 
 jobs:
   check_spec:
+    env:
+      JOB_SKIP_CI_SPECS: |
+        components/admin/ohpc-filesystem/SPECS/ohpc-filesystem.spec
 
     runs-on: ubuntu-latest
     container:
