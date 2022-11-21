@@ -81,7 +81,7 @@ mkdir -p %{buildroot}%{install_path}
 rsync -av --exclude=.gitignore {etc,bin,lib,var,share} %{buildroot}%{install_path}
 
 # remove embedded binary with /usr/tce rpaths that breaks Leap 15.3 builds
-rm -f %{buildroot}/%{install_path}/var/spack/repos/builtin/packages/patchelf/test/hello 
+rm -f %{buildroot}/%{install_path}/var/spack/repos/builtin/packages/patchelf/test/hello
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack

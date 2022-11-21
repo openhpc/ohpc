@@ -68,14 +68,14 @@ A shared library for applications using PowerMan.
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
   %{?_with_genders: --with-genders} \
   %{?_with_httppower: --with-httppower} \
-  %{?_with_snmppower: --with-snmppower} 
-           
+  %{?_with_snmppower: --with-snmppower}
+
 make
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 
-# Put the systemd directory in the right location. -JCSIADAL 3/29/20 
+# Put the systemd directory in the right location. -JCSIADAL 3/29/20
 %{__mv} $RPM_BUILD_ROOT/usr/usr/lib/systemd $RPM_BUILD_ROOT/usr/lib/
 %{__rm} -rd $RPM_BUILD_ROOT/usr/usr
 

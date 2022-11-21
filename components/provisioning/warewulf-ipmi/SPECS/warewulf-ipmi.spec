@@ -52,7 +52,7 @@ infrastructures. It facilitates elastic and large deployments consisting
 of groups of homogeneous systems.
 
 Warewulf IPMI adds required tools and libraries to support IPMI on
-cluster nodes. 
+cluster nodes.
 
 
 %prep
@@ -83,7 +83,7 @@ cd %{_builddir}
 
 # ====================
 %package initramfs-%{_arch}
-Summary: Warewulf - Add IPMI to %{_arch} initramfs 
+Summary: Warewulf - Add IPMI to %{_arch} initramfs
 BuildArch: noarch
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: warewulf-provision%{PROJ_DELIM}-initramfs-%{_arch}

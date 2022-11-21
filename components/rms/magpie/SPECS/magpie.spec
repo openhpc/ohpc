@@ -54,9 +54,9 @@ Requires: python2
 
 %description
 Magpie contains a number of scripts for running Big Data software in HPC environments.
-Thus far, Hadoop, Spark, Hbase, Storm, Pig, Mahout, Phoenix, Kafka, Zeppelin, and 
-Zookeeper are supported. It currently supports running over the parallel file system 
-Lustre and running over any generic network filesystem. There is scheduler/resource 
+Thus far, Hadoop, Spark, Hbase, Storm, Pig, Mahout, Phoenix, Kafka, Zeppelin, and
+Zookeeper are supported. It currently supports running over the parallel file system
+Lustre and running over any generic network filesystem. There is scheduler/resource
 manager support for Slurm, Moab, Torque, and LSF.
 
 %prep
@@ -135,4 +135,3 @@ EOF
 %doc doc/* NEWS README.md TODO VERSION
 %license COPYING DISCLAIMER
 %{OHPC_MODULES}/%{pname}
-

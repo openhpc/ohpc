@@ -10,7 +10,7 @@ flake8-lint:
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
-	cd ../../; git --no-pager grep -E '\s+$$' \*.spec
+	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec
 
 shellcheck-lint:
 	@echo "Running 'shellcheck' on selected shell scripts"

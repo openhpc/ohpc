@@ -81,11 +81,11 @@ Header files for developing against the Sigar API
 # Fix lib directory
 sed -i.sed s:DESTINATION\ lib:DESTINATION\ %{_lib}: src/CMakeLists.txt
 
-%cmake 
+%cmake
 make %{?_smp_mflags}
 
 %install
-%cmake 
+%cmake
 make install DESTDIR=$RPM_BUILD_ROOT
 
 %post -p /sbin/ldconfig

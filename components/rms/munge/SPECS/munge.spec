@@ -44,7 +44,7 @@ BuildRequires:	systemd
 %endif
 #!BuildIgnore: post-build-checks
 
-Conflicts: munge 
+Conflicts: munge
 
 Source0:   https://github.com/dun/munge/archive/munge-%{version}.tar.gz
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
@@ -139,7 +139,7 @@ rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %pre
-# karl.w.schulz@intel.com (9/10/18) - provide specific uid/gid to deal with 
+# karl.w.schulz@intel.com (9/10/18) - provide specific uid/gid to deal with
 # possibility of getting alternate ownership within Warewulf
 /usr/bin/getent group munge >/dev/null 2>&1 || \
   /usr/sbin/groupadd -r munge -o -g 201
@@ -184,7 +184,7 @@ if [ $1 -eq 0 ]; then
    %else
      %{_sysconfdir}/init.d/munge stop >/dev/null 2>&1 || :
      if [ -x /sbin/chkconfig ]; then /sbin/chkconfig --del munge; fi
-   %endif  
+   %endif
 fi
 
 %postun
@@ -216,7 +216,7 @@ fi
 %attr(0600,munge,munge) %config(noreplace) %ghost %{_sysconfdir}/munge/munge.key
 %config(noreplace) %{_sysconfdir}/sysconfig/munge
 
-# OpenHPC mods - systemd 
+# OpenHPC mods - systemd
 %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 %{_prefix}/lib/systemd/system/munge.service
 %else
