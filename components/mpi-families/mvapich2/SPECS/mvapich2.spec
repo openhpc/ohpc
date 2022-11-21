@@ -66,7 +66,7 @@ Buildrequires: rdma-core-devel libibmad-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
-BuildRequires: bison make
+BuildRequires: bison make m4
 BuildRequires: zlib-devel
 
 # Default library install path
