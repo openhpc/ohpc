@@ -9,34 +9,36 @@ PATTERN=${1}
 
 IFS=$'\n'
 
-for i in `find . -name "${PATTERN}"`; do
-
-	if [ ! -f ${i} ]; then
-		echo "${i} is not a file. Skipping."
+find . -name "${PATTERN}" -print0 | while IFS= read -r -d '' file
+do
+	if [ ! -f "${file}" ]; then
+		echo "${file} is not a file. Skipping."
 		continue
 	fi
 
-	echo ${i}
+	echo "${file}"
 
-	pushd `dirname ${i}` > /dev/null
-	BASE=`basename ${i}`
+	DIR=$(dirname "${file}")
+	pushd "${DIR}" > /dev/null || exit 1
+	BASE=$(basename "${file}")
 
-	SOURCES=`rpmspec --parse --define '_sourcedir ../../..' --define 'rhel 8' ${BASE} | grep Source`
+	SOURCES=$(rpmspec --parse --define '_sourcedir ../../..' --define 'rhel 8' "${BASE}" | grep Source)
 	for u in ${SOURCES}; do
-		echo ${u}
+		echo "${u}"
 		if [[ "${u}" != *"http"* ]]; then
 			continue
 		fi
-		u=`awk '{ print $2 }' <<< ${u}`
+		u=$(awk '{ print $2 }' <<< "${u}")
 		echo "Trying to get ${u}"
 		# Try to download only if newer
-		WGET=`wget -N -nv -P ../SOURCES ${u} 2>&1`
+		WGET=$(wget -N -nv -P ../SOURCES "${u}" 2>&1)
 		# Handling for github URLs with #/ or #$/
-		if grep -E "#[$]?/" <<< ${u}; then
-			URL=`echo ${u} | cut -d# -f1`
-			mv `echo ${WGET} | cut -d\  -f13 | sed -e 's/^"//' -e 's/"$//'` ../SOURCES/`basename ${u}`
+		if grep -E "#[$]?/" <<< "${u}"; then
+			MV_SOURCE=$(echo "${WGET}" | tail -1 | cut -d\  -f6 | sed -e 's/^"//' -e 's/"$//')
+			MV_DEST=../SOURCES/$(basename "${u}")
+			mv "${MV_SOURCE}" "${MV_DEST}"
 		fi
 	done
 
-	popd > /dev/null
+	popd > /dev/null || exit 1
 done

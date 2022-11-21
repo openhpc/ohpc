@@ -19,7 +19,4 @@ task:
     adduser ohpc
   build_script: |
     . /etc/profile.d/lmod.sh
-    echo bla
-    echo $SKIP_CI_SPECS
-    echo blub
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
