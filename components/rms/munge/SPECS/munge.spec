@@ -23,27 +23,18 @@ License:	GPLv3+ and LGPLv3+
 URL:		http://dun.github.io/munge/
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
 
-%if 0%{?suse_version} >= 1100
+%if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:	libbz2-devel
 BuildRequires:	libopenssl-devel
-BuildRequires:	zlib-devel
-%if 0%{?suse_version} >= 1230
-BuildRequires:	systemd
-%endif
-%else
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:	bzip2
-BuildRequires:	openssl-devel
-BuildRequires:	zlib-devel
+BuildRequires:	pkg-config
 %else
 BuildRequires:	bzip2-devel
 BuildRequires:	openssl-devel
-BuildRequires:	zlib-devel
-BuildRequires:	systemd
-%endif
+BuildRequires:	pkgconfig
 %endif
 #!BuildIgnore: post-build-checks
 
+BuildRequires:	zlib-devel systemd gcc make
 Conflicts: munge
 
 Source0:   https://github.com/dun/munge/archive/munge-%{version}.tar.gz
@@ -56,25 +47,16 @@ Patch3:     %{pname}.service.patch
 # 2019-03-11 janne.blomqvist@aalto.fi - Enable syslog
 Patch4:     %{pname}.syslog.patch
 
-%if 0%{?suse_version} >= 1230
+%if 0%{?sles_version} || 0%{?suse_version}
 Requires(pre):	shadow
 %else
-%if 0%{?suse_version}
-Requires(pre):	pwdutils
-%else
 Requires(pre):	shadow-utils
-%endif
 %endif
 
 %package -n %{pname}-devel%{PROJ_DELIM}
 Summary:	Headers and libraries for developing applications using MUNGE
 Group:		Development/Libraries
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
-%if 0%{?suse_version}
-BuildRequires:	pkg-config
-%else
-BuildRequires:	pkgconfig
-%endif
 Conflicts: %{pname}-devel
 
 %package -n %{pname}-libs%{PROJ_DELIM}
@@ -100,7 +82,7 @@ A header file and static library for developing applications using MUNGE.
 A shared library for applications using MUNGE.
 
 %prep
-%setup -n %{pname}-%{pname}-%{version}
+%setup -q -n %{pname}-%{pname}-%{version}
 
 # OpenHPC patches
 %patch1
@@ -129,10 +111,10 @@ touch "$RPM_BUILD_ROOT"/%{_localstatedir}/log/munge/munged.log
 touch "$RPM_BUILD_ROOT"/%{_localstatedir}/run/munge/munged.pid
 
 # karl.w.schulz@intel.com (11/10/14) - remove chkconfig service for newer distros
-%if 0%{?suse_version} >= 1230
+%if 0%{?sles_version} || 0%{?suse_version}
 rm "$RPM_BUILD_ROOT"/etc/init.d/munge
 %endif
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
+%if 0%{?rhel}
 rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 %endif
 
@@ -167,33 +149,20 @@ if [ -f /var/lock/subsys/munged ]; then
   /bin/mv /var/lock/subsys/munged /var/lock/subsys/munge
 fi
 ##
-%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
-   /bin/systemctl enable munge.service >/dev/null 2>&1 || :
-%else
-   if [ -x /sbin/chkconfig ]; then /sbin/chkconfig --add munge; fi
-%endif
+/bin/systemctl enable munge.service >/dev/null 2>&1 || :
 
 %post -n %{pname}-libs%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %preun
 if [ $1 -eq 0 ]; then
-   %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
-   /bin/systemctl disable munge.service >/dev/null 2>&1 || :
-   /bin/systemctl stop munge.service >/dev/null 2>&1 || :
-   %else
-     %{_sysconfdir}/init.d/munge stop >/dev/null 2>&1 || :
-     if [ -x /sbin/chkconfig ]; then /sbin/chkconfig --del munge; fi
-   %endif
+  /bin/systemctl disable munge.service >/dev/null 2>&1 || :
+  /bin/systemctl stop munge.service >/dev/null 2>&1 || :
 fi
 
 %postun
 if [ $1 -ge 1 ]; then
-   %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
-      service munge condrestart  >/dev/null 2>&1 || :
-   %else
-      %{_sysconfdir}/init.d/munge try-restart >/dev/null 2>&1 || :
-   %endif
+   service munge condrestart  >/dev/null 2>&1 || :
 fi
 
 %postun -n %{pname}-libs%{PROJ_DELIM}
@@ -217,11 +186,7 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/munge
 
 # OpenHPC mods - systemd
-%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 %{_prefix}/lib/systemd/system/munge.service
-%else
-%{?_initddir:%{_initddir}}%{!?_initddir:%{_initrddir}}/munge
-%endif
 
 %dir %attr(0711,munge,munge) %{_localstatedir}/lib/munge
 %attr(0600,munge,munge) %ghost %{_localstatedir}/lib/munge/munge.seed
@@ -233,10 +198,7 @@ fi
 %{_sbindir}/*
 %{_mandir}/*[^3]/*
 
-
-%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 %{_prefix}/lib/tmpfiles.d/munge.conf
-%endif
 
 %files -n %{pname}-devel%{PROJ_DELIM}
 %{_includedir}/*
@@ -248,4 +210,3 @@ fi
 
 %files -n %{pname}-libs%{PROJ_DELIM}
 %{_libdir}/*.so.*
-
