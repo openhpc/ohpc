@@ -16,6 +16,7 @@ if len(sys.argv) <= 2:
 spec_found = False
 build_user = sys.argv[1]
 dnf_based = False
+dist = "9999.ci.ohpc"
 
 # Check which base OS we are using
 reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
@@ -116,7 +117,7 @@ def build_srpm_and_rpm(command, family=None):
         build_user,
         '-l',
         '-c',
-        'rpmbuild --rebuild %s' % src_rpm,
+        'rpmbuild --define "dist %s" --rebuild %s' % (dist, src_rpm),
     ]
 
     if family is not None:
