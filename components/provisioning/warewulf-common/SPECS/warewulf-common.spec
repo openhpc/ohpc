@@ -145,7 +145,7 @@ if [ $1 -eq 1 ] ; then
 %endif
 
 /usr/bin/systemctl reenable %{daemon_name}.service &> /dev/null || :
-/usr/bin/systemctl restart %{daemon_name}.service  &> /dev/null || : 
+/usr/bin/systemctl restart %{daemon_name}.service  &> /dev/null || :
 fi
 
 %postun localdb

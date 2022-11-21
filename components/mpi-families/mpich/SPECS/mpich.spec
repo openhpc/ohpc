@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# MPICH MPI stack that is dependent on compiler toolchain 
+# MPICH MPI stack that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}

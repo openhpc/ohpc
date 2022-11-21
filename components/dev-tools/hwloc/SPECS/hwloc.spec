@@ -55,17 +55,17 @@ BuildRequires:  numactl-devel
 %define install_path %{OHPC_LIBS}/%{pname}
 
 %description
-The Portable Hardware Locality (hwloc) software package provides 
-a portable abstraction (across OS, versions, architectures, ...) 
-of the hierarchical topology of modern architectures, including 
+The Portable Hardware Locality (hwloc) software package provides
+a portable abstraction (across OS, versions, architectures, ...)
+of the hierarchical topology of modern architectures, including
 NUMA memory nodes,  shared caches, processor sockets, processor cores
 and processing units (logical processors or "threads"). It also gathers
 various system attributes such as cache and memory information. It primarily
 aims at helping applications with gathering information about modern
 computing hardware so as to exploit it accordingly and efficiently.
 
-hwloc may display the topology in multiple convenient formats. 
-It also offers a powerful programming interface (C API) to gather information 
+hwloc may display the topology in multiple convenient formats.
+It also offers a powerful programming interface (C API) to gather information
 about the hardware, bind processes, and much more.
 
 %prep

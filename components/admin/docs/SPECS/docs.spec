@@ -52,7 +52,7 @@ BuildRequires:  latexmk
 %endif
 
 
-%description 
+%description
 
 This guide presents a simple cluster installation procedure using components
 from the OpenHPC software stack.

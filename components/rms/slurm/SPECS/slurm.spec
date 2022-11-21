@@ -108,7 +108,7 @@ Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_D
 
 #!BuildIgnore: post-build-checks
 
-%if 0%{?suse_version} 
+%if 0%{?suse_version}
 BuildRequires: libopenssl-devel openssl
 %else
 BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
@@ -756,7 +756,7 @@ fi
 /usr/bin/getent passwd slurm >/dev/null 2>&1 || \
   /usr/sbin/useradd -c "SLURM resource manager" \
   -d %{_sysconfdir} -g slurm -s /sbin/nologin -r slurm -u 202
-  
+
 exit 0
 
 %post

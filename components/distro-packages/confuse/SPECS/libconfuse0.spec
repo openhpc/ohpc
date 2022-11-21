@@ -24,7 +24,7 @@ BuildRequires:  check
 #
 URL:            http://www.nongnu.org/confuse/
 # taken from    http://download.savannah.gnu.org/releases/confuse/%{pkg_name}-%{version}.tar.gz
-Source:         http://savannah.nongnu.org/download/confuse/confuse-%{version}.tar.gz 
+Source:         http://savannah.nongnu.org/download/confuse/confuse-%{version}.tar.gz
 #
 Summary:        A configuration file parser library
 
@@ -97,4 +97,3 @@ rm -rf examples/.deps/ examples/Makefile*
 %{_mandir}/man3/*.3*
 %{_datadir}/
 %doc doc/html/ doc/tutorial-html/ examples/
-

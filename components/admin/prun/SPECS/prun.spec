@@ -21,7 +21,7 @@ Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc
 Source0:   %{pname}
-Source2:   LICENSE      
+Source2:   LICENSE
 
 
 %define package_target %{OHPC_UTILS}/%{pname}/%{version}

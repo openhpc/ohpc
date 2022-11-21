@@ -56,7 +56,7 @@ Requires: yaml-cpp
 %define install_path %{OHPC_ADMIN}/%{pname}/%{version}
 
 %description
-HPC Workspace provides tools to provision temporaty workspaces on scratch or 
+HPC Workspace provides tools to provision temporaty workspaces on scratch or
 working filesystems in an HPC environment.
 
 %prep
@@ -103,7 +103,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%files 
+%files
 %config %{_sysconfdir}/ws.conf.template
 %dir %{OHPC_ADMIN}
 %dir %{OHPC_MODULES}

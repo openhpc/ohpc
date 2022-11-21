@@ -37,7 +37,7 @@ Patch1:    pdsh-slurm-list.patch
 
 #  To build the various module subpackages, pass --with <pkg> on
 #   the rpmbuild command line (if your rpm is a recent enough version)
-#  
+#
 #  Similarly, to disable various pdsh options pass --without <pkg> on
 #   the rpmbuild command line.
 #
@@ -48,7 +48,7 @@ Patch1:    pdsh-slurm-list.patch
 
 #
 #  Definition of default packages to build on various platforms:
-# 
+#
 %global _defaults ssh exec readline pam
 
 #   LLNL system defaults
