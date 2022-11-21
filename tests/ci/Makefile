@@ -14,4 +14,4 @@ whitespace-lint:
 
 shellcheck-lint:
 	@echo "Running 'shellcheck' on selected shell scripts"
-	shellcheck ../../misc/build_srpm.sh
+	shellcheck ../../misc/build_srpm.sh ../../misc/build_order.sh ../../misc/get_source.sh ../../misc/shell-functions

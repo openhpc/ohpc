@@ -31,19 +31,21 @@ jobs:
         tests/ci/check_spec.py ${{ steps.files.outputs.added_modified }}
 
   lint:
+    strategy:
+      matrix:
+        step: [codespell, flake8, shellcheck]
+    name: Run ${{ matrix.step }} linter
     runs-on: ubuntu-latest
     container:
       image: registry.fedoraproject.org/fedora:latest
     steps:
     - name: Setup
-      run: dnf -y install codespell make python3-flake8
+      run: dnf -y install codespell make python3-flake8 ShellCheck
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Run codespell
-      run: make -C tests/ci/ codespell-lint
-    - name: Run flake8 (Pythton)
-      run: make -C tests/ci/ flake8-lint
+    - name: Run ${{ matrix.step }}
+      run: make -C tests/ci/ ${{ matrix.step }}-lint
 
   build_on_rhel:
     runs-on: ubuntu-latest

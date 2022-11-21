@@ -21,14 +21,14 @@ else
 	MPI_FAMILY=openmpi4
 fi
 
-if [ ! -e ${SPEC} ]; then
+if [ ! -e "${SPEC}" ]; then
 	echo "Spec file ${SPEC} does not exist. Exiting."
 	exit 1
 fi
 
 MACROS=components/OHPC_macros
 
-if [ ! -e ${MACROS} ]; then
+if [ ! -e "${MACROS}" ]; then
 	echo -n "This script expects to be started in the top-level OpenHPC git"
 	echo " checkout directory."
 	echo -n "Checking for '${MACROS}' failed and"
@@ -36,33 +36,34 @@ if [ ! -e ${MACROS} ]; then
 	exit 1
 fi
 
+# shellcheck disable=SC1091
 . misc/shell-functions
 
-ROOT=`pwd`
+ROOT=$(pwd)
 
-BASE=`basename ${SPEC}`
-DIR=`dirname ${SPEC}`
+BASE=$(basename "${SPEC}")
+DIR=$(dirname "${SPEC}")
 echo "Building SRPM for ${SPEC}"
 
-prepare_git_tree ${DIR}
+prepare_git_tree "${DIR}"
 
 # Try to build the SRPM
-SRPM=`build_srpm ${SPEC} ${MPI_FAMILY}`
+SRPM=$(build_srpm "${SPEC}" "${MPI_FAMILY}")
 RESULT=$?
-if [ "$RESULT" == "1" ]; then
+if [ "${RESULT}" == "1" ]; then
 	echo "Building the SRPM for ${BASE} failed."
 	echo "Trying to fetch Source0"
-	${ROOT}/misc/get_source.sh ${BASE}
+	"${ROOT}"/misc/get_source.sh "${BASE}"
 fi
 
 # Let's hope fetching the sources worked and retry building the SRPM
-SRPM=`build_srpm ${SPEC} ${MPI_FAMILY}`
+SRPM=$(build_srpm "${SPEC}" "${MPI_FAMILY}")
 RESULT=$?
 
-if [ "$RESULT" == "1" ]; then
+if [ "${RESULT}" == "1" ]; then
 	echo "Still got an error building SRPM for ${BASE}"
 	echo "Giving up, this needs to be fixed manually"
 	exit 1
 fi
 
-echo ${SRPM}
+echo "${SRPM}"

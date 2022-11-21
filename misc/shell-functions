@@ -1,34 +1,38 @@
+# shellcheck shell=bash
 
 prepare_git_tree() {
 
-	local DIR=${1}
+	local DIR
+	DIR=${1}
 
-        if [ ! -e ${DIR}/../SOURCES ]; then
+        if [ ! -e "${DIR}"/../SOURCES ]; then
                 # empty SOURCES directory are not created by git
-                mkdir ${DIR}/../SOURCES
+                mkdir "${DIR}"/../SOURCES
         fi
 
         # for builds outside of OBS OHPC_macros needs to exist
-        if [ ! -e ${DIR}/../SOURCES/OHPC_macros ]; then
-                pushd ${DIR}/../SOURCES > /dev/null
+        if [ ! -e "${DIR}"/../SOURCES/OHPC_macros ]; then
+                pushd "${DIR}"/../SOURCES > /dev/null || exit 1
                 if [ -e ../../../OHPC_macros ]; then
-                        ln -s ../../../OHPC_macros
+                        ln -s ../../../OHPC_macros .
                 elif [ -e ../../../../OHPC_macros ]; then
-                        ln -s ../../../../OHPC_macros
+                        ln -s ../../../../OHPC_macros .
                 fi
-                popd > /dev/null
+                popd > /dev/null || exit 1
         fi
 }
 
 build_srpm() {
 	local SPEC=${1}
-	local DIR=`dirname ${1}`
+	local DIR
 	local MPI_FAMILY=${2}
 
-	SRPM=`rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "mpi_family ${MPI_FAMILY}" ${SPEC}`
+	DIR=$(dirname "${1}")
+
+	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "mpi_family ${MPI_FAMILY}" "${SPEC}")
 	RESULT=$?
 
-	echo ${SRPM} | tail -1 | awk -F\  '{ print $2 }'
+	echo "${SRPM}" | tail -1 | awk -F\  '{ print $2 }'
 
-	return ${RESULT}
+	return "${RESULT}"
 }
