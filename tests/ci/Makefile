@@ -6,7 +6,11 @@ codespell-lint:
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"
-	flake8 ../../tests/ci/check_spec.py ../../tests/ci/run_build.py ../../misc/build_order.py
+	flake8 \
+		../../tests/ci/check_spec.py \
+		../../tests/ci/run_build.py \
+		../../misc/build_order.py \
+		../../tests/ci/spec_to_test_mapping.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
@@ -14,4 +18,11 @@ whitespace-lint:
 
 shellcheck-lint:
 	@echo "Running 'shellcheck' on selected shell scripts"
-	shellcheck ../../misc/build_srpm.sh ../../misc/build_order.sh ../../misc/get_source.sh ../../misc/shell-functions
+	shellcheck \
+		-o require-variable-braces,quote-safe-variables,deprecate-which,avoid-nullary-conditions \
+		../../misc/build_srpm.sh \
+		../../misc/build_order.sh \
+		../../misc/get_source.sh \
+		../../misc/shell-functions \
+		../../tests/ci/prepare-ci-environment.sh \
+		../../tests/ci/setup_slurm_and_run_tests.sh

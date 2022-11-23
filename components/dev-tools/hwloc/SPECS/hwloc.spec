@@ -13,20 +13,17 @@
 %define pname hwloc
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        2.7.0
-Release:        1%{?dist}
+Version:        2.7.1
+Release:        %{?dist}.1
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
 Source0:        https://download.open-mpi.org/release/hwloc/v2.7/%{pname}-%{version}.tar.bz2
 
-BuildRequires:  autoconf
-BuildRequires:  automake
+BuildRequires:  make
 BuildRequires:  doxygen
-%if 0%{?suse_version}
 BuildRequires:  fdupes
-%endif
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
 BuildRequires:  cairo-devel
@@ -34,15 +31,10 @@ BuildRequires:  libxml2-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  transfig
-# % ifnarch s390 s390x
-# BuildRequires:  libibverbs-devel
-# % endif
-%ifnarch s390 s390x i586 %{arm}
-%if 0%{?suse_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  libnuma-devel
 %else
 BuildRequires:  numactl-devel
-%endif
 %endif
 #!BuildIgnore: post-build-checks rpmlint-Factory
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
@@ -72,13 +64,7 @@ about the hardware, bind processes, and much more.
 %setup -q -n %{pname}-%{version}
 
 %build
-%if 0%{?sles_version} || 0%{?suse_version}
-sed -i 's/1.11 dist-bzip2 subdir-objects foreign tar-ustar parallel-tests -Wall -Werror/1.10 dist-bzip2 subdir-objects foreign tar-ustar -Wall -Werror/g' configure.ac
-%endif
-autoreconf --force --install
 ./configure --prefix=%{install_path}
-##sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-##sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %{__make} %{?_smp_mflags} V=1
 
 %install
@@ -137,10 +123,6 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
 
 %files
 %doc AUTHORS COPYING NEWS README VERSION
