@@ -8,6 +8,10 @@ if [ -s ../TEST_ENV ];then
     source ../TEST_ENV
 fi
 
+if [ -z "$SIMPLE_CI" ]; then
+	skip "Not supported in simple CI setup"
+fi
+
 check_rms
 
 @test "[memlock] check increased soft limit" {

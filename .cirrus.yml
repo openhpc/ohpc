@@ -15,6 +15,7 @@ task:
     dnf install -y epel-release dnf-plugins-core git python3 http://repos.openhpc.community/OpenHPC/2/CentOS_8/aarch64/ohpc-release-2-1.el8.aarch64.rpm findutils rpm-build wget gawk jq which
     dnf config-manager --set-enabled powertools
     dnf config-manager --set-enabled devel
+    wget http://obs.openhpc.community:82/OpenHPC:/2.7:/Factory/EL_8/OpenHPC:2.7:Factory.repo -O /etc/yum.repos.d/obs.repo
     dnf install -y lmod-ohpc
     adduser ohpc
   build_script: |
