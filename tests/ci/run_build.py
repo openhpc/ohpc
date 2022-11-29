@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
-import csv
 import subprocess
+import selectors
 import logging
 import shutil
 import sys
+import csv
 import os
+import io
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
@@ -40,35 +42,66 @@ for row in reader:
                 dnf_based = True
 
 
-def build_srpm_and_rpm(command, family=None):
+def run_command(command):
     logging.info("About to run command %s" % ' '.join(command))
-    result = subprocess.run(
+    process = subprocess.Popen(
         command,
+        bufsize=1,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        universal_newlines=True,
     )
-    if result.returncode != 0:
+
+    buf = io.StringIO()
+
+    def handle_output(stream, mask):
+        line = stream.readline()
+        buf.write(line)
+        sys.stdout.write(line)
+
+    selector = selectors.DefaultSelector()
+    selector.register(
+        process.stdout,
+        selectors.EVENT_READ,
+        handle_output,
+    )
+
+    while process.poll() is None:
+        events = selector.select()
+        for key, mask in events:
+            callback = key.data
+            callback(key.fileobj, mask)
+
+    return_code = process.wait()
+    selector.close()
+
+    output = buf.getvalue()
+    buf.close()
+
+    return ((return_code == 0), output)
+
+
+def build_srpm_and_rpm(command, family=None):
+    success, output = run_command(command)
+    if not success:
+        # First check if the architecture is not supported
+        if output is not None:
+            for line in output.split('\n'):
+                if 'No compatible architectures found for build' in line:
+                    logging.info("Skipping unsupported architecture RPM")
+                    return True
+
         logging.error("Running misc/build_srpm.sh failed")
-        logging.error(result.stdout.decode('utf-8'))
-        logging.error(result.stderr.decode('utf-8'))
         return False
 
-    if result.stderr is not None:
-        for line in result.stderr.decode('utf-8').split('\n'):
-            if 'No compatible architectures found for build' in line:
-                logging.info("Skipping unsupported architecture RPM")
-                return True
-
     src_rpm = ""
-    for line in result.stdout.decode('utf-8').split('\n'):
+    for line in output.split('\n'):
         if line.endswith('.src.rpm'):
             src_rpm = line
             break
 
     if src_rpm == "":
         logging.error("SRPM generation failed")
-        logging.error(result.stdout.decode('utf-8'))
-        logging.error(result.stderr.decode('utf-8'))
         return False
 
     logging.info(src_rpm)
@@ -89,19 +122,10 @@ def build_srpm_and_rpm(command, family=None):
             src_rpm,
         ]
 
-    logging.info("About to run command %s" % ' '.join(builddep_command))
-    result = subprocess.run(
-        builddep_command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if result.returncode != 0:
+    success, _ = run_command(builddep_command)
+    if not success:
         logging.error("Running 'dnf builddep' failed")
-        logging.error(result.stdout.decode('utf-8'))
-        logging.error(result.stderr.decode('utf-8'))
         return False
-
-    logging.info(result.stdout.decode('utf-8'))
 
     tmp_src_rpm = os.path.join('/tmp', os.path.basename(src_rpm))
 
@@ -123,19 +147,10 @@ def build_srpm_and_rpm(command, family=None):
     if family is not None:
         rebuild_command[-1] += " --define 'mpi_family %s'" % family
 
-    logging.info("About to run command %s" % ' '.join(rebuild_command))
-    result = subprocess.run(
-        rebuild_command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if result.returncode != 0:
-        logging.info("Running 'rpmbuild --rebuild' failed")
-        logging.error(result.stdout.decode('utf-8'))
-        logging.error(result.stderr.decode('utf-8'))
+    success, _ = run_command(rebuild_command)
+    if not success:
+        logging.error("Running 'rpmbuild --rebuild' failed")
         return False
-
-    logging.info(result.stdout.decode('utf-8'))
 
     return True
 
@@ -162,17 +177,10 @@ for spec in sys.argv[1:]:
         just_spec,
     ]
 
-    logging.info("About to run command %s" % ' '.join(command))
-    result = subprocess.run(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if result.returncode != 0:
+    success, _ = run_command(command)
+    if not success:
         logging.error("Running misc/get_source.sh failed")
-        logging.error(result.stdout.decode('utf-8'))
-        logging.error(result.stderr.decode('utf-8'))
-        failed += 1
+        failed.append(just_spec)
         continue
 
     # cache spec file contents

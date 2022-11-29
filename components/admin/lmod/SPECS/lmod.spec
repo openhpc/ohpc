@@ -16,21 +16,17 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.7.6
-Release:   1%{?dist}
+Version:   8.7.14
+Release:   %{?dist}.1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
-# Known dependencies
-Requires: lua
-Requires: tcl
-
-BuildRequires: lua
 BuildRequires: lua-devel
 BuildRequires: rsync
-BuildRequires: tcl tcl-devel
+BuildRequires: tcl-devel
+BuildRequires: gcc make bc
 
 %if 0%{?rhel}
 BuildRequires: lua-libs
