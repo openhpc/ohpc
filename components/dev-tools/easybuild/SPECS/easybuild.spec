@@ -16,16 +16,16 @@
 Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
 Version:   4.6.2
-Release:   1%{?dist}
+Release:   %{?dist}.1
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
 URL:       https://easybuilders.github.io/easybuild
 
-Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
-Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
-Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
-Source3:   bootstrap_eb.py
-BuildRequires: python3
+Source0:   https://pypi.io/packages/source/e/easybuild/easybuild-%{version}.tar.gz
+Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
+Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
+Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
+BuildRequires: python3 python3-pip
 BuildRequires: python3-setuptools
 Requires:  python3
 Requires:  patch
@@ -48,25 +48,14 @@ you to manage (scientific) software on High Performance Computing (HPC)
 systems in an efficient way.
 
 %prep
-mkdir %{buildroot}
+%setup -q -n %{pname}-%{version} -a1 -a2 -a3
 
-%build
-
-cd %{buildroot}
-cp %{_sourcedir}/*py .
-
-export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
-export EASYBUILD_INSTALLPATH=%{install_path}
-export EASYBUILD_MODULE_SYNTAX=Tcl
-export PATH=${LMOD_DIR}:${PATH}
-
-MODULEPATH= python3 ./bootstrap_eb.py %{buildroot}/%{install_path}
-
-rm bootstrap_eb.py*
-pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
-rm %version
-ln -s ../../all/EasyBuild/%version .
-popd
+%install
+for eb in framework easyblocks easyconfigs; do
+	cd %{pname}-${eb}-%{version}
+	pip3 install --prefix=%{install_path} --root=%{buildroot} .
+	cd ..
+done
 
 # OHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULES}/EasyBuild
@@ -89,17 +78,15 @@ module-whatis "URL: https://easybuilders.github.io/easybuild/"
 set             version                 %{version}
 set             home                    \$::env(HOME)
 
-prepend-path    PATH                    %{install_path}/software/EasyBuild/%{version}/bin
+prepend-path    PATH                    %{install_path}/bin
 prepend-path    PATH                    ${LMOD_DIR}
-prepend-path	LD_LIBRARY_PATH         %{install_path}/software/EasyBuild/%{version}/lib
-prepend-path	LIBRARY_PATH            %{install_path}/software/EasyBuild/%{version}/lib
 module          use                     \$home/.local/easybuild/modules/all
 
-setenv          EBROOTEASYBUILD         %{install_path}/software/EasyBuild/%{version}
+setenv          EBROOTEASYBUILD         %{install_path}
 setenv          EBVERSIONEASYBUILD      %{version}
 setenv          EB_PYTHON               python3
 
-prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python%{python3_version}/site-packages
+prepend-path	PYTHONPATH	    %{install_path}/lib/python%{python3_version}/site-packages
 
 EOF
 
@@ -110,6 +97,20 @@ EOF
 ##
 set     ModulesVersion      "%{version}"
 EOF
+
+# Change ambiguous python shebangs into python3
+
+for file in \
+	easybuild/easyconfigs/p/PyTorch/PyTorch-check-cpp-extension.py \
+	easybuild/scripts/bootstrap_eb.py \
+	easybuild/scripts/clean_gists.py \
+	easybuild/scripts/findPythonDeps.py \
+	easybuild/scripts/fix_docs.py \
+	easybuild/scripts/mk_tmpl_easyblock_for.py \
+	easybuild/scripts/rpath_args.py; do
+	sed -e "s,^#\!/usr/bin/env python,#\!/usr/bin/env python3,g" \
+		-i %{buildroot}/%{install_path}/${file}
+done
 
 %files
 %{OHPC_HOME}

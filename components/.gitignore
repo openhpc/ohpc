@@ -26,6 +26,7 @@ dev-tools/autoconf/SOURCES/autoconf-*.tar.gz
 dev-tools/automake/SOURCES/automake-*.tar.gz
 dev-tools/annobin/SOURCES/annobin-*.tar.xz
 dev-tools/cmake/SOURCES/cmake-*.tar.gz
+dev-tools/easybuild/SOURCES/easybuild-*.tar.gz
 dev-tools/easybuild/SOURCES/easybuild-easyblocks-*.tar.gz
 dev-tools/easybuild/SOURCES/easybuild-easyconfigs-*.tar.gz
 dev-tools/easybuild/SOURCES/easybuild-framework-*.tar.gz
