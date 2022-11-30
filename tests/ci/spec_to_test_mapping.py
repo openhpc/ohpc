@@ -22,6 +22,10 @@ test_map = {
         'munge',
         'pdsh-mod-slurm-ohpc openmpi4-gnu12-ohpc pdsh-ohpc'
     ],
+    'components/dev-tools/easybuild/SPECS/easybuild.spec': [
+        'easybuild',
+        'gcc-c++',
+    ],
 }
 
 
