@@ -16,16 +16,16 @@ Version: 1.27
 Release: 1%{?dist}
 Summary: Static cluster configuration database
 License: GPL
-Source:  https://github.com/chaos/genders/archive/genders-1-27-3.tar.gz
+Source0:  https://github.com/chaos/genders/archive/genders-1-27-3.tar.gz
 Group:   %{PROJ_NAME}/admin
 URL:     https://github.com/chaos/genders
 
 Requires: perl
-BuildRequires: gcc-c++
+BuildRequires: gcc-c++ make
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: python2
-BuildRequires: python2-devel
+BuildRequires: python3
+BuildRequires: python3-devel
 
 %if 0%{?rhel_version}
 BuildRequires: byacc
@@ -61,7 +61,7 @@ genders API that is compatible with earlier releases of genders
 
 %build
 
-%configure PYTHON=/usr/bin/python2 --program-prefix=%{?_program_prefix:%{_program_prefix}} \
+%configure PYTHON=/usr/bin/python3 --program-prefix=%{?_program_prefix:%{_program_prefix}} \
     --with-extension-destdir="$RPM_BUILD_ROOT" \
     %{?_with_perl_extensions} \
     %{?_without_perl_extensions} \
@@ -84,12 +84,6 @@ find "$RPM_BUILD_ROOT" -name .packlist -exec sed -i '/BUILDROOT/d'        {} \;
 
 # turn off rpath check... causes failure on libgenders library
 export NO_BRP_CHECK_RPATH=true
-
-%post
-if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
-
-%postun
-if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %files
 %doc README NEWS ChangeLog DISCLAIMER DISCLAIMER.UC COPYING TUTORIAL genders.sample
