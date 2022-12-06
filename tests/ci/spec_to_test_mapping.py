@@ -18,6 +18,10 @@ test_map = {
         'hwloc',
         'gnu12-compilers-ohpc',
     ],
+    'components/rms/magpie/SPECS/magpie.spec': [
+        'munge',
+        'pdsh-mod-slurm-ohpc openmpi4-gnu12-ohpc pdsh-ohpc'
+    ],
 }
 
 

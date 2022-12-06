@@ -35,7 +35,7 @@
 
 Summary: Scripts for running Big Data software in HPC environments
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.5
+Version: 3.0
 Release: 1%{?dist}
 License: GPLv2
 URL: https://github.com/LLNL/magpie
@@ -46,7 +46,7 @@ Source0: https://github.com/LLNL/magpie/archive/%{version}.tar.gz
 # Java development package added to head node.
 BuildRequires: python-rpm-macros
 Requires: java-devel >= 1.8
-Requires: python2
+Requires: python3
 
 #!BuildIgnore: post-build-checks
 
@@ -80,7 +80,7 @@ for script in $(grep "^#!/usr/bin/env bash" conf); do
    %{__sed} -i "s#/usr/bin/env bash#/bin/bash#" $script
    %{__chmod} +x $script
 done
-%{__sed} -i "s#/usr/bin/env python#%{?__python2}%{!?__python2:/usr/bin/python2}#" magpie/job/magpie-job-zeppelin-checkzeppelinup.py
+%{__sed} -i "s#/usr/bin/env python#%{?__python3}%{!?__python3:/usr/bin/python3}#" magpie/job/magpie-job-zeppelin-checkzeppelinup.py
 find . -name \.gitignore -type f -delete
 %{__rm} .travis.yml
 
