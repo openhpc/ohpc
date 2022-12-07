@@ -52,8 +52,8 @@ chown root.root /var/log/munge
 
 /usr/sbin/munged -f
 /usr/sbin/slurmctld
-slurmd -N c0
-slurmd -N c1
+slurmd -N c0 || cat /var/log/slurm*
+slurmd -N c1 || cat /var/log/slurm*
 
 sinfo
 
