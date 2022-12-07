@@ -82,6 +82,11 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 find "$RPM_BUILD_ROOT" -name .packlist -exec sed -i "s#$RPM_BUILD_ROOT##" {} \;
 find "$RPM_BUILD_ROOT" -name .packlist -exec sed -i '/BUILDROOT/d'        {} \;
 
+%if %{?_with_perl_extensions:1}%{!?_with_perl_extensions:0}
+%define _perldir %(perl -e 'use Config; $T=$Config{installvendorarch}; $P=$Config{vendorprefix}; $T=~/$P\\/(.*)/; print "%{_prefix}/$1\\n"')
+chmod 755 ${RPM_BUILD_ROOT}/%{_perldir}/auto/Libgenders/Libgenders.so
+%endif
+
 # turn off rpath check... causes failure on libgenders library
 export NO_BRP_CHECK_RPATH=true
 
