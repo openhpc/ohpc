@@ -26,6 +26,18 @@ test_map = {
         'easybuild',
         'gcc-c++',
     ],
+    'components/io-libs/hdf5/SPECS/hdf5.spec': [
+        'hdf5',
+        'zlib-devel'
+    ],
+    'components/parallel-libs/ptscotch/SPECS/ptscotch.spec': [
+        'ptscotch',
+        'zlib-devel'
+    ],
+    'components/serial-libs/scotch/SPECS/scotch.spec': [
+        'scotch',
+        'zlib-devel'
+    ],
 }
 
 
