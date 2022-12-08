@@ -75,8 +75,7 @@ class ohpc_obs_tool(object):
                 activeComponents.append(item)
         return activeComponents
 
-
-    def parseConfig(self,configFile=None):
+    def parseConfig(self, configFile=None, service_file=None):
         assert(configFile is not None)
         logging.info("\nReading config information from file = %s" % configFile)
         if os.path.isfile(configFile):
@@ -103,10 +102,13 @@ class ohpc_obs_tool(object):
                 self.MPIFamilies       = ast.literal_eval(self.buildConfig.get(self.vip,'mpi_families'))
 
             except:
-                ERROR("Unable to parse global settings for %s" % vip)
+                ERROR("Unable to parse global settings for %s" % self.vip)
 
             assert(len(self.compilerFamilies) > 0)
             assert(len(self.MPIFamilies) > 0)
+
+            if service_file:
+                self.serviceFile = service_file
 
             self.Lock = True      # flag to indicate whether to lock new packages after creation (git trigger will unlock)
 
@@ -611,6 +613,14 @@ def main():
     parser.add_argument("--version"   ,help="version in progress",type=str)
     parser.add_argument("--no-lock",dest='lock',help="do not lock new build additions",action="store_false")
     parser.add_argument("--package",help="check OBS config for provided package only",type=str)
+    parser.add_argument(
+            "--service-file",
+            help=(
+                "OBS service file template "
+                "(default taken from configuration file)"
+            ),
+            type=str,
+    )
 
     parser.set_defaults(dryrun=True)
     parser.set_defaults(lock=True)
@@ -624,8 +634,8 @@ def main():
     # main worker bee class
     obs = ohpc_obs_tool(args.version)
 
-    # read config file and parse component packages desiredfor current version
-    obs.parseConfig(configFile=args.configFile)
+    # read config file and parse component packages desired for current version
+    obs.parseConfig(configFile=args.configFile, service_file=args.service_file)
     components = obs.query_components()
 
     # override dryrun option if requested
