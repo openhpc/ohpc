@@ -2,6 +2,8 @@ name: Validate
 
 on:
   push:
+    branches:
+      - 2.x
   pull_request:
     branches:
       - 2.x
@@ -69,12 +71,14 @@ jobs:
       run: |
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
+        touch /tmp/empty
     - uses: actions/upload-artifact@v3
       with:
         name: rhel-rpms
         path: |
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
+          /tmp/empty
 
   test_on_rhel:
     runs-on: ubuntu-latest
