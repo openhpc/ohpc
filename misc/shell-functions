@@ -29,7 +29,7 @@ build_srpm() {
 
 	DIR=$(dirname "${1}")
 
-	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "mpi_family ${MPI_FAMILY}" "${SPEC}")
+	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "mpi_family ${MPI_FAMILY}" "${SPEC}" 2>/dev/null)
 	RESULT=$?
 
 	echo "${SRPM}" | tail -1 | awk -F\  '{ print $2 }'

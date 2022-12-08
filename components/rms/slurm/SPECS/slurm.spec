@@ -110,7 +110,12 @@ Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_D
 
 %if 0%{?suse_version}
 BuildRequires: libopenssl-devel openssl
+BuildRequires: dbus-1-devel
 %else
+# To build the cgroupv2 plugin ./configure needs dbus-devel.
+# This feature is currently mainly necessary for CI runs in
+# containers on cgroupv2 systems.
+BuildRequires: dbus-devel
 BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
 

@@ -44,6 +44,10 @@ sed -i -e "
 	echo "PartitionName=normal Nodes=c0,c1 Default=YES MaxTime=24:00:00 State=UP"
 } >> /etc/slurm/slurm.conf
 
+# cgroupv2 support does not yet work in containers.
+# Force cgroupv1 even on hosts with v2.
+echo "CgroupPlugin=cgroup/v1" >  /etc/slurm/cgroup.conf
+
 chown root.root /var/log/munge
 
 /usr/sbin/munged -f
