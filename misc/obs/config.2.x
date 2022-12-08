@@ -36,7 +36,7 @@ mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie"]
+standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild"]
 
 [2.6.0]
 
