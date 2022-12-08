@@ -599,7 +599,14 @@ def main():
 
     # parse command-line args
     parser = argparse.ArgumentParser()
-    parser.add_argument("--configFile",help="filename with package definition options (default = config)",type=str)
+    parser.add_argument(
+            "--configFile",
+            help=(
+                "filename with package definition "
+                "options (default = %s)" % configFile
+            ),
+            type=str,
+    )
     parser.add_argument("--no-dryrun",dest='dryrun',help="flag to disable dryrun mode and execute obs commands",action="store_false")
     parser.add_argument("--version"   ,help="version in progress",type=str)
     parser.add_argument("--no-lock",dest='lock',help="do not lock new build additions",action="store_false")
@@ -618,7 +625,7 @@ def main():
     obs = ohpc_obs_tool(args.version)
 
     # read config file and parse component packages desiredfor current version
-    obs.parseConfig(configFile=configFile)
+    obs.parseConfig(configFile=args.configFile)
     components = obs.query_components()
 
     # override dryrun option if requested
@@ -730,15 +737,9 @@ def main():
                 else:
                     logging.info("%27s (%13s): *not* present in OBS, need to add" % (child,ptype))
                     obs.addPackage(child,parent=False,isMPIDep=True,compiler=compiler,mpi=mpi,parentName=parent)
-    
+
     obs.cancelNewBuilds()
-    
+
 
 if __name__ == '__main__':
     main()
-
-
-    
-
-
-
