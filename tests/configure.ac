@@ -203,7 +203,7 @@ AM_CONDITIONAL(IMB_ENABLED,test "x$enable_imb" = "xyes" )
 #------------------------------------------------------------------------------------------
 # OMB
 AC_ARG_ENABLE([omb],
-   [AS_HELP_STRING([--enable-imb],[Enable OSU MPI Micro-benchmarks tests (default=yes)])],[],
+   [AS_HELP_STRING([--enable-omb],[Enable OSU MPI Micro-benchmarks tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_omb,yes)])
 AM_CONDITIONAL(OMB_ENABLED,test "x$enable_omb" = "xyes" )
 #------------------------------------------------------------------------------------------
