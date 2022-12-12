@@ -60,7 +60,8 @@ BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
 BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
-
+BuildRequires: %{python_prefix}-mpi4py-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires: %{python_prefix}-Cython%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
@@ -192,13 +193,15 @@ export PATH=$(pwd):$PATH
 module load openblas
 %endif
 module load %{python_module_prefix}numpy
+module load %{python_module_prefix}mpi4py
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 export CFLAGS="$CFLAGS -I$MPI_DIR/include"
 pushd wrappers/numpy
 mkdir .bin
 ln -s /usr/bin/python3 .bin/python
 export PATH="$PWD/.bin:$PATH"
-make MPI=y python
+rm -f adios.cpp adios_mpi.cpp
+make CYTHON=y MPI=y python
 
 #%{python_prefix} setup.py install --prefix="%buildroot%{install_path}/python"
 python3 setup.py install --prefix="%buildroot%{install_path}/python"
