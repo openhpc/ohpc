@@ -26,6 +26,10 @@ test_map = {
         'easybuild',
         'gcc-c++',
     ],
+    'components/io-libs/adios/SPECS/adios.spec': [
+        'adios',
+        ''
+    ],
     'components/io-libs/hdf5/SPECS/hdf5.spec': [
         'hdf5',
         'zlib-devel'
