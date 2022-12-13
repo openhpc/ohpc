@@ -19,6 +19,7 @@ spec_found = False
 build_user = sys.argv[1]
 dnf_based = False
 dist = "9999.ci.ohpc"
+version_id = ''
 
 # Check which base OS we are using
 reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
@@ -40,6 +41,8 @@ for row in reader:
         for item in list(row.items())[0]:
             if 'fedora' in item:
                 dnf_based = True
+    if key == 'VERSION_ID':
+        version_id = list(row.items())[0][1]
 
 
 def run_command(command):
@@ -196,7 +199,9 @@ for spec in sys.argv[1:]:
         ]
 
         for family in families:
-            if family == 'mvapich2' and os.uname().machine == 'aarch64':
+            if (family == 'mvapich2' and
+                    (os.uname().machine == 'aarch64' or
+                        version_id.startswith('9'))):
                 continue
             # Build SRPM
             command = [

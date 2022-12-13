@@ -16,6 +16,7 @@ fi
 . /etc/os-release
 
 PKG_MANAGER=zypper
+COMMON_PKGS="wget python3"
 
 retry_counter=0
 max_retries=5
@@ -47,29 +48,52 @@ for like in ${ID_LIKE}; do
 done
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then
-	OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm"
+	# We need to figure out if we are running on RHEL (clone) 8 or 9 and
+	# rpmdev-vercmp from rpmdevtools is pretty good at comparing versions.
+	loop_command "${PKG_MANAGER}" -y  install rpmdevtools crypto-policies-scripts "${COMMON_PKGS}"
+
+	# Exit status is 0 if the EVR's are equal, 11 if EVR1 is newer, and 12 if EVR2
+        # is newer.  Other exit statuses indicate problems.
+	set +e
+	rpmdev-vercmp 9 "${VERSION_ID}"
+	if [ "$?" -eq "11" ]; then
+		OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm"
+	else
+		# This is our RHEL 9 pre-release repository
+		loop_command wget http://obs.openhpc.community:82/home:/adrianr/CentOS9/home:adrianr.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
+		# The OBS signing key is too old
+		update-crypto-policies --set LEGACY
+		NINE=1
+	fi
+	set -e
 else
 	OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/Leap_15/x86_64/ohpc-release-2-1.leap15.x86_64.rpm"
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
-	FACTORY_REPOSITORY=http://obs.openhpc.community:82/OpenHPC:/2.7:/Factory/
+	FACTORY_REPOSITORY=http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/
 	if [ "${PKG_MANAGER}" = "dnf" ]; then
-		FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_8"
+		if [ -z "${NINE}" ]; then
+			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_8"
+		else
+			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_9"
+		fi
 		FACTORY_REPOSITORY_DESTINATION="/etc/yum.repos.d/obs.repo"
 	else
 		FACTORY_REPOSITORY="${FACTORY_REPOSITORY}Leap_15"
 		FACTORY_REPOSITORY_DESTINATION="/etc/zypp/repos.d/obs.repo"
 	fi
-	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/OpenHPC:2.7:Factory.repo"
+	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/OpenHPC:${FACTORY_VERSION}:Factory.repo"
 fi
-
-COMMON_PKGS="wget python3"
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then
 	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
-	loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
-	loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
+	if [ -z "${NINE}" ]; then
+		loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
+		loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
+	else
+		loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
+	fi
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
