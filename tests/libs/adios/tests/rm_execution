@@ -13,7 +13,11 @@ rm=$RESOURCE_MANAGER
 testname="libs/ADIOS"
 
 NODES=2
-TASKS=8
+if [ -z "$SIMPLE_CI" ]; then
+    TASKS=2
+else
+    TASKS=8
+fi
 
 @test "[$testname] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=arrays_write
