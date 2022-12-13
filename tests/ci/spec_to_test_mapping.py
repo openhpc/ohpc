@@ -28,7 +28,7 @@ test_map = {
     ],
     'components/io-libs/adios/SPECS/adios.spec': [
         'adios',
-        ''
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
     ],
     'components/io-libs/hdf5/SPECS/hdf5.spec': [
         'hdf5',
