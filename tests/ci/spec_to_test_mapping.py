@@ -118,6 +118,14 @@ test_map = {
         'tau',
         'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
     ],
+    'components/mpi-families/openmpi/SPECS/openmpi.spec': [
+        'openmpi4',
+        'openmpi4-gnu12-ohpc'
+    ],
+    'components/mpi-families/mpich/SPECS/mpich.spec': [
+        'mpich',
+        'mpich-gnu12-ohpc'
+    ],
 }
 
 
