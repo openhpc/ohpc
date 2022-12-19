@@ -9,7 +9,7 @@ if [ -s ./common/TEST_ENV ];then
 fi
 
 NODES=2
-TASKS=4
+TASKS=`tasks_count 4`
 
 check_rms
 rm=$RESOURCE_MANAGER

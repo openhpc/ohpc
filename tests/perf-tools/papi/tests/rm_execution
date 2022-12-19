@@ -14,7 +14,7 @@ rm=$RESOURCE_MANAGER
 testname="perf-tools/papi"
 
 NODES=2
-TASKS=5
+TASKS=`tasks_count 5`
 ARGS=5
 
 @test "[$testname] C dynamic memory info under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {

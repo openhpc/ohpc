@@ -12,7 +12,7 @@ check_rms
 rm=$RESOURCE_MANAGER
 
 NODES=2
-TASKS=2
+TASKS=`tasks_count 2`
 ARGS=2
 
 @test "[RMS/harness] Verify zero exit code from MPI job runs OK ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {

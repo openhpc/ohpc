@@ -13,7 +13,7 @@ rm=$RESOURCE_MANAGER
 export SCAN_MPI_LAUNCHER=prun
 
 NODES=2
-TASKS=8
+TASKS=`tasks_count 8`
 ARGS=8
 
 @test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {

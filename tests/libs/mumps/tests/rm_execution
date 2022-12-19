@@ -14,7 +14,7 @@ rm=$RESOURCE_MANAGER
 testname="libs/Mumps"
 
 NODES=2
-TASKS=4
+TASKS=`tasks_count 4`
 ARGS=null
 
 @test "[$testname] C (double precision) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {

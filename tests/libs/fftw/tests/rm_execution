@@ -12,13 +12,8 @@ check_rms
 rm=$RESOURCE_MANAGER
 
 NODES=2
+TASKS=`tasks_count 8`
 ARGS=8
-if [ -z "$SIMPLE_CI" ]; then
-    TASKS=8
-else
-    TASKS=2
-fi
-
 
 TIMEOUT="00:05:00"
 

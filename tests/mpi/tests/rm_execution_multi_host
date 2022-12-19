@@ -12,7 +12,7 @@ check_rms
 RMS=$RESOURCE_MANAGER
 
 NODES=2
-TASKS=8
+TASKS=`tasks_count 8`
 ARGS=8
 
 @test "[MPI] C   binary runs on two nodes under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {

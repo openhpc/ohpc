@@ -14,7 +14,7 @@ rm=$RESOURCE_MANAGER
 testname="perf-tools/geopm"
 
 NODES=2
-TASKS=4
+TASKS=`tasks_count 4`
 
 @test "[$testname] Test LD_PRELOAD ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s tutorial_0 ]; then
