@@ -14,9 +14,9 @@ testname="libs/ADIOS"
 
 NODES=2
 if [ -z "$SIMPLE_CI" ]; then
-    TASKS=2
-else
     TASKS=8
+else
+    TASKS=2
 fi
 
 @test "[$testname] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
