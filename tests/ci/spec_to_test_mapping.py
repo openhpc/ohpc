@@ -42,8 +42,80 @@ test_map = {
         'scotch',
         'zlib-devel'
     ],
-    '../components/parallel-libs/fftw/SPECS/fftw.spec': [
+    'components/parallel-libs/fftw/SPECS/fftw.spec': [
         'fftw',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/hypre/SPECS/hypre.spec': [
+        'hypre',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/mfem/SPECS/mfem.spec': [
+        'mfem',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/mumps/SPECS/mumps.spec': [
+        'mumps',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/opencoarrays/SPECS/opencoarrays.spec': [
+        'opencoarrays',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/petsc/SPECS/petsc.spec': [
+        'petsc',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/io-libs/phdf5/SPECS/hdf5.spec': [
+        'phdf5',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/io-libs/pnetcdf/SPECS/pnetcdf.spec': [
+        'pnetcdf',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/scalapack/SPECS/scalapack.spec': [
+        'scalapack',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/slepc/SPECS/slepc.spec': [
+        'slepc',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/serial-libs/superlu/SPECS/superlu.spec': [
+        'superlu',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/superlu_dist/SPECS/superlu_dist.spec': [
+        'superlu_dist',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/parallel-libs/trilinos/SPECS/trilinos.spec': [
+        'trilinos',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/perf-tools/extrae/SPECS/extrae.spec': [
+        'extrae',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/perf-tools/geopm/SPECS/geopm.spec': [
+        'geopm',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/perf-tools/likwid/SPECS/likwid.spec': [
+        'likwid',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/perf-tools/papi/SPECS/papi.spec': [
+        'papi',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/perf-tools/scalasca/SPECS/scalasca.spec': [
+        'scalasca',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
+    'components/perf-tools/tau/SPECS/tau.spec': [
+        'tau',
         'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
     ],
 }
