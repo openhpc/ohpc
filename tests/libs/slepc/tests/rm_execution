@@ -12,7 +12,7 @@ check_rms
 rm=$RESOURCE_MANAGER
 
 NODES=2
-TASKS=4
+TASKS=`tasks_count 4`
 ARGS=8
 
 @test "[libs/SLEPc] F90 SVD test binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {

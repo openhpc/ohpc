@@ -144,3 +144,13 @@ batslib_prefix() {
   done
 }
 
+# Returns the number of tasks to run in parallel.
+# If SIMPLE_CI is set, returns 2, otherwise returns the value of $1.
+# Defaults to '8' if no $1.
+tasks_count() {
+  local TASKS=${1:-8}
+  if [ ! -z "$SIMPLE_CI" ]; then
+      TASKS=2
+  fi
+  echo $TASKS
+}
