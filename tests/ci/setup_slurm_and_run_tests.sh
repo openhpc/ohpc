@@ -88,4 +88,4 @@ export SIMPLE_CI=1
 
 # Always running at least with '--enable-modules'. No need to check for
 # an empty TESTS array.
-su "${USER}" -l -c "cd ${PWD}/tests; ./bootstrap; ./configure --disable-all --enable-modules --with-mpi-families='openmpi4 mpich' ${TESTS[*]}; make check"
+su "${USER}" --whitelist-environment SIMPLE_CI -l -c "cd ${PWD}/tests; ./bootstrap; ./configure --disable-all --enable-modules --with-mpi-families='openmpi4 mpich' ${TESTS[*]}; make check"

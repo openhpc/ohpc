@@ -42,6 +42,10 @@ test_map = {
         'scotch',
         'zlib-devel'
     ],
+    '../components/parallel-libs/fftw/SPECS/fftw.spec': [
+        'fftw',
+        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+    ],
 }
 
 
