@@ -14,7 +14,7 @@ rm=$RESOURCE_MANAGER
 testname="libs/SuperLU"
 
 NODES=1
-TASKS=4
+TASKS=`tasks_count 4`
 ARGS=null
 
 @test "[$testname] C test runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
