@@ -105,7 +105,7 @@ jobs:
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
-    - name: Print logs on error
+    - name: Print logs on failure
       if: failure()
       run: |
         for f in `find ./ -name "*.log"`; do 
