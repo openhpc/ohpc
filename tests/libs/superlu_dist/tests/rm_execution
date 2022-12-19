@@ -14,7 +14,7 @@ rm=$RESOURCE_MANAGER
 testname="libs/superLU_dist"
 
 NODES=2
-TASKS=4
+TASKS=`tasks_count 4`
 
 export MV2_ENABLE_AFFINITY=0
 

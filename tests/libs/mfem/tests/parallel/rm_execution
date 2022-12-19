@@ -13,7 +13,7 @@ rm=$RESOURCE_MANAGER
 testname="libs/MFEM"
 
 NODES=2
-TASKS=8
+TASKS=`tasks_count 8`
 
 @test "[$testname] p_laplace MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=p_laplace

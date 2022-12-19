@@ -14,7 +14,7 @@ rm=$RESOURCE_MANAGER
 testname="libs/ScaLAPACK"
 
 NODES=2
-TASKS=8
+TASKS=`tasks_count 8`
 ARGS=0
 
 @test "[$testname/PCSCAEX] CPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
