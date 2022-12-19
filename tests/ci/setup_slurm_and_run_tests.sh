@@ -20,7 +20,7 @@ dnf -y install \
 
 # Install rebuilt packages (if any)
 # shellcheck disable=SC2046 # (we want the words to be split)
-dnf -y install $(find /home/"${USER}"/rpmbuild/RPMS/ -name "*rpm") || true
+dnf -y install prun-ohpc $(find /home/"${USER}"/rpmbuild/RPMS/ -name "*rpm") || true
 
 # Setup slurm
 echo "127.0.0.1 node0 node1" >> /etc/hosts
