@@ -26,9 +26,7 @@ jobs:
     - name: Setup
       run: |
         dnf install -y epel-release git python3
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v3
     - id: files
       uses: Ana06/get-changed-files@v2.2.0
     - name: Validate Changes
@@ -46,9 +44,7 @@ jobs:
     steps:
     - name: Setup
       run: dnf -y install codespell make python3-flake8 ShellCheck
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v3
     - name: Run ${{ matrix.step }}
       run: make -C tests/ci/ ${{ matrix.step }}-lint
 
@@ -60,9 +56,7 @@ jobs:
     steps:
     - name: Install git
       run: dnf -y install git
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v3
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -89,9 +83,7 @@ jobs:
     steps:
     - name: Install git
       run: dnf -y install git
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v3
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -108,10 +100,10 @@ jobs:
     - name: Print logs on failure
       if: failure()
       run: |
-        for f in `find ./ -name "*.log"`; do 
-          echo $f; 
+        for f in `find ./ -name "*.log"`; do
+          echo $f;
           cat $f;
-          echo "================================================" 
+          echo "================================================"
         done
 
   build_on_leap:
@@ -122,9 +114,7 @@ jobs:
     steps:
     - name: Install git
       run: zypper -n install git
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v3
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
