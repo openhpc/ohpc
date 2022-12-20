@@ -30,7 +30,7 @@ jobs:
       with:
         fetch-depth: 0
     - id: files
-      uses: jitterbit/get-changed-files@v1
+      uses: Ana06/get-changed-files@v2.2.0
     - name: Validate Changes
       run: |
         tests/ci/check_spec.py ${{ steps.files.outputs.added_modified }}
@@ -66,7 +66,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: jitterbit/get-changed-files@v1
+      uses: Ana06/get-changed-files@v2.2.0
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
@@ -95,7 +95,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: jitterbit/get-changed-files@v1
+      uses: Ana06/get-changed-files@v2.2.0
     - uses: actions/download-artifact@v3
       with:
         name: rhel-rpms
@@ -128,7 +128,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: jitterbit/get-changed-files@v1
+      uses: Ana06/get-changed-files@v2.2.0
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
@@ -146,7 +146,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: jitterbit/get-changed-files@v1
+      uses: Ana06/get-changed-files@v2.2.0
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
