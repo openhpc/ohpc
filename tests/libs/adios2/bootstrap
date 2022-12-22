@@ -1,0 +1,9 @@
+#! /bin/sh
+# --------------------------------------------------------------------------
+# bootstrapping utility for autotools -> now just uses autoreconf
+# -------------------------------------------------------------------------- 
+
+cmd="autoreconf -f -i -Wno-portability"
+echo "Bootstrapping using $cmd ..."
+
+$cmd

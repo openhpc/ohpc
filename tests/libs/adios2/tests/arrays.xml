@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+
+    <adios-group name="arrays">
+        <var name="NX" type="integer"/>
+        <var name="NY" type="integer"/>
+        <var name="var_double_2Darray"  gwrite="t"  type="double"  dimensions="NX,NY"/>
+        <var name="var_int_1Darray"     gwrite="p"  type="integer" dimensions="NX"/>
+    </adios-group>
+
+    <method group="arrays"  method="MPI"/>
+
+    <buffer max-size-MB="20"/>
+
+</adios-config>
+

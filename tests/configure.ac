@@ -219,11 +219,17 @@ AC_ARG_ENABLE([fftw],
    [AX_OPTION_DEFAULT(type=long,enable_fftw,yes)])
 AM_CONDITIONAL(FFTW_ENABLED,test "x$enable_fftw" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# Adios 
+# Adios1 
 AC_ARG_ENABLE([adios],
    [AS_HELP_STRING([--enable-adios],[Enable Adios tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_adios,yes)])
 AM_CONDITIONAL(ADIOS_ENABLED,test "x$enable_adios" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Adios2
+AC_ARG_ENABLE([adios2],
+   [AS_HELP_STRING([--enable-adios2],[Enable Adios2 tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_adios2,yes)])
+AM_CONDITIONAL(ADIOS2_ENABLED,test "x$enable_adios2" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Boost
 AC_ARG_ENABLE([boost],
@@ -672,6 +678,12 @@ echo    Libraries:
        echo '    'Adios .................... : enabled
     else
        echo '    'Adios .................... : disabled
+    fi
+    
+    if test "x$enable_adios2" = "xyes"; then
+       echo '    'Adios2 ................... : enabled
+    else
+       echo '    'Adios2 ................... : disabled
     fi
 
     if test "x$enable_boost" = "xyes"; then
