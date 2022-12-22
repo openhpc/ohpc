@@ -44,6 +44,15 @@ test_map = {
         '',
         ''
     ],
+    'components/io-libs/adios2/SPECS/adios2.spec': [
+        'adios2',
+        '',
+        'openmpi4-gnu12-ohpc \
+            mpich-gnu12-ohpc \
+            python3-numpy-gnu12-ohpc \
+            python3-mpi4py-gnu12-mpich-ohpc \
+            python3-mpi4py-gnu12-openmpi4-ohpc'
+    ],
     'components/io-libs/hdf5/SPECS/hdf5.spec': [
         'hdf5',
         '',

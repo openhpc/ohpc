@@ -1,0 +1,8 @@
+*.trs
+*.log
+arrays_read.o
+arrays_write.o
+arrays_read
+arrays_write
+arrays.bp
+scalars.bp
