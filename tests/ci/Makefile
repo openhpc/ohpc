@@ -1,4 +1,4 @@
-lint: codespell-lint flake8-lint whitespace-lint
+lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"

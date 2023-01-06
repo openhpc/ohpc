@@ -86,7 +86,6 @@ Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
 Requires:  python3
-Requires:  singularity
 %if 0%{?rhel}
 Requires:  cairo-devel
 Requires:  libpciaccess
@@ -94,6 +93,7 @@ Requires:  libseccomp
 Requires:  librdmacm
 Requires:  NetworkManager
 Requires:  perl-interpreter
+Recommends: (singularity-ce or singularity or apptainer)
 %ifarch x86_64
 Requires:  libpsm2
 %endif
@@ -104,6 +104,7 @@ Requires:  libpciaccess0
 Requires:  libatomic1
 Requires:  librdmacm1
 Requires:  libicu-suse65_1
+Requires:  singularity
 %ifarch x86_64
 Requires:  libpsm2-2
 %endif
@@ -354,7 +355,12 @@ Collection of python3 related library builds for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-%{compiler_family}-runtimes
 Summary:   OpenHPC runtimes for GNU
 Requires:  charliecloud%{PROJ_DELIM}
+%if 0%{?suse_version}
 Requires:  singularity
+%endif
+%if 0%{?rhel}
+Recommends: (singularity-ce or singularity or apptainer)
+%endif
 %description -n %{PROJ_NAME}-%{compiler_family}-runtimes
 Collection of runtimes for use with GNU compiler toolchain
 
