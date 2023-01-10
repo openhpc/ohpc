@@ -215,15 +215,6 @@ jobs:
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v3
-
-  build_on_openEuler:
-    runs-on: ubuntu-latest
-    container:
-      image: docker.io/openeuler/openeuler:22.03-lts
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files

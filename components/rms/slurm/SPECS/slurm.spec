@@ -376,7 +376,7 @@ notifies slurm about failed nodes.
 Summary: Graphical user interface to view and modify Slurm state
 Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
-BuildRequires: gtk2-devel gcc
+BuildRequires: gtk2-devel
 Requires: gtk2
 %description  -n %{pname}-sview%{PROJ_DELIM}
 This package provides sview, which can be used to view Slurm configuration, job,

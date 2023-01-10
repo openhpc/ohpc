@@ -93,13 +93,7 @@ dnf_rhel() {
 		loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
 		loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
 	else
-		loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
-		if [ -z "${NINE}" ]; then
-			loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
-			loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
-		else
-			loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
-		fi
+		loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
 	fi
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
