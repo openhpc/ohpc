@@ -74,7 +74,6 @@ Requires:  NetworkManager
 %if 0%{?suse_version}
 Requires:  glibc-locale
 Requires:  nfs-kernel-server
-Requires:  singularity
 %endif
 %description -n %{PROJ_NAME}-base
 Collection of base packages
@@ -86,7 +85,6 @@ Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
 Requires:  python3
-Requires:  singularity
 %if 0%{?rhel}
 Requires:  cairo-devel
 Requires:  libpciaccess
@@ -354,7 +352,6 @@ Collection of python3 related library builds for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-%{compiler_family}-runtimes
 Summary:   OpenHPC runtimes for GNU
 Requires:  charliecloud%{PROJ_DELIM}
-Requires:  singularity
 %description -n %{PROJ_NAME}-%{compiler_family}-runtimes
 Collection of runtimes for use with GNU compiler toolchain
 
