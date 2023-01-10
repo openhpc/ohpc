@@ -21,3 +21,16 @@ task:
   build_script: |
     . /etc/profile.d/lmod.sh
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
+
+
+openeuler_task:
+  name: openEuler on aarch64
+  timeout_in: 120m
+  arm_container:
+    image: docker.io/openeuler/openeuler:22.03-lts
+    cpu: 4
+    memory: 12G
+  script: uname -a
+  setup_script: tests/ci/prepare-ci-environment.sh
+  build_script: |
+    tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
