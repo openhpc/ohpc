@@ -28,7 +28,7 @@ BuildRequires: rsync
 BuildRequires: tcl-devel
 BuildRequires: gcc make bc
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: lua-libs
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix

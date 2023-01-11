@@ -116,7 +116,7 @@ dnf_rhel() {
 }
 
 dnf_openeuler() {
-	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} git rpm-build gawk
+	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk
 	loop_command "${PKG_MANAGER}" -y install ohpc-filesystem
 }
 
