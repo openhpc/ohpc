@@ -34,6 +34,9 @@ if test -r "/etc/os-release"; then
    elif grep -q "openSUSE Leap" /etc/os-release; then
       AC_MSG_RESULT([openSUSE Leap])
       DISTRO_FAMILY=SLES
+   elif grep -q "openEuler" /etc/os-release; then
+      AC_MSG_RESULT([openEuler])
+      DISTRO_FAMILY=openEuler
    else  
       AC_MSG_RESULT([unknown])
       echo

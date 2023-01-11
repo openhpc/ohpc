@@ -6,6 +6,7 @@ env:
 
 task:
   name: RHEL/Rocky on aarch64
+  timeout_in: 120m
   arm_container:
     image: docker.io/library/rockylinux:8
     cpu: 4
@@ -21,7 +22,6 @@ task:
   build_script: |
     . /etc/profile.d/lmod.sh
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
-
 
 openeuler_task:
   name: openEuler on aarch64
