@@ -68,7 +68,7 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 		set +e
 		rpmdev-vercmp 9 "${VERSION_ID}"
 		if [ "$?" -eq "11" ]; then
-			OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.${UNAME_M}.rpm"
+			OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/CentOS_8/${UNAME_M}/ohpc-release-2-1.el8.${UNAME_M}.rpm"
 		else
 			FACTORY_VERSION=3.0
 			# This is our RHEL 9 pre-release repository
@@ -80,7 +80,7 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 		set -e
 	fi
 else
-	OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/Leap_15/x86_64/ohpc-release-2-1.leap15.${UNAME_M}.rpm"
+	OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/Leap_15/${UNAME_M}/ohpc-release-2-1.leap15.${UNAME_M}.rpm"
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
