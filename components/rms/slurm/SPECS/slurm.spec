@@ -152,6 +152,10 @@ BuildRequires: pkgconfig
 %endif
 %endif
 
+%if 0%{?openEuler}
+BuildRequires: perl-devel
+%endif
+
 BuildRequires: perl(ExtUtils::MakeMaker)
 
 #needed to enable jobcomp_elasticsearch plugin
@@ -347,7 +351,7 @@ Summary: Slurm REST API translator
 Group: System Environment/Base
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: http-parser-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: json-c-devel
 %endif
 %if 0%{?suse_version:1}
@@ -386,7 +390,7 @@ select information.
 %setup -q -n %{slurm_source_dir}
 
 %build
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 export PATH="$PWD/bin:$PATH"
 %endif
 %configure \
@@ -412,7 +416,7 @@ export PATH="$PWD/bin:$PATH"
 make %{?_smp_mflags}
 
 %install
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 export PATH="$PWD/bin:$PATH"
 %endif
 

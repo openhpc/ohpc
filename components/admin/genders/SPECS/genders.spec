@@ -27,8 +27,12 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: python3
 BuildRequires: python3-devel
 
-%if 0%{?rhel_version}
+%if 0%{?rhel_version} || 0%{?openEuler}
 BuildRequires: byacc
+%endif
+
+%if 0%{?openEuler}
+BuildRequires: perl-devel
 %endif
 
 Provides: %{pname} = %{version}
