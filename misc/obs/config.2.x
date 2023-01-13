@@ -32,6 +32,12 @@ perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","pap
 compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel","llvm-compilers"]
 mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 
+[3.0.0]
+compiler_families=["gnu12","intel","arm1"]
+mpi_families=["openmpi4","mpich","mvapich2","impi"]
+
+standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun"]
+
 [2.7.0]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
