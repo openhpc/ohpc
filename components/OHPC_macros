@@ -28,7 +28,11 @@
 %global OHPC_UTILS      %{OHPC_PUB}/utils
 %global debug_package   %{nil}
 
+%if 0%{?rhel} >= 9 || 0%{?openEuler}
+%{!?dist: %global dist 300.ohpc}
+%else
 %{!?dist: %global dist 27.ohpc}
+%endif
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Update package docs location to include version info (to allow
