@@ -33,4 +33,8 @@ openeuler_task:
   script: uname -a
   setup_script: tests/ci/prepare-ci-environment.sh
   build_script: |
+    . /etc/profile.d/lmod.sh
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
+  test_script: |
+    chown ohpc -R tests
+    tests/ci/setup_slurm_and_run_tests.sh ohpc $(tests/ci/cirrus_get_changed_files.sh)

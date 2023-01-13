@@ -90,6 +90,24 @@ fi
 
 export SIMPLE_CI=1
 
+set +e
+
+sudo --user="${USER}" --login bash -c 'cd ${PWD}/tests; find ./ -name "*.log" -delete'
+
 # Always running at least with '--enable-modules'. No need to check for
 # an empty TESTS array.
-sudo --user="${USER}" --preserve-env=SIMPLE_CI --login bash -c "cd ${PWD}/tests; ./bootstrap; ./configure --disable-all --enable-modules --enable-rms-harness --with-mpi-families='openmpi4 mpich' ${TESTS[*]}; make check"
+if sudo --user="${USER}" --preserve-env=SIMPLE_CI --login bash -c "cd ${PWD}/tests; ./bootstrap; ./configure --disable-all --enable-modules --enable-rms-harness --with-mpi-families='openmpi4 mpich' ${TESTS[*]}; make check";
+then
+    exit 0
+fi
+
+set -e
+
+# If we are here, the tests failed. Print the logs.
+echo -e "\nThe tests execution failed. Printing the logs.\n"
+find ./ -name "*.log" -print0 | while IFS= read -r -d '' log_file
+do
+	echo "================================================"
+	echo "Log file: ${log_file}";
+	cat "${log_file}";
+done
