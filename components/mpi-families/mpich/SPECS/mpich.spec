@@ -63,6 +63,7 @@ Patch0:    config.pmix.patch
 %global _default_patch_fuzz 2
 
 Requires: prun%{PROJ_DELIM} >= 1.2
+BuildRequires: perl
 Requires: perl
 BuildRequires: zlib-devel make
 %if 0%{?suse_version}
