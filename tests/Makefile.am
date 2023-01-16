@@ -4,7 +4,7 @@ AM_MAKEFLAGS     = --no-print-directory
 SUBDIRS          = 
 TESTS            =
 
-# Tests are broken up into those which require elevetated credentials
+# Tests are broken up into those which require elevated credentials
 # versus those that run in normal userspace
 
 if ROOT_ENABLED

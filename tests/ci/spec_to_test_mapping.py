@@ -168,6 +168,16 @@ test_map = {
         'oob',
         ''
     ],
+    'components/dev-tools/autoconf/SPECS/autoconf.spec': [
+        'autotools',
+        '',
+        'autoconf-ohpc automake-ohpc libtool-ohpc'
+    ],
+    'components/dev-tools/cmake/SPECS/cmake.spec': [
+        'cmake',
+        '',
+        'cmake-ohpc'
+    ],
 }
 
 

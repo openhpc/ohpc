@@ -121,7 +121,7 @@ fi
 
 set -e
 
-# If we are here, the tests failed. Print the logs.
+# If we are here, the tests failed. Print the logs and exit with an error code.
 echo -e "\nThe tests execution failed. Printing the logs.\n"
 find ./ -name "*.log" -print0 | while IFS= read -r -d '' log_file
 do
