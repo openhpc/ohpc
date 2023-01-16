@@ -68,7 +68,7 @@ BuildRequires:  libevent-devel
 %endif
 %if 0%{with_ofi}
 BuildRequires:  libfabric%{PROJ_DELIM}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  libibverbs-devel
 %endif
 %ifarch x86_64
@@ -81,7 +81,7 @@ Requires: ucx%{PROJ_DELIM}
 Requires: ucx-ib%{PROJ_DELIM}
 %endif
 BuildRequires:  hwloc%{PROJ_DELIM}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: libtool-ltdl
 %endif
 %if 0%{with_slurm}
