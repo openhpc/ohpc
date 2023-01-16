@@ -24,14 +24,14 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 URL:            https://cmake.org/
 Source0:        https://cmake.org/files/v%{major_version}/cmake-%{version}.tar.gz
-BuildRequires:  gcc-c++
+BuildRequires:  gcc-c++ make
 BuildRequires:  curl-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  expat-devel
 BuildRequires:  bzip2-devel
 %endif

@@ -163,6 +163,16 @@ test_map = {
         'spack',
         ''
     ],
+    'components/dev-tools/autoconf/SPECS/autoconf.spec': [
+        'autotools',
+        '',
+        ''
+    ],
+    'components/dev-tools/cmake/SPECS/cmake.spec': [
+        'cmake',
+        '',
+        ''
+    ],
 }
 
 
