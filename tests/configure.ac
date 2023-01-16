@@ -586,7 +586,7 @@ if test "x$ROOT_ENABLED" = "x1" ; then
     else 
        echo '    'Out of band tools......... : disabled
     fi
-    
+   
     if test "x$enable_spack" = "xyes"; then
        echo '    'Spack..................... : enabled
     else
