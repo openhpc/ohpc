@@ -2,7 +2,9 @@ lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
-	cd ../..; codespell $$(find components -name "*.spec")
+	cd ../..; codespell $$(find components -name "*.spec") \
+		README.md \
+		CONTRIBUTING.md
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"
