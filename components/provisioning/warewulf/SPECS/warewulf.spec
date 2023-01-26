@@ -25,15 +25,12 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.3.0
+Version: 4.4.0
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
 URL:     https://github.com/hpcng/warewulf
-Source0:  https://github.com/hpcng/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
-Source2: go_vendor-4.3.tgz
-Patch0:  warewulf-4.3.0-network_type.patch
-Patch1:  warewulf-4.3.0-ssh_completion.patch
+Source0: https://github.com/hpcng/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
 
 ExclusiveOS: linux
 
@@ -43,6 +40,11 @@ Conflicts: warewulf-cluster
 Conflicts: warewulf-vnfs
 Conflicts: warewulf-provision
 Conflicts: warewulf-ipmi
+
+BuildRequires: make
+BuildRequires: libassuan-devel
+BuildRequires: gpgme-devel
+Requires: dhcp-server
 
 %if 0%{?suse_version} || 0%{?sle_version}
 BuildRequires: distribution-release
@@ -63,10 +65,6 @@ BuildRequires: firewalld-filesystem
 Requires: tftp-server
 Requires: nfs-utils
 %endif
-BuildRequires: make
-# git required for some go mod tidy downloads
-BuildRequires: git
-Requires: dhcp-server
 
 %description
 Warewulf is a stateless and diskless container operating system provisioning
@@ -74,13 +72,13 @@ system for large clusters of bare metal and/or virtual systems.
 
 
 %prep
-%setup -q -n %{pname}-%{version} -b0 -a2
-%patch0 -p1
-%patch1 -p1
+%setup -q -n %{pname}-%{version}
 
 # No network access in OBS, so module downloads will break builds
+%if !0%{?update_mods}
 sed -i "s/go mod tidy .*$//" Makefile
 sed -i "s/go mod vendor .*$//" Makefile
+%endif
 
 
 %build
@@ -115,6 +113,15 @@ mv %{buildroot}%{statedir}/warewulf/overlays/host/etc/dhcp/dhcpd.conf.ww \
     %{buildroot}%{statedir}/warewulf/overlays/host/etc/
 %endif
 
+# For RH, tftpboot directory is hardcoded
+%if 0%{?rhel}
+ln -s %{_sharedstatedir}/tftpboot %{buildroot}%{tftpdir}
+%endif
+
+# Remove wwapi until the next release
+rm -f %{buildroot}%{_bindir}/wwapi*
+rm -f %{buildroot}%{_sysconfdir}/warewulf/wwapi*
+
 
 %pre
 getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
@@ -146,10 +153,17 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %{statedir}/warewulf/overlays
 %{srvdir}/warewulf
 
+%if 0%{?rhel}
+%{tftpdir}
+%endif
+
 %attr(-, root, root) %{_bindir}/wwctl
 %attr(-, root, root) %{_prefix}/lib/firewalld/services/warewulf.xml
 %attr(-, root, root) %{_unitdir}/warewulfd.service
 %attr(-, root, root) %{_mandir}/man1/wwctl*
+%attr(-, root, root) %{_mandir}/man5/defaults.conf*
+%attr(-, root, root) %{_mandir}/man5/nodes.conf*
+%attr(-, root, root) %{_mandir}/man5/warewulf.conf*
 %attr(-, root, root) %{_datadir}/warewulf
 
 %dir %{_docdir}/warewulf
