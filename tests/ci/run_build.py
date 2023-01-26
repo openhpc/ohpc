@@ -8,6 +8,7 @@ import sys
 import csv
 import os
 import io
+import time
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
@@ -84,6 +85,27 @@ def run_command(command):
     return ((return_code == 0), output)
 
 
+def loop_command(command, max_attempts=5):
+    output = None
+    attempt_counter = 0
+
+    while True:
+        attempt_counter += 1
+
+        try:
+            (success, output) = run_command(command)
+            if success:
+                return (True, output)
+        except Exception as e:
+            logging.error("Exception: %s" % e)
+
+        if attempt_counter >= abs(max_attempts):
+            return (False, output)
+
+        logging.info("Retrying attempt '%i'" % attempt_counter)
+        time.sleep(attempt_counter)
+
+
 def build_srpm_and_rpm(command, family=None):
     success, output = run_command(command)
     if not success:
@@ -125,9 +147,9 @@ def build_srpm_and_rpm(command, family=None):
             src_rpm,
         ]
 
-    success, _ = run_command(builddep_command)
+    success, _ = loop_command(builddep_command)
     if not success:
-        logging.error("Running 'dnf builddep' failed")
+        logging.error("Running '%s' failed" % ' '.join(builddep_command))
         return False
 
     tmp_src_rpm = os.path.join('/tmp', os.path.basename(src_rpm))
