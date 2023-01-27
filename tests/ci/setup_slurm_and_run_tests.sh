@@ -80,7 +80,8 @@ done
 srun -N2 hostname
 
 # Figure out which tests we need to run.
-# This script returns two array variables: PKGS and TESTS
+# This script returns three array variables:
+#  PKGS and TESTS and ADMIN_TESTS
 # shellcheck disable=SC2068 # (we want individual elements)
 eval "$(tests/ci/spec_to_test_mapping.py $@)"
 
@@ -89,16 +90,33 @@ if [ "${#PKGS[@]}" -gt 0 ]; then
 fi
 
 export SIMPLE_CI=1
+TESTS_FAILED=1
 
 set +e
 
-sudo --user="${USER}" --login bash -c 'cd ${PWD}/tests; find ./ -name "*.log" -delete'
+sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -delete"
 
 # Always running at least with '--enable-modules'. No need to check for
 # an empty TESTS array.
 if sudo --user="${USER}" --preserve-env=SIMPLE_CI --login bash -c "cd ${PWD}/tests; ./bootstrap; ./configure --disable-all --enable-modules --enable-rms-harness --with-mpi-families='openmpi4 mpich' ${TESTS[*]}; make check";
 then
-    exit 0
+    TESTS_FAILED=0
+fi
+
+
+if [ "${#ADMIN_TESTS[@]}" -gt 0 ]; then
+	# The configure script uses the variable $USER to decide if root or not
+	export USER=root
+	cd tests
+	./bootstrap
+	./configure --disable-all --disable-bos --disable-oob "${ADMIN_TESTS[*]}"
+	if ! make check; then
+		TESTS_FAILED=1
+	fi
+fi
+
+if [ "${TESTS_FAILED}" -eq 0 ]; then
+	exit 0
 fi
 
 set -e
@@ -111,3 +129,4 @@ do
 	echo "Log file: ${log_file}";
 	cat "${log_file}";
 done
+exit 1
