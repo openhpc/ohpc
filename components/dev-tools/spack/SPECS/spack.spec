@@ -13,8 +13,8 @@
 %define pname spack
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.18.1
-Release:	1%{?dist}
+Version:	0.19.0
+Release:	%{?dist}.1
 Summary:	HPC software package management
 
 Group:		%{PROJ_NAME}/dev-tools
@@ -98,7 +98,7 @@ set     version             %{version}
 set     SPACK_ROOT          %{install_path}
 
 prepend-path   PATH         %{install_path}/bin
-prepend-path   MODULEPATH   %{install_path}/modules
+prepend-path   MODULEPATH   %{install_path}/share/spack/modules/
 
 EOF
 
