@@ -69,6 +69,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: rhel-rpms
+        retention-days: 1
         path: |
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
