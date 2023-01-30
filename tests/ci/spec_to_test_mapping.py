@@ -163,6 +163,11 @@ test_map = {
         'spack',
         ''
     ],
+    'components/admin/conman/SPECS/conman.spec': [
+        '',
+        'oob',
+        ''
+    ],
 }
 
 

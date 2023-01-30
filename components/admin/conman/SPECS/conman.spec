@@ -13,29 +13,27 @@
 # Base package name
 %define pname conman
 
-
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.3.0
-Release:	1%{?dist}
+Version:	0.3.1
+Release:	%{?dist}.1
 
 Summary:	ConMan: The Console Manager
 Group:		%{PROJ_NAME}/admin
 License:	GPLv3+
 URL:		http://dun.github.io/conman/
+Source0:	https://github.com/dun/conman/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.xz
 
 Requires:	expect
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-
+BuildRequires: gcc make systemd
 
 %if 0%{?suse_version}
 BuildRequires:	tcpd-devel
 %endif
 BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
-
-Source0:	https://github.com/dun/conman/archive/%pname-%{version}.tar.gz
 
 %description
 ConMan is a serial console management program designed to support a large
@@ -53,7 +51,7 @@ Its features include:
   - broadcasting client output to multiple consoles
 
 %prep
-%setup -q -n %{pname}-%{pname}-%{version}
+%setup -q -n %{pname}-%{version}
 
 %build
 %configure \
@@ -115,3 +113,4 @@ fi
 %{_sbindir}/*
 %{_prefix}/lib/*
 %{_mandir}/*/*
+%{_datarootdir}/%{pname}

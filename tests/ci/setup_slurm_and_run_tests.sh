@@ -109,7 +109,7 @@ if [ "${#ADMIN_TESTS[@]}" -gt 0 ]; then
 	export USER=root
 	cd tests
 	./bootstrap
-	./configure --disable-all --disable-bos --disable-oob "${ADMIN_TESTS[*]}"
+	./configure --disable-all --disable-bos --disable-oob --disable-spack "${ADMIN_TESTS[*]}"
 	if ! make check; then
 		TESTS_FAILED=1
 	fi
