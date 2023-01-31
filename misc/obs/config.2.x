@@ -33,12 +33,20 @@ compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel"
 mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 
 [3.0.0]
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun"]
+standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun","gnu-compilers","ucx",
+              "libfabric","openpbs","conman","autoconf"]
+compiler_dependent = ["openmpi","mpich","mvapich2"]
 
 [2.7.0]
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
