@@ -21,11 +21,13 @@ Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
 
-BuildRequires: m4
+BuildRequires: m4 make
 Requires: m4
 
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel} || 0%{?openEuler}
 BuildRequires: perl-macros
+BuildRequires: perl(File::Compare)
+BuildRequires: perl(File::Copy)
 BuildRequires: perl(Data::Dumper)
 # from f19, Text::ParseWords is not the part of 'perl' package
 BuildRequires: perl(Text::ParseWords)
