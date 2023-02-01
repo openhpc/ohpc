@@ -40,7 +40,7 @@ compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun","gnu-compilers","ucx",
-              "libfabric","openpbs","conman","autoconf"]
+              "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython"]
 compiler_dependent = ["openmpi","mpich","mvapich2"]
 
 [2.7.0]
