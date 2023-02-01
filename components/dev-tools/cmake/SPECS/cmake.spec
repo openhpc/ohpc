@@ -18,7 +18,7 @@
 Summary: CMake is an open-source, cross-platform family of tools designed to build, test and package software.
 Name:    %{pname}%{PROJ_DELIM}
 Version: %{major_version}.%{minor_version}
-Release: 1%{?dist}
+Release: %{?dist}.1
 # https://spdx.org/licenses/BSD-3-Clause.html
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools

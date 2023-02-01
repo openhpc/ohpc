@@ -48,7 +48,7 @@ and GNU Automake).
 
 %prep
 
-%setup -n libtool-%{version}
+%setup -q -n libtool-%{version}
 
 %build
 export PATH=%{install_path}/bin:$PATH
