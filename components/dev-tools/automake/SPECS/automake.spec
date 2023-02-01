@@ -27,6 +27,8 @@ Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 
 BuildRequires: perl(Thread::Queue) make
+BuildRequires: perl(File::Compare)
+BuildRequires: perl(File::Copy)
 
 %description
 Automake is a tool for automatically generating `Makefile.in'
