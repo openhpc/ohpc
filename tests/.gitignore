@@ -12,4 +12,5 @@ config.sub
 depcomp
 Makefile
 .deps/
-
+*.trs
+job*out

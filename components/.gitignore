@@ -6,6 +6,7 @@
 */*/SRPMS
 admin/clustershell/SOURCES/v*.tar.gz
 admin/conman/SOURCES/conman-*.tar.gz
+admin/conman/SOURCES/conman-*.tar.xz
 admin/docs/SOURCES/docs-ohpc.tar
 admin/genders/SOURCES/genders-*.tar.gz
 admin/lmod/SOURCES/lmod-*.tar.gz
