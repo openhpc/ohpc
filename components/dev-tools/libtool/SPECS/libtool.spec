@@ -30,6 +30,7 @@ Requires:      autoconf%{PROJ_DELIM} >= 2.69
 Requires:      automake%{PROJ_DELIM} >= 1.14.1
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: automake%{PROJ_DELIM} >= 1.14.1
+BuildRequires: gcc-c++ make
 
 %description
 GNU Libtool is a set of shell scripts which automatically configure UNIX and
