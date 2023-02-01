@@ -15,7 +15,7 @@
 Summary:   A GNU tool for automatically configuring source code
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.69
-Release:   1%{?dist}
+Release:   %{?dist}.1
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/autoconf/
@@ -24,14 +24,11 @@ Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
 BuildRequires: m4 make
 Requires: m4
 
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel} || 0%{?openEuler}
 BuildRequires: perl-macros
 BuildRequires: perl(File::Compare)
 BuildRequires: perl(File::Copy)
 BuildRequires: perl(Data::Dumper)
-# from f19, Text::ParseWords is not the part of 'perl' package
 BuildRequires: perl(Text::ParseWords)
-%endif
 
 %define install_path %{OHPC_UTILS}/autotools
 
@@ -52,7 +49,7 @@ Autoconf is only required for the generation of the scripts, not
 their use.
 
 %prep
-%setup -n autoconf-%{version}
+%setup -q -n autoconf-%{version}
 
 %build
 %ifarch ppc64le
