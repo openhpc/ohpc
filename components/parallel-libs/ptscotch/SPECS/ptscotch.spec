@@ -31,7 +31,7 @@ Patch0:  scotch-6.0.4-destdir.patch
 
 BuildRequires:	flex bison make
 BuildRequires:  zlib-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  bzip2-devel
 Requires:       bzip2-devel
 %else
