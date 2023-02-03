@@ -38,7 +38,7 @@ BuildRequires:  valgrind-devel
 BuildRequires:  make
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  openssh-clients
 BuildRequires:  glibc-langpack-en
 %else
