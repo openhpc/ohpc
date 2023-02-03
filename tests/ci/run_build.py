@@ -172,6 +172,10 @@ def build_srpm_and_rpm(command, family=None):
     if family is not None:
         rebuild_command[-1] += " --define 'mpi_family %s'" % family
 
+    # Disable parallel builds for boost on aarch64 to avoid OOM
+    if "boost-" in src_rpm and os.uname().machine == "aarch64":
+        rebuild_command[-1] += " --define '_smp_mflags -j1'"
+
     success, _ = run_command(rebuild_command)
     if not success:
         logging.error("Running 'rpmbuild --rebuild' failed")

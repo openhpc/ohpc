@@ -178,6 +178,11 @@ test_map = {
         '',
         'cmake-ohpc'
     ],
+    'components/parallel-libs/boost/SPECS/boost.spec': [
+        'boost',
+        '',
+        ''
+    ],
 }
 
 
