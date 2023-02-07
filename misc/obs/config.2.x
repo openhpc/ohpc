@@ -13,7 +13,7 @@ dry_run=True  # do not make changes to OBS, just do a dry-run
 # used to identify where components reside in ohpc Github repo
 admin         = ["conman","docs","examples","ganglia","genders","lmod-defaults","lmod",
 	         "losf","meta-packages","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe",
-		 "ohpc-filesystem","ohpc-release",
+		 "ohpc-filesystem","ohpc-release","hpc-workspace",
 		 "pdsh","prun","test-suite"]
 dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","mpi4py","numpy",
 	         "scipy","spack","valgrind"]
@@ -40,8 +40,16 @@ compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun","gnu-compilers","ucx",
-              "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython"]
+              "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython",
+              "hpc-workspace","intel-compilers-devel","impi-devel"]
 compiler_dependent = ["openmpi","mpich","mvapich2"]
+mpi_dependent = ["ptscotch","boost"]
+# The parser is looking for entries starting with 'skip_on_distro_' and will
+# disable all packages on the distro after 'skip_on_distro_'
+# This is mainy used to automatically disable '-intel' and '-arm1' packages
+# on distros without support (like openEuler).
+skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel"]
+
 
 [2.7.0]
 skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",

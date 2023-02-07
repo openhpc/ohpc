@@ -59,7 +59,6 @@ def run_osc_command(parameters, dry_run=True, fname=""):
 # Main worker class to read config setup from file and interact with OBS
 class ohpc_obs_tool(object):
     def __init__(self, version):
-        coloredlogs.install(level='INFO', fmt="%(message)s")
         self.vip = version
 
         logging.info("\nVersion in Progress = %s" % self.vip)
@@ -69,6 +68,7 @@ class ohpc_obs_tool(object):
         self.parentMPI = None
         self.dryRun = True
         self.buildsToCancel = []
+        self.skip_on_distro = {}
 
         # parse version to derive obs-specific version info
         vparse = VersionInfo.parse(self.vip)
@@ -106,6 +106,7 @@ class ohpc_obs_tool(object):
                 inline_comment_prefixes='#',
                 interpolation=configparser.ExtendedInterpolation()
             )
+            self.buildConfig.optionxform = str
             try:
                 self.buildConfig.read(configFile)
             except configparser.DuplicateSectionError:
@@ -162,6 +163,21 @@ class ohpc_obs_tool(object):
             if service_file:
                 self.serviceFile = service_file
 
+            # Figure out if we need to disable building packages on
+            # one of the distributions for this version.
+            if self.vip in self.buildConfig.keys():
+                for key in self.buildConfig[self.vip]:
+                    if key.startswith('skip_on_distro_'):
+                        distro_to_skip = key[len('skip_on_distro') + 1:]
+                        pkgs_to_skip = ast.literal_eval(
+                            self.buildConfig.get(self.vip, key),
+                        )
+                        for pkg in pkgs_to_skip:
+                            try:
+                                self.skip_on_distro[pkg].extend(distro_to_skip)
+                            except KeyError:
+                                self.skip_on_distro[pkg] = [distro_to_skip]
+
             # flag to indicate whether to lock new packages
             # after creation (git trigger will unlock)
             self.Lock = True
@@ -207,6 +223,9 @@ class ohpc_obs_tool(object):
             for pattern in self.NoBuildPatterns:
                 logging.info("--> arch = %6s, pattern(s) to skip = %s" %
                              (pattern, self.NoBuildPatterns[pattern]))
+
+            logging.info("\nDistribution skip packages:")
+            logging.info("--> skip_on_distro = %s" % self.skip_on_distro)
 
             # cache group definition(s)
             self.groups = {}
@@ -537,6 +556,16 @@ class ohpc_obs_tool(object):
             fp.writelines("<enable arch=\"x86_64\"/>\n")
             numEnabled += 1
 
+        for skip in self.skip_on_distro:
+            if skip in package:
+                for distro in self.skip_on_distro[skip]:
+                    logging.warning(
+                        ' ' * pad +
+                        '--> disabling pkg %s on distro %s as requested' %
+                        (package, distro)
+                    )
+                    fp.writelines('<disable repository="%s"/>' % distro)
+
         if numEnabled == 0:
             logging.warning(
                 " " * pad +
@@ -615,7 +644,7 @@ class ohpc_obs_tool(object):
             )
 
             success, _ = run_osc_command(
-                ["api", "-f", constraintFile, "-X", "PUT"],
+                ["api", "-f", constraintFile, "-X", "PUT", url],
                 dry_run=self.dryRun,
                 fname=fname,
             )
@@ -659,7 +688,7 @@ class ohpc_obs_tool(object):
                     package)
 
             success, _ = run_osc_command(
-                ["api", "-f", fp_serv.name, "-X", "PUT"],
+                ["api", "-f", fp_serv.name, "-X", "PUT", url],
                 dry_run=self.dryRun,
                 fname=fname,
             )
@@ -710,7 +739,7 @@ class ohpc_obs_tool(object):
                     (package, parentName))
 
             success, _ = run_osc_command(
-                ["api", "-f", fp_link.name, "-X", "PUT"],
+                ["api", "-f", fp_link.name, "-X", "PUT", url],
                 dry_run=self.dryRun,
                 fname=fname,
             )
@@ -791,10 +820,23 @@ def main():
         ),
         type=str,
     )
+    parser.add_argument(
+        "--debug",
+        dest='debug',
+        help="enable debug output",
+        action="store_true",
+    )
 
     parser.set_defaults(dryrun=True)
     parser.set_defaults(lock=True)
     args = parser.parse_args()
+
+    def loglevel(debug):
+        if debug:
+            return "DEBUG"
+        return "INFO"
+
+    coloredlogs.install(level=loglevel(args.debug), fmt="%(message)s")
 
     if args.version is None:
         logging.error("\nPlease specify desired version\n")
