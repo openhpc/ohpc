@@ -4,7 +4,12 @@ codespell-lint:
 	@echo "Running 'codespell' on all spec files"
 	cd ../..; codespell $$(find components -name "*.spec") \
 		README.md \
-		CONTRIBUTING.md
+		CONTRIBUTING.md \
+		../../tests/ci/check_spec.py \
+		../../tests/ci/run_build.py \
+		../../misc/build_order.py \
+		../../misc/obs/obs_config.py \
+		../../tests/ci/spec_to_test_mapping.py
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"

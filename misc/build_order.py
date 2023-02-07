@@ -11,8 +11,8 @@ def topological_sort(source):
     # https://stackoverflow.com/questions/11557241/python-sorting-a-dependency-list
     """perform topo sort on elements.
 
-    :arg source: list of ``(name, [list of dependancies])`` pairs
-    :returns: list of names, with dependancies listed first
+    :arg source: list of ``(name, [list of dependencies])`` pairs
+    :returns: list of names, with dependencies listed first
     """
     # copy deps so we can modify set in-place
     pending = [(name, set(deps)) for name, deps in source]
@@ -37,7 +37,7 @@ def topological_sort(source):
         if not next_emitted:
             # all entries have unmet deps, one of two things is wrong...
             raise ValueError(
-                "cyclic or missing dependancy detected: %r" %
+                "cyclic or missing dependency detected: %r" %
                 (next_pending,))
         pending = next_pending
         emitted = next_emitted
@@ -104,7 +104,7 @@ dependency.update(additional)
 for k, v in dependency.items():
     for i in range(len(v)):
         v[i] = spec_dict[v[i]]
-    # remove cylic dependencies
+    # remove cyclic dependencies
     dependency[k] = [x for x in v if x != k]
 
 

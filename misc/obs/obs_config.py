@@ -413,7 +413,7 @@ class ohpc_obs_tool(object):
                 return group
         if not found:
             ERROR(
-                "package %s not assocated with any groups, " +
+                "package %s not associated with any groups, " +
                 "please check config" % package)
 
     # update dryrun option
@@ -895,7 +895,7 @@ def main():
             continue
         else:
             logging.info(
-                "desired overide package %s is compiler dependent" %
+                "desired override package %s is compiler dependent" %
                 package)
 
         ptype = "compiler dep"
