@@ -26,6 +26,9 @@ configFile = "config.2.x"
 # define known compiler/mpi combos to skip
 skip_combos = ["arm1-impi", "arm1-mvapich2"]
 
+# osc command
+osc_command = ["osc", "-A", obsurl]
+
 
 # Simple error wrapper to include exit
 def ERROR(output):
@@ -33,13 +36,30 @@ def ERROR(output):
     sys.exit()
 
 
+# This function runs an osc command based on
+# 'osc_command' with the ability to have a 'dry_run'.
+# This functions returns 'False', "" if something failed
+# and 'True', <output> if it succeeded.
+def run_osc_command(parameters, dry_run=True, fname=""):
+    command = osc_command.copy()
+    command.extend(parameters)
+
+    logging.debug("[%s]: (command) %s" % (fname, command))
+    if dry_run:
+        return True, ""
+
+    try:
+        s = subprocess.check_output(command)
+    except Exception:
+        return False, ""
+
+    return True, s
+
+
 # Main worker class to read config setup from file and interact with OBS
 class ohpc_obs_tool(object):
     def __init__(self, version):
         coloredlogs.install(level='INFO', fmt="%(message)s")
-#        logging.basicConfig(format="%(message)s",level=logging.INFO,stream=sys.stdout)
-#        logger = logging.getLogger()
-#        logger.setLevel("INFO")
         self.vip = version
 
         logging.info("\nVersion in Progress = %s" % self.vip)
@@ -276,14 +296,16 @@ class ohpc_obs_tool(object):
             "[queryOBSPackages]: checking for packages" +
             "currently defined in OBS (%s)" % self.vip)
 
-        command = ["osc", "-A", obsurl, "api", "-X",
-                   "GET", "/source/" + self.obsProject]
-        try:
-            s = subprocess.check_output(command)
-        except Exception:
+        success, output = run_osc_command(
+            ["api", "-X", "GET", "/source/" + self.obsProject],
+            dry_run=False,
+            fname=inspect.stack()[0][3],
+        )
+
+        if not success:
             ERROR("Unable to queryPackages from obs")
 
-        results = ElementTree.fromstring(s)
+        results = ElementTree.fromstring(output)
 
         packages = {}
 
@@ -400,8 +422,6 @@ class ohpc_obs_tool(object):
             return False
 
         for pattern in self.NoBuildPatterns[arch]:
-            print(pattern)
-            print(package)
             if re.search(pattern, package):
                 logging.debug(
                     "[%s]: %s found in package name (%s)" %
@@ -530,17 +550,6 @@ class ohpc_obs_tool(object):
 
         logging.debug("[%s]: new package _metadata written to %s" %
                       (fname, fp.name))
-        command = [
-            "osc",
-            "-A",
-            obsurl,
-            "api",
-            "-f",
-            fp.name,
-            "-X",
-            "PUT",
-            "/source/" + self.obsProject + "/" + package + "/_meta",
-        ]
 
         if self.dryRun:
             logging.error(
@@ -548,13 +557,16 @@ class ohpc_obs_tool(object):
                 "--> (dryrun) requesting addition of package: %s" % package
             )
 
-        logging.debug("[%s]: (command) %s" % (fname, command))
+        url = "/source/" + self.obsProject + "/" + package + "/_meta"
 
-        if not self.dryRun:
-            try:
-                subprocess.check_output(command)
-            except Exception:
-                ERROR("\nUnable to add new package (%s) to OBS" % package)
+        success, _ = run_osc_command(
+            ["api", "-f", fp.name, "-X", "PUT", url],
+            dry_run=self.dryRun,
+            fname=fname,
+        )
+
+        if not success:
+            ERROR("\nUnable to add new package (%s) to OBS" % package)
 
         # add marker file indicating this is a new OBS addition ready to
         # be rebuilt (nothing in file, simply a marker)
@@ -563,80 +575,54 @@ class ohpc_obs_tool(object):
             fp.flush()
 
             markerFile = "_obs_config_ready_for_build"
-            command = [
-                "osc",
-                "-A",
-                obsurl,
-                "api",
-                "-f",
-                fp.name,
-                "-X",
-                "PUT",
-                (
-                    "/source/" +
-                    self.obsProject +
-                    "/" +
-                    package +
-                    "/" +
-                    markerFile
-                ),
-            ]
             if self.dryRun:
                 logging.debug(
                     " " * pad +
                     "--> (dryrun) requesting addition " +
                     " of %s file for package: %s" % (markerFile, package))
 
-            logging.debug("[%s]: (command) %s" % (fname, command))
-
-            if not self.dryRun:
-                try:
-                    subprocess.check_output(command)
-                except Exception:
-                    ERROR(
-                        "\nUnable to add marker file for" +
-                        " package (%s) to OBS" % package)
+            url = (
+                "/source/" +
+                self.obsProject + "/"
+                + package + "/" +
+                markerFile
+            )
+            success, _ = run_osc_command(
+                ["api", "-f", fp.name, "-X", "PUT", url],
+                dry_run=self.dryRun,
+                fname=fname,
+            )
+            if not success:
+                ERROR("\nUnable to add marker file for" +
+                      " package (%s) to OBS" % package)
 
         # add a constraint file if present
         if os.path.isfile("constraints/%s" % package):
             logging.warning(
                 " " * pad + "--> constraint file provided for %s" % package)
             constraintFile = "constraints/%s" % package
-
-            command = [
-                "osc",
-                "-A",
-                obsurl,
-                "api",
-                "-f",
-                constraintFile,
-                "-X",
-                "PUT",
-                (
-                    "/source/" +
-                    self.obsProject +
-                    "/" +
-                    package +
-                    "/" +
-                    "_constraints"
-                ),
-            ]
             if self.dryRun:
                 logging.debug(
                     " " * pad +
                     "--> (dryrun) requesting addition of " +
                     "%s file for package: %s" % ('_constraints', package))
 
-            logging.debug("[%s]: (command) %s" % (fname, command))
+            url = (
+                "/source/" +
+                self.obsProject + "/" +
+                package + "/" +
+                "_constraints"
+            )
 
-            if not self.dryRun:
-                try:
-                    subprocess.check_output(command)
-                except BaseException:
-                    ERROR(
-                        "\nUnable to add _constraint file" +
-                        "for package (%s) to OBS" %
-                        package)
+            success, _ = run_osc_command(
+                ["api", "-f", constraintFile, "-X", "PUT"],
+                dry_run=self.dryRun,
+                fname=fname,
+            )
+
+            if not success:
+                ERROR("\nUnable to add _constraint file" +
+                      "for package (%s) to OBS" % package)
 
         # Step 2a: add _service file for parent package
         if parent:
@@ -661,20 +647,10 @@ class ohpc_obs_tool(object):
             fp_serv.flush()
             logging.debug("--> _service file written to %s" % fp_serv.name)
 
-            command = [
-                "osc",
-                "-A",
-                obsurl,
-                "api",
-                "-f",
-                fp_serv.name,
-                "-X",
-                "PUT",
-                "/source/" +
-                self.obsProject +
-                "/" +
-                package +
-                "/_service"]
+            url = (
+                "/source/" + self.obsProject + "/" +
+                package + "/_service"
+            )
 
             if self.dryRun:
                 logging.error(
@@ -682,16 +658,15 @@ class ohpc_obs_tool(object):
                     "--> (dryrun) adding _service file for package: %s" %
                     package)
 
-            logging.debug("[%s]: (command) %s" % (fname, command))
+            success, _ = run_osc_command(
+                ["api", "-f", fp_serv.name, "-X", "PUT"],
+                dry_run=self.dryRun,
+                fname=fname,
+            )
 
-            if not self.dryRun:
-                try:
-                    subprocess.check_output(command)
-                except BaseException:
-                    ERROR(
-                        "\nUnable to add _service file for" +
-                        " package (%s) to OBS" %
-                        package)
+            if not success:
+                ERROR("\nUnable to add _service file for" +
+                      " package (%s) to OBS" % package)
 
         # Step2b: add _link file for child package
         else:
@@ -725,20 +700,7 @@ class ohpc_obs_tool(object):
             fp_link.flush()
             logging.debug("--> _link file written to %s" % fp_link.name)
 
-            command = [
-                "osc",
-                "-A",
-                obsurl,
-                "api",
-                "-f",
-                fp_link.name,
-                "-X",
-                "PUT",
-                "/source/" +
-                self.obsProject +
-                "/" +
-                package +
-                "/_link"]
+            url = "/source/" + self.obsProject + "/" + package + "/_link"
 
             if self.dryRun:
                 logging.error(
@@ -747,15 +709,15 @@ class ohpc_obs_tool(object):
                     " package: %s (parent=%s)" %
                     (package, parentName))
 
-            logging.debug("[%s]: (command) %s" % (fname, command))
+            success, _ = run_osc_command(
+                ["api", "-f", fp_link.name, "-X", "PUT"],
+                dry_run=self.dryRun,
+                fname=fname,
+            )
 
-            if not self.dryRun:
-                try:
-                    subprocess.check_output(command)
-                except BaseException:
-                    ERROR(
-                        "\nUnable to add _link file for package (%s) to OBS" %
-                        package)
+            if not success:
+                ERROR("\nUnable to add _link file for package (%s) to OBS" %
+                      package)
 
         # Step 3 - register package to lock build once it kicks off
         self.buildsToCancel.append(package)
@@ -777,25 +739,22 @@ class ohpc_obs_tool(object):
                 " trigger will unlock on first commit")
 
         for package in self.buildsToCancel:
-            command = ["osc", "-A", obsurl, "lock", self.obsProject, package]
-
             if self.dryRun:
                 logging.info(
                     "--> (dryrun) requesting lock for package: %s" %
                     package)
 
-            logging.debug("[%s]: (command) %s" % (fname, command))
+            success, _ = run_osc_command(
+                ["lock", self.obsProject, package],
+                dry_run=self.dryRun,
+                fname=fname,
+            )
 
-            if not self.dryRun:
-                try:
-                    subprocess.check_output(command)
-                except BaseException:
-                    ERROR(
-                        "\nUnable to add _link file for package (%s) to OBS" %
-                        package)
+            if not success:
+                ERROR("\nUnable to add _link file for package (%s) to OBS" %
+                      package)
 
 
-# --
 # top-level
 
 def main():
