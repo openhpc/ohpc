@@ -12,6 +12,7 @@ flake8-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
+		../../misc/obs/obs_config.py \
 		../../tests/ci/spec_to_test_mapping.py
 
 whitespace-lint:
