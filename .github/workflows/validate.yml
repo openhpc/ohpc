@@ -33,6 +33,18 @@ jobs:
       run: |
         tests/ci/check_spec.py ${{ steps.files.outputs.added_modified }}
 
+  lint_markdown:
+    name: Run markdown linter
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Lint markdown
+      uses: DavidAnson/markdownlint-cli2-action@v9
+      with:
+        globs: |
+          README.md
+          CONTRIBUTING.md
+
   lint:
     strategy:
       matrix:

@@ -1,4 +1,6 @@
-# <img src="https://github.com/openhpc/ohpc/blob/master/docs/recipes/install/common/figures/ohpc_logo.png" width="170" valign="middle" hspace="5" alt="OpenHPC"/> 
+<!-- markdownlint-disable MD013 MD033 -->
+# <img src="https://github.com/openhpc/ohpc/blob/master/docs/recipes/install/common/figures/ohpc_logo.png" width="170" valign="middle" hspace="5" alt="OpenHPC"/>
+<!-- markdownlint-enable MD013 MD033 -->
 
 ## Community building blocks for HPC systems
 
