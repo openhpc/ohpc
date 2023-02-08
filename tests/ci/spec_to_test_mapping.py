@@ -16,17 +16,17 @@ test_map = {
     'components/rms/slurm/SPECS/slurm.spec': [
         'munge',
         '',
-        'magpie-ohpc pdsh-mod-slurm-ohpc openmpi4-gnu12-ohpc pdsh-ohpc'
+        'magpie-ohpc pdsh-mod-slurm-ohpc pdsh-ohpc'
     ],
     'components/dev-tools/hwloc/SPECS/hwloc.spec': [
         'hwloc',
         '',
-        'gnu12-compilers-ohpc',
+        '',
     ],
     'components/rms/magpie/SPECS/magpie.spec': [
         'munge',
         '',
-        'pdsh-mod-slurm-ohpc openmpi4-gnu12-ohpc pdsh-ohpc'
+        'pdsh-mod-slurm-ohpc pdsh-ohpc'
     ],
     'components/dev-tools/easybuild/SPECS/easybuild.spec': [
         'easybuild',
@@ -36,7 +36,7 @@ test_map = {
     'components/io-libs/adios/SPECS/adios.spec': [
         'adios',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/io-libs/hdf5/SPECS/hdf5.spec': [
         'hdf5',
@@ -56,107 +56,107 @@ test_map = {
     'components/parallel-libs/fftw/SPECS/fftw.spec': [
         'fftw',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/hypre/SPECS/hypre.spec': [
         'hypre',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/mfem/SPECS/mfem.spec': [
         'mfem',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/mumps/SPECS/mumps.spec': [
         'mumps',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/opencoarrays/SPECS/opencoarrays.spec': [
         'opencoarrays',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/petsc/SPECS/petsc.spec': [
         'petsc',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/io-libs/phdf5/SPECS/hdf5.spec': [
         'phdf5',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/io-libs/pnetcdf/SPECS/pnetcdf.spec': [
         'pnetcdf',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/scalapack/SPECS/scalapack.spec': [
         'scalapack',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/slepc/SPECS/slepc.spec': [
         'slepc',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/serial-libs/superlu/SPECS/superlu.spec': [
         'superlu',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/superlu_dist/SPECS/superlu_dist.spec': [
         'superlu_dist',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/parallel-libs/trilinos/SPECS/trilinos.spec': [
         'trilinos',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/perf-tools/extrae/SPECS/extrae.spec': [
         'extrae',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/perf-tools/geopm/SPECS/geopm.spec': [
         'geopm',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/perf-tools/likwid/SPECS/likwid.spec': [
         'likwid',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/perf-tools/papi/SPECS/papi.spec': [
         'papi',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/perf-tools/scalasca/SPECS/scalasca.spec': [
         'scalasca',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/perf-tools/tau/SPECS/tau.spec': [
         'tau',
         '',
-        'openmpi4-gnu12-ohpc mpich-gnu12-ohpc'
+        ''
     ],
     'components/mpi-families/openmpi/SPECS/openmpi.spec': [
         'openmpi4',
         '',
-        'openmpi4-gnu12-ohpc'
+        ''
     ],
     'components/mpi-families/mpich/SPECS/mpich.spec': [
         'mpich',
         '',
-        'mpich-gnu12-ohpc'
+        ''
     ],
     'components/dev-tools/spack/SPECS/spack.spec': [
         '',
@@ -171,12 +171,12 @@ test_map = {
     'components/dev-tools/autoconf/SPECS/autoconf.spec': [
         'autotools',
         '',
-        'autoconf-ohpc automake-ohpc libtool-ohpc'
+        'automake-ohpc libtool-ohpc'
     ],
     'components/dev-tools/cmake/SPECS/cmake.spec': [
         'cmake',
         '',
-        'cmake-ohpc'
+        ''
     ],
     'components/parallel-libs/boost/SPECS/boost.spec': [
         'boost',
