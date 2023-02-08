@@ -18,6 +18,11 @@ test_map = {
         '',
         'magpie-ohpc pdsh-mod-slurm-ohpc pdsh-ohpc'
     ],
+    'components/rms/munge/SPECS/munge.spec': [
+        'munge',
+        '',
+        'magpie-ohpc pdsh-mod-slurm-ohpc pdsh-ohpc'
+    ],
     'components/dev-tools/hwloc/SPECS/hwloc.spec': [
         'hwloc',
         '',
