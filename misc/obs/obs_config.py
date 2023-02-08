@@ -81,7 +81,7 @@ class ohpc_obs_tool(object):
         if self.microVer == '0':
             self.obsProject = "OpenHPC:" + self.branchVer + ":Factory"
         else:
-            self.obsProject= (
+            self.obsProject = (
                 "OpenHPC:" + self.branchVer + "." +
                 self.microVer + ":Factory"
             )
@@ -669,7 +669,7 @@ class ohpc_obs_tool(object):
             if self.microVer == '0':
                 contents = contents.replace('!VERSION!', "2.x")
             else:
-                contents = contents.replace('!VERSION!',"2.x")
+                contents = contents.replace('!VERSION!', "2.x")
 
             fp_serv = tempfile.NamedTemporaryFile(delete=True, mode='w')
             fp_serv.write(contents)
