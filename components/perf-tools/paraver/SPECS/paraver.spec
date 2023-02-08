@@ -27,7 +27,7 @@ Source0:       https://ftp.tools.bsc.es/wxparaver/wxparaver-%{version}-src.tar.b
 BuildRequires: gcc-c++
 BuildRequires: bison
 BuildRequires: boost-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: libfabric-devel
 BuildRequires: flex-devel
 BuildRequires: wxGTK3-devel
@@ -67,7 +67,7 @@ achieving these targets.
 
 %build
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config-3.0 "
 %endif
 %if 0%{?suse_version}
