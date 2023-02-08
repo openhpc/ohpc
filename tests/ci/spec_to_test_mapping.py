@@ -183,6 +183,11 @@ test_map = {
         '',
         ''
     ],
+    'components/serial-libs/openblas/SPECS/openblas.spec': [
+        'openblas',
+        '',
+        ''
+    ],
 }
 
 
