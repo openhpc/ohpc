@@ -60,6 +60,20 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild"]
 
+[2.6.1]
+
+# define patterns for a given arch in which to disable builds
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
+# define compiler/MPI families: first entry in list is defined to be parent in OBS
+compiler_families=["gnu12","intel","arm1"]
+mpi_families=["openmpi4","mpich","mvapich2","impi"]
+
+standalone = ["meta-packages"]
+
+
 [2.6.0]
 
 # define patterns for a given arch in which to disable builds
