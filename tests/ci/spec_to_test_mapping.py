@@ -198,6 +198,11 @@ test_map = {
         '',
         ''
     ],
+    'components/perf-tools/dimemas/SPECS/dimemas.spec': [
+        'dimemas',
+        '',
+        'lmod-defaults-gnu12-openmpi4-ohpc'
+    ],
 }
 
 
