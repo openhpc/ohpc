@@ -28,7 +28,7 @@ Source0:	https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
 
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  libxml2-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  bzip2-devel
 %endif
 %if 0%{?suse_version}
