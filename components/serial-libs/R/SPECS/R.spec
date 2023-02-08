@@ -31,6 +31,7 @@ Group:          %{PROJ_NAME}/serial-libs
 # Default library install path
 %define         install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
+BuildRequires:  make
 BuildRequires:  cairo-devel
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel
@@ -44,14 +45,14 @@ BuildRequires:  xz-devel
 BuildRequires:  pcre2-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  tk-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  libXt-devel
 BuildRequires:  texinfo >= 5.1
 BuildRequires:  bzip2-devel
 %endif
 Requires:       cairo >= 1.2
 Requires:       fontconfig
-Requires:       freetype2
+Requires:       freetype
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
