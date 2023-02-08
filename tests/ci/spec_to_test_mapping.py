@@ -188,6 +188,11 @@ test_map = {
         '',
         ''
     ],
+    'components/serial-libs/R/SPECS/R.spec': [
+        'R',
+        '',
+        ''
+    ],
 }
 
 
