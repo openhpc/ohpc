@@ -1,5 +1,14 @@
 # -*- mode: sh; fill-column: 120; -*-
 
+Version 2.6.1 (08 Feb 2023)
+
+[General Updates]
+
+  * updated ohpc-runtime meta-packages package to address singularity/apptainer dependency resolution
+    (https://github.com/openhpc/ohpc/issues/1644)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 2.6 (16 Nov 2022)
 
 [General Updates]
