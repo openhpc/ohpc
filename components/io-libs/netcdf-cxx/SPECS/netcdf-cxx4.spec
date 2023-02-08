@@ -26,6 +26,7 @@ Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 
+BuildRequires:  make
 BuildRequires:  zlib-devel >= 1.2.5
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
