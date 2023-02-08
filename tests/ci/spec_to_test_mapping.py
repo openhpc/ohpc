@@ -208,6 +208,16 @@ test_map = {
         'charliecloud',
         '',
         'singularity-ce'
+     ],
+    'components/io-libs/netcdf-fortran/SPECS/netcdf-fortran.spec': [
+        'netcdf',
+        '',
+        'netcdf-cxx-gnu12-openmpi4-ohpc netcdf-cxx-gnu12-mpich-ohpc'
+    ],
+    'components/io-libs/netcdf-cxx/SPECS/netcdf-cxx.spec': [
+        'netcdf',
+        '',
+        'netcdf-fortran-gnu12-openmpi4-ohpc netcdf-fortran-gnu12-mpich-ohpc'
     ],
 }
 
