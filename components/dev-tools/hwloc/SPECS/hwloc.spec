@@ -10,25 +10,16 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%if 0%{?rhel} >= 9 || 0%{?openEuler} || 0%{?sle_version} >= 150400
-%define major_version 2.9
-%define minor_version 0
-%else
-%define major_version 2.7
-%define minor_version 2
-%endif
-%define version %{major_version}.%{minor_version}
-
 %define pname hwloc
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        %{version}
+Version:        2.7.2
 Release:        %{?dist}.1
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        https://download.open-mpi.org/release/hwloc/v%{major_version}/%{pname}-%{version}.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v2.7/%{pname}-%{version}.tar.bz2
 
 BuildRequires:  make
 BuildRequires:  doxygen
