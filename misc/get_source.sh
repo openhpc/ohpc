@@ -5,6 +5,13 @@ if [ $# -ne 1 ]; then
 	exit 1
 fi
 
+# If running on Fedora special defines are needed
+DISTRO=$(rpm --eval '0%{?fedora}')
+
+if [ "${DISTRO}" != "0" ]; then
+	FLAGS=(--undefine fedora --define "rhel 8")
+fi
+
 PATTERN=${1}
 
 IFS=$'\n'
@@ -22,7 +29,7 @@ do
 	pushd "${DIR}" > /dev/null || exit 1
 	BASE=$(basename "${file}")
 
-	SOURCES=$(rpmspec --parse --define '_sourcedir ../../..' --define 'rhel 8' "${BASE}" | grep Source)
+	SOURCES=$(rpmspec --parse --define '_sourcedir ../../..' "${FLAGS[@]}" "${BASE}" | grep Source)
 	for u in ${SOURCES}; do
 		echo "${u}"
 		if [[ "${u}" != *"http"* ]]; then
