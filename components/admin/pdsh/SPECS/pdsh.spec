@@ -137,11 +137,10 @@ Patch1:    pdsh-slurm-list.patch
 %{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
 
-
 BuildRequires: ncurses-devel
 BuildRequires: readline-devel
 BuildRequires: pam-devel
-
+BuildRequires: make gcc
 
 ##############################################################################
 # Pdsh description
@@ -305,8 +304,6 @@ Requires:  torque
 Pdsh module providing support for gathering the list of target nodes
 from an allocated Torque job.
 
-
-
 ##############################################################################
 
 %prep
@@ -317,8 +314,12 @@ from an allocated Torque job.
 %build
 
 # work around old config.guess on aarch64 systems
-%ifarch aarch64 || ppc64le
+%ifarch aarch64
+%if 0%{?rhel} >= 9
+cp /usr/lib/rpm/redhat/config.guess config
+%else
 cp /usr/lib/rpm/config.guess config
+%endif
 %endif
 
 ./configure --prefix=%{install_path} \

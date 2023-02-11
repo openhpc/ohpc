@@ -28,6 +28,11 @@ test_map = {
         '',
         'pdsh-mod-slurm-ohpc pdsh-ohpc'
     ],
+    'components/admin/pdsh/SPECS/pdsh.spec': [
+        'munge',
+        '',
+        'magpie-ohpc'
+    ],
     'components/dev-tools/easybuild/SPECS/easybuild.spec': [
         'easybuild',
         '',
