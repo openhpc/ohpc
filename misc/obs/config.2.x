@@ -41,10 +41,16 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun","gnu-compilers","ucx",
               "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython",
-              "hpc-workspace","intel-compilers-devel","impi-devel","mrsh","losf","paraver"]
-compiler_dependent = ["openmpi","mpich","mvapich2","openblas"]
-mpi_dependent = ["ptscotch","boost"]
+              "hpc-workspace","intel-compilers-devel","impi-devel","mrsh","losf","paraver","papi","charliecloud",
+              "pmix","pdsh"]
+compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
+                      "pdtoolkit","gsl","metis","superlu","scotch",
+                      "numpy","plasma","hdf5"]
+mpi_dependent = ["ptscotch","boost","sionlib","pnetcdf","phdf5","netcdf","omb",
+                 "tau","extrae","imb","fftw","scalapack","opencoarrays",
+                 "ptscotch"]
 openblas_compiler=["gnu12"]
+R_compiler=["gnu12"]
 # The parser is looking for entries starting with 'skip_on_distro_' and will
 # disable all packages on the distro after 'skip_on_distro_'
 # This is mainy used to automatically disable '-intel' and '-arm1' packages
