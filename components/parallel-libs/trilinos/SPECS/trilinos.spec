@@ -33,6 +33,7 @@ Patch1:         trilinos-13_2_0-lapack_nothrow.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python3
 
+BuildRequires:  make
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  expat
