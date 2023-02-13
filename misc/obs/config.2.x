@@ -48,7 +48,9 @@ compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "numpy","plasma","hdf5"]
 mpi_dependent = ["ptscotch","boost","sionlib","pnetcdf","phdf5","netcdf","omb",
                  "tau","extrae","imb","fftw","scalapack","opencoarrays",
-                 "ptscotch"]
+                 "ptscotch","hypre","mpi4py","dimemas","scorep","scalasca",
+                 "!scipy","!adios","netcdf-fortran","netcdf-cxx","trilinos",
+                 "petsc","slepc","superlu_dist","mumps","mfem"]
 openblas_compiler=["gnu12"]
 R_compiler=["gnu12"]
 # The parser is looking for entries starting with 'skip_on_distro_' and will
