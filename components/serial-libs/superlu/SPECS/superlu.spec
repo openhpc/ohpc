@@ -34,7 +34,13 @@ Patch2:         superlu-4.3-dont-opt-away.diff
 # this routine in the library which, however, remains fully functional
 Patch3:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
+
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
+%endif
+
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  make
 BuildRequires:  tcsh
 
 # Default library install path
