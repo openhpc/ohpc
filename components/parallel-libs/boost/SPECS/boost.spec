@@ -16,8 +16,8 @@
 
 Summary:        Free peer-reviewed portable C++ source libraries
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.80.0
-%define version_exp 1_80_0
+Version:        1.81.0
+%define version_exp 1_81_0
 Release:        1%{?dist}
 License:        Boost
 Group:          %{PROJ_NAME}/parallel-libs
@@ -25,7 +25,7 @@ Url:            http://www.boost.org
 Source0:        https://boostorg.jfrog.io/artifactory/main/release/%{version}/source/boost_%{version_exp}.tar.gz
 Patch0:         boost-1.79.0-oneapi_pch.patch
 
-%if 0%{?sle_version} || 0%{?suse_version}
+%if 0%{?sle_version}
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  python3-numpy-devel
