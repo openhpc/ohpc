@@ -3,6 +3,7 @@ env:
     components/fs/lustre-client/SPECS/lustre.spec
     components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec
     components/mpi-families/impi-devel/SPECS/intel-mpi.spec
+    components/parallel-libs/trilinos/SPECS/trilinos.spec
 
 task:
   name: RHEL/Rocky on aarch64

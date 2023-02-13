@@ -28,13 +28,7 @@ reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
 skip_ci_specs = []
 skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
 if skip_ci_specs_env:
-    if os.getenv('CIRRUS_CI'):
-        # CIRRUS CI splits multi-line evinronment variables
-        # with a '\n'.
-        skip_ci_specs = skip_ci_specs_env.rstrip().split('\n')
-    else:
-        # GitHub Actions with a space.
-        skip_ci_specs = skip_ci_specs_env.rstrip().split(' ')
+    skip_ci_specs = skip_ci_specs_env.rstrip().split('\n')
 
 for row in reader:
     key = row.pop('NAME')
