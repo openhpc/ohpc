@@ -117,6 +117,8 @@ jobs:
     container:
       image: docker.io/openeuler/openeuler:22.03-lts
     steps:
+    - name: Switch repo
+      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v3
@@ -145,6 +147,8 @@ jobs:
       image: docker.io/openeuler/openeuler:22.03-lts
     needs: build_on_openEuler
     steps:
+    - name: Switch repo
+      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v3
