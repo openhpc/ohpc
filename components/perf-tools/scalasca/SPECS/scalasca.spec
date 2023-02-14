@@ -27,7 +27,7 @@ Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/%{version}/dist/
 Requires:  lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 4.0
-BuildRequires: zlib-devel gcc-c++
+BuildRequires: zlib-devel gcc-c++ make
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
