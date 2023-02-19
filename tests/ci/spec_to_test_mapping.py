@@ -146,7 +146,7 @@ test_map = {
     'components/perf-tools/scalasca/SPECS/scalasca.spec': [
         'scalasca',
         '',
-        ''
+        'lmod-defaults-gnu12-openmpi4-ohpc'
     ],
     'components/perf-tools/tau/SPECS/tau.spec': [
         'tau',
