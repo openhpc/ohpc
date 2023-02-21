@@ -20,6 +20,7 @@ URL: https://pmix.github.io/pmix/
 Group: %{PROJ_NAME}/rms
 Source0: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 
+BuildRequires: make
 BuildRequires: libevent-devel
 BuildRequires: gcc-c++
 BuildRequires: python3
