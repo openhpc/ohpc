@@ -256,7 +256,7 @@ run_mpi_binary () {
     input_file=""
     output_file=""
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
-	timeout=2		# default job timeout (in minutes)
+	timeout=5		# default job timeout (in minutes)
     else
 	timeout="00:02:00"
     fi

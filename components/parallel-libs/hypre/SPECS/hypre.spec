@@ -29,6 +29,7 @@ License:        Apache-2.0 or MIT
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source0:        https://github.com/hypre-space/hypre/archive/v%{version}.tar.gz#/hypre-%{version}.tar.gz
+BuildRequires:  make
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
