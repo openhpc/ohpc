@@ -32,6 +32,7 @@ BuildRequires: gcc-gfortran
 BuildRequires: gcc-fortran
 %endif
 
+BuildRequires: make
 BuildRequires: perl
 Requires: perl
 BuildRequires: lua
