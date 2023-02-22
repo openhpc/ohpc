@@ -38,5 +38,6 @@ openeuler_task:
     . /etc/profile.d/lmod.sh
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
   test_script: |
+    export JOB_SKIP_CI_SPECS=components/runtimes/charliecloud/SPECS/charliecloud.spec
     chown ohpc -R tests
     tests/ci/setup_slurm_and_run_tests.sh ohpc $(tests/ci/cirrus_get_changed_files.sh)

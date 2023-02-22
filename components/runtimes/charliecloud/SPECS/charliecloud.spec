@@ -31,6 +31,7 @@ URL:       https://hpc.github.io/%{pname}/
 Source0:   https://github.com/hpc/charliecloud/releases/download/v%{version}/charliecloud-%{version}.tar.gz
 Source1:   Build
 
+BuildRequires: make
 BuildRequires: gcc
 %if 0%{?centos_version} || 0%{?rhel_version}
 BuildRequires: python36

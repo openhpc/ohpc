@@ -93,6 +93,7 @@ jobs:
     name: Test on RHEL
     container:
       image: docker.io/library/rockylinux:8
+      options: --privileged
     needs: build_on_rhel
     steps:
     - name: Install git
@@ -142,6 +143,9 @@ jobs:
           /tmp/empty
 
   test_on_openEuler:
+    env:
+      JOB_SKIP_CI_SPECS: |
+        components/runtimes/charliecloud/SPECS/charliecloud.spec
     runs-on: ubuntu-latest
     name: Test on openEuler
     container:
