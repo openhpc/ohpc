@@ -13,11 +13,11 @@
 %define dname common
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define develSHA c6de604fc76eabfaef2cb99f4c6ae5ed44eff1e0
 %define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.9.0
+Version: 3.10.0
 Release: 1%{?dist}
 Summary: Scalable systems management suite for high performance clusters
 License: US Dept. of Energy (BSD-like)
@@ -29,7 +29,7 @@ Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Conflicts: warewulf < 3
 BuildArch: noarch
-BuildRequires: autoconf, automake
+BuildRequires: autoconf, automake, make
 Requires: perl(DBD::mysql), perl(DBD::Pg), perl(DBD::SQLite), perl(JSON::PP)
 
 %if 0%{?rhel:1} || 0%{?sle_version} > 150000
@@ -41,6 +41,7 @@ Requires: perl(DBD::mysql), perl(DBD::Pg), perl(DBD::SQLite), perl(JSON::PP)
 %endif
 
 %if 0%{?rhel} >= 8
+BuildRequires: perl-generators
 BuildRequires: systemd
 Requires: perl-Sys-Syslog
 %endif
