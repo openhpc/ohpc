@@ -255,10 +255,14 @@ run_mpi_binary () {
     # Parse optional arguments
     input_file=""
     output_file=""
-    if [ "$RESOURCE_MANAGER" = "slurm" ];then
-	timeout=5		# default job timeout (in minutes)
+    if [ "$RESOURCE_MANAGER" = "slurm" ]; then
+		if [ ! -z "$SIMPLE_CI" ]; then
+			timeout=5		# default job timeout (in minutes)
+		else
+			timeout=2		# default job timeout (in minutes)
+		fi
     else
-	timeout="00:02:00"
+		timeout="00:02:00"
     fi
 
     local OPTIND=1
