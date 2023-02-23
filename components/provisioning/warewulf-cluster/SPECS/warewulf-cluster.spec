@@ -13,11 +13,11 @@
 %define dname cluster
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define develSHA c6de604fc76eabfaef2cb99f4c6ae5ed44eff1e0
 %define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.9.0
+Version: 3.10.0
 Release: 1%{?dist}
 Summary: Warewulf - HPC cluster configuration
 License: US Dept. of Energy (BSD-like)
@@ -28,8 +28,14 @@ ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}, warewulf-provision%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: make
+
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
+
+%if 0%{?rhel} >= 8
+BuildRequires: perl-generators
+%endif
 
 %description
 Warewulf is an operating system management toolkit designed to facilitate
