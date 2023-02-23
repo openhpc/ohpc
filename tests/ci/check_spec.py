@@ -47,10 +47,7 @@ spec_found = False
 skip_ci_specs = []
 skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
 if skip_ci_specs_env:
-    skip_ci_specs = skip_ci_specs_env.rstrip().split(' ')
-skip_ci_specs_env = os.getenv('JOB_SKIP_CI_SPECS')
-if skip_ci_specs_env:
-    skip_ci_specs.extend(skip_ci_specs_env.rstrip().split(' '))
+    skip_ci_specs = skip_ci_specs_env.rstrip().split('\n')
 
 for spec in sys.argv[1:]:
     if not spec.endswith('.spec'):

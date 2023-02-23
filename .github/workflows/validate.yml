@@ -32,6 +32,7 @@ jobs:
       uses: Ana06/get-changed-files@v2.2.0
     - name: Validate Changes
       run: |
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         tests/ci/check_spec.py ${{ steps.files.outputs.added_modified }}
 
   lint_markdown:
@@ -167,6 +168,7 @@ jobs:
         path: /home/ohpc/rpmbuild/RPMS
     - name: Run CI Tests
       run: |
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
