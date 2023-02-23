@@ -215,9 +215,6 @@ skip_ci_specs = []
 skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
 if skip_ci_specs_env:
     skip_ci_specs = skip_ci_specs_env.rstrip().split('\n')
-skip_ci_specs_env = os.getenv('JOB_SKIP_CI_SPECS')
-if skip_ci_specs_env:
-    skip_ci_specs.extend(skip_ci_specs_env.rstrip().split('\n'))
 for spec in skip_ci_specs:
     if spec in test_map:
         test_map.pop(spec)
