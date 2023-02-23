@@ -1,12 +1,8 @@
---- a/vnfs/libexec/wwmkchroot/opensuse-15.1.tmpl	2020-03-05 08:37:25.000000000 -0600
-+++ b/vnfs/libexec/wwmkchroot/opensuse-15.1.tmpl	2020-04-28 10:28:48.000000000 -0500
-@@ -22,7 +22,8 @@
-     e2fsprogs ethtool filesystem findutils gawk grep iproute2 iputils \
+--- vnfs/libexec/wwmkchroot/opensuse-15.3.tmpl
++++ vnfs/libexec/wwmkchroot/opensuse-15.3.tmpl
+@@ -31,7 +31,7 @@ PKGLIST="systemd-sysvinit aaa_base bash dracut distribution-release coreutils \
      mingetty net-tools nfs-kernel-server pam rpcbind procps psmisc shadow \
      rsync sed rsyslog tcpd timezone util-linux tar less gzip kmod-compat \
--    udev openssh dhcp-client pciutils vim strace cron cpupower cpio wget zypper"
-+    udev openssh dhcp-client pciutils vim strace cron cpupower cpio wget \
-+    zypper which"
- 
- 
- 
+     udev openssh dhcp-client pciutils vim strace cron cpupower cpio wget
+-    zypper netcfg ncurses-utils"
++    zypper netcfg ncurses-utils which"

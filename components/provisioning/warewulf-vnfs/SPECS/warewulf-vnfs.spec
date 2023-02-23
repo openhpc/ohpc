@@ -13,11 +13,11 @@
 %define dname vnfs
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define develSHA c6de604fc76eabfaef2cb99f4c6ae5ed44eff1e0
 %define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.9.0
+Version: 3.10.0
 Release: 1%{?dist}
 Summary: Warewulf - Virtual Node File System support
 License: US Dept. of Energy (BSD-like)
@@ -36,13 +36,11 @@ Patch6:  warewulf-vnfs.utf8.patch
 Patch7:  warewulf-vnfs.dnf.rhel8.patch
 Patch8:  warewulf-vnfs.centos8.patch
 Patch9:  warewulf-vnfs.varlog.patch
-Patch10: warewulf-vnfs.leap.aarch.patch
-Patch11: warewulf-vnfs.wwbootstrap.vmlinuz.patch
-Patch12: warewulf-vnfs.bootstrap_qlogic.patch
-Patch13: warewulf-vnfs.leap.patch
-Patch14: warewulf-vnfs.bootstrap_drivers.patch
-Patch15: warewulf-vnfs.hybridize.patch
-Patch16: warewulf-vnfs.boot_fw_symlink.patch
+Patch10:  warewulf-vnfs.bootstrap_qlogic.patch
+Patch11: warewulf-vnfs.leap.patch
+Patch12: warewulf-vnfs.bootstrap_drivers.patch
+Patch13: warewulf-vnfs.hybridize.patch
+Patch14: warewulf-vnfs.boot_fw_symlink.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -52,6 +50,7 @@ Requires: perl-IO-Compress
 %endif
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: make
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildArch: noarch
@@ -85,13 +84,11 @@ cd %{_builddir}
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p2
+%patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p2
+%patch13 -p1
 %patch14 -p1
-%patch15 -p1
-%patch16 -p1
 
 %build
 ./autogen.sh
