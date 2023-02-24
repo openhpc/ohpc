@@ -1,0 +1,13 @@
+diff --git i/ipmi/initramfs/Makefile.am w/ipmi/initramfs/Makefile.am
+index 65635a6..b1661ce 100644
+--- i/ipmi/initramfs/Makefile.am
++++ w/ipmi/initramfs/Makefile.am
+@@ -41,6 +41,8 @@ rootfs: ipmitool
+ 	mkdir rootfs/sbin
+ 	mkdir rootfs/lib
+ 	mkdir rootfs/lib64
++	mkdir -p rootfs/usr/lib
++	mkdir -p rootfs/usr/lib64
+ 	mkdir -p rootfs/warewulf/provision/
+ 	chmod -R u+w rootfs/
+ 	cp -a ipmitool rootfs/sbin/

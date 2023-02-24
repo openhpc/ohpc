@@ -12,18 +12,19 @@
 
 %define dname ipmi
 %define pname warewulf-%{dname}
-%define wwsrvdir /srv
-%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define wwsrvdir /var/lib
+%define develSHA c6de604fc76eabfaef2cb99f4c6ae5ed44eff1e0
 %define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.9.0
-Provides: warewulf-ipmi = 3.9.0
+Version: 3.10.0
+Provides: warewulf-ipmi = %{version}
 Release: 1%{?dist}
 Summary: Warewulf - IPMI support
 License: US Dept. of Energy (BSD-like)
 URL: http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
+Patch0:  openEuler.initramfs.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Conflicts: warewulf < 3
@@ -31,7 +32,7 @@ Requires: warewulf-common%{PROJ_DELIM}
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 
 
-%if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
+%if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000 || 0%{?openEuler}
 %global localipmi 1
 BuildRequires: ipmitool
 Requires: ipmitool
@@ -42,6 +43,8 @@ Requires: ipmitool
 
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: make
+BuildRequires: gcc
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: openssl-devel
 
@@ -60,11 +63,13 @@ cd %{_builddir}
 %{__rm} -rf %{name}-%{version} %{wwextract}
 %{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
 %setup -q -D
-
+%if 0%{?openEuler}
+%patch0 -p2
+%endif
 
 %build
 ./autogen.sh
-%configure --localstatedir=%{wwsrvdir} %{?CONF_FLAGS}
+%configure --localstatedir=%{wwsrvdir} --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS}
 %{__make} %{?mflags}
 
 
