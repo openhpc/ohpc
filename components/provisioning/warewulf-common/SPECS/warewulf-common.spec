@@ -41,7 +41,7 @@ Requires: perl(DBD::mysql), perl(DBD::Pg), perl(DBD::SQLite), perl(JSON::PP)
 %global daemon_name mysqld
 %endif
 
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} >= 8 || 0%{?openEuler}
 BuildRequires: perl-generators
 BuildRequires: systemd
 Requires: perl-Sys-Syslog
@@ -141,7 +141,7 @@ SQL server.
 # Start services on install.
 # For upgrades or removal, restart after the old package is removed.
 if [ $1 -eq 1 ] ; then
-%if 0%{?sle_version:1} || 0%{?rhel} >= 8
+%if 0%{?sle_version:1} || 0%{?rhel} >= 8 || 0%{?openEuler}
 %systemd_post %{daemon_name}.service
 %else
 /usr/bin/systemctl --no-reload preset %{daemon_name}.service  &> /dev/null || :
@@ -152,7 +152,7 @@ if [ $1 -eq 1 ] ; then
 fi
 
 %postun localdb
-%if 0%{?sle_version:1} || 0%{?rhel} >= 8
+%if 0%{?sle_version:1} || 0%{?rhel} >= 8 || 0%{?openEuler}
 %systemd_postun_with_restart %{daemon_name}.service
 %else
 /usr/bin/systemctl try-restart %{daemon_name}.service  &> /dev/null || :

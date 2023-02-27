@@ -26,6 +26,7 @@ Requires: m4
 Requires: perl(Thread::Queue)
 Requires: perl(threads)
 
+%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel} || 0%{?openEuler}
 BuildRequires: perl-macros
 BuildRequires: perl(File::Compare)
 BuildRequires: perl(File::Copy)

@@ -33,6 +33,7 @@ Requires(post): update-alternatives
 Requires(postun): update-alternatives
 %endif
 BuildRequires: gcc-c++
+BuildRequires: python3-devel
 Requires: python3-devel
 
 %description

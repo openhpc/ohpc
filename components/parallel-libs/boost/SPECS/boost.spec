@@ -33,7 +33,7 @@ BuildRequires:  python3-numpy-devel
 BuildRequires:  libquadmath0
 %endif
 %else
-# Assume RHEL/Fedora distro
+# Assume RHEL/Fedora/openEuler distro
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 BuildRequires:  python3-numpy

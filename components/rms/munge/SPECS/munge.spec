@@ -114,7 +114,7 @@ touch "$RPM_BUILD_ROOT"/%{_localstatedir}/run/munge/munged.pid
 %if 0%{?sles_version} || 0%{?suse_version}
 rm "$RPM_BUILD_ROOT"/etc/init.d/munge
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 %endif
 

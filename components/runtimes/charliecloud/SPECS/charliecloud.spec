@@ -36,7 +36,7 @@ BuildRequires: gcc
 %if 0%{?centos_version} || 0%{?rhel_version}
 BuildRequires: python36
 %endif
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sles_version} || 0%{?suse_version} || 0%{?openEuler}
 BuildRequires: python3
 %endif
 
@@ -46,7 +46,7 @@ Requires:  wget
 %if 0%{?centos_version} || 0%{?rhel_version}
 Requires:  python36
 %endif
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sles_version} || 0%{?suse_version} || 0%{?openEuler}
 Requires: python3
 %endif
 
