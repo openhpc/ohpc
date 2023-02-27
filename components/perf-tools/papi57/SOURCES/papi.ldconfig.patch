@@ -1,0 +1,11 @@
+--- papi-5.4.0/src/libpfm4/config.mk	2014-11-14 12:09:41.000000000 -0800
++++ papi-5.4.0.patch/src/libpfm4/config.mk	2014-11-19 11:38:34.879719300 -0800
+@@ -194,7 +194,7 @@
+ CC?=gcc
+ LIBS=
+ INSTALL=install
+-LDCONFIG=ldconfig
++LDCONFIG=/sbin/ldconfig
+ LN?=ln -sf
+ PFMINCDIR=$(TOPDIR)/include
+ PFMLIBDIR=$(TOPDIR)/lib
