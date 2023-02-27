@@ -151,6 +151,7 @@ jobs:
     name: Test on openEuler
     container:
       image: docker.io/openeuler/openeuler:22.03-lts
+      options: --privileged
     needs: build_on_openEuler
     steps:
     - name: Switch repo
