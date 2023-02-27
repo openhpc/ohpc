@@ -13,11 +13,11 @@
 %define dname provision
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define develSHA c6de604fc76eabfaef2cb99f4c6ae5ed44eff1e0
 %define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.9.0
+Version: 3.10.0
 Release: 1%{?dist}
 Summary: Warewulf - System provisioning core
 License: US Dept. of Energy (BSD-like) and BSD-3 Clause
@@ -27,12 +27,8 @@ Patch0:  warewulf-provision.bin-file.patch
 Patch1:  warewulf-provision.ipxe-kargs.patch
 Patch2:  warewulf-provision.parted_libdir.patch
 Patch3:  warewulf-provision.ppc64le.patch
-Patch4:  warewulf-provision.pxe_file_modes.patch
-Patch5:  warewulf-provision.sle_tftpboot.patch
-Patch6:  warewulf-provision.wwgetfiles.patch
-Patch7:  warewulf-provision.noquiet.patch
-Patch8:  c5a90be.patch
-Patch9:  warewulf-provision.mke2fs.patch
+Patch4:  warewulf-provision.sle_tftpboot.patch
+Patch5:  warewulf-provision.wwgetfiles.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -43,6 +39,7 @@ BuildRequires: autoconf
 BuildRequires: automake, make
 BuildRequires: which
 BuildRequires: gcc
+BuildRequires: git
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel, libacl-devel, libattr-devel
 BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
@@ -53,12 +50,13 @@ BuildRequires: libtirpc-devel
 BuildRequires: distribution-release
 %endif
 
-%if 0%{?rhel:1}
+%if 0%{?rhel:1} || 0%{?openEuler}
 %global httpsvc httpd
 %global httpgrp apache
 %global tftpsvc tftp-server
-%if %{rhel} >= 8
+%if 0%{?rhel} >= 8
 BuildRequires: systemd
+BuildRequires: perl-generators
 %global dhcpsrv dhcp-server
 %else
 # rhel < 8
@@ -132,10 +130,6 @@ cd %{_builddir}
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
 
 
 %build
@@ -144,7 +138,7 @@ cd %{_builddir}
 # Configure needs to locate mkfs.ext4
 export PATH=/usr/sbin:$PATH
 
-%configure --localstatedir=%{wwsrvdir} %{?CONF_FLAGS} %{?CROSS_FLAG}
+%configure --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS} %{?CROSS_FLAG}
 %{__make} %{?mflags}
 
 
@@ -175,11 +169,13 @@ fi
 %{perl_vendorlib}/Warewulf/Provision
 %{perl_vendorlib}/Warewulf/Event/DynamicHosts.pm
 %{perl_vendorlib}/Warewulf/Event/DefaultProvisionNode.pm
+%{perl_vendorlib}/Warewulf/Event/Genders.pm
+%{perl_vendorlib}/Warewulf/Event/Http.pm
 %{perl_vendorlib}/Warewulf/Event/ProvisionFileDelete.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Provision.pm
+%{perl_vendorlib}/Warewulf/Module/Cli/Ucode.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Vnfs.pm
-
 
 # ====================
 %package initramfs-%{_arch}
@@ -209,7 +205,7 @@ Requires: %{name} = %{version}-%{release}
 Requires: %{name}-server-ipxe-%{_arch} = %{version}-%{release}
 Requires: %{httpsvc}, perl(Apache), %{tftpsvc}, %{dhcpsrv}
 
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} >= 8 || 0%{?openEuler}
 Requires(post): policycoreutils-python-utils
 %else # Not RHEL 8+
 %if 0%{?sle_version} >= 150100

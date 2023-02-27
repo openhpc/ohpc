@@ -1,9 +1,0 @@
---- a/etc/provision.conf			2020-03-31 22:09:25.980000000 +0000
-+++ b/etc/provision.conf			2020-03-31 22:09:36.370000000 +0000
-@@ -34,5 +34,5 @@
- use localdomain = yes
- 
- # The default kernel arguments to pass to the nodes boot kernel
--default kargs = "net.ifnames=0 biosdevname=0 quiet"
-+default kargs = "net.ifnames=0 biosdevname=0"
- 
