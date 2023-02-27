@@ -12,7 +12,7 @@
 
 %define dname ipmi
 %define pname warewulf-%{dname}
-%define wwsrvdir /var/lib
+%define wwsrvdir /srv
 %define develSHA c6de604fc76eabfaef2cb99f4c6ae5ed44eff1e0
 %define wwextract warewulf3-%{develSHA}
 
@@ -69,7 +69,7 @@ cd %{_builddir}
 
 %build
 ./autogen.sh
-%configure --localstatedir=%{wwsrvdir} --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS}
+%configure --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS}
 %{__make} %{?mflags}
 
 
