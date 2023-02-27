@@ -76,7 +76,7 @@ cd %{_builddir}
 %build
 ./autogen.sh
 WAREWULF_STATEDIR=%{wwsrvdir}
-%configure --localstatedir=%{wwsrvdir}
+%configure --sharedstatedir=%{wwsrvdir}
 %{__make} %{?mflags}
 
 

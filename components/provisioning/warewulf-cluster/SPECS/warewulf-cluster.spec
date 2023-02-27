@@ -56,7 +56,7 @@ cd %{_builddir}
 
 %build
 ./autogen.sh
-%configure --localstatedir=%{wwsrvdir}
+%configure --sharedstatedir=%{wwsrvdir}
 %{__make} %{?mflags}
 
 
