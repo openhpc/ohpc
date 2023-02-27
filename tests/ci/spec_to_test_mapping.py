@@ -47,7 +47,7 @@ test_map = {
     'components/io-libs/hdf5/SPECS/hdf5.spec': [
         'hdf5',
         '',
-        'zlib-devel'
+        'zlib-devel autoconf-ohpc automake-ohpc libtool-ohpc'
     ],
     'components/parallel-libs/ptscotch/SPECS/ptscotch.spec': [
         'ptscotch',
