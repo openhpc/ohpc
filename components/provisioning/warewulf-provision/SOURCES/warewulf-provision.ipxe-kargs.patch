@@ -1,9 +1,11 @@
---- a/lib/Warewulf/Provision/Pxe.pm	2019-06-17 14:01:40.000000000 -0700
-+++ b/lib/Warewulf/Provision/Pxe.pm	2019-06-25 13:34:04.790845258 -0700
-@@ -282,7 +282,9 @@
-                         print IPXE "set base http://$master_ipaddr/WW/bootstrap\n";
-                         print IPXE "initrd \${base}/$arch/$bootstrapid/initfs.gz\n";
-                         print IPXE "kernel \${base}/$arch/$bootstrapid/kernel ro initrd=initfs.gz wwhostname=$hostname ";
+diff --git i/lib/Warewulf/Provision/Pxe.pm w/lib/Warewulf/Provision/Pxe.pm
+index fd20408..d5c59a3 100644
+--- i/lib/Warewulf/Provision/Pxe.pm
++++ w/lib/Warewulf/Provision/Pxe.pm
+@@ -360,7 +360,9 @@ update()
+                         } else {
+                             print IPXE "kernel \${base}/$arch/$bootstrapid/kernel ro initrd=initfs.gz wwhostname=$hostname wwtransport=$transport ";
+                         }
 -                        print IPXE join(" ", @kargs) . " ";
 +                        if ($kargs[0]) { 
 +                            print IPXE join(" ", @kargs) . " ";
