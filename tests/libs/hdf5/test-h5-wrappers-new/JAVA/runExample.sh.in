@@ -1,0 +1,298 @@
+#! /bin/sh
+#
+# Copyright by The HDF Group.
+# Copyright by the Board of Trustees of the University of Illinois.
+# All rights reserved.
+#
+# This file is part of HDF5.  The full HDF5 copyright notice, including
+# terms governing use, modification, and redistribution, is contained in
+# the files COPYING and Copyright.html.  COPYING can be found at the root
+# of the source code distribution tree; Copyright.html can be found at the
+# root level of an installed copy of the electronic HDF5 document set and
+# is linked from the top-level documents page.  It can also be found at
+# http://hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have
+# access to either file, you may request a copy from help@hdfgroup.org.
+#
+
+top_builddir=@top_builddir@
+top_srcdir=@top_srcdir@
+srcdir=@srcdir@
+
+TESTNAME=EX_
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
+
+# Set up default variable values if not supplied by the user.
+RM='rm -rf'
+CMP='cmp'
+DIFF='diff -c'
+CP='cp'
+DIRNAME='dirname'
+LS='ls'
+AWK='awk'
+
+nerrors=0
+
+# where the libs exist
+HDFLIB_HOME="$top_srcdir/java/lib"
+BLDLIBDIR="./lib"
+BLDDIR="."
+HDFTEST_HOME="$top_srcdir/java/examples/intro"
+JARFILE=jar@PACKAGE_TARNAME@-@PACKAGE_VERSION@.jar
+TESTJARFILE=jar@PACKAGE_TARNAME@intro.jar
+test -d $BLDLIBDIR || mkdir -p $BLDLIBDIR
+
+######################################################################
+# library files
+# --------------------------------------------------------------------
+# All the library files copy from source directory to test directory
+# NOTE: Keep this framework to add/remove test files.
+#       This list are also used for checking exist.
+#       Comment '#' without space can be used.
+# --------------------------------------------------------------------
+LIST_LIBRARY_FILES="
+$HDFLIB_HOME/slf4j-api-1.7.5.jar
+$HDFLIB_HOME/ext/slf4j-simple-1.7.5.jar
+$top_builddir/src/.libs/libhdf5.*
+$top_builddir/java/src/jni/.libs/libhdf5_java.*
+$top_builddir/java/src/$JARFILE
+"
+LIST_DATA_FILES="
+$HDFTEST_HOME/../testfiles/HDF5AttributeCreate.txt
+$HDFTEST_HOME/../testfiles/HDF5DatasetCreate.txt
+$HDFTEST_HOME/../testfiles/HDF5DatasetRead.txt
+$HDFTEST_HOME/../testfiles/HDF5FileCreate.txt
+$HDFTEST_HOME/../testfiles/HDF5FileStructure.txt
+$HDFTEST_HOME/../testfiles/HDF5GroupCreate.txt
+$HDFTEST_HOME/../testfiles/HDF5SubsetSelect.txt
+"
+
+#
+# copy files from source dirs to test dir
+#
+COPY_LIBFILES="$LIST_LIBRARY_FILES"
+
+COPY_LIBFILES_TO_BLDLIBDIR()
+{
+    # copy test files. Used -f to make sure get a new copy
+    for tstfile in $COPY_LIBFILES
+    do
+        # ignore '#' comment
+        echo $tstfile | tr -d ' ' | grep '^#' > /dev/null
+        RET=$?
+        if [ $RET -eq 1 ]; then
+            # skip cp if srcdir is same as destdir
+            # this occurs when build/test performed in source dir and
+            # make cp fail
+            SDIR=`$DIRNAME $tstfile`
+            INODE_SDIR=`$LS -i -d $SDIR | $AWK -F' ' '{print $1}'`
+            INODE_DDIR=`$LS -i -d $TESTDIR | $AWK -F' ' '{print $1}'`
+            if [ "$INODE_SDIR" != "$INODE_DDIR" ]; then
+                $CP -f $tstfile $BLDLIBDIR
+                if [ $? -ne 0 ]; then
+                    echo "Error: FAILED to copy $tstfile ."
+
+                    # Comment out this to CREATE expected file
+                    exit $EXIT_FAILURE
+                fi
+            fi
+        fi
+    done
+}
+
+CLEAN_LIBFILES_AND_BLDLIBDIR()
+{
+    # skip rm if srcdir is same as destdir
+    # this occurs when build/test performed in source dir and
+    # make cp fail
+    SDIR=`$DIRNAME $tstfile`
+    INODE_SDIR=`$LS -i -d $SDIR | $AWK -F' ' '{print $1}'`
+    INODE_DDIR=`$LS -i -d $TESTDIR | $AWK -F' ' '{print $1}'`
+    if [ "$INODE_SDIR" != "$INODE_DDIR" ]; then
+        $RM $BLDLIBDIR
+    fi
+}
+
+COPY_DATAFILES="$LIST_DATA_FILES"
+
+COPY_DATAFILES_TO_BLDDIR()
+{
+    # copy test files. Used -f to make sure get a new copy
+    for tstfile in $COPY_DATAFILES
+    do
+        # ignore '#' comment
+        echo $tstfile | tr -d ' ' | grep '^#' > /dev/null
+        RET=$?
+        if [ $RET -eq 1 ]; then
+            # skip cp if srcdir is same as destdir
+            # this occurs when build/test performed in source dir and
+            # make cp fail
+            SDIR=`$DIRNAME $tstfile`
+            INODE_SDIR=`$LS -i -d $SDIR | $AWK -F' ' '{print $1}'`
+            INODE_DDIR=`$LS -i -d $TESTDIR | $AWK -F' ' '{print $1}'`
+            if [ "$INODE_SDIR" != "$INODE_DDIR" ]; then
+                $CP -f $tstfile $BLDDIR
+                if [ $? -ne 0 ]; then
+                    echo "Error: FAILED to copy $tstfile ."
+
+                    # Comment out this to CREATE expected file
+                    exit $EXIT_FAILURE
+                fi
+            fi
+        fi
+    done
+}
+
+CLEAN_DATAFILES_AND_BLDDIR()
+{
+    # skip rm if srcdir is same as destdir
+    # this occurs when build/test performed in source dir and
+    # make cp fail
+    SDIR=`$DIRNAME $tstfile`
+    INODE_SDIR=`$LS -i -d $SDIR | $AWK -F' ' '{print $1}'`
+    INODE_DDIR=`$LS -i -d $TESTDIR | $AWK -F' ' '{print $1}'`
+    if [ "$INODE_SDIR" != "$INODE_DDIR" ]; then
+        $RM $BLDDIR/*.txt
+        $RM $BLDDIR/*.out
+    fi
+}
+
+# Print a line-line message left justified in a field of 70 characters
+# beginning with the word "Testing".
+#
+TESTING() {
+   SPACES="                                                               "
+   echo "Testing $* $SPACES" | cut -c1-70 | tr -d '\012'
+}
+
+# where Java is installed (requires jdk1.7.x)
+JAVAEXE=@JAVA@
+export JAVAEXE
+
+###############################################################################
+#            DO NOT MODIFY BELOW THIS LINE
+###############################################################################
+
+# prepare for test
+COPY_LIBFILES_TO_BLDLIBDIR
+COPY_DATAFILES_TO_BLDDIR
+
+CPATH=".:"$BLDLIBDIR"/"$JARFILE":"$BLDLIBDIR"/slf4j-api-1.7.5.jar:"$BLDLIBDIR"/slf4j-simple-1.7.5.jar:"$TESTJARFILE""
+
+TEST=/usr/bin/test
+if [ ! -x /usr/bin/test ]
+then
+TEST=`which test`
+fi
+
+if $TEST -z "$CLASSPATH"; then
+        CLASSPATH=""
+fi
+CLASSPATH=$CPATH":"$CLASSPATH
+export CLASSPATH
+
+if $TEST -n "$JAVAPATH" ; then
+        PATH=$JAVAPATH":"$PATH
+        export PATH
+fi
+
+if $TEST -e /bin/uname; then
+   os_name=`/bin/uname -s`
+elif $TEST -e /usr/bin/uname; then
+   os_name=`/usr/bin/uname -s`
+else
+   os_name=unknown
+fi
+
+if $TEST -z "$LD_LIBRARY_PATH" ; then
+        LD_LIBRARY_PATH=""
+fi
+
+case  $os_name in
+    Darwin)
+    DYLD_LIBRARY_PATH=$BLDLIBDIR:$DYLD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH
+    LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
+    ;;
+    *)
+    LD_LIBRARY_PATH=$BLDLIBDIR:$LD_LIBRARY_PATH
+    ;;
+esac
+
+export LD_LIBRARY_PATH
+
+echo "$JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5AttributeCreate"
+($JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5AttributeCreate > HDF5AttributeCreate.out)
+if diff HDF5AttributeCreate.out HDF5AttributeCreate.txt > /dev/null; then
+    echo "  PASSED      HDF5AttributeCreate"
+else
+    echo "**FAILED**    HDF5AttributeCreate"
+    nerrors="`expr $nerrors + 1`"
+fi
+
+echo "$JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5DatasetCreate"
+($JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5DatasetCreate > HDF5DatasetCreate.out)
+if diff HDF5DatasetCreate.out HDF5DatasetCreate.txt > /dev/null; then
+    echo "  PASSED      HDF5DatasetCreate"
+else
+    echo "**FAILED**    HDF5DatasetCreate"
+    nerrors="`expr $nerrors + 1`"
+fi
+
+echo "$JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5DatasetRead"
+($JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5DatasetRead > HDF5DatasetRead.out)
+if diff HDF5DatasetRead.out HDF5DatasetRead.txt > /dev/null; then
+    echo "  PASSED      HDF5DatasetRead"
+else
+    echo "**FAILED**    HDF5DatasetRead"
+    nerrors="`expr $nerrors + 1`"
+fi
+
+echo "$JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5FileCreate"
+($JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5FileCreate > HDF5FileCreate.out)
+if diff HDF5FileCreate.out HDF5FileCreate.txt > /dev/null; then
+    echo "  PASSED      HDF5FileCreate"
+else
+    echo "**FAILED**    HDF5FileCreate"
+    nerrors="`expr $nerrors + 1`"
+fi
+
+echo "$JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5FileStructure"
+($JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5FileStructure > HDF5FileStructure.out)
+if diff HDF5FileStructure.out HDF5FileStructure.txt > /dev/null; then
+    echo "  PASSED      HDF5FileStructure"
+else
+    echo "**FAILED**    HDF5FileStructure"
+    nerrors="`expr $nerrors + 1`"
+fi
+
+echo "$JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5GroupCreate"
+($JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5GroupCreate > HDF5GroupCreate.out)
+if diff HDF5GroupCreate.out HDF5GroupCreate.txt > /dev/null; then
+    echo "  PASSED      HDF5GroupCreate"
+else
+    echo "**FAILED**    HDF5GroupCreate"
+    nerrors="`expr $nerrors + 1`"
+fi
+
+echo "$JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5SubsetSelect"
+($JAVAEXE -Xmx1024M -Dorg.slf4j.simpleLogger.defaultLog=trace -Djava.library.path=$BLDLIBDIR -cp $CLASSPATH HDF5SubsetSelect > HDF5SubsetSelect.out)
+if diff HDF5SubsetSelect.out HDF5SubsetSelect.txt > /dev/null; then
+    echo "  PASSED      HDF5SubsetSelect"
+else
+    echo "**FAILED**    HDF5SubsetSelect"
+    nerrors="`expr $nerrors + 1`"
+fi
+
+# Clean up temporary files/directories
+CLEAN_LIBFILES_AND_BLDLIBDIR
+CLEAN_DATAFILES_AND_BLDDIR
+
+# Report test results and exit
+if test $nerrors -eq 0 ; then
+    echo "All $TESTNAME tests passed."
+    exit $EXIT_SUCCESS
+else
+    echo "$TESTNAME tests failed with $nerrors errors."
+    exit $EXIT_FAILURE
+fi

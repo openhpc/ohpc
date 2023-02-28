@@ -1,0 +1,40 @@
+version (number)) thread (IDs):
+  #000: (file name) line (number) in H5Dcreate2(): unable to create dataset
+    major: Dataset
+    minor: Unable to initialize object
+  #001: (file name) line (number) in H5D__create_named(): unable to create and link to dataset
+    major: Dataset
+    minor: Unable to initialize object
+  #002: (file name) line (number) in H5L_link_object(): unable to create new link to object
+    major: Links
+    minor: Unable to initialize object
+  #003: (file name) line (number) in H5L__create_real(): can't insert link
+    major: Links
+    minor: Unable to insert object
+  #004: (file name) line (number) in H5G_traverse(): internal path traversal failed
+    major: Symbol table
+    minor: Object not found
+  #005: (file name) line (number) in H5G__traverse_real(): traversal operator failed
+    major: Symbol table
+    minor: Callback failed
+  #006: (file name) line (number) in H5L__link_cb(): unable to create object
+    major: Links
+    minor: Unable to initialize object
+  #007: (file name) line (number) in H5O_obj_create(): unable to open object
+    major: Object header
+    minor: Can't open object
+  #008: (file name) line (number) in H5O__dset_create(): unable to create dataset
+    major: Dataset
+    minor: Unable to initialize object
+  #009: (file name) line (number) in H5D__create(): I/O filters can't operate on this dataset
+    major: Invalid arguments to routine
+    minor: Unable to initialize object
+  #010: (file name) line (number) in H5Z_can_apply(): unable to apply filter
+    major: Data filters
+    minor: Error from filter 'can apply' callback
+  #011: (file name) line (number) in H5Z__prepare_prelude_callback_dcpl(): unable to apply filter
+    major: Data filters
+    minor: Error from filter 'can apply' callback
+  #012: (file name) line (number) in H5Z__prelude_callback(): Filter present but encoding is disabled.
+    major: Data filters
+    minor: Filter present but encoding disabled

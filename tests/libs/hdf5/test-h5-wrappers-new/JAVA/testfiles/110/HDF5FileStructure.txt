@@ -1,0 +1,6 @@
+    float arrays
+        2D 64-bit double 20x10
+        3D 32-bit float  20x10x5
+    integer arrays
+        2D 32-bit integer 20x10
+        3D 8-bit unsigned integer 20x10x5
