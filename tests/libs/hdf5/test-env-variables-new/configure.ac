@@ -64,12 +64,12 @@ AC_C_CONST
 AC_MSG_CHECKING([the version of the HDF5 Library])
 
 AC_SUBST([H5_LIBVER])
-H5_LIBVER=1.10.8
+H5_LIBVER=1.12.2
 AC_MSG_RESULT([$H5_LIBVER])
 
 AC_MSG_CHECKING([the API mapping of the HDF5 Library])
 AC_SUBST([H5_APIVER])
-H5_APIVER=1_10
+H5_APIVER=1_12
 AC_MSG_RESULT([$H5_APIVER])
 
 #if version is unreleased then bump to next official release.
