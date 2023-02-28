@@ -41,7 +41,7 @@ Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  bzip2-devel
 Requires:       bzip2
 %else
