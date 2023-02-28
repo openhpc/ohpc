@@ -45,6 +45,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: make
 BuildRequires: gcc
+BuildRequires: which
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: openssl-devel
 
