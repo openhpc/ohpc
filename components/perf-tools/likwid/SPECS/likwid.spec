@@ -83,7 +83,14 @@ It consists of:
           FC="ifort" \
           FCFLAGS="-module ./" \
 %else
+    %ifarch aarch64
+          COMPILER="GCCARMv8" \
+          BUILDDAEMON="true" \
+          BUILDFREQ="true" \
+          ACCESSMODE="perf_event" \
+    %else
           COMPILER="GCC" \
+    %endif
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
@@ -105,7 +112,14 @@ It consists of:
           FC="ifort" \
           FCFLAGS="-module ./" \
 %else
+    %ifarch aarch64
+          COMPILER="GCCARMv8" \
+          BUILDDAEMON="true" \
+          BUILDFREQ="true" \
+          ACCESSMODE="perf_event" \
+    %else
           COMPILER="GCC" \
+    %endif
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
