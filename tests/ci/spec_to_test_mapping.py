@@ -117,7 +117,7 @@ test_map = {
     'components/parallel-libs/superlu_dist/SPECS/superlu_dist.spec': [
         'superlu_dist',
         '',
-        ''
+        'scalapack-gnu12-openmpi4-ohpc scalapack-gnu12-mpich-ohpc'
     ],
     'components/parallel-libs/trilinos/SPECS/trilinos.spec': [
         'trilinos',
