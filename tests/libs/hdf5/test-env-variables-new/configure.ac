@@ -15,94 +15,48 @@
 # access to either file, you may request a copy from help@hdfgroup.org.
 
 AC_PREREQ(2.69)
-AC_INIT(HDF5-examples, 0.1, help@hdfgroup.org)
+AC_INIT(HDF5-tests-env-variables, 0.20, [https://github.com/openhpc/ohpc])
+AC_CONFIG_MACRO_DIR([m4])
 dnl AM_INIT_AUTOMAKE takes a list of options that should be applied to
 dnl every Makefile.am when automake is run.
 AM_INIT_AUTOMAKE([foreign])
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_CONFIG_HEADER(config.h)
+
+# karl.w.schulz@intel.com (8/28/14)
+# verify we have necessary HDF5 environment variables set
+AC_MSG_CHECKING([for HDF5_LIB environment variable])
+if test "x$HDF5_LIB" = "x"; then
+   AC_MSG_RESULT([no])
+   echo
+   AC_ERROR([HDF5_LIB not defined - please load hdf5 environment.])
+else
+   AC_MSG_RESULT([yes])
+fi
+AC_MSG_CHECKING([for HDF5_INC environment variable])
+if test "x$HDF5_INC" = "x"; then
+   AC_MSG_RESULT([no])
+   echo
+   AC_ERROR([HDF5_INC not defined - please load hdf5 environment.])
+else
+   AC_MSG_RESULT([yes])
+fi
+
+# unset default compilers and detect compiler toolchain from environment
+CC=" "
+CXX=" "
+FC=" "
+OHPC_COMPILER_FAMILY
+
+# Sets compiler.
+AC_PROG_CC()
+AC_PROG_FC()
+AC_PROG_CXX()
 
 # Turn off automake rebuild rules so make doesn't try to run automake
 # (which probably won't work).
 AM_MAINTAINER_MODE
 
-# Argument for static linking
-AC_ARG_ENABLE(shared,
-    [AS_HELP_STRING([--disable-shared],
-        [force static linking])],
-    [if test "$enableval" = "no"; then
-        shared_suffix=""
-        echo lo!
-    else
-        shared_suffix=" -shlib"
-    fi],
-    [shared_suffix=" -shlib"])
-
-# Checks and sets HDF5 compiler wrappers.
-if test "x$CC" = "x"; then
-  H5C_exists=`h5cc -help > /dev/null 2>&1; echo $?`
-  if test "x1" = "x$H5C_exists"; then
-    H5C_valid=`h5cc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-    if test "x1" = "x$H5C_valid"; then
-      H5C="h5cc"
-    fi
-  else
-    H5C_exists=`h5pcc > /dev/null 2>&1; echo $?`
-    if test "x1" = "x$H5C_exists"; then
-      H5C_valid=`h5pcc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-      if test "x1" = "x$H5C_valid"; then
-        H5C="h5pcc"
-      else
-        AC_MSG_ERROR(failed to find h5cc or h5pcc)
-      fi
-    else
-      AC_MSG_ERROR(failed to find h5cc or h5pcc)
-    fi
-  fi
-else
-  H5C_exists=`$CC -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-  if test "x1" = "x$H5C_exists"; then
-     H5C="$CC"
-  else
-     AC_MSG_ERROR(CC is not set to h5cc or h5pcc)
-  fi
-fi
-AC_PROG_CC([$H5C])
-
-if test "x$FC" = "x"; then
-  H5FC_exists=`h5fc -help > /dev/null 2>&1; echo $?`
-  if test "x1" = "x$H5FC_exists"; then
-    H5FC_valid=`h5fc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-    if test "x1" = "x$H5FC_valid"; then
-      H5FC="h5fc"
-    fi
-  else
-    H5FC_exists=`h5pfc > /dev/null 2>&1; echo $?`
-    if test "x1" = "x$H5FC_exists"; then
-      H5FC_valid=`h5pfc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-      if test "x1" = "x$H5FC_valid"; then
-        H5FC="h5pfc"
-      else
-        AC_MSG_ERROR(failed to find h5fc or h5pfc)
-      fi
-    else
-      AC_MSG_ERROR(failed to find h5fc or h5pfc)
-    fi
-  fi
-else
-  H5FC_exists=`$FC -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-  if test "1" = "$H5FC_exists"; then
-     H5FC="$FC"
-  else
-     AC_MSG_ERROR(FC is not set to h5fc or h5pfc)
-  fi
-fi
-AC_PROG_FC([$H5FC])
-
-# Add the suffix to CC for shared linking.  Can't just set as an option
-# because it must be first.
-if test "$shared_suffix" && test ! `echo ${CC} | grep "$shared_suffix"`; then
-    CC=${CC}${shared_suffix}
-fi
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
@@ -110,12 +64,12 @@ AC_C_CONST
 AC_MSG_CHECKING([the version of the HDF5 Library])
 
 AC_SUBST([H5_LIBVER])
-H5_LIBVER=$(${CC} -showconfig | grep -i "HDF5 Version:" | sed 's/^.* //g' | sed 's/[-].*//g')
+H5_LIBVER=1.10.8
 AC_MSG_RESULT([$H5_LIBVER])
 
 AC_MSG_CHECKING([the API mapping of the HDF5 Library])
 AC_SUBST([H5_APIVER])
-H5_APIVER=$(${CC} -showconfig | grep -i "Default API mapping:" | sed 's/^.* //g' | sed 's/v//g' | sed 's/1/1_/')
+H5_APIVER=1_10
 AC_MSG_RESULT([$H5_APIVER])
 
 #if version is unreleased then bump to next official release.
@@ -193,9 +147,19 @@ fi
 # End check if we have Fortran 2003 and Intel compiler.
 AM_CONDITIONAL([FORTRAN_2003_NOTINTEL_CONDITIONAL_F], [test "X$HAVE_FORTRAN_2003_NOTINTEL" = "Xyes"])
 
+# karl.w.schulz@intel.com (8/24/14)
+#
+# Define include path and library linkage from environment variables
+# which should be provided via module loads. Note that we include
+# linkage for both C, C++ and Fortran here.
+CFLAGS="-I ${HDF5_INC} ${CFLAGS}"
+CXXFLAGS="-I ${HDF5_INC} ${CXXFLAGS}"
+FCFLAGS="-I ${HDF5_INC} ${FCLAGS}"
+LDFLAGS="-L${HDF5_LIB} -lhdf5 -lhdf5_fortran -lhdf5_cpp ${LDFLAGS}"
 
 # Set subdirectories
 AC_CONFIG_FILES([Makefile
+                 ohpc_module/Makefile
                  C/Makefile
                  C/H5D/Makefile
                  C/H5G/Makefile
@@ -223,3 +187,19 @@ AC_CONFIG_FILES([FORTRAN/H5T/test.sh], [chmod +x FORTRAN/H5T/test.sh])
 
 # Configure
 AC_OUTPUT
+
+echo
+echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
+echo
+echo Package version............... : $PACKAGE-$VERSION
+echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
+echo
+echo C compiler.................... : `which $CC`
+echo C++ compiler.................. : `which $CXX`
+echo Fortran compiler ............. : `which $FC`
+echo
+echo C compiler flags.............. : $CFLAGS
+echo C++ compiler flags............ : $CXXFLAGS
+echo Fortran compiler flags........ : $FCFLAGS
+echo
+echo '-------------------------------------------------------------------------------------------------------------'
