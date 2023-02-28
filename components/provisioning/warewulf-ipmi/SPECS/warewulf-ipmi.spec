@@ -36,6 +36,10 @@ Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 %global localipmi 1
 BuildRequires: ipmitool
 Requires: ipmitool
+BuildRequires: which
+%if 0%{?rhel} >= 8
+BuildRequires: perl-generators
+%endif
 %define CONF_FLAGS "--with-local-ipmitool=yes"
 %else
 %global localipmi 0
@@ -45,7 +49,6 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: make
 BuildRequires: gcc
-BuildRequires: which
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: openssl-devel
 
