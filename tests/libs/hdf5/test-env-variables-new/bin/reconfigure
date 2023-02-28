@@ -1,0 +1,119 @@
+#! /bin/sh
+#
+# Copyright by the Board of Trustees of the University of Illinois.
+# All rights reserved.
+#
+# This file is part of HDF5.  The full HDF5 copyright notice, including
+# terms governing use, modification, and redistribution, is contained in
+# the files COPYING and Copyright.html.  COPYING can be found at the root
+# of the source code distribution tree; Copyright.html can be found at the
+# root level of an installed copy of the electronic HDF5 document set and
+# is linked from the top-level documents page.  It can also be found at
+# http://hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have
+# access to either file, you may request a copy from help@hdfgroup.org.
+#
+
+# A script to reconfigure autotools for HDF5, and to recreate other
+# generated files specifc to HDF5.
+# If the paths of the autotools are not specified by the user, they
+# are hardcoded to point to their locations on HDF5 Linux machines.
+# Users can specify the locations of the autotools with the following
+# variables:
+# AUTOCONF, AUTOMAKE, ACLOCAL, AUTOHEADER should be the path to the
+# corresponding tools.
+# LIBTOOL_DIR should be the path to the base libtool directory;
+# $LIBTOOL_DIR/bin/libtool should invoke libtool, while
+# $LIBTOOL_DIR/share/aclocal needs to be included by aclocal.
+# Be very careful when specifying these tools manually!  There are a lot
+# of versions that can get confused (not even counting the m4 utility)!
+
+# HDF5 currently uses the following versions of the autotools:
+AUTOCONF_DIR=/usr/hdf/bin/AUTOTOOLS
+AUTOCONF_VERSION="autoconf (GNU Autoconf) 2.69"
+AUTOMAKE_VERSION="automake (GNU automake) 1.15"
+AUTOHEADER_VERSION="autoheader (GNU Autoconf) 2.69"
+ACLOCAL_VERSION="aclocal (GNU automake) 1.15"
+LIBTOOL_VERSION="(GNU libtool) 2.4.6"
+M4_VERSION="m4 (GNU M4) 1.4.17"
+
+#
+# When upgrading automake's version, don't forget to also update its
+# helper utilities, especially depcomp.
+
+
+# If paths to autotools are not specified by the user, assume tools are
+# running on jelly in AUTOCONF_DIR and set paths accordingly.
+if test -z ${AUTORECONF}; then
+  AUTORECONF=${AUTOCONF_DIR}/autoreconf
+fi
+if test -z ${AUTOCONF}; then
+  AUTOCONF=${AUTOCONF_DIR}/autoconf
+fi
+if test -z ${AUTOMAKE}; then
+  AUTOMAKE=${AUTOCONF_DIR}/automake
+fi
+if test -z ${AUTOHEADER}; then
+  AUTOHEADER=${AUTOCONF_DIR}/autoheader
+fi
+if test -z ${ACLOCAL}; then
+  ACLOCAL=${AUTOCONF_DIR}/aclocal
+fi
+if test -z ${LIBTOOL}; then
+  LIBTOOL=${AUTOCONF_DIR}/libtool
+fi
+if test -z ${M4}; then
+  M4=${AUTOCONF_DIR}/m4
+fi
+
+# Check version numbers of all autotools against the "correct" versions
+AC_VERS=`${AUTOCONF} --version 2>&1 | grep "^${AUTOCONF_VERSION}"`
+if test -z "${AC_VERS}"; then
+   echo "${AUTOCONF} version is not ${AUTOCONF_VERSION}"
+   exit 1
+fi
+AM_VERS=`${AUTOMAKE} --version 2>&1 | grep "^${AUTOMAKE_VERSION}"`
+if test -z "${AM_VERS}"; then
+   echo "${AUTOMAKE} version is not ${AUTOMAKE_VERSION}"
+   exit 1
+fi
+AH_VERS=`${AUTOHEADER} --version 2>&1 | grep "^${AUTOHEADER_VERSION}"`
+if test -z "${AH_VERS}"; then
+   echo "${AUTOHEADER} version is not ${AUTOHEADER_VERSION}"
+   exit 1
+fi
+AL_VERS=`${ACLOCAL} --version 2>&1 | grep "^${ACLOCAL_VERSION}"`
+if test -z "${AL_VERS}"; then
+   echo "${ACLOCAL} version is not ${ACLOCAL_VERSION}"
+   exit 1
+fi
+LT_VERS=`${LIBTOOL} --version 2>&1 | grep "${LIBTOOL_VERSION}"`
+if test -z "${LT_VERS}"; then
+   echo "${LIBTOOL} version is not ${LIBTOOL_VERSION}"
+   exit 1
+fi
+M4_VERS=`${M4} --version 2>&1 | grep "${M4_VERSION}"`
+if test -z "${M4_VERS}"; then
+   echo "${M4} version is not ${M4_VERSION}"
+   exit 1
+fi
+
+# Make sure that the tools are in the path.
+AUTOCONF_DIR=`dirname ${AUTOCONF}`
+LIBTOOL_DIR=`dirname ${LIBTOOL}`
+M4_DIR=`dirname ${M4}`
+PATH=${AUTOCONF_DIR}:${M4_DIR}:$PATH
+
+# Run autoconf/automake commands in order
+  echo ${ACLOCAL}
+  ${ACLOCAL} || exit 1
+
+  echo ${AUTOHEADER}
+  ${AUTOHEADER} || exit 1
+
+  echo ${AUTOMAKE} --add-missing
+  ${AUTOMAKE} --add-missing || exit 1
+
+  echo ${AUTOCONF}
+  ${AUTOCONF} || exit 1
+
+exit 0

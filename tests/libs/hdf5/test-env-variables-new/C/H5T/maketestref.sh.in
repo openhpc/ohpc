@@ -1,0 +1,116 @@
+#! /bin/sh
+#
+# Copyright by The HDF Group.
+# Copyright by the Board of Trustees of the University of Illinois.
+# All rights reserved.
+#
+# This file is part of HDF5.  The full HDF5 copyright notice, including
+# terms governing use, modification, and redistribution, is contained in
+# the files COPYING and Copyright.html.  COPYING can be found at the root
+# of the source code distribution tree; Copyright.html can be found at the
+# root level of an installed copy of the electronic HDF5 document set and
+# is linked from the top-level documents page.  It can also be found at
+# http://hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have
+# access to either file, you may request a copy from help@hdfgroup.org.
+
+srcdir=@srcdir@
+
+case $CC in
+*/*)    H5DUMP=`echo $CC | sed -e 's/\/[^/]*$/\/h5dump/'`;
+        test -x $H5DUMP || H5DUMP=h5dump;;
+*)      H5DUMP=h5dump;;
+esac
+
+case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
+  *c*,-n*) ECHO_N= ECHO_C='
+' ;;
+  *c*,*  ) ECHO_N=-n ECHO_C= ;;
+  *)       ECHO_N= ECHO_C='\c' ;;
+esac
+ECHO_N="echo $ECHO_N"
+
+exout() {
+    $*
+}
+
+dumpout() {
+    $H5DUMP $*
+}
+
+# compare current version, required version.
+# returns if cur_ver < req_ver is true.
+version_compare() {
+  version_lt=0
+  if [ ! "$(printf '%s\n' "$1" "$2" | sort -V | head -n1)" = "$2" ]; then
+          version_lt=1
+  fi
+}
+
+H5_LIBVER=@H5_LIBVER@
+H5_LIBVER_DIR=@H5_LIBVER_DIR@
+
+if [ ! -d "$srcdir/testfiles/$H5_LIBVER_DIR" ]; then
+  mkdir $srcdir/testfiles/$H5_LIBVER_DIR
+fi
+
+topics="int intatt float floatatt enum enumatt bit bitatt opaque opaqueatt \
+array arrayatt vlen vlenatt string stringatt vlstring vlstringatt \
+cmpd cmpdatt commit"
+
+for topic in $topics
+do
+    fname=h5ex_t_$topic
+    $ECHO_N "Creating test reference file for $PWD/$fname...$ECHO_C"
+    exout ./$fname >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst
+    dumpout $fname.h5 >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.ddl
+    rm -f $fname.h5
+    echo "  Done."
+done
+
+#######Non-standard tests#######
+USE_ALT=""
+if [ "$H5_LIBVER_DIR" = "110" ]; then
+   # check if HDF5 version is < 1.10.7
+   version_compare "$H5_LIBVER" "1.10.7"
+   if [ "$version_lt" = 1 ]; then
+      USE_ALT="06"
+   fi
+else 
+  if [ "$H5_LIBVER_DIR" = "18" ]; then
+   # check if HDF5 version is < 1.8.22
+   version_compare "$H5_LIBVER" "1.8.22"
+   if [ "$version_lt" = 1 ]; then
+      USE_ALT="21"
+   fi
+  fi
+fi
+
+topics="objref objrefatt regref regrefatt"
+for topic in $topics
+do
+    fname=h5ex_t_$topic
+    $ECHO_N "Creating test reference file for $PWD/$fname...$ECHO_C"
+    exout ./$fname >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst
+    dumpout $fname.h5 >$srcdir/testfiles/$H5_LIBVER_DIR/$fname$USE_ALT.ddl
+    rm -f $fname.h5
+    echo "  Done."
+done
+
+fname=h5ex_t_cpxcmpd
+$ECHO_N "Creating test reference file for $PWD/$fname...$ECHO_C"
+exout ./$fname >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst
+dumpout -n $fname.h5 >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.ddl
+rm -f $fname.h5
+echo "  Done."
+
+fname=h5ex_t_cpxcmpdatt
+$ECHO_N "Creating test reference file for $PWD/$fname...$ECHO_C"
+exout ./$fname >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst
+dumpout -n $fname.h5 >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.ddl
+rm -f $fname.h5
+echo "  Done."
+
+fname=h5ex_t_convert
+$ECHO_N "Creating test reference file for $PWD/$fname...$ECHO_C"
+exout ./$fname >$srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst
+echo "  Done."
