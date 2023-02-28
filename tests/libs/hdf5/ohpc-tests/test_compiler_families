@@ -10,7 +10,7 @@ source ./common/functions || exit 1
 
 # HDF5 tests using h5cc, h5c++, h5fc
 
-cd libs/hdf5/test-h5-wrappers/ || exit 1
+cd libs/hdf5/test-h5-wrappers-new/ || exit 1
 
 export BATS_JUNIT_CLASS=HDF5
 
@@ -28,12 +28,10 @@ for compiler in $COMPILER_FAMILIES ; do
     echo "-------------------------------------------------------"
 
     module purge          || exit 1
-    module load autotools || exit 1
     module load $compiler || exit 1
     module load hdf5      || exit 1
 
     ./configure           || exit 1
-    make clean            || exit 1
     make -j 4 check       || status=1
 
 #    save_logs_compiler_family ohpc_module $compiler
@@ -46,7 +44,7 @@ cd -
 
 # HDF5 tests using module environment variables
 
-cd libs/hdf5/test-env-variables || exit 1
+cd libs/hdf5/test-env-variables-new || exit 1
 
 # bootstrap the local autotools project
 
@@ -61,12 +59,10 @@ for compiler in $COMPILER_FAMILIES ; do
     echo "----------------------------------------------------------"
 
     module purge          || exit 1
-    module load autotools || exit 1
     module load $compiler || exit 1
     module load hdf5      || exit 1
 
     ./configure           || exit 1
-    make clean            || exit 1
     make -j 4 check       || status=1
 
     save_logs_compiler_family ohpc_module $compiler
