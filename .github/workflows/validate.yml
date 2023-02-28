@@ -12,7 +12,6 @@ env:
   SKIP_CI_SPECS: |
     components/fs/lustre-client/SPECS/lustre.spec
     components/parallel-libs/trilinos/SPECS/trilinos.spec
-    components/perf-tools/likwid/SPECS/likwid.spec
 
 jobs:
   check_spec:
@@ -93,6 +92,9 @@ jobs:
   test_on_rhel:
     runs-on: ubuntu-latest
     name: Test on RHEL
+    env:
+      JOB_SKIP_CI_SPECS: |
+        components/perf-tools/likwid/SPECS/likwid.spec
     container:
       image: docker.io/library/rockylinux:8
       options: --privileged
@@ -111,6 +113,7 @@ jobs:
         path: /home/ohpc/rpmbuild/RPMS
     - name: Run CI Tests
       run: |
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
@@ -148,6 +151,7 @@ jobs:
     env:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
+        components/perf-tools/likwid/SPECS/likwid.spec
     runs-on: ubuntu-latest
     name: Test on openEuler
     container:
