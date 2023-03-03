@@ -92,7 +92,7 @@ test_map = {
     'components/io-libs/phdf5/SPECS/hdf5.spec': [
         'phdf5',
         '',
-        ''
+        'zlib-devel automake-ohpc libtool-ohpc autoconf-ohpc'
     ],
     'components/io-libs/pnetcdf/SPECS/pnetcdf.spec': [
         'pnetcdf',
