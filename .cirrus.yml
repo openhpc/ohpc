@@ -9,7 +9,7 @@ task:
   name: RHEL/Rocky on aarch64
   timeout_in: 120m
   arm_container:
-    image: docker.io/library/rockylinux:8
+    image: docker.io/library/rockylinux:9
     cpu: 4
     memory: 12G
   script: uname -a
