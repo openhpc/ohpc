@@ -3,10 +3,10 @@ name: Validate
 on:
   push:
     branches:
-      - 2.x
+      - 3.x
   pull_request:
     branches:
-      - 2.x
+      - 3.x
 
 env:
   SKIP_CI_SPECS: |
@@ -21,7 +21,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: docker.io/library/rockylinux:8
+      image: docker.io/library/rockylinux:9
 
     steps:
     - name: Setup
@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on RHEL
     container:
-      image: docker.io/library/rockylinux:8
+      image: docker.io/library/rockylinux:9
     steps:
     - name: Install git
       run: dnf -y install git
@@ -96,7 +96,7 @@ jobs:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
     container:
-      image: docker.io/library/rockylinux:8
+      image: docker.io/library/rockylinux:9
       options: --privileged
     needs: build_on_rhel
     steps:
@@ -182,7 +182,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on LEAP
     container:
-      image: registry.opensuse.org/opensuse/leap:15.3
+      image: registry.opensuse.org/opensuse/leap:15.4
     steps:
     - name: Install git
       run: zypper -n install git
