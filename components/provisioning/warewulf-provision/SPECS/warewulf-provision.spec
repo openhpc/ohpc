@@ -94,7 +94,7 @@ BuildRequires: libarchive.so.13()(64bit)
 Requires: libarchive.so.13()(64bit)
 %global CONF_FLAGS --with-local-e2fsprogs --with-local-libarchive --with-local-parted --with-local-partprobe
 # The included Busybox will not build on OpenSUSE 15.4
-%if 0%{?sle_version} >= 150400
+%if 0%{?sle_version} >= 150400 || 0%{?openEuler}
 BuildRequires: busybox
 Requires: busybox
 %global CONF_FLAGS %{CONF_FLAGS} --with-local-busybox
