@@ -17,6 +17,13 @@ task:
   build_script: |
     . /etc/profile.d/lmod.sh
     tests/ci/run_build.py ohpc $(tests/ci/cirrus_get_changed_files.sh)
+  env:
+    JOB_SKIP_CI_SPECS: |
+      components/perf-tools/likwid/SPECS/likwid.spec
+  test_script: |
+    export SKIP_CI_SPECS="${SKIP_CI_SPECS}${JOB_SKIP_CI_SPECS}"
+    chown ohpc -R tests
+    tests/ci/setup_slurm_and_run_tests.sh ohpc $(tests/ci/cirrus_get_changed_files.sh)
 
 openeuler_task:
   name: openEuler on aarch64
