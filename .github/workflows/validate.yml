@@ -117,6 +117,15 @@ jobs:
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
+    - name: Upload Test Results
+      # To display test results from forked repositories they need to
+      # be uploaded and then analyzed.
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        retention-days: 1
+        path: tests/**/*.log.xml
 
   build_on_openEuler:
     runs-on: ubuntu-latest
