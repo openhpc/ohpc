@@ -117,6 +117,12 @@ jobs:
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        check_name: RHEL test results
+        files: tests/**/*.log.xml
 
   build_on_openEuler:
     runs-on: ubuntu-latest

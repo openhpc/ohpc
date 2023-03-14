@@ -92,13 +92,39 @@ fi
 export SIMPLE_CI=1
 TESTS_FAILED=1
 
+# The following is necessary to create GitHub Action reports.
+# For now only on RHEL 9 (and clones)
+# shellcheck disable=SC1091
+. /etc/os-release
+if [ "${PLATFORM_ID}" == "platform:el9" ] && [ -n "${GITHUB_ACTIONS}" ]; then
+	export BATS_JUNIT_FORMAT=1
+	dnf -y install perl-XML-DOM.noarch
+	# Unfortunately there is no perl-XML-Generator for EPEL 9
+	wget https://kojipkgs.fedoraproject.org//packages/perl-XML-Generator/1.04/30.el8/noarch/perl-XML-Generator-1.04-30.el8.noarch.rpm
+	rpm -Uhv perl-XML-Generator-1.04-30.el8.noarch.rpm --nodeps
+fi
+
 set +e
 
 sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -delete"
 
 # Always running at least with '--enable-modules'. No need to check for
 # an empty TESTS array.
-if sudo --user="${USER}" --preserve-env=SIMPLE_CI --login bash -c "cd ${PWD}/tests; ./bootstrap; ./configure --disable-all --enable-modules --enable-rms-harness --with-mpi-families='openmpi4 mpich' ${TESTS[*]}; make check";
+if sudo \
+	--user="${USER}" \
+	--preserve-env=SIMPLE_CI \
+	--preserve-env=BATS_JUNIT_FORMAT \
+	--login \
+	bash -c "\
+		cd ${PWD}/tests; \
+		./bootstrap; \
+		./configure \
+			--disable-all \
+			--enable-modules \
+			--enable-rms-harness \
+			--with-mpi-families='openmpi4 mpich' \
+			${TESTS[*]}; \
+		make check";
 then
     TESTS_FAILED=0
 fi
