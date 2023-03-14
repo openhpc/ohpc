@@ -87,7 +87,7 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 	FACTORY_REPOSITORY=http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/
 	if [ "${PKG_MANAGER}" = "dnf" ]; then
 		if [ -z "${NINE}" ]; then
-			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_8"
+			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_9"
 		elif [ "${ID}" = "openEuler" ]; then
 			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}openEuler_22.03"
 		else
@@ -103,12 +103,7 @@ fi
 
 dnf_rhel() {
 	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
-	if [ -z "${NINE}" ]; then
-		loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
-		loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
-	else
-		loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
-	fi
+	loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
