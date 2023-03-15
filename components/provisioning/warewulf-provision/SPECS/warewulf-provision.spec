@@ -71,6 +71,12 @@ BuildRequires: systemd-rpm-macros
 %global dhcpsrv dhcp-server
 %endif
 
+%if 0%{?openEuler}
+%global perl_apache mod_perl
+%else
+%global perl_apache perl(Apache)
+%endif
+
 # If multiple architectures are needed, set
 # --define="cross_compile 1" as an rpmbuild option
 %if 0%{?cross_compile}
@@ -203,7 +209,7 @@ image and to provide boot capability for %{_arch} architecture.
 Summary: Warewulf - System provisioning server
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-server-ipxe-%{_arch} = %{version}-%{release}
-Requires: %{httpsvc}, perl(Apache), %{tftpsvc}, %{dhcpsrv}
+Requires: %{httpsvc}, %{perl_apache}, %{tftpsvc}, %{dhcpsrv}, tcpdump
 
 %if 0%{?rhel} >= 8 || 0%{?openEuler}
 Requires(post): policycoreutils-python-utils
