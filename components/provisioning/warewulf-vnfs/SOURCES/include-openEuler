@@ -1,0 +1,107 @@
+REPO_NAME="os-base"
+YUM_CONF="/root/yum-ww.conf"
+YUM_CMD="yum -c $CHROOTDIR/$YUM_CONF --installroot $CHROOTDIR -y"
+
+distro_check() {
+    if ! rpm -q yum >/dev/null 2>&1 ; then
+        echo "ERROR: Could not query RPM for YUM"
+        return 1
+    fi
+    return 0
+}
+
+set_overlay() {
+    if [ ! -d "$CHROOTDIR" -o ! -x "$CHROOTDIR/sbin/init" ]; then
+        echo "ERROR: This is an overlay that must work on an existing chroot!"
+        return 1
+    fi
+    if [ ! -f "$CHROOTDIR/etc/openEuler-release" ]; then
+        echo "ERROR: This must be a openEuler compatible chroot!"
+        return 1
+    fi
+    PKGR_CMD="$YUM_CMD install $PKGLIST"
+    return 0
+}
+
+prechroot() {
+    if [ -n "$OS_MIRROR" ]; then
+        YUM_MIRROR="$OS_MIRROR"
+    fi
+    if [[ -z "$YUM_MIRROR" && -z "$INSTALL_ISO" ]]; then
+        echo "ERROR: You must define the \$YUM_MIRROR variable in the template"
+        cleanup
+        return 1
+    fi
+
+    VERSION=`rpm -qf /etc/openEuler-release  --qf '%{VERSION}\n'`
+
+    mkdir -p $CHROOTDIR
+    mkdir -p $CHROOTDIR/etc
+
+    cp -rap /etc/yum.conf /etc/yum.repos.d $CHROOTDIR/etc
+    sed -i -e "s/\$releasever/$VERSION/g" `find $CHROOTDIR/etc/yum* -type f`
+
+    YUM_CONF_DIRNAME=`dirname $YUM_CONF`
+    mkdir -m 0755 -p $CHROOTDIR/$YUM_CONF_DIRNAME
+
+    > $CHROOTDIR/$YUM_CONF
+    echo "[main]" >> $CHROOTDIR/$YUM_CONF
+    echo 'cachedir=/var/cache/yum/$basearch/$releasever' >> $CHROOTDIR/$YUM_CONF
+    echo "keepcache=0" >> $CHROOTDIR/$YUM_CONF
+    echo "debuglevel=2" >> $CHROOTDIR/$YUM_CONF
+    echo "logfile=/var/log/yum.log" >> $CHROOTDIR/$YUM_CONF
+    echo "exactarch=1" >> $CHROOTDIR/$YUM_CONF
+    echo "obsoletes=1" >> $CHROOTDIR/$YUM_CONF
+    echo "gpgcheck=0" >> $CHROOTDIR/$YUM_CONF
+    echo "plugins=1" >> $CHROOTDIR/$YUM_CONF
+    echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
+    echo "" >> $CHROOTDIR/$YUM_CONF
+
+    if [ -z "$INSTALL_ISO" ]; then
+        echo "[$REPO_NAME]" >> $CHROOTDIR/$YUM_CONF
+        echo 'name=Linux $releasever - $basearch' >> $CHROOTDIR/$YUM_CONF
+        echo "baseurl=$YUM_MIRROR" >> $CHROOTDIR/$YUM_CONF
+        echo "enabled=1" >> $CHROOTDIR/$YUM_CONF
+        echo "gpgcheck=0" >> $CHROOTDIR/$YUM_CONF
+    else
+        for i in `ls -d $MEDIA_MOUNTPATH.*`; do
+            if [ -z "$INSTALLDIRS" ]; then
+                if [ -d $i/repodata ]; then
+                    # RHEL 6.x
+                    INSTALLDIRS="file://$i"
+                elif [ -d $i/Server/repodata ]; then
+                    # RHEL 5.x
+                    INSTALLDIRS="file://$i/Server"
+                fi
+            else
+                INSTALLDIRS="$INSTALLDIRS,file://$i"
+            fi
+        done
+        echo "[$REPO_NAME]" >> $CHROOTDIR/$YUM_CONF
+        echo 'name=Linux $releasever - $basearch' >> $CHROOTDIR/$YUM_CONF
+        echo "baseurl=$INSTALLDIRS" >> $CHROOTDIR/$YUM_CONF
+        echo "enabled=1" >> $CHROOTDIR/$YUM_CONF
+        echo "gpgcheck=0" >> $CHROOTDIR/$YUM_CONF
+
+        YUM_MIRROR=$INSTALLDIRS
+    fi
+    PKGR_CMD="$YUM_CMD install $PKGLIST"
+    return 0
+}
+
+postchroot() {
+    touch $CHROOTDIR/fastboot
+
+    NETFILE=$CHROOTDIR/etc/sysconfig/network-scripts/network-functions
+    if [ -f $NETFILE ]; then
+        if grep -q 'rename_device' $NETFILE && ! grep -q 'rename_device() { return 0; }' $NETFILE; then
+            echo "" >> $NETFILE
+            echo "# This is a kludge added by Warewulf so devices don't get renamed (broke things with IB)" >> $NETFILE
+            echo "rename_device() { return 0; }" >> $NETFILE
+        fi
+    fi
+    return 0
+}
+
+
+# vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:

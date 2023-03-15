@@ -1,0 +1,33 @@
+#DESC: openEuler 22.03
+
+# The general openEUler include has all of the necessary functions, but requires
+# some basic variables specific to each chroot type to be defined.
+
+# Use DNF as the package manager
+PKG_MGR=dnf
+EXTRA_ARGS="--releasever=22.03"
+PLATFORMID="platform:oe2203"
+
+# Uncomment to disable GPG checks on added repos
+# REPO_NOGPGCHECK=1
+
+. include-openEuler
+
+# Define the location of the YUM repository
+if [ -z "$YUM_MIRROR" ]; then
+    if [ -z "$YUM_MIRROR_BASE" ]; then
+        YUM_MIRROR_BASE="http://repo.openeuler.org"
+    fi
+    YUM_MIRROR="${YUM_MIRROR_BASE}/openEuler-22.03-LTS/OS/\$basearch/os","${YUM_MIRROR_BASE}/openEuler-22.03-LTS/everything/\$basearch","${YUM_MIRROR_BASE}/openEuler-22.03-LTS/EPOL/main/\$basearch"
+fi
+
+# Install only what is necessary/specific for this distribution
+PKGLIST="basesystem bash chkconfig coreutils e2fsprogs ethtool
+    filesystem findutils gawk grep initscripts iproute iputils
+    net-tools nfs-utils pam psmisc rsync sed setup
+    shadow rsyslog tzdata util-linux words
+    zlib tar less gzip which util-linux openssh-clients
+    openssh-server dhcp pciutils vim-minimal
+    strace cronie crontabs cpio wget openEuler-release hostname grub2-common glibc-all-langpacks"
+
+# vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:
