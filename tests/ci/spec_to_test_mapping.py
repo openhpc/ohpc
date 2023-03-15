@@ -155,12 +155,12 @@ test_map = {
         ''
     ],
     'components/mpi-families/openmpi/SPECS/openmpi.spec': [
-        'openmpi4',
+        'slurm',
         '',
         ''
     ],
     'components/mpi-families/mpich/SPECS/mpich.spec': [
-        'mpich',
+        'slurm',
         '',
         ''
     ],
