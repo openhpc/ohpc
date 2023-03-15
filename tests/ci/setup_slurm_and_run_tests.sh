@@ -25,6 +25,10 @@ dnf -y install \
 # shellcheck disable=SC2046 # (we want the words to be split)
 dnf -y install $(find /home/"${USER}"/rpmbuild/RPMS/ -name "*rpm") || true
 
+# Remove OpenPBS, if it is installed as a dependency. The tests use Slurm Resource Manager
+dnf -y remove openpbs-*-ohpc || true
+rm -f /etc/pbs.conf
+
 # Setup slurm
 echo "127.0.0.1 node0 node1" >> /etc/hosts
 
