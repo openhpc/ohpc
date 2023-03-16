@@ -25,15 +25,16 @@ rms           = ["slurm","openpbs","pmix","munge","magpie"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
 parallel-libs = ["boost","fftw","hypre","mfem","mumps","opencoarrays","petsc","scalapack","ptscotch",
                  "slepc","superlu_dist","trilinos"]
-provisioning  = ["warewulf-vnfs","warewulf"]
+provisioning  = ["warewulf-vnfs","warewulf","warewulf-common","warewulf-cluster","warewulf-ipmi",
+                 "warewulf-provision"]
 perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","papi","paraver","pdtoolkit",
-                 "scalasca","scorep","tau"]
+                 "scalasca","scorep","tau","papi57"]
 
 compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel","llvm-compilers"]
 mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 
 [3.0.0]
-skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-arm1","geopm",
             "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
 skip_x86  = ["-arm1"]
 compiler_families=["gnu12","intel","arm1"]
@@ -42,7 +43,8 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun","gnu-compilers","ucx",
               "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython",
               "hpc-workspace","intel-compilers-devel","impi-devel","mrsh","losf","paraver","papi","charliecloud",
-              "pmix","pdsh"]
+              "pmix","pdsh","flex","warewulf-common","warewulf-vnfs","warewulf-cluster","warewulf-ipmi",
+              "warewulf-provision","examples"]
 compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "pdtoolkit","gsl","metis","superlu","scotch",
                       "numpy","plasma","hdf5"]
@@ -50,9 +52,10 @@ mpi_dependent = ["ptscotch","boost","sionlib","pnetcdf","phdf5","netcdf","omb",
                  "tau","extrae","imb","fftw","scalapack","opencoarrays",
                  "ptscotch","hypre","mpi4py","dimemas","scorep","scalasca",
                  "!scipy","!adios","netcdf-fortran","netcdf-cxx","trilinos",
-                 "petsc","slepc","superlu_dist","mumps","mfem"]
+                 "petsc","slepc","superlu_dist","mumps","mfem","lmod-defaults"]
 openblas_compiler=["gnu12"]
 R_compiler=["gnu12"]
+lmod-defaults_mpi=["openmpi4","mvapich2","impi"]
 # The parser is looking for entries starting with 'skip_on_distro_' and will
 # disable all packages on the distro after 'skip_on_distro_'
 # This is mainy used to automatically disable '-intel' and '-arm1' packages
@@ -67,7 +70,7 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild"]
+standalone = ["ohpc-filesystem","slurm","hwloc","lmod","easybuild","papi57","magpie"]
 
 [2.6.1]
 

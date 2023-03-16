@@ -666,8 +666,8 @@ class ohpc_obs_tool(object):
                 pname = gitName
             contents = contents.replace('!GROUP!', group)
             contents = contents.replace('!PACKAGE!', pname)
-            if self.microVer == '0':
-                contents = contents.replace('!VERSION!', "2.x")
+            if self.branchVer.startswith('3.'):
+                contents = contents.replace('!VERSION!', "3.x")
             else:
                 contents = contents.replace('!VERSION!', "2.x")
 
