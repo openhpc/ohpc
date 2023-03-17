@@ -14,6 +14,9 @@ rm=$RESOURCE_MANAGER
 testname="libs/NetCDF"
 delimiter="$RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 
+if [ ! -z "$SIMPLE_CI" ]; then
+    export OMPI_MCA_btl="self,tcp"
+fi
 
 @test "[$testname] C parallel I/O  ($delimiter)" {
     if [ ! -x C_parallel ];then
