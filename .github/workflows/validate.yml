@@ -228,6 +228,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Upload
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: event-file

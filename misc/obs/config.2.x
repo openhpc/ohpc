@@ -71,6 +71,7 @@ compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["ohpc-filesystem","slurm","hwloc","lmod","easybuild","papi57","magpie"]
+compiler_dependent = ["openmpi"]
 
 [2.6.1]
 
