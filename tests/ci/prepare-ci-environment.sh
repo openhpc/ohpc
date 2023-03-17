@@ -5,7 +5,7 @@
 set -x
 set -e
 
-FACTORY_VERSION=2.7
+FACTORY_VERSION=3.0
 
 if [ ! -e /etc/os-release ]; then
 	echo "Cannot detect OS without /etc/os-release"
@@ -80,7 +80,9 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 		set -e
 	fi
 else
-	OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/Leap_15/${UNAME_M}/ohpc-release-2-1.leap15.${UNAME_M}.rpm"
+	FACTORY_VERSION=3.0
+	loop_command "${PKG_MANAGER}" -n  install "${COMMON_PKGS}"
+	loop_command wget http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/Leap_15.4/OpenHPC:"${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
@@ -95,7 +97,7 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 		fi
 		FACTORY_REPOSITORY_DESTINATION="/etc/yum.repos.d/obs.repo"
 	else
-		FACTORY_REPOSITORY="${FACTORY_REPOSITORY}Leap_15"
+		FACTORY_REPOSITORY="${FACTORY_REPOSITORY}Leap_15.4"
 		FACTORY_REPOSITORY_DESTINATION="/etc/zypp/repos.d/obs.repo"
 	fi
 	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/OpenHPC:${FACTORY_VERSION}:Factory.repo"
@@ -123,8 +125,7 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	fi
 	adduser ohpc
 else
-	loop_command "${PKG_MANAGER}" -n install ${COMMON_PKGS} awk rpmbuild
-	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
