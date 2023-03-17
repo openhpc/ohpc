@@ -416,6 +416,7 @@ Requires:  warewulf-vnfs%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-warewulf
 Collection of base packages for Warewulf provisioning
 
+%if !0%{?openEuler}
 # x86_64 specific groups
 %ifnarch aarch64
 %package -n %{PROJ_NAME}-intel-geopm
@@ -718,7 +719,7 @@ Requires:  superlu-intel%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-serial-libs
 Collection of serial library builds for use with Intel(R) oneAPI Toolkit
 
-%endif  # <-- end non-aarch64 only
+%endif
 
 # aarch64 specific groups
 %ifarch aarch64
@@ -809,7 +810,8 @@ Requires:  trilinos-arm1-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with the Arm Compiler for Linux and the %{mpi_family} runtime
 
-%endif  # <-- end aarch64 only
+%endif
+%endif
 
 
 %prep
@@ -843,6 +845,7 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-slurm-client
 %files -n %{PROJ_NAME}-slurm-server
 %files -n %{PROJ_NAME}-warewulf
+%if !0%{?openEuler}
 # x86_64 specific groups
 %ifnarch aarch64
 %files -n %{PROJ_NAME}-%{compiler_family}-mvapich2-io-libs
@@ -877,3 +880,5 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-arm1-mpich-parallel-libs
 %files -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
 %endif
+%endif
+
