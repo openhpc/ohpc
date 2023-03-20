@@ -1,0 +1,199 @@
+diff --git a/lib/Warewulf/System/Euler.pm b/lib/Warewulf/System/Euler.pm
+new file mode 100644
+index 0000000..a913028
+--- /dev/null
++++ b/lib/Warewulf/System/Euler.pm
+@@ -0,0 +1,168 @@
++# Copyright (c) 2001-2003 Gregory M. Kurtzer
++#
++# Copyright (c) 2003-2011, The Regents of the University of California,
++# through Lawrence Berkeley National Laboratory (subject to receipt of any
++# required approvals from the U.S. Dept. of Energy).  All rights reserved.
++#
++#
++# $Id: Euler.pm
++#
++
++package Warewulf::System::Euler;
++
++use Warewulf::System;
++use Warewulf::Logger;
++
++our @ISA = ('Warewulf::System');
++
++=head1 NAME
++
++Warewulf::System::Euler - Warewulf's general object instance object interface.
++
++=head1 ABOUT
++
++
++=head1 SYNOPSIS
++
++    use Warewulf::System::Euler;
++
++    my $obj = Warewulf::System::Euler->new();
++
++
++=head1 METHODS
++
++=over 12
++
++=cut
++
++=item new()
++
++The new constructor will create the object that references configuration the
++stores.
++
++=cut
++
++sub
++new($$)
++{
++    my $proto = shift;
++    my $class = ref($proto) || $proto;
++    my $self = {};
++
++    bless($self, $class);
++
++    return $self;
++}
++
++
++=item service($name, $command)
++
++Run a command on a service script (e.g. /etc/init.d/service restart).
++
++=cut
++
++sub
++service($$$)
++{
++    my ($self, $service, $command) = @_;
++
++    &dprint("Running service command: $service, $command\n");
++
++    if ( -x "/bin/systemctl" ) {
++        system("/bin/systemctl $command $service.service") == 0 and return(1);
++    } elsif (-x "/etc/init.d/$service") {
++        $self->{"OUTPUT"} = ();
++        open(SERVICE, "/etc/init.d/$service $command 2>&1|");
++        while(<SERVICE>) {
++            $self->{"OUTPUT"} .= $_;
++        }
++        chomp($self->{"OUTPUT"});
++        if (close SERVICE) {
++            &dprint("Service command ran successfully\n");
++            return(1);
++        } else {
++            &dprint("Error running: /etc/init.d/$service $command\n");
++        }
++    }
++	if ($self->{"OUTPUT"}) {
++        chomp($self->{"OUTPUT"});
++        if (close SERVICE) {
++            &dprint("Service command ran successfully\n");
++            return(1);
++        } else {
++            &dprint("Error running: /usr/bin/systemctl $command $service\n");
++        }
++    }
++    return();
++}
++
++
++
++
++=item chkconfig($name, $command)
++
++Enable a service script to be enabled or disabled at boot (e.g.
++/sbin/chkconfig service on).
++
++=cut
++
++sub
++chkconfig($$$)
++{
++    my ($self, $service, $command) = @_;
++
++    if ( -x "/bin/systemctl" ) {
++        system("/bin/systemctl enable $service.service");
++    } elsif (-x "/sbin/chkconfig") {
++        open(CHKCONFIG, "/sbin/chkconfig $service $command 2>&1|");
++        while(<CHKCONFIG>) {
++            $self->{"OUTPUT"} .= $_;
++        }
++        if (defined($self->{"OUTPUT"})) {
++            chomp($self->{"OUTPUT"});
++        }
++        if (close CHKCONFIG) {
++            &dprint("Chkconfig command ran successfully\n");
++            return(1);
++        } else {
++            &dprint("Error running: /sbin/chkconfig $service $command\n");
++        }
++    }
++    return();
++}
++
++
++=item output()
++
++return the output cache on a command
++
++=cut
++
++sub
++output($)
++{
++    my $self = shift;
++
++    return(defined($self->{"OUTPUT"}) ? $self->{"OUTPUT"} : "");
++}
++
++
++
++=back
++
++=head1 SEE ALSO
++
++Warewulf::Object
++
++=head1 COPYRIGHT
++
++Copyright (c) 2001-2003 Gregory M. Kurtzer
++
++Copyright (c) 2003-2011, The Regents of the University of California,
++through Lawrence Berkeley National Laboratory (subject to receipt of any
++required approvals from the U.S. Dept. of Energy).  All rights reserved.
++
++=cut
++
++
++1;
+diff --git a/lib/Warewulf/System/Makefile.am b/lib/Warewulf/System/Makefile.am
+index 4d727d8..2aaacf8 100644
+--- a/lib/Warewulf/System/Makefile.am
++++ b/lib/Warewulf/System/Makefile.am
+@@ -1,6 +1,6 @@
+ perlmodsdir = ${PERL_VENDORLIB}/Warewulf/System
+ 
+-dist_perlmods_SCRIPTS = Rhel.pm Deb.pm Suse.pm
++dist_perlmods_SCRIPTS = Rhel.pm Deb.pm Suse.pm Euler.pm
+ 
+ MAINTAINERCLEANFILES = Makefile.in
+ 
+diff --git a/lib/Warewulf/SystemFactory.pm b/lib/Warewulf/SystemFactory.pm
+index 2484bc9..37f0300 100644
+--- a/lib/Warewulf/SystemFactory.pm
++++ b/lib/Warewulf/SystemFactory.pm
+@@ -50,6 +50,8 @@ new($$)
+         $type = "unsupported";
+         if (-f "/etc/redhat-release") {
+             $type = "rhel";
++        } elsif (-f "/etc/openEuler-release") {
++            $type = "Euler";
+         } elsif (-f "/etc/SuSE-release") {
+             $type = "Suse";
+         } elsif ( -f "/etc/debian_version" ) {

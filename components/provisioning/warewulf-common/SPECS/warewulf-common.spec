@@ -25,6 +25,7 @@ URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Patch0:  warewulf-common.mysql_r1978.patch
 Patch1:  warewulf-common.rhel_service.patch
+Patch2:  warewulf-common.openEuler_22.03.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Conflicts: warewulf < 3
@@ -71,6 +72,7 @@ cd %{_builddir}
 %setup -q -D
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 
 %build
