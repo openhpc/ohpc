@@ -1,0 +1,60 @@
+diff --git a/3rd_party/GPL/0000-ipxe-revert-3fb3ffc.patch b/3rd_party/GPL/0000-ipxe-revert-3fb3ffc.patch
+deleted file mode 100644
+index effe922..0000000
+--- a/3rd_party/GPL/0000-ipxe-revert-3fb3ffc.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+---- a/ipxe-2265a65/src/include/errno.h	2021-09-23 01:01:07.372658000 +0000
+-+++ b/ipxe-2265a65/src/include/errno.h	2021-09-23 01:01:18.089527000 +0000
+-@@ -262,10 +262,10 @@
+- 		  ".balign 8\n\t"					\
+- 		  "\n1:\n\t"						\
+- 		  ".long ( 4f - 1b )\n\t"				\
+--		  ".long %c0\n\t"					\
+-+		  ".long %a0\n\t"					\
+- 		  ".long ( 2f - 1b )\n\t"				\
+- 		  ".long ( 3f - 1b )\n\t"				\
+--		  ".long %c1\n\t"					\
+-+		  ".long %a1\n\t"					\
+- 		  "\n2:\t.asciz \"" __einfo_desc ( einfo ) "\"\n\t"	\
+- 		  "\n3:\t.asciz \"" __FILE__ "\"\n\t"			\
+- 		  ".balign 8\n\t"					\
+diff --git a/3rd_party/GPL/Makefile.am b/3rd_party/GPL/Makefile.am
+index aebe08e..6314ab4 100644
+--- a/3rd_party/GPL/Makefile.am
++++ b/3rd_party/GPL/Makefile.am
+@@ -1,4 +1,4 @@
+-dist_gplsrc_DATA = 0000-ipxe-revert-3fb3ffc.patch README busybox-1.33.1.tar.bz2 e2fsprogs-1.46.4.tar.gz ipxe-2265a65.tar.xz parted-3.4.tar.xz
++dist_gplsrc_DATA = README busybox-1.33.1.tar.bz2 e2fsprogs-1.46.4.tar.gz ipxe-09e8a15.tar.xz parted-3.4.tar.xz
+ 
+ gplsrcdir = $(prefix)/src/warewulf/3rd_party/GPL/
+ 
+diff --git a/3rd_party/Makefile.am b/3rd_party/Makefile.am
+index 51ef17d..94d86d7 100644
+--- a/3rd_party/Makefile.am
++++ b/3rd_party/Makefile.am
+@@ -6,10 +6,9 @@ MAINTAINERCLEANFILES = Makefile.in
+ 
+ all: $(IPXETARGETS)
+ 
+-IPXE_VERSION = 2265a65
++IPXE_VERSION = 09e8a15
+ IPXE_SOURCE = $(top_srcdir)/3rd_party/GPL/ipxe-$(IPXE_VERSION).tar.xz
+ IPXE_DIR = ipxe-$(IPXE_VERSION)
+-IPXE_PATCH = GPL/0000-ipxe-revert-3fb3ffc.patch
+ 
+ 
+ prep:
+@@ -65,11 +64,8 @@ if BUILD_ARM64
+ 		mkdir -p _work/$(IPXE_DIR)/src/bin-arm64-efi ;\
+ 		cp "@local_ipxe_snp_arm64_path@" _work/$(IPXE_DIR)/src/bin-arm64-efi/snp.efi ;\
+ 	else \
+-	   if [ `$(CROSS_COMPILE_ARM64)gcc -dumpversion` == 4.8.5 ]; then \
+-	      ( cd _work && pwd && patch -N -p1 < ../$(IPXE_PATCH) ) ; \
+-	   fi ; \
+ 	$(MAKE) -C _work/$(IPXE_DIR)/src CROSS_COMPILE=$(CROSS_COMPILE_ARM64) bin-arm64-efi/snp.efi; \
+-  fi
++  fi
+ endif
+ 
+ install-data-local: $(IPXETARGETS)

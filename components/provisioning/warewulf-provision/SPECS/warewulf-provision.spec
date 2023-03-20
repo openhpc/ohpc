@@ -23,12 +23,14 @@ Summary: Warewulf - System provisioning core
 License: US Dept. of Energy (BSD-like) and BSD-3 Clause
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
+Source1: ipxe-09e8a15.tar.xz
 Patch0:  warewulf-provision.bin-file.patch
 Patch1:  warewulf-provision.ipxe-kargs.patch
 Patch2:  warewulf-provision.parted_libdir.patch
 Patch3:  warewulf-provision.ppc64le.patch
 Patch4:  warewulf-provision.sle_tftpboot.patch
 Patch5:  warewulf-provision.wwgetfiles.patch
+Patch6:  warewulf-provision.update_ipxe_to_09e8a15.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -130,6 +132,9 @@ cd %{_builddir}
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
+%{__rm} -f 3rd_party/GPL/ipxe-2265a65.tar.xz
+%{__cp} %SOURCE1 3rd_party/GPL/
 
 
 %build
