@@ -55,5 +55,4 @@ jobs:
           commit: ${{ github.event.workflow_run.head_sha }}
           event_file: artifacts/event-file/event.json
           event_name: ${{ github.event.workflow_run.event }}
-          search_pull_requests: true
           files: "artifacts/**/*.xml"
