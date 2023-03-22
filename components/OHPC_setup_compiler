@@ -50,10 +50,10 @@ elif [ "$OHPC_COMPILER_FAMILY" = "gnu9" ]; then
     module load gnu9
 elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
     export toolset=intel
-    export CC=icc
-    export CXX=icpc
-    export FC=ifort
-    export F77=ifort
+    export CC=icx
+    export CXX=icpx
+    export FC=ifx
+    export F77=ifx
     module purge
     module load intel
 elif [ "$OHPC_COMPILER_FAMILY" = "arm1" ]; then
