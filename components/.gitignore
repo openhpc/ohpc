@@ -13,7 +13,6 @@ admin/lmod/SOURCES/lmod-*.tar.gz
 admin/losf/SOURCES/losf-*.tar.gz
 admin/mrsh/SOURCES/mrsh-*.tar.gz
 admin/nhc/SOURCES/nhc-*.tar.gz
-admin/nrpe/SOURCES/nrpe-*.tar.gz
 admin/pdsh/SOURCES/pdsh-*.tar.gz
 admin/powerman/SOURCES/powerman-*.tar.gz
 admin/test-suite/SOURCES/tests-ohpc.tar
