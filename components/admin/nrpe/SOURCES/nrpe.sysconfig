@@ -1,2 +1,0 @@
-# specify additional command line arguments for nrpe
-NRPE_SSL_OPT=""

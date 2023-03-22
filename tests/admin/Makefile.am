@@ -5,7 +5,6 @@ TESTS = init.sh
 TESTS  += clustershell
 TESTS  += conman
 TESTS  += genders
-TESTS  += nagios
 TESTS  += nhc
 
 if WAREWULF_ENABLED
