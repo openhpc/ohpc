@@ -1,0 +1,26 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for charliecloud-ohpc
+\multirow{2}{*}{charliecloud-ohpc} & 
+\multirow{2}{*}{0.15} & 
+Lightweight user-defined software stacks for high-performance computing.  { \color{logoblue} \url{https://hpc.github.io/charliecloud}} 
+\\ \hline 
+% <-- end entry for charliecloud-ohpc
+
+% <-- begin entry for singularity-ohpc
+\multirow{2}{*}{singularity-ohpc} & 
+\multirow{2}{*}{3.7.1} & 
+Application and environment virtualization. \newline { \color{logoblue} \url{https://www.sylabs.io/singularity}} 
+\\ \hline 
+% <-- end entry for singularity-ohpc
+
+\bottomrule
+\end{tabularx}

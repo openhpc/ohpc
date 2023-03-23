@@ -1,0 +1,105 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for intel-psxe-mpi-devel-ohpc
+\multirow{2}{*}{intel-psxe-mpi-devel-ohpc} & 
+\multirow{2}{*}{2021.1} & 
+OpenHPC compatibility package for Intel(R) MPI Library. \newline { \color{logoblue} \url{https://github.com/openhpc/ohpc}} 
+\\ \hline 
+% <-- end entry for intel-psxe-mpi-devel-ohpc
+
+% <-- begin entry for intel-mpi-devel-ohpc
+\multirow{2}{*}{intel-mpi-devel-ohpc} & 
+\multirow{2}{*}{2021.1} & 
+OpenHPC compatibility package for Intel(R) oneAPI MPI Library.  { \color{logoblue} \url{https://github.com/openhpc/ohpc}} 
+\\ \hline 
+% <-- end entry for intel-mpi-devel-ohpc
+
+% <-- begin entry for libfabric-ohpc
+\multirow{2}{*}{libfabric-ohpc} & 
+\multirow{2}{*}{1.13.0} & 
+User-space RDMA Fabric Interfaces. \newline { \color{logoblue} \url{http://www.github.com/ofiwg/libfabric}} 
+\\ \hline 
+% <-- end entry for libfabric-ohpc
+
+% <-- begin entry for mpich-ofi
+\multirow{2}{*}{mpich-ofi-gnu9-ohpc} &
+\multirow{2}{*}{3.4.2} & 
+MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}} \\ 
+\hline
+% <-- end entry for mpich-ofi
+
+% <-- begin entry for mpich-ucx
+mpich-ucx-gnu9-ohpc &
+\multirow{2}{*}{3.4.2} & 
+\multirow{2}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
+mpich-ucx-intel-ohpc &
+& \\ 
+\hline
+% <-- end entry for mpich-ucx
+
+% <-- begin entry for mpich-ofi
+mpich-ofi-gnu12-ohpc &
+\multirow{2}{*}{3.4.3} & 
+\multirow{2}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
+mpich-ofi-intel-ohpc &
+& \\ 
+\hline
+% <-- end entry for mpich-ofi
+
+% <-- begin entry for mpich-ucx
+\multirow{2}{*}{mpich-ucx-gnu12-ohpc} &
+\multirow{2}{*}{3.4.3} & 
+MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}} \\ 
+\hline
+% <-- end entry for mpich-ucx
+
+% <-- begin entry for mvapich2-psm2
+\multirow{2}{*}{mvapich2-psm2-gnu9-ohpc} &
+\multirow{2}{*}{2.3.4} & 
+OSU MVAPICH2 MPI implementation. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu}} \\ 
+\hline
+% <-- end entry for mvapich2-psm2
+
+% <-- begin entry for mvapich2
+mvapich2-gnu9-ohpc &
+\multirow{1}{*}{2.3.6} & 
+\multirow{5}{\linewidth}{OSU MVAPICH2 MPI implementation. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu}}} \\ 
+\cline{1-2} mvapich2-gnu12-ohpc &\multirow{4}{*}{2.3.7}
+& \\ 
+mvapich2-intel-ohpc &
+& \\ 
+mvapich2-psm2-gnu12-ohpc &
+& \\ 
+mvapich2-psm2-intel-ohpc &
+& \\ 
+\hline
+% <-- end entry for mvapich2
+
+% <-- begin entry for openmpi4
+openmpi4-gnu9-ohpc &
+\multirow{1}{*}{4.1.1} & 
+\multirow{3}{\linewidth}{A powerful implementation of MPI/SHMEM. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
+\cline{1-2} openmpi4-gnu12-ohpc &\multirow{2}{*}{4.1.4}
+& \\ 
+openmpi4-intel-ohpc &
+& \\ 
+\hline
+% <-- end entry for openmpi4
+
+% <-- begin entry for ucx-ohpc
+\multirow{2}{*}{ucx-ohpc} & 
+\multirow{2}{*}{1.11.2} & 
+UCX is a communication library implementing high-performance messaging.  { \color{logoblue} \url{http://www.openucx.org}} 
+\\ \hline 
+% <-- end entry for ucx-ohpc
+
+\bottomrule
+\end{tabularx}
