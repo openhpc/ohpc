@@ -19,7 +19,8 @@ dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","mp
 	         "scipy","spack","valgrind"]
 distro-packages = ["python-Cython","flex"]
 fs            = ["lustre-client"]
-io-libs       = ["adios","hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib"]
+io-libs       = ["adios","hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib",
+                 "adios2"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","openpbs","pmix","munge","magpie"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
@@ -44,14 +45,14 @@ standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easyb
               "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython",
               "hpc-workspace","intel-compilers-devel","impi-devel","mrsh","losf","paraver","papi","charliecloud",
               "pmix","pdsh","flex","warewulf-common","warewulf-vnfs","warewulf-cluster","warewulf-ipmi",
-              "warewulf-provision","examples","meta-packages"]
+              "warewulf-provision","examples","meta-packages","valgrind"]
 compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "pdtoolkit","gsl","metis","superlu","scotch",
                       "numpy","plasma","hdf5"]
 mpi_dependent = ["ptscotch","boost","sionlib","pnetcdf","phdf5","netcdf","omb",
                  "tau","extrae","imb","fftw","scalapack","opencoarrays",
                  "ptscotch","hypre","mpi4py","dimemas","scorep","scalasca",
-                 "!scipy","!adios","netcdf-fortran","netcdf-cxx","trilinos",
+                 "!scipy","adios2","netcdf-fortran","netcdf-cxx","trilinos",
                  "petsc","slepc","superlu_dist","mumps","mfem","lmod-defaults"]
 openblas_compiler=["gnu12"]
 R_compiler=["gnu12"]
