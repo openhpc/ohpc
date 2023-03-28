@@ -64,6 +64,7 @@ Docu can be found on http://www.netlib.org.
 %ohpc_setup_compiler
 %if "%{compiler_family}" == "arm1"
 export DEFAULT_OPTS="${DEFAULT_OPTS} -Wno-implicit-int -fsimdmath"
+export DEFAULT_OPTS="${DEFAULT_OPTS} -Wno-implicit-function-declaration"
 %endif
 
 make lib
