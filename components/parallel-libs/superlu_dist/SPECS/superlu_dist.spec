@@ -100,6 +100,8 @@ module load openblas
 
 %if "%{compiler_family}" == "arm1"
 %define blas_lib -armpl
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-implicit-int"
 %endif
 
 %if "%{compiler_family}" == "intel"
