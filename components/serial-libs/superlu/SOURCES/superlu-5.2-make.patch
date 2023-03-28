@@ -29,10 +29,10 @@ diff -ruN SuperLU_5.2.1.old/make.inc SuperLU_5.2.1/make.inc
 -NOOPTS       = -O0
 -FORTRAN	     = /usr/bin/gfortran
 +#CC           = gcc
-+CFLAGS       = $(RPM_OPT_FLAGS) -fPIC -DPIC
-+NOOPTS       = $(RPM_OPT_FLAGS) -Os -fPIC -DPIC
++CFLAGS       = $(DEFAULT_OPTS) -fPIC -DPIC
++NOOPTS       = $(DEFAULT_OPTS) -Os -fPIC -DPIC
 +#FORTRAN	     = gfortran #g77
-+FFLAGS       = $(RPM_OPT_FLAGS) -fPIC
++FFLAGS       = $(DEFAULT_OPTS) -fPIC
  
  LOADER       = $(CC)
  LOADOPTS     =
