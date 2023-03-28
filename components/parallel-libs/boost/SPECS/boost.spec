@@ -44,6 +44,7 @@ BuildRequires:  libquadmath-devel
 %endif
 
 BuildRequires:  make
+BuildRequires:  which
 BuildRequires:  fdupes
 BuildRequires:  dos2unix
 BuildRequires:  gmp-devel

@@ -45,7 +45,7 @@ standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easyb
               "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython",
               "hpc-workspace","intel-compilers-devel","impi-devel","mrsh","losf","paraver","papi","charliecloud",
               "pmix","pdsh","flex","warewulf-common","warewulf-vnfs","warewulf-cluster","warewulf-ipmi",
-              "warewulf-provision","examples","meta-packages","valgrind","warewulf"]
+              "warewulf-provision","examples","meta-packages","valgrind","warewulf","arm-compilers-devel"]
 compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "pdtoolkit","gsl","metis","superlu","scotch",
                       "numpy","plasma","hdf5"]
