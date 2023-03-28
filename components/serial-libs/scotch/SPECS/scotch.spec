@@ -46,11 +46,11 @@ sparse matrix ordering.
 %prep
 %setup -q -n %{pname}_%{version}
 %patch0 -p1
-sed s:@RPMFLAGS@:'%{optflags} -fPIC': < %{SOURCE1} > src/Makefile.inc
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+sed s:@RPMFLAGS@:'${DEFAULT_FLAGS} -fPIC': < %{SOURCE1} > src/Makefile.inc
 
 pushd src
 make %{?_smp_mflags}
