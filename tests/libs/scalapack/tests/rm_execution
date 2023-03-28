@@ -17,6 +17,11 @@ NODES=2
 TASKS=`tasks_count 8`
 ARGS=0
 
+if [ ! -z "$SIMPLE_CI" ]; then
+    export OMPI_MCA_btl="self,tcp"
+    TASKS=4
+fi
+
 @test "[$testname/PCSCAEX] CPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pcscaex ];then
 	flunk "pcscaex binary does not exist"
@@ -52,4 +57,3 @@ ARGS=0
     run_mpi_binary ./pzscaex $ARGS $NODES $TASKS
     assert_success
 }
-

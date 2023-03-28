@@ -76,6 +76,9 @@ cp SLmake.inc.example SLmake.inc
 %{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
 %{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
 %{__cat} SLmake.inc
+export CFLAGS="${CFLAGS} -fsimdmath"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-implicit-int"
 %else
 module load openblas
 %endif
