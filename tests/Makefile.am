@@ -136,10 +136,6 @@ if VALGRIND_ENABLED
    TESTS += dev-tools/valgrind/ohpc-tests/test_compiler_families
 endif
 
-if ADIOS_ENABLED
-   TESTS += libs/adios/ohpc-tests/test_mpi_families
-endif
-
 if ADIOS2_ENABLED
    TESTS += libs/adios2/ohpc-tests/test_mpi_families
 endif

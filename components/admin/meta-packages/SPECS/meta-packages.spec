@@ -122,8 +122,8 @@ Global Extensible Open Power Manager for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-io-libs
 Summary:   OpenHPC IO libraries for GNU
-Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  adios2-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  adios2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -136,7 +136,7 @@ Requires:  pnetcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
-Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  adios2-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-fortran-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-%{compiler_family}-mvapich2%{PROJ_DELIM}
@@ -148,7 +148,7 @@ Collection of IO library builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mpich-io-libs
 Summary:   OpenHPC IO libraries for GNU and MPICH
-Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  adios2-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  netcdf-fortran-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  netcdf-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -160,7 +160,7 @@ Collection of IO library builds for use with GNU compiler toolchain and the MPIC
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mvapich2-io-libs
 Summary:   OpenHPC IO libraries for GNU and MVAPICH2
-Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  adios2-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-fortran-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-%{compiler_family}-mvapich2%{PROJ_DELIM}
@@ -172,7 +172,7 @@ Collection of IO library builds for use with GNU compiler toolchain and the MVAP
 
 %package -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-io-libs
 Summary:   OpenHPC IO libraries for GNU and OpenMPI
-Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  adios2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  netcdf-fortran-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -431,11 +431,11 @@ Global Extensible Open Power Manager for use with Intel(R) oneAPI Toolkit
 
 %package -n %{PROJ_NAME}-intel-io-libs
 Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit
-Requires:  adios-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  adios-intel-impi%{PROJ_DELIM}
-Requires:  adios-intel-mpich%{PROJ_DELIM}
-Requires:  adios-intel-mvapich2%{PROJ_DELIM}
-Requires:  adios-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  adios2-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  adios2-intel-impi%{PROJ_DELIM}
+Requires:  adios2-intel-mpich%{PROJ_DELIM}
+Requires:  adios2-intel-mvapich2%{PROJ_DELIM}
+Requires:  adios2-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-impi%{PROJ_DELIM}
@@ -467,7 +467,7 @@ Collection of IO library builds for use with Intel(R) oneAPI Toolkit
 
 %package -n %{PROJ_NAME}-intel-impi-io-libs
 Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and Intel(R) MPI runtime
-Requires:  adios-intel-impi%{PROJ_DELIM}
+Requires:  adios2-intel-impi%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-impi%{PROJ_DELIM}
 Requires:  netcdf-fortran-intel-impi%{PROJ_DELIM}
@@ -479,7 +479,7 @@ Collection of IO library builds for use with Intel(R) oneAPI Toolkit and Intel(R
 
 %package -n %{PROJ_NAME}-intel-mpich-io-libs
 Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and MPICH
-Requires:  adios-intel-mpich%{PROJ_DELIM}
+Requires:  adios2-intel-mpich%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-mpich%{PROJ_DELIM}
 Requires:  netcdf-fortran-intel-mpich%{PROJ_DELIM}
@@ -491,7 +491,7 @@ Collection of IO library builds for use with Intel(R) oneAPI Toolkit and MPICH r
 
 %package -n %{PROJ_NAME}-intel-mvapich2-io-libs
 Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and MVAPICH2
-Requires:  adios-intel-mvapich2%{PROJ_DELIM}
+Requires:  adios2-intel-mvapich2%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-fortran-intel-mvapich2%{PROJ_DELIM}
@@ -503,7 +503,7 @@ Collection of IO library builds for use with Intel(R) oneAPI Toolkit and MVAPICH
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-io-libs
 Summary:   OpenHPC IO libraries for Intel(R) oneAPI Toolkit and OpenMPI
-Requires:  adios-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  adios2-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  netcdf-fortran-intel-%{mpi_family}%{PROJ_DELIM}
@@ -735,8 +735,8 @@ Collection of serial library builds for use with the Arm Compiler for Linux tool
 
 %package -n %{PROJ_NAME}-arm1-io-libs
 Summary:   OpenHPC IO libraries for use with Arm Compiler for Linux
-Requires:  adios-arm1-mpich%{PROJ_DELIM}
-Requires:  adios-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  adios2-arm1-mpich%{PROJ_DELIM}
+Requires:  adios2-arm1-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-arm1%{PROJ_DELIM}
 Requires:  netcdf-cxx-arm1-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-arm1-%{mpi_family}%{PROJ_DELIM}
