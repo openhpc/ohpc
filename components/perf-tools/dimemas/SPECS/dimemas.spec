@@ -69,6 +69,13 @@ module load boost
 module load flex
 export LDFLAGS="-L$FLEX_LIB"
 %endif
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -Wno-implicit-int -fsimdmath"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CXXFLAGS="${CXXFLAGS} -Wno-implicit-int -fsimdmath"
+export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
+export CXXFLAGS="${CXXFLAGS} -Wno-register"
+%endif
 
 ./configure --prefix=%{install_path} \
             --with-boost=$BOOST_DIR || cat config.log
