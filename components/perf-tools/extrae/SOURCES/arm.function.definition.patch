@@ -9,3 +9,16 @@
  /*
   * Checks if there is a CPU event waiting to be emitted.
   * Returns 1 if the thread never emitted a CPU event or if the user specified
+
+--- src/merger/common/bfd_manager.c.orig	2023-03-29 10:38:08.675068852 -0400
++++ src/merger/common/bfd_manager.c	2023-03-29 10:38:19.815072092 -0400
+@@ -231,7 +231,7 @@
+  *
+  * @return No return value.
+  */
+-static void BFDmanager_findAddressInSection (bfd * abfd, asection * section, PTR data)
++static void BFDmanager_findAddressInSection (bfd * abfd, asection * section, void * data)
+ {
+ #if HAVE_BFD_GET_SECTION_SIZE || HAVE_BFD_SECTION_SIZE || HAVE_BFD_GET_SECTION_SIZE_BEFORE_RELOC
+ 	bfd_size_type size;
+
