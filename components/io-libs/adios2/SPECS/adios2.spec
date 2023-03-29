@@ -73,6 +73,14 @@ module load openblas
 module load %{python_module_prefix}numpy
 module load %{python_module_prefix}mpi4py
 
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -Wno-implicit-int -fsimdmath"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
+export CXXFLAGS="${CXXFLAGS} -Wno-implicit-int -fsimdmath"
+export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
+%endif
+
 export CC=mpicc
 export CXX=mpicxx
 export F77=mpif77
