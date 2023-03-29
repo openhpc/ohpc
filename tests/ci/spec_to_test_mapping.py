@@ -131,7 +131,7 @@ test_map = {
     'components/perf-tools/extrae/SPECS/extrae.spec': [
         'extrae',
         '',
-        ''
+        'lmod-defaults-gnu12-openmpi4-ohpc'
     ],
     'components/perf-tools/geopm/SPECS/geopm.spec': [
         'geopm',

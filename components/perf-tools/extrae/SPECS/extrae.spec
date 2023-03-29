@@ -49,9 +49,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%if "%{compiler_family}" == "arm1"
-%patch0 -p0
-%endif
+%patch -P0 -p0
 
 %build
 # OpenHPC compiler/mpi designation
@@ -75,11 +73,13 @@ export LDFLAGS="$LDFLAGS -lz"
     --with-mpi-libs=$MPI_DIR/lib/release \
 %endif
 %if "%{compiler_family}" == "arm1"
-    CFLAGS="-O3 -fsimdmath -fPIC" CXXFLAGS="-O3 -fsimdmath -fPIC" FCFLAGS="-O3 -fsimdmath -fPIC" \
+    CFLAGS="${CFLAGS} -fsimdmath -fPIC -Wno-implicit-function-declaration" \
+    CXXFLAGS="${CXXFLAGS} -fsimdmath -fPIC" \
+    FCFLAGS="${FCFLAGS} -fsimdmath -fPIC" \
 %endif
     || { cat config.log && exit 1; }
 
-make %{?_smp_mflags}
+make %{?_smp_mflags} V=1
 
 %install
 export NO_BRP_CHECK_RPATH=true
