@@ -39,11 +39,6 @@ test_map = {
         '',
         'gcc-c++',
     ],
-    'components/io-libs/adios/SPECS/adios.spec': [
-        'adios',
-        '',
-        ''
-    ],
     'components/io-libs/adios2/SPECS/adios2.spec': [
         'adios2',
         '',

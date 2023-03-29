@@ -47,7 +47,7 @@ distro-packages/python-setuptools/SOURCES/setuptools-*.tar.gz
 distro-packages/sigar/SOURCES/sigar-*.tar.gz
 fs/shine/SOURCES/v*.tar.gz
 fs/lustre-client/SOURCES/lustre-*.tar.gz
-io-libs/adios/SOURCES/adios-*.tar.gz
+io-libs/adios2/SOURCES/adios2-*.tar.gz
 io-libs/hdf5/SOURCES/hdf5-*.tar.bz2
 io-libs/netcdf-cxx/SOURCES/v*.tar.gz
 io-libs/netcdf-fortran/SOURCES/v*.tar.gz
