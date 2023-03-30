@@ -52,7 +52,7 @@ SRPM=$(build_srpm "${SPEC}" "${MPI_FAMILY}")
 RESULT=$?
 if [ "${RESULT}" == "1" ]; then
 	echo "Building the SRPM for ${BASE} failed."
-	echo "Trying to fetch Source0"
+	echo "Trying to fetch Sources"
 	"${ROOT}"/misc/get_source.sh "${BASE}"
 fi
 
