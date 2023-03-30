@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/python3
 #usage: validate_minidft.py filename
 
 import sys
@@ -34,7 +34,7 @@ for L in f:
     if( "atomic species   valence    mass     pseudopotential" in L ):
         measured['sp'] = []
         for i in range( measured['nsp'] ):
-            L = f.next()
+            L = next(f)
             measured['sp'].append( L )
         #end for i
         continue
@@ -101,22 +101,22 @@ for refid in reference:
 #end for refid
 
 if( ref_eq_meas ):
-    print "Identified benchmark:", refdat['input']
+    print("Identified benchmark:", refdat['input'])
 else:
-    print "Error: could not find corresponding benchmark"
+    print("Error: could not find corresponding benchmark")
     exit()
 
 #check accuracy ( computed, expected, difference, tolerance, pass/fail )
 dEtot = abs( refdat['Etot'] - measured['Etot'] )
 dEtol = 1.0e-6
-print "Reference Energy: %15.8f Ry" % refdat['Etot']
-print "Computed  Energy: %15.8f Ry" % measured['Etot']
-print "         Abs Err: %15.8f Ry" % dEtot
-print "       Tolerance: %15.8f Ry" % dEtol
+print("Reference Energy: %15.8f Ry" % refdat['Etot'])
+print("Computed  Energy: %15.8f Ry" % measured['Etot'])
+print("         Abs Err: %15.8f Ry" % dEtot)
+print("       Tolerance: %15.8f Ry" % dEtol)
 if( dEtot < dEtol ):
-    print "PASS"
+    print("PASS")
 else:
-    print "FAIL"
+    print("FAIL")
 
 #print time
 #QE does not print Benchmark_Time

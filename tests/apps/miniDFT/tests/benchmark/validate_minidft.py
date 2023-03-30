@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/python3
 #usage: validate_minidft.py filename
 
 import sys
@@ -6,22 +6,22 @@ import sys
 #parse options (just filenames)
 print_usage = False
 if( len(sys.argv) < 2 ): 
-    print "Please provide the name of the file you want to validate."
+    print("Please provide the name of the file you want to validate.")
     print_usage=True
 else:
     for a in sys.argv[1:]:
         if( a=="-h" or a=="--help" ): print_usage=True
 if( print_usage==True ):
-  print "Usage: validate_minidft.py <options> filename"
-  print "Options:"
-  print "  -h, --help:     Show this help message"
+  print("Usage: validate_minidft.py <options> filename")
+  print("Options:")
+  print("  -h, --help:     Show this help message")
   exit(0)
 
 try:
     fname = sys.argv[1]
     f = open( fname, 'r' )
 except:
-    print "The requested file (", fname, ") cannot be opened."
+    print("The requested file (", fname, ") cannot be opened.")
     exit(0)
 
 #determine which benchmark is being tested
@@ -51,7 +51,7 @@ for L in f:
     if( "atomic species   valence    mass     pseudopotential" in L ):
         measured['sp'] = []
         for i in range( measured['nsp'] ):
-            L = f.next()
+            L = next(f)
             measured['sp'].append( L )
         #end for i
         continue
@@ -118,25 +118,25 @@ for refid in reference:
 #end for refid
 
 if( ref_eq_meas ):
-    print "Identified benchmark:", refdat['input']
+    print("Identified benchmark:", refdat['input'])
 else:
-    print "Error: could not find corresponding benchmark"
+    print("Error: could not find corresponding benchmark")
     exit()
 
 #check accuracy ( computed, expected, difference, tolerance, pass/fail )
 dEtot = abs( refdat['Etot'] - measured['Etot'] )
 dEtol = 1.0e-6
-print "Reference Energy: %15.8f Ry" % refdat['Etot']
-print "Computed  Energy: %15.8f Ry" % measured['Etot']
-print "         Abs Err: %15.8f Ry" % dEtot
-print "       Tolerance: %15.8f Ry" % dEtol
+print("Reference Energy: %15.8f Ry" % refdat['Etot'])
+print("Computed  Energy: %15.8f Ry" % measured['Etot'])
+print("         Abs Err: %15.8f Ry" % dEtot)
+print("       Tolerance: %15.8f Ry" % dEtol)
 if( dEtot < dEtol ):
-    print "PASS"
+    print("PASS")
 else:
-    print "FAIL"
+    print("FAIL")
 
 #print time
-print "Benchmark_Time:", measured['Ntime'], "seconds"
+print("Benchmark_Time:", measured['Ntime'], "seconds")
 
 
 

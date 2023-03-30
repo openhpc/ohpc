@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os
 import string
@@ -37,17 +37,17 @@ def run_tests(range, compiler_command):
    for num in range:
       size = run_test(num, compiler_command)
       if last_size:
-         print "%2d calls: %5d bytes (+ %d)" % (num, size, size-last_size)
+         print("%2d calls: %5d bytes (+ %d)" % (num, size, size-last_size))
       else:
-         print "%2d calls: %5d bytes" % (num, size)
+         print("%2d calls: %5d bytes" % (num, size))
          first_size = size
       last_size = size
-   print "Avarage: ", (last_size-first_size)/(range[-1]-range[0])
+   print("Avarage: ", (last_size-first_size)/(range[-1]-range[0]))
 
 if __name__ == '__main__':
    for compiler in [ "g++ -Os", "g++ -O3"]:
-      print "****", compiler, "****"
-      run_tests(range(1, 20), compiler)
+      print("****", compiler, "****")
+      run_tests(list(range(1, 20)), compiler)
 
 
  
