@@ -64,6 +64,11 @@ CONFIGURE_OPTIONS="--with-nocross-compiler-suite=intel "
 export __INTEL_PRE_CFLAGS="-diag-disable=10441"
 %endif
 
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath"
+export CXXFLAGS="${CXXFLAGS} -fsimdmath"
+%endif
+
 %if "%{mpi_family}" == "impi"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=intel3 "
 %endif
@@ -84,9 +89,13 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
+./configure --prefix=%{install_path} $CONFIGURE_OPTIONS \
+	CFLAGS="${CFLAGS}" \
+	CXXFLAGS="${CXXFLAGS}" \
+	CC=${CC} \
+	CXX=${CXX}
 
-make %{?_smp_mflags}
+make %{?_smp_mflags} V=1
 
 %install
 
