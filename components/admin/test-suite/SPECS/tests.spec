@@ -8,73 +8,74 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%global __brp_mangle_shebangs_exclude bats
+%undefine __brp_mangle_shebangs
+
 %include %{_sourcedir}/OHPC_macros
+
+%global testuser ohpc-test
+%global homedir %(sed -n "s/^\s*HOME=\s*//p" /etc/default/useradd || echo "/home" )
 
 Summary:   Integration test suite for OpenHPC
 Name:      test-suite%{PROJ_DELIM}
-Version:   2.6.0
+Version:   2.7.0
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc/tests
 Source0:   tests-ohpc.tar
+# In the OHPC source root dir, create with "tar -cf tests-ohpc.tar tests/"
 
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
+BuildRequires:  sed, findutils
 
-%global __brp_mangle_shebangs_exclude bats
-%undefine __brp_mangle_shebangs
-
-%if 0%{?suse_version}
+%if 0%{?suse_version} || 0%{?sle_version}
 Requires(pre):  shadow
-Requires: python-base
+Requires: python3-base
 %endif
 
-%if 0%{?rhel_version}
+%if 0%{?rhel}
 Requires(pre):  shadow-utils
-Requires: python2
+Requires: python3
 %endif
-
-%define testuser ohpc-test
 
 %description
-
 This package provides a suite of integration tests used by the OpenHPC project
 during continuous integration. Most components can be tested individually, but
 a default configuration is setup to enable collective testing. The test suite
 is made available under an '%{testuser}' user account.
 
+
 %prep
 %setup -n tests-ohpc
+find . -name .gitignore  -exec rm {} \;
+
 
 %build
-
 export PATH=/opt/ohpc/pub/utils/autotools/bin:$PATH
 cd tests
 ./bootstrap
 
 
 %install
+mkdir -p %{buildroot}%{homedir}/%{testuser}
+cp -a tests %{buildroot}%{homedir}/%{testuser}/
 
-cd tests
-%{__mkdir_p} %{buildroot}/home/%{testuser}/tests
-cp -a * %{buildroot}/home/%{testuser}/tests
-find %{buildroot}/home/%{testuser}/tests -name .gitignore  -exec rm {} \;
 
 %pre
 getent passwd %{testuser} >/dev/null || \
     /usr/sbin/useradd -U -c "OpenHPC integration test account" \
-    -s /bin/bash -m -b /home %{testuser}
-%if 0%{?suse_version}
+    -s /bin/bash -m -b %{homedir} %{testuser}
 if [ $(getent group singularity) ]; then
-    usermod -a -G singularity ohpc-test
+    usermod -a -G singularity %{testuser}
 fi
-%endif
-exit 0
+if [ $(getent group geopm) ]; then
+    usermod -a -G geopm %{testuser}
+fi
+
 
 %files
 %defattr(-,%{testuser},%{testuser},-)
-%dir /home/%{testuser}
-/home/%{testuser}/tests
-
+%{homedir}/%{testuser}/tests
