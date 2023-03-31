@@ -223,6 +223,11 @@ test_map = {
         '',
         'netcdf-fortran-gnu12-openmpi4-ohpc netcdf-fortran-gnu12-mpich-ohpc'
     ],
+    'components/perf-tools/imb/SPECS/imb.spec': [
+        'imb',
+        '',
+        ''
+    ],
 }
 
 skip_ci_specs = []
