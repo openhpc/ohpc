@@ -18,7 +18,7 @@ check_rms
 rm=$RESOURCE_MANAGER
 
 NODES=2
-TASKS=$((NODES*TEST_NUM_RANKS))
+TASKS=$(tasks_count $((NODES*TEST_NUM_RANKS)))
 
 # set global env settings
 export OMP_NUM_THREADS=$TEST_NUM_THREADS
