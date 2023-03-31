@@ -55,6 +55,14 @@ export CXX=mpicxx
 export CFLAGS="$CFLAGS -I$MPI_DIR/include"
 export CPPFLAGS="$CPPFLAGS -I$MPI_DIR/include"
 export CXXFLAGS="$CXXFLAGS -I$MPI_DIR/include"
+
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath"
+export CFLAGS="${CFLAGS} -Wno-register"
+export CXXFLAGS="${CXXFLAGS} -fsimdmath"
+export CXXFLAGS="${CXXFLAGS} -Wno-register"
+%endif
+
 make all
 
 
