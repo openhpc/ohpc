@@ -87,8 +87,8 @@ LIBOTHERS = -lpthread
 CDEFS   = -DAdd_
 
 #Begin Optimized options
-OPTF    = -O  -DALLOW_NON_INIT -nofor_main -diag-warning 5286
-OPTL    = -O -nofor_main
+OPTF    = -O  -DALLOW_NON_INIT -nofor-main -diag-warning 5286
+OPTL    = -O -nofor-main
 OPTC    = -O
 #End Optimized options
 INCS = $(INCPAR)
