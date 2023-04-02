@@ -87,6 +87,13 @@ module load phdf5
 module load openblas
 %endif
 
++%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CXXFLAGS="${CXXFLAGS} -fsimdmath"
+export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
+%endif
+
 mkdir build
 cd build
 cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
