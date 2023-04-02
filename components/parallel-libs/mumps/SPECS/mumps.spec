@@ -150,11 +150,14 @@ cp -f %{S:1} Makefile.inc
 %if "%{compiler_family}" == "gnu12"
 export FCFLAGS="$FCFLAGS -fallow-argument-mismatch"
 %endif
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="$CFLAGS -fsimdmath"
+%endif
 
 make MUMPS_MPI=%{MUMPS_MPI} \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
-     OPTC="$RPM_OPT_FLAGS" OPTF="$FCFLAGS" all
+     OPTC="$CFLAGS" OPTF="$FCFLAGS" all
 
 
 %install
