@@ -43,6 +43,7 @@ distro-packages/confuse/SOURCES/confuse-*.tar.gz
 distro-packages/flex/SOURCES/flex-*.tar.gz
 distro-packages/ipmiutil/SOURCES/ipmiutil-*.tar.gz
 distro-packages/python-Cython/SOURCES/Cython-*.tar.gz
+distro-packages/python-dasbus/SOURCES/dasbus-*.tar.gz
 distro-packages/python-setuptools/SOURCES/setuptools-*.tar.gz
 distro-packages/sigar/SOURCES/sigar-*.tar.gz
 fs/shine/SOURCES/v*.tar.gz
