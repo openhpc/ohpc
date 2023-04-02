@@ -87,7 +87,7 @@ module load phdf5
 module load openblas
 %endif
 
-+%if "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "arm1"
 export CFLAGS="${CFLAGS} -fsimdmath"
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
