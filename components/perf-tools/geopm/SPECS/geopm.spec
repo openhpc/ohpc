@@ -9,140 +9,238 @@
 #----------------------------------------------------------------------------eh-
 
 # Build that is is dependent on compiler toolchain and MPI
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
-%define pname geopm
-
-# Install paths
-%define docdir %{OHPC_PUB}/doc/contrib/%{pname}-%{compiler_family}-%{mpi_family}-%{version}
-%define install_path  %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%global pname geopm
+%define svcpkg %{pname}-service%{PROJ_DELIM}
 
 Name:          %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:       Global Extensible Open Power Manager
-Version:       1.1.0
+Version:       2.0.1
 Release:       1
 License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/perf-tools
 URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
-# Based on https://patch-diff.githubusercontent.com/raw/geopm/geopm/pull/1141.patch
-Patch0:        gnu12.patch
+Source1:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-service-%{version}.tar.gz
+
+# Install paths
+%global install_path  %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%global module_path  %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+
+Requires:      %{svcpkg} = %{version}
+
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: make
+BuildRequires: gcc-c++
+BuildRequires: systemd-devel >= 239-29
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
-BuildRequires: make
-BuildRequires: python3
-BuildRequires: python3-devel
 BuildRequires: unzip
-BuildRequires: zlib-devel
-BuildRequires: openssh
+BuildRequires: sqlite-devel
 
-%if 0%{?suse_version}
-Buildrequires: libelf1
+%if 0%{?suse_version} || 0%{?sle_version}
+Buildrequires: libelf-devel
+BuildRequires: fdupes
+BuildRequires: systemd-rpm-macros
+%if 0%{?suse_version} >= 1320 || 0%{?sle_version} >= 132000
+BuildRequires: openssh
+%endif
 %else
-BuildRequires: elfutils-libelf
+BuildRequires: elfutils-libelf-devel
 %endif
 
 %description
-Global Extensible Open Power Manager (GEOPM) is an extensible power
-management framework targeting high performance computing.  The library can be
-extended to support new control algorithms and new hardware power management
-features.  The GEOPM package provides built in features ranging from static
-management of power policy for each individual compute node, to dynamic
-coordination of power policy and performance across all of the compute nodes
-hosting one MPI job on a portion of a distributed computing system.  The
-dynamic coordination is implemented as a hierarchical control system for
-scalable communication and decentralized control.  The hierarchical control
-system can optimize for various objective functions including maximizing
-global application performance within a power bound.  The root of the control
-hierarchy tree can communicate through shared memory with the system resource
-management daemon to extend the hierarchy above the individual MPI job level
-and enable management of system power resources for multiple MPI jobs and
-multiple users by the system resource manager.  The GEOPM package provides the
-libgeopm library, the libgeopmpolicy library, the geopmctl application and the
-geopmpolicy application.  The libgeopm library can be called within MPI
-applications to enable application feedback for informing the control
-decisions.  If modification of the target application is not desired then the
-geopmctl application can be run concurrently with the target application.  In
-this case, target application feedback is inferred by querying the hardware
-through Model Specific Registers (MSRs).  With either method (libgeopm or
-geopmctl), the control hierarchy tree writes processor power policy through
-MSRs to enact policy decisions.  The libgeopmpolicy library is used by a
-resource manager to set energy policy control parameters for MPI jobs.  Some
-features of libgeopmpolicy are available through the geopmpolicy application
-including support for static control.
+The Global Extensible Open Power Manager (GEOPM) is a framework for
+exploring power and energy optimizations on heterogeneous platforms.
+
 
 %prep
+%setup -q -n %{pname}-%{version} -a 1
+ln -s geopm-service-%{version} service
 
-%setup -q -n %{pname}-%{version}
-%patch0 -p1
 
 %build
-%ohpc_setup_compiler
-export CFLAGS="$CFLAGS -Wno-error=stringop-truncation"
+# Build the GEOPM Service
+pushd service
 ./autogen.sh
 
-%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu12"
-# The combination of impi and GCC 12 does not work as
-# expected and needs these additional fixes.
-sed -e 's,\sFFLAGS=$MPI_F77FLAGS,FFLAGS="-I$MPI_DIR/include $MPI_F77FLAGS",g' -i configure
-sed -e 's,\sFCFLAGS=$MPI_FFLAGS,FCFLAGS="-I$MPI_DIR/include/gfortran -I$MPI_DIR/include $MPI_FFLAGS",g' -i configure
-%endif
-
-./configure --prefix=%{install_path} \
-            --with-python=python3 \
-            --disable-ompt \
-            --disable-doc \
+CFLAGS= CXXFLAGS= CC=gcc CXX=g++ \
+./configure --prefix="/usr" \
+            --libdir=%{_libdir} \
+            --libexecdir=%{_libexecdir} \
+            --includedir=%{_includedir} \
+            --sbindir=%{_sbindir} \
+            --mandir=%{_mandir} \
+            --with-python=%{__python3} \
+            --bindir=%{_bindir} \
             || ( cat config.log && false )
-%{__make} %{?_smp_mflags}
+
+CFLAGS= CXXFLAGS= CC=gcc CXX=g++ \
+make %{?_smp_mflags}
+popd
+
+# Build the GEOPM Framework
+%ohpc_setup_compiler
+
+CFLAGS="$CFLAGS -Wno-error=stringop-truncation" \
+./autogen.sh
+
+test -f configure || ./autogen.sh
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --with-python=%{__python3} \
+            || ( cat config.log && false )
+
+make %{?_smp_mflags}
 
 
 %install
+# Install the GEOPM Service
+pushd service
+make DESTDIR=%{buildroot} install
+install -Dp -m644 geopm.service %{buildroot}%{_unitdir}/geopm.service
+install -Dp -m644 io.github.geopm.conf %{buildroot}%{_datadir}/dbus-1/system.d/io.github.geopm.conf
+install -Dp -m644 io.github.geopm.xml %{buildroot}%{_datadir}/dbus-1/interfaces/io.github.geopm.xml
+mkdir -p %{buildroot}%{_sysconfdir}/geopm-service
+mkdir -p %{buildroot}%{_sbindir}
+rm -f %{buildroot}%{_datadir}/doc/geopm-service/*
+ln -s /usr/sbin/service %{buildroot}%{_sbindir}/rcgeopm
+popd
+
+# Install the GEOPM Framework
 %ohpc_setup_compiler
-%{__make} DESTDIR=%{buildroot} install
-rm -f $(find %{buildroot}/%{install_path} -name '*.a'; \
-        find %{buildroot}/%{install_path} -name '*.la'; \
-        find %{buildroot}/%{install_path} -name 'geopm_launcher.1*')
 
-# Module file
+make DESTDIR=%{buildroot} install
+
+%if 0%{?suse_version} || 0%{?sle_version}
+%python_expand %fdupes %{buildroot}%{python3_sitelib}
+%endif
+
+find %{buildroot}/ \( -name '*.a' -o -name '*.la' \
+     -o -name 'geopm_launcher.1*' \) -print -exec rm -f {} \;
+rm -f %{buildroot}/%{_mandir}/man1/geopmbench.1
+rm -f %{buildroot}/%{_mandir}/man1/geopmctl.1
+rm -f %{buildroot}/%{_mandir}/man1/geopmlaunch.1
+rm -f %{buildroot}/%{_mandir}/man3/geopm_fortran.3
+rm -f %{buildroot}/%{_mandir}/man3/geopm_ctl.3
+rm -f %{buildroot}/%{_includedir}/geopm_ctl.h
+rm -f %{buildroot}/%{_bindir}/geopmlaunch
+
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
-#%Module1.0#####################################################################
+mkdir -p %{buildroot}/%{module_path}
+cat << EOF > %{buildroot}/%{module_path}/%{version}.lua
+local version="%{version}"
+help([[
+This module loads the %{pname} library built with the %{compiler_family}
+compiler toolchain and the %{mpi_family} MPI stack.
+Version ]] .. version .. [[
+]])
 
-proc ModulesHelp { } {
+whatis("Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI")
+whatis("Version: %{version}")
+whatis("Category: runtime")
+whatis("Description: %{summary}")
+whatis("URL: %{url}")
 
-puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain and the %{mpi_family} MPI stack."
-puts stderr "\nVersion %{version}\n"
+prepend_path("PATH",            "%{install_path}/bin")
+prepend_path("PYTHONPATH",      "%{install_path}/lib/python%{python3_version}/site-packages")
+prepend_path("INCLUDE",         "%{install_path}/include")
+prepend_path("LD_LIBRARY_PATH", "%{install_path}/lib")
+prepend_path("MANPATH",         "%{install_path}/share/man")
 
-}
-module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
-module-whatis "Version: %{version}"
-module-whatis "Category: runtime"
-module-whatis "Description: %{summary}"
-module-whatis "URL %{url}"
-
-set     version             %{version}
-
-prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib/python%{python3_version}/site-packages
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path    MANPATH             %{install_path}/share/man
-
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
+setenv("%{PNAME}_DIR", "%{install_path}")
+setenv("%{PNAME}_BIN", "%{install_path}/bin")
+setenv("%{PNAME}_LIB", "%{install_path}/lib")
+setenv("%{PNAME}_INC", "%{install_path}/include")
 
 EOF
 
+ln -s %{version} %{buildroot}/%{module_path}/default.lua
+
+
 %files
-%{OHPC_PUB}
-%doc README COPYING VERSION
+%{install_path}
+%{module_path}
+%doc README VERSION
+%license COPYING COPYING-TPP
+
+
+##########################################################################
+%package -n %{svcpkg}
+Summary:       Global Extensible Open Power Manager Service
+
+Requires:      systemd
+Requires:      python3
+Requires:      python3-psutil
+Requires:      python3-cffi
+Requires:      python3-jsonschema
+Requires:      python3-dasbus >= 1.5
+
+%Description -n %{svcpkg}
+Linux systemd service with DBus interface for user-level access to hardware
+features on heterogeneous systems.
+
+
+%if 0%{?suse_version} || 0%{?sle_version}
+%pre -n %{svcpkg}
+%service_add_pre geopm.service
+%endif
+
+
+%post -n %{svcpkg}
+/usr/bin/getent group geopm >/dev/null 2>&1 || groupadd -r geopm
+%if 0%{?rhel}
+%systemd_post geopm.service
+%else
+%service_add_post geopm.service
+%endif
+
+
+%preun -n %{svcpkg}
+%if 0%{?rhel}
+%systemd_preun geopm.service
+%else
+%service_del_preun geopm.service
+%endif
+
+
+%postun -n %{svcpkg}
+/sbin/ldconfig
+%if 0%{?rhel}
+%systemd_postun_with_restart geopm.service
+%else
+%service_del_postun geopm.service
+%endif
+
+
+%files -n %{svcpkg}
+%defattr(-,root,root,-)
+%{_sbindir}/rcgeopm
+%{_datadir}/dbus-1/system.d/io.github.geopm.conf
+%{_datadir}/dbus-1/interfaces/io.github.geopm.xml
+%{_unitdir}/geopm.service
+%{_bindir}/geopmread
+%{_bindir}/geopmwrite
+%{_bindir}/geopmd
+%{_bindir}/geopmaccess
+%{_bindir}/geopmsession
+%{_includedir}/geopm*
+%{_libdir}/libgeopmd.so
+%{python3_sitelib}/geopmdpy*
+%doc %{_mandir}/man3/geopm*
+%doc %{_mandir}/man1/geopm*
+%doc %{_mandir}/man7/geopm*
+%dir %{_libdir}/geopm
+%{_libdir}/libgeopmd.so.1.0.0
+%{_libdir}/libgeopmd.so.1
+%doc service/README.rst
+%doc service/VERSION
+%doc service/AUTHORS
+%license service/COPYING
+%license service/COPYING-TPP
