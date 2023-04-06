@@ -230,6 +230,9 @@ This package contains the CGI scripts and event components to
 provision systems.  Systems used solely for administration of Warewulf
 do not require this package.
 
+%pre server
+/usr/bin/getent group %{httpgrp} 1>/dev/null 2>&1 || \
+  /usr/sbin/groupadd -r %{httpgrp}
 
 %post server
 # Update users and services on first time installation
@@ -237,13 +240,13 @@ if [ $1 -eq 1 ] ; then
 usermod -a -G warewulf %{httpgrp} >/dev/null 2>&1 || :
 %{__mkdir_p} %{wwsrvdir}/warewulf/ipxe %{wwsrvdir}/warewulf/bootstrap 2>/dev/null || :
 %if 0%{?sle_version:1} || 0%{?rhel} >= 8
-%systemd_post %{httpdsvc}.service >/dev/null 2>&1 || :
-%systemd_post %{tftpsvc}.socket >/dev/null 2>&1 || :
+%systemd_post %{httpdsvc}.service
+%systemd_post %{tftpsvc}.socket
 %else
-/usr/bin/systemctl --system enable %{httpdsvc}.service &> /dev/null || :
-/usr/bin/systemctl --system restart %{httpdsvc}.service  &> /dev/null || :
-/usr/bin/systemctl --system enable %{tftpsvc}.socket &> /dev/null || :
-/usr/bin/systemctl --system restart %{tftpsvc}.socket  &> /dev/null || :
+/usr/bin/systemctl --system enable %{httpdsvc}.service >/dev/null 2>&1 || :
+/usr/bin/systemctl --system restart %{httpdsvc}.service >/dev/null 2>&1 || :
+/usr/bin/systemctl --system enable %{tftpsvc}.socket >/dev/null 2>&1 || :
+/usr/bin/systemctl --system restart %{tftpsvc}.socket >/dev/null 2>&1 || :
 %endif
 fi
 
@@ -261,11 +264,11 @@ semanage fcontext -d -t httpd_sys_content_t '%{wwsrvdir}/warewulf/bootstrap(/.*)
 /sbin/restorecon -R %{wwsrvdir}/warewulf || :
 fi
 %if 0%{?sle_version:1} || 0%{?rhel} >= 8
-%systemd_postun_with_restart %{httpdsvc}.service >/dev/null 2>&1 || :
-%systemd_postun_with_restart %{tftpsvc}.socket >/dev/null 2>&1 || :
+%systemd_postun_with_restart %{httpdsvc}.service
+%systemd_postun_with_restart %{tftpsvc}.socket
 %else
-/usr/bin/systemctl --system restart %{httpdsvc}.service  &> /dev/null || :
-/usr/bin/systemctl --system restart %{tftpsvc}.socket  &> /dev/null || :
+/usr/bin/systemctl --system restart %{httpdsvc}.service >/dev/null 2>&1 || :
+/usr/bin/systemctl --system restart %{tftpsvc}.socket >/dev/null 2>&1 || :
 %endif
 
 %files server
