@@ -12,7 +12,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if 0%{?rhel}
-%define disttag .el8
+%define disttag .el9
 %endif
 
 %if 0%{?suse_version}
@@ -21,7 +21,7 @@
 
 Summary:  OpenHPC release files
 Name:     ohpc-release
-Version:  2
+Version:  3
 Release:  1%{?disttag}
 License:  Apache-2.0
 Group:    %{PROJ_NAME}/admin
