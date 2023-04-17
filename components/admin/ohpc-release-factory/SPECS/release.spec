@@ -12,7 +12,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if 0%{?rhel}
-%define disttag .el8
+%define disttag .el9
 %endif
 
 %if 0%{?suse_version}
