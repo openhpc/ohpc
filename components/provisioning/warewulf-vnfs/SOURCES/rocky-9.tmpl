@@ -1,0 +1,34 @@
+
+#DESC: Rocky Linux 9
+
+# The general RHEL include has all of the necessary functions, but requires
+# some basic variables specific to each chroot type to be defined.
+
+# Use DNF as the package manager
+PKG_MGR=dnf
+EXTRA_ARGS="--releasever=9"
+PLATFORMID="platform:el9"
+
+# Uncomment to disable GPG checks on added repos
+# REPO_NOGPGCHECK=1
+
+. include-rhel
+
+# Define the location of the YUM repository
+if [ -z "$YUM_MIRROR" ]; then
+    if [ -z "$YUM_MIRROR_BASE" ]; then
+	YUM_MIRROR_BASE=https://download.rockylinux.org/pub/rocky/
+    fi
+    YUM_MIRROR="${YUM_MIRROR_BASE}/9/BaseOS/\$basearch/os","${YUM_MIRROR_BASE}/9/AppStream/\$basearch/os""
+fi
+
+# Install only what is necessary/specific for this distribution
+PKGLIST="basesystem bash chkconfig coreutils e2fsprogs ethtool
+    filesystem findutils gawk grep initscripts iproute iputils
+    net-tools nfs-utils pam psmisc rsync sed setup
+    shadow-utils rsyslog tzdata util-linux words
+    zlib tar less gzip which util-linux openssh-clients 
+    openssh-server dhclient pciutils vim-minimal shadow-utils
+    strace cronie crontabs cpio wget redhat-release hostname grub2-common glibc-langpack-en"
+
+# vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:
