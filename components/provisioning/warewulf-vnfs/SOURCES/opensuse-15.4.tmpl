@@ -1,0 +1,36 @@
+#DESC: OpenSUSE LEAP 15.4
+# The general SUSE include has all of the necessary functions, but requires
+# some basic variables specific to each chroot type to be defined.
+
+. include-suse
+
+# Uncomment and set to use a specific kernel version
+# KVERSION=latest
+
+# Uncomment to disable GPG checks on added repos
+# REPO_NOGPGHECK=1
+
+# Comma-seperated location(s) of the YUM repositories
+if [ "$(uname -m)" = "x86_64" ]; then
+    ZYPP_MIRROR="http://download.opensuse.org/distribution/leap/15.4/repo/oss/,\
+http://download.opensuse.org/update/leap/15.4/oss/"
+elif [ "$(uname -m)" = "aarch64" ]; then
+    ZYPP_MIRROR="http://download.opensuse.org/ports/aarch64/distribution/leap/15.4/repo/oss/,\
+    #http://download.opensuse.org/ports/aarch64/update/leap/15.4/oss/"
+else
+    echo "Unsupported Architecture"
+    exit 1
+fi
+
+# Install only what is necessary/specific for this distribution
+PKGLIST="systemd-sysvinit aaa_base bash dracut openSUSE-release coreutils \
+    e2fsprogs ethtool filesystem findutils gawk grep iproute2 iputils \
+    mingetty net-tools nfs-kernel-server pam rpcbind procps psmisc shadow \
+    rsync sed rsyslog tcpd timezone util-linux tar less gzip suse-module-tools \
+    udev openssh dhcp-client pciutils vim strace cron cpupower cpio wget \
+    zypper which"
+
+
+
+
+# vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:
