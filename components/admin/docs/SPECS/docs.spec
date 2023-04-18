@@ -31,11 +31,11 @@ BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
 BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
-BuildRequires:  texlive-epstopdf-pkg
 
 %if 0%{?suse_version}
 BuildRequires:  libstdc++6
 BuildRequires:  texlive-latexmk
+BuildRequires:  texlive-epstopdf-pkg
 %endif
 
 %if 0%{?rhel}
@@ -48,6 +48,7 @@ BuildRequires:  texlive-ec
 BuildRequires:  texlive-cm-super
 BuildRequires:  texlive-dvips
 BuildRequires:  texlive-mfware
+BuildRequires:  texlive-epstopdf-pkg
 BuildRequires:  tex
 BuildRequires:  latexmk
 %endif
@@ -167,7 +168,7 @@ install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHP
 
 # input file templates
 #install -m 0644 -p docs/recipes/install/centos8/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos8/input.local
-install -m 0644 -p docs/recipes/install/rocky9/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/rocky8/input.local
+install -m 0644 -p docs/recipes/install/rocky9/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/rocky9/input.local
 install -m 0644 -p docs/recipes/install/leap15/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/leap15/input.local
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
