@@ -28,6 +28,7 @@ Source2: rocky-8.tmpl
 Source3: opensuse-15.3.tmpl
 Source4: openeuler-22.03.tmpl
 Source5: include-openEuler
+Source6: rocky-9.tmpl
 Patch0:  warewulf-vnfs.aarch64.bootstrap.patch
 Patch1:  warewulf-vnfs.aarch64.bootstrap_usb.patch
 Patch2:  warewulf-vnfs.bootstrap_msr.patch
@@ -107,6 +108,7 @@ install -D -m 0644 %SOURCE2 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/rock
 install -D -m 0644 %SOURCE3 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/opensuse-15.3.tmpl
 install -D -m 0644 %SOURCE4 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/openeuler-22.03.tmpl
 install -D -m 0644 %SOURCE5 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/include-openEuler
+install -D -m 0644 %SOURCE6 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/rocky-9.tmpl
 
 %files
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
