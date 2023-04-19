@@ -39,21 +39,28 @@ BuildRequires:  texlive-latexmk
 BuildRequires:  texlive-epstopdf-pkg
 %endif
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  texlive-texconfig
 BuildRequires:  texlive-metafont
 BuildRequires:  texlive-cm
-BuildRequires:  texlive-pdftex-def
 BuildRequires:  texlive-helvetic
 BuildRequires:  texlive-ec
 BuildRequires:  texlive-cm-super
 BuildRequires:  texlive-dvips
 BuildRequires:  texlive-mfware
-BuildRequires:  texlive-epstopdf-pkg
-BuildRequires:  tex
 BuildRequires:  latexmk
 %endif
 
+%if 0%{?rhel}
+BuildRequires:  texlive-pdftex-def
+BuildRequires:  texlive-epstopdf-pkg
+BuildRequires:  tex
+%endif
+
+%if 0%{?openEuler}
+BuildRequires:  texlive-pdftex
+BuildRequires:  texlive-epstopdf
+%endif
 
 %description
 
