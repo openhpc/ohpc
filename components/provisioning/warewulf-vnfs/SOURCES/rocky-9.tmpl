@@ -19,7 +19,7 @@ if [ -z "$YUM_MIRROR" ]; then
     if [ -z "$YUM_MIRROR_BASE" ]; then
 	YUM_MIRROR_BASE=https://download.rockylinux.org/pub/rocky/
     fi
-    YUM_MIRROR="${YUM_MIRROR_BASE}/9/BaseOS/\$basearch/os","${YUM_MIRROR_BASE}/9/AppStream/\$basearch/os""
+    YUM_MIRROR="${YUM_MIRROR_BASE}/9/BaseOS/\$basearch/os","${YUM_MIRROR_BASE}/9/AppStream/\$basearch/os"
 fi
 
 # Install only what is necessary/specific for this distribution
