@@ -44,9 +44,10 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easybuild","prun","gnu-compilers","ucx",
               "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython",
               "hpc-workspace","intel-compilers-devel","impi-devel","mrsh","losf","paraver","papi","charliecloud",
-              "pmix","pdsh","flex","warewulf-common","warewulf-vnfs","warewulf-cluster","warewulf-ipmi",
+              "pmix","pdsh","flex","warewulf-common","warewulf-vnfs","warewulf-cluster","warewulf-ipmi","docs",
               "warewulf-provision","examples","meta-packages","valgrind","warewulf","arm-compilers-devel",
-              "nhc"]
+              "nhc","test-suite"]
+
 compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "pdtoolkit","gsl","metis","superlu","scotch",
                       "numpy","plasma","hdf5"]
