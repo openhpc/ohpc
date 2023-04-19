@@ -37,6 +37,8 @@ BuildRequires:  texlive-amsmath
 BuildRequires:  libstdc++6
 BuildRequires:  texlive-latexmk
 BuildRequires:  texlive-epstopdf-pkg
+BuildRequires:  texlive-listings
+BuildRequires:  texlive-geometry
 %endif
 
 %if 0%{?rhel}
