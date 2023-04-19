@@ -15,7 +15,7 @@
 
 Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   4.7.0
+Version:   4.7.1
 Release:   %{?dist}.1
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
@@ -25,7 +25,7 @@ Source0:   https://pypi.io/packages/source/e/easybuild/easybuild-%{version}.tar.
 Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
 Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
-BuildRequires: python3 python3-pip
+BuildRequires: python3-devel python3-pip
 BuildRequires: python3-setuptools
 Requires:  python3
 Requires:  patch
