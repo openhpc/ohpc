@@ -33,10 +33,10 @@ Provides: ohpc-release = %{version}
 
 %if 0%{?rhel}
 Requires: epel-release
-Requires: redhat-release >= 8.1
+Requires: redhat-release >= 9.1
 %endif
 %if 0%{?suse_version}
-Requires: (suse-release >= 15.1 or sles-release >= 15.1)
+Requires: (suse-release >= 15.4 or sles-release >= 15.4)
 %endif
 
 %description
