@@ -214,6 +214,7 @@ Requires: %{httpsvc}, perl(Apache), %{tftpsvc}, %{dhcpsrv}
 Requires(post): policycoreutils-python-utils
 %else # Not RHEL 8+
 %if 0%{?sle_version} >= 150100
+Requires(pre): shadow
 Requires(post): policycoreutils
 %else # Not RHEL 8+ or SLE 15.1+
 Requires(post): policycoreutils-python
