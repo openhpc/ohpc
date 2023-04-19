@@ -36,7 +36,7 @@ mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 
 [3.0.0]
 skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-arm1","geopm",
-            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1","tau-arm1","plasma-arm1"]
 skip_x86  = ["-arm1"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
@@ -45,18 +45,22 @@ standalone = ["ohpc-filesystem","slurm","hwloc","lmod","genders","magpie","easyb
               "libfabric","openpbs","conman","autoconf","automake","spack","cmake","libtool","python-Cython",
               "hpc-workspace","intel-compilers-devel","impi-devel","mrsh","losf","paraver","papi","charliecloud",
               "pmix","pdsh","flex","warewulf-common","warewulf-vnfs","warewulf-cluster","warewulf-ipmi",
-              "warewulf-provision","examples","meta-packages","valgrind","warewulf","arm-compilers-devel"]
+              "warewulf-provision","examples","meta-packages","valgrind","warewulf","arm-compilers-devel",
+              "nhc"]
 compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "pdtoolkit","gsl","metis","superlu","scotch",
                       "numpy","plasma","hdf5"]
 mpi_dependent = ["ptscotch","boost","sionlib","pnetcdf","phdf5","netcdf","omb",
                  "tau","extrae","imb","fftw","scalapack","opencoarrays",
                  "ptscotch","hypre","mpi4py","dimemas","scorep","scalasca",
-                 "!scipy","adios2","netcdf-fortran","netcdf-cxx","trilinos",
-                 "petsc","slepc","superlu_dist","mumps","mfem","lmod-defaults"]
+                 "scipy","adios2","netcdf-fortran","netcdf-cxx","trilinos",
+                 "petsc","slepc","superlu_dist","mumps","mfem","lmod-defaults",
+                 "geopm"]
 openblas_compiler=["gnu12"]
 R_compiler=["gnu12"]
 lmod-defaults_mpi=["openmpi4","mvapich2","impi"]
+opencoarrays_compiler=["gnu12"]
+scipy_compiler=["gnu12"]
 # The parser is looking for entries starting with 'skip_on_distro_' and will
 # disable all packages on the distro after 'skip_on_distro_'
 # This is mainy used to automatically disable '-intel' and '-arm1' packages
