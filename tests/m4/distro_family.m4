@@ -25,6 +25,9 @@ if test -r "/etc/os-release"; then
    elif grep -q "Red Hat" /etc/os-release; then
       AC_MSG_RESULT([RHEL])
       DISTRO_FAMILY=RHEL
+   elif grep -q "platform:el8" /etc/os-release; then
+      AC_MSG_RESULT([CentOS])
+      DISTRO_FAMILY=CentOS
    elif grep -q "platform:el9" /etc/os-release; then
       AC_MSG_RESULT([CentOS9])
       DISTRO_FAMILY=CentOS
