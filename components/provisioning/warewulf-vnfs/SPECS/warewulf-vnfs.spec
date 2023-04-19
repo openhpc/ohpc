@@ -25,7 +25,7 @@ URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Source1: opensuse-15.2.tmpl
 Source2: rocky-8.tmpl
-Source3: opensuse-15.3.tmpl
+Source3: opensuse-15.4.tmpl
 Source4: openeuler-22.03.tmpl
 Source5: include-openEuler
 Source6: rocky-9.tmpl
