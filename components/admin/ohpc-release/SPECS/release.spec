@@ -19,6 +19,10 @@
 %define disttag .leap15
 %endif
 
+%if 0%{?openEuler}
+%define disttag .oe2203
+%endif
+
 Summary:  OpenHPC release files
 Name:     ohpc-release
 Version:  3
