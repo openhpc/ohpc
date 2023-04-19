@@ -13,7 +13,7 @@
 %define pname spack
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.19.0
+Version:	0.19.2
 Release:	%{?dist}.1
 Summary:	HPC software package management
 
@@ -29,7 +29,6 @@ Requires: coreutils
 Requires: subversion
 Requires: hg
 Requires: patch
-Requires: python3-mock
 Requires: gcc
 Requires: gcc-c++
 Requires: make
