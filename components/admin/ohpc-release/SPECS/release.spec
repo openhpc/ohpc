@@ -74,18 +74,18 @@ cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 name=OpenHPC-%{ohpc_version} - Base
 baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-3
 
 [OpenHPC-updates]
 name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-3
 EOF
 
 # repository GPG key
 
-install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
+install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-3
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
