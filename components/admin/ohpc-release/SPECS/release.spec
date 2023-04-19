@@ -26,7 +26,7 @@ Release:  1%{?disttag}
 License:  Apache-2.0
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
-Source1:  RPM-GPG-KEY-OpenHPC-2
+Source1:  RPM-GPG-KEY-OpenHPC-3
 
 Provides: ohpc-release = %{version}
 
