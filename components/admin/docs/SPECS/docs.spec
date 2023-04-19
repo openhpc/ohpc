@@ -20,6 +20,7 @@ URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
 
 BuildRequires:  git
+BuildRequires:  make
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
