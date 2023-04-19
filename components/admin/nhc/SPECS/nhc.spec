@@ -18,20 +18,16 @@
 
 Summary: LBNL Node Health Check
 Name: %{pname}%{PROJ_DELIM}
-Version: 1.4.2
+Version: 1.4.3
 Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/mej/nhc/
 Source0: https://github.com/mej/nhc/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-# upstream patch will land in v1.4.3
-Patch1:  nhc-bash-substitution.patch
-Patch2:  nhc-ps-chronyd.patch
-Patch3:  libexec.patch
+Patch0: nhc-ps-chronyd.patch
 Requires: bash
 BuildRequires: automake autoconf
-BuildRequires: rpm-build
-Obsoletes: warewulf-nhc%{PROJ_DELIM} <= 1.4.2-1
+BuildRequires: make
 BuildArch: noarch
 
 %description
@@ -45,41 +41,24 @@ which checks should be run on which nodes.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
-%patch2 -p1
-%patch3 -p0
+%patch -P 0 -p1
 
 %build
 if [ ! -f configure ]; then
   ./autogen.sh
 fi
-rpmbuild --showrc
 %{configure}
-%{__make} %{?mflags}
+%{__make} %{?_smp_mflags}
 
 
 %install
 umask 0077
-%{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 # tweak ssh check for Leap
 %if 0%{?suse_version}
 perl -pi -e "s/check_ps_service -u root -S sshd/check_ps_service -m 'sshd:' -u root -S sshd/" $RPM_BUILD_ROOT/etc/nhc/nhc.conf
 %endif
-
-%triggerpostun -p /bin/bash -- warewulf-nhc <= 1.4.2-1
-if [ $1 -gt 0 -a $2 -eq 0 ]; then
-    cd %{_sysconfdir}/%{pname}/scripts
-    for SCRIPT in ww_*.nhc.rpmsave ; do
-        if [ -e $SCRIPT ]; then
-            NEWSCRIPT=lbnl${SCRIPT##ww}
-            NEWSCRIPT=${NEWSCRIPT%%.rpmsave}
-            echo warning: Auto-fixing script naming due to modified script ${SCRIPT%%.rpmsave}
-            mv -v $NEWSCRIPT $NEWSCRIPT.rpmnew && mv -v $SCRIPT $NEWSCRIPT
-        fi
-    done 2>/dev/null
-
-
 
 %files
 %doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
