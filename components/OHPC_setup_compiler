@@ -107,9 +107,9 @@ if [ "${toolset}" == "gcc" ];then
         fi
     fi
 elif [ "${toolset}" == "intel" ];then
-    DEFAULT_OPTS="-O3 -g -m64 -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
+    DEFAULT_OPTS="-O3 -g -m64 -fexceptions -fstack-protector-strong -mtune=generic"
 elif [ "${toolset}" == "arm" ];then
-    DEFAULT_OPTS="-O3 -g -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
+    DEFAULT_OPTS="-O3 -g -Wall -fexceptions -fstack-protector-strong -mtune=generic"
 fi
 
 if [ -z "${OHPC_CFLAGS}" ];then
