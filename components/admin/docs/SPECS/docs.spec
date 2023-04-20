@@ -62,7 +62,7 @@ BuildRequires:  tex
 %if 0%{?openEuler}
 BuildRequires:  texlive-pdftex
 BuildRequires:  texlive-epstopdf
-BuildRequires:  texlive-gsftopk
+BuildRequires:  texlive-collection-basic
 %endif
 
 %description
