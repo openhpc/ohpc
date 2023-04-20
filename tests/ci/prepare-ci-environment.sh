@@ -17,7 +17,10 @@ fi
 
 PKG_MANAGER=zypper
 COMMON_PKGS="wget python3 jq"
-UNAME_M=$(uname -m)
+YES="-n"
+
+OBS_SERVER="http://obs.openhpc.community:82/"
+PROJECT="OpenHPC3:"
 
 retry_counter=0
 max_retries=5
@@ -44,51 +47,34 @@ loop_command() {
 for like in ${ID_LIKE}; do
 	if [ "${like}" = "fedora" ]; then
 		PKG_MANAGER=dnf
+		YES="-y"
 		break
 	fi
 done
 
 if [ "${ID}" = "openEuler" ]; then
 	PKG_MANAGER=dnf
-	FACTORY_VERSION=3.0
+	YES="-y"
 fi
 
+loop_command "${PKG_MANAGER}" "${YES}" install "${COMMON_PKGS}"
 if [ "${PKG_MANAGER}" = "dnf" ]; then
+	# If there is a release, this is the place to install the corresponding
+	# release RPM. As long as there is no release RPM only the OBS repository
+	# is used directly.
 	if [ "${ID}" = "openEuler" ]; then
-		loop_command "${PKG_MANAGER}" -y  install "${COMMON_PKGS}"
-		FACTORY_VERSION=3.0
-		loop_command wget http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/openEuler_22.03/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
+		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/openEuler_22.03/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
 	else
-		# We need to figure out if we are running on RHEL (clone) 8 or 9 and
-		# rpmdev-vercmp from rpmdevtools is pretty good at comparing versions.
-		loop_command "${PKG_MANAGER}" -y  install rpmdevtools crypto-policies-scripts "${COMMON_PKGS}"
-
-		# Exit status is 0 if the EVR's are equal, 11 if EVR1 is newer, and 12 if EVR2
-	        # is newer.  Other exit statuses indicate problems.
-		set +e
-		rpmdev-vercmp 9 "${VERSION_ID}"
-		if [ "$?" -eq "11" ]; then
-			OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/CentOS_8/${UNAME_M}/ohpc-release-2-1.el8.${UNAME_M}.rpm"
-		else
-			FACTORY_VERSION=3.0
-			# This is our RHEL 9 pre-release repository
-			loop_command wget http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/EL_9/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
-			NINE=1
-		fi
-		set -e
+		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/EL_9/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
 	fi
 else
-	FACTORY_VERSION=3.0
-	loop_command "${PKG_MANAGER}" -n  install "${COMMON_PKGS}"
-	loop_command wget http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/Leap_15/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
+	loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/Leap_15/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
-	FACTORY_REPOSITORY=http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/
+	FACTORY_REPOSITORY="${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/
 	if [ "${PKG_MANAGER}" = "dnf" ]; then
-		if [ -z "${NINE}" ]; then
-			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_9"
-		elif [ "${ID}" = "openEuler" ]; then
+		if [ "${ID}" = "openEuler" ]; then
 			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}openEuler_22.03"
 		else
 			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_9"
@@ -102,17 +88,17 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 fi
 
 dnf_rhel() {
-	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
 	loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" -y install lmod-ohpc
+	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc
 }
 
 dnf_openeuler() {
-	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk
-	loop_command "${PKG_MANAGER}" -y install ohpc-filesystem lmod-ohpc hostname
+	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk
+	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname
 }
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then
@@ -123,10 +109,10 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	fi
 	adduser ohpc
 else
-	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install lmod-ohpc
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc
 	useradd -m ohpc
 fi
