@@ -27,9 +27,9 @@ Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
 Patch0:		arm.function.definition.patch
 
 
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool make which
+BuildRequires:	autoconf%{PROJ_DELIM}
+BuildRequires:	automake%{PROJ_DELIM}
+BuildRequires:	libtool%{PROJ_DELIM} make which
 BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	papi%{PROJ_DELIM}
@@ -61,10 +61,11 @@ export compiler_vars="MPICC=$(which mpicc)"
 
 %if "%{compiler_family}" == "intel"
 %if "%{mpi_family}" == "impi"
-export compiler_vars="CC=icc CXX=icpc MPIF90=mpiifort $compiler_vars"
+export compiler_vars="CC=${CC} CXX=${CXX} MPIF90=mpiifort $compiler_vars"
 %endif
 %endif
 
+export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
 ./bootstrap
 export LDFLAGS="$LDFLAGS -lz"
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
@@ -76,6 +77,9 @@ export LDFLAGS="$LDFLAGS -lz"
     CFLAGS="${CFLAGS} -fsimdmath -fPIC -Wno-implicit-function-declaration" \
     CXXFLAGS="${CXXFLAGS} -fsimdmath -fPIC" \
     FCFLAGS="${FCFLAGS} -fsimdmath -fPIC" \
+%endif
+%if "%{compiler_family}" == "intel"
+    CFLAGS="${CFLAGS} -Wno-implicit-function-declaration" \
 %endif
     || { cat config.log && exit 1; }
 
