@@ -14,7 +14,7 @@
 
 Summary:   A GNU tool for automatically configuring source code
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.69
+Version:   2.71
 Release:   %{?dist}.1
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
@@ -23,6 +23,8 @@ Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
 
 BuildRequires: m4 make
 Requires: m4
+Requires: perl(Thread::Queue)
+Requires: perl(threads)
 
 BuildRequires: perl-macros
 BuildRequires: perl(File::Compare)
