@@ -57,7 +57,7 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	if [ "${ID}" = "openEuler" ]; then
 		loop_command "${PKG_MANAGER}" -y  install "${COMMON_PKGS}"
 		FACTORY_VERSION=3.0
-		loop_command wget http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/openEuler_22.03/OpenHPC:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
+		loop_command wget http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/openEuler_22.03/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
 	else
 		# We need to figure out if we are running on RHEL (clone) 8 or 9 and
 		# rpmdev-vercmp from rpmdevtools is pretty good at comparing versions.
@@ -72,9 +72,7 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 		else
 			FACTORY_VERSION=3.0
 			# This is our RHEL 9 pre-release repository
-			loop_command wget http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/EL_9/OpenHPC:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
-			# The OBS signing key is too old
-			update-crypto-policies --set LEGACY
+			loop_command wget http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/EL_9/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
 			NINE=1
 		fi
 		set -e
@@ -82,11 +80,11 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 else
 	FACTORY_VERSION=3.0
 	loop_command "${PKG_MANAGER}" -n  install "${COMMON_PKGS}"
-	loop_command wget http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/Leap_15.4/OpenHPC:"${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
+	loop_command wget http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/Leap_15/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
-	FACTORY_REPOSITORY=http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/
+	FACTORY_REPOSITORY=http://obs.openhpc.community:82/OpenHPC3:/"${FACTORY_VERSION}":/Factory/
 	if [ "${PKG_MANAGER}" = "dnf" ]; then
 		if [ -z "${NINE}" ]; then
 			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_9"
@@ -97,10 +95,10 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 		fi
 		FACTORY_REPOSITORY_DESTINATION="/etc/yum.repos.d/obs.repo"
 	else
-		FACTORY_REPOSITORY="${FACTORY_REPOSITORY}Leap_15.4"
+		FACTORY_REPOSITORY="${FACTORY_REPOSITORY}Leap_15"
 		FACTORY_REPOSITORY_DESTINATION="/etc/zypp/repos.d/obs.repo"
 	fi
-	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/OpenHPC:${FACTORY_VERSION}:Factory.repo"
+	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/OpenHPC3:${FACTORY_VERSION}:Factory.repo"
 fi
 
 dnf_rhel() {
