@@ -97,6 +97,9 @@ across multiple networks.
 # This seems to fix the build.
 export FFLAGS=-fallow-argument-mismatch
 %endif
+%if "%{compiler_family}" == "intel"
+export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
+%endif
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
 	    --enable-cxx \
