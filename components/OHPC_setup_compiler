@@ -96,7 +96,15 @@ arch=`uname -m`
 if [ "$toolset" == "gcc" ];then
     DEFAULT_OPTS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
     if [ "$arch" == "x86_64" ];then
-	DEFAULT_OPTS="$DEFAULT_OPTS -m64"
+        DEFAULT_OPTS="$DEFAULT_OPTS -m64"
+        if [ -e /etc/os-release ]; then
+            # shellcheck disable=SC1091
+            . /etc/os-release
+            if [ -n "$PLATFORM_ID" ] && [ "$PLATFORM_ID" == "platform:el9" ]; then
+                # Only RHEL 9 has switched to the optimization baseline 'x86-64-v2'
+                DEFAULT_OPTS="$DEFAULT_OPTS -march=x86-64-v2"
+            fi
+        fi
     fi
 elif [ "$toolset" == "intel" ];then
     DEFAULT_OPTS="-O3 -g -m64 -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
