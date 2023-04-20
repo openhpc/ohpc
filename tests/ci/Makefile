@@ -33,4 +33,5 @@ shellcheck-lint:
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
 		../../tests/ci/prepare-ci-environment.sh \
-		../../tests/ci/setup_slurm_and_run_tests.sh
+		../../tests/ci/setup_slurm_and_run_tests.sh \
+		../../components/OHPC_setup_compiler
