@@ -228,6 +228,11 @@ test_map = {
         '',
         ''
     ],
+    'components/dev-tools/mpi4py/SPECS/python-mpi4py.spec': [
+        'mpi4py',
+        '',
+        ''
+    ],
 }
 
 skip_ci_specs = []
