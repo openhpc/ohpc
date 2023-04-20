@@ -50,7 +50,7 @@ sparse matrix ordering.
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-sed s:@RPMFLAGS@:'${DEFAULT_FLAGS} -fPIC': < %{SOURCE1} > src/Makefile.inc
+sed s:@RPMFLAGS@:"${CFLAGS} -fPIC": < %{SOURCE1} > src/Makefile.inc
 
 pushd src
 make %{?_smp_mflags}
