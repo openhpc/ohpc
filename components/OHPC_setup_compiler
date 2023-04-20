@@ -87,7 +87,7 @@ echo "--> F77      = $F77"
 echo " "
 
 #-----------------------------
-# Set default compiler flags 
+# Set default compiler flags
 # and check for user override
 #-----------------------------
 
@@ -145,5 +145,3 @@ fi
 
 echo "--"
 echo " "
-
-
