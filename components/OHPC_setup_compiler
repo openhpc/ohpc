@@ -21,34 +21,34 @@ if [ "$#" = "1" ]; then
     OHPC_COMPILER_FAMILY=$1
 fi
 
-if [ -z "$OHPC_COMPILER_FAMILY" ]; then
+if [ -z "${OHPC_COMPILER_FAMILY}" ]; then
     echo "OHPC_COMPILER_FAMILY not defined"
     exit 1
 fi
 
 export toolset=gcc
-if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
+if [ "${OHPC_COMPILER_FAMILY}" = "gnu" ]; then
     export CC=gcc
     export CXX=g++
     export FC=gfortran
     export F77=gfortran
     module purge
     module load gnu
-elif [ "$OHPC_COMPILER_FAMILY" = "gnu12" ]; then
+elif [ "${OHPC_COMPILER_FAMILY}" = "gnu12" ]; then
     export CC=gcc
     export CXX=g++
     export FC=gfortran
     export F77=gfortran
     module purge
     module load gnu12
-elif [ "$OHPC_COMPILER_FAMILY" = "gnu9" ]; then
+elif [ "${OHPC_COMPILER_FAMILY}" = "gnu9" ]; then
     export CC=gcc
     export CXX=g++
     export FC=gfortran
     export F77=gfortran
     module purge
     module load gnu9
-elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
+elif [ "${OHPC_COMPILER_FAMILY}" = "intel" ]; then
     export toolset=intel
     export CC=icx
     export CXX=icpx
@@ -56,7 +56,7 @@ elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
     export F77=ifx
     module purge
     module load intel
-elif [ "$OHPC_COMPILER_FAMILY" = "arm1" ]; then
+elif [ "${OHPC_COMPILER_FAMILY}" = "arm1" ]; then
     export toolset=arm
     export CC=armclang
     export CXX=armclang++
@@ -64,7 +64,7 @@ elif [ "$OHPC_COMPILER_FAMILY" = "arm1" ]; then
     export F77=armflang
     module purge
     module load arm1
-elif [ "$OHPC_COMPILER_FAMILY" = "llvm" ]; then
+elif [ "${OHPC_COMPILER_FAMILY}" = "llvm" ]; then
     export toolset=clang
     export CC=clang
     export CXX=clang++
@@ -73,17 +73,17 @@ elif [ "$OHPC_COMPILER_FAMILY" = "llvm" ]; then
     module purge
     module load llvm
 else
-    echo "Unsupported OHPC_COMPILER_FAMILY -> $OHPC_COMPILER_FAMILY"
+    echo "Unsupported OHPC_COMPILER_FAMILY -> ${OHPC_COMPILER_FAMILY}"
     exit 1
 fi
 
 echo " "
 echo "--"
 echo "OpenHPC compiler/build flags":
-echo "--> CC       = $CC"
-echo "--> CXX      = $CXX"
-echo "--> FC       = $FC"
-echo "--> F77      = $F77"
+echo "--> CC       = ${CC}"
+echo "--> CXX      = ${CXX}"
+echo "--> FC       = ${FC}"
+echo "--> F77      = ${F77}"
 echo " "
 
 #-----------------------------
@@ -91,56 +91,56 @@ echo " "
 # and check for user override
 #-----------------------------
 
-arch=`uname -m`
+arch=$(uname -m)
 
-if [ "$toolset" == "gcc" ];then
+if [ "${toolset}" == "gcc" ];then
     DEFAULT_OPTS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
-    if [ "$arch" == "x86_64" ];then
-        DEFAULT_OPTS="$DEFAULT_OPTS -m64"
+    if [ "${arch}" == "x86_64" ];then
+        DEFAULT_OPTS="${DEFAULT_OPTS} -m64"
         if [ -e /etc/os-release ]; then
             # shellcheck disable=SC1091
             . /etc/os-release
-            if [ -n "$PLATFORM_ID" ] && [ "$PLATFORM_ID" == "platform:el9" ]; then
+            if [ -n "${PLATFORM_ID}" ] && [ "${PLATFORM_ID}" == "platform:el9" ]; then
                 # Only RHEL 9 has switched to the optimization baseline 'x86-64-v2'
-                DEFAULT_OPTS="$DEFAULT_OPTS -march=x86-64-v2"
+                DEFAULT_OPTS="${DEFAULT_OPTS} -march=x86-64-v2"
             fi
         fi
     fi
-elif [ "$toolset" == "intel" ];then
+elif [ "${toolset}" == "intel" ];then
     DEFAULT_OPTS="-O3 -g -m64 -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
-elif [ "$toolset" == "arm" ];then
+elif [ "${toolset}" == "arm" ];then
     DEFAULT_OPTS="-O3 -g -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
 fi
 
-if [ -z "$OHPC_CFLAGS" ];then
-    export CFLAGS=$DEFAULT_OPTS
+if [ -z "${OHPC_CFLAGS}" ];then
+    export CFLAGS=${DEFAULT_OPTS}
 else
-    export CFLAGS=$OHPC_CFLAGS
-    echo "--> CFLAGS   (user override) = $CFLAGS"
+    export CFLAGS=${OHPC_CFLAGS}
+    echo "--> CFLAGS   (user override) = ${CFLAGS}"
 fi
 
-if [ -z "$OHPC_CXXFLAGS" ];then
-    export CXXFLAGS=$DEFAULT_OPTS
-    echo "--> CXXFLAGS = $CXXFLAGS"
+if [ -z "${OHPC_CXXFLAGS}" ];then
+    export CXXFLAGS=${DEFAULT_OPTS}
+    echo "--> CXXFLAGS = ${CXXFLAGS}"
 else
-    export CXXFLAGS=$OHPC_CXXFLAGS
-    echo "--> CXXFLAGS (user override) = $CXXFLAGS"
+    export CXXFLAGS=${OHPC_CXXFLAGS}
+    echo "--> CXXFLAGS (user override) = ${CXXFLAGS}"
 fi
 
-if [ -z "$OHPC_FCFLAGS" ];then
-    export FCFLAGS=$DEFAULT_OPTS
-    echo "--> FCFLAGS  = $FCFLAGS"
+if [ -z "${OHPC_FCFLAGS}" ];then
+    export FCFLAGS=${DEFAULT_OPTS}
+    echo "--> FCFLAGS  = ${FCFLAGS}"
 else
-    export FCFLAGS=$OHPC_FCFLAGS
-    echo "--> FCFLAGS  (user override) = $FCFLAGS"
+    export FCFLAGS=${OHPC_FCFLAGS}
+    echo "--> FCFLAGS  (user override) = ${FCFLAGS}"
 fi
 
-if [ -z "$OHPC_F77FLAGS" ];then
-    export F77FLAGS=$DEFAULT_OPTS
-    echo "--> F77FLAGS = $F77FLAGS"
+if [ -z "${OHPC_F77FLAGS}" ];then
+    export F77FLAGS=${DEFAULT_OPTS}
+    echo "--> F77FLAGS = ${F77FLAGS}"
 else
-    export F77FLAGS=$OHPC_F77FLAGS
-    echo "--> F77FLAGS (user override) = $F77FLAGS"
+    export F77FLAGS=${OHPC_F77FLAGS}
+    echo "--> F77FLAGS (user override) = ${F77FLAGS}"
 fi
 
 echo "--"
