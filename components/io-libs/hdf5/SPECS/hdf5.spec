@@ -25,7 +25,10 @@ URL:       http://www.hdfgroup.org/HDF5
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
 
 BuildRequires: zlib-devel make
-Requires:      zlib
+
+%if "%{compiler_family}" == "intel"
+BuildRequires: libtool%{PROJ_DELIM}
+%endif
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -59,14 +62,23 @@ cp /usr/lib/rpm/config.guess bin
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if "%{compiler_family}" == "intel"
+export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
+autoreconf -if
+sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-flags
+sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-cxxflags
+# delete special flags no longer available
+echo "" > config/intel-warnings/18
+sed '/-Wp64/d' -i config/intel-warnings/15
+%endif
+
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
             --enable-static=no       \
 	    --enable-shared          \
-	    --enable-cxx             \
-	    --enable-fortran2003    || { cat config.log && exit 1; }
+	    --enable-cxx            || { cat config.log && exit 1; }
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1" || "%{compiler_family}" == "intel"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
