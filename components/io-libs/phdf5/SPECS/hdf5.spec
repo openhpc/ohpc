@@ -28,6 +28,10 @@ Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/%{pname}-%{v
 
 BuildRequires: zlib-devel make
 
+%if "%{compiler_family}" == "intel"
+BuildRequires: libtool%{PROJ_DELIM}
+%endif
+
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
@@ -80,12 +84,21 @@ export FCFLAGS="-I $MPI_DIR/include/gfortran/11.1.0 $FCFLAGS"
 %{__sed} -i -e 's,^  ac_cv_fc_libs="\$ac_cv_fc_libs $ac_arg,  ac_cv_fc_libs="\$ac_cv_fc_libs \$(echo \$ac_arg | sed "s/\\"//g"),g' configure
 %endif
 
+%if "%{compiler_family}" == "intel"
+export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
+autoreconf -if
+sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-flags
+sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-cxxflags
+# delete special flags no longer available
+echo "" > config/intel-warnings/18
+sed '/-Wp64/d' -i config/intel-warnings/15
+%endif
+
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
             --enable-static=no       \
             --enable-parallel        \
-	    --enable-shared          \
-	    --enable-fortran2003     || { cat config.log && exit 1; }
+	    --enable-shared         || { cat config.log && exit 1; }
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
