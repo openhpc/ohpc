@@ -63,12 +63,12 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	# release RPM. As long as there is no release RPM only the OBS repository
 	# is used directly.
 	if [ "${ID}" = "openEuler" ]; then
-		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/openEuler_22.03/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
+		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/openEuler_22.03/"${PROJECT}""${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
 	else
-		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/EL_9/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
+		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/EL_9/"${PROJECT}""${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
 	fi
 else
-	loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/Leap_15/OpenHPC3:"${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
+	loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/Leap_15/"${PROJECT}""${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
@@ -84,7 +84,7 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 		FACTORY_REPOSITORY="${FACTORY_REPOSITORY}Leap_15"
 		FACTORY_REPOSITORY_DESTINATION="/etc/zypp/repos.d/obs.repo"
 	fi
-	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/OpenHPC3:${FACTORY_VERSION}:Factory.repo"
+	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/${PROJECT}${FACTORY_VERSION}:Factory.repo"
 fi
 
 dnf_rhel() {
