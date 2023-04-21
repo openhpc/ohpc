@@ -25,9 +25,6 @@ Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
-Patch0:    h5cc.patch
-Patch1:    h5fc.patch
-Patch2:    h5cxx.patch
 
 BuildRequires: zlib-devel make
 
@@ -46,14 +43,9 @@ structure, such as images, arrays of vectors, and structured and unstructured
 grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
-
 %setup -q -n %{pname}-%{version}
 
-# Fix building with gcc8 (this should be a patch)
-sed "s/\(.*\)(void) HDF_NO_UBSAN/HDF_NO_UBSAN \1(void)/" -i src/H5detect.c
-
 %build
-
 # override with newer config.guess for aarch64
 %ifarch aarch64 || ppc64le
 %if 0%{?rhel} >= 9
