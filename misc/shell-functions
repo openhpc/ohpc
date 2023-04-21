@@ -25,11 +25,12 @@ prepare_git_tree() {
 build_srpm() {
 	local SPEC=${1}
 	local DIR
-	local MPI_FAMILY=${2}
+	local COMPILER_FAMILY=${2}
+	local MPI_FAMILY=${3}
 
 	DIR=$(dirname "${1}")
 
-	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "mpi_family ${MPI_FAMILY}" "${SPEC}" 2>/dev/null)
+	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "compiler_family ${COMPILER_FAMILY}" --define "mpi_family ${MPI_FAMILY}" "${SPEC}" 2>/dev/null)
 	RESULT=$?
 
 	echo "${SRPM}" | tail -1 | awk -F\  '{ print $2 }'

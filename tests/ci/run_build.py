@@ -2,22 +2,44 @@
 
 import subprocess
 import selectors
+import argparse
 import logging
 import shutil
+import time
 import sys
 import csv
 import os
 import io
-import time
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
-if len(sys.argv) <= 2:
-    print("Usage: %s <non-root-user> <list of files to check>" % sys.argv[0])
-    sys.exit(0)
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    'user',
+    help='non root user to run build as',
+    nargs=1,
+)
+parser.add_argument(
+    'specfiles',
+    help='list of specfiles to check',
+    nargs='+',
+)
+parser.add_argument(
+    '--compiler-family',
+    help='compiler family name to use for rebuild',
+    default='gnu12',
+)
+parser.add_argument(
+    '--mpi-family',
+    help=(
+        'mpi family name to use for rebuild ' +
+        '(defaults to openmpi4, mpich, mvapich2)'
+    ),
+)
+args = parser.parse_args()
 
 spec_found = False
-build_user = sys.argv[1]
+build_user = ''.join(args.user)
 dnf_based = False
 dist = "9999.ci.ohpc"
 version_id = ''
@@ -100,7 +122,7 @@ def loop_command(command, max_attempts=5):
         time.sleep(attempt_counter)
 
 
-def build_srpm_and_rpm(command, family=None):
+def build_srpm_and_rpm(command, mpi_family=None, compiler_family=None):
     success, output = run_command(command)
     if not success:
         # First check if the architecture is not supported
@@ -163,14 +185,20 @@ def build_srpm_and_rpm(command, family=None):
         'rpmbuild --define "dist %s" --rebuild %s' % (dist, src_rpm),
     ]
 
-    if family is not None:
-        rebuild_command[-1] += " --define 'mpi_family %s'" % family
+    if mpi_family is not None:
+        rebuild_command[-1] += " --define 'mpi_family %s'" % mpi_family
+
+    if compiler_family is not None:
+        rebuild_command[-1] += (
+            " --define 'compiler_family %s'" % compiler_family
+        )
 
     # Disable parallel builds for below packages on aarch64 to avoid OOM
     pkgs = ["boost-", "paraver-"]
     if any([x in src_rpm for x in pkgs]) and os.uname().machine == "aarch64":
         rebuild_command[-1] += " --define '_smp_mflags -j1'"
 
+    logging.warning(rebuild_command)
     success, _ = run_command(rebuild_command)
     if not success:
         logging.error("Running 'rpmbuild --rebuild' failed")
@@ -181,9 +209,10 @@ def build_srpm_and_rpm(command, family=None):
 
 skipped = []
 failed = []
+rebuild_success = []
 total = 0
 
-for spec in sys.argv[1:]:
+for spec in args.specfiles:
     if not spec.endswith('.spec'):
         continue
     just_spec = os.path.basename(spec)
@@ -219,19 +248,47 @@ for spec in sys.argv[1:]:
             'mvapich2',
         ]
 
+        if args.mpi_family:
+            families = [args.mpi_family]
+
         for family in families:
-            if (family == 'mvapich2' and
-                    (os.uname().machine == 'aarch64' or
-                        version_id.startswith('9'))):
+            if family == 'mvapich2' and os.uname().machine == 'aarch64':
                 continue
             # Build SRPM
             command = [
                 'misc/build_srpm.sh',
                 spec,
+                args.compiler_family,
                 family,
             ]
-            if not build_srpm_and_rpm(command, family=family):
+            if not build_srpm_and_rpm(
+                    command,
+                    mpi_family=family,
+                    compiler_family=args.compiler_family,
+            ):
                 failed.append(just_spec)
+            else:
+                rebuild_success.append(
+                    "%s (%s, %s)" %
+                    (just_spec, args.compiler_family, family))
+
+    elif 'ohpc_compiler_dependent' in contents:
+        # Build SRPM
+        command = [
+            'misc/build_srpm.sh',
+            spec,
+            args.compiler_family,
+        ]
+        if not build_srpm_and_rpm(
+                command,
+                compiler_family=args.compiler_family,
+        ):
+            failed.append(just_spec)
+        else:
+            rebuild_success.append(
+                "%s (%s)" %
+                (just_spec, args.compiler_family))
+
     else:
         # Build SRPM
         command = [
@@ -240,6 +297,8 @@ for spec in sys.argv[1:]:
         ]
         if not build_srpm_and_rpm(command):
             failed.append(just_spec)
+        else:
+            rebuild_success.append(just_spec)
 
 
 if not spec_found:
@@ -248,6 +307,9 @@ if not spec_found:
 logging.info("Found %d spec file(s)" % total)
 logging.info("--> %d rebuild successfully" %
              (total - len(failed) - len(skipped)))
+for success in rebuild_success:
+    logging.info("----> %s" % success)
+
 logging.info("--> %d rebuilds skipped" % len(skipped))
 
 for skip in skipped:
