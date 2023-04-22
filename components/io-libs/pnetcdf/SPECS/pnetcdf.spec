@@ -33,6 +33,10 @@ BuildRequires:  make
 BuildRequires:  m4
 BuildRequires:  zlib-devel
 
+%if "%{compiler_family}" == "intel"
+BuildRequires: libtool%{PROJ_DELIM}
+%endif
+
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
@@ -57,6 +61,11 @@ cp /usr/lib/rpm/config.guess bin
 %endif
 %endif
 
+%if "%{compiler_family}" == "intel"
+export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
+autoreconf -if
+%endif
+
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
@@ -65,6 +74,10 @@ cp /usr/lib/rpm/config.guess bin
 # This tries to adapt the configure script to remove double quotes
 # from the linker options.
 %{__sed} -i -e 's,^  ac_cv_fc_libs="\$ac_cv_fc_libs $ac_arg,  ac_cv_fc_libs="\$ac_cv_fc_libs \$(echo \$ac_arg | sed "s/\\"//g"),g' configure
+export CFLAGS="${CFLAGS} -fsimdmath"
+export CXXFLAGS="${CXXFLAGS} -fsimdmath"
+export FCFLAGS="${FCFLAGS} -fsimdmath"
+export F77LAGS="${F77LAGS} -fsimdmath"
 %endif
 
 CC=mpicc \
@@ -75,7 +88,10 @@ MPICC=mpicc \
 MPIFC=mpifc \
 MPIF77=mpif77 \
 MPICXX=mpicxx \
-CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
+CFLAGS="${CFLAGS} -fPIC -DPIC" \
+CXXFLAGS="${CXXFLAGS} -fPIC -DPIC" \
+FCFLAGS="${FCFLAGS} -fPIC" \
+FFLAGS="${F77LAGS} -fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %{__make}
