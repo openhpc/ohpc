@@ -83,7 +83,12 @@ including support for static control.
 
 %build
 %ohpc_setup_compiler
+%if "%{compiler_family}" == "gnu12"
 export CFLAGS="$CFLAGS -Wno-error=stringop-truncation"
+%endif
+%if "%{compiler_family}" == "intel"
+export CXXFLAGS="${CXXFLAGS} -Wno-error"
+%endif
 ./autogen.sh
 
 %if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu12"
