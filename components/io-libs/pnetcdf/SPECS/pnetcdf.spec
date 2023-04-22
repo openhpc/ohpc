@@ -91,7 +91,7 @@ MPICXX=mpicxx \
 CFLAGS="${CFLAGS} -fPIC -DPIC" \
 CXXFLAGS="${CXXFLAGS} -fPIC -DPIC" \
 FCFLAGS="${FCFLAGS} -fPIC" \
-FFLAGS="${F77LAGS} -fPIC" \
+FFLAGS="${F77FLAGS} -fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %{__make}
