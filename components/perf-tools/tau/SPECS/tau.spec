@@ -39,7 +39,7 @@ Provides:  perl(ebs2otf)
 Conflicts: lib%{pname} < %{version}-%{release}
 Obsoletes: lib%{pname} < %{version}-%{release}
 
-%if 0%{?suse_version} || 0%{?sle_version}
+%if 0%{?sle_version}
 BuildRequires: libgomp1
 %else
 BuildRequires: libgomp
@@ -50,11 +50,7 @@ BuildRequires: papi%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
 %endif
 
-%if 0%{?rhel} >= 9
-BuildRequires: curl-minimal
-%else
 BuildRequires: curl
-%endif
 BuildRequires: chrpath sed grep which make
 BuildRequires: postgresql-devel binutils-devel
 BuildRequires: zlib-devel python3-devel
@@ -143,6 +139,14 @@ module load pdtoolkit
 export OMPI_LDFLAGS="-Wl,--as-needed -L${MPI_LIB_DIR}"
 export FFLAGS="$FFLAGS -I${MPI_INCLUDE_DIR}"
 
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath"
+%endif
+%if "%{compiler_family}" == "intel"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-register"
+%endif
+
 # Try and figure out architecture
 if [ -n "$detectarch" ]; then
    CONFIG_ARCH="${detectarch}"
@@ -166,24 +170,17 @@ mkdir -p ${TAUROOT}/TAUBUILD
     -mpiinc=${MPI_INCLUDE_DIR} \
     -mpilib=${MPI_LIB_DIR} \
 %if "%{compiler_family}" == "intel"
-    -fortran=ifort \
-%if "%{mpi_family}" == "impi"
-    -c++=mpiicpc \
-    -cc=mpiicc \
-%else
-    -c++=mpicxx \
-    -cc=mpicc \
-%endif
+    -fortran=ifx \
 %else
 %if "%{compiler_family}" == "arm1"
     -fortran=armflang \
 %else
     -fortran=gfortran \
 %endif
-    -c++=mpicxx \
-    -cc=mpicc \
     -opari \
 %endif
+    -c++=mpicxx \
+    -cc=mpicc \
 %ifarch x86_64
     -papi=${PAPI_DIR} \
 %endif
@@ -193,7 +190,7 @@ mkdir -p ${TAUROOT}/TAUBUILD
     -PROFILECALLPATH \
     -PROFILEPARAM \
     -pdt=${PDTOOLKIT_DIR} \
-    -useropt="%optflags -I${MPI_INCLUDE_DIR} -I${TAUROOT}/include -fno-strict-aliasing" \
+    -useropt="${CFLAGS} -I${MPI_INCLUDE_DIR} -I${TAUROOT}/include -fno-strict-aliasing" \
     -openmp \
     -extrashlibopts="-fPIC -L${MPI_LIB_DIR} -lmpi -L${INSTALLROOT}/lib"
 

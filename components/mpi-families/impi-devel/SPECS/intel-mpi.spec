@@ -20,7 +20,7 @@
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2021.1
-Release:   1
+Release:   %{?dist}.1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
@@ -119,11 +119,11 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library"
 
 # For convenience, redirect standard mpicc/mpicxx/mpifort
 # to use oneAPI icc/icpc/ifort instead of gcc/g++/gfortran
-setenv I_MPI_CC   icc
-setenv I_MPI_CXX  icpc
-setenv I_MPI_FC   ifort
-setenv I_MPI_F77  ifort
-setenv I_MPI_F90  ifort
+setenv I_MPI_CC   icx
+setenv I_MPI_CXX  icpx
+setenv I_MPI_FC   ifx
+setenv I_MPI_F77  ifx
+setenv I_MPI_F90  ifx
 
 setenv MPI_DIR    "$MPIDIR"
 
