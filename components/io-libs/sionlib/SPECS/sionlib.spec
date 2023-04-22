@@ -97,6 +97,11 @@ sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
 
 %if "%{compiler_family}" == "intel"
 sed -i 's|-g|-g -fpic|g' build-*/Makefile.defs
+sed -i "s/^CC.*/CC=$CC/g" build-*/Makefile.defs
+sed -i "s/^CXX.*icpc/CXX=$CXX/g" build-*/Makefile.defs
+sed -i "s/^F77.*/F77=$F77/g" build-*/Makefile.defs
+sed -i "s/-mieee-fp//g;s/-wd161//g;" build-*/Makefile.defs
+sed -i 's/$(CPP)/ifx/g' src/fortraninterface/Makefile
 %endif
 
 %if "%{compiler_family}" == "gnu12"
@@ -106,7 +111,7 @@ sed -i 's/F90 .*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
 %endif
 
 sed -i "s/CFLAGS.*/& $CFLAGS/g" build-*/Makefile.defs
-sed -i "s/CXXFLAGS.*/& $CXXLAGS/g" build-*/Makefile.defs
+sed -i "s/CXXFLAGS.*/& $CXXFLAGS/g" build-*/Makefile.defs
 sed -i "s/FFLAGS.*/& $FCFLAGS/g" build-*/Makefile.defs
 sed -i "s/F90FLAGS.*/& $FCFLAGS/g" build-*/Makefile.defs
 
