@@ -121,6 +121,9 @@ export FFLAGS=-fallow-argument-mismatch
 %endif
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
+%if "%{compiler_family}" == "intel"
+            --with-wrapper-dl-type=none \
+%endif
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif

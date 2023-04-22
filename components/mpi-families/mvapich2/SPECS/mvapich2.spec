@@ -102,6 +102,9 @@ export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
 %endif
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
+%if "%{compiler_family}" == "intel"
+            --disable-wrapper-rpath \
+%endif
 	    --enable-cxx \
 	    --enable-g=dbg \
             --with-device=ch3:mrail \
