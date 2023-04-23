@@ -58,8 +58,10 @@ export CXXFLAGS="$CXXFLAGS -I$MPI_DIR/include"
 
 %if "%{compiler_family}" == "arm1"
 export CFLAGS="${CFLAGS} -fsimdmath"
-export CFLAGS="${CFLAGS} -Wno-register"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
+%endif
+%if "%{compiler_family}" == "arm1" || "%{compiler_family}" == "intel"
+export CFLAGS="${CFLAGS} -Wno-register"
 export CXXFLAGS="${CXXFLAGS} -Wno-register"
 %endif
 
