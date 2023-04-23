@@ -57,7 +57,7 @@ measure the performances of various MPI operations including:
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "arm1" || "%{compiler_family}" == "intel"
 CFLAGS="$CFLAGS -Wno-return-type"
 %endif
 ./configure CC=mpicc CXX=mpicxx \

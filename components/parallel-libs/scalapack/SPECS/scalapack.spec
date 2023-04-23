@@ -71,19 +71,18 @@ cp SLmake.inc.example SLmake.inc
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel"
 %if "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
 %{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
 %{__cat} SLmake.inc
 export CFLAGS="${CFLAGS} -fsimdmath"
+%endif
+%if "%{compiler_family}" == "intel" || "%{compiler_family}" == "arm1"
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CFLAGS="${CFLAGS} -Wno-implicit-int"
-%else
-module load openblas
-%endif
 %endif
 %if "%{compiler_family}" == "gnu12"
+module load openblas
 # configure fails with:
 #   The Fortran compiler gfortran does not accept programs that
 #   call the same routine with arguments of different types without
