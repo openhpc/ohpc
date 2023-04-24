@@ -14,12 +14,17 @@
 %define keyname GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
 %define oneapi_manifest %{OHPC_MODULES}/intel/.rpm-manifest
 %define psxe_manifest %{OHPC_MODULES}/intel/.manifest
-%define min_intel_ver 2021.4.0
+# Using a minimum version has been problematic as DNF will happily
+# install newer versions during build time. If the user has the minimum
+# version, but the build system was already using a newer version, then
+# the resulting binaries might rely on symbols which are not present
+# in the minimum version.
+%define exact_intel_ver 2023.1.0
 
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2021.1
+Version:   2023.1
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -33,11 +38,11 @@ Source2:   oneAPI.repo
 #!BuildIgnore: post-build-checks
 
 Requires: gcc libstdc++-devel
-Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{min_intel_ver}
-Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic >= %{min_intel_ver}
+Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{exact_intel_ver}
+Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{exact_intel_ver}
 Requires: intel-oneapi-mkl intel-oneapi-mkl-devel
 Requires: intel-oneapi-compiler-fortran
-Recommends: intel-hpckit >= %{min_intel_vers}
+Recommends: intel-hpckit = %{exact_intel_ver}
 
 %description
 Provides OpenHPC-style compatible modules for use with the Intel(R) oneAPI
