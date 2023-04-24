@@ -44,7 +44,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # from pname defined in each component .spec file)
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
-# Definition to replace dots in %version with underscores
+# Definition to replace dots in %%version with underscores
 %define version_exp %(tr "." "_" <<< %{version})
 
 # Instead of having Source[1-9]: OHPC_macros in every SPEC file,
