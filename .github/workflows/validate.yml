@@ -118,66 +118,6 @@ jobs:
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
 
-  build_on_openEuler:
-    runs-on: ubuntu-latest
-    name: Build on openEuler
-    container:
-      image: docker.io/openeuler/openeuler:22.03-lts
-    steps:
-    - name: Switch repo
-      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
-    - name: Install git
-      run: dnf -y install git
-    - uses: actions/checkout@v3
-    - name: Setup
-      run: tests/ci/prepare-ci-environment.sh
-    - id: files
-      uses: Ana06/get-changed-files@v2.2.0
-    - name: Validate Build
-      run: |
-        . /etc/profile.d/lmod.sh
-        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
-        touch /tmp/empty
-    - uses: actions/upload-artifact@v3
-      with:
-        name: openEuler-rpms
-        retention-days: 1
-        path: |
-          /home/ohpc/rpmbuild/RPMS/noarch/*rpm
-          /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
-          /tmp/empty
-
-  test_on_openEuler:
-    env:
-      JOB_SKIP_CI_SPECS: |
-        components/runtimes/charliecloud/SPECS/charliecloud.spec
-        components/perf-tools/likwid/SPECS/likwid.spec
-    runs-on: ubuntu-latest
-    name: Test on openEuler
-    container:
-      image: docker.io/openeuler/openeuler:22.03-lts
-    needs: build_on_openEuler
-    steps:
-    - name: Switch repo
-      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
-    - name: Install git
-      run: dnf -y install git
-    - uses: actions/checkout@v3
-    - name: Setup
-      run: tests/ci/prepare-ci-environment.sh
-    - id: files
-      uses: Ana06/get-changed-files@v2.2.0
-    - uses: actions/download-artifact@v3
-      with:
-        name: openEuler-rpms
-        path: /home/ohpc/rpmbuild/RPMS
-    - name: Run CI Tests
-      run: |
-        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
-        . /etc/profile.d/lmod.sh
-        chown ohpc -R tests
-        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
-
   build_on_leap:
     runs-on: ubuntu-latest
     name: Build on LEAP
