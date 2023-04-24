@@ -78,11 +78,16 @@ class ohpc_obs_tool(object):
         logging.info("--> Branch version  = %s" % self.branchVer)
         logging.info("--> Micro release   = %s" % self.microVer)
 
+        projectName = "OpenHPC"
+        if self.branchVer.startswith('3.'):
+            projectName += "3"
+        projectName += ":"
+
         if self.microVer == '0':
-            self.obsProject = "OpenHPC:" + self.branchVer + ":Factory"
+            self.obsProject = projectName + self.branchVer + ":Factory"
         else:
             self.obsProject = (
-                "OpenHPC:" + self.branchVer + "." +
+                projectName + self.branchVer + "." +
                 self.microVer + ":Factory"
             )
         logging.info("--> OBS project     = %s" % self.obsProject)

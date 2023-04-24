@@ -37,7 +37,7 @@ mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 [3.0.0]
 skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-arm1","geopm",
             "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1","tau-arm1","plasma-arm1"]
-skip_x86  = ["-arm1"]
+skip_x86  = ["-arm1","arm-compilers-devel"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
@@ -53,12 +53,13 @@ compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "numpy","plasma","hdf5"]
 mpi_dependent = ["ptscotch","boost","sionlib","pnetcdf","phdf5","netcdf","omb",
                  "tau","extrae","imb","fftw","scalapack","opencoarrays",
-                 "ptscotch","hypre","mpi4py","dimemas","scorep","scalasca",
+                 "hypre","mpi4py","dimemas","scorep","scalasca",
                  "scipy","adios2","netcdf-fortran","netcdf-cxx","trilinos",
                  "petsc","slepc","superlu_dist","mumps","mfem","lmod-defaults",
                  "geopm"]
 openblas_compiler=["gnu12"]
 R_compiler=["gnu12"]
+trilinos_compiler=["gnu12"]
 lmod-defaults_mpi=["openmpi4","mvapich2","impi"]
 opencoarrays_compiler=["gnu12"]
 scipy_compiler=["gnu12"]
@@ -66,7 +67,7 @@ scipy_compiler=["gnu12"]
 # disable all packages on the distro after 'skip_on_distro_'
 # This is mainy used to automatically disable '-intel' and '-arm1' packages
 # on distros without support (like openEuler).
-skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel"]
+skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-compilers-devel","arm-compilers-devel"]
 
 
 [2.7.0]
@@ -76,7 +77,7 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu12","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["ohpc-filesystem","slurm","hwloc","lmod","easybuild","papi57","magpie"]
+standalone = ["ohpc-filesystem","slurm","hwloc","lmod","easybuild","papi57","magpie","ucx"]
 compiler_dependent = ["openmpi"]
 
 [2.6.1]
