@@ -255,7 +255,7 @@ ZFS hooks for mount/mkfs into a dynamic library.
 
 %if %{with servers}
 %package resource-agents
-Summary: HA Resuable Cluster Resource Scripts for Lustre
+Summary: HA Reusable Cluster Resource Scripts for Lustre
 Group: System Environment/Base
 Requires: lustre
 Requires: resource-agents
