@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Build that is dependent on compiler/mpi toolchains
+# Build that is dependent on the compiler toolchains
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
@@ -22,10 +22,10 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.9.0
+Version:        4.9.2
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
+Source0:        https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
 
 BuildRequires:  curl-devel
 BuildRequires:  zlib-devel >= 1.2.5
@@ -76,7 +76,7 @@ NetCDF data is:
 %setup -q -n %{pname}-c-%{version}
 
 %build
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler designation
 %ohpc_setup_compiler
 
 module load hdf5
@@ -101,7 +101,7 @@ make
 #make %{?_smp_mflags}
 
 %install
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler designation
 %ohpc_setup_compiler
 
 module load hdf5

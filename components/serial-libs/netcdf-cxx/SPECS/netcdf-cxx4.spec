@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Build that is dependent on compiler/mpi toolchains
+# Build that is dependent on the compiler toolchains
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
@@ -23,7 +23,7 @@ Group:          %{PROJ_NAME}/io-libs
 Version:        4.3.1
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
+Source0:        https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 
 BuildRequires:  zlib-devel >= 1.2.5
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -73,7 +73,7 @@ NetCDF data is:
 %setup -q -n %{pname}4-%{version}
 
 %build
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler designation
 %ohpc_setup_compiler
 
 module load hdf5
@@ -95,16 +95,13 @@ export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 make %{?_smp_mflags}
 
 %install
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler designation
 %ohpc_setup_compiler
 
 module load hdf5
 module load netcdf
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
-
-# Remove static libraries
-#find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
