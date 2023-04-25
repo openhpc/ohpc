@@ -37,8 +37,8 @@ Source1:   mod_generator_impi.sh
 
 Requires: sed
 Requires(pre): intel-compilers-devel%{PROJ_DELIM} = %{version}
-Requires(pre): intel-oneapi-mpi-devel-%{min_intel_ver}
-Requires: intel-oneapi-mpi-devel-%{min_intel_ver}
+Requires(pre): intel-oneapi-mpi-devel-%{exact_intel_ver}
+Requires: intel-oneapi-mpi-devel-%{exact_intel_ver}
 Requires: intel-compilers-devel%{PROJ_DELIM} = %{version}
 Requires: prun%{PROJ_DELIM}
 
