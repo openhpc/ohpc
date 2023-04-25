@@ -18,9 +18,8 @@
 # install newer versions during build time. If the user has the minimum
 # version, but the build system was already using a newer version, then
 # the resulting binaries might rely on symbols which are not present
-# in the minimum version.
+# in the minimum version.  Newer versions may still be installed in parallel.
 %define exact_intel_ver 2023.1.0
-
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
@@ -38,11 +37,12 @@ Source2:   oneAPI.repo
 #!BuildIgnore: post-build-checks
 
 Requires: gcc libstdc++-devel
-Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{exact_intel_ver}
-Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic = %{exact_intel_ver}
-Requires: intel-oneapi-mkl intel-oneapi-mkl-devel
-Requires: intel-oneapi-compiler-fortran
-Recommends: intel-hpckit = %{exact_intel_ver}
+Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_intel_ver}
+Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_intel_ver}
+Requires: intel-oneapi-dpcpp-cpp-%{exact_intel_ver}
+Requires: intel-oneapi-mkl-devel-%{exact_intel_ver}
+Requires: intel-oneapi-compiler-fortran-%{exact_intel_ver}
+Recommends: intel-hpckit >= %{exact_intel_ver}
 
 %description
 Provides OpenHPC-style compatible modules for use with the Intel(R) oneAPI
