@@ -96,6 +96,7 @@ cd %{_builddir}
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
+%define _default_patch_fuzz 2
 %patch16 -p1
 
 %build
