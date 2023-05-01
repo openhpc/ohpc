@@ -1,0 +1,11 @@
+--- a/libexec/wwmkchroot/include-rhel	2022-01-13 10:05:14.000000000 -0600
++++ a/libexec/wwmkchroot/include-rhel	2023-05-01 13:11:10.000000000 -0500
+@@ -88,7 +88,7 @@
+     echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
+     echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
+     if [ "$PKG_MGR" = "dnf" ]; then
+-        echo "install_weak_deps=0" >> $CHROOTDIR/$YUM_CONF
++        echo "install_weak_deps=1" >> $CHROOTDIR/$YUM_CONF
+         echo "cachedir=/var/cache/dnf" >> $CHROOTDIR/$YUM_CONF
+         # New DNF requires the os-release file with platform ID
+         echo "PLATFORM_ID=\"$PLATFORMID\"" > $CHROOTDIR/etc/os-release

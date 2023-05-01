@@ -46,6 +46,7 @@ Patch12: warewulf-vnfs.bootstrap_drivers.patch
 Patch13: warewulf-vnfs.hybridize.patch
 Patch14: warewulf-vnfs.boot_fw_symlink.patch
 Patch15: warewulf-vnfs.wwvnfs.requires.patch
+Patch16: warewulf-vnfs.rhel-weak-deps.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -95,6 +96,7 @@ cd %{_builddir}
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
+%patch16 -p1
 
 %build
 ./autogen.sh
