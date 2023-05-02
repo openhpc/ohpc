@@ -30,6 +30,7 @@ for compiler in $COMPILER_FAMILIES ; do
     module purge          || exit 1
     module load $compiler || exit 1
     module load hdf5      || exit 1
+    module load autotools || exit 1    
 
     ./configure           || exit 1
     make -j 4 check       || status=1
