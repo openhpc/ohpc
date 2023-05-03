@@ -41,6 +41,13 @@ elif [ "${OHPC_COMPILER_FAMILY}" = "gnu12" ]; then
     export F77=gfortran
     module purge
     module load gnu12
+elif [ "${OHPC_COMPILER_FAMILY}" = "gnu13" ]; then
+    export CC=gcc
+    export CXX=g++
+    export FC=gfortran
+    export F77=gfortran
+    module purge
+    module load gnu13
 elif [ "${OHPC_COMPILER_FAMILY}" = "gnu9" ]; then
     export CC=gcc
     export CXX=g++
@@ -93,21 +100,22 @@ echo " "
 
 arch=$(uname -m)
 
-if [ "${toolset}" == "gcc" ];then
-    DEFAULT_OPTS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic"
-    if [ "${arch}" == "x86_64" ];then
-        DEFAULT_OPTS="${DEFAULT_OPTS} -m64"
-        if [ -e /etc/os-release ]; then
-            # shellcheck disable=SC1091
-            . /etc/os-release
-            if [ -n "${PLATFORM_ID}" ] && [ "${PLATFORM_ID}" == "platform:el9" ]; then
-                # Only RHEL 9 has switched to the optimization baseline 'x86-64-v2'
-                DEFAULT_OPTS="${DEFAULT_OPTS} -march=x86-64-v2"
-            fi
+if [ "${arch}" == "x86_64" ];then
+    ARCH_OPTS="-m64"
+    if [ -e /etc/os-release ]; then
+        # shellcheck disable=SC1091
+        . /etc/os-release
+        if [ -n "${PLATFORM_ID}" ] && [ "${PLATFORM_ID}" == "platform:el9" ]; then
+            # Only RHEL 9 has switched to the optimization baseline 'x86-64-v2'
+            ARCH_OPTS="${ARCH_OPTS} -march=x86-64-v2"
         fi
     fi
+fi
+
+if [ "${toolset}" == "gcc" ];then
+    DEFAULT_OPTS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic ${ARCH_OPTS}"
 elif [ "${toolset}" == "intel" ];then
-    DEFAULT_OPTS="-O3 -g -m64 -fexceptions -fstack-protector-strong -mtune=generic"
+    DEFAULT_OPTS="-O3 -g -fexceptions -fstack-protector-strong -mtune=generic ${ARCH_OPTS}"
 elif [ "${toolset}" == "arm" ];then
     DEFAULT_OPTS="-O3 -g -Wall -fexceptions -fstack-protector-strong -mtune=generic"
 fi

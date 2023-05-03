@@ -86,6 +86,11 @@ BuildRequires: ohpc-buildroot
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
+%if "%{compiler_family}" == "gnu13"
+BuildRequires: gnu13-compilers%{PROJ_DELIM} >= 13.1.0
+Requires:      gnu13-compilers%{PROJ_DELIM} >= 13.1.0
+%global gnu_family gnu13
+%endif
 %if "%{compiler_family}" == "gnu12"
 BuildRequires: gnu12-compilers%{PROJ_DELIM} >= 12.1.0
 Requires:      gnu12-compilers%{PROJ_DELIM} >= 12.1.0
