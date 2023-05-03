@@ -7,6 +7,9 @@ to the chosen {\em master} host.
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) (*\groupinstall*) "InfiniBand Support"
+# Load IB services
+[sms](*\#*) udevadm trigger --type=devices --action=add
+[sms](*\#*) systemctl restart rdma-load-modules@infiniband.service
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
