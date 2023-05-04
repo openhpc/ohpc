@@ -47,6 +47,7 @@ BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel, libacl-devel, libattr-devel
 BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
 BuildRequires: libtirpc-devel
+BuildRequires: kmod
 
 # charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
 %if 0%{?suse_version} || 0%{?sle_version}
