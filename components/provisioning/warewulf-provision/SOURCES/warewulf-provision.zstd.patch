@@ -23,23 +23,6 @@ type.
  6 files changed, 1264 insertions(+), 13 deletions(-)
  create mode 100644 provision/initramfs/busybox_nokmod.config.in
 
-diff --git a/.gitignore b/.gitignore
-index 56b4d426..27289375 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -32,9 +32,10 @@ provision/3rd_party/syslinux32.efi
- provision/3rd_party/syslinux64.efi
- provision/initramfs/_work/
- provision/initramfs/busybox.config
-+provision/initramfs/busybox_nokmod.config
- provision/initramfs/capabilities/*/capability.cpio
- provision/initramfs/capabilities/*/rootfs/
- provision/initramfs/initramfs.cpio
- provision/initramfs/rootfs/
- vscode.code-workspace
--.vstags
-\ No newline at end of file
-+.vstags
 diff --git a/provision/configure.ac b/provision/configure.ac
 index 80d11ba0..0f289d2f 100644
 --- a/provision/configure.ac
@@ -1342,71 +1325,3 @@ index 7d884de0..6f087470 100644
  %else
  %global localtools 0
  Requires: %{name}-gpl_sources = %{version}-%{release}
-diff --git a/vnfs/bin/wwbootstrap b/vnfs/bin/wwbootstrap
-index b4dc8ad8..08b7b2e5 100755
---- a/vnfs/bin/wwbootstrap
-+++ b/vnfs/bin/wwbootstrap
-@@ -224,7 +224,10 @@ if ($config->get("drivers")) {
-     my %included_files;
-     my @driver_files;
-     my $module_count = 0;
--    my $check_compression;
-+    my $check_compression_xz;
-+    my $check_compression_gz;
-+    my $check_compression_zst;
-+    my $check_compression_bz2;
- 
-     mkpath("$tmpdir/initramfs/lib/modules/$opt_kversion");
- 
-@@ -238,10 +241,16 @@ if ($config->get("drivers")) {
-                 my $path = $1;
-                 my @deps = split(/\s+/, $2);
-                 my $name = basename($path);
--                if  ($name =~ /\.ko\.(xz|bz2|gz)$/) {
--                    $check_compression = 1;
-+                if  ($name =~ /\.ko\.xz$/) {
-+                    $check_compression_xz = 1;
-+                } elsif  ($name =~ /\.ko\.gz$/) {
-+                    $check_compression_gz = 1;
-+                } elsif  ($name =~ /\.ko\.zst$/) {
-+                    $check_compression_zst = 1;
-+                } elsif  ($name =~ /\.ko\.bz2$/) {
-+                    $check_compression_bz2 = 1;
-                 }
--                $name =~ s/\.ko(\.(xz|bz2|gz))?$//;
-+                $name =~ s/\.ko(\.(xz|bz2|gz|zst))?$//;
-                 $mod_path{"$name"} = $path;
-                 push(@mod_files, $path);
-                 if (@deps) {
-@@ -327,10 +336,28 @@ if ($config->get("drivers")) {
-         &dprint("Running depmod\n");
-         system("/sbin/depmod -a -b $tmpdir/initramfs $opt_kversion");
- 
--        if ($check_compression) {
--            my $dependencies = `ldd /sbin/depmod`;
-+        my $dependencies = `ldd /sbin/depmod`;
-+        if ($check_compression_xz) {
-             if (index($dependencies, "liblzma") == -1) {
--                &wprint("Using compressed kernel modules, but depmod doesn't support it\n");
-+                &wprint("Using xz compressed kernel modules, but depmod doesn't support it\n");
-+                &wprint("-> bootstrap will likely fail\n");
-+            }
-+        }
-+        if ($check_compression_gz) {
-+            if (index($dependencies, "libz") == -1) {
-+                &wprint("Using gzip compressed kernel modules, but depmod doesn't support it\n");
-+                &wprint("-> bootstrap will likely fail\n");
-+            }
-+        }
-+        if ($check_compression_zst) {
-+            if (index($dependencies, "libzstd") == -1) {
-+                &wprint("Using zstd compressed kernel modules, but depmod doesn't support it\n");
-+                &wprint("-> bootstrap will likely fail\n");
-+            }
-+        }
-+        if ($check_compression_bz2) {
-+            if (index($dependencies, "libbz2") == -1) {
-+                &wprint("Using bzip2 compressed kernel modules, but depmod doesn't support it\n");
-                 &wprint("-> bootstrap will likely fail\n");
-             }
-         }
