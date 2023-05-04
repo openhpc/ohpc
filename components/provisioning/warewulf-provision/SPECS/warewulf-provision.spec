@@ -31,6 +31,7 @@ Patch3:  warewulf-provision.ppc64le.patch
 Patch4:  warewulf-provision.sle_tftpboot.patch
 Patch5:  warewulf-provision.wwgetfiles.patch
 Patch6:  warewulf-provision.update_ipxe_to_09e8a15.patch
+Patch7:  warewulf-provision.zstd.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -133,6 +134,8 @@ cd %{_builddir}
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%define _default_patch_fuzz 2
+%patch7 -p2
 %{__rm} -f 3rd_party/GPL/ipxe-2265a65.tar.xz
 %{__cp} %SOURCE1 3rd_party/GPL/
 
