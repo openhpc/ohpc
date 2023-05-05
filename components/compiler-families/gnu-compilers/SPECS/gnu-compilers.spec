@@ -174,8 +174,9 @@ prepend_path("MODULEPATH",      "%{OHPC_MODULEDEPS}/%{gnu_major_ver}")
 family("compiler")
 EOF
 
+%if "%{compiler_family}" == "gnu12"
 ln -s %{version}.lua %{buildroot}%{module_path}/default
-
+%endif
 
 %files
 %{module_path}
