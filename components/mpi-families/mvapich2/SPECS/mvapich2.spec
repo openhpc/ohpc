@@ -88,7 +88,7 @@ across multiple networks.
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu12" || "%{compiler_family}" == "gnu13"
 # configure fails with:
 #   The Fortran compiler gfortran does not accept programs that
 #   call the same routine with arguments of different types without

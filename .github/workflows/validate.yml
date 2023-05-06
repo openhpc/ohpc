@@ -64,8 +64,11 @@ jobs:
       run: make -C tests/ci/ ${{ matrix.step }}-lint
 
   build_on_rhel:
+    strategy:
+      matrix:
+        compiler: [gnu12, gnu13]
     runs-on: ubuntu-latest
-    name: Build on RHEL
+    name: Build on RHEL (${{ matrix.compiler}})
     container:
       image: docker.io/library/rockylinux:9
     steps:
@@ -79,9 +82,10 @@ jobs:
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
-        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
+        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler}}
         touch /tmp/empty
     - uses: actions/upload-artifact@v3
+      if: matrix.compiler == 'gnu12'
       with:
         name: rhel-rpms
         retention-days: 1
