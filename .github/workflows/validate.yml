@@ -209,6 +209,44 @@ jobs:
       run: |
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
+        touch /tmp/empty
+    - uses: actions/upload-artifact@v3
+      with:
+        name: leap-rpms
+        retention-days: 1
+        path: |
+          /home/ohpc/rpmbuild/RPMS/noarch/*rpm
+          /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
+          /tmp/empty
+
+  test_on_leap:
+    env:
+      JOB_SKIP_CI_SPECS: |
+        components/runtimes/charliecloud/SPECS/charliecloud.spec
+        components/perf-tools/likwid/SPECS/likwid.spec
+    runs-on: ubuntu-latest
+    name: Test on LEAP
+    container:
+      image: registry.opensuse.org/opensuse/leap:15.4
+    needs: build_on_leap
+    steps:
+    - name: Install git
+      run: zypper -n update; zypper -n install git
+    - uses: actions/checkout@v3
+    - name: Setup
+      run: tests/ci/prepare-ci-environment.sh
+    - id: files
+      uses: Ana06/get-changed-files@v2.2.0
+    - uses: actions/download-artifact@v3
+      with:
+        name: leap-rpms
+        path: /home/ohpc/rpmbuild/RPMS
+    - name: Run CI Tests
+      run: |
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
+        . /etc/profile.d/lmod.sh
+        chown ohpc -R tests
+        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
 
   build_on_centos_stream_9:
     runs-on: ubuntu-latest

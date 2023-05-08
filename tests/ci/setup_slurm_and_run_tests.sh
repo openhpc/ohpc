@@ -6,11 +6,19 @@ set -e
 USER=$1
 shift
 
+PKG=("dnf" "-y")
+
+if hash zypper > /dev/null 2>&1; then
+	PKG=("zypper" "-n" "--no-gpg-checks")
+fi
+
 # First install slurm and needed packages
-dnf -y install \
+"${PKG[@]}" install \
 	autoconf \
 	automake \
+	hostname \
 	make \
+	openssh-clients \
 	which \
 	sudo \
 	prun-ohpc \
@@ -23,10 +31,10 @@ dnf -y install \
 
 # Install rebuilt packages (if any)
 # shellcheck disable=SC2046 # (we want the words to be split)
-dnf -y install $(find /home/"${USER}"/rpmbuild/RPMS/ -name "*rpm") || true
+"${PKG[@]}" install $(find /home/"${USER}"/rpmbuild/RPMS/ -name "*rpm") || true
 
 # Remove OpenPBS, if it is installed as a dependency. The tests use Slurm Resource Manager
-dnf -y remove openpbs-*-ohpc || true
+"${PKG[@]}" remove openpbs-*-ohpc || true
 rm -f /etc/pbs.conf
 
 # Setup slurm
@@ -57,6 +65,8 @@ sed -i -e "
 echo "CgroupPlugin=cgroup/v1" >  /etc/slurm/cgroup.conf
 
 chown root.root /var/log/munge
+
+mkdir -p /run/munge
 
 /usr/sbin/munged -f
 /usr/sbin/slurmctld
@@ -90,7 +100,7 @@ srun -N2 hostname
 eval "$(tests/ci/spec_to_test_mapping.py $@)"
 
 if [ "${#PKGS[@]}" -gt 0 ]; then
-	dnf -y install "${PKGS[@]}"
+	"${PKG[@]}" install "${PKGS[@]}"
 fi
 
 export SIMPLE_CI=1
