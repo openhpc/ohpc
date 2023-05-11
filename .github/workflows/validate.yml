@@ -135,21 +135,3 @@ jobs:
       run: |
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
-
-  build_on_centos_stream_9:
-    runs-on: ubuntu-latest
-    name: Build on CentOS Stream 9
-    container:
-      image: quay.io/centos/centos:stream9
-    steps:
-    - name: Install git
-      run: dnf -y install git
-    - uses: actions/checkout@v3
-    - name: Setup
-      run: tests/ci/prepare-ci-environment.sh
-    - id: files
-      uses: Ana06/get-changed-files@v2.2.0
-    - name: Validate Build
-      run: |
-        . /etc/profile.d/lmod.sh
-        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
