@@ -48,37 +48,19 @@ for like in ${ID_LIKE}; do
 	fi
 done
 
-if [ "${ID}" = "openEuler" ]; then
-	PKG_MANAGER=dnf
-	FACTORY_VERSION=3.0
-fi
-
 if [ "${PKG_MANAGER}" = "dnf" ]; then
-	if [ "${ID}" = "openEuler" ]; then
-		loop_command "${PKG_MANAGER}" -y  install "${COMMON_PKGS}"
-		FACTORY_VERSION=3.0
-		loop_command wget http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/openEuler_22.03/OpenHPC:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
-	else
-		# We need to figure out if we are running on RHEL (clone) 8 or 9 and
-		# rpmdev-vercmp from rpmdevtools is pretty good at comparing versions.
-		loop_command "${PKG_MANAGER}" -y  install rpmdevtools crypto-policies-scripts "${COMMON_PKGS}"
+	# We need to figure out if we are running on RHEL (clone) 8 or 9 and
+	# rpmdev-vercmp from rpmdevtools is pretty good at comparing versions.
+	loop_command "${PKG_MANAGER}" -y  install rpmdevtools crypto-policies-scripts "${COMMON_PKGS}"
 
-		# Exit status is 0 if the EVR's are equal, 11 if EVR1 is newer, and 12 if EVR2
-	        # is newer.  Other exit statuses indicate problems.
-		set +e
-		rpmdev-vercmp 9 "${VERSION_ID}"
-		if [ "$?" -eq "11" ]; then
-			OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/CentOS_8/${UNAME_M}/ohpc-release-2-1.el8.${UNAME_M}.rpm"
-		else
-			FACTORY_VERSION=3.0
-			# This is our RHEL 9 pre-release repository
-			loop_command wget http://obs.openhpc.community:82/OpenHPC:/"${FACTORY_VERSION}":/Factory/EL_9/OpenHPC:"${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
-			# The OBS signing key is too old
-			update-crypto-policies --set LEGACY
-			NINE=1
-		fi
-		set -e
+	# Exit status is 0 if the EVR's are equal, 11 if EVR1 is newer, and 12 if EVR2
+		# is newer.  Other exit statuses indicate problems.
+	set +e
+	rpmdev-vercmp 9 "${VERSION_ID}"
+	if [ "$?" -eq "11" ]; then
+		OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/CentOS_8/${UNAME_M}/ohpc-release-2-1.el8.${UNAME_M}.rpm"
 	fi
+	set -e
 else
 	OHPC_RELEASE="http://repos.openhpc.community/OpenHPC/2/Leap_15/${UNAME_M}/ohpc-release-2-1.leap15.${UNAME_M}.rpm"
 fi
@@ -88,10 +70,6 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 	if [ "${PKG_MANAGER}" = "dnf" ]; then
 		if [ -z "${NINE}" ]; then
 			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_8"
-		elif [ "${ID}" = "openEuler" ]; then
-			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}openEuler_22.03"
-		else
-			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_9"
 		fi
 		FACTORY_REPOSITORY_DESTINATION="/etc/yum.repos.d/obs.repo"
 	else
