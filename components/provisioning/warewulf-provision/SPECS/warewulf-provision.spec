@@ -92,11 +92,11 @@ BuildRequires: gcc-x86_64-linux-gnu
 # New RHEL and SLE include the required FS tools
 %if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
 %global localtools 1
-BuildRequires: parted, e2fsprogs, bsdtar
+BuildRequires: parted, e2fsprogs, bsdtar, mdadm, xfsprogs, kmod
 Requires: parted, autofs, e2fsprogs
 BuildRequires: libarchive.so.13()(64bit)
 Requires: libarchive.so.13()(64bit)
-%global CONF_FLAGS --with-local-e2fsprogs --with-local-libarchive --with-local-parted --with-local-partprobe
+%global CONF_FLAGS --with-local-e2fsprogs --with-local-libarchive --with-local-parted --with-local-partprobe --with-local-mdam --with-local-xfsprogs --with-local-kmod
 # The included Busybox will not build on OpenSUSE 15.4
 %if 0%{?sle_version} >= 150400 || 0%{?openEuler}
 BuildRequires: busybox
