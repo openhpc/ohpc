@@ -145,7 +145,7 @@ cd %{_builddir}
 ./autogen.sh
 
 # Configure needs to locate mkfs.ext4
-export PATH=/usr/sbin:$PATH
+export PATH=/usr/sbin:/sbin:$PATH
 
 %configure --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS} %{?CROSS_FLAG}
 %{__make} %{?mflags}
