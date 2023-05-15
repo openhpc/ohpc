@@ -19,11 +19,7 @@
 
 %define ncdf_so_major 7
 
-%if 0%{?ohpc_mpi_dependent}
-Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%else
-Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-%endif
+Name:           %{ohpc_name}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
@@ -38,11 +34,11 @@ BuildRequires:  libxml2-devel
 BuildRequires:  m4 make
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 %if 0%{?ohpc_mpi_dependent}
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  phdf5%{ohpc_suffix}
+Requires:       phdf5%{ohpc_suffix}
 %else
-BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM}
-Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  hdf5%{ohpc_suffix}
+Requires:       hdf5%{ohpc_suffix}
 %endif
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
@@ -132,13 +128,8 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 rm -rf $RPM_BUILD_ROOT/$RPM_BUILD_DIR/%{pname}-c-%{version}
 
 # OpenHPC module file
-%if 0%{?ohpc_mpi_dependent}
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
-%else
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
-%endif
+%{__mkdir_p} %{buildroot}%{ohpc_modulepath}
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -190,11 +181,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%if 0%{?ohpc_mpi_dependent}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
-%else
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
-%endif
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}

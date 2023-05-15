@@ -17,11 +17,7 @@
 
 %define pname netcdf-fortran
 
-%if 0%{?ohpc_mpi_dependent}
-Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%else
-Name:           %{pname}-%{compiler_family}{PROJ_DELIM}
-%endif
+Name:           %{ohpc_name}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
@@ -40,24 +36,15 @@ BuildRequires:  libbz2-devel
 %endif
 BuildRequires:  libcurl-devel m4 make
 %if 0%{?ohpc_mpi_dependent}
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
-BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  phdf5%{ohpc_suffix} >= 1.8.8
 %else
-BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} >= 1.8.8
-BuildRequires:  netcdf-%{compiler_family}%{PROJ_DELIM}
-Requires:       netcdf-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  hdf5%{ohpc_suffix} >= 1.8.8
 %endif
+BuildRequires:  netcdf%{ohpc_suffix}
+Requires:       netcdf%{ohpc_suffix}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-
-# Default library install path
-%if 0%{?ohpc_mpi_dependent}
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
-%else
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
-%endif
 
 %description
 NetCDF (network Common Data Form) is an interface for array-oriented
@@ -112,9 +99,9 @@ export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
 %if 0%{?ohpc_mpi_dependent}
-./configure FC=mpif90 --prefix=%{install_path} \
+./configure FC=mpif90 --prefix=%{ohpc_install_path} \
 %else
-./configure --prefix=%{install_path} \
+./configure --prefix=%{ohpc_install_path} \
 %endif
     --enable-shared \
     --with-pic \
@@ -142,13 +129,8 @@ module load netcdf
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # OpenHPC module file
-%if 0%{?ohpc_mpi_dependent}
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
-%else
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
-%endif
+%{__mkdir_p} %{buildroot}%{ohpc_modulepath}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -180,23 +162,19 @@ depends-on netcdf
 
 set             version             %{version}
 
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    PATH                %{ohpc_install_path}/bin
+prepend-path    MANPATH             %{ohpc_install_path}/share/man
+prepend-path    INCLUDE             %{ohpc_install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{ohpc_install_path}/lib
 
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_DIR        %{ohpc_install_path}
+setenv          %{PNAME}_BIN        %{ohpc_install_path}/bin
+setenv          %{PNAME}_LIB        %{ohpc_install_path}/lib
+setenv          %{PNAME}_INC        %{ohpc_install_path}/include
 
 EOF
 
-%if 0%{?ohpc_mpi_dependent}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
-%else
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
-%endif
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
