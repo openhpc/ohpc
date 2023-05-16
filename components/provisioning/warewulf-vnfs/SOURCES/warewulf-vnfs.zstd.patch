@@ -1,0 +1,94 @@
+From c77b81316f9980aee44eb097f3fddb1782fdbbd7 Mon Sep 17 00:00:00 2001
+From: Ben Allen <bsallen@alcf.anl.gov>
+Date: Tue, 30 Aug 2022 21:43:01 +0000
+Subject: [PATCH] Add Support for Zstandard Compressed Kernel Modules
+
+Newer distros (eg. OpenSUSE 15.4) are shipping with zstd compressed
+kernel modules. Currently busybox does not have support for zstd.
+Thus we add a new configure argument in provision `--with-local-kmod`
+to pull in kmod from the build host to the initramfs and symlink it to
+modprobe, etc. When this option is used we drop the module
+utilites from the busybox config to save a bit of space.
+
+Also update wwbootstrap to look for zst suffix kernel modules, and
+update the check_compression logic a bit to look for each compression
+type.
+---
+ .gitignore                                   |    3 +-
+ provision/configure.ac                       |    2 +
+ provision/initramfs/Makefile.am              |   24 +-
+ provision/initramfs/busybox_nokmod.config.in | 1203 ++++++++++++++++++
+ provision/warewulf-provision.spec.in         |    4 +-
+ vnfs/bin/wwbootstrap                         |   41 +-
+ 6 files changed, 1264 insertions(+), 13 deletions(-)
+ create mode 100644 provision/initramfs/busybox_nokmod.config.in
+
+
+diff --git a/vnfs/bin/wwbootstrap b/vnfs/bin/wwbootstrap
+index b4dc8ad8..08b7b2e5 100755
+--- a/vnfs/bin/wwbootstrap
++++ b/vnfs/bin/wwbootstrap
+@@ -224,7 +224,10 @@ if ($config->get("drivers")) {
+     my %included_files;
+     my @driver_files;
+     my $module_count = 0;
+-    my $check_compression;
++    my $check_compression_xz;
++    my $check_compression_gz;
++    my $check_compression_zst;
++    my $check_compression_bz2;
+ 
+     mkpath("$tmpdir/initramfs/lib/modules/$opt_kversion");
+ 
+@@ -238,10 +241,16 @@ if ($config->get("drivers")) {
+                 my $path = $1;
+                 my @deps = split(/\s+/, $2);
+                 my $name = basename($path);
+-                if  ($name =~ /\.ko\.(xz|bz2|gz)$/) {
+-                    $check_compression = 1;
++                if  ($name =~ /\.ko\.xz$/) {
++                    $check_compression_xz = 1;
++                } elsif  ($name =~ /\.ko\.gz$/) {
++                    $check_compression_gz = 1;
++                } elsif  ($name =~ /\.ko\.zst$/) {
++                    $check_compression_zst = 1;
++                } elsif  ($name =~ /\.ko\.bz2$/) {
++                    $check_compression_bz2 = 1;
+                 }
+-                $name =~ s/\.ko(\.(xz|bz2|gz))?$//;
++                $name =~ s/\.ko(\.(xz|bz2|gz|zst))?$//;
+                 $mod_path{"$name"} = $path;
+                 push(@mod_files, $path);
+                 if (@deps) {
+@@ -327,10 +336,28 @@ if ($config->get("drivers")) {
+         &dprint("Running depmod\n");
+         system("/sbin/depmod -a -b $tmpdir/initramfs $opt_kversion");
+ 
+-        if ($check_compression) {
+-            my $dependencies = `ldd /sbin/depmod`;
++        my $dependencies = `ldd /sbin/depmod`;
++        if ($check_compression_xz) {
+             if (index($dependencies, "liblzma") == -1) {
+-                &wprint("Using compressed kernel modules, but depmod doesn't support it\n");
++                &wprint("Using xz compressed kernel modules, but depmod doesn't support it\n");
++                &wprint("-> bootstrap will likely fail\n");
++            }
++        }
++        if ($check_compression_gz) {
++            if (index($dependencies, "libz") == -1) {
++                &wprint("Using gzip compressed kernel modules, but depmod doesn't support it\n");
++                &wprint("-> bootstrap will likely fail\n");
++            }
++        }
++        if ($check_compression_zst) {
++            if (index($dependencies, "libzstd") == -1) {
++                &wprint("Using zstd compressed kernel modules, but depmod doesn't support it\n");
++                &wprint("-> bootstrap will likely fail\n");
++            }
++        }
++        if ($check_compression_bz2) {
++            if (index($dependencies, "libbz2") == -1) {
++                &wprint("Using bzip2 compressed kernel modules, but depmod doesn't support it\n");
+                 &wprint("-> bootstrap will likely fail\n");
+             }
+         }
