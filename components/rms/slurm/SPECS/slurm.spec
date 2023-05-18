@@ -484,7 +484,7 @@ install -D -m755 contribs/sjstat %{buildroot}/%{_bindir}/sjstat
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
-head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example | grep -v ReturnToService > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
+head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example | grep -vE "TaskPlugin=|PropagateResourceLimitsExcept=|PropagateResourceLimitsExcept=|JobCompType=|Epilog=|NodeName=|PartitionName=|SlurmctldParameters=|LaunchParameters=|ReturnToService=" > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 # 10/2/18 brad.geltz@intel.com - Enabling the task/affinity plugin to add the --cpu-bind option to srun for GEOPM
 echo "TaskPlugin=task/affinity" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
