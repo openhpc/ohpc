@@ -25,7 +25,7 @@ Source0:   https://pypi.io/packages/source/e/easybuild/easybuild-%{version}.tar.
 Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
 Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
-BuildRequires: python3 python3-pip
+BuildRequires: python3-devel python3-pip
 BuildRequires: python3-setuptools
 Requires:  python3
 Requires:  patch
