@@ -35,30 +35,16 @@ BuildRequires: lua-posix
 BuildRequires: procps-ng
 Requires: lua-filesystem
 Requires: lua-posix
+Provides: environment(modules)
+Obsoletes: environment-modules
 %endif
-%if 0%{?suse_version}
+%if 0%{?sle_version}
 BuildRequires: lua-luafilesystem
 BuildRequires: lua-luaposix
 BuildRequires: procps
 Requires: lua-luafilesystem
 Requires: lua-luaposix
-%endif
-
-%if 0%{?suse_version}
 Conflicts: Modules
-%else
-%if 0%{?rhel} > 7
-# Starting with RHEL8, packages in RHEL8 depending on
-# environment modules no longer depend on the package
-# but on the virtual provide 'environment(modules)'.
-# By extending the MODULEPATH of this lmod we can easily
-# also use the OS provided modulesfiles.
-Provides: environment(modules)
-Obsoletes: environment-modules
-Conflicts: Lmod
-%else
-Conflicts: environment-modules
-%endif
 %endif
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
@@ -168,7 +154,12 @@ proc ModulesHelp { } { puts stderr "Enable operating system provided modules" }
 
 module-whatis "Name: Operating System provided modules"
 
+%if 0%{?sle_version}
+append-path MODULEPATH /etc/modulefiles:/usr/share/modules
+%endif
+%if 0%{?rhel} || 0%{?openEuler}
 append-path MODULEPATH /etc/modulefiles:/usr/share/modulefiles
+%endif
 EOF
 
 
