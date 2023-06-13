@@ -123,6 +123,15 @@ def loop_command(command, max_attempts=5):
 
 
 def build_srpm_and_rpm(command, mpi_family=None, compiler_family=None):
+    # Build SRPM
+    command = [
+        'misc/build_srpm.sh',
+        spec,
+    ]
+    if compiler_family:
+        command.append(compiler_family)
+    if compiler_family and mpi_family:
+        command.append(mpi_family)
     success, output = run_command(command)
     if not success:
         # First check if the architecture is not supported
@@ -254,15 +263,8 @@ for spec in args.specfiles:
         for family in families:
             if family == 'mvapich2' and os.uname().machine == 'aarch64':
                 continue
-            # Build SRPM
-            command = [
-                'misc/build_srpm.sh',
-                spec,
-                args.compiler_family,
-                family,
-            ]
             if not build_srpm_and_rpm(
-                    command,
+                    spec,
                     mpi_family=family,
                     compiler_family=args.compiler_family,
             ):
@@ -273,14 +275,8 @@ for spec in args.specfiles:
                     (just_spec, args.compiler_family, family))
 
     elif 'ohpc_compiler_dependent' in contents:
-        # Build SRPM
-        command = [
-            'misc/build_srpm.sh',
-            spec,
-            args.compiler_family,
-        ]
         if not build_srpm_and_rpm(
-                command,
+                spec,
                 compiler_family=args.compiler_family,
         ):
             failed.append(just_spec)
@@ -290,12 +286,7 @@ for spec in args.specfiles:
                 (just_spec, args.compiler_family))
 
     else:
-        # Build SRPM
-        command = [
-            'misc/build_srpm.sh',
-            spec,
-        ]
-        if not build_srpm_and_rpm(command):
+        if not build_srpm_and_rpm(spec):
             failed.append(just_spec)
         else:
             rebuild_success.append(just_spec)
