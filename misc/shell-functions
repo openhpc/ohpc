@@ -27,10 +27,17 @@ build_srpm() {
 	local DIR
 	local COMPILER_FAMILY=${2}
 	local MPI_FAMILY=${3}
+        local MPI_DEPENDENT=${4}
+
+        if [ "${MPI_DEPENDENT}" -eq "0" ]; then
+                MPI_DEPENDENT=(--define 'ohpc_mpi_dependent 0')
+        else
+                MPI_DEPENDENT=()
+        fi
 
 	DIR=$(dirname "${1}")
 
-	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "compiler_family ${COMPILER_FAMILY}" --define "mpi_family ${MPI_FAMILY}" "${SPEC}" 2>/dev/null)
+	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "compiler_family ${COMPILER_FAMILY}" --define "mpi_family ${MPI_FAMILY}" "${MPI_DEPENDENT[@]}" "${SPEC}" 2>/dev/null)
 	RESULT=$?
 
 	echo "${SRPM}" | tail -1 | awk -F\  '{ print $2 }'
