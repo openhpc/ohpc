@@ -122,7 +122,12 @@ def loop_command(command, max_attempts=5):
         time.sleep(attempt_counter)
 
 
-def build_srpm_and_rpm(command, mpi_family=None, compiler_family=None):
+def build_srpm_and_rpm(
+        command,
+        mpi_family=None,
+        compiler_family=None,
+        not_mpi_dependent=False
+):
     # Build SRPM
     command = [
         'misc/build_srpm.sh',
@@ -132,6 +137,13 @@ def build_srpm_and_rpm(command, mpi_family=None, compiler_family=None):
         command.append(compiler_family)
     if compiler_family and mpi_family:
         command.append(mpi_family)
+    if not_mpi_dependent:
+        if not mpi_family:
+            # This is a shortcoming of the build_srpm script.
+            # It only has positional parameters.
+            # It needs a dummy parameter here.
+            command.append('openmpi4')
+        command.append('0')
     success, output = run_command(command)
     if not success:
         # First check if the architecture is not supported
@@ -200,6 +212,11 @@ def build_srpm_and_rpm(command, mpi_family=None, compiler_family=None):
     if compiler_family is not None:
         rebuild_command[-1] += (
             " --define 'compiler_family %s'" % compiler_family
+        )
+
+    if not_mpi_dependent:
+        rebuild_command[-1] += (
+            " --define 'ohpc_mpi_dependent 0'"
         )
 
     # Disable parallel builds for below packages on aarch64 to avoid OOM
@@ -273,6 +290,23 @@ for spec in args.specfiles:
                 rebuild_success.append(
                     "%s (%s, %s)" %
                     (just_spec, args.compiler_family, family))
+
+        if '!?ohpc_mpi_dependent' in contents:
+            # This is a package that can be built with and without MPI support.
+            # It should have the following line:
+            # '%{!?ohpc_mpi_dependent:%define ohpc_mpi_dependent 1}'
+            # If that exists we need to rebuild it once more with
+            # ohpc_mpi_dependent set to 0.
+            if not build_srpm_and_rpm(
+                    spec,
+                    compiler_family=args.compiler_family,
+                    not_mpi_dependent=True,
+            ):
+                failed.append(just_spec)
+            else:
+                rebuild_success.append(
+                    "%s (%s)" %
+                    (just_spec, args.compiler_family))
 
     elif 'ohpc_compiler_dependent' in contents:
         if not build_srpm_and_rpm(
