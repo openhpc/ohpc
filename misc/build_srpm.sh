@@ -21,10 +21,16 @@ else
 	COMPILER_FAMILY=gnu12
 fi
 
-if [ $# -eq 3 ]; then
+if [ $# -ge 3 ]; then
 	MPI_FAMILY=$3
 else
 	MPI_FAMILY=openmpi4
+fi
+
+if [ $# -eq 4 ]; then
+	MPI_DEPENDENT=$4
+else
+	MPI_DEPENDENT=1
 fi
 
 if [ ! -e "${SPEC}" ]; then
@@ -54,16 +60,19 @@ echo "Building SRPM for ${SPEC}"
 prepare_git_tree "${DIR}"
 
 # Try to build the SRPM
-SRPM=$(build_srpm "${SPEC}" "${COMPILER_FAMILY}" "${MPI_FAMILY}")
+SRPM=$(build_srpm "${SPEC}" "${COMPILER_FAMILY}" "${MPI_FAMILY}" "${MPI_DEPENDENT}")
 RESULT=$?
-if [ "${RESULT}" == "1" ]; then
-	echo "Building the SRPM for ${BASE} failed."
-	echo "Trying to fetch Source0"
-	"${ROOT}"/misc/get_source.sh "${BASE}"
+if [ "${RESULT}" == "0" ]; then
+	echo "${SRPM}"
+	exit 0
 fi
 
+echo "Building the SRPM for ${BASE} failed."
+echo "Trying to fetch Source0"
+"${ROOT}"/misc/get_source.sh "${BASE}"
+
 # Let's hope fetching the sources worked and retry building the SRPM
-SRPM=$(build_srpm "${SPEC}" "${COMPILER_FAMILY}" "${MPI_FAMILY}")
+SRPM=$(build_srpm "${SPEC}" "${COMPILER_FAMILY}" "${MPI_FAMILY}" "${MPI_DEPENDENT}")
 RESULT=$?
 
 if [ "${RESULT}" == "1" ]; then
