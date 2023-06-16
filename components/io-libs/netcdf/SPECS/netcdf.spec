@@ -8,9 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Build that is dependent on compiler/mpi toolchains
+# Build that is dependent on compiler and conditionally the mpi toolchains
 %define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%{!?ohpc_mpi_dependent:%define ohpc_mpi_dependent 1}
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -19,22 +19,27 @@
 
 %define ncdf_so_major 7
 
-Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:           %{ohpc_name}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
 Version:        4.9.0
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
+Source0:        https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
 
 BuildRequires:  curl-devel
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  libxml2-devel
 BuildRequires:  m4 make
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%if 0%{?ohpc_mpi_dependent}
+BuildRequires:  phdf5%{ohpc_suffix}
+Requires:       phdf5%{ohpc_suffix}
+%else
+BuildRequires:  hdf5%{ohpc_suffix}
+Requires:       hdf5%{ohpc_suffix}
+%endif
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -80,11 +85,15 @@ NetCDF data is:
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if 0%{?ohpc_mpi_dependent}
 module load phdf5
+export CC=mpicc
+%else
+module load hdf5
+%endif
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC ${RPM_OPT_FLAGS}"
-export CC=mpicc
 
 ./configure --prefix=%{install_path} \
     --enable-shared \
@@ -106,7 +115,11 @@ make
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if 0%{?ohpc_mpi_dependent}
 module load phdf5
+%else
+module load hdf5
+%endif
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
@@ -115,18 +128,26 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 rm -rf $RPM_BUILD_ROOT/$RPM_BUILD_DIR/%{pname}-c-%{version}
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{ohpc_modulepath}
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
 puts stderr "This module loads the NetCDF C API built with the %{compiler_family} compiler"
+%if 0%{?ohpc_mpi_dependent}
 puts stderr "toolchain and the %{mpi_family} MPI stack."
+%else
+puts stderr "toolchain."
+%endif
 puts stderr " "
 puts stderr "Note that this build of NetCDF leverages the HDF I/O library and requires linkage"
+%if 0%{?ohpc_mpi_dependent}
 puts stderr "against hdf5. Consequently, the phdf5 package is loaded automatically with this module."
+%else
+puts stderr "against hdf5. Consequently, the hdf5 package is loaded automatically with this module."
+%endif
 puts stderr "A typical compilation step for C applications requiring NetCDF is as follows:"
 puts stderr " "
 puts stderr "\\\$CC -I\\\$NETCDF_INC app.c -L\\\$NETCDF_LIB -lnetcdf -L\\\$HDF5_LIB -lhdf5"
@@ -142,7 +163,11 @@ module-whatis "%{url}"
 
 set             version             %{version}
 
+%if 0%{?ohpc_mpi_dependent}
 depends-on phdf5
+%else
+depends-on hdf5
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -156,7 +181,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}

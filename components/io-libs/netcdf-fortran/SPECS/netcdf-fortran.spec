@@ -8,42 +8,43 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Build that is dependent on compiler/mpi toolchains
+# Build that is dependent on compiler and conditionally the mpi toolchains
 %define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%{!?ohpc_mpi_dependent:%define ohpc_mpi_dependent 1}
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
 
 %define pname netcdf-fortran
 
-Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:           %{ohpc_name}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
 Version:        4.6.0
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-Source0:	https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
+Source0:        https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
 
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  libxml2-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  bzip2-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires:  libbz2-devel
 %endif
 BuildRequires:  libcurl-devel m4 make
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
-BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%if 0%{?ohpc_mpi_dependent}
+BuildRequires:  phdf5%{ohpc_suffix} >= 1.8.8
+%else
+BuildRequires:  hdf5%{ohpc_suffix} >= 1.8.8
+%endif
+BuildRequires:  netcdf%{ohpc_suffix}
+Requires:       netcdf%{ohpc_suffix}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-
-# Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 NetCDF (network Common Data Form) is an interface for array-oriented
@@ -84,7 +85,11 @@ NetCDF data is:
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if 0%{?ohpc_mpi_dependent}
 module load phdf5
+%else
+module load hdf5
+%endif
 module load netcdf
 
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC $CFLAGS"
@@ -93,7 +98,11 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC $FCFLAGS"
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
-./configure FC=mpif90 --prefix=%{install_path} \
+%if 0%{?ohpc_mpi_dependent}
+./configure FC=mpif90 --prefix=%{ohpc_install_path} \
+%else
+./configure --prefix=%{ohpc_install_path} \
+%endif
     --enable-shared \
     --with-pic \
     --disable-doxygen \
@@ -110,14 +119,18 @@ make %{?_smp_mflags}
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if 0%{?ohpc_mpi_dependent}
 module load phdf5
+%else
+module load hdf5
+%endif
 module load netcdf
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{ohpc_modulepath}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -126,7 +139,11 @@ puts stderr " "
 puts stderr "This module loads the NetCDF Fortran API built with the %{compiler_family} compiler toolchain."
 puts stderr " "
 puts stderr "Note that this build of NetCDF leverages the HDF I/O library and requires linkage"
+%if 0%{?ohpc_mpi_dependent}
 puts stderr "against hdf5 and the native C NetCDF library. Consequently, phdf5 and the standard C"
+%else
+puts stderr "against hdf5 and the native C NetCDF library. Consequently, hdf5 and the standard C"
+%endif
 puts stderr "version of NetCDF are loaded automatically via this module. A typical compilation"
 puts stderr "example for Fortran applications requiring NetCDF is as follows:"
 puts stderr " "
@@ -145,19 +162,19 @@ depends-on netcdf
 
 set             version             %{version}
 
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    PATH                %{ohpc_install_path}/bin
+prepend-path    MANPATH             %{ohpc_install_path}/share/man
+prepend-path    INCLUDE             %{ohpc_install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{ohpc_install_path}/lib
 
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_DIR        %{ohpc_install_path}
+setenv          %{PNAME}_BIN        %{ohpc_install_path}/bin
+setenv          %{PNAME}_LIB        %{ohpc_install_path}/lib
+setenv          %{PNAME}_INC        %{ohpc_install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{ohpc_modulepath}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}

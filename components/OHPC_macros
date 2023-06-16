@@ -126,6 +126,18 @@ Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 # Disable RPM symlink analysis on files in %%{OHPC_HOME}.
 %global __libsymlink_exclude_path  %{OHPC_HOME}/.*$
 
+# MPI dependent macros
+%if 0%{?ohpc_mpi_dependent} == 1
+%global ohpc_suffix -%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%global ohpc_modulepath %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%global ohpc_install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%else
+%global ohpc_suffix -%{compiler_family}%{PROJ_DELIM}
+%global ohpc_modulepath %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%global ohpc_install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
+%endif
+%global ohpc_name %{pname}%{ohpc_suffix}
+
 # MPI dependencies
 %if 0%{?ohpc_mpi_dependent} == 1
 %if "%{mpi_family}" == "impi"
