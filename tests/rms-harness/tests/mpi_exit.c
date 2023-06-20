@@ -9,9 +9,6 @@
 int main(int argc, char *argv[])
 {
   int num_procs, num_local;
-  char mach_name[MPI_MAX_PROCESSOR_NAME];
-  int mach_len;
-
   int desiredExitCode;
 
   if(argc > 1)

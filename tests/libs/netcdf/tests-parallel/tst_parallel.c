@@ -1,8 +1,8 @@
-/* 
+/*
 Copyright 2009, UCAR/Unidata
 See COPYRIGHT file for copying and redistribution conditions.
 
-This program tests netcdf-4 parallel I/O. 
+This program tests netcdf-4 parallel I/O.
 
 $Id: tst_parallel.c,v 1.7 2009/08/19 15:58:57 ed Exp $
 */
@@ -29,7 +29,7 @@ int
 main(int argc, char **argv)
 {
     /* MPI stuff. */
-    int mpi_namelen;		
+    int mpi_namelen;
     char mpi_name[MPI_MAX_PROCESSOR_NAME];
     int mpi_size, mpi_rank;
     MPI_Comm comm = MPI_COMM_WORLD;
@@ -39,7 +39,7 @@ main(int argc, char **argv)
     int ncid, v1id, dimids[NDIMS];
     size_t start[NDIMS], count[NDIMS];
 
-    int data[DIMSIZE * DIMSIZE], i, res;
+    int i, res;
     int slab_data[DIMSIZE * DIMSIZE / 4]; /* one slab */
     char file_name[NC_MAX_NAME + 1];
 
@@ -83,8 +83,6 @@ main(int argc, char **argv)
        in 4 sets of 144. */
     /*printf("mpi_rank*QTR_DATA=%d (mpi_rank+1)*QTR_DATA-1=%d\n",
       mpi_rank*QTR_DATA, (mpi_rank+1)*QTR_DATA);*/
-    for (i = mpi_rank * QTR_DATA; i < (mpi_rank + 1) * QTR_DATA; i++)
-       data[i] = mpi_rank;
     for (i = 0; i < DIMSIZE * DIMSIZE / 4; i++)
        slab_data[i] = mpi_rank;
 
