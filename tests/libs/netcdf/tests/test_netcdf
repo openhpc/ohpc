@@ -11,7 +11,11 @@ fi
 check_rms
 
 testname="libs/NetCDF"
-delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+if [ "$PARALLEL_ENABLED" == "no" ]; then
+	delimiter="$LMOD_FAMILY_COMPILER"
+else
+	delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+fi
 
 @test "[$testname] ncdump availability ($delimiter)" {
     run which ncdump
@@ -29,6 +33,9 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 }
 
 @test "[$testname] verify nc4 available for Fortran interface ($delimiter)" {
+    if [ "$ALL_ENABLED" == "no" ]; then
+        skip "Skipping Fortran tests as requested"
+    fi
     run nf-config --has-nc4
     assert_output "yes"
 }
@@ -81,6 +88,9 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 
 
 @test "[$testname] Fortran write/read ($RESOURCE_MANAGER/$delimiter)" {
+    if [ "$ALL_ENABLED" == "no" ]; then
+        skip "Skipping Fortran tests as requested"
+    fi
     if [ ! -x F90_write ];then
         flunk "F90_write binary not available"
     fi
@@ -120,6 +130,9 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 }
 
 @test "[$testname] C++ write/read ($RESOURCE_MANAGER/$delimiter)" {
+    if [ "$ALL_ENABLED" == "no" ]; then
+        skip "Skipping C++ tests as requested"
+    fi
     if [ ! -x CXX_write ];then
         flunk "CXX_write binary not available"
     fi
@@ -157,5 +170,3 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     rm -f .cxx.data.ascii
     rm -f simple_xy.nc
 }
-
-

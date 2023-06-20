@@ -37,4 +37,6 @@ shellcheck-lint:
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
-		../../components/admin/prun/SOURCES/prun
+		../../components/admin/prun/SOURCES/prun \
+		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
+		../../tests/libs/netcdf/ohpc-tests/test_mpi_families

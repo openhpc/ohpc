@@ -1,4 +1,6 @@
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign no-dependencies
 AM_MAKEFLAGS     = --no-print-directory
-SUBDIRS          = tests tests-parallel
-
+if PARALLEL_ENABLED
+PARALLEL_SUBDIR  = tests-parallel
+endif
+SUBDIRS          = tests $(PARALLEL_SUBDIR)

@@ -13,16 +13,19 @@ module=netcdf
 testname="libs/NetCDF"
 library=libnetcdf
 header=netcdf.h
-delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+if [ "$PARALLEL_ENABLED" == "no" ]; then
+	rpm=netcdf-$LMOD_FAMILY_COMPILER${DELIM}
+	delimiter="$LMOD_FAMILY_COMPILER"
+else
+	rpm=netcdf-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
+	delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+fi
 
 @test "[$testname] Verify $PKG module is loaded and matches rpm version ($delimiter)" {
     module list $module/ | grep "1) $module" >& .cmd_output || exit 1
-    run grep $module .cmd_output 
+    run grep $module .cmd_output
     assert_success
-    
-    # check version against rpm
-    local rpm
-    rpm=$(get_rpm_name ${module})
+
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
     assert_output "  1) $module/$version"
@@ -33,10 +36,10 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     if [ -z ${!DIR} ];then
         flunk "${PKG}_DIR directory not defined"
     fi
-    
+
     if [ ! -d ${!DIR} || -z "${!DIR}" ];then
         flunk "directory ${!DIR} does not exist"
-    fi 
+    fi
 }
 
 # ----------
@@ -48,10 +51,10 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     if [ -z ${!BIN} ];then
         flunk "${PKG}_BIN directory not defined"
     fi
-    
+
     if [ ! -d ${!BIN} || -z "${!BIN}" ];then
         flunk "directory ${!BIN} does not exist"
-    fi 
+    fi
 }
 
 @test "[$testname] Verify availability of nc-config binary ($delimiter)" {
@@ -72,10 +75,10 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     if [ -z ${!LIB} ];then
         flunk "${PKG}_LIB directory not defined"
     fi
- 
+
     if [ ! -d ${!LIB} ];then
         flunk "directory ${!LIB} does not exist"
-    fi 
+    fi
 }
 
 @test "[$testname] Verify dynamic library available in ${PKG}_LIB ($delimiter)" {
@@ -87,7 +90,7 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 
     if [ ! -s ${!LIB}/${library}.so ];then
         flunk "${library}.so does not exist"
-    fi 
+    fi
 }
 
 @test "[$testname] Verify static library is not present in ${PKG}_LIB ($delimiter)" {
@@ -99,7 +102,7 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 
     if [ -e ${!LIB}/${library}.a ];then
         flunk "${library}.a exists when not expecting it"
-    fi 
+    fi
 }
 
 # --------------
@@ -112,10 +115,10 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     if [ -z ${!INC} ];then
         flunk "${PKG}_INC directory not defined"
     fi
-    
+
     if [ ! -d ${!INC} ];then
         flunk "directory ${!INC} does not exist"
-    fi 
+    fi
 }
 
 @test "[$testname] Verify header file is present in ${PKG}_INC ($delimiter)" {
@@ -124,10 +127,10 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     if [ -z ${!INC} ];then
         flunk "${PKG}_INC directory not defined"
     fi
-    
+
     if [ ! -s ${!INC}/${header} ];then
         flunk "directory $header file does not exist"
-    fi 
+    fi
 }
 
 rm -f .cmd_output

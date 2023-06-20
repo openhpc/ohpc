@@ -52,6 +52,9 @@ fi
 
 
 @test "[$testname] Fortran parallel I/O ($delimiter)" {
+    if [ "$ALL_ENABLED" == "no" ]; then
+        skip "Skipping Fortran tests as requested"
+    fi
     if [ ! -x F90_parallel ];then
         flunk "F90_parallel binary not available"
     fi

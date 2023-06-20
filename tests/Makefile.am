@@ -180,6 +180,10 @@ if NETCDF_ENABLED
    TESTS += libs/netcdf/ohpc-tests/test_mpi_families
 endif
 
+if NETCDF_ENABLED_ALL
+   TESTS += libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families
+endif
+
 if OPENBLAS_ENABLED
    TESTS += libs/openblas/ohpc-tests/test_compiler_families
 endif
