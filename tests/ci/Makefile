@@ -33,4 +33,6 @@ shellcheck-lint:
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
 		../../tests/ci/prepare-ci-environment.sh \
-		../../tests/ci/setup_slurm_and_run_tests.sh
+		../../tests/ci/setup_slurm_and_run_tests.sh \
+		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
+		../../tests/libs/netcdf/ohpc-tests/test_mpi_families

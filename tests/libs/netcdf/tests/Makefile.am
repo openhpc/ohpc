@@ -15,6 +15,9 @@ check_PROGRAMS   += C_read
 C_read_SOURCES   = C_simple_rd.c
 C_read_LDFLAGS   = $(C_LDFLAGS)
 
+TESTS             = test_C_module
+
+if ALL_ENABLED
 check_PROGRAMS   += F90_write
 F90_write_SOURCES = simple_xy_nc4_wr.f90
 F90_write_LDFLAGS = $(FC_LDFLAGS)
@@ -31,9 +34,9 @@ check_PROGRAMS   += CXX_read
 CXX_read_SOURCES  = simple_xy_rd.cpp
 CXX_read_LDFLAGS  = $(CXX_LDFLAGS)
 
-TESTS             = test_C_module
 TESTS            += test_CXX_module
 TESTS            += test_Fortran_module
+endif
 TESTS            += nctest
 TESTS            += compare_test_files.sh
 TESTS            += test_netcdf

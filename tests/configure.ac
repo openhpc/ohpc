@@ -177,6 +177,12 @@ AC_ARG_ENABLE([netcdf],
    [AX_OPTION_DEFAULT(type=long,enable_netcdf,yes)])
 AM_CONDITIONAL(NETCDF_ENABLED,test "x$enable_netcdf" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# NetCDF all (including cxx fortran)
+AC_ARG_ENABLE([netcdf-all],
+   [AS_HELP_STRING([--enable-netcdf-all],[Enable all NetCDF tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_netcdf_all,yes)])
+AM_CONDITIONAL(NETCDF_ENABLED_ALL,test "x$enable_netcdf_all" = "xyes" )
+#------------------------------------------------------------------------------------------
 # PNetCDF
 AC_ARG_ENABLE([pnetcdf],
    [AS_HELP_STRING([--enable-pnetcdf],[Enable PNetCDF tests (default=yes)])],[],
@@ -738,6 +744,12 @@ echo    Libraries:
        echo '    'NetCDF.................... : enabled
     else
        echo '    'NetCDF.................... : disabled
+    fi
+
+    if test "x$enable_netcdf_all" = "xyes"; then
+       echo '    'NetCDF All................ : enabled
+    else
+       echo '    'NetCDF All................ : disabled
     fi
 
     if test "x$enable_numpy" = "xyes"; then
