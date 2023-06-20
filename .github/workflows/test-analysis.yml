@@ -5,6 +5,9 @@ on:
     workflows: [Validate]
     types:
       - completed
+    branches:
+      - '3.x'
+
 permissions: {}
 
 jobs:
