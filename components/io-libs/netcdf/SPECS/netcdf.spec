@@ -101,7 +101,7 @@ module load hdf5
 %endif
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC ${RPM_OPT_FLAGS}"
+export CFLAGS="-L$HDF5_LIB -I$HDF5_INC ${CFLAGS}"
 
 ./configure --prefix=%{install_path} \
     --enable-shared \
@@ -112,12 +112,7 @@ export CFLAGS="-L$HDF5_LIB -I$HDF5_INC ${RPM_OPT_FLAGS}"
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
 
-# karl@ices.utexas.edu (5/17/18) - switching to serial make to avoid
-# problems. Others also reporting error with parallel build.
-#
-# https://github.com/Unidata/netcdf-c/issues/896
-make
-#make %{?_smp_mflags}
+make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler/mpi designation
