@@ -46,6 +46,7 @@ prechroot() {
 
     > $CHROOTDIR/$YUM_CONF
     echo "[main]" >> $CHROOTDIR/$YUM_CONF
+    echo "install_weak_deps=1" >> $CHROOTDIR/$YUM_CONF
     echo 'cachedir=/var/cache/yum/$basearch/$releasever' >> $CHROOTDIR/$YUM_CONF
     echo "keepcache=0" >> $CHROOTDIR/$YUM_CONF
     echo "debuglevel=2" >> $CHROOTDIR/$YUM_CONF
