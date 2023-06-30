@@ -66,7 +66,7 @@ Requires:  screen
 Requires:  sudo
 Requires:  binutils
 Requires:  binutils-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 Requires:  man-db
 Requires:  yum-utils
 Requires:  NetworkManager
@@ -86,7 +86,7 @@ Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
 Requires:  python3
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
@@ -358,7 +358,7 @@ Requires:  charliecloud%{PROJ_DELIM}
 %if 0%{?suse_version}
 Requires:  singularity
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 Recommends: (singularity-ce or singularity or apptainer)
 %endif
 %description -n %{PROJ_NAME}-%{compiler_family}-runtimes
@@ -383,7 +383,7 @@ Requires:  slurm-slurmd%{PROJ_DELIM}
 Requires:  slurm-contribs%{PROJ_DELIM}
 Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?openEuler}
 Requires:  hwloc%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-slurm-client
