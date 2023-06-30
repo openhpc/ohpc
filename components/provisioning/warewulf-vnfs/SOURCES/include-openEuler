@@ -1,10 +1,20 @@
-REPO_NAME="os-base"
-YUM_CONF="/root/yum-ww.conf"
-YUM_CMD="yum -c $CHROOTDIR/$YUM_CONF --installroot $CHROOTDIR -y"
+#!/bin/bash
+# Disable gpg checking
+[ -n "$NOGPGCHECK" ] && EXTRA_ARGS="${EXTRA_ARGS} --nogpgcheck"
+
+# Set DNF extra vebosity
+[ -n "$DEBUG" ] && EXTRA_ARGS="${EXTRA_ARGS} -v --debuglevel=5"
+
+# Make DNF quiet if verbose and debug are not set
+[ -z "$VERBOSE" -a -z "$DEBUG" ] && EXTRA_ARGS="${EXTRA_ARGS} -q"
+
+DNF_CONF="/etc/dnf/dnf.conf"
+DNF_CMD="dnf -y -c $CHROOTDIR/$DNF_CONF --installroot $CHROOTDIR --setopt=reposdir=$CHROOTDIR/etc/yum.repos.d $EXTRA_ARGS"
+DNF_REPOCMD="dnf config-manager -y -c $CHROOTDIR/$DNF_CONF --installroot $CHROOTDIR --setopt=reposdir=$CHROOTDIR/etc/yum.repos.d $EXTRA_ARGS"
 
 distro_check() {
-    if ! rpm -q yum >/dev/null 2>&1 ; then
-        echo "ERROR: Could not query RPM for YUM"
+    if ! rpm -q dnf >/dev/null 2>&1 ; then
+        echo "ERROR: Could not query RPM for DNF"
         return 1
     fi
     return 0
@@ -19,11 +29,12 @@ set_overlay() {
         echo "ERROR: This must be a openEuler compatible chroot!"
         return 1
     fi
-    PKGR_CMD="$YUM_CMD install $PKGLIST"
+    PKGR_CMD="$DNF_CMD install $PKGLIST"
     return 0
 }
 
 prechroot() {
+    set -x
     if [ -n "$OS_MIRROR" ]; then
         YUM_MIRROR="$OS_MIRROR"
     fi
@@ -33,59 +44,33 @@ prechroot() {
         return 1
     fi
 
-    VERSION=`rpm -qf /etc/openEuler-release  --qf '%{VERSION}\n'`
+    mkdir -p $CHROOTDIR/var/log
+    mkdir -p $CHROOTDIR/var/cache
 
-    mkdir -p $CHROOTDIR
-    mkdir -p $CHROOTDIR/etc
+    mkdir -m 0755 -p $CHROOTDIR/$(dirname $DNF_CONF)
 
-    cp -rap /etc/yum.conf /etc/yum.repos.d $CHROOTDIR/etc
-    sed -i -e "s/\$releasever/$VERSION/g" `find $CHROOTDIR/etc/yum* -type f`
+    echo "[main]" >> $CHROOTDIR/$DNF_CONF
+    echo "keepcache=0" >> $CHROOTDIR/$DNF_CONF
+    echo "debuglevel=2" >> $CHROOTDIR/$DNF_CONF
+    echo "logfile=/var/log/dnf.log" >> $CHROOTDIR/$DNF_CONF
+    echo "exactarch=1" >> $CHROOTDIR/$DNF_CONF
+    echo "obsoletes=1" >> $CHROOTDIR/$DNF_CONF
+    echo "gpgcheck=0" >> $CHROOTDIR/$DNF_CONF
+    echo "plugins=1" >> $CHROOTDIR/$DNF_CONF
+    echo "install_weak_deps=1" >> $CHROOTDIR/$DNF_CONF
+    echo "cachedir=/var/cache/dnf" >> $CHROOTDIR/$DNF_CONF
+    echo "" >> $CHROOTDIR/$DNF_CONF
 
-    YUM_CONF_DIRNAME=`dirname $YUM_CONF`
-    mkdir -m 0755 -p $CHROOTDIR/$YUM_CONF_DIRNAME
+    mkdir -p $CHROOTDIR/etc/yum.repos.d/
+    cp /etc/yum.repos.d/epol-update.repo $CHROOTDIR/etc/yum.repos.d/
+    # Create new repos from comma-seperated list (using bash inline S&R)
+    if [ "0$NOGPGCHECK" -eq "00" ]; then REPO_NOGPGCHECK=0; else REPO_NOGPGCHECK=1; fi
+    for i in ${YUM_MIRROR//,/ }; do
+        $DNF_REPOCMD --setopt=gpgcheck=$REPO_NOGPGCHECK --add-repo $i
+    done
 
-    > $CHROOTDIR/$YUM_CONF
-    echo "[main]" >> $CHROOTDIR/$YUM_CONF
-    echo 'cachedir=/var/cache/yum/$basearch/$releasever' >> $CHROOTDIR/$YUM_CONF
-    echo "keepcache=0" >> $CHROOTDIR/$YUM_CONF
-    echo "debuglevel=2" >> $CHROOTDIR/$YUM_CONF
-    echo "logfile=/var/log/yum.log" >> $CHROOTDIR/$YUM_CONF
-    echo "exactarch=1" >> $CHROOTDIR/$YUM_CONF
-    echo "obsoletes=1" >> $CHROOTDIR/$YUM_CONF
-    echo "gpgcheck=0" >> $CHROOTDIR/$YUM_CONF
-    echo "plugins=1" >> $CHROOTDIR/$YUM_CONF
-    echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
-    echo "" >> $CHROOTDIR/$YUM_CONF
-
-    if [ -z "$INSTALL_ISO" ]; then
-        echo "[$REPO_NAME]" >> $CHROOTDIR/$YUM_CONF
-        echo 'name=Linux $releasever - $basearch' >> $CHROOTDIR/$YUM_CONF
-        echo "baseurl=$YUM_MIRROR" >> $CHROOTDIR/$YUM_CONF
-        echo "enabled=1" >> $CHROOTDIR/$YUM_CONF
-        echo "gpgcheck=0" >> $CHROOTDIR/$YUM_CONF
-    else
-        for i in `ls -d $MEDIA_MOUNTPATH.*`; do
-            if [ -z "$INSTALLDIRS" ]; then
-                if [ -d $i/repodata ]; then
-                    # RHEL 6.x
-                    INSTALLDIRS="file://$i"
-                elif [ -d $i/Server/repodata ]; then
-                    # RHEL 5.x
-                    INSTALLDIRS="file://$i/Server"
-                fi
-            else
-                INSTALLDIRS="$INSTALLDIRS,file://$i"
-            fi
-        done
-        echo "[$REPO_NAME]" >> $CHROOTDIR/$YUM_CONF
-        echo 'name=Linux $releasever - $basearch' >> $CHROOTDIR/$YUM_CONF
-        echo "baseurl=$INSTALLDIRS" >> $CHROOTDIR/$YUM_CONF
-        echo "enabled=1" >> $CHROOTDIR/$YUM_CONF
-        echo "gpgcheck=0" >> $CHROOTDIR/$YUM_CONF
-
-        YUM_MIRROR=$INSTALLDIRS
-    fi
-    PKGR_CMD="$YUM_CMD install $PKGLIST"
+    PKGR_CMD="$DNF_CMD install $PKGLIST"
+    set +x
     return 0
 }
 
