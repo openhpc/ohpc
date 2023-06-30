@@ -30,6 +30,9 @@ fi
     elif [ "x$DISTRO_FAMILY" == "xSLES" ];then
 	run zypper info slurm-sview-ohpc
 	assert_success
+    elif [ "x$DISTRO_FAMILY" == "xopenEuler" ];then
+	run dnf info slurm-sview-ohpc
+	assert_success
     else
 	echo "unsupported distro"
 	false

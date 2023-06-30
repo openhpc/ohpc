@@ -9,11 +9,19 @@ if [ -s ./common/TEST_ENV ];then
 fi
 
 @test "[clush] check for OS-provided RPM" {
+    if [ "x$DISTRO_FAMILY" == "xopenEuler" ];then
+        skip "no clustershell on $DISTRO_FAMILY"
+    fi
+
     run check_if_rpm_installed "clustershell"
     assert_success
 }
 
 @test "[clush] clush -Sg compute" {
+    if [ "x$DISTRO_FAMILY" == "xopenEuler" ];then
+        skip "no clustershell on $DISTRO_FAMILY"
+    fi
+
     run clush -Sg compute hostname
     assert_success
 }
