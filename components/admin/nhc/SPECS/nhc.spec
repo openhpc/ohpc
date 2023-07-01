@@ -55,14 +55,8 @@ fi
 umask 0077
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-# tweak ssh check for Leap
-%if 0%{?suse_version}
+# tweak ssh check
 perl -pi -e "s/check_ps_service -u root -S sshd/check_ps_service -m 'sshd:' -u root -S sshd/" $RPM_BUILD_ROOT/etc/nhc/nhc.conf
-%endif
-
-%if 0%{?rhel}
-perl -pi -e "s/check_ps_service -u root -S sshd/check_ps_service -m 'sshd:' -u root -S sshd/" $RPM_BUILD_ROOT/etc/nhc/nhc.conf
-%endif
 
 %files
 %doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
