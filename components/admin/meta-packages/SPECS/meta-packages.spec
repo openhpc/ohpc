@@ -68,8 +68,10 @@ Requires:  binutils
 Requires:  binutils-devel
 %if 0%{?rhel} || 0%{?openEuler}
 Requires:  man-db
-Requires:  yum-utils
 Requires:  NetworkManager
+%endif
+%if 0%{?rhel}
+Requires:  yum-utils
 %endif
 %if 0%{?suse_version}
 Requires:  glibc-locale
