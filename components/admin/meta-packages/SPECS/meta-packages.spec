@@ -100,6 +100,10 @@ Recommends: (singularity-ce or singularity or apptainer)
 Requires:  libpsm2
 %endif
 %endif
+%if 0%{?openEuler}
+# For valgrind on openEuler we need to glibc-debuginfo on the compute nodes
+Requires: glibc-debuginfo
+%endif
 %if 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
