@@ -18,7 +18,10 @@ if [ -z "$YUM_MIRROR" ]; then
     if [ -z "$YUM_MIRROR_BASE" ]; then
         YUM_MIRROR_BASE="http://repo.openeuler.org"
     fi
-    YUM_MIRROR="${YUM_MIRROR_BASE}/openEuler-22.03-LTS/OS/\$basearch/","${YUM_MIRROR_BASE}/openEuler-22.03-LTS/everything/\$basearch/","${YUM_MIRROR_BASE}/openEuler-22.03-LTS/EPOL/main/\$basearch/"
+    YUM_MIRROR="${YUM_MIRROR_BASE}/openEuler-22.03-LTS/OS/\$basearch/",\
+	"${YUM_MIRROR_BASE}/openEuler-22.03-LTS/everything/\$basearch/",\
+	"${YUM_MIRROR_BASE}/openEuler-22.03-LTS/EPOL/main/\$basearch/",\
+	"${YUM_MIRROR_BASE}/openEuler-22.03-LTS/update/\$basearch/"
 fi
 
 # Install only what is necessary/specific for this distribution
