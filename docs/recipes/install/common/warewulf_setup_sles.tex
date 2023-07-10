@@ -21,6 +21,8 @@
 [sms](*\#*) ip link set dev ${sms_eth_internal} up
 [sms](*\#*) ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
 
+# Enable Apache mod_rewrite module (needed for warewulf)
+[sms](*\#*) a2enmod mod_rewrite
 # Restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl enable mysql.service
 [sms](*\#*) systemctl restart mysql
