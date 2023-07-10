@@ -12,6 +12,9 @@
 # Configure Warewulf to use the default SLES tftp location
 [sms](*\#*) perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
 
+# Configure Warewulf to use the correct certificate bundle
+[sms](*\#*) perl -pi -e "s,cacert =.*,cacert = /etc/ssl/ca-bundle.pem," /etc/warewulf/provision.conf
+
 # Update Warewulf http configuration to use the SLES version of Apache modules
 [sms](*\#*) export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
 [sms](*\#*) perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
