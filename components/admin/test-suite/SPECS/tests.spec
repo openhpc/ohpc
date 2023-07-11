@@ -28,12 +28,12 @@ BuildRequires:  automake%{PROJ_DELIM}
 
 %if 0%{?suse_version}
 Requires(pre):  shadow
-Requires: python-base
+Requires: python3-base
 %endif
 
 %if 0%{?rhel_version}
 Requires(pre):  shadow-utils
-Requires: python2
+Requires: python3
 %endif
 
 %define testuser ohpc-test
@@ -77,4 +77,3 @@ exit 0
 %defattr(-,%{testuser},%{testuser},-)
 %dir /home/%{testuser}
 /home/%{testuser}/tests
-
