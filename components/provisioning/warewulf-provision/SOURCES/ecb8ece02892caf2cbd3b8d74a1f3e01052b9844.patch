@@ -1,0 +1,25 @@
+From ecb8ece02892caf2cbd3b8d74a1f3e01052b9844 Mon Sep 17 00:00:00 2001
+From: "Benjamin S. Allen" <bsallen@alcf.anl.gov>
+Date: Wed, 2 Feb 2022 17:13:03 -0500
+Subject: [PATCH] Fix syntax error with extra quote, and fix shellcheck SC2166
+ on -a use vs &&
+
+---
+ .../initramfs/capabilities/provision-vnfs/70-kernelmodules    | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/provision/initramfs/capabilities/provision-vnfs/70-kernelmodules b/provision/initramfs/capabilities/provision-vnfs/70-kernelmodules
+index feea4ca4..adbc9c9e 100644
+--- a/provision/initramfs/capabilities/provision-vnfs/70-kernelmodules
++++ b/provision/initramfs/capabilities/provision-vnfs/70-kernelmodules
+@@ -33,8 +33,8 @@ if [ -x "${NEWROOT}${DEPMOD}" ]; then
+     chroot "${NEWROOT}" /sbin/depmod -a
+ fi
+ 
+-if [ -e "${NEWROOT}"/lib/modules/"${KVERSION}"/sysctl.conf -a ! -e "${NEWROOT}"/boot/sysctl.conf-"${KVERSION}" ]; then
+-    ln -s /lib/modules/"${KVERSION}"/sysctl.conf" "${NEWROOT}"/boot/sysctl.conf-"${KVERSION}"
++if [ -e "${NEWROOT}"/lib/modules/"${KVERSION}"/sysctl.conf ] && [ ! -e "${NEWROOT}"/boot/sysctl.conf-"${KVERSION}" ]; then
++    ln -s /lib/modules/"${KVERSION}"/sysctl.conf "${NEWROOT}"/boot/sysctl.conf-"${KVERSION}"
+ fi
+ 
+ exit 0
