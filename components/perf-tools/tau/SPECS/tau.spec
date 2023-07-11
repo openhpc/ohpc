@@ -204,7 +204,7 @@ find ${INSTALLROOT}/lib -type d -name 'static-*' -delete
 # Use find/replace function -- easy to add more as needed
 # Two stage, using much faster grep to target specific files
 replace_all() {
-    for f in $(grep -Ilr "$1" ${INSTALLROOT}); do
+    for f in $(grep -Ilr -- "$1" ${INSTALLROOT}); do
       sed -i "s|$1|$2|g" $f
     done
 }
@@ -213,6 +213,7 @@ replace_all "${TAUROOT}/TAUBUILD" ""
 replace_all "${TAUROOT}" ""
 replace_all "${MPI_DIR}" "\${MPI_DIR}"
 replace_all "${PDTOOLKIT_DIR}" "\${PDTOOLKIT_DIR}"
+replace_all "-fstack-protector-strong" ""
 %if "%{mpi_family}" == "impi"
 replace_all "${I_MPI_ROOT}" "\${I_MPI_ROOT}"
 %endif
