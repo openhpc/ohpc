@@ -733,7 +733,7 @@ Collection of serial library builds for use with Intel(R) oneAPI Toolkit
 %package -n %{PROJ_NAME}-arm1-serial-libs
 Summary:   OpenHPC serial libraries for use with Arm Compiler for Linux
 Requires:  metis-arm1%{PROJ_DELIM}
-Requires:  plasma-arm1%{PROJ_DELIM}
+### Requires:  plasma-arm1%{PROJ_DELIM}
 Requires:  scotch-arm1%{PROJ_DELIM}
 Requires:  superlu-arm1%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-arm1-serial-libs
