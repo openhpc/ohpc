@@ -812,7 +812,7 @@ Requires:  scalapack-arm1-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-arm1-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-arm1-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-arm1-%{mpi_family}%{PROJ_DELIM}
-Requires:  trilinos-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  trilinos-arm1-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with the Arm Compiler for Linux and the %{mpi_family} runtime
 
