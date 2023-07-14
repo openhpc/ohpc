@@ -12,7 +12,6 @@ PKG=DIMEMAS
 testname="Dimemas"
 module=dimemas
 header=extern_comm_model.h
-rpm=dimemas-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
 setup() {
     module purge
@@ -26,6 +25,8 @@ setup() {
     assert_success
     
     # check version against rpm
+    local rpm
+    rpm=$(get_rpm_name ${module})
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
     assert_output "  1) $module/$version"

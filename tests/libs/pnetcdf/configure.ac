@@ -39,7 +39,11 @@ AC_C_CONST
 
 CFLAGS="-I${PNETCDF_INC} ${CFLAGS}"
 CXXFLAGS="-I${PNETCDF_INC} ${CXXFLAGS}"
-FCFLAGS="-I${PNETCDF_INC} ${FCLAGS} -fallow-argument-mismatch"
+if test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then
+    FCFLAGS="-I${PNETCDF_INC} ${FCLAGS}"
+else
+    FCFLAGS="-I${PNETCDF_INC} ${FCLAGS} -fallow-argument-mismatch"
+fi
 LDFLAGS="-L${PNETCDF_LIB} -lpnetcdf ${LDFLAGS}"
 
 # Set subdirectories

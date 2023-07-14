@@ -24,6 +24,9 @@ OHPC_COMPILER_FAMILY
 # test compilers
 
 AC_PROG_CC
+if test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then
+   F77=${FC}
+fi
 AC_PROG_F77
 AC_PROG_CXX
 # Checks for typedefs, structures, and compiler characteristics.

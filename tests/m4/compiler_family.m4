@@ -54,7 +54,7 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
    FC=ifort
    AC_MSG_RESULT([intel])
    OHPC_BLAS="-L${MKLROOT}/lib/intel64 -lmkl_rt"
-elif test "x$LMOD_FAMILY_COMPILER" = "xarm1"; then
+elif test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then
    CC=armclang
    CXX=armclang++
    FC=armflang
@@ -63,7 +63,7 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xarm1"; then
 else
    AC_MSG_RESULT([unknown])
    echo
-   AC_ERROR([Unknown compiler family - please load a compiler toolchain.])
+   AC_MSG_ERROR([Unknown compiler family - please load a compiler toolchain.])
 fi
 
 AC_SUBST(OHPC_BLAS)

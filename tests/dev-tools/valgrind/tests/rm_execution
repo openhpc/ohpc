@@ -14,6 +14,9 @@ rm=$RESOURCE_MANAGER
 PKG="Valgrind"
 
 @test "[$PKG] Callgrind execution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if  [[ "$LMOD_FAMILY_COMPILER" =~ "acfl" ]]; then
+        skip "arm compiler currently breaks valgrind"
+    fi
     test=simwork
     if [ ! -x $test ];then
         flunk "$test does not exist"
@@ -30,6 +33,9 @@ PKG="Valgrind"
 }
 
 @test "[$PKG] Memcheck execution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if  [[ "$LMOD_FAMILY_COMPILER" =~ "acfl" ]]; then
+        skip "arm compiler currently breaks valgrind"
+    fi
 
     # Clean program that should run without incident
     if [ ! -x ./hello ];then

@@ -13,7 +13,6 @@ module=adios2
 testname=libs/ADIOS2
 library=libadios2
 header=adios2.h
-rpm=adios2-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
 check_rms
 
@@ -23,6 +22,8 @@ check_rms
     assert_success
     
     # check version against rpm
+    local rpm
+    rpm=$(get_rpm_name ${module})
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
     assert_output "  1) $module/$version"

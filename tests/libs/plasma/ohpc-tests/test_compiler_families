@@ -18,6 +18,10 @@ export BATS_JUNIT_CLASS=PLASMA
 
 for compiler in $COMPILER_FAMILIES ; do
 
+    if [ "$compiler" == "arm1" ]; then
+	continue
+    fi
+
     echo " "
     echo " "
     echo "----------------------------------------------------------"

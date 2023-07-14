@@ -2,6 +2,7 @@
 # -*-sh-*-
 
 source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
 
 if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
@@ -11,7 +12,6 @@ PKG=BOOST
 module=boost
 library=libboost_program_options
 header=boost/version.hpp
-rpm=boost-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
 @test "[$PKG] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     module list $module | grep "1) $module" >& .cmd_output || exit 1
@@ -19,6 +19,8 @@ rpm=boost-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
     assert_success
     
     # check version against rpm
+    local rpm
+    rpm=$(get_rpm_name ${module})
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
     assert_output "  1) $module/$version"
@@ -122,6 +124,8 @@ rpm=boost-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
         CXX=icpc
     elif [[ $LMOD_FAMILY_COMPILER =~ "gnu" ]];then
         CXX=g++
+    elif [[ $LMOD_FAMILY_COMPILER =~ "acfl" ]];then
+        CXX=armclang++
     else
         flunk "Unknown compiler family"
     fi

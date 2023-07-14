@@ -149,6 +149,10 @@ check_compiler_family()
         myCC=armclang
         myCXX=armclang++
         myFC=armflang
+  elif [[ $LMOD_FAMILY_COMPILER =~ "acfl" ]];then
+        myCC=armclang
+        myCXX=armclang++
+        myFC=armflang
     elif [ $LMOD_FAMILY_COMPILER == "gnu" ];then
 	myCC=gcc
 	myCXX=g++
@@ -431,3 +435,19 @@ run_mpi_binary () {
 
 } # end run_mpi_binary()
 
+get_rpm_name () {
+    local family
+    if  [[ "${LMOD_FAMILY_COMPILER}" =~ "acfl" ]]; then
+        # The arm compiler package set "acfl".
+        # OpenHPC expects "arm1".
+        family="arm1"
+    else
+        family="${LMOD_FAMILY_COMPILER}"
+    fi
+
+    if [ -n "${LMOD_FAMILY_MPI}" ]; then
+        echo "${1}-${family}-${LMOD_FAMILY_MPI}${DELIM}"
+    else
+        echo "${1}-${family}${DELIM}"
+    fi
+}

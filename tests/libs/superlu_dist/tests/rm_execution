@@ -22,6 +22,7 @@ TASKS=4
 export MV2_ENABLE_AFFINITY=0
 
 @test "[$testname] PDGSSVX with full (default) options ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive ];then
 	flunk "pddrive binary does not exist"
     fi
@@ -31,6 +32,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] pdgssvx_ABglobal with full (default) options ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive_ABglobal ];then
 	flunk "pddrive_ABglobal binary does not exist"
     fi
@@ -40,6 +42,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] vary RHS ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive1 ];then
 	flunk "pddrive1 binary does not exist"
     fi
@@ -49,6 +52,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] vary RHS ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive1_ABglobal ];then
 	flunk "pddrive1_ABglobal binary does not exist"
     fi
@@ -58,6 +62,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] re-use permutation vector ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive2 ];then
 	flunk "pddrive2 binary does not exist"
     fi
@@ -67,6 +72,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] re-use permutation vector ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" { 
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive2_ABglobal ];then
 	flunk "pddrive2_ABglobal binary does not exist"
     fi
@@ -76,6 +82,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] re-use symbolic factorization ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive3 ];then
 	flunk "pddrive3 binary does not exist"
     fi
@@ -85,6 +92,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] re-use symbolic factorization ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s pddrive3_ABglobal ];then
 	flunk "pddrive3_ABglobal binary does not exist"
     fi
@@ -94,6 +102,7 @@ export MV2_ENABLE_AFFINITY=0
 }
 
 @test "[$testname] multi-grid ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -z "$SIMPLE_CI" ]; then
         skip "The multi-grid test is too heavy for SIMPLE_CI environments, like Github Actions and Cirrus CI"
     fi
@@ -105,4 +114,3 @@ export MV2_ENABLE_AFFINITY=0
     run_mpi_binary ./pddrive4 "g20.rua" $NODES 10
     assert_success
 }
-

@@ -44,8 +44,12 @@ AC_C_CONST
 
 CFLAGS="-I${MUMPS_INC} ${CFLAGS}"
 FFLAGS="-I${MUMPS_INC} ${FFLAGS}"
-LDFLAGS="-L${MUMPS_LIB}"
 LIBS="-lmumps_common"
+if test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then
+  LDFLAGS="-L${MUMPS_LIB} -armpl -lm"
+else
+  LDFLAGS="-L${MUMPS_LIB}"
+fi
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)

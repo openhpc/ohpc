@@ -1,6 +1,7 @@
 #!./common/bats/bin/bats 
 # -*-sh-*-
 source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
 
 if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
@@ -9,7 +10,6 @@ fi
 PKG=MUMPS
 module=mumps
 family=$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI
-rpm=$module-$family${DELIM}
 
 @test "[libs/$PKG] Verify $PKG module is loaded and matches rpm version ($family)" {
     module list $module | grep "1) $module" >& .cmd_output || exit 1
@@ -17,6 +17,8 @@ rpm=$module-$family${DELIM}
     assert_success
     
     # check version against rpm
+    local rpm
+    rpm=$(get_rpm_name ${module})
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
     assert_output "  1) $module/$version"

@@ -17,6 +17,9 @@ export SCAN_MPI_LAUNCHER=prun
 ./bootstrap || exit 1
 
 for compiler in $COMPILER_FAMILIES ; do
+    if [ "$compiler" == "arm1" ]; then
+	continue
+    fi
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "

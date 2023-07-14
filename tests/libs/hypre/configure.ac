@@ -35,6 +35,11 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CXXFLAGS} -fopenmp"
   FFLAGS="-I ${HYPRE_INC} -I ${MKLROOT}/include ${FFLAGS}"
   LDFLAGS="-L${HYPRE_LIB} -lHYPRE -L$MKLROOT/lib/intel64 -lmkl_rt -lm ${LDFLAGS}"
+elif test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then
+  CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CFLAGS}"
+  CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CXXFLAGS} -fopenmp"
+  FFLAGS="-I ${HYPRE_INC} ${FFLAGS}"
+  LDFLAGS="-L${HYPRE_LIB} -lHYPRE -armpl -lm ${LDFLAGS}"
 else
   CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CFLAGS}"
   CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CXXFLAGS} -fopenmp"

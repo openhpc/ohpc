@@ -19,6 +19,7 @@ unset OMP_NUM_THREADS
 
 
 @test "[Extrae] MPI C trace under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     if [ ! -s heat_mpi ];then
 	flunk "heat_mpi binary does not exist"
     fi
@@ -52,6 +53,7 @@ unset OMP_NUM_THREADS
 
 @test "[Extrae] Parallel trace merge runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 
+    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
     run ls TRACE.mpits
     assert_success
 

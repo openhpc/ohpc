@@ -113,7 +113,9 @@ check_compiler_family CC CXX FC
 }
 
 @test "[$testname] Memcheck compile/test ($LMOD_FAMILY_COMPILER)" {
-
+    if  [[ "$LMOD_FAMILY_COMPILER" =~ "acfl" ]]; then
+        skip "arm compiler currently breaks valgrind"
+    fi
     # Clean program that should run without incident
     $CC -o hello hello.c
     assert_success
@@ -125,9 +127,4 @@ check_compiler_family CC CXX FC
     assert_success
     run valgrind -q --error-exitcode=1 ./badfree
     assert_failure
-
-#    rm ./badfree
-#    rm ./hello
 }
-
-

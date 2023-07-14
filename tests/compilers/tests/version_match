@@ -23,25 +23,33 @@ family=$LMOD_FAMILY_COMPILER
 }
 
 @test "[Compilers] C, C++, and Fortran versions match module ($family)" {
-    module list $family >& .cmd_output || exit 1
-    local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+    local my_family
+    if  [[ "$family" =~ "acfl" ]]; then
+        # The arm compiler package set "acfl".
+        # OpenHPC expects "arm1".
+        my_family="arm1"
+    else
+        my_family="$family"
+    fi
+    module list $my_family >& .cmd_output || exit 1
+    local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$my_family/" '{print $2}'`
 
-    if [[ "$family" = "intel" ]];then
+    if [[ "$my_family" = "intel" ]];then
 	# intel has no consistency here, have to punt
 ## 	compiler=`which icc`
 ## 	version=`icc --version | head -1 | awk '{print $3}'`
 ## 	assert_equal "$my_mod_version" "$version"
 	version="assuming all is good"
-  elif [[ "$family" =~ "arm" ]];then
+  elif [[ "$my_family" =~ "arm1" ]];then
 	assert_equal "$my_mod_version" "compat"
-    elif [[ "$family" =~ "gnu"  ]];then
+    elif [[ "$my_family" =~ "gnu"  ]];then
 	version=`gcc --version | head -1 | awk '{print $3}'`
 	assert_equal "$my_mod_version" "$version"
 	version=`g++ --version | head -1 | awk '{print $3}'`
 	assert_equal "$my_mod_version" "$version"
 	version=`gfortran --version | head -1 | awk '{print $4}'`
 	assert_equal "$my_mod_version" "$version"
-    elif [[ "$family" =~ "llvm"  ]];then
+    elif [[ "$my_family" =~ "llvm"  ]];then
 	version=`clang --version | head -1 | awk '{print $3}'`
 	assert_equal "$my_mod_version" "$version"
 	version=`clang++ --version | head -1 | awk '{print $3}'`
