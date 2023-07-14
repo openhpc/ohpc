@@ -1,0 +1,13 @@
+% begin_ohpc_run
+\noindent If planning to install the Arm Linux compiler
+(see~\S\ref{sec:3rdparty_arm}), register the
+following additional path (\texttt{/opt/arm}) to share with computes:
+% ohpc_command if [[ ${enable_arm1_packages} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# (Optional) Setup NFS mount for /opt/arm if planning to install Arm Linux compiler packages
+[sms](*\#*) echo "/opt/arm *(ro,no_subtree_check,fsid=12)" >> /etc/exports
+[sms](*\#*) echo "${sms_ip}:/opt/arm /opt/arm nfs nfsvers=4,nodev 0 0" >> $CHROOT/etc/fstab
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
