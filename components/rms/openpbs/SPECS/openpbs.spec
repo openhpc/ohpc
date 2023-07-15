@@ -138,6 +138,7 @@ Requires: hostname
 %endif
 %if 0%{?rhel} >= 7
 Requires: hwloc-ohpc
+Requires: chkconfig
 %endif
 Requires: libical
 Autoreq: 1
@@ -175,6 +176,7 @@ Requires: hostname
 %endif
 %if 0%{?rhel} >= 7
 Requires: hwloc-ohpc
+Requires: chkconfig
 %endif
 Autoreq: 1
 
