@@ -141,12 +141,12 @@ test_map = {
     'components/perf-tools/geopm/SPECS/geopm.spec': [
         'geopm',
         '',
-        ''
+        'lmod-defaults-gnu13-openmpi5-ohpc'
     ],
     'components/perf-tools/likwid/SPECS/likwid.spec': [
         'likwid',
         '',
-        ''
+        'lmod-defaults-gnu13-openmpi5-ohpc'
     ],
     'components/perf-tools/papi/SPECS/papi.spec': [
         'papi',
@@ -161,7 +161,7 @@ test_map = {
     'components/perf-tools/tau/SPECS/tau.spec': [
         'tau',
         '',
-        ''
+        'lmod-defaults-gnu13-openmpi5-ohpc man bc'
     ],
     'components/mpi-families/openmpi/SPECS/openmpi5.spec': [
         'slurm',

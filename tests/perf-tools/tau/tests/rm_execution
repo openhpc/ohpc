@@ -34,8 +34,11 @@ unset OMP_NUM_THREADS
 }
 
 @test "[libs/TAU] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -z "$SIMPLE_CI" ];then
+        skip "Not supported on SIMPLE_CI"
+    fi
     if [ "x$ARCH" == "xx86_64" ];then
-	export TAU_METRICS=PAPI_LD_INS
+        export TAU_METRICS=PAPI_LD_INS
     fi
     if [ ! -s CXX_mpi_test ];then
     flunk "CXX_mpi_test binary does not exist"
@@ -51,11 +54,14 @@ unset OMP_NUM_THREADS
 }
 
 @test "[libs/TAU] Hybrid OpenMP/MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -z "$SIMPLE_CI" ];then
+        skip "Not supported on SIMPLE_CI"
+    fi
     if [ "$LMOD_FAMILY_COMPILER" == "intel" ];then
 	skip "intel"
     fi
     if [ "x$ARCH" == "xx86_64" ];then
-	export TAU_METRICS=PAPI_L1_DCM
+        export TAU_METRICS=PAPI_L1_DCM
     fi
     if [ ! -s C_hybrid_test ];then
 	flunk "C_hybrid_test binary does not exist"
