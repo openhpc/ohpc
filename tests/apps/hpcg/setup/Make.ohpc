@@ -120,6 +120,8 @@ CXX          = mpicxx
 
 ifeq ($(LMOD_FAMILY_COMPILER),intel)
 CXXFLAGS     = $(HPCG_DEFS) -O3 -qopenmp
+else ifeq ($(LMOD_FAMILY_COMPILER),acfl)
+CXXFLAGS     = $(HPCG_DEFS) -O3 -fsimdmath -fopenmp
 else
 CXXFLAGS     = $(HPCG_DEFS) -O3 -ffast-math -ftree-vectorize -ftree-vectorizer-verbose=0 -fopenmp
 endif
