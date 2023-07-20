@@ -797,7 +797,7 @@ Requires:  scalapack-arm1-mpich%{PROJ_DELIM}
 Requires:  slepc-arm1-mpich%{PROJ_DELIM}
 Requires:  ptscotch-arm1-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-arm1-mpich%{PROJ_DELIM}
-Requires:  trilinos-arm1-mpich%{PROJ_DELIM}
+### Requires:  trilinos-arm1-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-arm1-mpich-parallel-libs
 Collection of parallel library builds for use with the Arm Compiler for Linux and the MPICH runtime
 
