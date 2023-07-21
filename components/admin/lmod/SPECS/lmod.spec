@@ -39,11 +39,11 @@ Provides: environment(modules)
 Obsoletes: environment-modules
 %endif
 %if 0%{?sle_version}
-BuildRequires: lua-luafilesystem
-BuildRequires: lua-luaposix
+BuildRequires: lua53-luafilesystem
+BuildRequires: lua53-luaposix
 BuildRequires: procps
-Requires: lua-luafilesystem
-Requires: lua-luaposix
+Requires: lua53-luafilesystem
+Requires: lua53-luaposix
 Conflicts: Modules
 %endif
 
