@@ -132,6 +132,9 @@ Requires: tk
 %if %{defined suse_version}
 Requires: smtp_daemon
 Requires: net-tools
+# The pbs_postinstall is not 100% systemd and still needs
+# sysv files and directories.
+Requires: insserv-compat
 %else
 Requires: smtpdaemon
 Requires: hostname
@@ -171,6 +174,9 @@ Requires: expat
 Requires: python3 >= 3.5
 %if %{defined suse_version}
 Requires: net-tools
+# The pbs_postinstall is not 100% systemd and still needs
+# sysv files and directories.
+Requires: insserv-compat
 %else
 Requires: hostname
 %endif
