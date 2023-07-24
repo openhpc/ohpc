@@ -10,7 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
-#global _with_pmix --with-pmix=%{OHPC_ADMIN}/pmix
+%global _with_pmix --with-pmix=%{OHPC_ADMIN}/pmix
 %global _with_hwloc 1
 %global _with_numa 1
 %global _with_slurmrestd 1
@@ -392,6 +392,9 @@ select information.
 %build
 %if 0%{?rhel} || 0%{?openEuler}
 export PATH="$PWD/bin:$PATH"
+%endif
+%if %{with pmix}
+module load hwloc
 %endif
 %configure \
 	%{?_without_debug:--disable-debug} \
