@@ -186,7 +186,7 @@ Requires: chkconfig
 %endif
 Autoreq: 1
 # Open MPI needs pmix installed on the compute nodes, but the
-# package is not acutally installed on the compute nodes.
+# package is not actually installed on the compute nodes.
 # As slurm pulls in pmix for Open MPI in slurm deployments,
 # let's have openpbs pull pmix for openpbs deployments.
 Requires: pmix%{PROJ_DELIM}
