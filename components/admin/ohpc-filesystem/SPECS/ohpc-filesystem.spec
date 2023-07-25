@@ -64,8 +64,8 @@ install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 %%__ohpc_provides        /usr/lib/rpm/ohpc-find-provides
 %%__ohpc_requires        /usr/lib/rpm/ohpc-find-requires %%{buildroot} %{OHPC_HOME}
 
-%%__ohpc_path            ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)|(/opt/pbs/sbin/pbs.*)$
-%%__elf_exclude_path     ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)|(/opt/pbs/sbin/pbs.*)$
+%%__ohpc_path            ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)|(/usr/lib64/slurm/mpi_pmix.*so)|(/opt/pbs/sbin/pbs.*)$
+%%__elf_exclude_path     ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)|(/usr/lib64/slurm/mpi_pmix.*so)|(/opt/pbs/sbin/pbs.*)$
 
 %%__ohpc_magic           ^ELF (32|64)-bit.*$
 %%__ohpc_flags           magic_and_path
