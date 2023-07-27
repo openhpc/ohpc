@@ -73,7 +73,8 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
-BuildRequires: hwloc-ohpc
+BuildRequires: hwloc%{PROJ_DELIM}
+BuildRequires: pmix%{PROJ_DELIM}
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
@@ -139,8 +140,8 @@ Requires: insserv-compat
 Requires: smtpdaemon
 Requires: hostname
 %endif
-%if 0%{?rhel} >= 7
-Requires: hwloc-ohpc
+Requires: hwloc%{PROJ_DELIM}
+%if 0%{?rhel} >= 7 || 0%{?openEuler}
 Requires: chkconfig
 %endif
 Requires: libical
@@ -282,6 +283,7 @@ cd build
 	PBS_VERSION=%{pbs_version} \
 	--prefix=%{pbs_prefix} \
         --with-hwloc=%{OHPC_LIBS}/hwloc \
+        --with-pmix=%{OHPC_ADMIN}/pmix \
 %if %{with ptl}
 	--enable-ptl \
 %endif
