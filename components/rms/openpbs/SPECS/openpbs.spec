@@ -74,6 +74,7 @@ BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
 BuildRequires: hwloc%{PROJ_DELIM}
+BuildRequires: libevent-devel
 BuildRequires: pmix%{PROJ_DELIM}
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
