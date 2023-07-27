@@ -290,7 +290,8 @@ run_mpi_binary () {
     done
 
     if [ -z "$scalasca" ];then
-    mpi_launcher="prun"
+    #mpi_launcher="prun"
+	mpi_launcher="mpirun --mca plm_base_verbose 100"
     else
     mpi_launcher="scalasca -analyze prun"
     fi
