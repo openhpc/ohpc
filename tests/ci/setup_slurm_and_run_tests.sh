@@ -91,6 +91,7 @@ while true; do
 	sleep "${retry_counter}"
 done
 
+srun --mpi=list
 srun -N2 hostname
 
 # Figure out which tests we need to run.

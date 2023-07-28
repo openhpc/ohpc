@@ -74,8 +74,8 @@ BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
 BuildRequires: hwloc%{PROJ_DELIM}
-#BuildRequires: libevent-devel
-#BuildRequires: pmix%{PROJ_DELIM}
+BuildRequires: libevent-devel
+BuildRequires: pmix%{PROJ_DELIM}
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
@@ -283,7 +283,8 @@ cd build
 ../configure CFLAGS="-fPIC" \
 	PBS_VERSION=%{pbs_version} \
 	--prefix=%{pbs_prefix} \
-        --with-hwloc=%{OHPC_LIBS}/hwloc \
+	--with-hwloc=%{OHPC_LIBS}/hwloc \
+	--with-pmix=%{OHPC_ADMIN}/pmix \
 %if %{with ptl}
 	--enable-ptl \
 %endif
