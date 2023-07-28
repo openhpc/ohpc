@@ -291,7 +291,7 @@ run_mpi_binary () {
 
     if [ -z "$scalasca" ];then
     #mpi_launcher="prun"
-	mpi_launcher="mpirun --mpi=pmix --mca plm_base_verbose 100"
+	mpi_launcher="mpirun --mca plm_base_verbose 100"
     else
     mpi_launcher="scalasca -analyze prun"
     fi
@@ -323,6 +323,7 @@ run_mpi_binary () {
 	    echo "#SBATCH -N $NNODES"      >> $jobScript
 	    echo "#SBATCH -n $NTASKS"      >> $jobScript
 	    echo "#SBATCH -t $timeout"     >> $jobScript
+	    echo "#SBATCH --mpi=pmix"     >> $jobScript
 	    echo "#SBATCH -o job.%j.out"   >> $jobScript
 	    
 	    if [ -n "$input_file" ];then
