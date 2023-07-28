@@ -263,7 +263,7 @@ run_mpi_binary () {
 		if [ ! -z "$SIMPLE_CI" ]; then
 			timeout=5		# default job timeout (in minutes)
 			# Do not use pmix in the SIMPLE_CI case (GitHub Actions)
-			unset OHPC_MPI_LAUNCHERS
+#			unset OHPC_MPI_LAUNCHERS
 		else
 			timeout=2		# default job timeout (in minutes)
 		fi
