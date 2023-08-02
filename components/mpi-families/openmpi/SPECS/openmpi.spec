@@ -32,7 +32,11 @@
 %{!?with_lustre: %define with_lustre 0}
 %{!?with_slurm: %define with_slurm 0}
 %{!?with_tm: %global with_tm 1}
-%{!?with_pmix: %define with_pmix 1}
+%if "%{RMS_DELIM}" == "-pmix"
+%define with_pmix 1
+%else
+%define with_pmix 0
+%endif
 %{!?with_ofi: %define with_ofi 1}
 %{!?with_ucx: %define with_ucx 1}
 
