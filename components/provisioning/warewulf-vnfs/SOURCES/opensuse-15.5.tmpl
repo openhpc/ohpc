@@ -12,9 +12,13 @@ EXTRA_ARGS="--releasever=15.5"
 # Uncomment to disable GPG checks on added repos
 # REPO_NOGPGHECK=1
 
-# Comma-seperated location(s) of the YUM repositories
-ZYPP_MIRROR="http://download.opensuse.org/distribution/leap/15.5/repo/oss/,\
-    http://download.opensuse.org/update/leap/15.5/oss/"
+# Comma-seperated location(s) of the repositories
+if [ -z "$ZYPP_MIRROR" ]; then
+    if [ -z "$ZYPP_MIRROR_BASE" ]; then
+        ZYPP_MIRROR_BASE=http://download.opensuse.org/
+    fi
+    ZYPP_MIRROR="${ZYPP_MIRROR_BASE}/distribution/leap/15.5/repo/oss/","${ZYPP_MIRROR_BASE}/update/leap/15.5/oss/"
+fi
 
 # Install only what is necessary/specific for this distribution
 PKGLIST="systemd-sysvinit aaa_base bash dracut openSUSE-release coreutils \
