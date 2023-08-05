@@ -6,6 +6,7 @@ following additional path (\texttt{/opt/arm}) to share with computes:
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # (Optional) Setup NFS mount for /opt/arm if planning to install Arm Linux compiler packages
+[sms](*\#*) mkdir /opt/arm
 [sms](*\#*) echo "/opt/arm *(ro,no_subtree_check,fsid=12)" >> /etc/exports
 [sms](*\#*) echo "${sms_ip}:/opt/arm /opt/arm nfs nfsvers=4,nodev 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
