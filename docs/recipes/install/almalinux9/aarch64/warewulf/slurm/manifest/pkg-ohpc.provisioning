@@ -1,0 +1,15 @@
+warewulf-common-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Scalable systems management suite for high performance clusters
+warewulf-ipmi-ohpc-initramfs-aarch64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Add IPMI to aarch64 initramfs
+warewulf-ipmi-ohpc-initramfs-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Add IPMI to x86_64 initramfs
+warewulf-provision-ohpc-gpl_sources 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - GPL sources used in Warewulf provisioning
+warewulf-cluster-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - HPC cluster configuration
+warewulf-ipmi-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - IPMI support
+warewulf-common-ohpc-localdb 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Install local database server
+warewulf-provision-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - System provisioning core
+warewulf-provision-ohpc-server 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - System provisioning server
+warewulf-vnfs-ohpc 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Virtual Node File System support
+warewulf-provision-ohpc-server-ipxe-aarch64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - iPXE Bootloader for aarch64
+warewulf-provision-ohpc-server-ipxe-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - iPXE Bootloader for x86_64
+warewulf-provision-ohpc-initramfs-aarch64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for aarch64
+warewulf-provision-ohpc-initramfs-x86_64 3.9.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for x86_64
+warewulf-ohpc 4.3.0 https://github.com/hpcng/warewulf ohpc/provisioning A provisioning system for large clusters of bare metal and/or virtual systems

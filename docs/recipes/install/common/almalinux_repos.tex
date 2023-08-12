@@ -1,0 +1,25 @@
+In addition to the \OHPC{}
+\iftoggle{isxCAT}{and \xCAT{} package repositories,}{package repository,}
+the {\em master} host also requires access to the standard base OS distro
+repositories in order to resolve necessary dependencies. For \baseOS{}, the
+requirements are to have access to the BaseOS, Appstream, Extras, CRB,
+and EPEL repositories for which mirrors are freely available online:
+
+\begin{itemize*}
+\item AlmaLinux-9
+  (e.g. \href{https://repo.almalinux.org/almalinux/9/}
+             {\color{blue}{https://repo.almalinux.org/almalinux/9/}} )
+\item EPEL 9 (e.g. \href{http://download.fedoraproject.org/pub/epel/9/}
+                        {\color{blue}{http://download.fedoraproject.org/pub/epel/9/}} )
+\end{itemize*}
+
+\noindent The public EPEL repository will be enabled automatically upon
+installation of the \texttt{ohpc-release} package. Note that this does depend
+on the AlmaLinux Extras repository, which is shipped with AlmaLinux and is typically
+enabled by default.  In contrast, the CRB repository is typically
+disabled in a standard install, but can be enabled from EPEL as follows:
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) yum install dnf-plugins-core
+[sms](*\#*) yum config-manager --set-enabled CRB
+\end{lstlisting}

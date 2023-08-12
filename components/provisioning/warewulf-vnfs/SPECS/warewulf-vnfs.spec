@@ -31,6 +31,7 @@ Source5: include-openEuler
 Source6: rocky-9.tmpl
 Source7: opensuse-15.4.tmpl
 Source8: opensuse-15.5.tmpl
+Source9: almalinux-9.tmpl
 Patch0:  warewulf-vnfs.aarch64.bootstrap.patch
 Patch1:  warewulf-vnfs.aarch64.bootstrap_usb.patch
 Patch2:  warewulf-vnfs.bootstrap_msr.patch
@@ -118,6 +119,7 @@ install -D -m 0644 %SOURCE5 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/incl
 install -D -m 0644 %SOURCE6 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/rocky-9.tmpl
 install -D -m 0644 %SOURCE7 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/opensuse-15.4.tmpl
 install -D -m 0644 %SOURCE8 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/opensuse-15.5.tmpl
+install -D -m 0644 %SOURCE9 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/almalinux-9.tmpl
 
 %files
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE

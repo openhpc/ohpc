@@ -1,0 +1,2 @@
+charliecloud-ohpc 0.15 https://hpc.github.io/charliecloud/ ohpc/runtimes Lightweight user-defined software stacks for high-performance computing
+singularity-ohpc 3.7.1 https://www.sylabs.io/singularity/ ohpc/runtimes Application and environment virtualization

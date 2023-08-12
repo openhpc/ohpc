@@ -1,0 +1,145 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for boost
+boost-gnu9-mpich-ohpc &
+\multirow{2}{*}{1.76.0} & 
+\multirow{6}{\linewidth}{Boost free peer-reviewed portable C++ source libraries. \newline {\color{logoblue} \url{http://www.boost.org}}} \\ 
+boost-gnu9-openmpi4-ohpc &
+& \\ 
+\cline{1-2} boost-arm1-mpich-ohpc &\multirow{4}{*}{1.80.0}
+& \\ 
+boost-arm1-openmpi4-ohpc &
+& \\ 
+boost-gnu12-mpich-ohpc &
+& \\ 
+boost-gnu12-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for boost
+
+% <-- begin entry for fftw
+fftw-gnu9-mpich-ohpc &
+\multirow{2}{*}{3.3.8} & 
+\multirow{6}{\linewidth}{A Fast Fourier Transform library. \newline {\color{logoblue} \url{http://www.fftw.org}}} \\ 
+fftw-gnu9-openmpi4-ohpc &
+& \\ 
+\cline{1-2} fftw-arm1-mpich-ohpc &\multirow{4}{*}{3.3.10}
+& \\ 
+fftw-arm1-openmpi4-ohpc &
+& \\ 
+fftw-gnu12-mpich-ohpc &
+& \\ 
+fftw-gnu12-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for fftw
+
+% <-- begin entry for hypre
+hypre-arm1-mpich-ohpc &
+\multirow{6}{*}{2.18.1} & 
+\multirow{6}{\linewidth}{Scalable algorithms for solving linear systems of equations. \newline {\color{logoblue} \url{http://www.llnl.gov/casc/hypre}}} \\ 
+hypre-arm1-openmpi4-ohpc &
+& \\ 
+hypre-gnu12-mpich-ohpc &
+& \\ 
+hypre-gnu12-openmpi4-ohpc &
+& \\ 
+hypre-gnu9-mpich-ohpc &
+& \\ 
+hypre-gnu9-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for hypre
+
+% <-- begin entry for mfem
+mfem-gnu9-mpich-ohpc &
+\multirow{2}{*}{4.3} & 
+\multirow{6}{\linewidth}{Lightweight, general, scalable C++ library for finite element methods. \newline {\color{logoblue} \url{http://mfem.org}}} \\ 
+mfem-gnu9-openmpi4-ohpc &
+& \\ 
+\cline{1-2} mfem-arm1-mpich-ohpc &\multirow{4}{*}{4.4}
+& \\ 
+mfem-arm1-openmpi4-ohpc &
+& \\ 
+mfem-gnu12-mpich-ohpc &
+& \\ 
+mfem-gnu12-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for mfem
+
+% <-- begin entry for mumps
+mumps-arm1-mpich-ohpc &
+\multirow{6}{*}{5.2.1} & 
+\multirow{6}{\linewidth}{A MUltifrontal Massively Parallel Sparse direct Solver. \newline {\color{logoblue} \url{http://graal.ens-lyon.fr/MUMPS}}} \\ 
+mumps-arm1-openmpi4-ohpc &
+& \\ 
+mumps-gnu12-mpich-ohpc &
+& \\ 
+mumps-gnu12-openmpi4-ohpc &
+& \\ 
+mumps-gnu9-mpich-ohpc &
+& \\ 
+mumps-gnu9-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for mumps
+
+% <-- begin entry for opencoarrays
+opencoarrays-gnu9-mpich-ohpc &
+\multirow{2}{*}{2.9.2} & 
+\multirow{4}{\linewidth}{ABI to leverage the parallel programming features of the Fortran 2018 DIS. \newline {\color{logoblue} \url{http://www.opencoarrays.org}}} \\ 
+opencoarrays-gnu9-openmpi4-ohpc &
+& \\ 
+\cline{1-2} opencoarrays-gnu12-mpich-ohpc &\multirow{2}{*}{2.10.0}
+& \\ 
+opencoarrays-gnu12-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for opencoarrays
+
+% <-- begin entry for petsc
+petsc-gnu9-mpich-ohpc &
+\multirow{2}{*}{3.16.1} & 
+\multirow{6}{\linewidth}{Portable Extensible Toolkit for Scientific Computation. \newline {\color{logoblue} \url{http://www.mcs.anl.gov/petsc}}} \\ 
+petsc-gnu9-openmpi4-ohpc &
+& \\ 
+\cline{1-2} petsc-arm1-mpich-ohpc &\multirow{4}{*}{3.18.1}
+& \\ 
+petsc-arm1-openmpi4-ohpc &
+& \\ 
+petsc-gnu12-mpich-ohpc &
+& \\ 
+petsc-gnu12-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for petsc
+
+% <-- begin entry for ptscotch
+ptscotch-gnu9-mpich-ohpc &
+\multirow{2}{*}{6.0.6} & 
+\multirow{6}{\linewidth}{Graph, mesh and hypergraph partitioning library using MPI. \newline {\color{logoblue} \url{http://www.labri.fr/perso/pelegrin/scotch}}} \\ 
+ptscotch-gnu9-openmpi4-ohpc &
+& \\ 
+\cline{1-2} ptscotch-arm1-mpich-ohpc &\multirow{4}{*}{7.0.1}
+& \\ 
+ptscotch-arm1-openmpi4-ohpc &
+& \\ 
+ptscotch-gnu12-mpich-ohpc &
+& \\ 
+ptscotch-gnu12-openmpi4-ohpc &
+& \\ 
+\hline
+% <-- end entry for ptscotch
+
+% <-- begin entry for scalapack
+\bottomrule
+\end{tabularx}
