@@ -1,25 +1,25 @@
-In addition to the \OHPC{} 
+In addition to the \OHPC{}
 \iftoggle{isxCAT}{and \xCAT{} package repositories,}{package repository,}
 the {\em master} host also requires access to the standard base OS distro
 repositories in order to resolve necessary dependencies. For \baseOS{}, the
-requirements are to have access to the BaseOS, Appstream, Extras, PowerTools,
+requirements are to have access to the BaseOS, Appstream, Extras, CRB,
 and EPEL repositories for which mirrors are freely available online:
 
 \begin{itemize*}
-\item Rocky-8
-  (e.g. \href{http://download.rockylinux.org/pub/rocky/8/}
-             {\color{blue}{http://download.rockylinux.org/pub/rocky/8/}} )
-\item EPEL 8 (e.g. \href{http://download.fedoraproject.org/pub/epel/8/}
-                        {\color{blue}{http://download.fedoraproject.org/pub/epel/8/}} )
+\item Rocky-9
+  (e.g. \href{http://download.rockylinux.org/pub/rocky/9/}
+             {\color{blue}{http://download.rockylinux.org/pub/rocky/9/}} )
+\item EPEL 9 (e.g. \href{http://download.fedoraproject.org/pub/epel/9/}
+                        {\color{blue}{http://download.fedoraproject.org/pub/epel/9/}} )
 \end{itemize*}
 
 \noindent The public EPEL repository will be enabled automatically upon
 installation of the \texttt{ohpc-release} package. Note that this does depend
 on the Rocky Extras repository, which is shipped with Rocky and is typically
-enabled by default.  In contrast, the PowerTools repository is typically
+enabled by default.  In contrast, the CRB repository is typically
 disabled in a standard install, but can be enabled from EPEL as follows:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [sms](*\#*) yum install dnf-plugins-core
-[sms](*\#*) yum config-manager --set-enabled powertools
+[sms](*\#*) yum config-manager --set-enabled CRB
 \end{lstlisting}
