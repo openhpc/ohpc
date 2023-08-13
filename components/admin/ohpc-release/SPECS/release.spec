@@ -40,7 +40,7 @@ Requires: epel-release
 Requires: redhat-release >= 9.1
 %endif
 %if 0%{?suse_version}
-Requires: (suse-release >= 15.4 or sles-release >= 15.4)
+Requires: (suse-release >= 15.4 or SLE_HPC-release >= 15.4 or sles-release >= 15.4)
 %endif
 
 %description
