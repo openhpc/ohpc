@@ -62,7 +62,13 @@ prechroot() {
     echo "" >> $CHROOTDIR/$DNF_CONF
 
     mkdir -p $CHROOTDIR/etc/yum.repos.d/
-    cp /etc/yum.repos.d/epol-update.repo $CHROOTDIR/etc/yum.repos.d/
+    # karl@koomie.com - I don't grok this next step. epol-update.repo is not owned by
+    # any package - adding a file check since not present by default.
+    
+    if [ -e /etc/yum.repos.d/epol-update.repo ];then
+	cp /etc/yum.repos.d/epol-update.repo $CHROOTDIR/etc/yum.repos.d/
+    fi
+
     # Create new repos from comma-seperated list (using bash inline S&R)
     if [ "0$NOGPGCHECK" -eq "00" ]; then REPO_NOGPGCHECK=0; else REPO_NOGPGCHECK=1; fi
     for i in ${YUM_MIRROR//,/ }; do
@@ -85,6 +91,14 @@ postchroot() {
             echo "rename_device() { return 0; }" >> $NETFILE
         fi
     fi
+
+    # update default openEuler.repo to honor YUM_MIRROR_BASE if provided (karl@koomie.com)
+    if [ -n "$YUM_MIRROR_BASE" ];then
+        if [ -e $CHROOTDIR/etc/yum.repos.d/openEuler.repo ];then
+            sed -i "s|http://repo.openeuler.org|${YUM_MIRROR_BASE}|g" $CHROOTDIR/etc/yum.repos.d/openEuler.repo
+        fi
+    fi
+
     return 0
 }
 
