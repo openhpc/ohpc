@@ -3,23 +3,17 @@ In addition to the \OHPC{}
 the {\em master} host also requires access to the standard base OS distro
 repositories in order to resolve necessary dependencies. For \baseOS{}, the
 requirements are to have access to the {\color{purple}{OS}}, {\color{purple}{Everything}},
-{\color{purple}{EPOL main}} and {\color{purple}{EPOL update}} repositories
-for which mirrors are freely available online:
+{\color{purple}{EPOL main}} and {\color{purple}{EPOL update}} repositories.
 
-\begin{itemize*}
-\item OS
-  (e.g. \href{http://repo.openeuler.org/openEuler-22.03-LTS/OS/}
-            {\color{blue}{http://repo.openeuler.org/openEuler-22.03-LTS/OS/}} )
-\item Everything
-  (e.g. \href{http://repo.openeuler.org/openEuler-22.03-LTS/everything/}
-            {\color{blue}{http://repo.openeuler.org/openEuler-22.03-LTS/everything/}} )
-\item EPOL-main
-  (e.g. \href{http://repo.openeuler.org/openEuler-22.03-LTS/EPOL/main/}
-            {\color{blue}{http://repo.openeuler.org/openEuler-22.03-LTS/EPOL/main/}} )
-\item EPOL-update
-  (e.g. \href{http://repo.openeuler.org/openEuler-22.03-LTS/EPOL/update/main}
-            {\color{blue}{http://repo.openeuler.org/openEuler-22.03-LTS/EPOL/update/main}} )
-\end{itemize*}
+{\color{purple}{OS}}, {\color{purple}{Everything}} and {\color{purple}{EPOL main}} 
+repositories are enabled by default.
 
-One might replace {\color{blue}{http://repo.openeuler.org}} with any of the mirrors listed
+To enable {\color{purple}{EPOL update}} repository on openEuler-22.03, run the following command:
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
+	literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) \install https://eur.openeuler.openatom.cn/results/mgrigorov/OpenHPC/openeuler-22.03_LTS-ARCH/00091098-openeuler-extra-repos/openeuler-extra-repos-22.03-LTS.noarch.rpm
+\end{lstlisting}
+
+By default all repositories use {\color{blue}{http://repo.openeuler.org}}. 
+For better network speed it could be replaced with any of the mirrors listed
 \href{https://www.openeuler.org/en/mirror/list/}{\color{blue}{here}}
