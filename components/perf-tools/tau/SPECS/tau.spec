@@ -56,6 +56,15 @@ BuildRequires: postgresql-devel binutils-devel
 BuildRequires: zlib-devel python3-devel
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
+# Exclude libCg*.so that breaks install on openeuler/x86_64
+%if 0%{?openEuler}
+%if "0%{?__requires_exclude}" == "0"
+%global __requires_exclude ^libCg*$
+%else
+%global __requires_exclude %{__requires_exclude}|^libCg*$
+%endif
+%endif
+
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires: binutils-devel
