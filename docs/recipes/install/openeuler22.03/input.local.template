@@ -65,6 +65,7 @@ enable_nagios="${enable_nagios:-0}"
 enable_powerman="${enable_powerman:-0}"
 enable_pmix="${enable_pmix:-0}"
 enable_geopm="${enable_geopm:-0}"
+enable_epol_updates="${enable_epol_updates:-1}"
 
 # Vendor compiler package flags
 enable_intel_packages="${enable_intel_packages:-0}"
