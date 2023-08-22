@@ -13,11 +13,11 @@ command:
 % begin_ohpc_run
 % ohpc_command if [[ ${enable_epol_updates} -eq 1 ]];then
 % ohpc_indent 5
-\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
-	literate={ARCH}{\arch{}}1 {-}{-}1]
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily]
 [sms](*\#*) export repo=https://eur.openeuler.openatom.cn/results/mgrigorov/OpenHPC
+[sms](*\#*) export arch=$(uname -m)
 [sms](*\#*) (*\install*) \
-  ${repo}/openeuler-22.03_LTS-ARCH/00091098-openeuler-extra-repos/openeuler-extra-repos-22.03-LTS.noarch.rpm
+  ${repo}/openeuler-22.03_LTS-${arch}/00091098-openeuler-extra-repos/openeuler-extra-repos-22.03-LTS.noarch.rpm
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
