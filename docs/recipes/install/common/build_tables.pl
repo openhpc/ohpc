@@ -27,10 +27,10 @@ my @exclude = ("slurm-sjstat-ohpc","slurm-slurmdb-direct-ohpc","slurm-sjobexit-o
 push @exclude, "lustre-client-ohpc-kmp-default";
 push @exclude, "R_base-ohpc";
 
-# include lustre for x86
-if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
-    push @ohpcCategories, "lustre";
-}
+## # include lustre for x86
+## if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
+##     push @ohpcCategories, "lustre";
+## }
     
 
 # skip older lmod defaults
