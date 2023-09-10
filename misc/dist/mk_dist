@@ -179,7 +179,11 @@ if( !$skipCopy) {
 	foreach my $distro (@distros) {
 	    print "--> copying from $base_repo_path/$base_release/$distro\n";
 	    unless(dircopy("$base_repo_path/$base_release/$distro", "$tmp_dir/$distro")) {
-            die "Unable to copy $base_repo_path/$base_release/$distro to $tmp_dir/$distro: $!";
+		die "Unable to copy $base_repo_path/$base_release/$distro to $tmp_dir/$distro: $!";
+	    }
+	    # update gpg key for 3.x
+	    unless(copy("RPM-GPG-KEY-OpenHPC-3","$tmp_dir/$distro/repodata")) {
+		die "Unable to copy RPM-GPG-KEY-OpenHPC-3 to $tmp_dir/$distro/repodata";
 	    }
         }
     }

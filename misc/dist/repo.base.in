@@ -2,5 +2,5 @@
 name=OpenHPC-@VERSION_MINOR@ - Base
 baseurl=file://@PATH@/@DISTRO@
 gpgcheck=1
-gpgkey=file://@PATH@/@DISTRO@/repodata/repomd.xml.key
+gpgkey=file://@PATH@/@DISTRO@/repodata/RPM-GPG-KEY-OpenHPC-3
 
