@@ -1,5 +1,38 @@
 # -*- mode: sh; fill-column: 120; -*-
 
+Version 3.0 (15 September 2023)
+
+[Important Highlights/Notices for 3.x series]
+
+  * the 3.x series targets support for three new major OS distro versions: EL 9, openSUSE Leap 15.5 and openEuler 22.03.
+     o As the OpenHPC 3.x series targets major new distro versions, please note that the 3.x series
+       is **not** backwards compatible with the OpenHPC 2.x series.
+     o OpenHPC 3.x is intended for fresh installs with the newer distro versions (or containers based
+       on these distro versions).
+     o Note that 3.x builds for SUSE based systems are now performed against Leap instead of SLES. Leap 15 is
+       intended to be compatible with SLES 15.
+     o EL 9 based builds are performed against RHEL 9.2 and tested against Rocky Linux 9.2 and AlmaLinux 9.2
+  * Slurm based installations are now using Open MPI in combination with PMIX. OpenPBS based installation are not.
+
+[General Updates]
+
+  * Updates to support openSUSE Leap 15.5, openEuler 22.03 and RHEL/AlmaLinux/Rocky Linux 9.2.
+  * Tech preview build of Warewulf 4.x.
+  * Switched to clang based Intel oneAPI compiler backend.
+  * Removed deprecated ADIOS package and introduced ADIOS2.
+  * Introduced two Open MPI variants. One with PMIX support and one without PMIX support.
+    The Open MPI variant with PMIX support is used in the slurm based recipes.
+  * Introduced new compiler variant gnu13 as tech preview.
+
+[Known Issues]
+
+ * AlmaLinux recipes only tested on aarch64
+ * mvapich2 on openEuler not supported
+
+[Component Additions]
+      * R-gnu12-ohpc                             (vx.x.x)
+
+
 Version 2.6.1 (08 Feb 2023)
 
 [General Updates]
