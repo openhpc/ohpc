@@ -1,1 +1,2 @@
-python3-Cython-ohpc 0.29.32 http://www.cython.org ohpc/distro-packages The Cython compiler for writing C extensions for the Python language
+flex-ohpc 2.6.4 https://github.com/westes/flex ohpc/distro-packages Fast Lexical Analyzer Generator
+python3-Cython-ohpc 0.29.33 http://www.cython.org ohpc/distro-packages The Cython compiler for writing C extensions for the Python language
