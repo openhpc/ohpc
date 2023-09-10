@@ -77,11 +77,11 @@ $mpi_exceptions{"mkl-blacs"} = 1;
 my %page_breaks = ();
 if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"mpiP-gnu-impi-ohpc"} = 2;
-    $page_breaks{"likwid-gnu9-ohpc"} = 2;
-    $page_breaks{"tau-gnu9-impi-ohpc"} = 3;
-    $page_breaks{"netcdf-gnu9-impi-ohpc"} = 2;
+    $page_breaks{"pdtoolkit-gnu12-ohpc"} = 2;
+#    $page_breaks{"pdtoolkit-gnu12-ohpc"} = 3;
+    $page_breaks{"pnetcdf-gnu12-impi-ohpc"} = 2;
     $page_breaks{"mumps-gnu12-impi-ohpc"} = 2;
-    $page_breaks{"scalapack-gnu9-impi-ohpc"} = 3;
+    $page_breaks{"superlu_dist-gnu12-impi-ohpc"} = 3;
 } elsif ( $ENV{'PWD'} =~ /\S+\/aarch64\// ) {
     $page_breaks{"scalapack-gnu9-mpich-ohpc"} = 2;
 }
