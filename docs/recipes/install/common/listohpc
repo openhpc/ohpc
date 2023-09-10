@@ -72,6 +72,7 @@ echo $version | egrep -q "^3."
 if [ $? -eq 0 ];then
     pwd | grep -q leap15  && baseos="Leap_15"
     pwd | grep -q rocky9 && baseos="EL_9"
+    pwd | grep -q openeuler22.03 && baseos="openEuler_22.03"
 fi
 
 pwd | grep -q aarch64 && arch="aarch64"
