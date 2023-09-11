@@ -24,7 +24,7 @@ if(defined $ENV{'OverWritePrevoius'} ) {
 } 
 
 my @arches = ('aarch64', 'x86_64');
-my @distros = ('Leap_15','EL_9');
+my @distros = ('Leap_15','EL_9','openEuler_22.03');
 
 my $base_repo_path = "/repos/.staging/OpenHPC";
 my $dest_dir = "/repos/dist/$release";
