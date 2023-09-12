@@ -13,26 +13,17 @@
 
 Summary: Reference RunTime Environment for PMIx
 Name: %{pname}%{PROJ_DELIM}
-Version: 3.0.1rc2
+Version: 3.0.0
 Release: 1%{?dist}
 License: BSD
 URL: https://openpmix.github.io/openpmix/
 Group: %{PROJ_NAME}/rms
 Source0: https://github.com/openpmix/prrte/releases/download/v%{version}/%{pname}-%{version}.tar.gz
+Source1: prrte.lua
 
-Conflicts: libev
-
-BuildRequires: libevent-devel
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: zlib-devel
-BuildRequires: hwloc%{PROJ_DELIM}
-BuildRequires: munge-devel
-BuildRequires: automake
-BuildRequires: autoconf
+BuildRequires: openpmix%{PROJ_DELIM} > 5.0.0
 BuildRequires: slurm%{PROJ_DELIM}
 BuildRequires: openpbs-server%{PROJ_DELIM}
-BuildRequires: openpmix%{PROJ_DELIM} > 4.2.0
 BuildRequires: flex
 Provides: openpmix-runtime%{PROJ_DELIM} = %{version}
 
@@ -86,24 +77,7 @@ make install DESTDIR=${RPM_BUILD_ROOT}
 # PRRTE Module File
 mkdir -p ${RPM_BUILD_ROOT}%{module_path}
 cat <<EOF > ${RPM_BUILD_ROOT}%{module_path}/%{version}.lua
-help([[
-This module loads the %{pname} library.
-]])
-
-whatis("Name: %{pname}")
-whatis("Version: %{version}")
-
-local version = "%{version}"
-
-prepend_path("MANPATH",      "%{install_path}/share/man")
-prepend_path("INCLUDE",      "%{install_path}/include")
-prepend_path("LIBRARY_PATH", "%{install_path}/lib")
-
-setenv("%{PNAME}_DIR", "%{install_path}")
-setenv("%{PNAME}_LIB", "%{install_path}/lib")
-setenv("%{PNAME}_INC", "%{install_path}/include")
-
-family("PMIx")
+%include %{SOURCE1}
 EOF
 
 

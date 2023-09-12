@@ -15,12 +15,13 @@
 
 Summary: An extended/exascale implementation of the PMIx Standard
 Name: %{pname}%{PROJ_DELIM}
-Version: 5.0.0rc1
+Version: 5.0.1
 Release: 1%{?dist}
 License: BSD
 URL: https://openpmix.github.io/openpmix/
 Group: %{PROJ_NAME}/rms
 Source0: https://github.com/openpmix/openpmix/releases/download/v%{version}/%{sname}-%{version}.tar.gz
+Source1: openpmix.lua
 
 Obsoletes: pmix-%{PROJ_DELIM}
 
@@ -39,8 +40,6 @@ BuildRequires: hwloc%{PROJ_DELIM}
 BuildRequires: munge-devel
 BuildRequires: automake
 BuildRequires: autoconf
-BuildRequires: slurm%{PROJ_DELIM}
-BuildRequires: openpbs-server%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
 
@@ -96,27 +95,7 @@ make install DESTDIR=${RPM_BUILD_ROOT}
 # OpenPMIx Module File
 mkdir -p ${RPM_BUILD_ROOT}%{module_path}
 cat <<EOF > ${RPM_BUILD_ROOT}%{module_path}/%{version}.lua
-help([[
-This module loads the %{pname} library.
-]])
-
-whatis("Name:    %{pname}")
-whatis("Version: %{version}")
-
-local version = "%{version}"
-
-prepend_path("MANPATH",         "%{install_path}/share/man")
-prepend_path("INCLUDE",         "%{install_path}/include")
-prepend_path("LD_LIBRARY_PATH", "%{install_path}/lib")
-
-setenv("%{PNAME}_DIR", "%{install_path}")
-setenv("%{PNAME}_LIB", "%{install_path}/lib")
-setenv("%{PNAME}_INC", "%{install_path}/include")
-setenv("%{SNAME}_DIR", "%{install_path}")
-setenv("%{SNAME}_LIB", "%{install_path}/lib")
-setenv("%{SNAME}_INC", "%{install_path}/include")
-
-family("PMIx")
+%include %{SOURCE1}
 EOF
 
 
