@@ -12,6 +12,7 @@ Version 3.0 (15 September 2023)
      o Note that 3.x builds for SUSE based systems are now performed against Leap instead of SLES. Leap 15 is
        intended to be compatible with SLES 15.
      o EL 9 based builds are performed against RHEL 9.2 and tested against Rocky Linux 9.2 and AlmaLinux 9.2
+     o OpenHPC 3.x is the first release that supports openEuler OS! It is tested against openEuler 22.03 LTS (SP0)
   * Slurm based installations are now using Open MPI in combination with PMIX. OpenPBS based installation are not.
 
 [General Updates]
