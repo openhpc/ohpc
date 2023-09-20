@@ -13,7 +13,7 @@ RMS=$RESOURCE_MANAGER
 
 NODES=2
 TASKS=`tasks_count 8`
-ARGS=8
+ARGS=`tasks_count 8`
 
 @test "[MPI] C   binary runs on two nodes under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_test ];then

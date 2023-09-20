@@ -46,17 +46,19 @@ CXX='scorep mpicxx'
 FC='scorep mpif90'
 F77='scorep mpif90'
 
-CFLAGS="${CFLAGS} -fopenmp"
-CXXFLAGS="${CXXFLAGS} -fopenmp"
-FCFLAGS="${FCLAGS}"
-FFLAGS="${FCLAGS}"
-LDFLAGS="${LDFLAGS}"
-
 if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
+   CFLAGS="${CFLAGS} -qopenmp"
+   CXXFLAGS="${CXXFLAGS} -qopenmp"
    if test "x$LMOD_FAMILY_MPI" = "xmvapich2" ;then
       LDFLAGS="$LDFLAGS -lfmpich"
    fi
+else
+  CFLAGS="${CFLAGS} -fopenmp"
+  CXXFLAGS="${CXXFLAGS} -fopenmp"
 fi
+FCFLAGS="${FCLAGS}"
+FFLAGS="${FCLAGS}"
+LDFLAGS="${LDFLAGS}"
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)

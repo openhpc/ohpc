@@ -35,11 +35,9 @@ family=$LMOD_FAMILY_COMPILER
     local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$my_family/" '{print $2}'`
 
     if [[ "$my_family" = "intel" ]];then
-	# intel has no consistency here, have to punt
-## 	compiler=`which icc`
-## 	version=`icc --version | head -1 | awk '{print $3}'`
-## 	assert_equal "$my_mod_version" "$version"
-	version="assuming all is good"
+      compiler=`which icx`
+      version=`icx --version | awk 'sub(/^.* 202/,"202",$0){print $1;exit}'`
+      assert_equal "$my_mod_version" "$version"
   elif [[ "$my_family" =~ "arm1" ]];then
 	assert_equal "$my_mod_version" "compat"
     elif [[ "$my_family" =~ "gnu"  ]];then

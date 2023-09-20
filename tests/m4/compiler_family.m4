@@ -49,9 +49,9 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xllvm9"; then
    FC=gfortran
    AC_MSG_RESULT([llvm9])
 elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
-   CC=icc
-   CXX=icpc
-   FC=ifort
+   CC=icx
+   CXX=icpx
+   FC=ifx
    AC_MSG_RESULT([intel])
    OHPC_BLAS="-L${MKLROOT}/lib/intel64 -lmkl_rt"
 elif test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then

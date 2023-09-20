@@ -4,14 +4,14 @@
 set(CMAKE_COMPILER_VENDOR "intel")
 
 if(USE_SANITIZER)
-  set(CMAKE_C_COMPILER icl)
-  set(CMAKE_CXX_COMPILER icl++)
-  set(CMAKE_Fortran_COMPILER ifort)
+  set(CMAKE_C_COMPILER icx-cl)
+  set(CMAKE_CXX_COMPILER icx-cl)
+  set(CMAKE_Fortran_COMPILER icx)
   set(INTEL_CLANG ON)
 else ()
-  set(CMAKE_C_COMPILER icc)
-  set(CMAKE_CXX_COMPILER icpc)
-  set(CMAKE_Fortran_COMPILER ifort)
+  set(CMAKE_C_COMPILER icx)
+  set(CMAKE_CXX_COMPILER icpx)
+  set(CMAKE_Fortran_COMPILER icx)
 endif ()
 
 # the following is used if cross-compiling
