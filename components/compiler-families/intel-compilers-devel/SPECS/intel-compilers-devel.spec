@@ -20,6 +20,8 @@
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version.  Newer versions may still be installed in parallel.
 %define exact_intel_ver 2023.1.0
+%define exact_mkl_ver 2023.1.0
+%define exact_deps compiler/2023.1.0 mkl/%{exact_mkl_ver} oclfpga/2023.1.0 compiler-rt/2023.1.0 debugger/2023.1.0 tbb/2021.9.0
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
@@ -40,7 +42,7 @@ Requires: gcc libstdc++-devel
 Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_intel_ver}
 Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_intel_ver}
 Requires: intel-oneapi-dpcpp-cpp-%{exact_intel_ver}
-Requires: intel-oneapi-mkl-devel-%{exact_intel_ver}
+Requires: intel-oneapi-mkl-devel-%{exact_mkl_ver}
 Requires: intel-oneapi-compiler-fortran-%{exact_intel_ver}
 Recommends: intel-hpckit >= %{exact_intel_ver}
 
@@ -98,11 +100,31 @@ rm -f %{oneapi_manifest}
 # Regenerate the oneAPI modules directory
 echo "Generating new oneAPI modulefiles"
 /opt/intel/oneapi/modulefiles-setup.sh --ignore-latest --force --output-dir=%{OHPC_MODULEDEPS}/oneapi/ > /dev/null
+if [ ! -d %{OHPC_MODULEDEPS}/oneapi/compiler ]; then
+    echo "ERROR: Failed to create oneAPI module directory"
+    exit 1
+fi
+
+# Set system defaults for default OBS oneAPI modules
+for tool in %{exact_deps}; do
+  ln -s ${tool##*/} %{OHPC_MODULEDEPS}/oneapi/${tool%%/*}/default
+done
 
 # Create an OpenHPC module file for each version found in compilers
 echo "Creating OpenHPC-style modulefiles for local oneAPI compiler installation(s)."
 for compilers in %{OHPC_MODULEDEPS}/oneapi/compiler/2*; do
     ver=$(basename "$compilers")
+    # Skip 2023.2.0 due to errors that can hang installer
+    if [ "$ver" = "2023.2.0" ]; then
+        echo "--> Skipping version=2023.2.0 : environment module format error"
+        continue
+    fi
+    # For the default, also specify the MKL version
+    if [ "$ver" = "%{exact_intel_ver}" ]; then
+        mklver="mkl/%{exact_mkl_ver}"
+    else
+        mklver="mkl"
+    fi
     echo "--> Installing modulefile for version=${ver}"
     # Do not overwrite existing files
     # Write the new file as rpmnew
@@ -137,19 +159,9 @@ if { ![info exists ::env(ACL_SKIP_BSP_CONF)] } {
 }
 
 module load "compiler/\$version"
-module load "mkl"
+module load "$mklver"
 
 family "compiler"
-EOF
-
-    md5sum ${modname} >> %{oneapi_manifest}
-
-    modname=$(testfile %{OHPC_MODULES}/intel/.version.$ver)
-
-
-    cat << EOF > ${modname}
-#%Module1.0#####################################################################
-set     ModulesVersion      "$ver"
 EOF
 
     md5sum ${modname} >> %{oneapi_manifest}
@@ -175,17 +187,28 @@ module-whatis "Description: Intel(R) Math Kernel Library for C/C++ and Fortran"
 module-whatis "URL: https://software.intel.com/en-us/en-us/intel-mkl"
 
 prepend-path  MODULEPATH       %{OHPC_MODULEDEPS}/oneapi
-module load   "mkl/\$version"
+module load   "$mklver"
 EOF
 
     md5sum ${modname} >> %{oneapi_manifest}
 done
+
+# Set default version to match that used to build OpenHPC packages
+modname=$(testfile %{OHPC_MODULES}/intel/.version)
+
+cat << EOF > ${modname}
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{exact_intel_ver}"
+EOF
+
+md5sum ${modname} >> %{oneapi_manifest}
 
 
 %preun -p /bin/bash
 # Check current files against the manifest
 # Remove files that match and backup files that don't
 if [ -s %{oneapi_manifest} ]; then
+    echo "Removing module files"
     while IFS= read -r line; do
        f=${line%:*}
        s=${line#*:}
@@ -202,8 +225,9 @@ else
     echo "         modulefiles will not be removed or moved."
 fi
 # Remove the generated oneAPI module links, remove directories if empty
-find %{OHPC_MODULEDEPS}/oneapi -type l -delete
-find %{OHPC_MODULEDEPS}/oneapi/* -empty -type d -delete
+echo "Removing oneAPI module directory"
+find %{OHPC_MODULEDEPS}/oneapi -type l -delete || true
+find %{OHPC_MODULEDEPS}/oneapi/* -empty -type d -delete || true
 
 
 %files
