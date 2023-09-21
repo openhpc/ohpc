@@ -121,7 +121,7 @@ header=boost/version.hpp
     fi
 
     if [ $LMOD_FAMILY_COMPILER == "intel" ];then
-        CXX=icpc
+        CXX=icpx
     elif [[ $LMOD_FAMILY_COMPILER =~ "gnu" ]];then
         CXX=g++
     elif [[ $LMOD_FAMILY_COMPILER =~ "acfl" ]];then

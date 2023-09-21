@@ -32,7 +32,7 @@ AC_C_CONST
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CFLAGS}"
-  CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CXXFLAGS} -fopenmp"
+  CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CXXFLAGS} -qopenmp"
   FFLAGS="-I ${HYPRE_INC} -I ${MKLROOT}/include ${FFLAGS}"
   LDFLAGS="-L${HYPRE_LIB} -lHYPRE -L$MKLROOT/lib/intel64 -lmkl_rt -lm ${LDFLAGS}"
 elif test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then

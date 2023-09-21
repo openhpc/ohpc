@@ -26,8 +26,8 @@ AC_PROG_FC
 AC_C_CONST
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
-  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -fopenmp"
-  FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS} -fopenmp"
+  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -qopenmp"
+  FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS} -qopenmp"
   FCFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
   LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
 else

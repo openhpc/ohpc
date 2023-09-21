@@ -34,7 +34,11 @@ AC_C_CONST
 
 # OMP_FLAGS: Flags for enabling OpenMP
 if test "x$OMP_FLAGS" = "x"; then
-    OMP_FLAGS="-fopenmp"
+    if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
+        OMP_FLAGS="-qopenmp"
+    else
+        OMP_FLAGS="-fopenmp"
+    fi
 fi
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then

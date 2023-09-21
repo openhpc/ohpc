@@ -7,60 +7,53 @@ source ../../common/functions || exit 1
 family=$LMOD_FAMILY_COMPILER
 
 @test "[Compilers] compiler module loaded ($family)" {
-    module list $family >& .cmd_output || exit 1
-    local my_module=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1`
-    echo $my_module | grep -q "1) $family/" || exit 1
-}
+    module list $family >&.cmd_output || exit 1
+    local my_module=$(cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1)
+    echo $my_module | grep -q "1) $family/" || exit 1 }
 
 @test "[Compilers] compiler module version available ($family)" {
-    module list $family >& .cmd_output || exit 1
-    local my_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+    module list $family >&.cmd_output || exit 1
+    local my_version=$(cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}')
 
-    if [ -z "$my_version" ];then
-	flunk "ERROR: unable to ascertain module version ($my_version)"
+    if [ -z "$my_version" ]; then
+        flunk "ERROR: unable to ascertain module version ($my_version)"
     fi
-    rm -f .cmd_output
-}
+    rm -f .cmd_output }
 
 @test "[Compilers] C, C++, and Fortran versions match module ($family)" {
     local my_family
-    if  [[ "$family" =~ "acfl" ]]; then
+    if [[ "$family" =~ "acfl" ]]; then
         # The arm compiler package set "acfl".
         # OpenHPC expects "arm1".
         my_family="arm1"
     else
         my_family="$family"
     fi
-    module list $my_family >& .cmd_output || exit 1
-    local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$my_family/" '{print $2}'`
+    module list $my_family >&.cmd_output || exit 1
+    local my_mod_version=$(cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$my_family/" '{print $2}')
 
-    if [[ "$my_family" = "intel" ]];then
-	# intel has no consistency here, have to punt
-## 	compiler=`which icc`
-## 	version=`icc --version | head -1 | awk '{print $3}'`
-## 	assert_equal "$my_mod_version" "$version"
-	version="assuming all is good"
-  elif [[ "$my_family" =~ "arm1" ]];then
-	assert_equal "$my_mod_version" "compat"
-    elif [[ "$my_family" =~ "gnu"  ]];then
-	version=`gcc --version | head -1 | awk '{print $3}'`
-	assert_equal "$my_mod_version" "$version"
-	version=`g++ --version | head -1 | awk '{print $3}'`
-	assert_equal "$my_mod_version" "$version"
-	version=`gfortran --version | head -1 | awk '{print $4}'`
-	assert_equal "$my_mod_version" "$version"
-    elif [[ "$my_family" =~ "llvm"  ]];then
-	version=`clang --version | head -1 | awk '{print $3}'`
-	assert_equal "$my_mod_version" "$version"
-	version=`clang++ --version | head -1 | awk '{print $3}'`
-	assert_equal "$my_mod_version" "$version"
-	version=`flang --version | head -1 | awk '{print $3}'`
-	assert_equal "$my_mod_version" "$version"
+    if [[ "$my_family" = "intel" ]]; then
+        compiler=$(which icx)
+        version=$(icx --version | awk 'sub(/^.* 202/,"202",$0){print $1;exit}')
+        assert_equal "$my_mod_version" "$version"
+    elif [[ "$my_family" =~ "arm1" ]]; then
+        assert_equal "$my_mod_version" "compat"
+    elif [[ "$my_family" =~ "gnu" ]]; then
+        version=$(gcc --version | head -1 | awk '{print $3}')
+        assert_equal "$my_mod_version" "$version"
+        version=$(g++ --version | head -1 | awk '{print $3}')
+        assert_equal "$my_mod_version" "$version"
+        version=$(gfortran --version | head -1 | awk '{print $4}')
+        assert_equal "$my_mod_version" "$version"
+    elif [[ "$my_family" =~ "llvm" ]]; then
+        version=$(clang --version | head -1 | awk '{print $3}')
+        assert_equal "$my_mod_version" "$version"
+        version=$(clang++ --version | head -1 | awk '{print $3}')
+        assert_equal "$my_mod_version" "$version"
+        version=$(flang --version | head -1 | awk '{print $3}')
+        assert_equal "$my_mod_version" "$version"
     else
-	flunk "Unsupported compiler toolchain"
+        flunk "Unsupported compiler toolchain"
     fi
 
-    rm -f .cmd_output
-}
-
-
+    rm -f .cmd_output }
