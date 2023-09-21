@@ -141,15 +141,6 @@ EOF
 
     md5sum ${modname} >> %{oneapi_manifest}
 
-    modname=$(testfile %{OHPC_MODULEDEPS}/intel/impi/.version.$ver)
-
-    cat << EOF > ${modname}
-#%Module1.0#####################################################################
-set     ModulesVersion      "$ver"
-EOF
-
-    md5sum ${modname} >> %{oneapi_manifest}
-
     modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/$ver)
 
     cat << EOF > ${modname}
@@ -192,22 +183,32 @@ EOF
     sed -i "s,%{OHPC_MODULEDEPS}/gnu-impi,%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}-impi," ${modname}
     md5sum ${modname} >> %{oneapi_manifest}
 
-    modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/.version.$ver)
-
-    cat << EOF > ${modname}
-#%Module1.0#####################################################################
-set     ModulesVersion      "$ver"
-EOF
-
-    md5sum ${modname} >> %{oneapi_manifest}
-
-    # support for gnu major version
-    orig_modname=$modname
-    modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.$ver)
-    cp ${orig_modname} ${modname}
-    md5sum ${modname} >> %{oneapi_manifest}
 done
 
+# Default Intel(R) MPI Versions to match OpenHPC build version
+modname=$(testfile %{OHPC_MODULEDEPS}/intel/impi/.version)
+
+cat << EOF > ${modname}
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{exact_intel_ver}"
+EOF
+
+md5sum ${modname} >> %{oneapi_manifest}
+
+modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/.version)
+
+cat << EOF > ${modname}
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{exact_intel_ver}"
+EOF
+
+md5sum ${modname} >> %{oneapi_manifest}
+
+# support for gnu major version
+orig_modname=$modname
+modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version)
+cp ${orig_modname} ${modname}
+md5sum ${modname} >> %{oneapi_manifest}
 
 %preun -p /bin/bash
 # Check current files against the manifest
