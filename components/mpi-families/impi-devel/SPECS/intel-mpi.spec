@@ -19,7 +19,10 @@
 # version, but the build system was already using a newer version, then
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version. Newer versions may still be installed in parallel.
-%define exact_intel_ver 2021.9.0
+%define exact_intel_ver 2023.1.0
+%define exact_mpi_ver 2021.9.0
+%define exact_mkl_ver 2023.1.0
+%define exact_deps compiler/2023.1.0 mkl/%{exact_mkl_ver} oclfpga/2023.1.0 compiler-rt/2023.1.0 debugger/2023.1.0 tbb/2021.9.0
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
@@ -37,8 +40,8 @@ Source1:   mod_generator_impi.sh
 
 Requires: sed
 Requires(pre): intel-compilers-devel%{PROJ_DELIM} = %{version}
-Requires(pre): intel-oneapi-mpi-devel-%{exact_intel_ver}
-Requires: intel-oneapi-mpi-devel-%{exact_intel_ver}
+Requires(pre): intel-oneapi-mpi-devel-%{exact_mpi_ver}
+Requires: intel-oneapi-mpi-devel-%{exact_mpi_ver}
 Requires: intel-compilers-devel%{PROJ_DELIM} = %{version}
 Requires: prun%{PROJ_DELIM}
 
@@ -83,9 +86,20 @@ testfile () {
 # Create an OpenHPC module file for each version found in compilers
 rm -f %{oneapi_manifest}
 
-# Regenerate the oneAPI modules directory (since MPI may have just been added)
+# Regenerate the oneAPI modules directory  (since MPI may have just been added)
 echo "Generating new oneAPI modulefiles"
 /opt/intel/oneapi/modulefiles-setup.sh --ignore-latest --force --output-dir=%{OHPC_MODULEDEPS}/oneapi/ > /dev/null
+if [ ! -d %{OHPC_MODULEDEPS}/oneapi/compiler ]; then
+    echo "ERROR: Failed to create oneAPI module directory"
+    exit 1
+fi
+
+# Set system defaults for default OBS oneAPI modules
+for tool in %{exact_deps}; do
+  filename=%{OHPC_MODULEDEPS}/oneapi/${tool%%/*}/.version
+  echo "#%Module1.0" > ${filename}
+  echo "set  ModulesVersion  \"${tool##*/}\"" >> ${filename}
+done
 
 # Create an OpenHPC module file for each MPI version found
 echo "Creating OpenHPC-style modulefiles for local oneAPI MPI installation(s)."
@@ -190,7 +204,7 @@ modname=$(testfile %{OHPC_MODULEDEPS}/intel/impi/.version)
 
 cat << EOF > ${modname}
 #%Module1.0#####################################################################
-set     ModulesVersion      "%{exact_intel_ver}"
+set     ModulesVersion      "%{exact_mpi_ver}"
 EOF
 
 md5sum ${modname} >> %{oneapi_manifest}
@@ -199,7 +213,7 @@ modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/.version)
 
 cat << EOF > ${modname}
 #%Module1.0#####################################################################
-set     ModulesVersion      "%{exact_intel_ver}"
+set     ModulesVersion      "%{exact_mpi_ver}"
 EOF
 
 md5sum ${modname} >> %{oneapi_manifest}
@@ -214,6 +228,7 @@ md5sum ${modname} >> %{oneapi_manifest}
 # Check current files against the manifest
 # Remove files that match and backup files that don't
 if [ -s %{oneapi_manifest} ]; then
+    echo "Removing module files"
     while IFS= read -r line; do
        f=${line%:*}
        s=${line#*:}
