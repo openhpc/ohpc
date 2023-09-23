@@ -20,6 +20,7 @@
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version.  Newer versions may still be installed in parallel.
 %define exact_intel_ver 2023.1.0
+%define exact_mpi_ver 2021.9.0
 %define exact_mkl_ver 2023.1.0
 %define exact_deps compiler/2023.1.0 mkl/%{exact_mkl_ver} oclfpga/2023.1.0 compiler-rt/2023.1.0 debugger/2023.1.0 tbb/2021.9.0
 
@@ -107,7 +108,9 @@ fi
 
 # Set system defaults for default OBS oneAPI modules
 for tool in %{exact_deps}; do
-  ln -s ${tool##*/} %{OHPC_MODULEDEPS}/oneapi/${tool%%/*}/default
+  filename=%{OHPC_MODULEDEPS}/oneapi/${tool%%/*}/.version
+  echo "#%Module1.0" > ${filename}
+  echo "set  ModulesVersion  \"${tool##*/}\"" >> ${filename}
 done
 
 # Create an OpenHPC module file for each version found in compilers
