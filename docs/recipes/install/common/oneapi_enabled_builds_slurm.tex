@@ -1,0 +1,71 @@
+In addition to the 3rd party development libraries built using the open source
+toolchains mentioned in \S\ref{sec:3rdparty}, \OHPC{} also provides {\em
+  optional} compatible builds for use with the compilers and MPI stack included
+in newer versions of the \IntelR{}~oneAPI HPC Toolkit (using the {\em classic}
+compiler variants).  These
+packages provide a similar hierarchical user
+environment experience as other compiler and MPI families present in \OHPC{}.
+
+To take advantage of the available builds, \OHPC{} provides a convenience
+package to enable the oneAPI repository locally along with compatibility
+packages that integrate oneAPI-generated compiler and MPI modulefiles within
+the standard \OHPC{} user environment. To enable the \IntelR{} oneAPI
+repository and install minimum compiler and MPI requirements for \OHPC{}
+packaging, issue the following:
+
+% begin_ohpc_run
+% ohpc_comment_header Install Intel oneAPI tools \ref{sec:3rdparty_intel}
+% ohpc_command if [[ ${enable_intel_packages} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Enable Intel oneAPI and install OpenHPC compatibility packages
+[sms](*\#*) (*\install*) intel-oneapi-toolkit-release-ohpc
+[sms](*\#*) rpm --import https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+[sms](*\#*) (*\install*) intel-compilers-devel-ohpc
+[sms](*\#*) (*\install*) intel-mpi-devel-ohpc
+\end{lstlisting}
+
+
+\begin{center}
+\begin{tcolorbox}[]
+As noted in \S\ref{sec:master_customization}, the default installation path for
+\OHPC{} (\texttt{/opt/ohpc/pub}) is exported over NFS from the {\em master} to the 
+compute nodes, but the \IntelR{} oneAPI HPC Toolkit packages install to a top-level path of 
+\texttt{/opt/intel}. To make the \IntelR{} compilers available to the compute 
+nodes one must add an additional NFS export
+for \texttt{/opt/intel} that is mounted on desired compute nodes.
+\end{tcolorbox}
+\end{center}
+
+\noindent To enable all 3rd party builds available in \OHPC{} that are compatible with
+the \IntelR{}~oneAPI classic compiler suite, issue the following:
+
+
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
+% ohpc_indent 10
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Optionally, choose the Omni-Path enabled build for MVAPICH2. Otherwise, skip to retain IB variant
+[sms](*\#*) (*\install*) mvapich2-psm2-intel-ohpc
+\end{lstlisting}
+% ohpc_indent 5
+% ohpc_command fi
+
+%\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Install 3rd party libraries/tools meta-packages built with Intel toolchain
+[sms](*\#*) (*\install*) openmpi4-pmix-intel-ohpc
+[sms](*\#*) (*\install*) ohpc-intel-serial-libs
+[sms](*\#*) (*\install*) ohpc-intel-geopm
+[sms](*\#*) (*\install*) ohpc-intel-io-libs
+[sms](*\#*) (*\install*) ohpc-intel-perf-tools
+[sms](*\#*) (*\install*) ohpc-intel-python3-libs
+[sms](*\#*) (*\install*) ohpc-intel-mpich-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-mvapich2-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-openmpi4-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-impi-parallel-libs
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
