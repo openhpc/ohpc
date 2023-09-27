@@ -14,6 +14,23 @@ fi
 
 PATTERN=${1}
 
+prepare_docs_ohpc_tar() {
+	rm -rf docs-ohpc /tmp/ohpc-for-docs
+	mkdir -p docs-ohpc
+	# Fetch the full Git history so that `git describe` works later
+	git clone https://github.com/openhpc/ohpc /tmp/ohpc-for-docs
+	cp -r /tmp/ohpc-for-docs/.git docs-ohpc/
+	# Copy the local docs/
+	cp -r docs docs-ohpc/
+	
+	tar cf components/admin/docs/SOURCES/docs-ohpc.tar docs-ohpc
+	rm -rf docs-ohpc
+}
+
+if [[ "${PATTERN}" == "docs.spec" ]]; then
+	prepare_docs_ohpc_tar
+fi
+
 IFS=$'\n'
 
 find . -name "${PATTERN}" -print0 | while IFS= read -r -d '' file
