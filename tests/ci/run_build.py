@@ -237,9 +237,17 @@ skipped = []
 failed = []
 rebuild_success = []
 total = 0
+docs_spec_executed = False
 
 for spec in args.specfiles:
-    if not spec.endswith('.spec'):
+    if 'components/admin/docs/SPECS/docs.spec' == spec:
+        if docs_spec_executed:
+            continue
+        docs_spec_executed = True
+    elif not docs_spec_executed and 'docs/recipes/install/' in spec:
+        docs_spec_executed = True
+        spec = 'components/admin/docs/SPECS/docs.spec'
+    elif not spec.endswith('.spec'):
         continue
     just_spec = os.path.basename(spec)
     total += 1
