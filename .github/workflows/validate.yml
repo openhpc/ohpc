@@ -12,7 +12,6 @@ env:
   SKIP_CI_SPECS: |
     components/fs/lustre-client/SPECS/lustre.spec
     components/parallel-libs/trilinos/SPECS/trilinos.spec
-    components/admin/docs/SPECS/docs.spec
 
 jobs:
   check_spec:
