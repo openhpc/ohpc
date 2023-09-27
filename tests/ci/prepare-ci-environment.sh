@@ -17,10 +17,12 @@ fi
 
 PKG_MANAGER=zypper
 COMMON_PKGS="wget python3 jq"
+UNAME_M=$(uname -m)
 YES="-n"
 
 OBS_SERVER="http://obs.openhpc.community:82/"
 PROJECT="OpenHPC3:"
+REPOSITORY_URL="http://repos.openhpc.community/OpenHPC/3/"
 
 retry_counter=0
 max_retries=5
@@ -63,12 +65,12 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	# release RPM. As long as there is no release RPM only the OBS repository
 	# is used directly.
 	if [ "${ID}" = "openEuler" ]; then
-		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/openEuler_22.03/"${PROJECT}""${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
+		OHPC_RELEASE="${REPOSITORY_URL}openEuler_22.03/${UNAME_M}/ohpc-release-3-1.oe2203.${UNAME_M}.rpm"
 	else
-		loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/EL_9/"${PROJECT}""${FACTORY_VERSION}":Factory.repo -O /etc/yum.repos.d/ohpc-pre-release.repo
+		OHPC_RELEASE="${REPOSITORY_URL}EL_9/${UNAME_M}/ohpc-release-3-1.el9.${UNAME_M}.rpm"
 	fi
 else
-	loop_command wget "${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/Leap_15/"${PROJECT}""${FACTORY_VERSION}":Factory.repo -O /etc/zypp/repos.d/ohpc-pre-release.repo
+	OHPC_RELEASE="${REPOSITORY_URL}Leap_15/${UNAME_M}/ohpc-release-3-1.leap15.${UNAME_M}.rpm"
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
@@ -97,7 +99,10 @@ dnf_rhel() {
 }
 
 dnf_openeuler() {
-	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk
+	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk "${OHPC_RELEASE}"
+	if [ "${FACTORY_VERSION}" != "" ]; then
+		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
+	fi
 	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname
 }
 
