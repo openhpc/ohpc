@@ -6,6 +6,12 @@ set -x
 set -e
 
 FACTORY_VERSION=3.1
+ENABLE_ONEAPI=""
+if [ $# -eq 1 ]; then
+	if [ "${1}" = "intel" ]; then
+		ENABLE_ONEAPI="intel-oneapi-toolkit-release-ohpc"
+	fi
+fi
 
 if [ ! -e /etc/os-release ]; then
 	echo "Cannot detect OS without /etc/os-release"
@@ -16,7 +22,7 @@ fi
 . /etc/os-release
 
 PKG_MANAGER=zypper
-COMMON_PKGS="wget python3 jq"
+COMMON_PKGS="wget python3 jq man"
 UNAME_M=$(uname -m)
 YES="-n"
 
@@ -95,7 +101,7 @@ dnf_rhel() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats
+	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats "${ENABLE_ONEAPI}"
 }
 
 dnf_openeuler() {
@@ -119,6 +125,6 @@ else
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc "${ENABLE_ONEAPI}"
 	useradd -m ohpc
 fi

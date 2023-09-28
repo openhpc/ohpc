@@ -6,6 +6,9 @@ set -e
 USER=$1
 shift
 
+COMPILER_FAMILY=$1
+shift
+
 PKG=("dnf" "-y")
 
 if hash zypper > /dev/null 2>&1; then
@@ -22,8 +25,8 @@ fi
 	which \
 	sudo \
 	prun-ohpc \
-	openmpi5-gnu13-ohpc \
-	mpich-gnu13-ohpc \
+	openmpi5-"${COMPILER_FAMILY}"-ohpc \
+	mpich-"${COMPILER_FAMILY}"-ohpc \
 	slurm-slurmd-ohpc \
 	slurm-slurmctld-ohpc \
 	slurm-example-configs-ohpc \
@@ -123,6 +126,8 @@ if sudo \
 			--disable-all \
 			--enable-modules \
 			--enable-rms-harness \
+			--enable-compilers \
+			--with-compiler-families='${COMPILER_FAMILY}' \
 			--with-mpi-families='openmpi5 mpich' \
 			${TESTS[*]}; \
 		make check";
