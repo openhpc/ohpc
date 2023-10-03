@@ -35,6 +35,19 @@ perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","pap
 compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel","llvm-compilers"]
 mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 
+[3.0.1]
+
+# define patterns for a given arch in which to disable builds
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
+# define compiler/MPI families: first entry in list is defined to be parent in OBS
+compiler_families=["gnu12","intel","arm1"]
+mpi_families=["openmpi4","mpich","mvapich2","impi"]
+
+standalone = ["slurm"]
+
 [3.0.0]
 skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-arm1","geopm",
             "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1","tau-arm1","plasma-arm1"]
@@ -137,6 +150,19 @@ superlu_dist_compiler = ["intel"]
 mumps_compiler = ["intel"]
 mfem_compiler = ["intel"]
 geopm_compiler = ["intel"]
+
+[2.6.2]
+
+# define patterns for a given arch in which to disable builds
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
+# define compiler/MPI families: first entry in list is defined to be parent in OBS
+compiler_families=["gnu12","intel","arm1"]
+mpi_families=["openmpi4","mpich","mvapich2","impi"]
+
+standalone = ["slurm"]
 
 [2.6.1]
 
