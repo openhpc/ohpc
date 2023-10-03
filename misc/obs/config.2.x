@@ -1,4 +1,5 @@
 # -*-sh-*-
+# vim: ft=config
 
 [global]
 github_url = "git@github.com:openhpc/ohpc.git"
@@ -63,6 +64,7 @@ trilinos_compiler=["gnu12"]
 lmod-defaults_mpi=["openmpi4","mvapich2","impi"]
 opencoarrays_compiler=["gnu12"]
 scipy_compiler=["gnu12"]
+openmpi_compiler=["gnu12","arm1","intel"]
 # The parser is looking for entries starting with 'skip_on_distro_' and will
 # disable all packages on the distro after 'skip_on_distro_'
 # This is mainy used to automatically disable '-intel' and '-arm1' packages
@@ -74,11 +76,67 @@ skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-c
 skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
             "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
 skip_x86  = ["-arm1"]
-compiler_families=["gnu12","intel","arm1"]
+compiler_families=["intel","gnu12","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
-standalone = ["ohpc-filesystem","slurm","hwloc","lmod","easybuild","papi57","magpie","ucx"]
-compiler_dependent = ["openmpi"]
+standalone = ["ohpc-filesystem","slurm","hwloc","lmod","easybuild","papi57","magpie","ucx",
+              "spack","intel-compilers-devel","impi-devel"]
+compiler_dependent = ["openmpi","mvapich2","mpich","likwid","pdtoolkit","gsl",
+		      "superlu","scotch","numpy","plasma","hdf5"]
+mpi_dependent = ["phdf5","netcdf","boost","sionlib","ptscotch","pnetcdf","omb",
+                 "tau","extrae","imb","fftw","scalapack",
+                 "hypre","mpi4py","dimemas","scorep","scalasca",
+                 "adios","netcdf-fortran","netcdf-cxx","!trilinos",
+                 "petsc","slepc","superlu_dist","mumps","mfem",
+                 "geopm"]
+
+scipy_mpi=["openmpi4","mpich","mvapich2"]
+# Only rebuilding everything with the Intel compiler for this release.
+# The Intel compiler dependency has been switched from a minimal version
+# to an exact version that is required to ensure the same version is
+# used during building the packages as well as using the packages.
+
+# For this to work correctly the first compiler in the 'compiler_families'
+# needs to be 'intel'. This breaks the usual setup where the *gnu12* package
+# is the main package and all other compiler packages are links to the
+# *gnu12* package.
+
+mpich_compiler = ["intel"]
+mvapich2_compiler = ["intel"]
+phdf5_compiler = ["intel"]
+netcdf_compiler = ["intel"]
+boost_compiler = ["intel"]
+likwid_compiler = ["intel"]
+pdtoolkit_compiler = ["intel"]
+gsl_compiler = ["intel"]
+superlu_compiler = ["intel"]
+scotch_compiler = ["intel"]
+numpy_compiler = ["intel"]
+plasma_compiler = ["intel"]
+hdf5_compiler = ["intel"]
+sionlib_compiler = ["intel"]
+ptscotch_compiler = ["intel"]
+pnetcdf_compiler = ["intel"]
+omb_compiler = ["intel"]
+tau_compiler = ["intel"]
+extrae_compiler = ["intel"]
+imb_compiler = ["intel"]
+fftw_compiler = ["intel"]
+scalapack_compiler = ["intel"]
+hypre_compiler = ["intel"]
+mpi4py_compiler = ["intel"]
+dimemas_compiler = ["intel"]
+scorep_compiler = ["intel"]
+scalasca_compiler = ["intel"]
+adios_compiler = ["intel"]
+netcdf-fortran_compiler = ["intel"]
+netcdf-cxx_compiler = ["intel"]
+petsc_compiler = ["intel"]
+slepc_compiler = ["intel"]
+superlu_dist_compiler = ["intel"]
+mumps_compiler = ["intel"]
+mfem_compiler = ["intel"]
+geopm_compiler = ["intel"]
 
 [2.6.1]
 
