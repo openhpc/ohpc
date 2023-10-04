@@ -42,7 +42,7 @@ jobs:
            gh api --paginate "$artifacts_url" -q '.artifacts[] | [.name, .archive_download_url] | @tsv' | while read artifact
            do
              IFS=$'\t' read name url <<< "$artifact"
-             if [ "$name" != "test-results" ] && [ "$name" != "event-file" ]; then
+             if [ "${name:0:12}" != "test-results" ] && [ "$name" != "event-file" ]; then
                continue
              fi
              gh api $url > "$name.zip"
