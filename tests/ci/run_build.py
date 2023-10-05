@@ -240,13 +240,19 @@ total = 0
 docs_spec_executed = False
 
 for spec in args.specfiles:
+    # if more than one docs related file are modified then
+    # build the docs.spec just once
+    # START OF LOGIC FOR DOCS
     if 'components/admin/docs/SPECS/docs.spec' == spec:
         if docs_spec_executed:
             continue
         docs_spec_executed = True
-    elif not docs_spec_executed and 'docs/recipes/install/' in spec:
+    elif not docs_spec_executed and \
+        ('docs/recipes/install/' in spec
+            or 'components/admin/docs/SOURCES/' in spec):
         docs_spec_executed = True
         spec = 'components/admin/docs/SPECS/docs.spec'
+    # END OF LOGIC FOR DOCS
     elif not spec.endswith('.spec'):
         continue
     just_spec = os.path.basename(spec)
