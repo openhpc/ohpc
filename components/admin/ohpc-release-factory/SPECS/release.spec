@@ -93,8 +93,8 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-3
 
 [OpenHPC-updates-factory]
-name=OpenHPC-%{ohpc_version}.%{ohpc_micro_update} - Factory Updates
-baseurl=%{ohpc_factory_repo}/OpenHPC3:/%{ohpc_version}.%{ohpc_micro_update}:/Factory/%{_repository}
+name=OpenHPC-%{ohpc_micro_update} - Factory Updates
+baseurl=%{ohpc_factory_repo}/OpenHPC3:/%{ohpc_micro_update}:/Factory/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-3
 enabled=1
