@@ -77,7 +77,7 @@ EOF
 # not. If not, then we enable factory for the initial minor release. If it is a
 # micro update, we enable factory for the update instead.
 
-%if 0%{?ohpc_micro_update}
+%if "%{ohpc_micro_update}" != "%{nil}"
 
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
