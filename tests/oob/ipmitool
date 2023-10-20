@@ -99,7 +99,7 @@ fi
     
     # read sensor data locally
     ipmitool -E -I lanplus -H $my_bmc_ip -U root sensor > .cmd_output || flunk "Unable to query sensor data"
-    egrep -q "CPU1 Temp|P1 Therm Margin" .cmd_output   || flunk "CPU1 Temp not found in sensor data"
+    egrep -q "CPU\s?1 Temp|P1 Therm Margin" .cmd_output   || flunk "CPU1 Temp not found in sensor data"
 
 }
 
