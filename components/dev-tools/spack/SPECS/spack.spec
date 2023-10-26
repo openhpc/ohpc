@@ -13,7 +13,7 @@
 %define pname spack
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.19.2
+Version:	0.20.2
 Release:	%{?dist}.1
 Summary:	HPC software package management
 
