@@ -13,4 +13,5 @@ openmpi4-gnu12-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful i
 openmpi4-gnu13-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-intel-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-pmix-gnu12-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-pmix-intel-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 ucx-ohpc 1.14.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging

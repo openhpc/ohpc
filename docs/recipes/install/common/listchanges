@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #t_old="obs/OpenHPC_1.3.9_Factory"
-t_old="v2.4.GA"
-t_new="2.3"
+t_old="v3.0.GA"
+t_new="3.0.1"
 
 f_all=pkg-ohpc.all
 f_add=pkg-ohpc.chglog-add
@@ -31,7 +31,7 @@ rm -f ${f_dif} ${f_old} ${f_new}
 #git diff $t_old:docs/recipes/install/centos8/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
 
 # updated for 2.4-> 2.5 release (ks 5/29/22)
-git diff $t_old:docs/recipes/install/rocky8/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
+git diff $t_old:docs/recipes/install/rocky9/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
 
 # revert back to normal diff (ks 6/7/17)
 #git diff ${t_old} ${t_new} ${f_all} >${f_dif}
