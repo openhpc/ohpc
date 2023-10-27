@@ -51,8 +51,7 @@ for compiler in ${COMPILER_FAMILIES} ; do
 	done
 
 	export PARALLEL_ENABLED=no
-	#export ALL_ENABLED=yes
-	export ALL_ENABLED=no
+	export ALL_ENABLED=yes
 	echo " "
 	echo " "
 	echo "----------------------------------------------------------"
@@ -63,11 +62,10 @@ for compiler in ${COMPILER_FAMILIES} ; do
 	module load prun               || exit 1
 	module load "${compiler}"      || exit 1
 	module load netcdf             || exit 1
-	#module load netcdf-cxx         || exit 1
-	#module load netcdf-fortran     || exit 1
+	module load netcdf-cxx         || exit 1
+	module load netcdf-fortran     || exit 1
 
-	# --enable-all
-	./configure --disable-parallel || exit 1
+	./configure --enable-all --disable-parallel || exit 1
 	make clean                     || exit 1
 	make -k check                  || status=1
 
