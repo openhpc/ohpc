@@ -16,7 +16,7 @@ AM_CONDITIONAL(PARALLEL_ENABLED,test "x$enable_parallel" = "xyes" )
 AC_ARG_ENABLE([all],
 [AS_HELP_STRING([--enable-all],[Enable all tests (c++, fortran)(default=no)])],
          [],[enable_all=no])
-AM_CONDITIONAL(ALL_ENABLED,test "x$enable_all" = "xyes" )
+AM_CONDITIONAL(ALL_ENABLED,test "x$enable_all" != "xno" )
 
 # verify we have necessary environment variables set
 

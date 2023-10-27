@@ -13,7 +13,13 @@ module=netcdf-cxx
 testname="libs/NetCDF-CXX"
 library=libnetcdf_c++4
 header=netcdf
-delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+if [ "$PARALLEL_ENABLED" == "no" ]; then
+	rpm=netcdf-cxx-$LMOD_FAMILY_COMPILER${DELIM}
+	delimiter="$LMOD_FAMILY_COMPILER"
+else
+	rpm=netcdf-cxx-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
+	delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+fi
 
 @test "[$testname] Verify $PKG module is loaded and matches rpm version ($delimiter)" {
     module list $module/ | grep "1) $module" >& .cmd_output || exit 1
@@ -21,7 +27,6 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     assert_success
     
     # check version against rpm
-    local rpm
     rpm=$(get_rpm_name ${module})
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
