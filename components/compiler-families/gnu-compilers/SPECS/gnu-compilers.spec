@@ -10,14 +10,14 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_version 12.2.0
+%global gnu_version 12.3.0
 %global gnu_major_ver gnu12
 %global pname %{gnu_major_ver}-compilers
 
 # Define subcomponent versions required for build
-%global gmp_version 6.2.1
-%global mpc_version 1.2.1
-%global mpfr_version 4.1.0
+%global gmp_version 6.3.0
+%global mpc_version 1.3.1
+%global mpfr_version 4.2.1
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
