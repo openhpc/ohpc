@@ -15,7 +15,7 @@
 %endif
 
 %if !%{defined pbs_version}
-%define pbs_version 22.05.11
+%define pbs_version 23.06.06
 %endif
 
 %if !%{defined pbs_release}
