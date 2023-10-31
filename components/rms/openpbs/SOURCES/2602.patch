@@ -1,0 +1,59 @@
+From 9ea88efb20df0f510fb5bf8f1a16e235583c8d3a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=A1clav=20Chlumsk=C3=BD?= <chlumskyvaclav@gmail.com>
+Date: Wed, 28 Jun 2023 08:32:13 +0200
+Subject: [PATCH] fix environmental variables with qsub parameter -V
+
+---
+ src/cmds/qsub.c         |  2 --
+ src/resmom/start_exec.c | 16 ++++++++++++++--
+ 2 files changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/src/cmds/qsub.c b/src/cmds/qsub.c
+index 669648f649..67a7e70e27 100644
+--- a/src/cmds/qsub.c
++++ b/src/cmds/qsub.c
+@@ -2169,8 +2169,6 @@ env_array_to_varlist(char **envp)
+ 	if ((len > 0) && ((job_env = (char *) malloc(len)) == NULL)) {
+ 			fprintf(stderr, "env_array_to_varlist: malloc failure errno=%d", errno);
+ 			return NULL;
+-	} else {
+-		return NULL;
+ 	}
+ 
+ 	*job_env = '\0';
+diff --git a/src/resmom/start_exec.c b/src/resmom/start_exec.c
+index 2b507a84db..3c1aec950d 100644
+--- a/src/resmom/start_exec.c
++++ b/src/resmom/start_exec.c
+@@ -3469,8 +3469,14 @@ finish_exec(job *pjob)
+ 	/* Second, the variables passed with the job.  They may */
+ 	/* be overwritten with new correct values for this job	*/
+ 
+-	for (j = 0; j < vstrs->as_usedptr; ++j)
++	for (j = 0; j < vstrs->as_usedptr; ++j) {
++#if defined(PBS_SECURITY) && (PBS_SECURITY == KRB5)
++			/* never set KRB5CCNAME; it would rewrite the correct value */
++			if (strncmp(vstrs->as_string[j], "KRB5CCNAME", strlen("KRB5CCNAME")) == 0)
++				continue;
++#endif
+ 		bld_env_variables(&(pjob->ji_env), vstrs->as_string[j], NULL);
++	}
+ 
+ 	/* .. Next the critical variables: home, path, logname, ... */
+ 	/* these may replace some passed in with the job	    */
+@@ -4751,8 +4757,14 @@ start_process(task *ptask, char **argv, char **envp, bool nodemux)
+ 	/* Next, the variables passed with the job.  They may   */
+ 	/* be overwritten with new correct values for this job	*/
+ 
+-	for (j = 0; j < vstrs->as_usedptr; ++j)
++	for (j = 0; j < vstrs->as_usedptr; ++j) {
++#if defined(PBS_SECURITY) && (PBS_SECURITY == KRB5)
++			/* never set KRB5CCNAME; it would rewrite the correct value */
++			if (strncmp(vstrs->as_string[j], "KRB5CCNAME", strlen("KRB5CCNAME")) == 0)
++				continue;
++#endif
+ 		bld_env_variables(&(pjob->ji_env), vstrs->as_string[j], NULL);
++	}
+ 
+ 	/* HOME */
+ 	bld_env_variables(&(pjob->ji_env), variables_else[0],

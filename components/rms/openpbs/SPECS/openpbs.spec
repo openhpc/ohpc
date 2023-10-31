@@ -62,6 +62,8 @@ Vendor: Altair Engineering, Inc.
 Prefix: %{?pbs_prefix}%{!?pbs_prefix:%{_prefix}}
 
 Patch1: hwloc.patch
+# Needed for 23.06.06. qsub ignores all environment variables without it
+Patch2: https://github.com/openpbs/openpbs/pull/2602.patch
 
 %bcond_with alps
 %bcond_with ptl
@@ -258,7 +260,9 @@ functionality of PBS.
 %endif
 
 %prep
-%autosetup -n %{pbs_name}-%{pbs_version} -p1
+%setup -n %{pbs_name}-%{pbs_version}
+%patch -P 1 -p1
+%patch -P 2 -p1
 
 %build
 [ -f configure ] || ./autogen.sh
