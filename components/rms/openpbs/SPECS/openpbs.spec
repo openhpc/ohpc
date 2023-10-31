@@ -134,12 +134,16 @@ Requires: tk
 %if %{defined suse_version}
 Requires: smtp_daemon
 Requires: net-tools
+# The pbs_postinstall is not 100% systemd and still needs
+# sysv files and directories.
+Requires: insserv-compat
 %else
 Requires: smtpdaemon
 Requires: hostname
 %endif
 %if 0%{?rhel} >= 7
 Requires: hwloc-ohpc
+Requires: chkconfig
 %endif
 Requires: libical
 Autoreq: 1
@@ -172,13 +176,22 @@ Requires: expat
 Requires: python3 >= 3.5
 %if %{defined suse_version}
 Requires: net-tools
+# The pbs_postinstall is not 100% systemd and still needs
+# sysv files and directories.
+Requires: insserv-compat
 %else
 Requires: hostname
 %endif
 %if 0%{?rhel} >= 7
 Requires: hwloc-ohpc
+Requires: chkconfig
 %endif
 Autoreq: 1
+# Open MPI needs pmix installed on the compute nodes, but the
+# package is not actually installed on the compute nodes.
+# As slurm pulls in pmix for Open MPI in slurm deployments,
+# let's have openpbs pull pmix for openpbs deployments.
+Requires: pmix%{PROJ_DELIM}
 
 %description -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 OpenPBS is a fast, powerful workload manager and
