@@ -1,0 +1,153 @@
+From 57444cd8df8f463c38fce759b1e5d9978cde6f30 Mon Sep 17 00:00:00 2001
+From: Mohamed Akram <mohd.akram@outlook.com>
+Date: Mon, 8 Aug 2022 16:19:57 +0400
+Subject: [PATCH] Fix su invocations
+
+---
+ src/cmds/scripts/pbs_dataservice   |  6 +++---
+ src/cmds/scripts/pbs_habitat.in    |  4 ++--
+ src/lib/Libdb/pgsql/db_common.c    |  6 +++---
+ src/lib/Libdb/pgsql/pbs_db_utility | 12 ++++++------
+ 4 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/src/cmds/scripts/pbs_dataservice b/src/cmds/scripts/pbs_dataservice
+index 7084609ea14..84e9bf357c1 100755
+--- a/src/cmds/scripts/pbs_dataservice
++++ b/src/cmds/scripts/pbs_dataservice
+@@ -127,7 +127,7 @@ if [ "${myid}" != "0" ]; then
+ fi
+ 
+ # Check if DBUSER is enabled, try to cd to user home
+-su - ${DBUSER} -s /bin/sh -c "cd" >/dev/null 2>&1
++su - ${DBUSER} -c "cd" >/dev/null 2>&1
+ if [ $? -ne 0 ]; then
+ 	echo "Unable to login as user ${DBUSER}. Is the user enabled/home directory accessible?"
+ 	exit 1
+@@ -173,7 +173,7 @@ check_status() {
+ 		echo "${res}" | grep 'no server running'
+ 		if [ $? -eq 0 ]; then
+ 			status=1
+-		else 
++		else
+ 			msg="PBS data service running locally"
+ 		fi
+ 	else
+@@ -224,7 +224,7 @@ case "$1" in
+ 		if [ ${ret} -ne 0 ]; then
+ 			echo "${msg} - cannot stop"
+ 			exit 0
+-		fi	
++		fi
+ 
+ 		# Check if PBS is running
+ 		${PBS_EXEC}/bin/qstat -Bf >/dev/null 2>&1
+diff --git a/src/cmds/scripts/pbs_habitat.in b/src/cmds/scripts/pbs_habitat.in
+index 45f8c12ea45..31c7acd04dd 100644
+--- a/src/cmds/scripts/pbs_habitat.in
++++ b/src/cmds/scripts/pbs_habitat.in
+@@ -75,7 +75,7 @@ chk_dataservice_user() {
+ 	fi
+ 
+ 	# login as ${chk_usr} and try to cd to user home dir
+-	su - ${chk_usr} -s /bin/sh -c "cd" > /dev/null 2>&1
++	su - ${chk_usr} -c "cd" > /dev/null 2>&1
+ 
+ 	if [ $? -ne 0 ]; then
+ 		echo "Unable to login as user ${chk_usr}. Is the user enabled/home directory accessible?"
+@@ -293,7 +293,7 @@ if [ "${PBS_START_SERVER:-0}" != 0 ] ; then
+ 			echo "*** Error starting pbs server"
+ 			exit $ret
+ 		fi
+-		server_started=1	
++		server_started=1
+ 
+ 		if is_cray_xt; then
+ 			${PBS_EXEC}/bin/qmgr <<-EOF > /dev/null
+diff --git a/src/lib/Libdb/pgsql/db_common.c b/src/lib/Libdb/pgsql/db_common.c
+index 220dd2f4846..09d9c01a04b 100644
+--- a/src/lib/Libdb/pgsql/db_common.c
++++ b/src/lib/Libdb/pgsql/db_common.c
+@@ -515,7 +515,7 @@ pbs_dataservice_control(char *cmd, char *pbs_ds_host, int pbs_ds_port)
+ 
+ 	if (!(strcmp(cmd, PBS_DB_CONTROL_START))) {
+ 		sprintf(dbcmd,
+-			"su - %s -s /bin/sh -c \"/bin/sh -c '%s -o \\\"-p %d \\\" -W start -l %s > %s 2>&1'\"",
++			"su - %s -c \"/bin/sh -c '%s -o \\\"-p %d \\\" -W start -l %s > %s 2>&1'\"",
+ 			pg_user,
+ 			pg_ctl,
+ 			pbs_ds_port,
+@@ -523,14 +523,14 @@ pbs_dataservice_control(char *cmd, char *pbs_ds_host, int pbs_ds_port)
+ 			errfile);
+ 	} else if (!(strcmp(cmd, PBS_DB_CONTROL_STATUS))) {
+ 		sprintf(dbcmd,
+-			"su - %s -s /bin/sh -c \"/bin/sh -c '%s -o \\\"-p %d \\\" -w status > %s 2>&1'\"",
++			"su - %s -c \"/bin/sh -c '%s -o \\\"-p %d \\\" -w status > %s 2>&1'\"",
+ 			pg_user,
+ 			pg_ctl,
+ 			pbs_ds_port,
+ 			errfile);
+ 	} else if (!(strcmp(cmd, PBS_DB_CONTROL_STOP))) {
+ 		sprintf(dbcmd,
+-			"su - %s -s /bin/sh -c \"/bin/sh -c '%s -w stop -m fast > %s 2>&1'\"",
++			"su - %s -c \"/bin/sh -c '%s -w stop -m fast > %s 2>&1'\"",
+ 			pg_user,
+ 			pg_ctl,
+ 			errfile);
+diff --git a/src/lib/Libdb/pgsql/pbs_db_utility b/src/lib/Libdb/pgsql/pbs_db_utility
+index 81a88b5c871..e8abaf41f83 100755
+--- a/src/lib/Libdb/pgsql/pbs_db_utility
++++ b/src/lib/Libdb/pgsql/pbs_db_utility
+@@ -430,7 +430,7 @@ pbs_install_db () {
+ 	# change directory to data_dir to ensure that we don't get cd errors from postgres later
+ 	cd ${data_dir}
+ 
+-	err=`su ${user} -s /bin/sh -c "/bin/sh -c '${PGSQL_LIBSTR} ${bin_dir}/initdb -D ${data_dir} -U \"${user}\" -E SQL_ASCII ${locale}'" 2>&1`
++	err=`su ${user} -c "/bin/sh -c '${PGSQL_LIBSTR} ${bin_dir}/initdb -D ${data_dir} -U \"${user}\" -E SQL_ASCII ${locale}'" 2>&1`
+ 
+ 	if [ $? -ne 0 ]; then
+ 		echo "$err"
+@@ -452,7 +452,7 @@ pbs_install_db () {
+ 		exit 1
+ 	fi
+ 
+-	# update postgresql.conf 
++	# update postgresql.conf
+ 	sed "{
+ 		s/#checkpoint_segments = 3/checkpoint_segments = 20/g
+ 		s/#port = 5432/port = ${port}/g
+@@ -490,7 +490,7 @@ pbs_install_db () {
+ 		cleanup
+ 		exit 1
+ 	fi
+-	
++
+ 	# Copy pgsql directory to PBS_HOME (as pgsql.forupgrade) for it's future upgrade
+ 	[ ! -d "${PBS_HOME}/pgsql.forupgrade" -a -d "${PBS_EXEC}/pgsql" -a -d "${PBS_HOME}" ] && cp -pr --no-preserve=timestamps "${PBS_EXEC}/pgsql" "${PBS_HOME}/pgsql.forupgrade" 2>&1
+ 
+@@ -502,7 +502,7 @@ pbs_install_db () {
+ 	# Add IPV6 local address to pg_hba.conf so the pbs_ds_password is fine
+ 	echo "host    all             all             ::1/128                 trust" >> ${data_dir}/pg_hba.conf
+ 
+-	${server_ctl} start 
++	${server_ctl} start
+ 	if [ $? -ne 0 ]; then
+ 		echo "Error starting PBS Data Service"
+ 		cleanup
+@@ -526,7 +526,7 @@ pbs_install_db () {
+ 		exit 1
+ 	fi
+ 
+-	err=`su ${user} -s /bin/sh -c "/bin/sh -c '${PGSQL_LIBSTR} ${bin_dir}/createdb -p ${port} pbs_datastore'" 2>&1`
++	err=`su ${user} -c "/bin/sh -c '${PGSQL_LIBSTR} ${bin_dir}/createdb -p ${port} pbs_datastore'" 2>&1`
+ 
+ 	if [ $? -ne 0 ]; then
+ 		echo "$err"
+@@ -537,7 +537,7 @@ pbs_install_db () {
+ 	fi
+ 
+ 	# now install the pbs datastore schema onto the datastore
+-	err=`su ${user} -s /bin/sh -c "/bin/sh -c '${PGSQL_LIBSTR} ${bin_dir}/psql -p ${port} -d pbs_datastore -U \"${user}\" -f ${schema}'" 2>&1`
++	err=`su ${user} -c "/bin/sh -c '${PGSQL_LIBSTR} ${bin_dir}/psql -p ${port} -d pbs_datastore -U \"${user}\" -f ${schema}'" 2>&1`
+ 
+ 	if [ $? -ne 0 ]; then
+ 		echo $err

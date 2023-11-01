@@ -64,6 +64,9 @@ Prefix: %{?pbs_prefix}%{!?pbs_prefix:%{_prefix}}
 Patch1: hwloc.patch
 # Needed for 23.06.06. qsub ignores all environment variables without it
 Patch2: https://github.com/openpbs/openpbs/pull/2602.patch
+# The postgres user in Leap 15.3 has no shell and this 23.06.06
+# change needs to be reverted.
+Patch3: https://github.com/openpbs/openpbs/pull/2546.patch
 
 %bcond_with alps
 %bcond_with ptl
@@ -276,6 +279,7 @@ functionality of PBS.
 %setup -n %{pbs_name}-%{pbs_version}
 %patch -P 1 -p1
 %patch -P 2 -p1
+%patch -P 3 -p1 -R
 
 %build
 [ -f configure ] || ./autogen.sh
