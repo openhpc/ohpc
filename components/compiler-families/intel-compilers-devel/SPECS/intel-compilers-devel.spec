@@ -20,7 +20,7 @@
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version.  Newer versions may still be installed in parallel.
 %define exact_intel_ver 2023.2.0
-%define exact_compiler_ver 2023.1.0
+%define exact_compiler_ver 2023.2.1
 %define exact_mpi_ver 2021.10.0
 %define exact_mkl_ver 2023.2.0
 %define exact_deps compiler/%{exact_compiler_ver} mkl/%{exact_mkl_ver} oclfpga/2023.2.1 compiler-rt/2023.2.1 debugger/2023.2.0 tbb/2021.10.0
