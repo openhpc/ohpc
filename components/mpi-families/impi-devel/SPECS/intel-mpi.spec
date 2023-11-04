@@ -225,6 +225,11 @@ modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version)
 cp ${orig_modname} ${modname}
 md5sum ${modname} >> %{oneapi_manifest}
 
+# hack for 2021.10.0
+# modulefile points to the wrong (non-existing directory)
+# modulefile points to ${MPIDIR}/intel64 which does not exist
+ln -s ${MPIDIR}/latest ${MPIDIR}/intel64
+
 %preun -p /bin/bash
 # Check current files against the manifest
 # Remove files that match and backup files that don't
