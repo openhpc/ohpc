@@ -117,11 +117,6 @@ done
 echo "Creating OpenHPC-style modulefiles for local oneAPI compiler installation(s)."
 for compilers in %{OHPC_MODULEDEPS}/oneapi/compiler/2*; do
     ver=$(basename "$compilers")
-    # Skip 2023.2.0 due to errors that can hang installer
-    if [ "$ver" = "2023.2.0" ]; then
-        echo "--> Skipping version=2023.2.0 : environment module format error"
-        continue
-    fi
     # For the default, also specify the MKL version
     if [ "$ver" = "%{exact_intel_ver}" ]; then
         mklver="mkl/%{exact_mkl_ver}"
