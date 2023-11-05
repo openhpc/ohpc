@@ -144,12 +144,17 @@ setenv I_MPI_FC   ifort
 setenv I_MPI_F77  ifort
 setenv I_MPI_F90  ifort
 
-setenv MPI_DIR    "$MPIDIR"
+# Also a workaround for 2021.10.0 which changed the directory layout
+setenv MPI_DIR    "${MPIDIR}/latest/"
 
 prepend-path      MODULEPATH       %{OHPC_MODULEDEPS}/oneapi
 prepend-path      MODULEPATH       %{OHPC_MODULEDEPS}/intel-impi
 
 module load "mpi/\$version"
+
+prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/libfabric/lib"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib/release"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib"
 
 family "MPI"
 EOF
@@ -179,12 +184,17 @@ module-whatis "Category: library, runtime support"
 module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
-setenv MPI_DIR    "$MPIDIR"
+# Also a workaround for 2021.10.0 which changed the directory layout
+setenv MPI_DIR    "${MPIDIR}/latest/"
 
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/oneapi
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 
 module load "mpi/\$version"
+
+prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/libfabric/lib"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib/release"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib"
 
 family "MPI"
 EOF
@@ -228,7 +238,9 @@ md5sum ${modname} >> %{oneapi_manifest}
 # hack for 2021.10.0
 # modulefile points to the wrong (non-existing directory)
 # modulefile points to ${MPIDIR}/intel64 which does not exist
-ln -s ${MPIDIR}/latest ${MPIDIR}/intel64
+if [ ! -e ${MPIDIR}/intel64 ]; then
+    ln -s ${MPIDIR}/latest ${MPIDIR}/intel64
+fi
 
 %preun -p /bin/bash
 # Check current files against the manifest
