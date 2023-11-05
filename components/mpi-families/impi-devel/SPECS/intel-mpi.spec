@@ -241,6 +241,9 @@ md5sum ${modname} >> %{oneapi_manifest}
 if [ ! -e ${MPIDIR}/intel64 ]; then
     ln -s ${MPIDIR}/latest ${MPIDIR}/intel64
 fi
+if [ ! -e ${MPIDIR}/include ]; then
+    ln -s ${MPIDIR}/latest/include ${MPIDIR}/include
+fi
 
 %preun -p /bin/bash
 # Check current files against the manifest
