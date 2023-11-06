@@ -66,7 +66,7 @@ make %{?_smp_mflags} VERBOSE=1
 cd build-opencoarrays
 
 # de-hardcodify the caf wrapper script to rely on MPI_DIR variable
-sed -i "s|${MPI_DIR}|\$MPI_DIR|g" bin/caf
+sed -i "s|${MPI_DIR}|\$MPI_DIR/|g" bin/caf
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # remove static lib
