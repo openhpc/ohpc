@@ -50,7 +50,17 @@ jobs:
            done
            ls -alR
 
+      - name: Check for event-file
+        id: file_check
+        run: |
+          if [ -e artifacts/event-file/event.json ]; then
+            echo "check_result=true" >> $GITHUB_OUTPUT
+          else
+            echo "check_result=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Publish Test Results
+        if: steps.file_check.outputs.check_result == 'true'
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           commit: ${{ github.event.workflow_run.head_sha }}
