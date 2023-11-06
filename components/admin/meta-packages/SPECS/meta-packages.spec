@@ -423,8 +423,9 @@ Collection of base packages for Warewulf provisioning
 %ifnarch aarch64
 %package -n %{PROJ_NAME}-intel-geopm
 Summary:   OpenHPC GEOPM power management for Intel(R) oneAPI Toolkit
-Requires:  geopm-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  geopm-intel-impi%{PROJ_DELIM}
+### geopm does not build with Intel MPI currently
+### Requires:  geopm-%{compiler_family}-impi%{PROJ_DELIM}
+### Requires:  geopm-intel-impi%{PROJ_DELIM}
 Requires:  geopm-intel-mpich%{PROJ_DELIM}
 Requires:  geopm-intel-mvapich2%{PROJ_DELIM}
 Requires:  geopm-intel-%{mpi_family}%{PROJ_DELIM}
