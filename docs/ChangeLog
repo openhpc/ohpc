@@ -1,5 +1,95 @@
 # -*- mode: sh; fill-column: 120; -*-
 
+Version 2.7 (09 November 2023)
+
+[General Updates]
+
+  * Updated target distribution support to EL 8.8 and Leap 15.3.
+  * Introduced non-MPI builds of `netcdf`, `netcdf-cxx`, `netcdf-fortran`.
+  * Upgraded Lmod to handle `getenv` (#1905, #1906).
+  * Excluded Intel libraries from RPM requires (#1853). Intel seems to have dropped all shared object (SO) names from their RPMs.
+    This means that OpenHPC cannot require those SO names any more or old packages will be pulled in during dependency resolution.
+  * Rebuilt all packages with the latest Intel compiler 2023.2.x.
+  * Added a `papi57` package after bug reports from users regarding the previous update of PAPI to 6.x (#1714).
+  * Variety of component version updates and other additions highlighted further below.
+
+[Known Issues]
+
+  * Several package builds with the latest Intel classic compiler exhibited problems with the OpenHPC test
+    suite. Affected packages are: plasma, TAU, and superlu_dist. Users are advised to stick with the gcc (gnu12)
+    compiler variant if using these packages.
+
+[Component Additions]
+  * netcdf-cxx-gnu12-ohpc                    (4.3.1)
+  * netcdf-cxx-intel-ohpc                    (4.3.1)
+  * netcdf-fortran-gnu12-ohpc                (4.6.0)
+  * netcdf-fortran-intel-ohpc                (4.6.0)
+  * netcdf-gnu12-ohpc                        (4.9.0)
+  * netcdf-intel-ohpc                        (4.9.0)
+  * papi57-ohpc                              (5.7.0)
+
+[Component Version Changes]
+  * EasyBuild-ohpc                           (4.6.2 -> 4.8.2)
+  * boost-gnu12-impi-ohpc                    (1.80.0 -> 1.81.0)
+  * boost-gnu12-mpich-ohpc                   (1.80.0 -> 1.81.0)
+  * boost-gnu12-mvapich2-ohpc                (1.80.0 -> 1.81.0)
+  * boost-gnu12-openmpi4-ohpc                (1.80.0 -> 1.81.0)
+  * boost-intel-impi-ohpc                    (1.80.0 -> 1.81.0)
+  * boost-intel-mpich-ohpc                   (1.80.0 -> 1.81.0)
+  * boost-intel-mvapich2-ohpc                (1.80.0 -> 1.81.0)
+  * boost-intel-openmpi4-ohpc                (1.80.0 -> 1.81.0)
+  * gnu12-compilers-ohpc                     (12.2.0 -> 12.3.0)
+  * hwloc-ohpc                               (2.7.0 -> 2.7.2)
+  * intel-compilers-devel-ohpc               (2021.1 -> 2023.2)
+  * intel-mpi-devel-ohpc                     (2021.1 -> 2023.2)
+  * intel-oneapi-toolkit-release-ohpc        (2021.1 -> 2023.2)
+  * intel-psxe-compilers-devel-ohpc          (2021.1 -> 2023.2)
+  * intel-psxe-mpi-devel-ohpc                (2021.1 -> 2023.2)
+  * libfabric-ohpc                           (1.13.0 -> 1.19.0)
+  * lmod-ohpc                                (8.7.6 -> 8.7.32)
+  * magpie-ohpc                              (2.5 -> 3.0)
+  * opencoarrays-gnu12-impi-ohpc             (2.10.0 -> 2.10.1)
+  * opencoarrays-gnu12-mpich-ohpc            (2.10.0 -> 2.10.1)
+  * opencoarrays-gnu12-mvapich2-ohpc         (2.10.0 -> 2.10.1)
+  * opencoarrays-gnu12-openmpi4-ohpc         (2.10.0 -> 2.10.1)
+  * openmpi4-gnu12-ohpc                      (4.1.4 -> 4.1.6)
+  * openmpi4-intel-ohpc                      (4.1.4 -> 4.1.6)
+  * openpbs-client-ohpc                      (22.05.11 -> 23.06.06)
+  * openpbs-devel-ohpc                       (22.05.11 -> 23.06.06)
+  * openpbs-execution-ohpc                   (22.05.11 -> 23.06.06)
+  * openpbs-server-ohpc                      (22.05.11 -> 23.06.06)
+  * spack-ohpc                               (0.18.1 -> 0.20.2)
+  * ucx-cma-ohpc                             (1.11.2 -> 1.15.0)
+  * ucx-ib-ohpc                              (1.11.2 -> 1.15.0)
+  * ucx-ohpc                                 (1.11.2 -> 1.15.0)
+  * ucx-rdmacm-ohpc                          (1.11.2 -> 1.15.0)
+
+----------------------------------------------------------------------------------------------------------------------
+
+Version 2.6.2 (25 October 2023)
+
+[General Updates]
+
+  * updated SLURM version to address CVE-2023-41914
+
+[Component Version Changes]
+  * slurm-contribs-ohpc                      (22.05.2 -> 22.05.10)
+  * slurm-devel-ohpc                         (22.05.2 -> 22.05.10)
+  * slurm-example-configs-ohpc               (22.05.2 -> 22.05.10)
+  * slurm-libpmi-ohpc                        (22.05.2 -> 22.05.10)
+  * slurm-ohpc                               (22.05.2 -> 22.05.10)
+  * slurm-ohpc-slurmrestd                    (22.05.2 -> 22.05.10)
+  * slurm-openlava-ohpc                      (22.05.2 -> 22.05.10)
+  * slurm-pam_slurm-ohpc                     (22.05.2 -> 22.05.10)
+  * slurm-perlapi-ohpc                       (22.05.2 -> 22.05.10)
+  * slurm-slurmctld-ohpc                     (22.05.2 -> 22.05.10)
+  * slurm-slurmd-ohpc                        (22.05.2 -> 22.05.10)
+  * slurm-slurmdbd-ohpc                      (22.05.2 -> 22.05.10)
+  * slurm-sview-ohpc                         (22.05.2 -> 22.05.10)
+  * slurm-torque-ohpc                        (22.05.2 -> 22.05.10)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 2.6.1 (08 Feb 2023)
 
 [General Updates]

@@ -1,7 +1,7 @@
-magpie-ohpc 2.5 https://github.com/LLNL/magpie ohpc/rms Scripts for running Big Data software in HPC environments
-openpbs-execution-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for an execution host
-openpbs-client-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for a client host
-openpbs-server-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for a server host
+magpie-ohpc 3.0 https://github.com/LLNL/magpie ohpc/rms Scripts for running Big Data software in HPC environments
+openpbs-execution-ohpc 23.06.06 http://www.openpbs.org ohpc/rms OpenPBS for an execution host
+openpbs-client-ohpc 23.06.06 http://www.openpbs.org ohpc/rms OpenPBS for a client host
+openpbs-server-ohpc 23.06.06 http://www.openpbs.org ohpc/rms OpenPBS for a server host
 pmix-ohpc 4.2.1 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
 slurm-devel-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
 slurm-example-configs-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
