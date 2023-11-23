@@ -1,0 +1,45 @@
+--- orig/etc/slurm.conf.example	2023-10-11 22:23:30.000000000 +0300
++++ new/etc/slurm.conf.ohpc	2023-11-24 15:01:18.989659566 +0200
+@@ -57,7 +57,7 @@
+ StateSaveLocation=/var/spool/slurmctld
+ SwitchType=switch/none
+ #TaskEpilog=
+-TaskPlugin=task/affinity
++#TaskPlugin=task/affinity
+ #TaskProlog=
+ #TopologyPlugin=topology/tree
+ #TmpFS=/tmp
+@@ -122,7 +122,7 @@
+ #JobCompLoc=
+ #JobCompPass=
+ #JobCompPort=
+-JobCompType=jobcomp/none
++#JobCompType=jobcomp/none
+ #JobCompUser=
+ #JobContainerType=job_container/none
+ JobAcctGatherFrequency=30
+@@ -149,5 +149,22 @@
+ #
+ #
+ # COMPUTE NODES
+-NodeName=linux[1-32] CPUs=1 State=UNKNOWN
+-PartitionName=debug Nodes=ALL Default=YES MaxTime=INFINITE State=UP
++#NodeName=linux[1-32] CPUs=1 State=UNKNOWN
++#PartitionName=debug Nodes=ALL Default=YES MaxTime=INFINITE State=UP
++
++
++
++# OpenHPC default configuration
++# Enable the task/affinity plugin to add the --cpu-bind option to srun for GEOPM
++TaskPlugin=task/affinity
++PropagateResourceLimitsExcept=MEMLOCK
++JobCompType=jobcomp/filetxt
++Epilog=/etc/slurm/slurm.epilog.clean
++NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN
++PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP Oversubscribe=EXCLUSIVE
++# Enable configless option
++SlurmctldParameters=enable_configless
++# Setup interactive jobs for salloc
++LaunchParameters=use_interactive_step
++# Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
++ReturnToService=1

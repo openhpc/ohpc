@@ -45,6 +45,8 @@ URL:		https://slurm.schedmd.com/
 Source0:	https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 Source1:	slurm.epilog.clean
 
+Patch0: slurm.conf.example.patch
+
 # build options		.rpmmacros options	change to default action
 # ====================  ====================	========================
 # --prefix		%_prefix path		install path for commands, libraries, etc.
@@ -388,6 +390,7 @@ select information.
 %prep
 # when the rel number is one, the tarball filename does not include it
 %setup -q -n %{slurm_source_dir}
+%patch0 -p1
 
 %build
 %if 0%{?rhel} || 0%{?openEuler}
@@ -484,24 +487,7 @@ install -D -m755 contribs/sjstat %{buildroot}/%{_bindir}/sjstat
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
-head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example | grep -v ReturnToService > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-# 10/2/18 brad.geltz@intel.com - Enabling the task/affinity plugin to add the --cpu-bind option to srun for GEOPM
-echo "TaskPlugin=task/affinity" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-echo "JobCompType=jobcomp/filetxt" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP Oversubscribe=EXCLUSIVE" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-# 5/5/2020 karl@oden.utexas.edu - enable configless option
-echo "SlurmctldParameters=enable_configless" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-# 11/9/2021 karl@oden.utexas.edu - setup interactive jobs for salloc
-LaunchParameters=use_interactive_step >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-# 6/3/16 nirmalasrjn@gmail.com - Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
-echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
-# 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
-sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (OpenHPC)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
-
+cp $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.ohpc
 %endif
 
 # Correct some file permissions
