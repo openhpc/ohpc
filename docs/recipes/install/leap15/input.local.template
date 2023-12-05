@@ -88,9 +88,9 @@ c_ip[3]=${c_ip[3]:-172.16.1.4}
 
 # compute node MAC addreses for provisioning interface
 c_mac[0]=${c_mac[0]:-00:1a:2b:3c:4f:56}
-c_mac[1]=${c_mac[1]:-00:1a:2b:3c:4f:56}
-c_mac[2]=${c_mac[2]:-00:1a:2b:3c:4f:56}
-c_mac[3]=${c_mac[3]:-00:1a:2b:3c:4f:56}
+c_mac[1]=${c_mac[1]:-00:1a:2b:3c:4f:57}
+c_mac[2]=${c_mac[2]:-00:1a:2b:3c:4f:58}
+c_mac[3]=${c_mac[3]:-00:1a:2b:3c:4f:59}
 
 # compute node BMC addresses
 c_bmc[0]=${c_bmc[0]:-10.16.1.1}
