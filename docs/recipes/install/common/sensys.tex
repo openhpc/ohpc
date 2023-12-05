@@ -54,7 +54,7 @@ below:
         -omca db_postgres_user ohpc-test \
         -omca db_postgres_database sensys &
 # Launch Sensys on compute nodes
-[sms](*\#*) pdsh -w $compute_prefix[1-4] /opt/ohpc/admin/sensys/bin/orcmd -omca sensor heartbeat,coretemp \
+[sms](*\#*) pdsh -w ${compute_prefix}[1-${num_computes}] /opt/ohpc/admin/sensys/bin/orcmd -omca sensor heartbeat,coretemp \
         -omca sensor_base_sample_rate 30 &
 \end{lstlisting}
 % end_ohpc_run
