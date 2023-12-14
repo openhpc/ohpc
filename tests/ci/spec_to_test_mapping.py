@@ -233,6 +233,11 @@ test_map = {
         '',
         ''
     ],
+    'components/serial-libs/gsl/SPECS/gsl.spec': [
+        'gsl',
+        '',
+        ''
+    ],
 }
 
 skip_ci_specs = []
