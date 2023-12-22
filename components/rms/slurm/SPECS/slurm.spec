@@ -180,8 +180,8 @@ BuildRequires: numactl-devel
 %endif
 
 %if %{with pmix}
-BuildRequires: pmix%{PROJ_DELIM}
-Requires: pmix%{PROJ_DELIM}
+BuildRequires: openpmix%{PROJ_DELIM}
+Requires: openpmix%{PROJ_DELIM}
 %endif
 
 %if %{with ucx} && "%{_with_ucx}" == "--with-ucx"

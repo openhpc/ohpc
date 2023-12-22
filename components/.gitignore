@@ -98,7 +98,8 @@ provisioning/warewulf/SOURCES/warewulf-*.tar.gz
 rms/magpie/SOURCES/*.tar.gz
 rms/munge/SOURCES/munge-*.tar.gz
 rms/openpbs/SOURCES/v*.tar.gz
-rms/pmix/SOURCES/pmix-*.tar.bz2
+rms/openpmix/SOURCES/pmix-*.tar.gz
+rms/openpmix/SOURCES/prrte-*.tar.gz
 rms/slurm/SOURCES/slurm-*.tar.bz2
 runtimes/charliecloud/SOURCES/charliecloud-*.tar.gz
 serial-libs/R/SOURCES/R-*.tar.gz
