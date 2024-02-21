@@ -15,10 +15,10 @@
 %global gnu12_mpc_version 1.2.1
 %global gnu12_mpfr_version 4.1.0
 
-%global gnu13_version 13.1.0
-%global gnu13_gmp_version 6.2.1
+%global gnu13_version 13.2.0
+%global gnu13_gmp_version 6.3.0
 %global gnu13_mpc_version 1.3.1
-%global gnu13_mpfr_version 4.2.0
+%global gnu13_mpfr_version 4.2.1
 
 %if "%{compiler_family}" == "gnu12"
 %global gnu_major_ver gnu12
