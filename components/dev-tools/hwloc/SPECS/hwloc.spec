@@ -39,6 +39,8 @@ BuildRequires:  numactl-devel
 #!BuildIgnore: post-build-checks rpmlint-Factory
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
 
+Requires: libxml2-devel
+
 # Default library install path
 # note that this install path is purposefully not including a version
 # so that RMS packages that do not rely on Lmod environments can
