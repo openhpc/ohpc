@@ -5,7 +5,7 @@
 set -x
 set -e
 
-FACTORY_VERSION=3.0
+FACTORY_VERSION=3.1
 
 if [ ! -e /etc/os-release ]; then
 	echo "Cannot detect OS without /etc/os-release"
