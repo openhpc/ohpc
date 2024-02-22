@@ -85,7 +85,7 @@ jobs:
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler}}
         touch /tmp/empty
     - uses: actions/upload-artifact@v4
-      if: matrix.compiler == 'gnu12'
+      if: matrix.compiler == 'gnu13'
       with:
         name: rhel-rpms
         retention-days: 1

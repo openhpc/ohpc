@@ -48,8 +48,8 @@ fi
         flunk "missing $EXE"
     fi
 
-    # openmpi4 needs to use specific management layer to run RMA tests
-    if [[ "$LMOD_FAMILY_MPI" == "openmpi4" ]];then
+    # openmpi5 needs to use specific management layer to run RMA tests
+    if [[ "$LMOD_FAMILY_MPI" == "openmpi5" ]];then
         export OMPI_MCA_pml=ob1
     fi
 

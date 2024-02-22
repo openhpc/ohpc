@@ -18,13 +18,13 @@ SPEC=$1
 if [ $# -ge 2 ]; then
 	COMPILER_FAMILY=$2
 else
-	COMPILER_FAMILY=gnu12
+	COMPILER_FAMILY=gnu13
 fi
 
 if [ $# -ge 3 ]; then
 	MPI_FAMILY=$3
 else
-	MPI_FAMILY=openmpi4
+	MPI_FAMILY=openmpi5
 fi
 
 if [ $# -eq 4 ]; then
