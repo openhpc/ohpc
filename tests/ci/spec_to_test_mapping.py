@@ -42,11 +42,11 @@ test_map = {
     'components/io-libs/adios2/SPECS/adios2.spec': [
         'adios2',
         '',
-        'openmpi4-gnu12-ohpc \
-            mpich-gnu12-ohpc \
-            python3-numpy-gnu12-ohpc \
-            python3-mpi4py-gnu12-mpich-ohpc \
-            python3-mpi4py-gnu12-openmpi4-ohpc'
+        'openmpi5-gnu13-ohpc \
+            mpich-gnu13-ohpc \
+            python3-numpy-gnu13-ohpc \
+            python3-mpi4py-gnu13-mpich-ohpc \
+            python3-mpi4py-gnu13-openmpi5-ohpc'
     ],
     'components/io-libs/hdf5/SPECS/hdf5.spec': [
         'hdf5',
@@ -121,7 +121,7 @@ test_map = {
     'components/parallel-libs/superlu_dist/SPECS/superlu_dist.spec': [
         'superlu_dist',
         '',
-        'scalapack-gnu12-openmpi4-ohpc scalapack-gnu12-mpich-ohpc'
+        'scalapack-gnu13-openmpi5-ohpc scalapack-gnu13-mpich-ohpc'
     ],
     'components/parallel-libs/trilinos/SPECS/trilinos.spec': [
         'trilinos',
@@ -131,7 +131,7 @@ test_map = {
     'components/perf-tools/extrae/SPECS/extrae.spec': [
         'extrae',
         '',
-        'lmod-defaults-gnu12-openmpi4-ohpc'
+        'lmod-defaults-gnu13-openmpi5-ohpc'
     ],
     'components/perf-tools/geopm/SPECS/geopm.spec': [
         'geopm',
@@ -151,14 +151,14 @@ test_map = {
     'components/perf-tools/scalasca/SPECS/scalasca.spec': [
         'scalasca',
         '',
-        'lmod-defaults-gnu12-openmpi4-ohpc'
+        'lmod-defaults-gnu13-openmpi5-ohpc'
     ],
     'components/perf-tools/tau/SPECS/tau.spec': [
         'tau',
         '',
         ''
     ],
-    'components/mpi-families/openmpi/SPECS/openmpi.spec': [
+    'components/mpi-families/openmpi/SPECS/openmpi5.spec': [
         'slurm',
         '',
         ''
@@ -206,7 +206,7 @@ test_map = {
     'components/perf-tools/dimemas/SPECS/dimemas.spec': [
         'dimemas',
         '',
-        'lmod-defaults-gnu12-openmpi4-ohpc'
+        'lmod-defaults-gnu13-openmpi5-ohpc'
     ],
     'components/runtimes/charliecloud/SPECS/charliecloud.spec': [
         'charliecloud',
@@ -216,12 +216,12 @@ test_map = {
     'components/io-libs/netcdf-fortran/SPECS/netcdf-fortran.spec': [
         'netcdf',
         '',
-        'netcdf-cxx-gnu12-openmpi4-ohpc netcdf-cxx-gnu12-mpich-ohpc'
+        'netcdf-cxx-gnu13-openmpi5-ohpc netcdf-cxx-gnu13-mpich-ohpc'
     ],
     'components/io-libs/netcdf-cxx/SPECS/netcdf-cxx.spec': [
         'netcdf',
         '',
-        'netcdf-fortran-gnu12-openmpi4-ohpc netcdf-fortran-gnu12-mpich-ohpc'
+        'netcdf-fortran-gnu13-openmpi5-ohpc netcdf-fortran-gnu13-mpich-ohpc'
     ],
     'components/perf-tools/imb/SPECS/imb.spec': [
         'imb',

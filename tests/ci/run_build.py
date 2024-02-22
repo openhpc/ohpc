@@ -27,13 +27,13 @@ parser.add_argument(
 parser.add_argument(
     '--compiler-family',
     help='compiler family name to use for rebuild',
-    default='gnu12',
+    default='gnu13',
 )
 parser.add_argument(
     '--mpi-family',
     help=(
         'mpi family name to use for rebuild ' +
-        '(defaults to openmpi4, mpich, mvapich2)'
+        '(defaults to openmpi5, mpich, mvapich2)'
     ),
 )
 args = parser.parse_args()
@@ -142,7 +142,7 @@ def build_srpm_and_rpm(
             # This is a shortcoming of the build_srpm script.
             # It only has positional parameters.
             # It needs a dummy parameter here.
-            command.append('openmpi4')
+            command.append('openmpi5')
         command.append('0')
     success, output = run_command(command)
     if not success:
@@ -269,7 +269,7 @@ for spec in args.specfiles:
 
     if 'ohpc_mpi_dependent' in contents:
         families = [
-            'openmpi4',
+            'openmpi5',
             'mpich',
             'mvapich2',
         ]

@@ -23,7 +23,7 @@ fi
 	sudo \
 	prun-ohpc \
 	openmpi4-gnu12-ohpc \
-	mpich-gnu12-ohpc \
+	mpich-gnu13-ohpc \
 	slurm-slurmd-ohpc \
 	slurm-slurmctld-ohpc \
 	slurm-example-configs-ohpc \
@@ -112,10 +112,7 @@ TESTS_FAILED=1
 . /etc/os-release
 if [ "${PLATFORM_ID}" == "platform:el9" ] && [ -n "${GITHUB_ACTIONS}" ]; then
 	export BATS_JUNIT_FORMAT=1
-	dnf -y install perl-XML-DOM.noarch
-	# Unfortunately there is no perl-XML-Generator for EPEL 9
-	wget https://kojipkgs.fedoraproject.org//packages/perl-XML-Generator/1.04/30.el8/noarch/perl-XML-Generator-1.04-30.el8.noarch.rpm
-	rpm -Uhv perl-XML-Generator-1.04-30.el8.noarch.rpm --nodeps
+	dnf -y install perl-XML-DOM.noarch perl-XML-Generator
 fi
 
 set +e
@@ -136,7 +133,7 @@ if sudo \
 			--disable-all \
 			--enable-modules \
 			--enable-rms-harness \
-			--with-mpi-families='openmpi4 mpich' \
+			--with-mpi-families='openmpi5 mpich' \
 			${TESTS[*]}; \
 		make check";
 then
