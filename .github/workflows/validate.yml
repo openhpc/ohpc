@@ -196,7 +196,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on LEAP
     container:
-      image: registry.opensuse.org/opensuse/leap:15.4
+      image: registry.opensuse.org/opensuse/leap:15.5
     steps:
     - name: Install git
       run: zypper -n update; zypper -n install git
@@ -227,7 +227,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Test on LEAP
     container:
-      image: registry.opensuse.org/opensuse/leap:15.4
+      image: registry.opensuse.org/opensuse/leap:15.5
     needs: build_on_leap
     steps:
     - name: Install git
