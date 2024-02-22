@@ -1,0 +1,13 @@
+--- a/3rd-party/prrte/configure	2024-02-06 20:29:01.000000000 +0000
++++ b/3rd-party/prrte/configure	2024-02-23 10:38:13.494000000 +0000
+@@ -31813,8 +31813,8 @@
+            prte_check_tm_LIBS_save="${LIBS}"
+ 
+            CPPFLAGS="${CPPFLAGS} ${ess_tm_CPPFLAGS}"
+-           LIBS="${LIBS} ${ess_tm_LIBS}"
+-           LDFLAGS="${LDFLAGS} ${ess_tm_LDFLAGS}"
++           LIBS="${LIBS} ${ess_tm_LIBS} ${ess_tm_LDFLAGS}"
++           LDFLAGS="${LDFLAGS}"
+ 
+            pbs_config_happy=no
+            ac_fn_c_check_header_compile "$LINENO" "tm.h" "ac_cv_header_tm_h" "$ac_includes_default"
