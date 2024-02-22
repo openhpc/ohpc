@@ -43,10 +43,26 @@ skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","
 skip_x86  = ["-arm1"]
 
 # define compiler/MPI families: first entry in list is defined to be parent in OBS
-compiler_families=["gnu13","intel","arm1"]
-mpi_families=["openmpi4","mpich","mvapich2","impi"]
+#compiler_families=["gnu13","intel","arm1"]
+compiler_families=["gnu13"]
+mpi_families=["openmpi5","mpich","mvapich2","impi"]
 
 standalone = ["gnu-compilers"]
+
+compiler_dependent = ["!openmpi","mpich","mvapich2","openblas","R","likwid",
+                      "!pdtoolkit","gsl","metis","superlu","!scotch",
+                      "!numpy","!plasma","!hdf5"]
+openblas_compiler=["gnu13"]
+R_compiler=["gnu13"]
+trilinos_compiler=["gnu13"]
+lmod-defaults_mpi=["openmpi5","mvapich2","impi"]
+opencoarrays_compiler=["gnu13"]
+scipy_compiler=["gnu13"]
+# The parser is looking for entries starting with 'skip_on_distro_' and will
+# disable all packages on the distro after 'skip_on_distro_'
+# This is mainy used to automatically disable '-intel' and '-arm1' packages
+# on distros without support (like openEuler).
+skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-compilers-devel","arm-compilers-devel"]
 
 [3.0.2]
 
