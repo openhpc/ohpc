@@ -89,6 +89,10 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
+%if "%{mpi_family}" == "openmpi5"
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
+%endif
+
 ./configure --prefix=%{install_path} $CONFIGURE_OPTIONS \
 	CFLAGS="${CFLAGS}" \
 	CXXFLAGS="${CXXFLAGS}" \

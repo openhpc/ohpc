@@ -145,6 +145,20 @@ cp -f %{S:6} Makefile.inc
 cp -f %{S:1} Makefile.inc
 %endif
 %endif
+
+%if "%{mpi_family}" == "openmpi5"
+%global MUMPS_MPI openmpi
+export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+%if "%{compiler_family}" == "intel"
+cp -f %{S:4} Makefile.inc
+%else
+%if "%{compiler_family}" == "arm1"
+cp -f %{S:6} Makefile.inc
+%else
+cp -f %{S:1} Makefile.inc
+%endif
+%endif
+
 %endif
 
 %if "%{compiler_family}" == "gnu12"

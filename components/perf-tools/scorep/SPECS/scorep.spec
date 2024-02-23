@@ -93,6 +93,10 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
+%if "%{mpi_family}" == "openmpi5"
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
+%endif
+
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 ./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
