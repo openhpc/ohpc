@@ -14,266 +14,256 @@
 
 CONFIG=/etc/sysconfig/prun
 MODE=native
-LOGLEVEL=2     # 0=error,1=warn,2=info,3=debug
+LOGLEVEL=2 # 0=error,1=warn,2=info,3=debug
 
-function usage () {
-
-    echo " "
-    echo "This OpenHPC utility is used to launch parallel (MPI) applications"
-    echo "within a supported resource manager."
-    echo " "
-    echo "Usage: $DELIM <options> executable [arguments]"
-    echo " "
-    echo "where available options are as follows:"
-    echo " "
-    echo "  -h        generate help message and exit"
-    echo "  -v        enable verbose output"
-    echo " "
-    exit 1
+function usage() {
+	echo " "
+	echo "This OpenHPC utility is used to launch parallel (MPI) applications"
+	echo "within a supported resource manager."
+	echo " "
+	echo "Usage: ${DELIM} <options> executable [arguments]"
+	echo " "
+	echo "where available options are as follows:"
+	echo " "
+	echo "  -h        generate help message and exit"
+	echo "  -v        enable verbose output"
+	echo " "
+	exit 1
 }
 
-function parse_config_file () {
-
-    if [ -e $CONFIG ];then
-        source $CONFIG 2> /dev/null
-    fi
-}
-
-function _error () {
-    if [ $LOGLEVEL -ge 0 ];then
-        echo -n "[$DELIM] Error: "
-        echo "$@"
-    fi
-}
-
-function _warn () {
-    if [ $LOGLEVEL -ge 1 ];then
-        echo -n "[$DELIM] "
-        echo "$@"
-    fi
-}
-
-function _info () {
-    if [ $LOGLEVEL -ge 2 ];then
-        echo -n "[$DELIM] "
-        echo "$@"
-    fi
-}
-
-function _debug () {
-    if [ $LOGLEVEL -ge 3 ];then
-        echo -n "[$DELIM] "
-        echo "$@"
-    fi
-}
-
-function verify_launcher_avail () {
-    if [ ! $(type -P "$1") ];then
-        _error "Expected Job launcher $1 not found for $LMOD_FAMILY_MPI"
-        exit 1
-    fi
-}
-
-function set_variable () {
-
-    local var=$1
-    local set=$2
-
-    if [[ -z ${!var} ]];then
-        export $var="$2"
-        _debug "Setting env variable: $var=$2"
-    else
-        _debug "Keeping existing env variable: $var=${!var}"
-    fi
-}
-
-function launch_impi () {
-    if [ $MODE == "native" ];then
-
-	if [ ${RM} == "slurm" ];then
-	    cmd="srun --mpi=pmi2 $@"
-	elif [ ${RM} == "openpbs" ];then
-            LAUNCHER="mpiexec.hydra"
-            verify_launcher_avail $LAUNCHER
-
-	    cmd="$LAUNCHER -rmk pbs $@"
+function parse_config_file() {
+	if [ -e "${CONFIG}" ]; then
+		# shellcheck disable=SC1090
+		source "${CONFIG}" 2>/dev/null
 	fi
-
-	_info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
-        $cmd
-    fi
 }
 
-function launch_mpich () {
+function _error() {
+	if [ "${LOGLEVEL}" -ge 0 ]; then
+		echo -n "[${DELIM}] Error: "
+		echo "$@"
+	fi
+}
 
-    if [[ ${RM} == "slurm" ]];then
-	if [[ ${OHPC_MPI_LAUNCHERS} =~ "pmix" ]];then
-            verify_launcher_avail srun
-            cmd="srun --mpi=pmix $@"
+function _warn() {
+	if [ "${LOGLEVEL}" -ge 1 ]; then
+		echo -n "[${DELIM}] "
+		echo "$@"
+	fi
+}
+
+function _info() {
+	if [ "${LOGLEVEL}" -ge 2 ]; then
+		echo -n "[${DELIM}] "
+		echo "$@"
+	fi
+}
+
+function _debug() {
+	if [ "${LOGLEVEL}" -ge 3 ]; then
+		echo -n "[${DELIM}] "
+		echo "$@"
+	fi
+}
+
+function verify_launcher_avail() {
+	if [ -z "$(type -P "${1}")" ]; then
+		_error "Expected Job launcher $1 not found for ${LMOD_FAMILY_MPI}"
+		exit 1
+	fi
+}
+
+function set_variable() {
+	local var=${1}
+
+	if [[ -z ${!var} ]]; then
+		export "${var}"="${2}"
+		_debug "Setting env variable: ${var}=${2}"
 	else
-	    verify_launcher_avail mpiexec.hydra
-	    cmd="mpiexec.hydra -bootstrap slurm $@"
+		_debug "Keeping existing env variable: ${var}=${!var}"
 	fi
-    elif [[ ${RM} == "openpbs" ]];then
-	verify_launcher_avail mpiexec.hydra
-	cmd="mpiexec.hydra -rmk pbs $@"
-    else
-        _error "Unknown resource manager -> ${RM}"
-    fi
-
-    _info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
-    $cmd
-
-        return $?
 }
 
-function setupenv_mvapich () {
-    # quiet job launch nonhomogeneous warning
-    set_variable MV2_SUPPRESS_JOB_STARTUP_PERFORMANCE_WARNING  1
+function launch_impi() {
+	if [ "${MODE}" == "native" ]; then
+		if [ "${RM}" == "slurm" ]; then
+			cmd="srun --mpi=pmi2 $*"
+		elif [ "${RM}" == "openpbs" ]; then
+			LAUNCHER="mpiexec.hydra"
+			verify_launcher_avail "${LAUNCHER}"
+
+			cmd="${LAUNCHER} -rmk pbs $*"
+		fi
+
+		_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
+		${cmd}
+	fi
 }
 
-function launch_mvapich2 () {
-    if [ $MODE == "native" ];then
-
-	setupenv_mvapich
-
-        LAUNCHER="mpiexec.hydra"
-        verify_launcher_avail $LAUNCHER
-
-	if [ ${RM} == "slurm" ];then
-            cmd="$LAUNCHER -bootstrap slurm $@"
-	elif [ ${RM} == "openpbs" ];then
-	    cmd="$LAUNCHER -rmk pbs $@"
+function launch_mpich() {
+	if [[ "${RM}" == "slurm" ]]; then
+		if [[ ${OHPC_MPI_LAUNCHERS} =~ "pmix" ]]; then
+			verify_launcher_avail srun
+			cmd="srun --mpi=pmix $*"
+		else
+			verify_launcher_avail mpiexec.hydra
+			cmd="mpiexec.hydra -bootstrap slurm $*"
+		fi
+	elif [[ "${RM}" == "openpbs" ]]; then
+		verify_launcher_avail mpiexec.hydra
+		cmd="mpiexec.hydra -rmk pbs $*"
 	else
-            _error "Unknown resource manager -> ${RM}"
+		_error "Unknown resource manager -> ${RM}"
 	fi
 
-	_info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
-        $cmd
+	_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
+	${cmd}
 
-        local _status=$?
-
-        return $_status
-    fi
+	return $?
 }
 
-function setupenv_openmpi () {
-    # disable plugin loader warnings if not not available
-    set_variable OMPI_MCA_mca_base_component_show_load_errors 0
-    set_variable PMIX_MCA_mca_base_component_show_load_errors 0
-
-    # no tm module avail when using slurm
-    if [[ ${RM} == "slurm" ]];then
-	set_variable OMPI_MCA_ras ^tm
-	set_variable OMPI_MCA_ess ^tm
-	set_variable OMPI_MCA_plm ^tm
-    fi
-
-    # use romio for openmpi3
-    if [[ $LMOD_FAMILY_MPI == "openmpi3" ]];then
-	set_variable OMPI_MCA_io romio314
-    fi
+function setupenv_mvapich() {
+	# quiet job launch nonhomogeneous warning
+	set_variable MV2_SUPPRESS_JOB_STARTUP_PERFORMANCE_WARNING 1
 }
 
-function launch_openmpi () {
+function launch_mvapich2() {
+	if [ "${MODE}" == "native" ]; then
 
-    setupenv_openmpi
+		setupenv_mvapich
 
-    if [[ ${RM} == "slurm" ]];then
-	if [[ ${OHPC_MPI_LAUNCHERS} =~ "pmix" ]];then
-            verify_launcher_avail srun
-            cmd="srun --mpi=pmix $@"
+		LAUNCHER="mpiexec.hydra"
+		verify_launcher_avail "${LAUNCHER}"
+
+		if [ "${RM}" == "slurm" ]; then
+			cmd="${LAUNCHER} -bootstrap slurm $*"
+		elif [ "${RM}" == "openpbs" ]; then
+			cmd="${LAUNCHER} -rmk pbs $*"
+		else
+			_error "Unknown resource manager -> ${RM}"
+		fi
+
+		_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
+		${cmd}
+
+		local _status=$?
+
+		return "${_status}"
+	fi
+}
+
+function setupenv_openmpi() {
+	# disable plugin loader warnings if not not available
+	set_variable OMPI_MCA_mca_base_component_show_load_errors 0
+	set_variable PMIX_MCA_mca_base_component_show_load_errors 0
+
+	# no tm module avail when using slurm
+	if [[ "${RM}" == "slurm" ]]; then
+		set_variable OMPI_MCA_ras ^tm
+		set_variable OMPI_MCA_ess ^tm
+		set_variable OMPI_MCA_plm ^tm
+	fi
+
+	# use romio for openmpi3
+	if [[ "${LMOD_FAMILY_MPI}" == "openmpi3" ]]; then
+		set_variable OMPI_MCA_io romio314
+	fi
+}
+
+function launch_openmpi() {
+
+	setupenv_openmpi
+
+	if [[ "${RM}" == "slurm" ]]; then
+		if [[ "${OHPC_MPI_LAUNCHERS}" =~ "pmix" ]]; then
+			verify_launcher_avail srun
+			cmd="srun --mpi=pmix $*"
+		else
+			verify_launcher_avail mpirun
+			cmd="mpirun $*"
+		fi
+	elif [[ "${RM}" == "openpbs" ]]; then
+		verify_launcher_avail mpiexec
+		cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $*"
 	else
-	    verify_launcher_avail mpirun
-            cmd="mpirun $@"
+		_error "Unknown resource manager -> ${RM}"
 	fi
-    elif [[ ${RM} == "openpbs" ]];then
-            verify_launcher_avail mpiexec
-	    cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $@"
-    else
-        _error "Unknown resource manager -> ${RM}"
-    fi
 
-    _info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
-    $cmd
+	_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
+	${cmd}
 
-    return $?
+	return $?
 }
-
-
-
-
 
 DELIM=prun
 
 # Parse command-line args
 
 while getopts "hv" opt; do
-    case $opt in
+	case "${opt}" in
 	h)
-	    usage
-	    ;;
+		usage
+		;;
 	v)
-	    LOGLEVEL=3
-	    ;;
+		LOGLEVEL=3
+		;;
 	\?)
-	    echo "Invalid option: -$OPTARG" >&2
-	    exit 1
-	    ;;
-    esac
+		echo "Invalid option: -${OPTARG}" >&2
+		exit 1
+		;;
+	esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
-if [ $# -lt 1 ];then
-    usage
+if [ $# -lt 1 ]; then
+	usage
 fi
-
 
 parse_config_file
 
 EXEC=$1
 shift
-ARGS=$@
+ARGS=$*
 
 # Resource manager detection. If not specified from the config file, determine
 # from locally installed packages. Like Highlander, we assume there can be only one.
 
-if [ -z "$RM" ];then
-    [[ -s /etc/pbs.conf ]] && RM=openpbs
-    [[ -s /etc/slurm/slurm.conf ]] && RM=slurm
-    [[ -s /var/run/slurm/conf/slurm.conf ]] && RM=slurm
+if [ -z "${RM}" ]; then
+	[[ -s /etc/pbs.conf ]] && RM=openpbs
+	[[ -s /etc/slurm/slurm.conf ]] && RM=slurm
+	[[ -s /var/run/slurm/conf/slurm.conf ]] && RM=slurm
 fi
 
-if ! [ -x "$(command -v $EXEC)" ];then
-    if [ ! -x $EXEC ];then
-        _error "Unable to access executable -> $EXEC"
-        exit 1
-    fi
+if ! [ -x "$(command -v "${EXEC}")" ]; then
+	if [ ! -x "${EXEC}" ]; then
+		_error "Unable to access executable -> ${EXEC}"
+		exit 1
+	fi
 fi
 
-if [ -z $LMOD_FAMILY_MPI ];then
-    _error "LMOD_FAMILY_MPI environment variable must be set to desired MPI runtime"
-    exit 1
+if [ -z "${LMOD_FAMILY_MPI}" ]; then
+	_error "LMOD_FAMILY_MPI environment variable must be set to desired MPI runtime"
+	exit 1
 fi
 
-masterHost=`hostname -s`
-_info "Master compute host = $masterHost"
-_info "Resource manager = $RM"
+PRIMARY_HOST=$(hostname -s)
+_info "Master compute host = ${PRIMARY_HOST}"
+_info "Resource manager = ${RM}"
 
-if [ $LMOD_FAMILY_MPI == "impi" ];then
-    launch_impi $EXEC $ARGS
-elif [ $LMOD_FAMILY_MPI == "mpich" ];then
-    launch_mpich $EXEC $ARGS
-elif [ $LMOD_FAMILY_MPI == "mvapich2" ];then
-    launch_mvapich2 $EXEC $ARGS
-elif [ $LMOD_FAMILY_MPI == "openmpi" ];then
-    launch_openmpi $EXEC $ARGS
-elif [ $LMOD_FAMILY_MPI == "openmpi3" ];then
-    launch_openmpi $EXEC $ARGS
-elif [ $LMOD_FAMILY_MPI == "openmpi4" ];then
-    launch_openmpi $EXEC $ARGS
-elif [ $LMOD_FAMILY_MPI == "openmpi5" ];then
-    launch_openmpi $EXEC $ARGS
+if [ "${LMOD_FAMILY_MPI}" == "impi" ]; then
+	launch_impi "${EXEC}" "${ARGS}"
+elif [ "${LMOD_FAMILY_MPI}" == "mpich" ]; then
+	launch_mpich "${EXEC}" "${ARGS}"
+elif [ "${LMOD_FAMILY_MPI}" == "mvapich2" ]; then
+	launch_mvapich2 "${EXEC}" "${ARGS}"
+elif [ "${LMOD_FAMILY_MPI}" == "openmpi" ]; then
+	launch_openmpi "${EXEC}" "${ARGS}"
+elif [ "${LMOD_FAMILY_MPI}" == "openmpi3" ]; then
+	launch_openmpi "${EXEC}" "${ARGS}"
+elif [ "${LMOD_FAMILY_MPI}" == "openmpi4" ]; then
+	launch_openmpi "${EXEC}" "${ARGS}"
+elif [ "${LMOD_FAMILY_MPI}" == "openmpi5" ]; then
+	launch_openmpi "${EXEC}" "${ARGS}"
 else
-    _error "Unsupported or unknown MPI family -> $LMOD_FAMILY_MPI"
+	_error "Unsupported or unknown MPI family -> ${LMOD_FAMILY_MPI}"
 fi
