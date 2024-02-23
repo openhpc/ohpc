@@ -30,7 +30,7 @@ openeuler_task:
   name: openEuler on aarch64
   timeout_in: 120m
   arm_container:
-    image: docker.io/openeuler/openeuler:22.03-lts
+    image: docker.io/openeuler/openeuler:22.03-lts-sp3
     cpu: 4
     memory: 12G
   script: uname -a
