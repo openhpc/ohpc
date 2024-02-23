@@ -36,4 +36,5 @@ shellcheck-lint:
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../components/OHPC_setup_compiler \
+		../../components/OHPC_setup_mpi \
 		../../components/admin/prun/SOURCES/prun

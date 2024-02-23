@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # OpenHPC build script/utilities
 #
 #-----------------------------------------------------------------------
@@ -17,35 +18,34 @@
 #-----------------------------------------------------------------------
 
 if [ "$#" = "1" ]; then
-    OHPC_MPI_FAMILY=$1
+	OHPC_MPI_FAMILY="${1}"
 fi
 
-if [ -z "$OHPC_MPI_FAMILY" ]; then
-    echo "OHPC_MPI_FAMILY not defined"
-    exit 1
+if [ -z "${OHPC_MPI_FAMILY}" ]; then
+	echo "OHPC_MPI_FAMILY not defined"
+	exit 1
 fi
 
-if [ -z "$MODULEPATH" ]; then
-    echo "MODULEPATH not defined"
-    exit 1
+if [ -z "${MODULEPATH}" ]; then
+	echo "MODULEPATH not defined"
+	exit 1
 fi
 
-if [ "$OHPC_MPI_FAMILY" = "openmpi" ]; then
-    module load openmpi
-elif [ "$OHPC_MPI_FAMILY" = "openmpi3" ]; then
-    module load openmpi3
-elif [ "$OHPC_MPI_FAMILY" = "openmpi4" ]; then
-    module load openmpi4
-elif [ "$OHPC_MPI_FAMILY" = "impi" ]; then
-    module load impi
-elif [ "$OHPC_MPI_FAMILY" = "mvapich2" ]; then
-    module load mvapich2
-elif [ "$OHPC_MPI_FAMILY" = "mpich" ]; then
-    module load mpich
+if [ "${OHPC_MPI_FAMILY}" = "openmpi" ]; then
+	module load openmpi
+elif [ "${OHPC_MPI_FAMILY}" = "openmpi3" ]; then
+	module load openmpi3
+elif [ "${OHPC_MPI_FAMILY}" = "openmpi4" ]; then
+	module load openmpi4
+elif [ "${OHPC_MPI_FAMILY}" = "openmpi5" ]; then
+	module load openmpi4
+elif [ "${OHPC_MPI_FAMILY}" = "impi" ]; then
+	module load impi
+elif [ "${OHPC_MPI_FAMILY}" = "mvapich2" ]; then
+	module load mvapich2
+elif [ "${OHPC_MPI_FAMILY}" = "mpich" ]; then
+	module load mpich
 else
-    echo "Unsupported OHPC_MPI_FAMILY -> $OHPC_MPI_FAMILY"
-    exit 1
+	echo "Unsupported OHPC_MPI_FAMILY -> ${OHPC_MPI_FAMILY}"
+	exit 1
 fi
-
-
-
