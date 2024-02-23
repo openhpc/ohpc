@@ -47,11 +47,11 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu13"]
 mpi_families=["openmpi5","mpich","mvapich2","impi"]
 
-standalone = ["gnu-compilers"]
+standalone = ["gnu-compilers", "hwloc", "prun", "test-suite"]
 
-compiler_dependent = ["!openmpi","mpich","mvapich2","openblas","R","likwid",
-                      "!pdtoolkit","gsl","metis","superlu","!scotch",
-                      "!numpy","!plasma","!hdf5"]
+compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
+                      "pdtoolkit","gsl","metis","superlu","scotch",
+                      "numpy","plasma","hdf5"]
 openblas_compiler=["gnu13"]
 R_compiler=["gnu13"]
 trilinos_compiler=["gnu13"]
