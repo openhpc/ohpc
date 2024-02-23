@@ -9,7 +9,8 @@ codespell-lint:
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
 		../../misc/obs/obs_config.py \
-		../../tests/ci/spec_to_test_mapping.py
+		../../tests/ci/spec_to_test_mapping.py \
+		../../components/admin/prun/SOURCES/prun
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"
@@ -34,4 +35,5 @@ shellcheck-lint:
 		../../misc/shell-functions \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
-		../../components/OHPC_setup_compiler
+		../../components/OHPC_setup_compiler \
+		../../components/admin/prun/SOURCES/prun
