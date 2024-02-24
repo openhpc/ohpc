@@ -53,7 +53,7 @@ standalone = ["gnu-compilers", "hwloc", "prun", "test-suite", "docs", "meta-pack
 compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "pdtoolkit","gsl","metis","superlu","scotch",
                       "numpy","plasma","hdf5"]
-mpi_dependent = ["phdf5", "netcdf"]
+mpi_dependent = ["phdf5", "netcdf", "lmod-defaults"]
 openblas_compiler=["gnu13"]
 R_compiler=["gnu13"]
 trilinos_compiler=["gnu13"]
