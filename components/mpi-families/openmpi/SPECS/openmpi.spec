@@ -65,9 +65,9 @@ BuildRequires:  postfix
 BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
+BuildRequires:  libevent-devel
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
-BuildRequires:  libevent-devel
 %endif
 %if 0%{with_ofi}
 BuildRequires:  libfabric%{PROJ_DELIM}
@@ -152,16 +152,15 @@ communication techniques.
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge"
+BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --with-libevent=external"
 
 # build against ohpc-variant of hwloc
 BASEFLAGS="$BASEFLAGS --with-hwloc=%{OHPC_LIBS}/hwloc"
 
-# build against external pmix and libevent
+# build against external pmix
 %if 0%{with_pmix}
 module load pmix
 BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
-BASEFLAGS="$BASEFLAGS --with-libevent=external"
 %endif
 
 %if 0%{with_ofi}
@@ -214,9 +213,6 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/openmpi/*.la
 %{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/pmix/*.la
 %{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/prte/*.la
-
-# fix ambiguous python shebang
-sed -e "s,/usr/bin/env python,/usr/bin/env python3,g" -i $RPM_BUILD_ROOT/%{install_path}/bin/event_rpcgen.py
 
 # rename to avoid name collision with OpenHPC's prun
 mv $RPM_BUILD_ROOT/%{install_path}/bin/prun $RPM_BUILD_ROOT/%{install_path}/bin/prrte-prun
