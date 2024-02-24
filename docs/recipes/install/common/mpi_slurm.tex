@@ -41,7 +41,7 @@ MVAPICH2 (psm2) &                              &                                
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi4-pmix-gnu13-ohpc mpich-ofi-gnu13-ohpc
+[sms](*\#*) (*\install*) openmpi5-pmix-gnu13-ohpc mpich-ofi-gnu13-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -110,4 +110,4 @@ variant of MVAPICH2 instead:
 %% An additional OpenMPI build variant is listed in Table~\ref{table:mpi} which
 %% enables \href{https://pmix.github.io/pmix/}{\color{blue}{PMIx}} job launch
 %% support for use with \SLURM{}. This optional variant is
-%% available as \texttt{openmpi4-pmix-slurm-gnu9-ohpc}.
+%% available as \texttt{openmpi5-pmix-slurm-gnu9-ohpc}.
