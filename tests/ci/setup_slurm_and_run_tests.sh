@@ -22,7 +22,7 @@ fi
 	which \
 	sudo \
 	prun-ohpc \
-	openmpi4-gnu12-ohpc \
+	openmpi5-gnu13-ohpc \
 	mpich-gnu13-ohpc \
 	slurm-slurmd-ohpc \
 	slurm-slurmctld-ohpc \
