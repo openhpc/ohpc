@@ -26,6 +26,9 @@ fi
 }
 
 @test "[MPI] build/execute C++ binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [[ "$LMOD_FAMILY_MPI" == "openmpi5" ]];then
+        skip "C++ not available with openmpi5"
+    fi
     binary=CXX_test
     if [ -e $binary ];then
         rm $binary

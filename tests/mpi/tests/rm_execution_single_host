@@ -25,6 +25,9 @@ ARGS=2
 }
 
 @test "[MPI] C++ binary runs on single node under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [[ "$LMOD_FAMILY_MPI" == "openmpi5" ]];then
+        skip "C++ not available with openmpi5"
+    fi
     if [ ! -s CXX_test ];then
 	flunk "CXX_test binary does not exist"
     fi
