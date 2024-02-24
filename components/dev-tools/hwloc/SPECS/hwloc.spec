@@ -13,7 +13,7 @@
 %define pname hwloc
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        2.9.0
+Version:        2.9.3
 Release:        %{?dist}.1
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
