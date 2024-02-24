@@ -73,6 +73,9 @@ module-whatis "Version: %{version}"
 
 set     version                     %{version}
 
+# The pmix library requires the hwloc library. Also load it.
+depends-on hwloc
+
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
