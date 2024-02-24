@@ -108,16 +108,6 @@ test_map = {
         '',
         ''
     ],
-    'components/io-libs/netcdf-cxx/SPECS/netcdf-cxx4.spec': [
-        'netcdf-all',
-        '',
-        'netcdf-fortran-gnu12-mpich-ohpc netcdf-fortran-gnu12-openmpi4-ohpc'
-    ],
-    'components/io-libs/netcdf-fortran/SPECS/netcdf-fortran.spec': [
-        'netcdf-all',
-        '',
-        'netcdf-cxx-gnu12-mpich-ohpc netcdf-cxx-gnu12-openmpi4-ohpc'
-    ],
     'components/parallel-libs/scalapack/SPECS/scalapack.spec': [
         'scalapack',
         '',
