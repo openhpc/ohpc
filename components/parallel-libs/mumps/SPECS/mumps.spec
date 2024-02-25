@@ -13,7 +13,7 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu12
+%global gnu_family gnu13
 
 # Base package name
 %define pname mumps
@@ -161,7 +161,7 @@ cp -f %{S:1} Makefile.inc
 
 %endif
 
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "%{gnu_family}"
 export FCFLAGS="$FCFLAGS -fallow-argument-mismatch"
 %endif
 %if "%{compiler_family}" == "arm1"
