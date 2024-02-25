@@ -81,7 +81,7 @@ export CFLAGS="${CFLAGS} -fsimdmath"
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CFLAGS="${CFLAGS} -Wno-implicit-int"
 %endif
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu13"
 module load openblas
 # configure fails with:
 #   The Fortran compiler gfortran does not accept programs that
@@ -89,7 +89,7 @@ module load openblas
 #   the option -fallow-argument-mismatch.
 #   Rerun configure with FFLAGS=-fallow-argument-mismatch
 # This seems to fix the build.
-export GNU12FCFLAGS=-fallow-argument-mismatch
+export GNU13FCFLAGS=-fallow-argument-mismatch
 %endif
 make lib
 
