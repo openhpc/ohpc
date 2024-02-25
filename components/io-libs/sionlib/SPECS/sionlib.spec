@@ -64,7 +64,7 @@ CONFIGURE_OPTIONS="--compiler=arm "
 %if "%{compiler_family}" == "llvm"
 CONFIGURE_OPTIONS="--compiler=llvm "
 %endif
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu13"
 CONFIGURE_OPTIONS="--compiler=gnu "
 %endif
 
@@ -108,7 +108,7 @@ sed -i "s/-mieee-fp//g;s/-wd161//g;" build-*/Makefile.defs
 sed -i 's/$(CPP)/ifx/g' src/fortraninterface/Makefile
 %endif
 
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu13"
 sed -i 's/FFLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
 sed -i 's/F90FLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
 sed -i 's/F90 .*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
