@@ -1,0 +1,10 @@
+--- a/src/PlatformTopo.cpp	2024-02-26 07:58:13.219000000 +0000
++++ b/src/PlatformTopo.cpp	2024-02-26 07:58:45.316000000 +0000
+@@ -30,6 +30,7 @@
+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#include <cstdint>
+ #include "PlatformTopoImp.hpp"
+ 
+ #include <signal.h>
