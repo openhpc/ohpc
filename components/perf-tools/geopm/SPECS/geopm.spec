@@ -30,6 +30,8 @@ URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
 # Based on https://patch-diff.githubusercontent.com/raw/geopm/geopm/pull/1141.patch
 Patch0:        gnu12.patch
+Patch1:        https://github.com/geopm/geopm/commit/4b70c27c058fc826270a487778226f4719a1df8a.patch
+Patch2:        cstdint.patch
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
@@ -79,7 +81,9 @@ including support for static control.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
 
 %build
 %ohpc_setup_compiler

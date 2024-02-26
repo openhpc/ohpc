@@ -1,0 +1,23 @@
+From 4b70c27c058fc826270a487778226f4719a1df8a Mon Sep 17 00:00:00 2001
+From: Brad Geltz <brad.geltz@intel.com>
+Date: Mon, 11 Sep 2023 09:43:55 -0700
+Subject: [PATCH] Add missing header
+
+Signed-off-by: Brad Geltz <brad.geltz@intel.com>
+Change-Id: I137cc3bd3142672f57721474fef00d83c67633ac
+---
+ src/ModelParse.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/ModelParse.hpp b/src/ModelParse.hpp
+index 81ec052263..e384cd3212 100644
+--- a/src/ModelParse.hpp
++++ b/src/ModelParse.hpp
+@@ -8,6 +8,7 @@
+ 
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace geopm
+ {
