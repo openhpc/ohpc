@@ -12,8 +12,8 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-Name:           python3-Cython%{PROJ_DELIM}
-Version:        0.29.33
+Name:           %{python_prefix}-Cython%{PROJ_DELIM}
+Version:        0.29.37
 Release:        1%{?dist}
 Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
@@ -22,18 +22,15 @@ Group:          %{PROJ_NAME}/distro-packages
 Source0:        https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 %if 0%{?rhel} || 0%{?openEuler}
-BuildRequires: python3-libxml2
-Requires: python3-libxml2
 Requires(post): chkconfig
 Requires(postun): chkconfig
 %else
-BuildRequires: python3-xml
 BuildRequires: fdupes
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
 %endif
 BuildRequires: gcc-c++
-Requires: python3-devel
+Requires: %{python_prefix}-devel
 
 %description
 The Cython language allows for writing C extensions for the Python
@@ -51,10 +48,10 @@ allows the compiler to generate very efficient C code from Cython code.
 sed -i "s|^#!.*||" Cython/Debugger/{libpython,Cygdb}.py cython.py
 
 %build
-CFLAGS="%{optflags}" python3 setup.py build
+CFLAGS="%{optflags}" %{__python} setup.py build
 
 %install
-python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
+%{__python} setup.py install --prefix=%{_prefix} --root=%{buildroot}
 
 # Prepare for update-alternatives usage
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
@@ -73,11 +70,14 @@ done
 "%_sbindir/update-alternatives" \
    --install %{_bindir}/cython cython %{_bindir}/cython-%{python3_version} 30 \
    --slave %{_bindir}/cythonize cythonize %{_bindir}/cythonize-%{python3_version} \
-   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{python3_version}
+   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{python3_version} \
+   >/dev/null 2>&1 || :
 
 %postun
-if [ $1 -eq 0 ] ; then
-    "%_sbindir/update-alternatives" --remove cython %{_bindir}/cython-%{python3_version}
+if [ $1 -ge 1 ]; then
+    if [ "$(readlink /etc/alternatives/cython)" == "%{_bindir}/cython-%{python3_version}" ]; then
+        /usr/sbin/update-alternatives --set cython %{_bindir}/cython-%{python3_version} >/dev/null 2>&1 || :
+    fi
 fi
 
 %files

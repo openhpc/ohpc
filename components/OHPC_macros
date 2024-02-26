@@ -162,14 +162,31 @@ Requires:      openmpi5-%{compiler_family}%{PROJ_DELIM}
 
 # Python dependencies and macros
 %if 0%{?ohpc_python_dependent} == 1
-%global __python %__python3
 %global python_module_prefix py3-
-%global python_site_dir %{python3_sitearch}
+%if 0%{?rhel} == 9
+%global python_prefix python3.11
+%global __python /usr/bin/python3.11
+%global python3_pkgversion 3.11
+%global python_lib_dir python%{python3_pkgversion}
+BuildRequires: %{python_prefix}-rpm-macros
+%else
+%if 0%{?sle_version} >= 150500
+%global python_prefix python311
+%global __python /usr/bin/python3.11
+%global python3_pkgversion 3.11
+%global python3_sitearch %{python311_sitearch}
+%global python_lib_dir python%{python3_pkgversion}
+BuildRequires: python3-rpm-macros
+%else
 %global python_prefix python3
+%global __python %__python3
 %global python_lib_dir python%{python3_version}
+BuildRequires: %{python_prefix}-rpm-macros
+%endif
+%endif
+%global python_site_dir %{python3_sitearch}
 BuildRequires: %{python_prefix}-devel
 BuildRequires: %{python_prefix}-setuptools
-BuildRequires: %{python_prefix}-rpm-macros
 Requires:      %{python_prefix}
 %endif
 
