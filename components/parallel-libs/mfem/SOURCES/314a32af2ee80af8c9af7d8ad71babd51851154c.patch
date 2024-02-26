@@ -1,0 +1,52 @@
+From 314a32af2ee80af8c9af7d8ad71babd51851154c Mon Sep 17 00:00:00 2001
+From: David Dement <ddement3@gmail.com>
+Date: Thu, 27 Apr 2023 10:33:51 -0400
+Subject: [PATCH] Fixes comilation errors when compiling with gcc-13 on Fedora
+ 38
+
+When compiling with gcc-13, types such as uint64_t are not defined.
+It is likely that <cstdint> is included implicitly with older compiler
+versions.
+---
+ general/hash.hpp        | 1 +
+ general/mem_manager.cpp | 1 +
+ mesh/vtk.hpp            | 2 ++
+ 3 files changed, 4 insertions(+)
+
+diff --git a/general/hash.hpp b/general/hash.hpp
+index 86d987d8029..288d51288df 100644
+--- a/general/hash.hpp
++++ b/general/hash.hpp
+@@ -16,6 +16,7 @@
+ #include "array.hpp"
+ #include "globals.hpp"
+ #include <type_traits>
++#include <cstdint>
+ 
+ namespace mfem
+ {
+diff --git a/general/mem_manager.cpp b/general/mem_manager.cpp
+index 416a6ac6203..37b80c878ad 100644
+--- a/general/mem_manager.cpp
++++ b/general/mem_manager.cpp
+@@ -16,6 +16,7 @@
+ #include <cstring> // std::memcpy, std::memcmp
+ #include <unordered_map>
+ #include <algorithm> // std::max
++#include <cstdint>
+ 
+ // Uncomment to try _WIN32 platform
+ //#define _WIN32
+diff --git a/mesh/vtk.hpp b/mesh/vtk.hpp
+index a59bed27592..50eeea5bc78 100644
+--- a/mesh/vtk.hpp
++++ b/mesh/vtk.hpp
+@@ -12,6 +12,8 @@
+ #ifndef MFEM_VTK
+ #define MFEM_VTK
+ 
++#include <cstdint>
++
+ #include "../fem/geom.hpp"
+ #include "../general/binaryio.hpp"
+ 
