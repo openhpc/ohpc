@@ -32,13 +32,19 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
 Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  fdupes
-BuildRequires:  %{python_prefix}-pybind11-devel
-%else
+%if 0%{?openEuler}
 BuildRequires:  pybind11-devel
-%endif
 BuildRequires:  %{python_prefix}-pybind11
+%endif
+%if 0%{?sle_version}
+BuildRequires:  python-pybind11-common-devel
+BuildRequires:  fdupes
+BuildRequires:  %{python_prefix}-pybind11
+%endif
+%if 0%{?rhel}
+BuildRequires:  %{python_prefix}-pybind11
+BuildRequires:  %{python_prefix}-pybind11-devel
+%endif
 %if "%{compiler_family}" != "arm"
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
@@ -145,6 +151,12 @@ find %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/scipy/wea
 %fdupes %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages
 %endif
 
+# The default python3 binary is too old. This package uses a newer
+# version than the default. Let's point the default python3 binary
+# to that newer version.
+%{__mkdir_p} %{buildroot}/%{install_path}/bin
+ln -sn %{__python} %{buildroot}/%{install_path}/bin/%{python_family}
+
 # fix executability issue
 chmod +x %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/%{pname}/io/arff/arffread.py
 chmod +x %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/%{pname}/special/spfun_stats.py
@@ -171,6 +183,7 @@ module-whatis "URL %{url}"
 family                      scipy
 set     version             %{version}
 
+prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
