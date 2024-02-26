@@ -24,6 +24,7 @@ Group:          %{PROJ_NAME}/parallel-libs
 Version:        4.4
 Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
+Patch0:         https://github.com/mfem/mfem/commit/314a32af2ee80af8c9af7d8ad71babd51851154c.patch
 Url:            http://mfem.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -53,6 +54,7 @@ flexible visualization, and tight integration with the hypre library.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch -P0 -p1
 
 %build
 # OpenHPC compiler/mpi designation
