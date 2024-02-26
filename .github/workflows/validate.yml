@@ -66,7 +66,7 @@ jobs:
   build_on_rhel:
     strategy:
       matrix:
-        compiler: [gnu12, gnu13]
+        compiler: [gnu13]
     runs-on: ubuntu-latest
     name: Build on RHEL (${{ matrix.compiler}})
     container:
