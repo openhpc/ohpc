@@ -1,0 +1,20 @@
+--- a/packages/kokkos/core/src/impl/Kokkos_MemoryPool.cpp.org	2024-02-26 16:17:13.500070101 +0000
++++ b/packages/kokkos/core/src/impl/Kokkos_MemoryPool.cpp	2024-02-26 16:17:29.824071208 +0000
+@@ -42,6 +42,7 @@
+ //@HEADER
+ */
+ 
++#include <cstdint>
+ #include <impl/Kokkos_Error.hpp>
+ 
+ #include <ostream>
+--- a/packages/teuchos/core/src/Teuchos_BigUIntDecl.hpp.org	2024-02-26 16:22:51.025092989 +0000
++++ b/packages/teuchos/core/src/Teuchos_BigUIntDecl.hpp	2024-02-26 16:23:07.266094091 +0000
+@@ -42,6 +42,7 @@
+ #ifndef TEUCHOS_BIG_UINT_DECL_HPP
+ #define TEUCHOS_BIG_UINT_DECL_HPP
+ 
++#include <cstdint>
+ #include <iosfwd>
+ 
+ /*! \file Teuchos_BigUIntDecl.hpp
