@@ -29,6 +29,7 @@ Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-13_0_0-destdir_fix.patch
 Patch1:         trilinos-13_2_0-lapack_nothrow.patch
+Patch2:         cstdint.patch
 
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python3
@@ -72,8 +73,9 @@ For a summary of included packages see https://trilinos.github.io/packages.html
 
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -93,6 +95,8 @@ export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
 export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
 %endif
+export CFLAGS="${CFLAGS} -Wno-deprecated-declarations"
+export CXXFLAGS="${CXXFLAGS} -Wno-deprecated-declarations"
 
 mkdir build
 cd build
