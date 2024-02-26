@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.19.5
+Version:        1.26.4
 Release:        1%{?dist}
 Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
@@ -34,7 +34,7 @@ Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 Patch4:         numpy-llvm-arm.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  python3-Cython%{PROJ_DELIM}
+BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  fdupes gcc
 #!BuildIgnore: post-build-checks
 
@@ -145,7 +145,8 @@ EOF
 %files
 %exclude %{install_path}/bin/f2py
 %{OHPC_PUB}
-%doc INSTALL.rst.txt
+%doc INSTALL.rst
+%doc README.md
 %doc LICENSE.txt
 %doc PKG-INFO
 %doc THANKS.txt
