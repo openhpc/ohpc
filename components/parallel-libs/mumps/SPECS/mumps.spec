@@ -145,6 +145,7 @@ cp -f %{S:6} Makefile.inc
 cp -f %{S:1} Makefile.inc
 %endif
 %endif
+%endif
 
 %if "%{mpi_family}" == "openmpi5"
 %global MUMPS_MPI openmpi
@@ -158,7 +159,6 @@ cp -f %{S:6} Makefile.inc
 cp -f %{S:1} Makefile.inc
 %endif
 %endif
-
 %endif
 
 %if "%{compiler_family}" == "%{gnu_family}"
