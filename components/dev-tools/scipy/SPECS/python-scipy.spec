@@ -47,6 +47,7 @@ BuildRequires:  %{python_prefix}-pybind11-devel
 %endif
 %if "%{compiler_family}" != "arm"
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
