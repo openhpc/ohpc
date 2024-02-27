@@ -109,6 +109,8 @@ cmake \
     -DADIOS2_USE_BZip2=ON \
     -DBUILD_TESTING=OFF \
     -DADIOS2_BUILD_EXAMPLES=OFF \
+    -DPYTHON_EXECUTABLE=%{__python} \
+    -DPython_FIND_STRATEGY=LOCATION \
     ..
 make -j$(nproc)
 # make test
