@@ -96,6 +96,12 @@ CFLAGS="$CFLAGS -fno-strict-aliasing" %__python setup.py build $COMPILER_FLAG %{
 %fdupes -s %{buildroot}%{install_path}
 %endif
 
+# The default python3 binary is too old. This package uses a newer
+# version than the default. Let's point the default python3 binary
+# to that newer version.
+%{__mkdir_p} %{buildroot}/%{install_path}/bin
+ln -sn %{__python} %{buildroot}/%{install_path}/bin/%{python_family}
+
 # OpenHPC module file
 %{!?compiler_family: %global compiler_family gnu}
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{python_module_prefix}%{pname}
