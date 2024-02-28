@@ -20,9 +20,8 @@ fi
 
 OHPC_COMPILER_FAMILY
 
-# set compilers to use MPI toolchain 
+# set compilers to use MPI toolchain
 CC=mpicc
-CXX=mpicxx
 FC=mpif90
 
 # test compilers
@@ -36,16 +35,6 @@ AC_C_CONST
 CFLAGS="-I${SUPERLU_DIST_INC} ${CFLAGS}"
 FFLAGS="-I${SUPERLU_DIST_INC} ${FFLAGS}"
 LDFLAGS="-L${SUPERLU_DIST_LIB} -lsuperlu_dist ${OHPC_BLAS} ${LDFLAGS}"
-
-# check if using OpenMPI
-AC_MSG_CHECKING([if using OpenMPI variant])
-if ( sh -c "echo $LMOD_FAMILY_MPI" | grep -q openmpi ); then
-   AC_MSG_RESULT([yes])
-   LDFLAGS="${LDFLAGS} -lmpi_cxx"
-else
-   AC_MSG_RESULT([no])
-fi
-
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)
@@ -62,10 +51,10 @@ echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo Fortran compiler ............. : `which $FC`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo Fortran compiler flags........ : $FFLAGS
 echo
 echo LDFLAGS linker flags.......... : $LDFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'
