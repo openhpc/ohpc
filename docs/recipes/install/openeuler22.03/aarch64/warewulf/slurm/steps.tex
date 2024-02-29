@@ -132,9 +132,10 @@
 # provisioning system.
 [sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
 
-# Add Slurm client support meta-package and enable munge
+# Add Slurm client support meta-package and enable munge and slurmd
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 [sms](*\#*) chroot $CHROOT systemctl enable munge
+[sms](*\#*) chroot $CHROOT systemctl enable slurmd
 
 # Register Slurm server with computes (using "configless" option)
 [sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd

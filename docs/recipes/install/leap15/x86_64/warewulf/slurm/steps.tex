@@ -130,9 +130,10 @@
 # Add OpenHPC base components
 [sms](*\#*) (*\chrootinstall*) ohpc-base-compute
 
-# Add SLURM client support meta-package and enable munge
+# Add SLURM client support meta-package and enable munge and slurm
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 [sms](*\#*) chroot $CHROOT systemctl enable munge
+[sms](*\#*) chroot $CHROOT systemctl enable slurmd
 
 # Register Slurm server with computes (using "configless" option)
 [sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
