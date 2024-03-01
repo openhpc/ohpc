@@ -51,9 +51,8 @@ for more detailed information on setting up a database configuration for \SLURM{
 % ohpc_comment_header Update node configuration for slurm.conf
 % ohpc_command if [[ ${update_slurm_nodeconfig} -eq 1 ]];then
 % ohpc_indent 5
-% ohpc_command perl -pi -e "s/^NodeName=.+$/#/" /etc/slurm/slurm.conf
+% ohpc_command perl -pi -e "s/^NodeName=.+$/NodeName=${slurm_node_config}/" /etc/slurm/slurm.conf
 % ohpc_command perl -pi -e "s/ Nodes=c\S+ / Nodes=c[1-$num_computes] /" /etc/slurm/slurm.conf
-% ohpc_command echo -e ${slurm_node_config} >> /etc/slurm/slurm.conf
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
