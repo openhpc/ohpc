@@ -13,6 +13,8 @@
 # Base package name
 %define pname easybuild
 
+%define __brp_mangle_shebangs_exclude_from easyconfigs
+
 Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
 Version:   4.8.2
