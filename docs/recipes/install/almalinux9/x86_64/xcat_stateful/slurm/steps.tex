@@ -25,18 +25,18 @@
 \newcommand{\VERLONG}{2.0}
 
 % Define package manager commands
-\newcommand{\pkgmgr}{yum}
+\newcommand{\pkgmgr}{dnf}
 \newcommand{\addrepo}{wget -P /etc/yum.repos.d}
 \newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
-\newcommand{\clean}{yum clean expire-cache}
-\newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
-\newcommand{\install}{yum -y install}
-\newcommand{\chrootinstall}{psh compute yum -y install}
-\newcommand{\groupinstall}{yum -y groupinstall}
-\newcommand{\groupchrootinstall}{psh compute yum -y groupinstall}
-\newcommand{\remove}{yum -y remove}
-\newcommand{\upgrade}{yum -y upgrade}
-\newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
+\newcommand{\clean}{dnf clean expire-cache}
+\newcommand{\chrootclean}{dnf --installroot=\$CHROOT clean expire-cache}
+\newcommand{\install}{dnf -y install}
+\newcommand{\chrootinstall}{psh compute dnf -y install}
+\newcommand{\groupinstall}{dnf -y groupinstall}
+\newcommand{\groupchrootinstall}{psh compute dnf -y groupinstall}
+\newcommand{\remove}{dnf -y remove}
+\newcommand{\upgrade}{dnf -y upgrade}
+\newcommand{\chrootupgrade}{dnf -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
 \newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2.1/dists/beegfs-rhel8.repo}
 
@@ -143,7 +143,7 @@ distributions. To enable for local use, issue the following:
 % ohpc_validation_newline
 % ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
 % ohpc_validation_newline
-% ohpc_command yum repolist | grep -q OpenHPC
+% ohpc_command dnf repolist | grep -q OpenHPC
 % ohpc_command if [ $? -ne 0 ];then
 % ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
 % ohpc_command    exit 1

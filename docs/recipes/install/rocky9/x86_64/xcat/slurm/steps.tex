@@ -21,18 +21,18 @@
 \newcommand{\installimage}{netboot}
 
 % Define package manager commands
-\newcommand{\pkgmgr}{yum}
+\newcommand{\pkgmgr}{dnf}
 \newcommand{\addrepo}{wget -P /etc/yum.repos.d}
 \newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
-\newcommand{\clean}{yum clean expire-cache}
-\newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
-\newcommand{\install}{yum -y install}
-\newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
-\newcommand{\groupinstall}{yum -y groupinstall}
-\newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
-\newcommand{\remove}{yum -y remove}
-\newcommand{\upgrade}{yum -y upgrade}
-\newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
+\newcommand{\clean}{dnf clean expire-cache}
+\newcommand{\chrootclean}{dnf --installroot=\$CHROOT clean expire-cache}
+\newcommand{\install}{dnf -y install}
+\newcommand{\chrootinstall}{dnf -y --installroot=\$CHROOT install}
+\newcommand{\groupinstall}{dnf -y groupinstall}
+\newcommand{\groupchrootinstall}{dnf -y --installroot=\$CHROOT groupinstall}
+\newcommand{\remove}{dnf -y remove}
+\newcommand{\upgrade}{dnf -y upgrade}
+\newcommand{\chrootupgrade}{dnf -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
 \newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2.1/dists/beegfs-rhel8.repo}
 
@@ -72,7 +72,7 @@
 % ohpc_validation_newline
 % ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
 % ohpc_validation_newline
-% ohpc_command yum repolist | grep -q OpenHPC
+% ohpc_command dnf repolist | grep -q OpenHPC
 % ohpc_command if [ $? -ne 0 ];then
 % ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
 % ohpc_command    exit 1
@@ -165,7 +165,7 @@ distributions. To enable additional repositories for local use, issue the follow
 # Include matching kernel from head node into compute image
 [sms](*\#*) genimage BOSSHORT-ARCH-netboot-compute -k `uname -r`
 # Re-enable BaseOS repo
-[sms](*\#*) yum-config-manager --installroot=$CHROOT --enable BaseOS
+[sms](*\#*) dnf config-manager --installroot=$CHROOT --enable BaseOS
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*)  --enablerepo=powertools lmod-ohpc
 \end{lstlisting}
