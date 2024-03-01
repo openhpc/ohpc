@@ -32,17 +32,18 @@ for more detailed information on setting up a database configuration for \SLURM{
 
 \begin{center}
 \begin{tcolorbox}[]
-  \small SLURM requires enumeration of the physical hardware characteristics
-  for compute nodes under its control. In particular, three configuration
-  parameters combine to define consumable compute resources: {\em Sockets},
-  {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration
-  file provided via \OHPC{} assumes dual-socket, 8 cores per socket, and two
-  threads per core for this 4-node example. If this does not reflect your local
-  hardware, please update the configuration file at
-  \path{/etc/slurm/slurm.conf} accordingly to match your particular hardware.
-  Note that the SLURM project provides an easy-to-use online configuration tool that
-  can be accessed
- \href{https://slurm.schedmd.com/configurator.html}{\color{blue} here}. 
+  \small SLURM requires enumeration of the physical hardware characteristics for
+  compute nodes under its control. In particular, three configuration parameters
+  combine to define consumable compute resources: {\em Sockets}, {\em
+  CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration file
+  provided via \OHPC{} assumes the nodes are named c1-c4 and are dual-socket, 8
+  cores per socket, and two threads per core for this 4-node example. If this
+  does not reflect your local hardware, please update the configuration file at
+  \path{/etc/slurm/slurm.conf} accordingly to match your nodes names and
+  particular hardware. Be sure to run \texttt{scontrol reconfigure} to notify
+  SLURM of the changes. Note that the SLURM project provides an easy-to-use
+  online configuration tool that can be accessed
+  \href{https://slurm.schedmd.com/configurator.html}{\color{blue} here}.
 \end{tcolorbox}
 \end{center}
 
