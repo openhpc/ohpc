@@ -29,6 +29,9 @@ regex_required = [
     'provisioning|rms|runtimes|serial-libs)$',
     # Need a URL
     '(^URL:.*$|Url:.*$)',
+    # RPMs should include their license files; don't use %doc for licenses
+    # Add a comment if no license file is needed
+    '(^%License.*$|^# No license.*$)',
     ]
 
 if len(sys.argv) <= 1:
