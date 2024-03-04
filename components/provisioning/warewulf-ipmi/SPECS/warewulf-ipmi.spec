@@ -31,19 +31,12 @@ Conflicts: warewulf < 3
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 
-
-%if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000 || 0%{?openEuler}
-%global localipmi 1
 BuildRequires: ipmitool
 Requires: ipmitool
 BuildRequires: which
-%if 0%{?rhel} >= 8
+%if 0%{?rhel}
 BuildRequires: perl-generators
 Requires: perl(sys/ioctl.ph)
-%endif
-%define CONF_FLAGS "--with-local-ipmitool=yes"
-%else
-%global localipmi 0
 %endif
 
 BuildRequires: autoconf
@@ -74,24 +67,20 @@ cd %{_builddir}
 
 %build
 ./autogen.sh
-%configure --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS}
-%{__make} %{?mflags}
+%configure --sharedstatedir=%{wwsrvdir} --with-local-ipmitool=yes
+%{__make} %{?_smp_mflags}
 
 
 %install
-%{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 
 %files
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING
-%if ! %{localipmi}
-%{_libexecdir}/warewulf/ipmitool
-%endif
 %{perl_vendorlib}/Warewulf/Ipmi.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/*
 
 
-# ====================
 %package initramfs-%{_arch}
 Summary: Warewulf - Add IPMI to %{_arch} initramfs
 BuildArch: noarch
@@ -111,7 +100,3 @@ node boot image.
 %dir %{wwsrvdir}/warewulf
 %dir %{wwsrvdir}/warewulf/initramfs
 %{wwsrvdir}/warewulf/initramfs/%{_arch}
-#{wwsrvdir}/warewulf/initramfs/%{_arch}/capabilities/setup-ipmi
-
-
-# ====================
