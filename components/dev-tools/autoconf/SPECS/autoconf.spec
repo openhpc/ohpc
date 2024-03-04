@@ -26,11 +26,18 @@ Requires: m4
 Requires: perl(Thread::Queue)
 Requires: perl(threads)
 
+BuildRequires: perl
 BuildRequires: perl-macros
 BuildRequires: perl(File::Compare)
 BuildRequires: perl(File::Copy)
 BuildRequires: perl(Data::Dumper)
 BuildRequires: perl(Text::ParseWords)
+%if 0%{?suse_version} || 0%{?sle_version}
+Requires: perl-base
+%else
+Requires: perl-interpreter
+%endif
+Requires: perl(File::Compare)
 
 %define install_path %{OHPC_UTILS}/autotools
 
@@ -50,15 +57,20 @@ may be configuring software with an Autoconf-generated script;
 Autoconf is only required for the generation of the scripts, not
 their use.
 
+
 %prep
 %setup -q -n autoconf-%{version}
+
 
 %build
 %ifarch ppc64le
 cp /usr/lib/rpm/config.guess build-aux
 %endif
 
-./configure --prefix=%{install_path} || { cat config.log && exit 1; }
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            || { cat config.log && exit 1; }
+
 
 %install
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
@@ -66,21 +78,21 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 # remove share/info/dir to avoid conflict with other package installs
 rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
-%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+mkdir -p ${RPM_BUILD_ROOT}/%{_docdir}
+
 
 %files
-%dir %{OHPC_HOME}
-%{OHPC_UTILS}
+%{OHPC_UTILS}/autotools
 %doc THANKS
 %doc NEWS
 %doc ChangeLog.2
 %doc ChangeLog
-%doc COPYING
+%license COPYING
 %doc ChangeLog.3
 %doc README
 %doc AUTHORS
-%doc COPYINGv3
+%license COPYINGv3
 %doc ChangeLog.0
 %doc ChangeLog.1
 %doc TODO
-%doc COPYING.EXCEPTION
+%license COPYING.EXCEPTION
