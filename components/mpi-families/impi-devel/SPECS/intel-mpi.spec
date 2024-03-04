@@ -65,7 +65,7 @@ mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi
 
 %pre
-if ! [ -d /opt/intel/oneapi/mpi/latest/modulefiles ]; then
+if ! [ -d /opt/intel/oneapi/mpi/%{exact_mpi_ver}/etc/modulefiles ]; then
     echo " "
     echo "Error: Unable to detect the oneAPI MPI installation at /opt/intel."
     echo " "
@@ -144,17 +144,15 @@ setenv I_MPI_FC   ifx
 setenv I_MPI_F77  ifx
 setenv I_MPI_F90  ifx
 
-# Also a workaround for 2021.10.0 which changed the directory layout
-setenv MPI_DIR    "${MPIDIR}/latest/"
+setenv MPI_DIR    "${MPIDIR}"
 
 prepend-path      MODULEPATH       %{OHPC_MODULEDEPS}/oneapi
 prepend-path      MODULEPATH       %{OHPC_MODULEDEPS}/intel-impi
 
 module load "mpi/\$version"
 
-prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/libfabric/lib"
-prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib/release"
-prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/libfabric/lib"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/lib"
 
 family "MPI"
 EOF
@@ -184,17 +182,15 @@ module-whatis "Category: library, runtime support"
 module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
-# Also a workaround for 2021.10.0 which changed the directory layout
-setenv MPI_DIR    "${MPIDIR}/latest/"
+setenv MPI_DIR    "${MPIDIR}"
 
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/oneapi
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 
 module load "mpi/\$version"
 
-prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/libfabric/lib"
-prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib/release"
-prepend-path    LIBRARY_PATH    "${MPIDIR}/latest/lib"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/libfabric/lib"
+prepend-path    LIBRARY_PATH    "${MPIDIR}/lib"
 
 family "MPI"
 EOF
@@ -234,16 +230,6 @@ orig_modname=$modname
 modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version)
 cp ${orig_modname} ${modname}
 md5sum ${modname} >> %{oneapi_manifest}
-
-# hack for 2021.10.0
-# modulefile points to the wrong (non-existing directory)
-# modulefile points to ${MPIDIR}/intel64 which does not exist
-if [ ! -e ${MPIDIR}/intel64 ]; then
-    ln -s ${MPIDIR}/latest ${MPIDIR}/intel64
-fi
-if [ ! -e ${MPIDIR}/include ]; then
-    ln -s ${MPIDIR}/latest/include ${MPIDIR}/include
-fi
 
 %preun -p /bin/bash
 # Check current files against the manifest
