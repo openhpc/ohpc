@@ -39,6 +39,7 @@ Requires: ipmitool
 BuildRequires: which
 %if 0%{?rhel} >= 8
 BuildRequires: perl-generators
+Requires: perl(sys/ioctl.ph)
 %endif
 %define CONF_FLAGS "--with-local-ipmitool=yes"
 %else
