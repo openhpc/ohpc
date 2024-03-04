@@ -49,7 +49,7 @@ mpi_families=["openmpi5","mpich","mvapich2"]
 
 standalone = ["gnu-compilers", "hwloc", "prun", "test-suite", "docs", "meta-packages",
 	      "ohpc-filesystem", "pmix", "python-Cython", "slurm", "warewulf-vnfs",
-	      "easybuild"]
+	      "easybuild", "warewulf-ipmi"]
 
 compiler_dependent = ["openmpi","mpich","mvapich2","openblas","R","likwid",
                       "pdtoolkit","gsl","metis","superlu","scotch",
