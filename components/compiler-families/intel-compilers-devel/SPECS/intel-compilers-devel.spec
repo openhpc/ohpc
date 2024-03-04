@@ -19,15 +19,16 @@
 # version, but the build system was already using a newer version, then
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version.  Newer versions may still be installed in parallel.
-%define exact_intel_ver 2023.1.0
-%define exact_mpi_ver 2021.9.0
-%define exact_mkl_ver 2023.1.0
-%define exact_deps compiler/2023.1.0 mkl/%{exact_mkl_ver} oclfpga/2023.1.0 compiler-rt/2023.1.0 debugger/2023.1.0 tbb/2021.9.0
+%define exact_intel_ver 2024.0
+%define exact_mpi_ver 2021.11
+%define exact_mkl_ver 2024.0
+%define exact_classic_ver 2023.2.3
+%define exact_deps compiler/2024.0 mkl/%{exact_mkl_ver} oclfpga/2024.0 compiler-rt/2024.0 debugger/2024.0 tbb/2021.11
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2023.1
-Release:   1
+Version:   2024.0
+Release:   %{?dist}.1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
@@ -40,12 +41,12 @@ Source2:   oneAPI.repo
 #!BuildIgnore: post-build-checks
 
 Requires: gcc libstdc++-devel
-Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_intel_ver}
-Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_intel_ver}
+Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_classic_ver}
+Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_classic_ver}
 Requires: intel-oneapi-dpcpp-cpp-%{exact_intel_ver}
 Requires: intel-oneapi-mkl-devel-%{exact_mkl_ver}
 Requires: intel-oneapi-compiler-fortran-%{exact_intel_ver}
-Recommends: intel-hpckit >= %{exact_intel_ver}
+Recommends: intel-hpckit-%{exact_intel_ver}
 
 %description
 Provides OpenHPC-style compatible modules for use with the Intel(R) oneAPI
@@ -161,6 +162,9 @@ if { ![info exists ::env(ACL_SKIP_BSP_CONF)] } {
     setenv          ACL_SKIP_BSP_CONF   1
 }
 
+module load "oclfpga"
+module load "tbb"
+module load "compiler-rt"
 module load "compiler/\$version"
 module load "$mklver"
 
