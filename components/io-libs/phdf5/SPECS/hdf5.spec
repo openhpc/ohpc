@@ -70,11 +70,12 @@ export MPICC=mpicc
 export MPIFC=mpifc
 export MPICXX=mpicxx
 
-%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu12"
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu13"
 # This is not really the perfect solution, but impi does not have
 # the necessary files for gfortran 12. It seems to work with
 # the files from gfortran 11.1.0.
 export FCFLAGS="-I $MPI_DIR/include/gfortran/11.1.0 $FCFLAGS"
+export FCFLAGS="$FCFLAGS -Wno-array-temporaries"
 %endif
 
 %if "%{compiler_family}" == "arm1"
