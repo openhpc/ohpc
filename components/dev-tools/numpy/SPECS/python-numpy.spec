@@ -29,10 +29,7 @@ Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
-Patch1:         numpy-buildfix.patch
-Patch2:         numpy-intelccomp.patch
-Patch3:         numpy-intelfcomp.patch
-Patch4:         numpy-llvm-arm.patch
+Patch1:         numpy-icx.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  fdupes gcc
@@ -55,6 +52,7 @@ basic linear algebra and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch -P1 -p1
 
 %build
 # OpenHPC compiler/mpi designation
