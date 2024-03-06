@@ -17,7 +17,7 @@
 
 Summary:   Performance tools for the Linux console
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   5.2.2
+Version:   5.3.0
 Release:   1%{?dist}
 License:   GPL-3.0+
 Group:     %{PROJ_NAME}/perf-tools
@@ -80,7 +80,8 @@ It consists of:
           MANPREFIX="%{install_path}/man" \
 %if "%{compiler_family}" == "intel"
           COMPILER="ICC" \
-          FC="ifort" \
+          CC="icx" \
+          FC="ifx" \
           FCFLAGS="-module ./" \
 %else
     %ifarch aarch64
@@ -94,7 +95,7 @@ It consists of:
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
-          OPTFLAGS="%{optflags}" \
+          OPTFLAGS="${CFLAGS}" \
           Q=""
 
 
@@ -109,7 +110,8 @@ It consists of:
           MANPREFIX="%{buildroot}%{install_path}/man" \
 %if "%{compiler_family}" == "intel"
           COMPILER="ICC" \
-          FC="ifort" \
+          CC="icx" \
+          FC="ifx" \
           FCFLAGS="-module ./" \
 %else
     %ifarch aarch64
@@ -124,7 +126,7 @@ It consists of:
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
           INSTALL_CHOWN="" \
-          OPTFLAGS="%{optflags}" \
+          OPTFLAGS="${CFLAGS}" \
           Q="" install
 
 chmod 755 $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
@@ -185,4 +187,3 @@ chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
 %license COPYING
 %doc %{install_path}/man/man1/*
 %doc %{install_path}/share/likwid/docs/*
-
