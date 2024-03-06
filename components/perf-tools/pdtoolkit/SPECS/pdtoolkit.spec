@@ -24,6 +24,7 @@ Url:            http://www.cs.uoregon.edu/Research/pdt
 Group:          %{PROJ_NAME}/perf-tools
 Source0:        https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
 Patch1:         pdtoolkit-3.25-umask.patch
+Patch2:         pdtoolkit-icx.patch
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 BuildRequires:  gcc-c++ make
@@ -38,8 +39,8 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
-
+%patch -P1 -p1
+%patch -P2 -p1
 
 %build
 # OpenHPC compiler/mpi designation
