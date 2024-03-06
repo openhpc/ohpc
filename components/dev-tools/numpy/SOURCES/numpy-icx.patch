@@ -1,0 +1,38 @@
+--- a/numpy/distutils/intelccompiler.py.org	2024-03-06 13:48:26.711000000 +0000
++++ b/numpy/distutils/intelccompiler.py	2024-03-06 13:48:34.839000000 +0000
+@@ -10,7 +10,7 @@
+ class IntelCCompiler(UnixCCompiler):
+     """A modified Intel compiler compatible with a GCC-built Python."""
+     compiler_type = 'intel'
+-    cc_exe = 'icc'
++    cc_exe = 'icx'
+     cc_args = 'fPIC'
+ 
+     def __init__(self, verbose=0, dry_run=0, force=0):
+@@ -18,7 +18,7 @@
+ 
+         v = self.get_version()
+         mpopt = 'openmp' if v and v < '15' else 'qopenmp'
+-        self.cc_exe = ('icc -fPIC -fp-model strict -O3 '
++        self.cc_exe = ('icx -fPIC -fp-model strict -O3 '
+                        '-fomit-frame-pointer -{}').format(mpopt)
+         compiler = self.cc_exe
+ 
+@@ -50,7 +50,7 @@
+     A modified Intel x86_64 compiler compatible with a 64bit GCC-built Python.
+     """
+     compiler_type = 'intelem'
+-    cc_exe = 'icc -m64'
++    cc_exe = 'icx -m64'
+     cc_args = '-fPIC'
+ 
+     def __init__(self, verbose=0, dry_run=0, force=0):
+@@ -58,7 +58,7 @@
+ 
+         v = self.get_version()
+         mpopt = 'openmp' if v and v < '15' else 'qopenmp'
+-        self.cc_exe = ('icc -std=c99 -m64 -fPIC -fp-model strict -O3 '
++        self.cc_exe = ('icx -std=c99 -m64 -fPIC -fp-model strict -O3 '
+                        '-fomit-frame-pointer -{}').format(mpopt)
+         compiler = self.cc_exe
+ 
