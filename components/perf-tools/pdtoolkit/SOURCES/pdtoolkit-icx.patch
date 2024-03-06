@@ -1,0 +1,27 @@
+--- a/configure.org	2024-03-06 14:10:59.995000000 +0000
++++ b/configure	2024-03-06 14:11:09.583000000 +0000
+@@ -270,11 +270,11 @@
+     #echo "    Using $dir/cxx"
+     path_cxx=$dir/cxx
+   fi
+-  if [ -x $dir/icpc -a -z "$path_icpc" ]
++  if [ -x $dir/icpx -a -z "$path_icpc" ]
+   then
+     $echo ".${nnl}"
+     #echo "    Using $dir/icpc"
+-    path_icpc=$dir/icpc
++    path_icpc=$dir/icpx
+   fi
+   if [ -x $dir/ecpc -a -z "$path_ecpc" ]
+   then
+--- a/ductape/Makefile.org	2024-03-06 14:14:37.843000000 +0000
++++ b/ductape/Makefile	2024-03-06 14:14:49.915000000 +0000
+@@ -96,7 +96,7 @@
+ 
+ # -- INTEL icpc (IA32) 
+ #ICPC#EXTRAOPT= #EOC#
+-#ICPC#CXX = icpc $(USEROPT) $(EXTRAOPT) #EOC#
++#ICPC#CXX = icpx $(USEROPT) $(EXTRAOPT) #EOC#
+ #ICPC#CXXAR = ar $(PLATFORM_AR_OPTS) cr#EOC#
+ 
+ # -- INTEL ecpc (IA64) 
