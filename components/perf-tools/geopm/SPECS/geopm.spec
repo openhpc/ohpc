@@ -107,6 +107,10 @@ sed -e 's,\sFCFLAGS=$MPI_FFLAGS,FCFLAGS="-I$MPI_DIR/include/gfortran -I$MPI_DIR/
             --disable-ompt \
             --disable-doc \
             || ( cat config.log && false )
+%if "%{compiler_family}" == "intel"
+# needed for icx
+sed -e "s,-fopenmp,-qopenmp,g" -i Makefile
+%endif
 %{__make} %{?_smp_mflags}
 
 
