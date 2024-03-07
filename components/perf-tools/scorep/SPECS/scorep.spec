@@ -97,13 +97,18 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-export CFLAGS="$RPM_OPT_FLAGS"
-export CXXFLAGS="$RPM_OPT_FLAGS"
-./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
+export CFLAGS="$CFLAGS"
+export CXXFLAGS="$CFLAGS"
+./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS CC=$CC CXX=$CXX F77=$F77
 
 %if "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' build-mpi/libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' build-mpi/libtool
+%endif
+
+%if "%{compiler_family}" == "intel"
+sed -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' build-score/libtool
+make -C build-score CC=$CC V=1 %{?_smp_mflags}
 %endif
 
 make V=1 %{?_smp_mflags}
