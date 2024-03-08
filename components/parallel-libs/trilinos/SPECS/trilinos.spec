@@ -95,6 +95,10 @@ export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
 export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
 %endif
+%if "%{compiler_family}" == "intel"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
+%endif
 export CFLAGS="${CFLAGS} -Wno-deprecated-declarations"
 export CXXFLAGS="${CXXFLAGS} -Wno-deprecated-declarations"
 
