@@ -16,19 +16,19 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.7.14
+Version:   8.7.34
 Release:   %{?dist}.1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
-BuildRequires: lua-devel
 BuildRequires: rsync
 BuildRequires: tcl-devel
 BuildRequires: gcc make bc
 
 %if 0%{?rhel} || 0%{?openEuler}
+BuildRequires: lua-devel
 BuildRequires: lua-libs
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
@@ -41,6 +41,7 @@ Obsoletes: environment-modules
 %if 0%{?sle_version}
 BuildRequires: lua53-luafilesystem
 BuildRequires: lua53-luaposix
+BuildRequires: lua53-devel
 BuildRequires: procps
 Requires: lua53-luafilesystem
 Requires: lua53-luaposix
