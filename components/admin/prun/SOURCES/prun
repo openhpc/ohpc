@@ -263,7 +263,8 @@ elif [ "${LMOD_FAMILY_MPI}" == "openmpi3" ]; then
 elif [ "${LMOD_FAMILY_MPI}" == "openmpi4" ]; then
 	launch_openmpi "${EXEC}" "${ARGS}"
 elif [ "${LMOD_FAMILY_MPI}" == "openmpi5" ]; then
-	launch_openmpi "${EXEC}" "${ARGS}"
+	# There have been errors where one of the ARGS was interpreted by mpirun directly
+	launch_openmpi "--" "${EXEC}" "${ARGS}"
 else
 	_error "Unsupported or unknown MPI family -> ${LMOD_FAMILY_MPI}"
 fi
