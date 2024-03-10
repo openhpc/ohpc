@@ -13,7 +13,6 @@
 %bcond_with    cuda
 %bcond_with    gdrcopy
 %bcond_without ib
-%bcond_with    ib_cm
 %bcond_with    knem
 %bcond_without rdmacm
 %bcond_with    rocm
@@ -53,9 +52,6 @@ BuildRequires: gdrcopy
 %endif
 %if %{with ib}
 BuildRequires: libibverbs-devel
-%endif
-%if %{with ib_cm}
-BuildRequires: libibcm-devel
 %endif
 %if %{with knem}
 BuildRequires: knem
@@ -108,7 +104,6 @@ This package was built from '' branch, commit c30b7da.
            %_with_arg cuda cuda \
            %_with_arg gdrcopy gdrcopy \
            %_with_arg ib verbs \
-           %_with_arg ib_cm cm \
            %_with_arg knem knem \
            %_with_arg rdmacm rdmacm \
            %_with_arg rocm rocm \
@@ -249,19 +244,6 @@ hardware-offloaded data transfer.
 
 %files -n ucx-ib%{PROJ_DELIM}
 %{install_path}/lib/ucx/libuct_ib.so.*
-%endif
-
-%if %{with ib_cm}
-%package -n ucx-ib-cm%{PROJ_DELIM}
-Requires: %{name}-ib%{?_isa} = %{version}-%{release}
-Summary: UCX InfiniBand connection-manager support
-Group: System Environment/Libraries
-
-%description -n ucx-ib-cm%{PROJ_DELIM}
-Provides Infiniband Connection Manager (also known as ibcm) support for UCX.
-
-%files -n ucx-ib-cm%{PROJ_DELIM}
-%{install_path}/lib/ucx/libuct_ib_cm.so.*
 %endif
 
 %if %{with knem}
