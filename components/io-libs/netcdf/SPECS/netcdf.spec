@@ -27,7 +27,7 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.9.0
+Version:        4.9.2
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:        https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
@@ -101,7 +101,7 @@ module load hdf5
 %endif
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC ${CFLAGS}"
+export CFLAGS="-I$HDF5_INC ${CFLAGS}"
 
 ./configure --prefix=%{install_path} \
     --enable-shared \
@@ -123,7 +123,7 @@ module load phdf5
 %else
 module load hdf5
 %endif
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
+export CFLAGS="-I$HDF5_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
