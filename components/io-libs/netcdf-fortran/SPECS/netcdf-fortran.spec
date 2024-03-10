@@ -25,7 +25,7 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.6.0
+Version:        4.6.1
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:        https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
@@ -105,9 +105,9 @@ module load hdf5
 %endif
 module load netcdf
 
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC $CFLAGS"
-export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC $CXXFLAGS"
-export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC $FCFLAGS"
+export CFLAGS="-I$HDF5_INC -I$NETCDF_INC $CFLAGS"
+export CXXFLAGS="-I$HDF5_INC -I$NETCDF_INC $CXXFLAGS"
+export FCFLAGS="-I$HDF5_INC -I$NETCDF_INC $FCFLAGS"
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
