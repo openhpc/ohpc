@@ -38,7 +38,7 @@ BuildRequires:  bzip2-devel
 %if 0%{?suse_version}
 BuildRequires:  libbz2-devel
 %endif
-BuildRequires:  libcurl-devel m4 make
+BuildRequires:  libcurl-devel m4 make which
 %if 0%{?ohpc_mpi_dependent}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -108,14 +108,20 @@ module load netcdf
 export CFLAGS="-I$HDF5_INC -I$NETCDF_INC $CFLAGS"
 export CXXFLAGS="-I$HDF5_INC -I$NETCDF_INC $CXXFLAGS"
 export FCFLAGS="-I$HDF5_INC -I$NETCDF_INC $FCFLAGS"
+export FFLAGS="$FCFLAGS"
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
-%if 0%{?ohpc_mpi_dependent}
-./configure FC=mpif90 --prefix=%{install_path} \
-%else
-./configure --prefix=%{install_path} \
+%if "%{compiler_family}" == "intel"
+sed -e 's, -mismatch_all",",g' -i configure
+sed -e 's, -fallow-argument-mismatch",",g' -i configure
 %endif
+
+./configure \
+%if 0%{?ohpc_mpi_dependent}
+    FC=mpif90 \
+%endif
+    --prefix=%{install_path} \
     --enable-shared \
     --with-pic \
     --disable-doxygen \
