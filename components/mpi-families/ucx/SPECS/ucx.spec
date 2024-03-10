@@ -28,7 +28,7 @@
 %define pname ucx
 
 Name:    ucx%{PROJ_DELIM}
-Version: 1.14.0
+Version: 1.15.0
 Release: 1%{?dist}
 Summary: UCX is a communication library implementing high-performance messaging
 Group:   %{PROJ_NAME}/mpi-families
