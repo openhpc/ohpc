@@ -8,9 +8,6 @@
 #
 #  Creation date:   March 1, 2016	version 5.0.0
 #
-#  Modified:	    
-#		    
-#
 ############################################################################
 #
 #  The name of the libraries to be created/linked to
@@ -34,12 +31,10 @@ RANLIB       = /usr/bin/ranlib
 
 CC           = mpicc
 CXX          = mpicxx
-CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -std=c11 -fPIC -g
-CXXFLAGS     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -std=c++11 -fPIC -g
-# CFLAGS       += -D
-# CFLAGS       +=  
+CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -qopenmp -std=c11 -fPIC -g
+CXXFLAGS     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -qopenmp -std=c++11 -fPIC -g
 NOOPTS       = -O0
 FORTRAN	     = mpif90
 
-LOADER       = $(CC) -fopenmp
-LOADOPTS     = 
+LOADER       = $(CC) -qopenmp
+LOADOPTS     =
