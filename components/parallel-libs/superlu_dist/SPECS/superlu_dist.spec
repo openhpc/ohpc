@@ -115,7 +115,12 @@ make SuperLUroot=$(pwd)
 mkdir tmp
 (cd tmp; ar x ../SRC/libsuperlu_dist.a)
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
-    -o ./%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
+    -o ./%{libname}.so.%{version} tmp/*.o -L$METIS_LIB \
+%if "%{compiler_family}" == "intel"
+    -qopenmp \
+%else
+    -fopenmp \
+%endif
     -L$PTSCOTCH_LIB \
     -lptscotch -lptscotcherr -lscotch -lmetis %{blas_lib} \
     -lbz2 -lz %{?__global_ldflags}
