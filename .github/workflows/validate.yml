@@ -50,14 +50,14 @@ jobs:
   lint:
     strategy:
       matrix:
-        step: [codespell, flake8, shellcheck, whitespace]
+        step: [codespell, flake8, shellcheck, whitespace, shfmt]
     name: Run ${{ matrix.step }} linter
     runs-on: ubuntu-latest
     container:
       image: registry.fedoraproject.org/fedora:latest
     steps:
     - name: Setup
-      run: dnf -y install codespell make python3-flake8 ShellCheck
+      run: dnf -y install codespell make python3-flake8 ShellCheck shfmt
     - uses: actions/checkout@v4
     - name: Run ${{ matrix.step }}
       run: make -C tests/ci/ ${{ matrix.step }}-lint
