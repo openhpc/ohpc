@@ -1,4 +1,4 @@
-lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint
+lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint shfmt-lint
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
@@ -10,7 +10,9 @@ codespell-lint:
 		../../misc/build_order.py \
 		../../misc/obs/obs_config.py \
 		../../tests/ci/spec_to_test_mapping.py \
-		../../components/admin/prun/SOURCES/prun
+		../../components/admin/prun/SOURCES/prun \
+		../../tests/libs/superlu_dist/tests/rm_execution \
+		../../tests/libs/superlu_dist/tests/test_module
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"
@@ -23,7 +25,9 @@ flake8-lint:
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
-	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec
+	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
+		../../tests/libs/superlu_dist/tests/rm_execution \
+		../../tests/libs/superlu_dist/tests/test_module
 
 shellcheck-lint:
 	@echo "Running 'shellcheck' on selected shell scripts"
@@ -40,3 +44,13 @@ shellcheck-lint:
 		../../components/admin/prun/SOURCES/prun \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
+	shellcheck --exclude=SC2239,SC1091 \
+		../../tests/libs/superlu_dist/tests/rm_execution \
+		../../tests/libs/superlu_dist/tests/test_module
+
+shfmt-lint:
+	@echo "Running 'shfmt' on selected shell scripts"
+	shfmt \
+		-w -d -ln bats \
+		../../tests/libs/superlu_dist/tests/rm_execution \
+		../../tests/libs/superlu_dist/tests/test_module
