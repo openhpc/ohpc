@@ -19,7 +19,7 @@ else
    AC_MSG_RESULT([yes])
 fi
 
-# set compilers to use MPI toolchain 
+# set compilers to use MPI toolchain
 
 OHPC_COMPILER_FAMILY
 
@@ -39,7 +39,7 @@ dnl fi
 AC_C_CONST
 
 # Define include path and library linkage from environment variables
-# which should be provided via module loads. 
+# which should be provided via module loads.
 
 CC='scorep mpicc'
 CXX='scorep mpicxx'
@@ -47,11 +47,12 @@ FC='scorep mpif90'
 F77='scorep mpif90'
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
-   CFLAGS="${CFLAGS} -qopenmp"
-   CXXFLAGS="${CXXFLAGS} -qopenmp"
+   CFLAGS="${CFLAGS} -qopenmp -Wno-implicit-function-declaration"
+   CXXFLAGS="${CXXFLAGS} -qopenmp -Wno-implicit-function-declaration"
    if test "x$LMOD_FAMILY_MPI" = "xmvapich2" ;then
       LDFLAGS="$LDFLAGS -lfmpich"
    fi
+   FC=mpif90
 else
   CFLAGS="${CFLAGS} -fopenmp"
   CXXFLAGS="${CXXFLAGS} -fopenmp"
@@ -70,16 +71,16 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
-echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
+echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`
 echo Fortran compiler ............. : `which $FC`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FCFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

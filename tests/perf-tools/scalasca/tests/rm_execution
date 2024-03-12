@@ -4,55 +4,55 @@
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
 check_rms
-rm=$RESOURCE_MANAGER
+export RM=$RESOURCE_MANAGER
 export SCAN_MPI_LAUNCHER=prun
 
 NODES=2
-TASKS=`tasks_count 8`
+TASKS=$(tasks_count 8)
 ARGS=8
 
-@test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
-	skip "scorep not working with mvapich 2.3.4"
-    fi
+@test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
+		skip "scorep not working with mvapich 2.3.4"
+	fi
 
-    if [ ! -s C_mpi_test ];then
-	flunk "C_mpi_test binary does not exist"
-    fi
+	if [ ! -s C_mpi_test ]; then
+		flunk "C_mpi_test binary does not exist"
+	fi
 
-    run_mpi_binary -s 1 ./C_mpi_test $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -s 1 ./C_mpi_test $ARGS $NODES "$TASKS"
+	assert_success
 
-    run scalasca -examine -s scorep_C_mpi_test_*
-    assert_success
+	run scalasca -examine -s scorep_C_mpi_test_*
+	assert_success
 
-    rm -rf scorep_C_mpi_test_*
+	rm -rf scorep_C_mpi_test_*
 }
 
-@test "[perf-tools/Scalasca] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
-	skip "scorep not working with mvapich 2.3.4"
-    fi
+@test "[perf-tools/Scalasca] MPI C++ binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
+		skip "scorep not working with mvapich 2.3.4"
+	fi
 
-    if [ ! -s CXX_mpi_test ];then
-	flunk "CXX_mpi_test binary does not exist"
-    fi
+	if [ ! -s CXX_mpi_test ]; then
+		flunk "CXX_mpi_test binary does not exist"
+	fi
 
-    run_mpi_binary -s 1 ./CXX_mpi_test $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -s 1 ./CXX_mpi_test $ARGS $NODES "$TASKS"
+	assert_success
 
-    run scalasca -examine -s scorep_CXX_mpi_test_*
-    assert_success
+	run scalasca -examine -s scorep_CXX_mpi_test_*
+	assert_success
 
-    rm -rf scorep_CXX_mpi_test_*
+	rm -rf scorep_CXX_mpi_test_*
 }
 
-#@test "[perf-tools/Scalasca] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+#@test "[perf-tools/Scalasca] Serial C OpenMP binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 #    if [ ! -s C_omp_test ];then
 #	flunk "C_omp_test binary does not exist"
 #    fi
@@ -66,20 +66,23 @@ ARGS=8
 #    rm -rf scorep_C_omp_test_16_sum
 #}
 
-@test "[perf-tools/Scalasca] MPI FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
-	skip "scorep not working with mvapich 2.3.4"
-    fi
+@test "[perf-tools/Scalasca] MPI FORTRAN binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [[ "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
+		skip "scorep not working with mvapich 2.3.4"
+	fi
+	if [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] || [ "${LMOD_FAMILY_COMPILER}" == "intel" ]; then
+		skip "Test segfaults with ${LMOD_FAMILY_COMPILER} compiler"
+	fi
 
-    if [ ! -s F_test ];then
-	flunk "F_test binary does not exist"
-    fi
+	if [ ! -s F_test ]; then
+		flunk "F_test binary does not exist"
+	fi
 
-    run_mpi_binary -s 1 ./F_test $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -s 1 ./F_test $ARGS $NODES "$TASKS"
+	assert_success
 
-    run scalasca -examine -s scorep_F_test_*
-    assert_success
+	run scalasca -examine -s scorep_F_test_*
+	assert_success
 
-    rm -rf scorep_F_test_*
+	rm -rf scorep_F_test_*
 }

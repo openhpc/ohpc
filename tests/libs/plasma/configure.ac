@@ -26,7 +26,7 @@ AC_PROG_FC
 AC_C_CONST
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
-  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -qopenmp"
+  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -qopenmp -DHAVE_MKL"
   FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS} -qopenmp"
   FCFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
   LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
@@ -53,9 +53,9 @@ echo
 echo C compiler.................... : `which $CC`
 echo F77 compiler ................. : `which $F77`
 echo F90 compiler ................. : `which $F77`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo F77 compiler flags............ : $FFLAGS
 echo F90 compiler flags............ : $FCFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'
