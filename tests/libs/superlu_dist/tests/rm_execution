@@ -8,9 +8,11 @@ if [ -s ./common/TEST_ENV ]; then
 	source ./common/TEST_ENV
 fi
 
-if [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] || [ "${LMOD_FAMILY_COMPILER}" == "intel" ]; then
-	skip "Test segfaults with ${LMOD_FAMILY_COMPILER} compiler"
-fi
+setup() {
+	if [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] || [ "${LMOD_FAMILY_COMPILER}" == "intel" ]; then
+		skip "Test segfaults with ${LMOD_FAMILY_COMPILER} compiler"
+	fi
+}
 
 check_rms
 export RM=$RESOURCE_MANAGER
