@@ -286,9 +286,7 @@ Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -616,13 +614,11 @@ Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and t
 
 %package -n %{PROJ_NAME}-intel-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  dimemas-intel-impi%{PROJ_DELIM}
 Requires:  dimemas-intel-mpich%{PROJ_DELIM}
 Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
 Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  extrae-intel-impi%{PROJ_DELIM}
 Requires:  extrae-intel-mpich%{PROJ_DELIM}
