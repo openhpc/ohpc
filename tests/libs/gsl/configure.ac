@@ -8,6 +8,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_HEADERS([config.h])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 
@@ -42,7 +43,7 @@ AC_PROG_CC
 AC_PROG_CXX
 
 # Define include path and library linkage from environment variables
-# which should be provided via module loads. 
+# which should be provided via module loads.
 
 CFLAGS="-I${GSL_INC} ${CFLAGS}"
 CXXFLAGS="-I${GSL_INC} ${CXXFLAGS} -fopenmp"
@@ -89,9 +90,9 @@ echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

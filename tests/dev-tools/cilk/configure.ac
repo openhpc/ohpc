@@ -7,13 +7,14 @@ AC_INIT([cilk], [2.0], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 
 OHPC_COMPILER_FAMILY
 
 # Define include path and library linkage from environment variables
-# which should be provided via module loads. 
+# which should be provided via module loads.
 
 CFLAGS="-I${TBBROOT}/include ${CFLAGS}"
 CXXFLAGS="-I${TBBROOT}/include ${CXXFLAGS}"
@@ -34,13 +35,13 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
 echo Linker flags.................. : $LDFLAGS $LIBS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

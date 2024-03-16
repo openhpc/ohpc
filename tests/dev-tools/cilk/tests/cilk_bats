@@ -1,4 +1,4 @@
-#!../../../common/bats/bin/bats
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
 # -*-sh-*-
 
 load ../../../common/test_helper_functions

@@ -90,8 +90,8 @@ AC_ARG_WITH(fabric,
 AM_CONDITIONAL(OPA_FABRIC_ENABLED,test "x$FABRIC" = "xopa" )
 AM_CONDITIONAL(IB_FABRIC_ENABLED,test "x$FABRIC" = "xib" )
 
-# Use customizable test driver
-#AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/test-driver-cmt'])
+# Use customizable test driver to tell bats the output file name
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/test-driver-ohpc'])
 
 #-----------------
 # ROOT level tests

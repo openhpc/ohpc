@@ -7,6 +7,7 @@ AC_INIT(superlu_dist, 4.0, [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 AC_MSG_CHECKING([for SUPERLU_DIST_DIR environment variable])

@@ -7,6 +7,7 @@ AC_INIT([boost], [0.10.0], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 AC_MSG_CHECKING([for BOOST_DIR environment variable])
@@ -22,9 +23,9 @@ OHPC_COMPILER_FAMILY
 
 # test compilers
 
-# (TRon Mar 25, 2015) 
-# Added the AM conditionals below for use with mkl-ublas header 
-# with different options for ICC and GCC 
+# (TRon Mar 25, 2015)
+# Added the AM conditionals below for use with mkl-ublas header
+# with different options for ICC and GCC
 AM_CONDITIONAL(ICC, test $LMOD_FAMILY_COMPILER = "intel")
 AM_CONDITIONAL(GCC, test $LMOD_FAMILY_COMPILER = "gnu")
 
@@ -55,5 +56,5 @@ echo
 echo C++ compiler.................. : `which $CXX`
 echo C++ compiler flags............ : $CXXFLAGS
 echo Boost CPPFLAGS flags.......... : -I$BOOST_DIR/include
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

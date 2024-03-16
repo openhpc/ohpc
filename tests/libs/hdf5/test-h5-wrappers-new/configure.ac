@@ -20,6 +20,7 @@ dnl AM_INIT_AUTOMAKE takes a list of options that should be applied to
 dnl every Makefile.am when automake is run.
 AM_INIT_AUTOMAKE([foreign])
 AM_CONFIG_HEADER(config.h)
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../../test-driver-ohpc'])
 
 # Turn off automake rebuild rules so make doesn't try to run automake
 # (which probably won't work).
@@ -164,7 +165,7 @@ if (${FC} -showconfig 2>&1 | grep 'Fortran 2003 Compiler: yes') > /dev/null; the
   HAVE_FORTRAN_2003="yes"
 else
 # check if HDF5 version is > 1.8
- if version_gt "$H5_LIBVER" "1.9.0"; then   
+ if version_gt "$H5_LIBVER" "1.9.0"; then
      HAVE_FORTRAN_2003="yes"
  fi
 fi
@@ -228,7 +229,7 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`

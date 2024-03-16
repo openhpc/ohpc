@@ -6,6 +6,7 @@ AC_PREREQ(2.59)
 AC_INIT(mumps, 4.0.2, [https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 
@@ -23,7 +24,7 @@ AC_CHECK_FILE([$MUMPS_DIR/etc/Makefile.inc],[],[AC_ERROR[MUMPS_DIR/etc/Makefile.
 SCALAPACK=`grep "^SCALAP" $MUMPS_DIR/etc/Makefile.inc | awk '{$1=$2="";print $0}'`
 AC_SUBST(SCALAPACK)
 
-# set compilers to use MPI toolchain 
+# set compilers to use MPI toolchain
 
 CC=mpicc
 CXX=mpicxx
@@ -40,7 +41,7 @@ AC_PROG_F77
 AC_C_CONST
 
 # Define include path and library linkage from environment variables
-# which should be provided via module loads. 
+# which should be provided via module loads.
 
 CFLAGS="-I${MUMPS_INC} ${CFLAGS}"
 FFLAGS="-I${MUMPS_INC} ${FFLAGS}"
@@ -66,11 +67,11 @@ echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo Fortran compiler ............. : `which $F77`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo Fortran compiler flags........ : $FFLAGS
 echo SCALAPACK linkage............. : $SCALAPACK
 echo LDFLAGS linker flags.......... : $LDFLAGS
 echo LIBS ......................... : $LIBS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

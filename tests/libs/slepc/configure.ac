@@ -7,6 +7,7 @@ AC_INIT(slepc, 3.7.4, [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 AC_MSG_CHECKING([for SLEPC_DIR environment variable])
@@ -19,7 +20,7 @@ else
    LMOD_PACKAGE_VER([slepc])
 fi
 
-# set compilers to use MPI toolchain 
+# set compilers to use MPI toolchain
 CC=mpicc
 F77=mpif77
 FC=mpif90
@@ -61,9 +62,9 @@ echo
 echo C compiler.................... : `which $CC`
 echo F77 compiler ................. : `which $F77`
 echo F90 compiler ................. : `which $F77`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo F77 compiler flags............ : $FFLAGS
 echo F90 compiler flags............ : $FCFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

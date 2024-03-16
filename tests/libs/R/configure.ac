@@ -7,6 +7,7 @@ AC_INIT([R_base], [0.10.0], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 AC_MSG_CHECKING([for R_DIR environment variable])
@@ -39,5 +40,5 @@ echo Rscript location.............. : `which $R_BIN/Rscript`
 echo R_base install dir............ : $R_DIR
 echo R_base lib dir................ : $R_LIB
 echo R_base share dir.............. : $R_SHARE
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

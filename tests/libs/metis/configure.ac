@@ -7,6 +7,7 @@ AC_INIT([metis], [0.10.0], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 
@@ -35,7 +36,7 @@ CXX=" "
 OHPC_COMPILER_FAMILY
 
 # Define include path and library linkage from environment variables
-# which should be provided via module loads. 
+# which should be provided via module loads.
 CFLAGS="-I${METIS_INC} ${CFLAGS}"
 LDFLAGS="-L${METIS_LIB} -lmetis ${LDFLAGS}"
 
@@ -57,5 +58,5 @@ echo
 echo C compiler.................... : `which $CC`
 echo C compiler flags.............. : $CFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

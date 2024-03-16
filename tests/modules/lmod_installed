@@ -1,9 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
 
 . ../common/functions
 
-if [ -s ../common/TEST_ENV ];then
-    source ../common/TEST_ENV
+if [ -s ../common/TEST_ENV ]; then
+	source ../common/TEST_ENV
 fi
 
-check_if_rpm_installed lmod${DELIM}
+@test "[modules] Check if lmod RPM installed" {
+	check_if_rpm_installed lmod${DELIM}
+}

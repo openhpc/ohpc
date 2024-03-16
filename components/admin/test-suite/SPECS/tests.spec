@@ -23,7 +23,7 @@ Source0:   tests-ohpc.tar
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
-Requires: which
+Requires: which bats
 
 %global __brp_mangle_shebangs_exclude bats
 %undefine __brp_mangle_shebangs

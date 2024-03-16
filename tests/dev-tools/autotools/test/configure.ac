@@ -7,3 +7,4 @@ AC_CONFIG_FILES([
  src/Makefile
 ])
 AC_OUTPUT
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../../test-driver-ohpc'])

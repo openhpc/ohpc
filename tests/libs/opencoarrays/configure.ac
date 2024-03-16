@@ -7,6 +7,7 @@ AC_INIT(opencoarrays, 2.2.0, [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 AC_MSG_CHECKING([for OPENCOARRAYS_DIR environment variable])
@@ -21,7 +22,7 @@ fi
 
 
 
-# set compilers to use MPI toolchain.  
+# set compilers to use MPI toolchain.
 # note that the caf compiler wrapper hard-codes paths to MPI libraries and is
 # not recommended for normal usage (instead, use modules and link in libs
 # directly).
@@ -65,8 +66,8 @@ echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo F77 compiler ................. : `which $F77`
 echo F90 compiler ................. : `which $FC`
-echo 
+echo
 echo F77 compiler flags............ : $FFLAGS
 echo F90 compiler flags............ : $FCFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

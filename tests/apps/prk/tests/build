@@ -1,4 +1,4 @@
-#!../../../common/bats/bin/bats
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
 # -*-sh-*-
 
 @test "[Apps/PRK] build PRK executables ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {

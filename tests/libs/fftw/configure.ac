@@ -6,6 +6,7 @@ AC_PREREQ(2.59)
 AC_INIT(fftw, 0.10.0, [https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary fftw environment variables set
 
@@ -27,7 +28,7 @@ else
    AC_MSG_RESULT([yes])
 fi
 
-# set compilers to use MPI toolchain 
+# set compilers to use MPI toolchain
 
 CC=mpicc
 CXX=mpicxx
@@ -49,7 +50,7 @@ dnl fi
 AC_C_CONST
 
 # Define include path and library linkage from environment variables
-# which should be provided via module loads. 
+# which should be provided via module loads.
 
 CFLAGS="-I ${FFTW_INC} ${CFLAGS}"
 CXXFLAGS="-I ${FFTW_INC} ${CXXFLAGS} -fopenmp"
@@ -66,16 +67,16 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
-echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
+echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`
 echo Fortran compiler ............. : `which $FC`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FCFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

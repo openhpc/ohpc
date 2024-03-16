@@ -7,6 +7,7 @@ AC_INIT([mfem], [3.3.2], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 AC_MSG_CHECKING([for MFEM_DIR environment variable])
@@ -95,5 +96,5 @@ echo OHPC MPI toolchain.............. : $LMOD_FAMILY_MPI
 echo
 echo CXX compiler.................... : `which $CXX`
 echo CXX compiler flags.............. : $CXXFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

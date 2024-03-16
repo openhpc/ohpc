@@ -2,8 +2,9 @@ AC_PREREQ([2.63])
 AC_INIT([miniFE], [2.0.1], [https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
-# set compilers to use MPI toolchain 
+# set compilers to use MPI toolchain
 
 CC=mpicc
 CXX=mpicxx
@@ -27,9 +28,9 @@ echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`
 echo Fortran compiler ............. : `which $FC`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FCFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'
