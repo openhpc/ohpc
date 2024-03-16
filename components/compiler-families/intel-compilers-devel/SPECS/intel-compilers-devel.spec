@@ -22,7 +22,7 @@
 %define exact_intel_ver 2024.0
 %define exact_mpi_ver 2021.11
 %define exact_mkl_ver 2024.0
-%define exact_classic_ver 2023.2.3
+%define exact_classic_ver 2023.2.1
 %define exact_deps compiler/2024.0 mkl/%{exact_mkl_ver} oclfpga/2024.0 compiler-rt/2024.0 debugger/2024.0 tbb/2021.11
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
