@@ -24,6 +24,7 @@ License: US Dept. of Energy (BSD-like) and BSD-3 Clause
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Source1: ipxe-09e8a15.tar.xz
+Source2: https://github.com/ipxe/ipxe/pull/1036.patch
 Patch0:  warewulf-provision.bin-file.patch
 Patch1:  warewulf-provision.ipxe-kargs.patch
 Patch2:  warewulf-provision.parted_libdir.patch
@@ -33,8 +34,8 @@ Patch5:  warewulf-provision.wwgetfiles.patch
 Patch6:  warewulf-provision.update_ipxe_to_09e8a15.patch
 Patch7:  warewulf-provision.zstd.patch
 Patch8:  https://github.com/warewulf/warewulf3/commit/ecb8ece02892caf2cbd3b8d74a1f3e01052b9844.patch
+Patch9:  apply-ipxe-pr-1036.patch
 Group:   %{PROJ_NAME}/provisioning
-ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: perl-CGI
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
@@ -51,47 +52,29 @@ BuildRequires: libtirpc-devel
 BuildRequires: kmod
 
 # charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
-%if 0%{?suse_version} || 0%{?sle_version}
+%if 0%{?sle_version}
 BuildRequires: distribution-release
 %endif
 
-%if 0%{?rhel:1} || 0%{?openEuler}
-%global httpsvc httpd
-%global httpgrp apache
-%global tftpsvc tftp-server
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: systemd
 BuildRequires: perl-generators
+%global httpsvc httpd
+%global httpgrp apache
+%global tftpsvc tftp
+%global tftpsrv tftp-server
 %global dhcpsrv dhcp-server
 %else
-# rhel < 8
-%global dhcpsrv dhcp
-%endif
-%else
-# sle_version
 BuildRequires: systemd-rpm-macros
 %global httpsvc apache2
 %global httpgrp www
 %global tftpsvc tftp
+%global tftpsrv tftp
 %global dhcpsrv dhcp-server
 %endif
 
-# If multiple architectures are needed, set
-# --define="cross_compile 1" as an rpmbuild option
-%if 0%{?cross_compile}
-%global CROSS_FLAG --enable-cross-compile
-%if "%{_arch}" == "x86_64"
-BuildRequires: gcc-aarch64-linux-gnu
-%endif # x86_64
-%if "%{_arch}" == "aarch64"
-BuildRequires: gcc-x86_64-linux-gnu
-%endif # aarch64
-%else
-%undefine CROSS_FLAG
-%endif # cross_compile
-
 # New RHEL and SLE include the required FS tools
-%if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
+%if 0%{?rhel} || 0%{?sle_version}
 %global localtools 1
 BuildRequires: parted, e2fsprogs, bsdtar, mdadm, xfsprogs, kmod
 Requires: parted, autofs, e2fsprogs
@@ -123,18 +106,19 @@ cd %{_builddir}
 %{__rm} -rf %{name}-%{version} %{wwextract}
 %{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
 %setup -q -D
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
 %define _default_patch_fuzz 3
-%patch7 -p2
-%patch8 -p2
+%patch -P7 -p2
+%patch -P8 -p2
+%patch -P9 -p1
 %{__rm} -f 3rd_party/GPL/ipxe-2265a65.tar.xz
-%{__cp} %SOURCE1 3rd_party/GPL/
+%{__cp} %SOURCE1 %SOURCE2 3rd_party/GPL/
 
 
 %build
@@ -143,12 +127,12 @@ cd %{_builddir}
 # Configure needs to locate mkfs.ext4
 export PATH=/usr/sbin:/sbin:$PATH
 
-%configure --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS} %{?CROSS_FLAG}
-%{__make} %{?mflags}
+%configure --sharedstatedir=%{wwsrvdir} %{?CONF_FLAGS}
+%{__make} %{?_smp_mflags}
 
 
 %install
-%{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 
 %post
@@ -158,7 +142,6 @@ fi
 
 
 %files
-%defattr(-, root, root)
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
@@ -182,7 +165,6 @@ fi
 %{perl_vendorlib}/Warewulf/Module/Cli/Ucode.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Vnfs.pm
 
-# ====================
 %package initramfs-%{_arch}
 Summary: Warewulf - initramfs base for %{_arch}
 BuildArch: noarch
@@ -203,23 +185,18 @@ image and to provide boot capability for %{_arch} architecture.
 %{wwsrvdir}/warewulf/initramfs/%{_arch}
 
 
-# ====================
 %package server
 Summary: Warewulf - System provisioning server
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-server-ipxe-%{_arch} = %{version}-%{release}
-Requires: %{httpsvc}, perl(Apache), %{tftpsvc}, %{dhcpsrv}
+Requires: %{httpsvc}, perl(Apache), %{tftpsrv}, %{dhcpsrv}
 
-%if 0%{?rhel} >= 8 || 0%{?openEuler}
+%if 0%{?rhel} || 0%{?openEuler}
 Requires(post): policycoreutils-python-utils
-%else # Not RHEL 8+
-%if 0%{?sle_version} >= 150100
+%else
 Requires(pre): shadow
 Requires(post): policycoreutils
-%else # Not RHEL 8+ or SLE 15.1+
-Requires(post): policycoreutils-python
-%endif # sle_version
-%endif # rhel
+%endif
 
 %description server
 Warewulf is an operating system management toolkit designed to facilitate
@@ -240,12 +217,12 @@ do not require this package.
 if [ $1 -eq 1 ] ; then
 usermod -a -G warewulf %{httpgrp} >/dev/null 2>&1 || :
 %{__mkdir_p} %{wwsrvdir}/warewulf/ipxe %{wwsrvdir}/warewulf/bootstrap 2>/dev/null || :
-%if 0%{?sle_version:1} || 0%{?rhel} >= 8
+%if 0%{?sle_version} || 0%{?rhel}
 %systemd_post %{httpdsvc}.service
 %systemd_post %{tftpsvc}.socket
 %else
-/usr/bin/systemctl --system enable %{httpdsvc}.service >/dev/null 2>&1 || :
-/usr/bin/systemctl --system restart %{httpdsvc}.service >/dev/null 2>&1 || :
+/usr/bin/systemctl --system enable %{httpsvc}.service >/dev/null 2>&1 || :
+/usr/bin/systemctl --system restart %{httpsvc}.service >/dev/null 2>&1 || :
 /usr/bin/systemctl --system enable %{tftpsvc}.socket >/dev/null 2>&1 || :
 /usr/bin/systemctl --system restart %{tftpsvc}.socket >/dev/null 2>&1 || :
 %endif
@@ -264,7 +241,7 @@ semanage fcontext -d -t httpd_sys_content_t '%{wwsrvdir}/warewulf/ipxe(/.*)?' 2>
 semanage fcontext -d -t httpd_sys_content_t '%{wwsrvdir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
 /sbin/restorecon -R %{wwsrvdir}/warewulf || :
 fi
-%if 0%{?sle_version:1} || 0%{?rhel} >= 8
+%if 0%{?sle_version} || 0%{?rhel}
 %systemd_postun_with_restart %{httpdsvc}.service
 %systemd_postun_with_restart %{tftpsvc}.socket
 %else
@@ -273,7 +250,6 @@ fi
 %endif
 
 %files server
-%defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/warewulf/dhcpd-template.conf
 %config(noreplace) %{_sysconfdir}/warewulf/dnsmasq-template.conf
 %dir %{_sysconfdir}/%{httpsvc}
@@ -288,8 +264,7 @@ fi
 %{perl_vendorlib}/Warewulf/Module/Cli/Dhcp.pm
 
 
-# ====================
-%if "%{_arch}" == "x86_64" || 0%{?CROSS_FLAG:1}
+%if "%{_arch}" == "x86_64"
 %package server-ipxe-x86_64
 Summary: Warewulf - iPXE Bootloader for x86_64
 BuildArch: noarch
@@ -310,8 +285,7 @@ This package provides bundled iPXE binaries for x86_64.
 %endif
 
 
-# ====================
-%if "%{_arch}" == "aarch64" || 0%{?CROSS_FLAG:1}
+%if "%{_arch}" == "aarch64"
 %package server-ipxe-aarch64
 Summary: Warewulf - iPXE Bootloader for aarch64
 BuildArch: noarch
@@ -330,7 +304,6 @@ This package provides bundled iPXE binaries for aarch64.
 %endif
 
 
-# ====================
 %package gpl_sources
 Summary: Warewulf - GPL sources used in Warewulf provisioning
 License: GPL+
@@ -350,10 +323,6 @@ different licensing terms. To be fully compliant to the GPL open source
 license, GPL source files are included in this package.
 
 %files gpl_sources
-%defattr(-, root, root)
 %dir %{_prefix}/src/warewulf
 %dir %{_prefix}/src/warewulf/3rd_party
 %{_prefix}/src/warewulf/3rd_party/GPL/
-
-
-# ====================
