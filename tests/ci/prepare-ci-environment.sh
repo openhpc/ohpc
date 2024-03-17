@@ -95,7 +95,7 @@ dnf_rhel() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc
+	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats
 }
 
 dnf_openeuler() {
@@ -104,6 +104,12 @@ dnf_openeuler() {
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
 	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname
+	# Currently no bats package available via a repository. Installing from source.
+	loop_command wget https://github.com/bats-core/bats-core/archive/refs/tags/v1.10.0.tar.gz
+	tar xf v1.10.0.tar.gz
+	cd bats-core-1.10.0
+	./install.sh /usr
+	cd ..
 }
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then
@@ -114,7 +120,7 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	fi
 	adduser ohpc
 else
-	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild bats "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
