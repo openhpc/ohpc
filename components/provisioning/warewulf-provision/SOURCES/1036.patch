@@ -1,0 +1,58 @@
+From 0aa2e4ec963597794dd8f8b36f77f4d0cf4e03c8 Mon Sep 17 00:00:00 2001
+From: Michael Brown <mcb30@ipxe.org>
+Date: Tue, 5 Sep 2023 12:46:39 +0100
+Subject: [PATCH] [librm] Use explicit operand size when pushing a label
+ address
+
+We currently use "push $1f" within inline assembly to push the address
+of the real-mode code fragment, relying on the assembler to treat this
+as "pushl" for 32-bit code or "pushq" for 64-bit code.
+
+As of binutils commit 5cc0077 ("x86: further adjust extend-to-32bit-
+address conditions"), first included in binutils-2.41, this implicit
+operand size is no longer calculated as expected and 64-bit builds
+will fail with
+
+  Error: operand size mismatch for `push'
+
+Fix by adding an explicit operand size to the "push" instruction.
+
+Originally-fixed-by: Justin Cano <jstncno@gmail.com>
+Signed-off-by: Michael Brown <mcb30@ipxe.org>
+---
+ src/arch/x86/include/librm.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/arch/x86/include/librm.h b/src/arch/x86/include/librm.h
+index 5196d390fa..40f075439a 100644
+--- a/src/arch/x86/include/librm.h
++++ b/src/arch/x86/include/librm.h
+@@ -250,8 +250,10 @@ extern void remove_user_from_rm_stack ( userptr_t data, size_t size );
+ /* CODE_DEFAULT: restore default .code32/.code64 directive */
+ #ifdef __x86_64__
+ #define CODE_DEFAULT ".code64"
++#define STACK_DEFAULT "q"
+ #else
+ #define CODE_DEFAULT ".code32"
++#define STACK_DEFAULT "l"
+ #endif
+ 
+ /* LINE_SYMBOL: declare a symbol for the current source code line */
+@@ -268,7 +270,7 @@ extern void remove_user_from_rm_stack ( userptr_t data, size_t size );
+ 
+ /* REAL_CODE: declare a fragment of code that executes in real mode */
+ #define REAL_CODE( asm_code_str )			\
+-	"push $1f\n\t"					\
++	"push" STACK_DEFAULT " $1f\n\t"			\
+ 	"call real_call\n\t"				\
+ 	TEXT16_CODE ( "\n1:\n\t"			\
+ 		      asm_code_str			\
+@@ -277,7 +279,7 @@ extern void remove_user_from_rm_stack ( userptr_t data, size_t size );
+ 
+ /* PHYS_CODE: declare a fragment of code that executes in flat physical mode */
+ #define PHYS_CODE( asm_code_str )			\
+-	"push $1f\n\t"					\
++	"push" STACK_DEFAULT " $1f\n\t"			\
+ 	"call phys_call\n\t"				\
+ 	".section \".text.phys\", \"ax\", @progbits\n\t"\
+ 	"\n" LINE_SYMBOL "\n\t"				\
