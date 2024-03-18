@@ -103,13 +103,8 @@ dnf_openeuler() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname
-	# Currently no bats package available via a repository. Installing from source.
-	loop_command wget https://github.com/bats-core/bats-core/archive/refs/tags/v1.10.0.tar.gz
-	tar xf v1.10.0.tar.gz
-	cd bats-core-1.10.0
-	./install.sh /usr
-	cd ..
+	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
+	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats
 }
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then

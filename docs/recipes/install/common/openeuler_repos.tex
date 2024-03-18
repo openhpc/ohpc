@@ -14,10 +14,8 @@ command:
 % ohpc_command if [[ ${enable_epol_updates} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily]
-[sms](*\#*) export repo=https://eur.openeuler.openatom.cn/results/mgrigorov/OpenHPC
-[sms](*\#*) export arch=$(uname -m)
-[sms](*\#*) (*\install*) \
-  ${repo}/openeuler-22.03_LTS-${arch}/00091098-openeuler-extra-repos/openeuler-extra-repos-22.03-LTS.noarch.rpm
+[sms](*\#*) (*\addrepo*) https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
+[sms](*\#*) (*\install*) openeuler-extra-repos
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
