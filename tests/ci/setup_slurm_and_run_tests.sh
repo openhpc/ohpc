@@ -106,15 +106,6 @@ fi
 export SIMPLE_CI=1
 TESTS_FAILED=1
 
-# The following is necessary to create GitHub Action reports.
-# For now only on RHEL 9 (and clones)
-# shellcheck disable=SC1091
-. /etc/os-release
-if [ "${PLATFORM_ID}" == "platform:el9" ] && [ -n "${GITHUB_ACTIONS}" ]; then
-	export BATS_JUNIT_FORMAT=1
-	dnf -y install perl-XML-DOM.noarch perl-XML-Generator
-fi
-
 set +e
 
 sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -delete"
@@ -124,7 +115,6 @@ sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -d
 if sudo \
 	--user="${USER}" \
 	--preserve-env=SIMPLE_CI \
-	--preserve-env=BATS_JUNIT_FORMAT \
 	--login \
 	bash -c "\
 		cd ${PWD}/tests; \
