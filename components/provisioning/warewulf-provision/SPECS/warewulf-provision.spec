@@ -51,11 +51,6 @@ BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
 BuildRequires: libtirpc-devel
 BuildRequires: kmod
 
-# charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
-%if 0%{?sle_version}
-BuildRequires: distribution-release
-%endif
-
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: systemd
 BuildRequires: perl-generators
