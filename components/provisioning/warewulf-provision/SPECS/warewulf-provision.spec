@@ -213,7 +213,7 @@ if [ $1 -eq 1 ] ; then
 usermod -a -G warewulf %{httpgrp} >/dev/null 2>&1 || :
 %{__mkdir_p} %{wwsrvdir}/warewulf/ipxe %{wwsrvdir}/warewulf/bootstrap 2>/dev/null || :
 %if 0%{?sle_version} || 0%{?rhel}
-%systemd_post %{httpdsvc}.service
+%systemd_post %{httpsvc}.service
 %systemd_post %{tftpsvc}.socket
 %else
 /usr/bin/systemctl --system enable %{httpsvc}.service >/dev/null 2>&1 || :
@@ -237,10 +237,10 @@ semanage fcontext -d -t httpd_sys_content_t '%{wwsrvdir}/warewulf/bootstrap(/.*)
 /sbin/restorecon -R %{wwsrvdir}/warewulf || :
 fi
 %if 0%{?sle_version} || 0%{?rhel}
-%systemd_postun_with_restart %{httpdsvc}.service
+%systemd_postun_with_restart %{httpsvc}.service
 %systemd_postun_with_restart %{tftpsvc}.socket
 %else
-/usr/bin/systemctl --system restart %{httpdsvc}.service >/dev/null 2>&1 || :
+/usr/bin/systemctl --system restart %{httpsvc}.service >/dev/null 2>&1 || :
 /usr/bin/systemctl --system restart %{tftpsvc}.socket >/dev/null 2>&1 || :
 %endif
 
