@@ -12,6 +12,7 @@ codespell-lint:
 		../../tests/ci/spec_to_test_mapping.py \
 		../../components/admin/prun/SOURCES/prun \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
+		../../tests/user-env/mem_limits \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
@@ -33,6 +34,7 @@ whitespace-lint:
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		../../components/admin/prun/SOURCES/prun \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
+		../../tests/user-env/mem_limits \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
@@ -57,6 +59,7 @@ shellcheck-lint:
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
 	shellcheck --exclude=SC2239,SC1091 \
+		../../tests/user-env/mem_limits \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
@@ -68,6 +71,7 @@ shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
 	shfmt \
 		-w -d -ln bats \
+		../../tests/user-env/mem_limits \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \

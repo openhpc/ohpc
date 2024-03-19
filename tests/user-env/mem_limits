@@ -1,43 +1,43 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
 load ../common/test_helper_functions
 source ../common/functions || exit 1
 
-if [ -s ../TEST_ENV ];then
-    source ../TEST_ENV
+if [ -s ../TEST_ENV ]; then
+	source ../TEST_ENV
 fi
 
-if [ ! -z "$SIMPLE_CI" ]; then
-	skip "Not supported in simple CI setup"
-fi
+setup() {
+	if [ -n "$SIMPLE_CI" ]; then
+		skip "Not supported in simple CI setup"
+	fi
 
-check_rms
+	OUTPUT=$(mktemp)
+
+	check_rms
+}
+
+teardown() {
+	rm -f "${OUTPUT}"
+}
 
 @test "[memlock] check increased soft limit" {
+	run_serial_binary -o "${OUTPUT}" prlimit -l -o SOFT
 
-    run_serial_binary -o .cmd_output prlimit -l -o SOFT
-
-    for limit in `cat .cmd_output | grep -v SOFT`; do
-        if [ "$limit" != "unlimited" ];then
-            flunk $limit
-        fi
-    done
-
-    rm -f .cmd_output
-
+	grep -v SOFT <"${OUTPUT}" | while IFS= read -r limit; do
+		if [ "$limit" != "unlimited" ]; then
+			flunk "$limit"
+		fi
+	done
 }
 
 @test "[memlock] check increased hard limit" {
+	run_serial_binary -o "${OUTPUT}" prlimit -l -o HARD
 
-    run_serial_binary -o .cmd_output prlimit -l -o HARD
-
-    for limit in `cat .cmd_output | grep -v HARD`; do
-        if [ "$limit" != "unlimited" ];then
-            flunk $limit
-        fi
-    done
-
-    rm -f .cmd_output
-
+	grep -v HARD <"${OUTPUT}" | while IFS= read -r limit; do
+		if [ "$limit" != "unlimited" ]; then
+			flunk "$limit"
+		fi
+	done
 }
