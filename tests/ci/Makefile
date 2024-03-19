@@ -11,6 +11,7 @@ codespell-lint:
 		../../misc/obs/obs_config.py \
 		../../tests/ci/spec_to_test_mapping.py \
 		../../components/admin/prun/SOURCES/prun \
+		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
@@ -30,6 +31,8 @@ flake8-lint:
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
+		../../components/admin/prun/SOURCES/prun \
+		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
@@ -50,6 +53,7 @@ shellcheck-lint:
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
 		../../components/admin/prun/SOURCES/prun \
+		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
 	shellcheck --exclude=SC2239,SC1091 \
@@ -70,3 +74,5 @@ shfmt-lint:
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
+	shfmt -w -d \
+		../../components/rms/slurm/SOURCES/slurm.epilog.clean
