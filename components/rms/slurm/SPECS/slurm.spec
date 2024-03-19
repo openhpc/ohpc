@@ -15,13 +15,22 @@
 %global _with_numa 1
 %global _with_slurmrestd 1
 %global _with_multiple_slurmd 1
+%global _with_freeipmi 1
+
+%if 0%{?rhel} || 0%{?openEuler}
+%global _with_yaml 1
+%endif
+
+%if 0%{?rhel}
+%global _with_jwt 1
+%endif
 
 %define pname slurm
 
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	22.05.11
+Version:	23.11.4
 %global rel	1
 Release:	%{?dist}.1
 Summary:	Slurm Workload Manager
@@ -65,6 +74,9 @@ Patch0: slurm.conf.example.patch
 # --with ucx		%_with_ucx path		require ucx support
 # --with pmix		%_with_pmix path	require pmix support
 # --with nvml           %_with_nvml path        require nvml support
+# --with jwt		%_with_jwt 1		require jwt support
+# --with freeipmi	%_with_freeipmi 1	require freeipmi support
+# --with selinux	%_with_selinux 1	build with selinux support
 
 #  Options that are off by default (enable with --with <opt>)
 %bcond_with cray
@@ -83,6 +95,9 @@ Patch0: slurm.conf.example.patch
 %bcond_with numa
 %bcond_with pmix
 %bcond_with nvml
+%bcond_with jwt
+%bcond_with yaml
+%bcond_with freeipmi
 
 # 4/11/18 karl@ices.utexas.edu - enable lua bindings
 %bcond_without lua
@@ -190,6 +205,22 @@ Requires: pmix%{PROJ_DELIM}
 BuildRequires: ucx-devel
 
 %endif
+
+%if %{with jwt}
+BuildRequires: libjwt-devel >= 1.10.0
+Requires: libjwt >= 1.10.0
+%endif
+
+%if %{with yaml}
+Requires: libyaml >= 0.2.5
+BuildRequires: libyaml-devel >= 0.2.5
+%endif
+
+%if %{with freeipmi}
+Requires: freeipmi
+BuildRequires: freeipmi-devel
+%endif
+
 #  Allow override of sysconfdir via _slurm_sysconfdir.
 #  Note 'global' instead of 'define' needed here to work around apparent
 #   bug in rpm macro scoping (or something...)
@@ -211,11 +242,6 @@ BuildRequires: ucx-devel
 #  into non-standard locations (e.g. /usr/local)
 #
 %define __os_install_post /usr/lib/rpm/brp-compress
-
-#
-# Should unpackaged files in a build root terminate a build?
-# Uncomment if needed again.
-#%define _unpackaged_files_terminate_build      0
 
 # Slurm may intentionally include empty manifest files, which will
 # cause errors with rpm 4.13 and on. Turn that check off.
@@ -270,6 +296,14 @@ Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 Slurm controller daemon. Used to manage the job queue, schedule jobs,
 and dispatch RPC messages to the slurmd processon the compute nodes
 to launch jobs.
+
+%package -n %{pname}-sackd%{PROJ_DELIM}
+Summary: Slurm authentication daemon
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
+%description -n %{pname}-sackd%{PROJ_DELIM}
+Slurm authentication daemon. Used on login nodes that are not running slurmd
+daemons to allow authentication to the cluster.
 
 %package -n %{pname}-slurmd%{PROJ_DELIM}
 Summary: Slurm compute node daemon
@@ -400,6 +434,7 @@ export PATH="$PWD/bin:$PATH"
 module load hwloc
 %endif
 %configure \
+  --with-systemdsystemunitdir=%{_unitdir} \
 	%{?_without_debug:--disable-debug} \
 	%{?_with_pam_dir} \
 	%{?_with_cpusetdir} \
@@ -409,7 +444,6 @@ module load hwloc
 	%{?_with_cray_network:--enable-cray-network}\
 	%{?_with_multiple_slurmd:--enable-multiple-slurmd} \
 	%{?_with_pmix} \
-	%{?_with_freeipmi} \
 	%{?_with_hdf5} \
 	%{?_with_shared_libslurm} \
 	%{!?_with_slurmrestd:--disable-slurmrestd} \
@@ -441,14 +475,6 @@ export QA_RPATHS=0x5
 
 make install DESTDIR=%{buildroot}
 make install-contrib DESTDIR=%{buildroot}
-
-install -D -m644 etc/slurmctld.service %{buildroot}/%{_unitdir}/slurmctld.service
-install -D -m644 etc/slurmd.service    %{buildroot}/%{_unitdir}/slurmd.service
-install -D -m644 etc/slurmdbd.service  %{buildroot}/%{_unitdir}/slurmdbd.service
-
-%if %{with slurmrestd}
-install -D -m644 etc/slurmrestd.service  %{buildroot}/%{_unitdir}/slurmrestd.service
-%endif
 
 # Do not package Slurm's version of libpmi on Cray systems in the usual location.
 # Cray's version of libpmi should be used. Move it elsewhere if the site still
@@ -629,7 +655,6 @@ fi
 %config %{_sysconfdir}/plugstack.conf.template
 %config %{_sysconfdir}/slurm.conf.template
 %endif
-%config %{_sysconfdir}/slurm.conf.example
 
 %{OHPC_PUB}
 %doc AUTHORS CONTRIBUTING.md COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
@@ -665,6 +690,12 @@ fi
 %{_perldir}/auto/Slurmdb/Slurmdb.so
 %{_perldir}/auto/Slurmdb/autosplit.ix
 %{_perlman3dir}/Slurm*
+#############################################################################
+
+%files -n %{pname}-sackd%{PROJ_DELIM}
+%defattr(-,root,root)
+%{_sbindir}/sackd
+%{_unitdir}/sackd.service
 #############################################################################
 
 %files -n %{pname}-slurmctld%{PROJ_DELIM}
@@ -771,15 +802,6 @@ if [ ! -d /var/spool/slurmctld ];then
    chown slurm: /var/spool/slurmctld
 fi
 
-if [ -x /sbin/ldconfig ]; then
-    /sbin/ldconfig %{_libdir}
-fi
-
-%preun
-
-%postun
-/sbin/ldconfig
-
 %post -n %{pname}-slurmctld%{PROJ_DELIM}
 %systemd_post slurmctld.service
 %preun -n %{pname}-slurmctld%{PROJ_DELIM}
@@ -800,3 +822,11 @@ fi
 %systemd_preun slurmdbd.service
 %postun -n %{pname}-slurmdbd%{PROJ_DELIM}
 %systemd_postun_with_restart slurmdbd.service
+
+
+%post -n %{pname}-sackd%{PROJ_DELIM}
+%systemd_post sackd.service
+%preun -n %{pname}-sackd%{PROJ_DELIM}
+%systemd_preun sackd.service
+%postun -n %{pname}-sackd%{PROJ_DELIM}
+%systemd_postun_with_restart sackd.service

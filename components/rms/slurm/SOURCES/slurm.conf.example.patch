@@ -16,7 +16,7 @@
 -JobCompType=jobcomp/none
 +#JobCompType=jobcomp/none
  #JobCompUser=
- #JobContainerType=job_container/none
+ #JobContainerType=
  JobAcctGatherFrequency=30
 @@ -149,5 +149,22 @@
  #
