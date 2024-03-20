@@ -20,10 +20,6 @@ License:   GPL
 Url:       https://github.com/chaos/pdsh
 Group:     %{PROJ_NAME}/admin
 Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
-Patch1:    pdsh-slurm-list.patch
-
-### karl.w.schulz@intel.com (11/07/14) - temporarily disabling rcmd requirement
-### Requires: pdsh-rcmd
 
 # Default library install path
 %global install_path %{OHPC_HOME}/admin/%{pname}
@@ -52,8 +48,8 @@ Patch1:    pdsh-slurm-list.patch
 %global _defaults ssh exec readline pam
 
 #   LLNL system defaults
-#%if 0%{?chaos}
-#%global _default_with %{_defaults} mrsh nodeupdown genders slurm
+#%if 0%%{?chaos}
+#%%global _default_with %%{_defaults} mrsh nodeupdown genders slurm
 #%else
 #   All other defaults
 %global _default_with %{_defaults} mrsh genders slurm
@@ -62,8 +58,8 @@ Patch1:    pdsh-slurm-list.patch
 #
 #   Environment variables can be used to override defaults above:
 #
-#%global _env_without ${PDSH_WITHOUT_OPTIONS}
-#%global _env_with    ${PDSH_WITH_OPTIONS}
+#%%global _env_without ${PDSH_WITHOUT_OPTIONS}
+#%%global _env_with    ${PDSH_WITH_OPTIONS}
 
 #   Shortcut for % global expansion
 %define dstr "%%%%"global
@@ -123,16 +119,11 @@ Patch1:    pdsh-slurm-list.patch
   %global _enable_debug --enable-debug
 %endif
 
-
-#%{?_with_mrsh:BuildRequires: munge-devel%{PROJ_DELIM}}
-#BuildRequires: munge-devel%{PROJ_DELIM}
 %{?_with_qshell:BuildRequires: qsnetlibs}
 %{?_with_mqshell:BuildRequires: qsnetlibs}
 %{?_with_readline:BuildRequires: readline-devel}
 %{?_with_readline:BuildRequires: ncurses-devel}
 %{?_with_nodeupdown:BuildRequires: whatsup}
-#%{?_with_genders:BuildRequires: genders > 1.0}
-#BuildRequires: genders > 1.0
 %{?_with_pam:BuildRequires: pam-devel}
 %{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
@@ -307,8 +298,7 @@ from an allocated Torque job.
 ##############################################################################
 
 %prep
-%setup  -q -n %{pname}-%{version}
-%patch1 -p1
+%setup -q -n %{pname}-%{version}
 ##############################################################################
 
 %build
@@ -359,22 +349,11 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
 ##############################################################################
 
 %install
-%{__mkdir_p} $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
-if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.qshd ]; then
-   install -D -m644 etc/qshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/qshell
-fi
-if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.mqshd ]; then
-   install -D -m644 etc/mqshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/mqshell
-fi
 
-%if 0%{?OHPC_BUILD}
-# install_doc_files
-%endif
-
-#
 # Remove all module .a's as they are not needed on any known RPM platform.
 find "%buildroot" -type f -name "*.a" | xargs rm -f
+find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # Add soft link to pdsh binaries in default path
 
@@ -384,15 +363,12 @@ ln -sf %{install_path}/bin/dshbak ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdcp ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 
-find ${RPM_BUILD_ROOT}
-
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
 %doc COPYING README NEWS DISCLAIMER.LLNS DISCLAIMER.UC
 %doc README.KRB4 README.modules
-%{OHPC_HOME}
-%{OHPC_PUB}
+%{install_path}
 %{_bindir}/pdsh
 %{_bindir}/dshbak
 %{_bindir}/pdcp
@@ -404,7 +380,6 @@ find ${RPM_BUILD_ROOT}
 # dir %{OHPC_PUB}/share/doc
 # {OHPC_PUB}/share/doc/%{pname}
 %doc AUTHORS
-
 %endif
 
 %if %{?_with_genders:1}%{!?_with_genders:0}
