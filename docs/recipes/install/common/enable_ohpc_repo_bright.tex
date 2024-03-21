@@ -1,0 +1,32 @@
+To begin, enable use of the \OHPC{} repository by adding it to the local list
+of available package repositories. Note that this requires network access from
+your {\em master} server to the \OHPC{} repository, or alternatively, that
+the \OHPC{} repository be mirrored locally.  In cases where network external
+connectivity is available, \OHPC{} provides an \texttt{ohpc-release} package
+that includes GPG keys for package signing and enabling the repository.  The
+example which follows illustrates installation of the \texttt{ohpc-release}
+package directly from the \OHPC{} build server.
+
+\iftoggleverb{isCentOS}
+% CentOS
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) yum install https://support2.brightcomputing.com/ohpc/ohpc-reposetup-2.0_100008_cm9.0_590aab9b26.x86_64.rpm
+\end{lstlisting}
+\else
+% non-CentOS
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.8}{10}\ttfamily,
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) rpm -ivh https://support2.brightcomputing.com/ohpc/ohpc-reposetup-2.0_100008_cm9.0_590aab9b26.x86_64.rpm
+\end{lstlisting}
+\fi
+
+After installing the ohpc-reposetup Bright package on the {\em master} node, the 
+ohpc-reposetup module needs to be loaded, then the ohpc-reposetup.sh script run 
+to enable OpenHPC in the software images and the {\em master} node
+
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
+        literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
+	[sms](*\#*) module load ohpc-reposetup/2.0/ohpc-reposetup.module
+	[sms](*\#*) ohpc-reposetup.sh
+\end{lstlisting}
