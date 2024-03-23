@@ -33,12 +33,41 @@ REPOSITORY_URL="http://repos.openhpc.community/OpenHPC/3/"
 retry_counter=0
 max_retries=5
 
+print_header() {
+	echo "############### $1 ###############"
+}
+
+print_env() {
+	set +x
+	loop_command "${PKG_MANAGER}" "${YES}" install procps
+	# As this script can run on multiple different CI systems
+	# the following lines should give some context to the
+	# evnvironment of this CI run.
+	print_header "Environment variables"
+	printenv
+	print_header "uname -a"
+	uname -a || :
+	print_header "Mounted file systems"
+	cat /proc/self/mountinfo || :
+	print_header "Kernel command line"
+	cat /proc/cmdline || :
+	print_header "ulimit -a"
+	ulimit -a
+	print_header "Available memory"
+	free -h
+	print_header "Available disk space"
+	df -h
+	print_header "Available CPUs"
+	lscpu || :
+	set -x
+}
+
 loop_command() {
 	local retry_counter=0
 	local max_retries=5
 
 	while true; do
-		(( retry_counter+=1 ))
+		((retry_counter += 1))
 		if [ "${retry_counter}" -gt "${max_retries}" ]; then
 			exit 1
 		fi
@@ -50,7 +79,6 @@ loop_command() {
 		sleep "${retry_counter}"
 	done
 }
-
 
 for like in ${ID_LIKE}; do
 	if [ "${like}" = "fedora" ]; then
@@ -112,6 +140,8 @@ dnf_openeuler() {
 	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
 	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats
 }
+
+print_env
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then
 	if [ "${ID}" = "openEuler" ]; then
