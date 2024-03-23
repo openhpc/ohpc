@@ -79,4 +79,5 @@ shfmt-lint:
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 	shfmt -w -d \
+		../../tests/ci/prepare-ci-environment.sh \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
