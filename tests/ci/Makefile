@@ -13,6 +13,7 @@ codespell-lint:
 		../../components/admin/prun/SOURCES/prun \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/user-env/mem_limits \
+		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
@@ -32,15 +33,16 @@ flake8-lint:
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
-		../../components/admin/prun/SOURCES/prun \
-		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
-		../../tests/user-env/mem_limits \
-		../../tests/perf-tools/scalasca/tests/rm_execution \
-		../../tests/perf-tools/scalasca/tests/test_module \
-		../../tests/libs/superlu_dist/tests/rm_execution \
-		../../tests/libs/superlu_dist/tests/test_module \
-		../../tests/libs/plasma/tests/rm_execution \
-		../../tests/libs/plasma/tests/test_module
+		components/admin/prun/SOURCES/prun \
+		components/rms/slurm/SOURCES/slurm.epilog.clean \
+		tests/user-env/mem_limits \
+		tests/perf-tools/omb/tests/rm_execution \
+		tests/perf-tools/scalasca/tests/rm_execution \
+		tests/perf-tools/scalasca/tests/test_module \
+		tests/libs/superlu_dist/tests/rm_execution \
+		tests/libs/superlu_dist/tests/test_module \
+		tests/libs/plasma/tests/rm_execution \
+		tests/libs/plasma/tests/test_module
 
 shellcheck-lint:
 	@echo "Running 'shellcheck' on selected shell scripts"
@@ -60,6 +62,7 @@ shellcheck-lint:
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
 	shellcheck --exclude=SC2239,SC1091 \
 		../../tests/user-env/mem_limits \
+		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
@@ -72,6 +75,7 @@ shfmt-lint:
 	shfmt \
 		-w -d -ln bats \
 		../../tests/user-env/mem_limits \
+		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
