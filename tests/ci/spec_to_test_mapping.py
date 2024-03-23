@@ -233,6 +233,11 @@ test_map = {
         '',
         ''
     ],
+    'components/perf-tools/omb/SPECS/omb.spec': [
+        'omb',
+        '',
+        ''
+    ],
     'components/dev-tools/mpi4py/SPECS/python-mpi4py.spec': [
         'mpi4py',
         '',
