@@ -240,8 +240,8 @@ run_serial_binary () {
 	chmod 700 $jobScript
 	
         if [ -n "$output_file" ];then
-            qsub -k oe -W block=true -l select=1 -l walltime=$timeout -- `readlink -f $jobScript` > .job_in
-	    JOB=`cat .job_in | awk -F . '{print $1}'`
+	    QSUB_OUT=$(qsub -k oe -W block=true -l select=1 -l walltime=$timeout -- `readlink -f $jobScript`)
+	    JOB=$(echo $QSUB_OUT | awk -F . '{print $1}')
 	    [[ -e ${HOME}/STDIN.o${JOB} ]] || exit 1
 	    mv ${HOME}/STDIN.o${JOB} $output_file
 	    cat $output_file
