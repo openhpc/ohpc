@@ -61,6 +61,7 @@ shellcheck-lint:
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
 	shellcheck --exclude=SC2239,SC1091 \
+		../../tests/apps/hpcg/run \
 		../../tests/user-env/mem_limits \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
@@ -74,6 +75,7 @@ shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
 	shfmt \
 		-w -d -ln bats \
+		../../tests/apps/hpcg/run \
 		../../tests/user-env/mem_limits \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
