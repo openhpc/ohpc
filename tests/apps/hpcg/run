@@ -44,7 +44,7 @@ for compiler in $COMPILER_FAMILIES ; do
 
         rm -f HPCG*.yaml
 	rm -f hpcg*.txt
-	rm -f job.*.out
+	rm -f job*out
 
 	module purge          || exit 1
 	module load prun      || exit 1
@@ -59,7 +59,7 @@ for compiler in $COMPILER_FAMILIES ; do
         save_logs_mpi_family . $compiler $mpi
 	mv HPCG*.yaml family-$compiler-$mpi
 	mv hpcg*.txt  family-$compiler-$mpi
-	mv job.*.out  family-$compiler-$mpi
+	mv job*out  family-$compiler-$mpi
     done
 done
 
