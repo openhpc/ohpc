@@ -20,6 +20,7 @@
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version.  Newer versions may still be installed in parallel.
 %define exact_intel_ver 2024.0
+%define exact_intel_ver_module 2024.0.0
 %define exact_mpi_ver 2021.11
 %define exact_mkl_ver 2024.0
 %define exact_classic_ver 2023.2.1
@@ -205,7 +206,7 @@ modname=$(testfile %{OHPC_MODULES}/intel/.version)
 
 cat << EOF > ${modname}
 #%Module1.0#####################################################################
-set     ModulesVersion      "%{exact_intel_ver}"
+set     ModulesVersion      "%{exact_intel_ver_module}"
 EOF
 
 md5sum ${modname} >> %{oneapi_manifest}
