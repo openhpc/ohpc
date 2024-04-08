@@ -17,10 +17,6 @@
 %global _with_multiple_slurmd 1
 %global _with_freeipmi 1
 
-%if 0%{?rhel} || 0%{?openEuler}
-%global _with_yaml 1
-%endif
-
 %if 0%{?rhel}
 %global _with_jwt 1
 %endif
