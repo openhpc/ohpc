@@ -27,6 +27,8 @@ on how to disable. \\
 
 Finally, provisioning services rely on DHCP, TFTP, and HTTP network protocols.
 Depending on the local BOS configuration on the SMS host, default firewall
-rules may prohibit these services. Consequently, this recipe assumes that the local
-firewall running on the SMS host is disabled. If installed, the default
-firewall service can be disabled as follows:
+rules may prohibit these services. Consequently, this recipe assumes that the
+local firewall running on the SMS host is disabled (it is still recommended to
+have additional security boundaries like a firewall to protect the cluster from
+the Internet). If installed, the default firewall service can be disabled as
+follows:

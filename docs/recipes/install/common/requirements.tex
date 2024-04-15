@@ -46,7 +46,9 @@ used for power management and remote console access. Physical connectivity for
 these two logical IP networks is often accommodated via separate cabling and
 switching infrastructure; however, an alternate configuration can also be
 accommodated via the use of a shared NIC, which runs a packet filter to divert
-management packets between the host and BMC.
+management packets between the host and BMC. Independent of the actual networking
+configuration it is recommended to have additional security boundaries like a
+firewall to protect the network interfaces from the Internet.
 
 \iftoggleverb{isx86}
 In addition to the IP networking, there is an optional high-speed network
