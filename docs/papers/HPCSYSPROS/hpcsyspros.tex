@@ -167,7 +167,7 @@ similar equivalent).  With this background motivation in mind, combined with a
 desire to minimize duplication and share best practices across sites, the OpenHPC community
 project was formed with the following mission and vision principles: \\
 
-\noindent {\bf Mission:} to 
+\noindent {\bf Mission:} to
 provide a reference collection of open-source HPC software components and
 best practices, lowering barriers to deployment, advancement, and use of
 modern HPC methods and tools.
@@ -214,7 +214,7 @@ OpenHPC collateral.  At present, there are nearly 20 community volunteers
 serving on the TSC~\cite{TSC_url} with representation from academia, industry,
 and government R\&D laboratories.
 
-%%Public mailing lists for community interaction and support are available at 
+%%Public mailing lists for community interaction and support are available at
 %%http://groups.io/openhpc, and there is a set of openHPC Slack channels as well
 %%(http://openhpc.slack.com). We also welcome bug reports and patches at
 %%http://github.com/openhpc.
@@ -262,7 +262,7 @@ switching infrastructure; however, an alternate configuration can also be
 accommodated via the use of a shared NIC.
 %, which runs a packet filter to divert
 %management packets between the host and BMC.
-For power management, we assume that the compute node 
+For power management, we assume that the compute node
 BMCs are available via IPMI from the chosen master host. For file
 systems, the current recipe(s) document setting up the chosen master
 host as an NFS file system that is made available to the compute
@@ -332,7 +332,7 @@ resource manager is installed using available convenience groups:
   \caption{Example installations using convenience groups.}
     \label{fig:grouplinstall}
 \end{figure}
-  
+
 Convenience groups like the examples above are prefixed with the ``ohpc-'' tag
 and install a collection of related packages. As an example, the
 \texttt{ohpc-warewulf} group expands to include all the packages needed to
@@ -372,7 +372,7 @@ each desired compiler/MPI permutation.
 %%% Again, multiple builds of
 %%% each package are available in the OpenHPC repository to support multiple
 %%% compiler and MPI family combinations where appropriate.
-The general naming convention for builds that have these toolchain dependencies 
+The general naming convention for builds that have these toolchain dependencies
 %provided by OpenHPC
 is to append the compiler and MPI family name that the
 library was built against directly into the package name. For example,
@@ -385,7 +385,7 @@ following RPM naming scheme: \\
 \noindent where \texttt{<comp\_fam>} maps to the underlying compiler family and \texttt{<ver>}
 and \texttt{<rel>} correspond to the individual software version and build
 release number, respectively.
-Expanding on this convention, packages that also require MPI as part of the build 
+Expanding on this convention, packages that also require MPI as part of the build
 additionally include the MPI family (\texttt{<mpi\_fam}>) name as follows: \\
 
 \noindent
@@ -451,16 +451,16 @@ the currently loaded MPI family.
 
 %\subsection{Conventions}
 %\subsubsection{Architecture}
-%%We have assembled a variety of common ingredients required to deploy and manage 
-%%an HPC Linux cluster including provisioning tools, resource management, I/O 
-%%libraries, development tools, and a variety of scientific libraries. The 
-%%delivery mechanism is via standard package managers (i.e., there are public 
+%%We have assembled a variety of common ingredients required to deploy and manage
+%%an HPC Linux cluster including provisioning tools, resource management, I/O
+%%libraries, development tools, and a variety of scientific libraries. The
+%%delivery mechanism is via standard package managers (i.e., there are public
 %%OpenHPC repositories for both yum and zypper). OpenHPC currently supports CentOS
 %%7 and SUSE's SLE 12. A single RPM spec file generates packages for both base
 %%operating systems. This multiple target model also extends to compiler
 %%toolchains and MPI runtime libraries. For some components that means a spec file
 %%can generate 12 different versions of a package. This complexity is masked by
-%%yum/zypper convenience groups, macros within the build system, and hierarchical 
+%%yum/zypper convenience groups, macros within the build system, and hierarchical
 %%Lmod environment modules for users.
 
 
@@ -482,7 +482,7 @@ build system for openSUSE.  The public OBS instance for OpenHPC is available at
 While OpenHPC does not, by itself, provide a complete Linux distribution, it
 does have in common many of the same packaging requirements and targets a
 delivery mechanism that adopts Linux sysadmin familiarity.  OBS aids in this
-process by driving simultaneous builds for multiple OS distributions (e.g. 
+process by driving simultaneous builds for multiple OS distributions (e.g.
 CentOS and SLES), multiple target architectures (e.g. x86\_64 and aarch64),
 and by performing dependency analysis among components, triggering downstream
 builds as necessary based on upstream changes. Each build is carried out in a
@@ -576,11 +576,11 @@ validation tests, but rather to ensure all of OpenHPC is functionally
 integrated. The testing framework is publicly available in the OpenHPC GitHub
 repository.
 
-A Jenkins continuous integration server~\cite{jenkins_url} manages a set of 
-physical servers in our test infrastructure. Jenkins periodically kickstarts a cluster 
-master node using out-of-the-box base OS repositories, and this master is then 
-customized according to the OpenHPC install guide. The \LaTeX\ source for the 
-install guide contains markup that is used to generate a \texttt{{bash}} script 
+A Jenkins continuous integration server~\cite{jenkins_url} manages a set of
+physical servers in our test infrastructure. Jenkins periodically kickstarts a cluster
+master node using out-of-the-box base OS repositories, and this master is then
+customized according to the OpenHPC install guide. The \LaTeX\ source for the
+install guide contains markup that is used to generate a \texttt{{bash}} script
 containing each command necessary to provision and configure the cluster and install OpenHPC
 components. Jenkins executes this script, then launches the component test suite.
 
@@ -603,7 +603,7 @@ status=0
 cd libs/petsc || exit 1
 export BATS_JUNIT_CLASS=PETSc
 
-(*\#*) bootstrap the local autotools project 
+(*\#*) bootstrap the local autotools project
 ./bootstrap || exit 1
 
 for compiler in $COMPILER_FAMILIES ; do
@@ -655,10 +655,10 @@ underlying build and test infrastructure.
 Future work by the OpenHPC Technical Steering Committee (TSC) is focused on
 formalizing and publishing a component selection process by which the community
 can request inclusion of additional software. Currently, OpenHPC provides simple
-configuration recipes for HPC clusters, but future efforts will focus on 
+configuration recipes for HPC clusters, but future efforts will focus on
 providing automation for more advanced configuration and tuning to address
 scalability, power management, and high availability concerns. We also hope to
-expand community cooperation between complementary efforts by 
+expand community cooperation between complementary efforts by
 %continue driving standardization across the HPC landscape,
 developing package dependency conventions with EasyBuild and Spack.
 %Finally, we

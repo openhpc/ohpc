@@ -17,7 +17,7 @@ repository. In contrast, when upgrading between micro releases on the same
 branch (e.g. from v\OHPCVerTree{} to \OHPCVerTree{}.2), there is no need to
 adjust local package manager configurations when using the public repository as
 rolling updates are pre-configured.
- 
+
 \begin{enumerate*}
 \item (Optional) Ensure repo metadata is current (on head node and in chroot
   location(s)). Package managers will naturally do this on their own over time,
@@ -38,7 +38,7 @@ rolling updates are pre-configured.
 # updating the ohpc-base metapackage
 [sms](*\#*)  (*\upgrade*) "ohpc-base"
 \end{lstlisting}
-  
+
 \item Upgrade packages in compute image
 
 \begin{lstlisting}[language=bash,keywords={}]
@@ -48,7 +48,7 @@ rolling updates are pre-configured.
 # updating the ohpc-base-compute metapackage
 [sms](*\#*)  (*\chrootupgrade*) "ohpc-base-compute"
 \end{lstlisting}
-  
+
 \item Rebuild image(s)
 
 \iftoggleverb{isWarewulf}
@@ -71,13 +71,13 @@ you will need to reboot the compute nodes when convenient to enable the
 changes.
 
 %%% \subsubsection{New component variants}
-%%% 
+%%%
 %%% As newer variants of key compiler/MPI stacks are released, \OHPC{} will
 %%% periodically add toolchains enabling the latest variant. To stay consistent
 %%% throughout the build hierarchy, minimize recompilation requirements for existing
 %%% binaries, and allow for multiple variants to coexist, unique delimiters are
 %%% used to distinguish RPM package names and module hierarchy.
-%%% 
+%%%
 %%% In the case of a fresh install, \OHPC{} recipes default to installation of the
 %%% latest toolchains available in a given release branch. However, if upgrading a
 %%% previously installed system, administrators can {\em opt-in} to enable new
@@ -91,7 +91,7 @@ changes.
 %%% complete ``gnu8'' toolchain.  Note that we leverage the convenience
 %%% meta-packages containing MPI-dependent builds, and we also update the
 %%% modules environment to make it the default.
-%%% 
+%%%
 %%% \begin{lstlisting}[language=bash,keywords={}]
 %%% # Install GCC 8.x-compiled meta-packages with dependencies
 %%% [sms](*\#*)  (*\install*) ohpc-gnu8-perf-tools \
@@ -100,11 +100,11 @@ changes.
 %%%                          ohpc-gnu8-runtimes \
 %%%                          ohpc-gnu8-serial \
 %%%                          ohpc-gnu8-parallel-libs
-%%% 
+%%%
 %%% # Update default environment
 %%% [sms](*\#*) (*\remove*) lmod-defaults-gnu7-openmpi3-ohpc
 %%% [sms](*\#*) (*\install*) lmod-defaults-gnu8-openmpi3-ohpc
-%%% 
+%%%
 %%% \end{lstlisting}
-%%% 
-%%% 
+%%%
+%%%

@@ -55,8 +55,8 @@
 
 % Title Page
 \input{common/title}
-% Disclaimer 
-\input{common/legal} 
+% Disclaimer
+\input{common/legal}
 
 \newpage
 \tableofcontents
@@ -80,10 +80,10 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-%\clearpage 
+%\clearpage
 % begin_ohpc_run
 % ohpc_validation_newline
-% ohpc_validation_comment Disable firewall 
+% ohpc_validation_comment Disable firewall
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) systemctl disable firewalld
 [sms](*\#*) systemctl stop firewalld
@@ -127,7 +127,7 @@ distributions. To enable for local use, issue the following:
 
 %\vspace*{-0.25cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
-\input{common/reset_computes_xcat} 
+\input{common/reset_computes_xcat}
 
 
 
@@ -255,7 +255,7 @@ issue the following
 \paragraph{Increase locked memory limits}
 \input{common/memlimits_stateful}
 
-\paragraph{Enable ssh control via resource manager} 
+\paragraph{Enable ssh control via resource manager}
 \input{common/slurm_pam_stateful}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}

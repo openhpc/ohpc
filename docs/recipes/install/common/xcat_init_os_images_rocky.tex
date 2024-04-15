@@ -1,7 +1,7 @@
 % -*- mode: latex; fill-column: 120; -*-
 
 With the provisioning services enabled, the next step is to define
-\nottoggle{isxCATstateful}{and customize} 
+\nottoggle{isxCATstateful}{and customize}
 a system image that can subsequently be
 used to provision one or more {\em compute} nodes. The following subsections highlight this process.
 
@@ -11,7 +11,7 @@ first need to have a local copy of the ISO image available for the underlying OS
 is \texttt{Rocky-8.4-x86\_64-dvd1.iso} (available from the Rocky
 \href{https://rockylinux.org/download/}{\color{blue}download} page).
 We initialize the image
-creation process using the \texttt{copycds} command assuming that the necessary ISO image is available locally in 
+creation process using the \texttt{copycds} command assuming that the necessary ISO image is available locally in
 \texttt{\$\{iso\_path\}} as follows:
 
 % begin_ohpc_run
@@ -42,7 +42,7 @@ follow that guide if you are interested in a stateless install.
 \else
 the stateless ({\em netboot}) image for compute nodes and proceed by using
 \texttt{genimage} to initialize a chroot-based install. Note that the previous query highlights the existence of other
-provisioning images as well. \OHPC{} provides a stateful \xCAT{} recipe, 
+provisioning images as well. \OHPC{} provides a stateful \xCAT{} recipe,
 follow that guide if you are interested in  stateful install.
 %The \texttt{CHROOT} environment variable highlights the path and is used by
 %subsequent commands to augment the basic installation.

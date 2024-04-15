@@ -17,15 +17,15 @@ repository. In contrast, when upgrading between micro releases on the same
 branch (e.g. from v\OHPCVerTree{} to \OHPCVerTree{}.2), there is no need to
 adjust local package manager configurations when using the public repository as
 rolling updates are pre-configured.
- 
+
 The initial step, when using a local mirror as described in
-\S\ref{sec:enable_repo}, is downloading a new tarball from \texttt{http://build.openhpc.community/dist}. 
+\S\ref{sec:enable_repo}, is downloading a new tarball from \texttt{http://build.openhpc.community/dist}.
 After this, move (or remove) the old repository directory, unpack
 the new tarball and run the \texttt{make\_repo.sh} script. In the following,
-substitute \texttt{x.x.x} with the desired version number. 
+substitute \texttt{x.x.x} with the desired version number.
 
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
-	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1 
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1
         {VER2}{\OHPCVersion{}}1]
 [sms](*\#*) wget http://repos.openhpc.community/dist/x.x.x/OpenHPC-x.x.x.OSREPO.ARCH.tar
 [sms](*\#*) mv $ohpc_repo_dir "$ohpc_repo_dir"_old
@@ -56,13 +56,13 @@ The actual update is performed as follows:
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*)  (*\upgrade*) "*-ohpc"
 \end{lstlisting}
-  
+
 \item Upgrade packages on compute nodes
 
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) psh compute  (*\upgrade*) "*-ohpc"
 \end{lstlisting}
-  
+
 \nottoggle{isxCATstateful}{\item Rebuild image(s)
 
 \iftoggleverb{isWarewulf}
@@ -85,13 +85,13 @@ The actual update is performed as follows:
 service restart (or a full reboot) is required.
 
 %%% \subsubsection{New component variants}
-%%% 
+%%%
 %%% As newer variants of key compiler/MPI stacks are released, \OHPC{} will
 %%% periodically add toolchains enabling the latest variant. To stay consistent
 %%% throughout the build hierarchy, minimize recompilation requirements for existing
 %%% binaries, and allow for multiple variants to coexist, unique delimiters are
 %%% used to distinguish RPM package names and module hierarchy.
-%%% 
+%%%
 %%% In the case of a fresh install, \OHPC{} recipes default to installation of the
 %%% latest toolchains available in a given release branch. However, if upgrading a
 %%% previously installed system, administrators can {\em opt-in} to enable new
@@ -107,21 +107,21 @@ service restart (or a full reboot) is required.
 %%% complete ``openmpi3'' toolchain.  Note that we leverage the convenience
 %%% meta-packages containing MPI-dependent builds, and we also update the
 %%% modules environment to make it the default.
-%%% 
+%%%
 %%% \begin{lstlisting}[language=bash,keywords={}]
 %%% # Update default environment
 %%% [sms](*\#*) (*\remove*) lmod-defaults-gnu7-openmpi-ohpc
 %%% [sms](*\#*) (*\install*) lmod-defaults-gnu7-openmpi3-ohpc
-%%% 
+%%%
 %%% # Install OpenMPI 3.x-compiled meta-packages with dependencies
 %%% [sms](*\#*)  (*\install*) ohpc-gnu7-perf-tools \
 %%%                          ohpc-gnu7-io-libs \
 %%%                          ohpc-gnu7-python-libs \
 %%%                          ohpc-gnu7-runtimes \
 %%%                          ohpc-gnu7-openmpi3-parallel-libs
-%%% 
+%%%
 %%% # Install LLVM/Clang 5.x
 %%% [sms](*\#*)  (*\install*) llvm5-compilers-ohpc
 %%% \end{lstlisting}
-%%% 
-%%% 
+%%%
+%%%

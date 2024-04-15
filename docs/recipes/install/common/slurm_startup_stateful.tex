@@ -19,12 +19,12 @@ is a two-step process that requires starting up the controller daemons on the {\
  master} host and the client daemons on each of the {\em compute} hosts.
 %Since the {\em compute} hosts were booted into an image that included the SLURM client
 %components, the daemons should already be running on the {\em compute}
-%hosts. 
+%hosts.
 Note that \SLURM{} leverages the use of the {\em munge} library to provide
 authentication services and this daemon also needs to be running on all hosts
-within the resource management pool. 
+within the resource management pool.
 %The munge daemons should already
-%be running on the {\em compute} subsystem at this point, 
+%be running on the {\em compute} subsystem at this point,
 The following commands can be used to startup the necessary services to support
 resource management under \SLURM{}.
 

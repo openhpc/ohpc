@@ -13,7 +13,7 @@ order to work interactively.
 [sms](*\#*) for ((i=0; i<${num_computes}; i++)) ; do
              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} -P ${bmc_password} chassis power reset
         done
-\end{lstlisting} 
+\end{lstlisting}
 % end_ohpc_run
 
 Once kicked off, the boot process should take less than 5 minutes (depending on
@@ -23,7 +23,7 @@ on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
 
 %\iftoggle{isCentOS_ww_pbs_x86}{\clearpage}
 %\iftoggle{isCentOS}{\clearpage}
-  
+
 \begin{lstlisting}[language=bash]
 [sms](*\#*) pdsh -w ${compute_prefix}[1-${num_computes}] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05

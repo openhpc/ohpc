@@ -42,7 +42,8 @@ whitespace-lint:
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
 		tests/libs/plasma/tests/rm_execution \
-		tests/libs/plasma/tests/test_module
+		tests/libs/plasma/tests/test_module \
+		\*.tex
 
 shellcheck-lint:
 	@echo "Running 'shellcheck' on selected shell scripts"

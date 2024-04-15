@@ -10,7 +10,7 @@ host that can be used to run an example job.
 
 Next, the user's credentials need to be distributed across the cluster.
 \xCAT{}'s \texttt{xdcp} has a merge functionality that adds new entries into
-credential files on {\em compute} nodes: 
+credential files on {\em compute} nodes:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
@@ -26,7 +26,7 @@ credential files on {\em compute} nodes:
 
 \nottoggle{isxCATstateful}{Alternatively, the \texttt{updatenode compute -f} command
 can be used. This re-synchronizes (i.e. copies) all the files defined in the
-\texttt{syncfile} setup in Section \ref{sec:file_import}. \\ }  
+\texttt{syncfile} setup in Section \ref{sec:file_import}. \\ }
 
 ~\\
 \input{common/prun}
@@ -48,7 +48,7 @@ the underlying native job launch mechanism being used):
 [test@sms ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
 
 # Submit interactive job request and use prun to launch executable
-[test@sms ~]$ salloc -n 8 -N 2 
+[test@sms ~]$ salloc -n 8 -N 2
 
 [test@c1 ~]$ prun ./a.out
 
