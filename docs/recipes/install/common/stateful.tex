@@ -11,14 +11,14 @@ require that a boot loader (GRUB) be added to the image as follows:
 \end{lstlisting}
 
 \noindent Enabling stateful nodes also requires additional site-specific, disk-related
-parameters in the Warewulf configuration, and several example partitioning scripts are 
-provided in the distribution. 
+parameters in the Warewulf configuration, and several example partitioning scripts are
+provided in the distribution.
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Select (and customize) appropriate parted layout example
 [sms](*\#*) cp /etc/warewulf/filesystem/examples/gpt_example.cmds /etc/warewulf/filesystem/gpt.cmds
-[sms](*\#*) wwsh provision set --filesystem=gpt "${compute_regex}" 
-[sms](*\#*) wwsh provision set --bootloader=sda "${compute_regex}" 
+[sms](*\#*) wwsh provision set --filesystem=gpt "${compute_regex}"
+[sms](*\#*) wwsh provision set --bootloader=sda "${compute_regex}"
 \end{lstlisting}
 
 \begin{center}
@@ -32,15 +32,15 @@ layout.
 [sms](*\#*) (*\chrootinstall*) grub2-efi grub2-efi-modules
 [sms](*\#*) wwvnfs  --chroot $CHROOT
 [sms](*\#*) cp /etc/warewulf/filesystem/examples/efi_example.cmds /etc/warewulf/filesystem/efi.cmds
-[sms](*\#*) wwsh provision set --filesystem=efi "${compute_regex}" 
-[sms](*\#*) wwsh provision set --bootloader=sda "${compute_regex}" 
+[sms](*\#*) wwsh provision set --filesystem=efi "${compute_regex}"
+[sms](*\#*) wwsh provision set --bootloader=sda "${compute_regex}"
 \end{lstlisting}
 \end{tcolorbox}
 \end{center}
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
-and format the disk to host the desired VNFS image.  Once the image is installed 
-to disk, warewulf can be configured to use the nodes' local storage as the boot 
+and format the disk to host the desired VNFS image.  Once the image is installed
+to disk, warewulf can be configured to use the nodes' local storage as the boot
 device.
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]

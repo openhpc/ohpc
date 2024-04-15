@@ -4,11 +4,11 @@ this recipe, it is assumed that the \Lustre{} file system is hosted by servers
 that are pre-existing and are not part of the install process. Outlining the
 variety of \Lustre{} client mounting options is beyond the scope of this document,
 %(please consult \Lustre{} documentation for more details on failover configuration
-%support and networking options), 
+%support and networking options),
 but the general requirement is to add a mount entry for the desired file system
 that defines the management server (MGS) and underlying network transport
 protocol. To add client mounts on both the {\em master} server and {\em
 compute} image, the following commands can be used. Note that the \Lustre{} file
-system to be mounted is identified by the \texttt{\$\{mgs\_fs\_name\}} variable. 
+system to be mounted is identified by the \texttt{\$\{mgs\_fs\_name\}} variable.
 In this example, the file system is configured to be mounted locally
 as \path{/mnt/lustre}.

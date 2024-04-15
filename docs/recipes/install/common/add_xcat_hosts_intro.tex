@@ -1,12 +1,12 @@
 %\subsubsection{Register nodes for provisioning}
 
 \noindent Next, we add {\em compute} nodes and define their properties as
-objects in \xCAT{} database. 
+objects in \xCAT{} database.
 These hosts are grouped logically into a group named {\em
 compute} to facilitate group-level commands used later in the recipe.  Note the
 use of variable names for the desired compute hostnames, node IPs, MAC
 addresses, and BMC login credentials, which should be modified to accommodate
-local settings and hardware. To enable serial console access via  \xCAT{}, 
+local settings and hardware. To enable serial console access via  \xCAT{},
 {\texttt serialport} and {\texttt serialspeed}
 properties are also defined.
 
@@ -18,14 +18,14 @@ properties are also defined.
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
 		mkdef -t node ${c_name[$i]} groups=compute,all ip=${c_ip[$i]} mac=${c_mac[$i]} netboot=xnba \
 		arch=x86_64 bmc=${c_bmc[$i]} bmcusername=${bmc_username} bmcpassword=${bmc_password} \
-		mgt=ipmi serialport=0 serialspeed=115200 
+		mgt=ipmi serialport=0 serialspeed=115200
         done
 \end{lstlisting}
 % end_ohpc_run
 
 \begin{center}
   \begin{tcolorbox}[]
-    \small 
+    \small
 Defining nodes one-by-one, as done above, is only efficient
 for a small number of nodes. For larger node counts,
 \xCAT{} provides capabilities for automated detection and
@@ -35,7 +35,7 @@ Consult the
 Hardware Discovery \& Define Node Guide}. Alternatively, confluent, a tool
 related to \xCAT{}, also has robust discovery capabilities and can be used to
 \href{https://hpc.lenovo.com/users/documentation/confluentdisco.html}{\color{blue}detect
-and auto-configure} compute hosts.  
+and auto-configure} compute hosts.
 \end{tcolorbox}
 \end{center}
 
@@ -103,10 +103,10 @@ accomplished as follows:
 
 %%% If the Lustre client was enabled for computes in \S\ref{sec:lustre_client}, you
 %%% should be able to mount the file system post-boot using the fstab entry
-%%% (e.g. via ``\texttt{mount /mnt/lustre}''). Alternatively, if 
+%%% (e.g. via ``\texttt{mount /mnt/lustre}''). Alternatively, if
 %%% you prefer to have the file system mounted automatically at boot time, a simple
 %%% postscript can be created and registered with \xCAT{} for this purpose as follows.
-%%% 
+%%%
 %%% % begin_ohpc_run
 %%% % ohpc_validation_newline
 %%% % ohpc_validation_comment Optionally create xCAT postscript to mount Lustre client
@@ -123,5 +123,5 @@ accomplished as follows:
 %%% % ohpc_indent 0
 %%% % ohpc_command fi
 %%% % end_ohpc_run
-%%% 
+%%%
 

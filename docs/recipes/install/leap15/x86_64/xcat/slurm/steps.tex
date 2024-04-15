@@ -51,8 +51,8 @@
 
 % Title Page
 \input{common/title}
-% Disclaimer 
-\input{common/legal} 
+% Disclaimer
+\input{common/legal}
 
 \newpage
 \tableofcontents
@@ -85,10 +85,10 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-\clearpage 
+\clearpage
 % begin_ohpc_run
 % ohpc_validation_newline
-% ohpc_validation_comment Disable firewall 
+% ohpc_validation_comment Disable firewall
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) systemctl disable firewalld
 [sms](*\#*) systemctl stop firewalld
@@ -119,7 +119,7 @@ In addition to the \OHPC{} and \xCAT{} package repositories, the {\em master} ho
 requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base and SDK repositories. In addition, add-on modules are needed to
-resolve dependencies for certain optional components. A summary of these 
+resolve dependencies for certain optional components. A summary of these
 requirements is as follows:
 
 \begin{itemize*}
@@ -211,7 +211,7 @@ requirements is as follows:
 \paragraph{Increase locked memory limits}
 \input{common/memlimits}
 
-\paragraph{Enable ssh control via resource manager} 
+\paragraph{Enable ssh control via resource manager}
 \input{common/slurm_pam}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
@@ -251,7 +251,7 @@ requirements is as follows:
 
 %\vspace*{-0.25cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
-\input{common/reset_computes} 
+\input{common/reset_computes}
 
 %\vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components}

@@ -25,7 +25,7 @@ as desired on login nodes, service nodes, or compute hosts.
 # Install nrpe and an example plugin into compute node image
 [sms](*\#*) (*\chrootinstall*) nrpe monitoring-plugins-ssh
 
-# Enable and configure Nagios NRPE daemon in compute image 
+# Enable and configure Nagios NRPE daemon in compute image
 [sms](*\#*) chroot $CHROOT systemctl enable nrpe
 [sms](*\#*) perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" $CHROOT/etc/nagios/nrpe.cfg
 [sms](*\#*) echo "nrpe : ${sms_ip}  : ALLOW"    >> $CHROOT/etc/hosts.allow

@@ -1,5 +1,5 @@
-To add optional support for mounting \beegfs{} file systems, an 
-additional external \pkgmgr{} repository provided by the \beegfs{} project must be 
+To add optional support for mounting \beegfs{} file systems, an
+additional external \pkgmgr{} repository provided by the \beegfs{} project must be
 configured.  In this recipe, it is
 assumed that the file system is hosted by servers that are pre-existing
 and are not part of the install process. The \texttt{\$\{sysmgmtd\_host\}} should
@@ -29,10 +29,10 @@ installed first.
 [sms](*\#*) systemctl start beegfs-client
 \end{lstlisting}
 
-%%%% Due to changes that came along with kernel 3.10.0-862.el7.x86\_64 , an error 
-%%%% appears when accessing the BeeGFS mount point. A patch is available and can be 
+%%%% Due to changes that came along with kernel 3.10.0-862.el7.x86\_64 , an error
+%%%% appears when accessing the BeeGFS mount point. A patch is available and can be
 %%%% downloaded from the BeeGFS repository:
-%%%% 
+%%%%
 %%%% \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 %%%% [sms](*\#*) (*\install*) patch
 %%%% [sms](*\#*) wget https://www.beegfs.io/release/beegfs_6/0001-client-fix-readdir-in-rhel-7.5.patch  \
