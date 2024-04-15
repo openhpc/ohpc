@@ -184,6 +184,21 @@ EOF
 
 %{__ln_s} %{OHPC_ADMIN}/lmod/lmod/libexec/lmod %{buildroot}/%{_bindir}/modulecmd
 
+%post
+if [ -e %{_sysconfdir}/apparmor.d/local/usr.bin.lessopen.sh ] ; then
+%{__cat} << EOF >> %{_sysconfdir}/apparmor.d/local/usr.bin.lessopen.sh
+# allow lmod for OHPC-lmod
+  /usr/bin/readlink mrix, #OHPC-lmod
+  /usr/bin/expr mrix, #OHPC-lmod
+  /usr/bin/basename mrix, #OHPC-lmod
+EOF
+fi 
+
+%postun 
+if [ -e %{_sysconfdir}/apparmor.d/local/usr.bin.lessopen.sh ] ; then
+  sed -i '/OHPC-lmod/d' %{_sysconfdir}/apparmor.d/local/usr.bin.lessopen.sh
+fi
+
 %files
 %dir %{OHPC_HOME}
 %dir %{OHPC_ADMIN}
