@@ -11,7 +11,7 @@
 %if 0%{?rhel} >= 9 || 0%{?openEuler} || 0%{?sle_version} >= 150400
 %define version 3.0
 %else
-%define version 2.7
+%define version 2.8
 %endif
 
 Name: ohpc-filesystem
