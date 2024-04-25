@@ -364,15 +364,17 @@ foreach my $category (@ohpcCategories) {
 
  	    print $OUT "\\multirow{2}{*}{$lname} &\n";
  	    print $OUT "\\multirow{2}{*}{$versionData[$i]} &\n";
+	    my $lsummary = $summaryData[$i];
+	    $lsummary =~ s/_/\\_/g;
  	    if ($urlData[$i] ne "(none)") {
- 		print $OUT "$summaryData[$i] ";
+		print $OUT "$lsummary ";
 		if($sumLength <= $longSummaryLine) {
 		    print $OUT "\\newline";
 		}
  		print $OUT " { \\color{$urlColor} \\url{$urlData[$i]}}\n"
  	    } else {
- 		print $OUT "\\multirow{2}{*}{$summaryData[$i]}\\\\\n";
- 		print $OUT "& & \n";
+		print $OUT "\\multirow{2}{*}{$lsummary}\\\\\n";
+		print $OUT "& &\n";
  	    }
 
  	    print $OUT "\\\\ \\hline\n";
