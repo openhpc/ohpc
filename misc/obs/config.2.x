@@ -135,6 +135,20 @@ openmpi_compiler=["gnu12","arm1","intel"]
 skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-compilers-devel","arm-compilers-devel"]
 
 
+[2.8.0]
+
+# define patterns for a given arch in which to disable builds
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
+# define compiler/MPI families: first entry in list is defined to be parent in OBS
+compiler_families=["gnu12","intel","arm1"]
+mpi_families=["openmpi4","mpich","mvapich2","impi"]
+
+standalone = ["ohpc-filesystem","easybuild", "spack", "slurm", "pdsh", "pmix", "hwloc", "docs", "lmod"]
+compiler_dependent = ["openmpi"]
+
 [2.7.1]
 
 # define patterns for a given arch in which to disable builds
