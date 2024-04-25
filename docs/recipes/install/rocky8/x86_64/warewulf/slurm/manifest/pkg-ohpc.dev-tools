@@ -1,4 +1,4 @@
-EasyBuild-ohpc 4.8.2 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
+EasyBuild-ohpc 4.9.1 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
 automake-ohpc 1.16.1 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU tool for automatically creating Makefiles
 autoconf-ohpc 2.69 http://www.gnu.org/software/autoconf/ ohpc/dev-tools A GNU tool for automatically configuring source code
 cmake-ohpc 3.24.2 https://cmake.org/ ohpc/dev-tools CMake is an open-source, cross-platform family of tools designed to build, test and package software.
@@ -26,5 +26,5 @@ python3-mpi4py-intel-mpich-ohpc 3.1.3 https://github.com/mpi4py/mpi4py ohpc/dev-
 python3-mpi4py-intel-mvapich2-ohpc 3.1.3 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-intel-openmpi4-ohpc 3.1.3 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
-spack-ohpc 0.20.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
+spack-ohpc 0.21.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
 valgrind-ohpc 3.19.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger

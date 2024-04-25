@@ -50,7 +50,6 @@ likwid-gnu9-ohpc 5.0.1 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Perfor
 likwid-gnu12-ohpc 5.2.2 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Performance tools for the Linux console
 likwid-intel-ohpc 5.2.2 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Performance tools for the Linux console
 msr-safe-ohpc 1.6.0 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
-msr-safe-ohpc-kmp-default 1.6.0_k5.3.18_57 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
 omb-gnu9-impi-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 omb-gnu9-mpich-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 omb-gnu9-mvapich2-ohpc 5.8 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
@@ -64,6 +63,7 @@ omb-intel-mpich-ohpc 6.1 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/per
 omb-intel-mvapich2-ohpc 6.1 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 omb-intel-openmpi4-ohpc 6.1 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 paraver-ohpc 4.10.4 https://tools.bsc.es ohpc/perf-tools Paraver
+papi57-ohpc 5.7.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 papi-ohpc 6.0.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 pdtoolkit-gnu12-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 pdtoolkit-gnu9-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code

@@ -9,142 +9,284 @@
 \midrule
 
 % <-- begin entry for dimemas
-dimemas-arm1-mpich-ohpc &
-\multirow{6}{*}{5.4.2} & 
-\multirow{6}{\linewidth}{Dimemas tool. \newline {\color{logoblue} \url{https://tools.bsc.es}}} \\ 
-dimemas-arm1-openmpi4-ohpc &
-& \\ 
+dimemas-gnu12-impi-ohpc &
+\multirow{12}{*}{5.4.2} &
+\multirow{12}{\linewidth}{Dimemas tool. \newline {\color{logoblue} \url{https://tools.bsc.es}}}\\
 dimemas-gnu12-mpich-ohpc &
-& \\ 
+& \\
+dimemas-gnu12-mvapich2-ohpc &
+& \\
 dimemas-gnu12-openmpi4-ohpc &
-& \\ 
+& \\
+dimemas-gnu9-impi-ohpc &
+& \\
 dimemas-gnu9-mpich-ohpc &
-& \\ 
+& \\
+dimemas-gnu9-mvapich2-ohpc &
+& \\
 dimemas-gnu9-openmpi4-ohpc &
-& \\ 
+& \\
+dimemas-intel-impi-ohpc &
+& \\
+dimemas-intel-mpich-ohpc &
+& \\
+dimemas-intel-mvapich2-ohpc &
+& \\
+dimemas-intel-openmpi4-ohpc &
+& \\
 \hline
 % <-- end entry for dimemas
 
 % <-- begin entry for extrae
+extrae-gnu9-impi-ohpc &
+\multirow{4}{*}{3.7.0} &
+\multirow{12}{\linewidth}{Extrae tool. \newline {\color{logoblue} \url{https://tools.bsc.es}}}\\
 extrae-gnu9-mpich-ohpc &
-\multirow{2}{*}{3.7.0} & 
-\multirow{6}{\linewidth}{Extrae tool. \newline {\color{logoblue} \url{https://tools.bsc.es}}} \\ 
+& \\
+extrae-gnu9-mvapich2-ohpc &
+& \\
 extrae-gnu9-openmpi4-ohpc &
-& \\ 
-\cline{1-2} extrae-arm1-mpich-ohpc &\multirow{4}{*}{3.8.3}
-& \\ 
-extrae-arm1-openmpi4-ohpc &
-& \\ 
+& \\
+\cline{1-2} extrae-gnu12-impi-ohpc &\multirow{8}{*}{3.8.3}
+& \\
 extrae-gnu12-mpich-ohpc &
-& \\ 
+& \\
+extrae-gnu12-mvapich2-ohpc &
+& \\
 extrae-gnu12-openmpi4-ohpc &
-& \\ 
+& \\
+extrae-intel-impi-ohpc &
+& \\
+extrae-intel-mpich-ohpc &
+& \\
+extrae-intel-mvapich2-ohpc &
+& \\
+extrae-intel-openmpi4-ohpc &
+& \\
 \hline
 % <-- end entry for extrae
 
+% <-- begin entry for geopm
+geopm-gnu12-impi-ohpc &
+\multirow{12}{*}{1.1.0} &
+\multirow{12}{\linewidth}{Global Extensible Open Power Manager. \newline {\color{logoblue} \url{https://geopm.github.io}}}\\
+geopm-gnu12-mpich-ohpc &
+& \\
+geopm-gnu12-mvapich2-ohpc &
+& \\
+geopm-gnu12-openmpi4-ohpc &
+& \\
+geopm-gnu9-impi-ohpc &
+& \\
+geopm-gnu9-mpich-ohpc &
+& \\
+geopm-gnu9-mvapich2-ohpc &
+& \\
+geopm-gnu9-openmpi4-ohpc &
+& \\
+geopm-intel-impi-ohpc &
+& \\
+geopm-intel-mpich-ohpc &
+& \\
+geopm-intel-mvapich2-ohpc &
+& \\
+geopm-intel-openmpi4-ohpc &
+& \\
+\hline
+% <-- end entry for geopm
+
 % <-- begin entry for imb
+imb-gnu9-impi-ohpc &
+\multirow{4}{*}{2019.6} &
+\multirow{12}{\linewidth}{Intel MPI Benchmarks (IMB). \newline {\color{logoblue} \url{https://software.intel.com/en-us/articles/intel-mpi-benchmarks}}}\\
 imb-gnu9-mpich-ohpc &
-\multirow{2}{*}{2019.6} & 
-\multirow{6}{\linewidth}{Intel MPI Benchmarks (IMB). \newline {\color{logoblue} \url{https://software.intel.com/en-us/articles/intel-mpi-benchmarks}}} \\ 
+& \\
+imb-gnu9-mvapich2-ohpc &
+& \\
 imb-gnu9-openmpi4-ohpc &
-& \\ 
-\cline{1-2} imb-arm1-mpich-ohpc &\multirow{4}{*}{2021.3}
-& \\ 
-imb-arm1-openmpi4-ohpc &
-& \\ 
+& \\
+\cline{1-2} imb-gnu12-impi-ohpc &\multirow{8}{*}{2021.3}
+& \\
 imb-gnu12-mpich-ohpc &
-& \\ 
+& \\
+imb-gnu12-mvapich2-ohpc &
+& \\
 imb-gnu12-openmpi4-ohpc &
-& \\ 
+& \\
+imb-intel-impi-ohpc &
+& \\
+imb-intel-mpich-ohpc &
+& \\
+imb-intel-mvapich2-ohpc &
+& \\
+imb-intel-openmpi4-ohpc &
+& \\
 \hline
 % <-- end entry for imb
 
+% <-- begin entry for likwid
+likwid-gnu9-ohpc &
+\multirow{1}{*}{5.0.1} &
+\multirow{3}{\linewidth}{Performance tools for the Linux console. \newline {\color{logoblue} \url{https://github.com/RRZE-HPC/likwid}}}\\
+\cline{1-2} likwid-gnu12-ohpc &\multirow{2}{*}{5.2.2}
+& \\
+likwid-intel-ohpc &
+& \\
+\hline
+% <-- end entry for likwid
+
+% <-- begin entry for msr-safe-ohpc
+\multirow{2}{*}{msr-safe-ohpc} &
+\multirow{2}{*}{1.6.0} &
+Allows safer access to model specific registers (MSRs). \newline { \color{logoblue} \url{https://github.com/LLNL/msr-safe}}
+\\ \hline
+% <-- end entry for msr-safe-ohpc
+
 % <-- begin entry for omb
+omb-gnu9-impi-ohpc &
+\multirow{4}{*}{5.8} &
+\multirow{12}{\linewidth}{OSU Micro-benchmarks. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu/benchmarks}}}\\
 omb-gnu9-mpich-ohpc &
-\multirow{2}{*}{5.8} & 
-\multirow{6}{\linewidth}{OSU Micro-benchmarks. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu/benchmarks}}} \\ 
+& \\
+omb-gnu9-mvapich2-ohpc &
+& \\
 omb-gnu9-openmpi4-ohpc &
-& \\ 
-\cline{1-2} omb-arm1-mpich-ohpc &\multirow{4}{*}{6.1}
-& \\ 
-omb-arm1-openmpi4-ohpc &
-& \\ 
+& \\
+\cline{1-2} omb-gnu12-impi-ohpc &\multirow{8}{*}{6.1}
+& \\
 omb-gnu12-mpich-ohpc &
-& \\ 
+& \\
+omb-gnu12-mvapich2-ohpc &
+& \\
 omb-gnu12-openmpi4-ohpc &
-& \\ 
+& \\
+omb-intel-impi-ohpc &
+& \\
+omb-intel-mpich-ohpc &
+& \\
+omb-intel-mvapich2-ohpc &
+& \\
+omb-intel-openmpi4-ohpc &
+& \\
 \hline
 % <-- end entry for omb
 
 % <-- begin entry for paraver-ohpc
-\multirow{2}{*}{paraver-ohpc} & 
-\multirow{2}{*}{4.10.4} & 
-Paraver. \newline { \color{logoblue} \url{https://tools.bsc.es}} 
-\\ \hline 
+\multirow{2}{*}{paraver-ohpc} &
+\multirow{2}{*}{4.10.4} &
+Paraver. \newline { \color{logoblue} \url{https://tools.bsc.es}}
+\\ \hline
 % <-- end entry for paraver-ohpc
 
+% <-- begin entry for papi57-ohpc
+\multirow{2}{*}{papi57-ohpc} &
+\multirow{2}{*}{5.7.0} &
+Performance Application Programming Interface. \newline { \color{logoblue} \url{http://icl.cs.utk.edu/papi}}
+\\ \hline
+% <-- end entry for papi57-ohpc
+
 % <-- begin entry for papi-ohpc
-\multirow{2}{*}{papi-ohpc} & 
-\multirow{2}{*}{6.0.0} & 
-Performance Application Programming Interface. \newline { \color{logoblue} \url{http://icl.cs.utk.edu/papi}} 
-\\ \hline 
+\multirow{2}{*}{papi-ohpc} &
+\multirow{2}{*}{6.0.0} &
+Performance Application Programming Interface. \newline { \color{logoblue} \url{http://icl.cs.utk.edu/papi}}
+\\ \hline
 % <-- end entry for papi-ohpc
 
 % <-- begin entry for pdtoolkit
-pdtoolkit-arm1-ohpc &
-\multirow{3}{*}{3.25.1} & 
-\multirow{3}{\linewidth}{PDT is a framework for analyzing source code. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/Research/pdt}}} \\ 
 pdtoolkit-gnu12-ohpc &
-& \\ 
+\multirow{3}{*}{3.25.1} &
+\multirow{3}{\linewidth}{PDT is a framework for analyzing source code. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/Research/pdt}}}\\
 pdtoolkit-gnu9-ohpc &
-& \\ 
+& \\
+pdtoolkit-intel-ohpc &
+& \\
 \hline
 % <-- end entry for pdtoolkit
 
 % <-- begin entry for scalasca
-scalasca-arm1-mpich-ohpc &
-\multirow{6}{*}{2.5} & 
-\multirow{6}{\linewidth}{Toolset for performance analysis of large-scale parallel applications. \newline {\color{logoblue} \url{http://www.scalasca.org}}} \\ 
-scalasca-arm1-openmpi4-ohpc &
-& \\ 
+scalasca-gnu12-impi-ohpc &
+\multirow{12}{*}{2.5} &
+\multirow{12}{\linewidth}{Toolset for performance analysis of large-scale parallel applications. \newline {\color{logoblue} \url{http://www.scalasca.org}}}\\
 scalasca-gnu12-mpich-ohpc &
-& \\ 
+& \\
+scalasca-gnu12-mvapich2-ohpc &
+& \\
 scalasca-gnu12-openmpi4-ohpc &
-& \\ 
+& \\
+scalasca-gnu9-impi-ohpc &
+& \\
 scalasca-gnu9-mpich-ohpc &
-& \\ 
+& \\
+scalasca-gnu9-mvapich2-ohpc &
+& \\
 scalasca-gnu9-openmpi4-ohpc &
-& \\ 
+& \\
+scalasca-intel-impi-ohpc &
+& \\
+scalasca-intel-mpich-ohpc &
+& \\
+scalasca-intel-mvapich2-ohpc &
+& \\
+scalasca-intel-openmpi4-ohpc &
+& \\
 \hline
 % <-- end entry for scalasca
 
 % <-- begin entry for scorep
+scorep-gnu9-impi-ohpc &
+\multirow{4}{*}{6.0} &
+\multirow{12}{\linewidth}{Scalable Performance Measurement Infrastructure for Parallel Codes. \newline {\color{logoblue} \url{http://www.vi-hps.org/projects/score-p}}}\\
 scorep-gnu9-mpich-ohpc &
-\multirow{2}{*}{6.0} & 
-\multirow{6}{\linewidth}{Scalable Performance Measurement Infrastructure for Parallel Codes. \newline {\color{logoblue} \url{http://www.vi-hps.org/projects/score-p}}} \\ 
+& \\
+scorep-gnu9-mvapich2-ohpc &
+& \\
 scorep-gnu9-openmpi4-ohpc &
-& \\ 
-\cline{1-2} scorep-arm1-mpich-ohpc &\multirow{4}{*}{7.1}
-& \\ 
-scorep-arm1-openmpi4-ohpc &
-& \\ 
+& \\
+\cline{1-2} scorep-gnu12-impi-ohpc &\multirow{8}{*}{7.1}
+& \\
 scorep-gnu12-mpich-ohpc &
-& \\ 
+& \\
+scorep-gnu12-mvapich2-ohpc &
+& \\
 scorep-gnu12-openmpi4-ohpc &
-& \\ 
+& \\
+scorep-intel-impi-ohpc &
+& \\
+scorep-intel-mpich-ohpc &
+& \\
+scorep-intel-mvapich2-ohpc &
+& \\
+scorep-intel-openmpi4-ohpc &
+& \\
 \hline
 % <-- end entry for scorep
 
 % <-- begin entry for tau
+tau-gnu9-impi-ohpc &
+\multirow{4}{*}{2.29} &
+\multirow{12}{\linewidth}{Tuning and Analysis Utilities Profiling Package. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/research/tau/home.php}}}\\
 tau-gnu9-mpich-ohpc &
-\multirow{2}{*}{2.29} & 
-\multirow{4}{\linewidth}{Tuning and Analysis Utilities Profiling Package. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/research/tau/home.php}}} \\ 
+& \\
+tau-gnu9-mvapich2-ohpc &
+& \\
 tau-gnu9-openmpi4-ohpc &
-& \\ 
-\cline{1-2} tau-gnu12-mpich-ohpc &\multirow{2}{*}{2.31.1}
-& \\ 
+& \\
+\cline{1-2} tau-gnu12-impi-ohpc &\multirow{8}{*}{2.31.1}
+& \\
+tau-gnu12-mpich-ohpc &
+& \\
+tau-gnu12-mvapich2-ohpc &
+& \\
 tau-gnu12-openmpi4-ohpc &
-& \\ 
+& \\
+tau-intel-impi-ohpc &
+& \\
+tau-intel-mpich-ohpc &
+& \\
+tau-intel-mvapich2-ohpc &
+& \\
+tau-intel-openmpi4-ohpc &
+& \\
 \hline
 % <-- end entry for tau
 

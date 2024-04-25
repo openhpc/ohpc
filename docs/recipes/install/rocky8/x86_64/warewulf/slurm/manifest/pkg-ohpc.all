@@ -1,4 +1,4 @@
-EasyBuild-ohpc 4.8.2 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
+EasyBuild-ohpc 4.9.1 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
 R-gnu12-ohpc 4.2.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 R-gnu9-ohpc 4.1.2 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 adios-gnu12-impi-ohpc 1.13.1 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
@@ -42,7 +42,7 @@ dimemas-intel-impi-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-intel-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-intel-mvapich2-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-intel-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-docs-ohpc 2.6.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+docs-ohpc 2.8.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 extrae-gnu12-impi-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu12-mpich-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
@@ -144,7 +144,7 @@ lmod-defaults-intel-impi-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin Ope
 lmod-defaults-intel-mpich-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-intel-mvapich2-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-intel-openmpi4-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-ohpc 8.7.32 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
+lmod-ohpc 8.7.37 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
 losf-ohpc 0.56.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating system framework for managing HPC clusters
 lustre-client-ohpc 2.15.1 https://wiki.whamcloud.com/ ohpc/lustre Lustre File System
 lustre-client-ohpc-tests 2.15.1 https://wiki.whamcloud.com/ System Environment/Kernel Lustre testing framework
@@ -261,6 +261,8 @@ opencoarrays-gnu9-openmpi4-ohpc 2.9.2 http://www.opencoarrays.org ohpc/parallel-
 openmpi4-gnu12-ohpc 4.1.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-gnu9-ohpc 4.1.1 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-intel-ohpc 4.1.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-pmix-gnu12-ohpc 4.1.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-pmix-intel-ohpc 4.1.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openpbs-client-ohpc 23.06.06 http://www.openpbs.org ohpc/rms OpenPBS for a client host
 openpbs-devel-ohpc 23.06.06 http://www.openpbs.org Development/System OpenPBS Development Package
 openpbs-execution-ohpc 23.06.06 http://www.openpbs.org ohpc/rms OpenPBS for an execution host
@@ -268,9 +270,9 @@ openpbs-server-ohpc 23.06.06 http://www.openpbs.org ohpc/rms OpenPBS for a serve
 papi-ohpc 6.0.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 papi57-ohpc 5.7.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 paraver-ohpc 4.10.4 https://tools.bsc.es ohpc/perf-tools Paraver
-pdsh-mod-genders-ohpc 2.34 https://github.com/chaos/pdsh System Environment/Base Provides libgenders support for pdsh
-pdsh-mod-slurm-ohpc 2.34 https://github.com/chaos/pdsh System Environment/Base Provides support for running pdsh under SLURM allocations
-pdsh-ohpc 2.34 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell program
+pdsh-mod-genders-ohpc 2.35 https://github.com/chaos/pdsh System Environment/Base Provides libgenders support for pdsh
+pdsh-mod-slurm-ohpc 2.35 https://github.com/chaos/pdsh System Environment/Base Provides support for running pdsh under SLURM allocations
+pdsh-ohpc 2.35 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell program
 pdtoolkit-gnu12-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 pdtoolkit-gnu9-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 pdtoolkit-intel-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
@@ -301,7 +303,7 @@ phdf5-intel-openmpi4-ohpc 1.10.8 http://www.hdfgroup.org/HDF5 ohpc/io-libs A gen
 plasma-gnu12-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 plasma-gnu9-ohpc 2.8.0 https://bitbucket.org/icl/plasma ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 plasma-intel-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
-pmix-ohpc 4.2.1 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
+pmix-ohpc 4.2.9 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
 pnetcdf-gnu12-impi-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu12-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu12-mvapich2-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
@@ -413,22 +415,23 @@ slepc-intel-impi-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library fo
 slepc-intel-mpich-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-mvapich2-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-openmpi4-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slurm-contribs-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-devel-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
-slurm-example-configs-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
-slurm-libpmi-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
-slurm-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
-slurm-ohpc-slurmrestd 22.05.10 https://slurm.schedmd.com/ System Environment/Base Slurm REST API translator
-slurm-openlava-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
-slurm-pam_slurm-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
-slurm-perlapi-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
-slurm-slurmctld-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
-slurm-slurmd-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
-slurm-slurmdbd-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
-slurm-sview-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
-slurm-torque-ohpc 22.05.10 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
+slurm-contribs-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-devel-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-example-configs-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
+slurm-libpmi-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
+slurm-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-ohpc-slurmrestd 23.11.4 https://slurm.schedmd.com/ System Environment/Base Slurm REST API translator
+slurm-openlava-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
+slurm-pam_slurm-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-sackd-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Slurm authentication daemon
+slurm-slurmctld-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
+slurm-slurmd-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
+slurm-slurmdbd-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-sview-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
+slurm-torque-ohpc 23.11.4 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
 spack-ohpc 0.15.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
-spack-ohpc 0.20.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
+spack-ohpc 0.21.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
 superlu-gnu12-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-gnu9-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-intel-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
