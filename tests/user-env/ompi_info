@@ -4,30 +4,37 @@
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
+fi
+
 # simple test to confirm that OpenMPI binaries to do
 # not have ld resolution complaints. Testing by confirming no
 # output generated to stdout
 
-@test "[openmpi] check for no output to stderr with ompi_info" {
-
-    module purge
-    module load gnu13
-    module load openmpi5
-
-    run which ompi_info
-    assert_success
-
-    rm -f .test.output
-    ompi_info > /dev/null 2> .test.output
-
-    run test -f .test.output
-    assert_success
-
-    run test -s .test.output
-    assert_failure
-
+setup() {
+	OUTPUT=$(mktemp)
 }
 
+teardown() {
+	rm -f "${OUTPUT}"
+}
 
+@test "[openmpi] check for no output to stderr with ompi_info" {
 
+	module purge
+	# Take the first available compiler
+	module load "${COMPILER_FAMILIES%% *}"
+	module load openmpi5
 
+	run which ompi_info
+	assert_success
+
+	ompi_info >/dev/null 2>"${OUTPUT}"
+
+	run test -f "${OUTPUT}"
+	assert_success
+
+	run test -s "${OUTPUT}"
+	assert_failure
+}
