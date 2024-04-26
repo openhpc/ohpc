@@ -8,4 +8,6 @@ mvapich2-gnu13-ohpc 2.3.7 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OS
 openmpi4-gnu12-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-gnu13-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-pmix-gnu12-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
-ucx-ohpc 1.14.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging
+openmpi5-gnu13-ohpc 5.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi5-pmix-gnu13-ohpc 5.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+ucx-ohpc 1.15.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging

@@ -25,13 +25,13 @@ sub write_table_header {
 
     # Table format/header
 
-    print $fd "\\newcolumntype{C}[1]{>{\\centering}p{#1}} \n";
-    print $fd "\\newcolumntype{L}[1]{>{\\raggedleft}p{#1}} \n";
+    print $fd "\\newcolumntype{C}[1]{>{\\centering}p{#1}}\n";
+    print $fd "\\newcolumntype{L}[1]{>{\\raggedleft}p{#1}}\n";
 
     print $fd "\\small\n";
     print $fd "\\begin{tabularx}{\\textwidth}{r|X}\n";
     print $fd "\\toprule\n";
-    print $fd "{\\bf Group Name} & {\\bf Description} \\\\ \n";
+    print $fd "{\\bf Group Name} & {\\bf Description} \\\\\n";
     print $fd "\\midrule\n";
     print $fd "\n";
 
@@ -66,7 +66,7 @@ my @urlData     = ();
 my @summaryData = ();
 
 while(<IN>) {
-    
+
     # example format
     # ohpc-autotools Collection of GNU autotools packages
 
@@ -75,7 +75,7 @@ while(<IN>) {
 	my $summary=$2;
 
 	# Include period for summary
-	    
+
 	if( (substr $summary,-1) ne "." ) {
 	    $summary = "$summary.";
 	}
@@ -97,7 +97,7 @@ while(<IN>) {
 
         print "name = $name\n";
 
-	print $OUT "$name & $summary \\\\ \n";
+	print $OUT "$name & $summary \\\\\n";
 	print $OUT "\\hline\n";
 
     }
@@ -107,8 +107,5 @@ close(IN);
 
 print $OUT "\\bottomrule\n";
 print $OUT "\\end{tabularx}\n";
-    
+
 close(OUT);
-
-
-

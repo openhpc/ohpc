@@ -44,40 +44,41 @@ arch=""
 
 
 
-echo $version | egrep -q "^1.0"
+echo $version | grep -E -q "^1.0"
 if [ $? -eq 0 ];then
     pwd | grep -q centos7 && baseos="CentOS_7.1"
 fi
 
-echo $version | egrep -q "^1.2|^1.1"
+echo $version | grep -E -q "^1.2|^1.1"
 if [ $? -eq 0 ];then
     pwd | grep -q sles12  && baseos="SLE_12_SP1"
     pwd | grep -q centos7 && baseos="CentOS_7.2"
 fi
 
-echo $version | egrep -q "^1.3"
+echo $version | grep -E -q "^1.3"
 if [ $? -eq 0 ];then
     pwd | grep -q sles12  && baseos="SLE_12"
     pwd | grep -q centos7 && baseos="CentOS_7"
 fi
 
-echo $version | egrep -q "^2."
+echo $version | grep -E -q "^2."
 if [ $? -eq 0 ];then
     pwd | grep -q leap15  && baseos="Leap_15"
     pwd | grep -q centos8 && baseos="CentOS_8"
     pwd | grep -q rocky8 && baseos="EL_8"
 fi
 
-echo $version | egrep -q "^3."
+echo $version | grep -E -q "^3."
 if [ $? -eq 0 ];then
     pwd | grep -q leap15  && baseos="Leap_15"
     pwd | grep -q rocky9 && baseos="EL_9"
+    pwd | grep -q almalinux9 && baseos="EL_9"
     pwd | grep -q openeuler22.03 && baseos="openEuler_22.03"
 fi
 
 pwd | grep -q aarch64 && arch="aarch64"
 pwd | grep -q x86_64  && arch="x86_64"
-    
+
 if [[ -z ${baseos} ]];then
     echo "Unknown or unsupported base os"
     exit 1;
@@ -107,13 +108,13 @@ arch="$arch,noarch"
 export LC_COLLATE=C
 
 # query repo for ohpc packages
-if [[ $minor_dig -eq 1 ]];then
+if [[ $minor_dig -eq 0 ]];then
     if [ -z "$skip" ];then
 	dnf repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
 	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort >> ${logfile}.all
     else
 	dnf repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
-	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
+	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | grep -E -v  $skip | sort >> ${logfile}.all
     fi
 
     # query meta-packages
@@ -128,7 +129,7 @@ else
     else
 	dnf repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a --latest-limit 1 \
 	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
-	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
+	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | grep -E -v  $skip | sort >> ${logfile}.all
     fi
 
     # query meta-packages
@@ -157,9 +158,9 @@ echo
 
 for grp in ${groups}; do
     if [[ $naturalSort -eq 1 ]];then
-	grep "ohpc/${grp}" ${logfile}.all | sort   >& ${logfile}.${grp} 
+	grep "ohpc/${grp}" ${logfile}.all | sort   >& ${logfile}.${grp}
     else
-	grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp} 
+	grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp}
     fi
 
 done

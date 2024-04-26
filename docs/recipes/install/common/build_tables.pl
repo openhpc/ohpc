@@ -12,7 +12,7 @@ sub usage {
     print "     -h --help                      generate help message and exit\n";
     print "        --category [name]           update provided category table only\n";
     print "\n";
-    
+
     exit(0);
 }
 
@@ -31,7 +31,7 @@ push @exclude, "R_base-ohpc";
 ## if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
 ##     push @ohpcCategories, "lustre";
 ## }
-    
+
 
 # skip older lmod defaults
 push @exclude, "lmod-defaults-gnu-impi-ohpc";
@@ -113,13 +113,13 @@ sub write_table_header {
 
     # Table format/header
 
-    print $fd "\\newcolumntype{C}[1]{>{\\centering}p{#1}} \n";
-    print $fd "\\newcolumntype{L}[1]{>{\\raggedleft}p{#1}} \n";
+    print $fd "\\newcolumntype{C}[1]{>{\\centering}p{#1}}\n";
+    print $fd "\\newcolumntype{L}[1]{>{\\raggedleft}p{#1}}\n";
 
     print $fd "\\small\n";
     print $fd "\\begin{tabularx}{\\textwidth}{L{\\firstColWidth{}}|C{\\secondColWidth{}}|X}\n";
     print $fd "\\toprule\n";
-    print $fd "{\\bf RPM Package Name} & {\\bf Version} & {\\bf Info/URL}  \\\\ \n";
+    print $fd "{\\bf RPM Package Name} & {\\bf Version} & {\\bf Info/URL}  \\\\\n";
     print $fd "\\midrule\n";
     print $fd "\n";
 
@@ -136,8 +136,8 @@ foreach my $category (@ohpcCategories) {
 
     # Table format/header
 
-    print $OUT "\\newcolumntype{C}[1]{>{\\centering}p{#1}} \n";
-    print $OUT "\\newcolumntype{L}[1]{>{\\raggedleft}p{#1}} \n";
+    print $OUT "\\newcolumntype{C}[1]{>{\\centering}p{#1}}\n";
+    print $OUT "\\newcolumntype{L}[1]{>{\\raggedleft}p{#1}}\n";
 
     write_table_header($OUT);
 
@@ -147,7 +147,7 @@ foreach my $category (@ohpcCategories) {
     my @versionData = ();
     my @urlData     = ();
     my @summaryData = ();
-    
+
     while(<IN>) {
 
 	# example format
@@ -177,7 +177,7 @@ foreach my $category (@ohpcCategories) {
 	    }
 
 	    # Include period for summary
-	    
+
 	    if( (substr $summary,-1) ne "." ) {
 		$summary = "$summary.";
 	    }
@@ -239,17 +239,17 @@ foreach my $category (@ohpcCategories) {
 
 	print "   --> compiler_package = $compiler_package\n";
 	print "   --> mpi_package      = $mpi_package\n";
-		
+
 	# latex entry
 
  	print $OUT "% <-- begin entry for $name_base\n";
-	
+
 	if($compiler_package == 1 || $mpi_package == 1) {
 	    my $end_index = $i;
 
 	    # Find out how many packages in this family
 	    for my $j ($i .. $#nameData) {
-		if( $compiler_package && $nameData[$j] =~ /$name_base-(\S+)-ohpc$/) { 
+		if( $compiler_package && $nameData[$j] =~ /$name_base-(\S+)-ohpc$/) {
 		    $end_index = $j;
 		} elsif ($mpi_package && $nameData[$j] =~ /$name_base-(\S+)-(\S+)-ohpc$/) {
 		    $end_index = $j;
@@ -268,7 +268,7 @@ foreach my $category (@ohpcCategories) {
 ###                     die "unexpected # of compiler families for $name_base" if ( $delta != $numCompiler_permute) ;
 ###                 }
 ###             }
-### 
+###
 ###             if ($mpi_package) {
 ###                 if( exists $mpi_exceptions{$name_base} ) {
 ###                     die "unexpected # of mpi families for exception -> $name_base" if ($delta != $mpi_exceptions{$name_base});
@@ -278,7 +278,7 @@ foreach my $category (@ohpcCategories) {
 ###             }
 
 	    # Check if all versions are equal, compiler/mpi variant additions
-	    # might introduce asymmetry that needs to be handled 
+	    # might introduce asymmetry that needs to be handled
 
 	    my $versions_equal=1;
 	    my $startVer=$versionData[$i];
@@ -315,35 +315,35 @@ foreach my $category (@ohpcCategories) {
 		if(! $versions_equal && ($k == $verIndex[0]) && (@verIndex > 1) ) {
 		    print $OUT "\\cline{1-2} ";
 		}
-		
+
 		print $OUT "$lname &";
-		
+
 		if(! $versions_equal && ($k == $verIndex[0]) && (@verIndex > 1) ) {
 		    my $local_delta = $verIndex[1] - $verIndex[0] + 1;
 		    shift @verIndex;
 		    print $OUT "\\multirow{$local_delta}{*}{$versionData[$k]}";
 		}
 		print $OUT "\n";
-		    
+
 
 		if($k == $i) {
 		    my $sumLength = length($summaryData[$k]);
 		    if($versions_equal) {
-			print $OUT "\\multirow{$delta}{*}{$versionData[$k]} & \n";
+			print $OUT "\\multirow{$delta}{*}{$versionData[$k]} &\n";
 		    } else {
 			my $local_delta = $verIndex[0] - $i;
-			print $OUT "\\multirow{$local_delta}{*}{$versionData[$k]} & \n";
+			print $OUT "\\multirow{$local_delta}{*}{$versionData[$k]} &\n";
 		    }
 		    print $OUT "\\multirow{$delta}{\\linewidth}{$summaryData[$k] ";
 		    if($sumLength <= $longSummaryLine || $delta > 2) {
 			print $OUT "\\newline";
 		    }
-		    print $OUT " {\\color{$urlColor} \\url{$urlData[$k]}}} \\\\ \n";
+		    print $OUT " {\\color{$urlColor} \\url{$urlData[$k]}}}\\\\\n"
 		} else {
 		    if($versions_equal) {
-			print $OUT "& \\\\ \n";
+			print $OUT "& \\\\\n";
 		    } else {
-			print $OUT "& \\\\ ";
+			print $OUT "& \\\\";
 			print $OUT "\n";
 		    }
 	        }
@@ -351,7 +351,7 @@ foreach my $category (@ohpcCategories) {
 	    print $OUT "\\hline\n";
 	    # skip to next package
 	    $i = $end_index+1;
-	    print "skipping\n"; 
+	    print "skipping\n";
 	    print $OUT "% <-- end entry for $name_base\n\n";
 	    next;
 	} else {
@@ -361,32 +361,31 @@ foreach my $category (@ohpcCategories) {
 	    my $lname = $name_base;
 	    $lname =~ s/_/\\_/g;
 
-	    
- 	    print $OUT "\\multirow{2}{*}{$lname} & \n";
- 	    print $OUT "\\multirow{2}{*}{$versionData[$i]} & \n";
+
+ 	    print $OUT "\\multirow{2}{*}{$lname} &\n";
+ 	    print $OUT "\\multirow{2}{*}{$versionData[$i]} &\n";
+	    my $lsummary = $summaryData[$i];
+	    $lsummary =~ s/_/\\_/g;
  	    if ($urlData[$i] ne "(none)") {
- 		print $OUT "$summaryData[$i] ";
+		print $OUT "$lsummary ";
 		if($sumLength <= $longSummaryLine) {
 		    print $OUT "\\newline";
 		}
- 		print $OUT " { \\color{$urlColor} \\url{$urlData[$i]}} \n"
+ 		print $OUT " { \\color{$urlColor} \\url{$urlData[$i]}}\n"
  	    } else {
- 		print $OUT "\\multirow{2}{*}{$summaryData[$i]} \\\\\n";
- 		print $OUT "& & \n";
+		print $OUT "\\multirow{2}{*}{$lsummary}\\\\\n";
+		print $OUT "& &\n";
  	    }
- 	    
- 	    print $OUT "\\\\ \\hline \n";
+
+ 	    print $OUT "\\\\ \\hline\n";
  	    print $OUT "% <-- end entry for $name_base\n\n";
  	}
 
 	$i++;
-    }	    
-    
+    }
+
     print $OUT "\\bottomrule\n";
     print $OUT "\\end{tabularx}\n";
-#    print $OUT "\\end{tabular}\n";
-    
+
     close($OUT);
 }
-
-

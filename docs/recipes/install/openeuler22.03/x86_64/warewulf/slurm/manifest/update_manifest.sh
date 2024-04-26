@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./common/listohpc
+#./common/listohpc
 #./common/listpatterns
 ./common/listchanges
 
