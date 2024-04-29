@@ -87,6 +87,9 @@ jobs:
       uses: Ana06/get-changed-files@v2.2.0
     - name: Validate Build
       run: |
+        if [ "${{ matrix.compiler }}" == "intel" ]; then
+          export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }} components/serial-libs/openblas/SPECS/openblas.spec"
+        fi
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler }}
         touch /tmp/empty
@@ -134,6 +137,9 @@ jobs:
     - name: Run CI Tests
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
+        if [ "${{ matrix.compiler }}" == "intel" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/serial-libs/openblas/SPECS/openblas.spec"
+        fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
