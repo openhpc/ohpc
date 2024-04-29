@@ -50,7 +50,7 @@ reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
 skip_ci_specs = []
 skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
 if skip_ci_specs_env:
-    skip_ci_specs = skip_ci_specs_env.rstrip().split('\n')
+    skip_ci_specs = skip_ci_specs_env.rstrip().split()
 
 for row in reader:
     key = row.pop('NAME')
