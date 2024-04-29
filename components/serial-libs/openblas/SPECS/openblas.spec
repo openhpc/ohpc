@@ -103,6 +103,7 @@ set     version             %{version}
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
