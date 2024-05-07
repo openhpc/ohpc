@@ -157,6 +157,9 @@ if { ![info exists ::env(ACL_SKIP_BSP_CONF)] } {
     setenv          ACL_SKIP_BSP_CONF   1
 }
 
+module load "oclfpga"
+module load "tbb"
+module load "compiler-rt"
 module load "compiler/\$version"
 module load "$mklver"
 
