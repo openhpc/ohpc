@@ -56,5 +56,5 @@ using the [System Registration Form][register].
 [2xbranch]: https://github.com/openhpc/ohpc/wiki/2.x
 [3xbranch]: https://github.com/openhpc/ohpc/wiki/3.x
 [register]: https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI
-[submission]: https://github.com/openhpc/submission
+[submission]: https://github.com/openhpc/submissions
 [userlist]: https://groups.io/g/openhpc-users
