@@ -1,0 +1,39 @@
+diff --git a/build-backend/configure b/build-backend/configure
+index 6b31021..384991a 100755
+--- a/build-backend/configure
++++ b/build-backend/configure
+@@ -37835,7 +37835,7 @@ fi
+ if test "${with_libbfd_include:+set}" != set; then :
+   as_fn_error $? "internal: with_libbfd_include not set" "$LINENO" 5
+ fi
+-SCOREP_LIBBFD_LIBS="-lbfd"
++SCOREP_LIBBFD_LIBS="-lbfd -liberty -lz -ldl -lsframe"
+ 
+ if test "x${_afs_lib_download}" = xyes; then :
+                             #--- Delegated download for libbfd: begin
+diff --git a/build-mpi/configure b/build-mpi/configure
+index 6e7c18b..3a5d044 100755
+--- a/build-mpi/configure
++++ b/build-mpi/configure
+@@ -35792,7 +35792,7 @@ fi
+ if test "${with_libbfd_include:+set}" != set; then :
+   as_fn_error $? "internal: with_libbfd_include not set" "$LINENO" 5
+ fi
+-SCOREP_LIBBFD_LIBS="-lbfd"
++SCOREP_LIBBFD_LIBS="-lbfd -liberty -lz -ldl -lsframe"
+ 
+ if test "x${_afs_lib_download}" = xyes; then :
+                             #--- Delegated download for libbfd: begin
+diff --git a/build-shmem/configure b/build-shmem/configure
+index 5c18f77..3921eeb 100755
+--- a/build-shmem/configure
++++ b/build-shmem/configure
+@@ -35603,7 +35603,7 @@ fi
+ if test "${with_libbfd_include:+set}" != set; then :
+   as_fn_error $? "internal: with_libbfd_include not set" "$LINENO" 5
+ fi
+-SCOREP_LIBBFD_LIBS="-lbfd"
++SCOREP_LIBBFD_LIBS="-lbfd -liberty -lz -ldl -lsframe"
+ 
+ if test "x${_afs_lib_download}" = xyes; then :
+                             #--- Delegated download for libbfd: begin
