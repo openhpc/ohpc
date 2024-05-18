@@ -18,29 +18,44 @@
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   7.1
+Version:   8.4
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/scorep-%{version}/scorep-%{version}.tar.gz
+# For OpenSUSE, we are required to patch the binutils detection.
+# OpenSUSE ships a broken binutils-devel package, where dependencies need to be resolved
+# manually, unlike Alma/RHEL/Fedora/Arch Linux and others.
+%if 0%{?suse_version}
+Patch1:    scorep-8.4-opensuse-libbfd-additional-libs.patch
+%endif
 
-BuildRequires: fdupes
-BuildRequires: automake make which
+BuildRequires: automake
+BuildRequires: bison
 BuildRequires: binutils-devel
-Requires:      binutils-devel
+BuildRequires: chrpath
+BuildRequires: cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
+BuildRequires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
+BuildRequires: fdupes
+BuildRequires: gcc-c++
 BuildRequires: libunwind-devel
-Requires:      libunwind-devel
-Requires:      lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: zlib-devel gcc-c++
+BuildRequires: make
+BuildRequires: opari2-%{compiler_family}%{PROJ_DELIM} >= 2.0
+BuildRequires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
-Requires:      papi%{PROJ_DELIM}
 %endif
-BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-Requires:      pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires: which
+Requires:      binutils-devel
+Requires:      cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
+Requires:      cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
+Requires:      libunwind-devel
+Requires:      lmod%{PROJ_DELIM} >= 7.6.1
+Requires:      opari2-%{compiler_family}%{PROJ_DELIM} >= 2.0
+Requires:      otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
+Requires:      papi%{PROJ_DELIM}
+
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -56,7 +71,11 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 
 %prep
+
 %setup -q -n %{pname}-%{version}
+%if 0%{?suse_version}
+%patch -P 1 -p1
+%endif
 
 %build
 
@@ -65,12 +84,15 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %ifarch x86_64
 module load papi
+CONFIGURE_OPTIONS="${CONFIGURE_OPTIONS} --with-papi-header=${PAPI_INC} --with-papi-lib=${PAPI_LIB}"
 %endif
-module load pdtoolkit
-module load sionlib
+module load cubew
+module load cubelib
+module load opari2
+module load otf2
 
 %if "%{compiler_family}" == "intel"
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-nocross-compiler-suite=intel "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-nocross-compiler-suite=oneapi "
 %endif
 
 %if "%{mpi_family}" == "impi"
@@ -99,7 +121,20 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="$CFLAGS"
-./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS CC=$CC CXX=$CXX F77=$F77
+./configure --prefix=%{install_path} \
+            --disable-static \
+            --enable-shared \
+            --disable-silent-rules \
+            --enable-backend-test-runs \
+            --with-platform=linux \
+            CC="$CC" \
+            CXX="$CXX" \
+            F77="$F77" \
+            F90="$F90" \
+            CFLAGS="$CFLAGS" \
+            CXXFLAGS="$CXXFLAGS" \
+            LDFLAGS="$LDFLAGS" \
+            ${CONFIGURE_OPTIONS}
 
 %if "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' build-mpi/libtool
@@ -107,11 +142,25 @@ export CXXFLAGS="$CFLAGS"
 %endif
 
 %if "%{compiler_family}" == "intel"
-sed -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' build-score/libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' build-score/libtool
 make -C build-score CC=$CC V=1 %{?_smp_mflags}
 %endif
 
 make V=1 %{?_smp_mflags}
+
+# GNU compilers bring their own libstdc++, which is required for C++
+# code to work correctly. Due to rpathing issues however, Score-P
+# causes the wrong libstdc++ to be linked (the system one instead of
+# the gnu13 installation). This causes issues when running code.
+# This will be fixed in Score-P v9.0. Until then, fix the paths
+# manually be replacing the added /usr/lib64 and /lib64 library paths
+# by the gnu13 ones. We need to do this after make, since it is
+# generated during the build process.
+%if "%{compiler_family}" == "gnu13"
+%{__sed} -i -e 's#"/lib64"#"/opt/ohpc/pub/compiler/gcc/13.2.0/lib64"#g' src/scorep_config_library_dependencies_backend_inc.hpp
+%{__sed} -i -e 's#"/usr/lib64"#"/opt/ohpc/pub/compiler/gcc/13.2.0/lib/../lib64"#g' src/scorep_config_library_dependencies_backend_inc.hpp
+make V=1 %{?_smp_mflags}
+%endif
 
 %install
 
@@ -123,6 +172,10 @@ export NO_BRP_CHECK_RPATH=true
 %ifarch x86_64
 module load papi
 %endif
+module load cubew
+module load cubelib
+module load opari2
+module load otf2
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
@@ -156,8 +209,10 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-depends-on pdtoolkit
-depends-on sionlib
+depends-on cubelib
+depends-on cubew
+depends-on opari2
+depends-on otf2
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -165,6 +220,7 @@ prepend-path    INCLUDE             %{install_path}/include
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
@@ -186,4 +242,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
+%doc AUTHORS CITATION.cff ChangeLog COPYING INSTALL OPEN_ISSUES README.md THANKS
