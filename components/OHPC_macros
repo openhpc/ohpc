@@ -20,6 +20,7 @@
 %global OHPC_ADMIN      %{OHPC_HOME}/admin
 %global OHPC_PUB        %{OHPC_HOME}/pub
 %global OHPC_APPS       %{OHPC_PUB}/apps
+%global OHPC_BIN        %{OHPC_PUB}/bin
 %global OHPC_COMPILERS  %{OHPC_PUB}/compiler
 %global OHPC_LIBS       %{OHPC_PUB}/libs
 %global OHPC_MODULES    %{OHPC_PUB}/modulefiles

@@ -58,6 +58,8 @@ whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		components/admin/prun/SOURCES/prun \
+		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
+		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
 		tests/common/functions \
@@ -111,6 +113,8 @@ shellcheck-lint:
 		../../components/admin/prun/SOURCES/prun \
 		../../components/admin/docs/SOURCES/get_source.sh \
 		../../components/admin/test-suite/SOURCES/get_source.sh \
+		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
+		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
@@ -197,6 +201,8 @@ shfmt-lint:
 		../../tests/common/functions \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
+		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
+		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
 
 clang-format-lint:
