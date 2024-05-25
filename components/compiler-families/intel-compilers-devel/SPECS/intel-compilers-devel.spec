@@ -28,7 +28,7 @@
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2024.0
-Release:   %{?dist}.1
+Release:   %{?dist}.2
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
@@ -36,6 +36,7 @@ BuildArch: x86_64
 AutoReq:   no
 Source1:   mod_generator.sh
 Source2:   oneAPI.repo
+Source3:   ohpc-update-modules-intel
 
 
 #!BuildIgnore: post-build-checks
@@ -70,11 +71,26 @@ install -D -m644 %{SOURCE2} -t %{buildroot}%{repodir}/
 # Mod generator for PSXE support
 install -D -m755 %{SOURCE1} %{buildroot}/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
+# Mod generator for oneAPI support
+sed -e 's|@@oneapi_manifest@@|%{oneapi_manifes}|' \
+    -e 's|@@OHPC_MODULEDEPS@@|%{OHPC_MODULEDEPS}|' \
+    -e 's|@@OHPC_MODULES@@|%{OHPC_MODULES}|' \
+    -e 's|@@exact_deps@@|%{exact_deps}|' \
+    -e 's|@@exact_intel_ver@@|%{exact_intel_ver}|' \
+    -e 's|@@exact_intel_ver_module@@|%{exact_intel_ver_module}|' \
+    -e 's|@@exact_mkl_ver@@|%{exact_mkl_ver}|' %{SOURCE3} > ohpc-update-modules-intel
+install -D -m755 ohpc-update-modules-intel %{buildroot}/%{OHPC_BIN}/ohpc-update-modules-intel
+
 # Module directories
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/oneapi
 mkdir -p %{buildroot}/%{OHPC_MODULES}/intel
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/mkl
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/intel
+
+
+# Regenerate module files when components are added or removed
+%transfiletriggerin -- /opt/intel/oneapi
+%{OHPC_BIN}/ohpc-update-modules-intel
 
 
 %pre -p /bin/bash
@@ -87,157 +103,39 @@ fi
 
 
 %post -p /bin/bash
-# Do not overwrite existing files
-# Write the new file as rpmnew
-testfile () {
-    if [ -e $1 ]; then
-       echo "$1.rpmnew"
-    else
-       echo "$1"
-    fi
-}
-
-rm -f %{oneapi_manifest}
-
-# Regenerate the oneAPI modules directory
-echo "Generating new oneAPI modulefiles"
-/opt/intel/oneapi/modulefiles-setup.sh --ignore-latest --force --output-dir=%{OHPC_MODULEDEPS}/oneapi/ > /dev/null
-if [ ! -d %{OHPC_MODULEDEPS}/oneapi/compiler ]; then
-    echo "ERROR: Failed to create oneAPI module directory"
-    exit 1
-fi
-
-# Set system defaults for default OBS oneAPI modules
-for tool in %{exact_deps}; do
-  filename=%{OHPC_MODULEDEPS}/oneapi/${tool%%/*}/.version
-  echo "#%Module1.0" > ${filename}
-  echo "set  ModulesVersion  \"${tool##*/}\"" >> ${filename}
-done
-
-# Create an OpenHPC module file for each version found in compilers
-echo "Creating OpenHPC-style modulefiles for local oneAPI compiler installation(s)."
-for compilers in %{OHPC_MODULEDEPS}/oneapi/compiler/2*; do
-    ver=$(basename "$compilers")
-    # Skip 2023.2.0 due to errors that can hang installer
-    if [ "$ver" = "2023.2.0" ]; then
-        echo "--> Skipping version=2023.2.0 : environment module format error"
-        continue
-    fi
-    # For the default, also specify the MKL version
-    if [ "$ver" = "%{exact_intel_ver}" ]; then
-        mklver="mkl/%{exact_mkl_ver}"
-    else
-        mklver="mkl"
-    fi
-    echo "--> Installing modulefile for version=${ver}"
-    # Do not overwrite existing files
-    # Write the new file as rpmnew
-    modname=$(testfile %{OHPC_MODULES}/intel/$ver)
-
-    cat << EOF > ${modname}
-#%Module1.0#####################################################################
-
-set version "$ver"
-
-proc ModulesHelp { } {
-global version
-puts stderr "\nThis module loads the oneAPI compiler environment.\n"
-puts stderr "\nSee the man pages for icc, icpc, and ifort for detailed information"
-puts stderr "on available compiler options and command-line syntax."
-puts stderr "\nVersion \$version\n"
-}
-
-module-whatis "Name: Intel(R) Compiler"
-module-whatis "Version: \$version"
-module-whatis "Category: compiler, runtime support"
-module-whatis "Description: Intel(R) Compiler Family (C/C++/Fortran for x86_64)"
-module-whatis "URL: http://software.intel.com/en-us/articles/intel-compilers/"
-
-# update module path hierarchy
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/oneapi
-
-# Assume no PAC device; allow override on each node
-if { ![info exists ::env(ACL_SKIP_BSP_CONF)] } {
-    setenv          ACL_SKIP_BSP_CONF   1
-}
-
-module load "oclfpga"
-module load "tbb"
-module load "compiler-rt"
-module load "compiler/\$version"
-module load "$mklver"
-
-family "compiler"
-EOF
-
-    md5sum ${modname} >> %{oneapi_manifest}
-
-    # Provide standalone module for use with GNU toolchain
-    modname=$(testfile  %{OHPC_MODULEDEPS}/gnu/mkl/$ver)
-
-    cat << EOF > ${modname}
-#%Module1.0#####################################################################
-
-set version "$ver"
-
-proc ModulesHelp { } {
-global version
-puts stderr "\nConfigures oneAPI MKL environment\n"
-puts stderr "\$version\n"
-}
-
-module-whatis "Name: Intel(R) Math Kernel Library"
-module-whatis "Version: \$version"
-module-whatis "Category: library, runtime support"
-module-whatis "Description: Intel(R) Math Kernel Library for C/C++ and Fortran"
-module-whatis "URL: https://software.intel.com/en-us/en-us/intel-mkl"
-
-prepend-path  MODULEPATH       %{OHPC_MODULEDEPS}/oneapi
-module load   "$mklver"
-EOF
-
-    md5sum ${modname} >> %{oneapi_manifest}
-done
-
-# Set default version to match that used to build OpenHPC packages
-modname=$(testfile %{OHPC_MODULES}/intel/.version)
-
-cat << EOF > ${modname}
-#%Module1.0#####################################################################
-set     ModulesVersion      "%{exact_intel_ver_module}"
-EOF
-
-md5sum ${modname} >> %{oneapi_manifest}
+%{OHPC_BIN}/ohpc-update-modules-intel
 
 
 %preun -p /bin/bash
-# Check current files against the manifest
-# Remove files that match and backup files that don't
-if [ -s %{oneapi_manifest} ]; then
-    echo "Removing module files"
-    while IFS= read -r line; do
-       f=${line%:*}
-       s=${line#*:}
-       if [ "${s: -2}" = "OK" ]; then
-           rm -f $f
-       elif [ -f $f ]; then
-           mv -T -f $f $f.rpmsave
-       fi
-    done <<< $(md5sum --check %{oneapi_manifest})
-else
-    # Don't touch any generated files if there's no manifest
-    # On upgrade, expect lots of modulefiles created as .rpmnew
-    echo "WARNING: Manifest not found. Previously generated"
-    echo "         modulefiles will not be removed or moved."
+if [ $1 -eq 0 ]; then
+    # Check current files against the manifest
+    # Remove files that match and backup files that don't
+    if [ -s %{oneapi_manifest} ]; then
+        echo "Removing module files"
+        while IFS= read -r line; do
+           f=${line%:*}
+           s=${line#*:}
+           if [ "${s: -2}" = "OK" ]; then
+               rm -f $f
+           elif [ -f $f ]; then
+               mv -T -f $f $f.rpmsave
+           fi
+        done <<< $(md5sum --check %{oneapi_manifest})
+    else
+        # Don't touch any generated files if there's no manifest
+        # On upgrade, expect lots of modulefiles created as .rpmnew
+        echo "WARNING: Manifest not found. Previously generated"
+        echo "         modulefiles will not be removed or moved."
+    fi
+    # Remove the generated oneAPI module links, remove directories if empty
+    echo "Removing oneAPI module directory"
+    find %{OHPC_MODULEDEPS}/oneapi -type l -delete || true
+    find %{OHPC_MODULEDEPS}/oneapi/* -empty -type d -delete || true
 fi
-# Remove the generated oneAPI module links, remove directories if empty
-echo "Removing oneAPI module directory"
-find %{OHPC_MODULEDEPS}/oneapi -type l -delete || true
-find %{OHPC_MODULEDEPS}/oneapi/* -empty -type d -delete || true
 
 
 %files
+%{OHPC_BIN}/ohpc-update-modules-intel
 %dir %{OHPC_MODULES}/intel
 %dir %{OHPC_MODULEDEPS}/oneapi
 %dir %{OHPC_MODULEDEPS}/intel
