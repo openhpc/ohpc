@@ -15,19 +15,24 @@
 
 # Base package name
 %define pname scalasca
+%define shortver 2.6
 
 Summary:   Toolset for performance analysis of large-scale parallel applications
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2.5
+Version:   2.6.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
-Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/%{version}/dist/scalasca-%{version}.tar.gz
-Requires:  lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 4.0
+Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/%{shortver}/dist/scalasca-%{version}.tar.gz
+BuildRequires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8
+BuildRequires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
 BuildRequires: zlib-devel gcc-c++ which make
+Requires: lmod%{PROJ_DELIM} >= 7.6.1
+Requires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8
+Requires: cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.4
+Requires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
+Requires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.2
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -57,11 +62,11 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load scorep
+module load cubew
+module load otf2
 
 %if "%{compiler_family}" == "intel"
-CONFIGURE_OPTIONS="--with-nocross-compiler-suite=intel "
-export __INTEL_PRE_CFLAGS="-diag-disable=10441"
+CONFIGURE_OPTIONS="--with-nocross-compiler-suite=oneapi "
 %endif
 
 %if "%{compiler_family}" == "arm1"
@@ -93,11 +98,13 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-./configure --prefix=%{install_path} $CONFIGURE_OPTIONS \
-	CFLAGS="${CFLAGS}" \
-	CXXFLAGS="${CXXFLAGS}" \
-	CC=${CC} \
-	CXX=${CXX}
+./configure --prefix=%{install_path} \
+            --disable-silent-rules \
+            --enable-backend-test-runs \
+            --with-platform=linux \
+            CC="$CC" \
+            CXX="$CXX" \
+            ${CONFIGURE_OPTIONS}
 
 make %{?_smp_mflags} V=1
 
@@ -106,7 +113,8 @@ make %{?_smp_mflags} V=1
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-module load scorep
+module load cubew
+module load otf2
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
@@ -136,6 +144,8 @@ module-whatis "URL %{url}"
 set     version			    %{version}
 
 depends-on scorep
+depends-on otf2
+depends-on cubew
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
