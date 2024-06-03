@@ -18,19 +18,20 @@
 # Group for warewulfd and other WW operations
 %global wwgroup warewulf
 
-# Service directories (normally defaults to /var/lib/*)
+# Service directories (change /var/lib/* default to match WW3 build)
 %global tftpdir /srv/tftpboot
 %global srvdir /srv
 %global statedir /srv
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.4.0
+Version: 4.5.5
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
 URL:     https://github.com/hpcng/warewulf
 Source0: https://github.com/hpcng/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
+Patch0:  warewulf-4.5.x-sle_ipxe.patch
 
 ExclusiveOS: linux
 
@@ -42,28 +43,33 @@ Conflicts: warewulf-provision
 Conflicts: warewulf-ipmi
 
 BuildRequires: make
+BuildRequires: git
 BuildRequires: libassuan-devel
 BuildRequires: gpgme-devel
+BuildRequires: unzip
 Requires: dhcp-server
 
 %if 0%{?suse_version} || 0%{?sle_version}
 BuildRequires: distribution-release
 BuildRequires: systemd-rpm-macros
-BuildRequires: go > 1.16
+BuildRequires: go > 1.20
 BuildRequires: firewall-macros
 BuildRequires: firewalld
 BuildRequires: tftp
 Requires: tftp
 Requires: nfs-kernel-server
 Requires: firewalld
+Requires: ipxe-bootimgs
 %else
-# Assume Fedora-based OS if not SUSE-based
+# Assume Fedora-based OS (>= RHEL 9) if not SUSE-based
 BuildRequires: system-release
 BuildRequires: systemd
-BuildRequires: golang > 1.16
+BuildRequires: golang > 1.20
 BuildRequires: firewalld-filesystem
 Requires: tftp-server
 Requires: nfs-utils
+Requires: ipxe-bootimgs-x86
+Requires: ipxe-bootimgs-aarch64
 %endif
 
 %description
@@ -73,17 +79,21 @@ system for large clusters of bare metal and/or virtual systems.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
-# No network access in OBS, so module downloads will break builds
-%if !0%{?update_mods}
-sed -i "s/go mod tidy .*$//" Makefile
-sed -i "s/go mod vendor .*$//" Makefile
+%if 0%{?suse_version} || 0%{?sle_version}
+%patch0 -p1
 %endif
 
 
 %build
+# No network access in OBS, so module downloads will break builds
+%if 0%{?OHPC_BUILD} || !0%{?update_mods}
+export OFFLINE_BUILD=1
+%else
+export OFFLINE_BUILD=0
+%endif
+
 # Install to sharedstatedir by redirecting LOCALSTATEDIR
-make genconfig \
+make defaults \
     PREFIX=%{_prefix} \
     BINDIR=%{_bindir} \
     SYSCONFDIR=%{_sysconfdir} \
@@ -99,28 +109,20 @@ make genconfig \
     BASHCOMPDIR=/etc/bash_completion.d/ \
     FIREWALLDDIR=/usr/lib/firewalld/services \
     WWCLIENTDIR=/warewulf
+    IPXESOURCE=/usr/share/ipxe
 make
+make api
 
 
 %install
 export NO_BRP_STALE_LINK_ERROR=yes
 make install DESTDIR=%{buildroot}
-
-# For SUSE, move dhcp.conf.ww to replace symlink
-%if 0%{?suse_version} || 0%{?sle_version}
-rm %{buildroot}%{statedir}/warewulf/overlays/host/etc/dhcpd.conf
-mv %{buildroot}%{statedir}/warewulf/overlays/host/etc/dhcp/dhcpd.conf.ww \
-    %{buildroot}%{statedir}/warewulf/overlays/host/etc/
-%endif
+make installapi DESTDIR=%{buildroot}
 
 # For RH, tftpboot directory is hardcoded
 %if 0%{?rhel}
 ln -s %{_sharedstatedir}/tftpboot %{buildroot}%{tftpdir}
 %endif
-
-# Remove wwapi until the next release
-rm -f %{buildroot}%{_bindir}/wwapi*
-rm -f %{buildroot}%{_sysconfdir}/warewulf/wwapi*
 
 
 %pre
@@ -144,14 +146,22 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %files
 %defattr(-, root, %{wwgroup})
 %dir %{_sysconfdir}/warewulf
-%config(noreplace) %{_sysconfdir}/warewulf/*
+%config(noreplace) %{_sysconfdir}/warewulf/warewulf.conf
+%dir %{_sysconfdir}/warewulf/examples
+%config(noreplace) %{_sysconfdir}/warewulf/examples/*.ww
+%dir %{_sysconfdir}/warewulf/ipxe
+%config(noreplace) %{_sysconfdir}/warewulf/ipxe/*.ipxe
+%dir %{_sysconfdir}/warewulf/grub
+%config(noreplace) %{_sysconfdir}/warewulf/grub/*.ww
 %config(noreplace) %attr(0640,-,-) %{_sysconfdir}/warewulf/nodes.conf
-%{_sysconfdir}/bash_completion.d/warewulf
+%{_sysconfdir}/bash_completion.d/wwctl
 
 %dir %{statedir}/warewulf
+%dir %{srvdir}/warewulf
 %{statedir}/warewulf/chroots
-%{statedir}/warewulf/overlays
-%{srvdir}/warewulf
+%dir %{statedir}/warewulf/overlays
+%dir %{statedir}/warewulf/overlays/*
+%attr(-, root, root) %{statedir}/warewulf/overlays/*/rootfs
 
 %if 0%{?rhel}
 %{tftpdir}
@@ -161,10 +171,38 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %attr(-, root, root) %{_prefix}/lib/firewalld/services/warewulf.xml
 %attr(-, root, root) %{_unitdir}/warewulfd.service
 %attr(-, root, root) %{_mandir}/man1/wwctl*
-%attr(-, root, root) %{_mandir}/man5/defaults.conf*
-%attr(-, root, root) %{_mandir}/man5/nodes.conf*
-%attr(-, root, root) %{_mandir}/man5/warewulf.conf*
+%attr(-, root, root) %{_mandir}/man5/*.5*
 %attr(-, root, root) %{_datadir}/warewulf
 
 %dir %{_docdir}/warewulf
 %license %{_docdir}/warewulf/LICENSE.md
+
+%attr(-, root, root) %{_bindir}/wwapi*
+%config(noreplace) %{_sysconfdir}/warewulf/wwapi*.conf
+
+# ===========================================================
+%define dracut_package %{pname}-dracut%{PROJ_DELIM}
+
+%package -n %{dracut_package}
+Summary: A dracut module for loading a Warewulf container image
+BuildArch: noarch
+
+Requires: dracut
+%if 0%{?suse_version} || 0%{?sle_version}
+%else
+Requires: dracut-network
+%endif
+
+%description -n %{dracut_package}
+Warewulf is a stateless and diskless container operating system provisioning
+system for large clusters of bare metal and/or virtual systems.
+
+This subpackage contains a dracut module that can be used to generate
+an initramfs that can fetch and boot a Warewulf container image from a
+Warewulf server.
+
+
+%files -n %{dracut_package}
+%defattr(-, root, root)
+%dir %{_prefix}/lib/dracut/modules.d/90wwinit
+%{_prefix}/lib/dracut/modules.d/90wwinit/*.sh
