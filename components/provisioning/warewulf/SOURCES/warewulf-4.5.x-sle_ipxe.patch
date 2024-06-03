@@ -1,0 +1,16 @@
+--- a/etc/warewulf.conf	2024-05-13 20:43:03.000000000 -0700
++++ b/etc/warewulf.conf	2024-06-02 14:42:51.645090625 -0700
+@@ -18,10 +18,10 @@
+   enabled: true
+   systemd name: tftp
+   ipxe:
+-    00:09: ipxe-snponly-x86_64.efi
++    00:09: ipxe-x86_64.efi
+     00:00: undionly.kpxe
+-    00:0B: arm64-efi/snponly.efi
+-    00:07: ipxe-snponly-x86_64.efi
++    00:0B: snp-arm64.efi
++    00:07: ipxe-x86_64.efi
+ nfs:
+   enabled: true
+   export paths:
