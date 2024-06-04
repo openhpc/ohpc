@@ -25,8 +25,10 @@ Group:          %{PROJ_NAME}/serial-libs
 URL:            http://www.scalasca.org/software/cube-4.x/download.html
 Source0:        http://apps.fz-juelich.de/scalasca/releases/cube/%shortwv/dist/cubelib-%{version}.tar.gz
 BuildRequires:  chrpath
+BuildRequires:  file
 BuildRequires:  gcc-c++
 BuildRequires:  make
+BuildRequires:  sed
 BuildRequires:  which
 BuildRequires:  zlib-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
