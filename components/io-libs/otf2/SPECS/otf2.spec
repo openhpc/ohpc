@@ -24,8 +24,10 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/io-libs
 URL:            http://score-p.org
 Source0:        http://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/%{pname}-%{version}/%{pname}-%{version}.tar.gz
+BuildRequires:  file
 BuildRequires:  gcc-c++
 BuildRequires:  make
+BuildRequires:  sed
 BuildRequires:  which
 BuildRequires:  chrpath dos2unix
 # Need a new py-compile for Python 3.12

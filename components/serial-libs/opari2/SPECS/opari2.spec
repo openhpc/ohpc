@@ -23,8 +23,11 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 URL:            https://www.vi-hps.org/projects/score-p/
 Source0:        http://perftools.pages.jsc.fz-juelich.de/cicd/opari2/tags/%{pname}-%{version}/%{pname}-%{version}.tar.gz
+BuildRequires:  file
 BuildRequires:  make
 BuildRequires:  gcc-c++
+BuildRequires:  sed
+BuildRequires:  which
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # Default library install path
