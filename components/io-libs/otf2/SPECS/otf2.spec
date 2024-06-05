@@ -34,6 +34,7 @@ BuildRequires:  chrpath dos2unix
 BuildRequires:  libtool automake
 BuildRequires:  sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -49,7 +50,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %setup -q -n %{pname}-%{version}
 dos2unix doc/examples/otf2_high_level_writer_example.py
 rm build-config/py-compile
-for d in . build-backend build-frontend	
+for d in . build-backend build-frontend
 do
   cd $d
   autoreconf -f -i -v
