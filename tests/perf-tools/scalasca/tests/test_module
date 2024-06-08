@@ -13,12 +13,6 @@ export TESTNAME="perf-tools/Scalasca"
 module=scalasca
 rpm=scalasca-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
-setup() {
-	module purge
-	module load ohpc
-	module load $module
-}
-
 @test "[$TESTNAME] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	module list $module | grep "1) $module" >&.cmd_output || exit 1
 	run grep $module .cmd_output
