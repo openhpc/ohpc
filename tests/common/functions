@@ -191,13 +191,15 @@ run_serial_binary () {
     timeout=1		# default job timeout (in minutes)
 
     local OPTIND=1
-    while getopts "o:t:" opt; do
+    while getopts "o:s:t:" opt; do
 	case "$opt" in
-	    o)	output_file="$OPTARG"
+		o)	output_file="$OPTARG"
 		;;
-	    t)	timeout="$OPTARG"
+		s)  scalasca="$OPTARG"
 		;;
-	    '?')
+		t)	timeout="$OPTARG"
+		;;
+		'?')
 		echo "Unknown option given to run_serial_binary" >&2
 		exit 1
 		;;
@@ -210,7 +212,13 @@ run_serial_binary () {
     shift
 
     check_exe $EXE
-    
+
+    if [ -z "$scalasca" ];then
+    exec_prefix=""
+    else
+    exec_prefix="scalasca -analyze -t"
+    fi   
+
     if [ -z "$RESOURCE_MANAGER" ];then
 	ERROR_RETURN "OHPC resource manager is not defined - please set via RESOURCE_MANAGER variable"
     fi
@@ -218,10 +226,10 @@ run_serial_binary () {
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
 
 	if [ -n "$output_file" ];then
-	    srun -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
+	    $exec_prefix srun -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
 	else
 	    # srun -n 1 -N 1 -t $timeout $EXE "$@"
-	    eval srun -n 1 -N 1 -t $timeout $EXE "$@"
+	    eval $exec_prefix srun -n 1 -N 1 -t $timeout $EXE "$@"
 	fi
 	return $?
    elif [ "$RESOURCE_MANAGER" = "openpbs" ];then
@@ -236,7 +244,7 @@ run_serial_binary () {
 	jobScript=".job.$RANDOM"
 	echo "#!/bin/bash" > $jobScript
 	echo "cd \${PBS_O_WORKDIR}" >> $jobScript
-	echo $EXE "$@" >> $jobScript
+	echo $exec_prefix $EXE "$@" >> $jobScript
 	chmod 700 $jobScript
 	
         if [ -n "$output_file" ];then
@@ -296,7 +304,7 @@ run_mpi_binary () {
     if [ -z "$scalasca" ];then
     mpi_launcher="prun"
     else
-    mpi_launcher="scalasca -analyze prun"
+    mpi_launcher="scalasca -analyze -t prun"
     fi
 
     shift "$((OPTIND-1))" # Shift off the options and optional --.
