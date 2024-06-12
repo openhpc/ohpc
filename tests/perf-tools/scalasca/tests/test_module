@@ -56,8 +56,33 @@ rpm=scalasca-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 	assert_success
 }
 
+@test "[$TESTNAME] Verify availability of scan binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scan
+	assert_success
+}
+
 @test "[$TESTNAME] Verify availability of scout.mpi binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	run which scout.mpi
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scout.omp binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scout.omp
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scout.hyb binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scout.hyb
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scout.ser binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scout.ser
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of square binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which square
 	assert_success
 }
 
