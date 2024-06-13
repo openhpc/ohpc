@@ -1,0 +1,109 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
+fi
+
+export TESTNAME="perf-tools/Score-P"
+
+check_scorep_mpi_instrumentation() {
+	EXE="$1"
+	ldd "${EXE}" 2>/dev/null | grep libscorep_
+	assert_success
+	ldd "${EXE}" 2>/dev/null | grep libscorep_adapter_compiler_mgmt.
+	assert_success
+	ldd "${EXE}" 2>/dev/null | grep libscorep_adapter_mpi_mgmt.
+	assert_success
+
+	return 0
+}
+
+check_scorep_omp_instrumentation() {
+	EXE="$1"
+	# We need to check if OMPT is default.
+	# This changes the symbol we need to check.
+	ompt_is_default=$(scorep-info config-summary | awk '/OMPT is default:/ {print $NF; found=1} END {if (!found) print "no"}')
+
+	ldd "${EXE}" 2>/dev/null | grep libscorep_
+	assert_success
+	ldd "${EXE}" 2>/dev/null | grep scorep_adapter_compiler_mgmt.
+	assert_success
+	if [ "$ompt_is_default" = "yes" ]; then
+		ldd "${EXE}" 2>/dev/null | grep libscorep_adapter_ompt_mgmt.
+		assert_success
+	else
+		ldd "${EXE}" 2>/dev/null | grep libscorep_adapter_opari2_openmp_mgmt.
+		assert_success
+	fi
+	return 0
+}
+
+@test "[perf-tools/Score-P] MPI C binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_mpi_c ]; then
+		flunk "main_mpi_c binary does not exist"
+	fi
+	check_scorep_mpi_instrumentation ./mpi/main_mpi_c
+}
+
+@test "[perf-tools/Score-P] MPI C++ binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_mpi_cxx ]; then
+		flunk "main_mpi_cxx binary does not exist"
+	fi
+	check_scorep_mpi_instrumentation ./mpi/main_mpi_cxx
+}
+
+@test "[perf-tools/Score-P] MPI Fortran binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_mpi_fort ]; then
+		flunk "main_mpi_fort binary does not exist"
+	fi
+	check_scorep_mpi_instrumentation ./mpi/main_mpi_fort
+}
+
+@test "[perf-tools/Score-P] Serial C OpenMP binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./serial/main_omp_c ]; then
+		flunk "main_omp_c binary does not exist"
+	fi
+	check_scorep_omp_instrumentation ./serial/main_omp_c
+}
+
+@test "[perf-tools/Score-P] Serial C++ OpenMP binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./serial/main_omp_cxx ]; then
+		flunk "main_omp_cxx binary does not exist"
+	fi
+	check_scorep_omp_instrumentation ./serial/main_omp_cxx
+}
+
+@test "[perf-tools/Score-P] Serial Fortran OpenMP binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./serial/main_omp_fort ]; then
+		flunk "main_omp_fort binary does not exist"
+	fi
+	check_scorep_omp_instrumentation ./serial/main_omp_fort
+}
+
+@test "[perf-tools/Score-P] Hybrid (MPI+OpenMP) C binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_hyb_c ]; then
+		flunk "main_hyb_c binary does not exist"
+	fi
+	check_scorep_mpi_instrumentation ./mpi/main_hyb_c
+	check_scorep_omp_instrumentation ./mpi/main_hyb_c
+}
+
+@test "[perf-tools/Score-P] Hybrid (MPI+OpenMP) C++ binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_hyb_cxx ]; then
+		flunk "main_hyb_cxx binary does not exist"
+	fi
+	check_scorep_mpi_instrumentation ./mpi/main_hyb_cxx
+	check_scorep_omp_instrumentation ./mpi/main_hyb_cxx
+}
+
+@test "[perf-tools/Score-P] Hybrid (MPI+OpenMP) Fortran binary includes expected Score-P instrumenter symbols ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_hyb_fort ]; then
+		flunk "main_hyb_fort binary does not exist"
+	fi
+	check_scorep_mpi_instrumentation ./mpi/main_hyb_fort
+	check_scorep_omp_instrumentation ./mpi/main_hyb_fort
+}

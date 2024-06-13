@@ -273,6 +273,10 @@ if PAPI_ENABLED
    TESTS += perf-tools/papi/ohpc-tests/test_compiler_families
 endif
 
+if SCOREP_ENABLED
+   TESTS += perf-tools/scorep/ohpc-tests/test_mpi_families
+endif
+
 if SCALASCA_ENABLED
    TESTS += perf-tools/scalasca/ohpc-tests/test_mpi_families
 endif
