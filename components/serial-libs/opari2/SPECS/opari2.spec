@@ -32,7 +32,7 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
-	
+
 %description
 OPARI2 is a source-to-source instrumentation tool for OpenMP and hybrid
 codes.  It surrounds OpenMP directives and runtime library calls with calls
@@ -142,3 +142,4 @@ EOF
 %files
 %{OHPC_PUB}
 %doc ChangeLog COPYING INSTALL OPEN_ISSUES README
+
