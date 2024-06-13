@@ -153,6 +153,11 @@ test_map = {
         '',
         ''
     ],
+    'components/perf-tools/scorep/SPECS/scorep.spec': [
+        'scorep',
+        '',
+        'lmod-defaults-gnu13-openmpi5-ohpc'
+    ],
     'components/perf-tools/scalasca/SPECS/scalasca.spec': [
         'scalasca',
         '',

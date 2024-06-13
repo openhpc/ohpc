@@ -1,0 +1,119 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
+fi
+
+PKG=SCOREP
+export TESTNAME="perf-tools/Score-P"
+module=scorep
+rpm=scorep-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
+
+@test "[$TESTNAME] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	module list $module | grep "1) $module" >&.cmd_output || exit 1
+	run grep $module .cmd_output
+	assert_success
+
+	# check version against rpm
+	local version
+	version="$(rpm -q --queryformat='%{VERSION}\n' "$rpm")"
+	run cat .cmd_output
+	assert_output "  1) $module/$version"
+}
+
+@test "[$TESTNAME] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	DIR=${PKG}_DIR
+	if [ -z ${!DIR} ]; then
+		flunk "${PKG}_DIR directory not defined"
+	fi
+
+	if [ ! -d ${!DIR} ] || [ -z "${!DIR}" ]; then
+		flunk "directory ${!DIR} does not exist"
+	fi
+}
+
+# ----------
+# Binaries
+# ----------
+@test "[$TESTNAME] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	BIN=${PKG}_BIN
+	if [ -z ${!BIN} ]; then
+		flunk "${PKG}_BIN directory not defined"
+	fi
+
+	if [ ! -d ${!BIN} ] || [ -z "${!BIN}" ]; then
+		flunk "directory ${!BIN} does not exist"
+	fi
+}
+
+@test "[$TESTNAME] Verify availability of scorep binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scorep
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scorep-backend-info binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scorep-backend-info
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scorep-config binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scorep-config
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scorep-info binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scorep-info
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scorep-preload-init binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scorep-preload-init
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scorep-score binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scorep-score
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of scorep-wrapper binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run which scorep-wrapper
+	assert_success
+}
+
+# Test actual compiler availability
+@test "[$TESTNAME] Verify availability of scorep wrapper binaries ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	# Get list of all available wrappers which were determined during the initial build process.
+	compiler_wrappers=$(scorep-info config-summary | sed -n '/Compiler wrappers:/,/User library wrappers support:/p' | grep -o 'scorep-[^ \\]*')
+	for wrapper in $compiler_wrappers; do
+		echo "Checking for $wrapper"
+		run which "$wrapper"
+		assert_success
+	done
+}
+
+# ----------
+# Documentation
+# ----------
+@test "[$TESTNAME] Verify availability of user guide for scorep ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	run ls "${SCOREP_DIR}/share/doc/scorep/pdf/scorep.pdf"
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of OPEN_ISSUES for scorep ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	# Required for scorep-info open-issues
+	run ls "${SCOREP_DIR}/share/doc/scorep/OPEN_ISSUES"
+	assert_success
+}
+
+@test "[$TESTNAME] Verify availability of COPYING for scorep ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	# Required for scorep-info license
+	run ls "${SCOREP_DIR}/share/doc/scorep/COPYING"
+	assert_success
+}
+
+rm -f .cmd_output

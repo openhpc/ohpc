@@ -411,6 +411,12 @@ AC_ARG_ENABLE([superlu_dist],
    [AX_OPTION_DEFAULT(type=long,enable_superlu_dist,yes)])
 AM_CONDITIONAL(SUPERLU_DIST_ENABLED,test "x$enable_superlu_dist" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Score-P
+AC_ARG_ENABLE([scorep],
+   [AS_HELP_STRING([--enable-scorep],[Enable scorep tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_scorep,yes)])
+AM_CONDITIONAL(SCOREP_ENABLED,test "x$enable_scorep" = "xyes" )
+#------------------------------------------------------------------------------------------
 # Scalasca
 AC_ARG_ENABLE([scalasca],
    [AS_HELP_STRING([--enable-scalasca],[Enable scalasca tests (default=yes)])],[],
@@ -505,6 +511,7 @@ AC_OUTPUT( Makefile
        perf-tools/dimemas/Makefile
        perf-tools/extrae/Makefile
        perf-tools/geopm/Makefile
+       perf-tools/scorep/Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
        oob/Makefile
@@ -896,6 +903,12 @@ echo    Performance Tools:
        echo '    'Papi...................... : enabled
     else
        echo '    'Papi...................... : disabled
+    fi
+
+    if test "x$enable_scorep" = "xyes"; then
+       echo '    'Score-P................... : enabled
+    else
+       echo '    'Score-P................... : disabled
     fi
 
     if test "x$enable_scalasca" = "xyes"; then

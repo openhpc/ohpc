@@ -1,0 +1,189 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
+fi
+
+check_rms
+export RM=$RESOURCE_MANAGER
+export SCAN_MPI_LAUNCHER=prun
+
+NODES=2
+TASKS=$(tasks_count 8)
+ARGS=8
+
+check_scorep_result_directory() {
+	scorep_result_dir=$SCOREP_EXPERIMENT_DIRECTORY
+
+	# Test if profile.cubex exists (result of profile)
+	run ls "$scorep_result_dir"/profile.cubex
+	assert_success
+	# Test if we can interact with profile
+	run scorep-score "$scorep_result_dir"/profile.cubex
+	assert_success
+	# Test if traces.otf2 exist (result of tracing)
+	run ls "$scorep_result_dir"/traces.otf2
+	assert_success
+	# Test if we can interact with trace
+	run otf2-print "$scorep_result_dir"/traces.otf2
+	assert_success
+
+	return 0
+}
+
+@test "[perf-tools/Score-P] MPI C binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_mpi_c ]; then
+		flunk "main_mpi_c binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_mpi_c
+	export SCOREP_ENABLE_TRACING=true
+	run_mpi_binary ./mpi/main_mpi_c $ARGS $NODES "$TASKS"
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_mpi_c*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] MPI C++ binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_mpi_cxx ]; then
+		flunk "main_mpi_cxx binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_mpi_cxx
+	export SCOREP_ENABLE_TRACING=true
+	run_mpi_binary ./mpi/main_mpi_cxx $ARGS $NODES "$TASKS"
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_mpi_cxx*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] MPI Fortran binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_mpi_fort ]; then
+		flunk "main_mpi_fort binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_mpi_fort
+	export SCOREP_ENABLE_TRACING=true
+	run_mpi_binary ./mpi/main_mpi_fort $ARGS $NODES "$TASKS"
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_mpi_fort*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] Serial C OpenMP binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./serial/main_omp_c ]; then
+		flunk "main_omp_c binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_omp_c
+	export SCOREP_ENABLE_TRACING=true
+	run_serial_binary ./serial/main_omp_c
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_omp_c*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] Serial C++ OpenMP binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./serial/main_omp_cxx ]; then
+		flunk "main_omp_cxx binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_omp_cxx
+	export SCOREP_ENABLE_TRACING=true
+	run_serial_binary ./serial/main_omp_cxx
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_omp_cxx*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] Serial Fortran OpenMP binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./serial/main_omp_fort ]; then
+		flunk "main_omp_fort binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_omp_fort
+	export SCOREP_ENABLE_TRACING=true
+	run_serial_binary ./serial/main_omp_fort
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_omp_fort*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] Hybrid (MPI+OpenMP) C binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_hyb_c ]; then
+		flunk "main_hyb_c binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_hyb_c
+	export SCOREP_ENABLE_TRACING=true
+	run_mpi_binary ./mpi/main_hyb_c $ARGS $NODES "$TASKS"
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_hyb_c*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] Hybrid (MPI+OpenMP) C++ binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_hyb_cxx ]; then
+		flunk "main_hyb_cxx binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_hyb_cxx
+	export SCOREP_ENABLE_TRACING=true
+	run_mpi_binary ./mpi/main_hyb_cxx $ARGS $NODES "$TASKS"
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_hyb_cxx*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
+
+@test "[perf-tools/Score-P] Hybrid (MPI+OpenMP) Fortran binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s ./mpi/main_hyb_fort ]; then
+		flunk "main_hyb_fort binary does not exist"
+	fi
+
+	export SCOREP_EXPERIMENT_DIRECTORY=scorep_res_main_hyb_fort
+	export SCOREP_ENABLE_TRACING=true
+	run_mpi_binary ./mpi/main_hyb_fort $ARGS $NODES "$TASKS"
+	assert_success
+
+	check_scorep_result_directory
+
+	rm -rf scorep_res_main_hyb_fort*
+	unset SCOREP_EXPERIMENT_DIRECTORY
+	unset SCOREP_ENABLE_TRACING
+}
