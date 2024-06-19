@@ -24,9 +24,9 @@ Group:     %{PROJ_NAME}/dev-tools
 URL:       https://easybuilders.github.io/easybuild
 
 Source0:   https://pypi.io/packages/source/e/easybuild/easybuild-%{version}.tar.gz
-Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
-Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
-Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
+Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild_easyblocks-%{version}.tar.gz
+Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild_easyconfigs-%{version}.tar.gz
+Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild_framework-%{version}.tar.gz
 BuildRequires: python3-devel python3-pip
 BuildRequires: python3-setuptools
 Requires:  python3
