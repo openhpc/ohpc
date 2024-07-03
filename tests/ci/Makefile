@@ -36,6 +36,7 @@ whitespace-lint:
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
+		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-mpi \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
 		tests/user-env/ompi_info \
@@ -62,6 +63,7 @@ shellcheck-lint:
 		../../components/OHPC_setup_mpi \
 		../../components/admin/prun/SOURCES/prun \
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
+		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-mpi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
@@ -94,4 +96,5 @@ shfmt-lint:
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
+		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-mpi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
