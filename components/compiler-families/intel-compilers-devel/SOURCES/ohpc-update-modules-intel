@@ -2,7 +2,7 @@
 # Do not overwrite existing files
 # Write the new file as rpmnew
 testfile () {
-    if [ -e $1 ]; then
+    if [ -e "$1" ]; then
        echo "$1.rpmnew"
     else
        echo "$1"
@@ -18,7 +18,7 @@ modprocess () {
             return
         fi
     fi
-    md5sum ${modname} >> @@oneapi_manifest@@
+    md5sum "${modname}" >> @@oneapi_manifest@@
 }
 
 rm -f @@oneapi_manifest@@
@@ -34,8 +34,8 @@ fi
 # Set system defaults for default OBS oneAPI modules
 for tool in @@exact_deps@@; do
   filename=@@OHPC_MODULEDEPS@@/oneapi/${tool%%/*}/.version
-  echo "#%Module1.0" > ${filename}
-  echo "set  ModulesVersion  \"${tool##*/}\"" >> ${filename}
+  echo "#%Module1.0" > "${filename}"
+  echo "set  ModulesVersion  \"${tool##*/}\"" >> "${filename}"
 done
 
 # Create an OpenHPC module file for each version found in compilers
@@ -56,9 +56,9 @@ for compilers in @@OHPC_MODULEDEPS@@/oneapi/compiler/2*; do
     echo "--> Installing modulefile for version=${ver}"
     # Do not overwrite existing files
     # Write the new file as rpmnew
-    modname=$(testfile @@OHPC_MODULES@@/intel/$ver)
+    modname=$(testfile @@OHPC_MODULES@@/intel/"$ver")
 
-    cat << EOF > ${modname}
+    cat << EOF > "${modname}"
 #%Module1.0#####################################################################
 
 set version "$ver"
@@ -95,12 +95,12 @@ module load "$mklver"
 family "compiler"
 EOF
 
-    modprocess ${modname}
+    modprocess "${modname}"
 
     # Provide standalone module for use with GNU toolchain
-    modname=$(testfile  @@OHPC_MODULEDEPS@@/gnu/mkl/$ver)
+    modname=$(testfile  @@OHPC_MODULEDEPS@@/gnu/mkl/"$ver")
 
-    cat << EOF > ${modname}
+    cat << EOF > "${modname}"
 #%Module1.0#####################################################################
 
 set version "$ver"
@@ -121,15 +121,15 @@ prepend-path  MODULEPATH       @@OHPC_MODULEDEPS@@/oneapi
 module load   "$mklver"
 EOF
 
-    modprocess ${modname}
+    modprocess "${modname}"
 done
 
 # Set default version to match that used to build OpenHPC packages
 modname=$(testfile @@OHPC_MODULES@@/intel/.version)
 
-cat << EOF > ${modname}
+cat << EOF > "${modname}"
 #%Module1.0#####################################################################
 set     ModulesVersion      "@@exact_intel_ver_module@@"
 EOF
 
-modprocess ${modname}
+modprocess "${modname}"

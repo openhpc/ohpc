@@ -35,6 +35,7 @@ whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		components/admin/prun/SOURCES/prun \
+		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
 		tests/user-env/ompi_info \
@@ -60,6 +61,7 @@ shellcheck-lint:
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
 		../../components/admin/prun/SOURCES/prun \
+		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
@@ -91,4 +93,5 @@ shfmt-lint:
 		../../tests/libs/plasma/tests/test_module
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
+		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
