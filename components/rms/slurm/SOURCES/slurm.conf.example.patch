@@ -41,5 +41,3 @@
 +SlurmctldParameters=enable_configless
 +# Setup interactive jobs for salloc
 +LaunchParameters=use_interactive_step
-+# Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
-+ReturnToService=1
