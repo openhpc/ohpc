@@ -157,7 +157,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on openEuler
     container:
-      image: docker.io/openeuler/openeuler:22.03-lts-sp3
+      image: docker.io/openeuler/openeuler:22.03-lts-sp4
     steps:
     - name: Switch repo
       run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
@@ -193,7 +193,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Test on openEuler
     container:
-      image: docker.io/openeuler/openeuler:22.03-lts-sp3
+      image: docker.io/openeuler/openeuler:22.03-lts-sp4
     needs: build_on_openEuler
     steps:
     - name: Switch repo
