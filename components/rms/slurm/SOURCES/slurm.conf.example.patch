@@ -18,7 +18,7 @@
  #JobCompUser=
  #JobContainerType=
  JobAcctGatherFrequency=30
-@@ -149,5 +149,22 @@
+@@ -149,5 +152,20 @@
  #
  #
  # COMPUTE NODES
@@ -41,5 +41,3 @@
 +SlurmctldParameters=enable_configless
 +# Setup interactive jobs for salloc
 +LaunchParameters=use_interactive_step
-+# Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
-+ReturnToService=1
