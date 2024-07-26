@@ -29,7 +29,7 @@ jobs:
         dnf install -y epel-release git python3
     - uses: actions/checkout@v4
     - id: files
-      uses: Ana06/get-changed-files@v2.2.0
+      uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Changes
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
@@ -84,7 +84,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh ${{ matrix.compiler }}
     - id: files
-      uses: Ana06/get-changed-files@v2.2.0
+      uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
         if [ "${{ matrix.compiler }}" == "intel" ]; then
@@ -129,7 +129,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh ${{ matrix.compiler }}
     - id: files
-      uses: Ana06/get-changed-files@v2.2.0
+      uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
       with:
         name: rhel-rpms-${{ matrix.compiler }}
@@ -167,7 +167,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: Ana06/get-changed-files@v2.2.0
+      uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
@@ -204,7 +204,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: Ana06/get-changed-files@v2.2.0
+      uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
       with:
         name: openEuler-rpms
@@ -228,7 +228,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: Ana06/get-changed-files@v2.2.0
+      uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
@@ -263,7 +263,7 @@ jobs:
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
-      uses: Ana06/get-changed-files@v2.2.0
+      uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
       with:
         name: leap-rpms
