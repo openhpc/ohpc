@@ -21,10 +21,10 @@ dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","mp
 distro-packages = ["python-Cython","flex"]
 fs            = ["lustre-client"]
 io-libs       = ["adios","hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib",
-                 "adios2"]
+                 "adios2","cubew","otf2"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","openpbs","pmix","munge","magpie"]
-serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
+serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu","cubelib","opari2"]
 parallel-libs = ["boost","fftw","hypre","mfem","mumps","opencoarrays","petsc","scalapack","ptscotch",
                  "slepc","superlu_dist","trilinos"]
 provisioning  = ["warewulf-vnfs","warewulf","warewulf-common","warewulf-cluster","warewulf-ipmi",
@@ -34,6 +34,22 @@ perf-tools    = ["dimemas","extrae","geopm","imb","likwid","msr-safe","omb","pap
 
 compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel","llvm-compilers"]
 mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
+
+[3.2.0]
+
+# define patterns for a given arch in which to disable builds
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
+# define compiler/MPI families: first entry in list is defined to be parent in OBS
+#compiler_families=["gnu13","intel","arm1"]
+compiler_families=["gnu13", "intel"]
+mpi_families=["openmpi5","mpich","mvapich2","impi"]
+
+standalone = ["docs","test-suite"]
+mpi_dependent = ["cubew","otf2","cubelib","opari2","scorep","scalasca"]
+skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-compilers-devel","arm-compilers-devel"]
 
 [3.1.0]
 
@@ -134,6 +150,19 @@ openmpi_compiler=["gnu12","arm1","intel"]
 # on distros without support (like openEuler).
 skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-compilers-devel","arm-compilers-devel"]
 
+
+[2.9.0]
+
+# define patterns for a given arch in which to disable builds
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
+# define compiler/MPI families: first entry in list is defined to be parent in OBS
+compiler_families=["gnu12","intel","arm1"]
+mpi_families=["openmpi4","mpich","mvapich2","impi"]
+
+standalone = ["intel-compilers-devel"]
 
 [2.8.0]
 
