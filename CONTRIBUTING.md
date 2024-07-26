@@ -30,7 +30,7 @@ specifically for opening issues and pull requests against OpenHPC.
 
 * [Open an issue][open] in the submissions repository.
 
-[community]: https://openhpc.community/about-us/ways-to-participate
+[community]: https://openhpc.community/about/participate
 [contribute]: https://github.com/openhpc/ohpc/wiki/Contributions
 [issues]: https://github.com/openhpc/ohpc/issues
 [new]: https://github.com/openhpc/ohpc/issues/new
