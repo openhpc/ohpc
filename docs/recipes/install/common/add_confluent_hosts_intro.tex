@@ -1,0 +1,120 @@
+%\subsubsection{Register nodes for provisioning}
+
+\noindent Next, we add {\em compute} nodes and define their properties as
+attributes in \Confluent{} database.
+These hosts are grouped logically into a group named {\em
+compute} to facilitate group-level commands used later in the recipe. The compute
+group has to be defined first before we can add any nodes to the group using the 
+{\texttt nodegroup define} command. Note the
+use of variable names for the desired compute hostnames, node IPs, MAC
+addresses, and BMC login credentials, which should be modified to accommodate
+local settings and hardware. To enable serial console access via  \Confluent{},
+{\texttt console.method}
+property is also defined. 
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Add hosts to cluster \ref{sec:confluent_add_nodes}
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+#define the compute group
+[sms](*\#*) nodegroupdefine compute
+
+# Define nodes as objects in confluent database
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+nodedefine ${c_name[$i]} groups=everything,compute hardwaremanagement.manager=${c_bmc[$i]} \ 
+secret.hardwaremanagementuser=${bmc_username} secret.hardwaremanagementpassword=${bmc_password} \ 
+net.hwaddr=${c_mac[$i]} net.ipv4_address=${c_ip[$i]}
+        done
+\end{lstlisting}
+% end_ohpc_run
+
+\begin{center}
+  \begin{tcolorbox}[]
+    \small
+Defining nodes one-by-one, as done above, is only efficient
+for a small number of nodes. For larger node counts,
+\Confluent{} provides capabilities for automated detection and
+configuration.
+Consult the
+\href{https://hpc.lenovo.com/users/documentation/confluentdisco.html}{\color{blue}\Confluent{}
+Hardware Discovery \& Define Node Guide}.
+\end{tcolorbox}
+\end{center}
+
+
+%\clearpage
+If enabling {\em optional} IPoIB functionality (e.g. to support Lustre over \InfiniBand{}), additional
+settings are required to define the IPoIB network with \Confluent{} and specify
+desired IP settings for each compute. This can be accomplished as follows for
+the {\em ib0} interface:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Setup IPoIB networking
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Register desired IPoIB IPs per compute
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+		nodeattrib ${c_name[i]} net.ib0.ipv4_address=${c_ipoib[i]}/${ipoib_netmask}
+        done
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+%\clearpage
+confluent2hosts can be used to help generate /etc/hosts entries for a noderange.
+It can read from the confluent db, using -a. In this mode, each net.value.attribute
+group is pulled together into hosts lines. ipv4 and ipv6 address
+fields are associated with the corresponding hostname attributes.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Generating lines to append to local /etc/hosts 
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Add nodes to /etc/hosts
+[sms](*\#*) confluent2hosts -a compute
+\end{lstlisting}
+% end_ohpc_run
+
+%\clearpage
+With the desired compute nodes and domain identified, the remaining steps in the
+provisioning configuration process are to define the provisioning mode and
+image for the {\em compute} group and use \Confluent{} commands to complete
+configuration for network services like DNS and DHCP. These tasks are
+accomplished as follows:
+
+%\clearpage
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Complete networking setup, associate provisioning image
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSSHORT}{\baseosshort{}}1 {IMAGE}{\installimage{}}1]
+# Associate desired provisioning image for computes
+[sms](*\#*) nodedeploy -n compute -p rocky-9.4-x86_64-default
+\end{lstlisting}
+
+%%% If the Lustre client was enabled for computes in \S\ref{sec:lustre_client}, you
+%%% should be able to mount the file system post-boot using the fstab entry
+%%% (e.g. via ``\texttt{mount /mnt/lustre}''). Alternatively, if
+%%% you prefer to have the file system mounted automatically at boot time, a simple
+%%% postscript can be created and registered with \xCAT{} for this purpose as follows.
+%%%
+%%% % begin_ohpc_run
+%%% % ohpc_validation_newline
+%%% % ohpc_validation_comment Optionally create xCAT postscript to mount Lustre client
+%%% % ohpc_command if [ ${enable_lustre_client} -eq 1 ];then
+%%% % ohpc_indent 5
+%%% \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+%%% # Optionally create postscript to mount Lustre client at boot
+%%% [sms](*\#*) echo '#!/bin/bash' > /install/postscripts/lustre-client
+%%% [sms](*\#*) echo 'mount /mnt/lustre' >> /install/postscripts/lustre-client
+%%% [sms](*\#*) chmod 755 /install/postscripts/lustre-client
+%%% # Register script for computes
+%%% [sms](*\#*) chdef compute -p postscripts=lustre-client
+%%% \end{lstlisting}
+%%% % ohpc_indent 0
+%%% % ohpc_command fi
+%%% % end_ohpc_run
+%%%
+

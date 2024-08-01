@@ -1,0 +1,18 @@
+% -*- mode: latex; fill-column: 120; -*-
+With \Confluent{} repository enabled, issue the following install the provisioning
+service on {\em master} node
+
+% begin_ohpc_run
+% ohpc_comment_header Add baseline OpenHPC and provisioning services \ref{sec:add_provisioning}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) (*\install*) lenovo-confluent
+[sms](*\#*) (*\install*) tftp-server
+
+# enable Confluent and its tools for use in current shell
+[sms](*\#*) systemctl enable confluent --now
+[sms](*\#*) systemctl enable httpd --now
+[sms](*\#*) systemctl enable tftp.socket --now
+[sms](*\#*) source /etc/profile.d/confluent_env.sh
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

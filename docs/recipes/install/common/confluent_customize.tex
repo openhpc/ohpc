@@ -1,0 +1,35 @@
+Here we set up \NFS{}  mounting of a
+\$HOME file system and the public \OHPC{} install path (\texttt{/opt/ohpc/pub})
+that will be hosted by the {\em master} host in this  example configuration.
+
+\vspace*{0.15cm}
+% begin_ohpc_run
+% ohpc_comment_header Customize system configuration \ref{sec:master_customization}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Disable /tftpboot and /install export entries
+[sms](*\#*) perl -pi -e "s|/tftpboot|#/tftpboot|" /etc/exports
+[sms](*\#*) perl -pi -e "s|/install|#/install|" /etc/exports
+
+# Export /home and OpenHPC public packages from master server
+[sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[sms](*\#*) exportfs -a
+[sms](*\#*) systemctl restart nfs-server
+[sms](*\#*) systemctl enable nfs-server
+
+
+# Create NFS client mounts of /home and /opt/ohpc/pub on compute hosts
+[sms](*\#*) nodeshell compute echo \
+        "\""${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid 0 0"\"" \>\> /etc/fstab
+[sms](*\#*) nodeshell compute echo \
+        "\""${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0 0"\"" \>\> /etc/fstab
+[sms](*\#*) nodeshell compute systemctl restart nfs
+
+# Mount NFS shares
+[sms](*\#*) nodeshell compute mount /home
+[sms](*\#*) nodeshell compute mkdir -p /opt/ohpc/pub
+[sms](*\#*) nodeshell compute mount /opt/ohpc/pub
+
+\end{lstlisting}
+% end_ohpc_run
+

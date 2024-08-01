@@ -1,0 +1,13 @@
+To begin, enable use of the public \Confluent{} repository by adding it to the local list
+of available package repositories. This also requires network access from
+your {\em master} server to the internet, or alternatively, that
+the repository be mirrored locally. In this case, we use the network.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_comment_header Enable Confluent repositories \ref{sec:enable_confluent}
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) (*\install*) https://hpc.lenovo.com/yum/latest/el9/x86_64/lenovo-hpc-yum-1-1.x86_64.rpm
+\end{lstlisting}
+% end_ohpc_run

@@ -1,0 +1,349 @@
+\documentclass[letterpaper]{article}
+\usepackage{common/ohpc-doc}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+% Include git variables
+\input{vc.tex}
+
+% Define Base OS and other local macros
+\newcommand{\baseOS}{Rocky 9.4}
+\newcommand{\OSRepo}{Rocky\_9.4}
+\newcommand{\OSTree}{EL\_9}
+\newcommand{\OSTag}{el9}
+\newcommand{\baseos}{rocky9.4}
+\newcommand{\baseosshort}{rocky9}
+\newcommand{\provisioner}{confluent}
+\newcommand{\provheader}{\provisioner{}}
+\newcommand{\rms}{SLURM}
+\newcommand{\rmsshort}{slurm}
+\newcommand{\arch}{x86\_64}
+
+% Define package manager commands
+\newcommand{\pkgmgr}{dnf}
+\newcommand{\addrepo}{wget -P /etc/yum.repos.d}
+\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
+\newcommand{\clean}{dnf clean expire-cache}
+\newcommand{\chrootclean}{dnf --installroot=\$CHROOT clean expire-cache}
+\newcommand{\install}{dnf -y install}
+\newcommand{\chrootinstall}{nodeshell compute dnf -y install}
+\newcommand{\groupinstall}{dnf -y groupinstall}
+\newcommand{\groupchrootinstall}{nodeshell compute dnf -y groupinstall}
+\newcommand{\remove}{dnf -y remove}
+\newcommand{\upgrade}{dnf -y upgrade}
+\newcommand{\chrootupgrade}{dnf -y --installroot=\$CHROOT upgrade}
+\newcommand{\tftppkg}{syslinux-tftpboot}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2.1/dists/beegfs-rhel8.repo}
+
+% boolean for os-specific formatting
+\toggletrue{isCentOS}
+\toggletrue{isCentOS_ww_slurm_x86}
+\toggletrue{isSLURM}
+\toggletrue{isx86}
+\toggletrue{isCentOS_x86}
+
+\begin{document}
+\graphicspath{{common/figures/}}
+\thispagestyle{empty}
+
+% Title Page
+\input{common/title}
+% Disclaimer
+\input{common/legal}
+
+\newpage
+\tableofcontents
+\newpage
+
+% Introduction  --------------------------------------------------
+
+\section{Introduction} \label{sec:introduction}
+\input{common/install_header}
+\input{common/intro} \\
+
+\input{common/base_edition/edition}
+\input{common/audience}
+\input{common/requirements}
+\input{common/inputs}
+
+
+
+% Base Operating System --------------------------------------------
+
+\section{Install Base Operating System (BOS)}
+\input{common/bos}
+
+%\clearpage
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Disable firewall
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) systemctl disable firewalld
+[sms](*\#*) systemctl stop firewalld
+\end{lstlisting}
+% end_ohpc_run
+
+% ------------------------------------------------------------------
+
+\section{Install \Confluent{} and Provision Nodes with BOS} \label{sec:provision_compute_bos}
+\input{common/confluent_compute_bos_intro}
+
+\subsection{Enable \Confluent{} repository for local use} \label{sec:enable_confluent}
+\input{common/enable_confluent_repo}
+
+\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
+\input{common/install_provisioning_confluent_intro}
+
+\vspace*{-0.15cm}
+\subsection{Complete basic \Confluent{} setup for {\em master} node} \label{sec:setup_confluent}
+\input{common/confluent_setup}
+
+\subsection{Define {\em compute} image for provisioning}
+\input{common/confluent_init_os_images_rocky}
+
+\vspace*{0.9cm}
+\subsection{Add compute nodes into \Confluent{} database} \label{sec:confluent_add_nodes}
+\input{common/add_confluent_hosts_intro}
+
+%\vspace*{-0.25cm}
+\subsection{Boot compute nodes} \label{sec:boot_computes}
+\input{common/reset_computes_confluent}
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Check if provisioning is in progress
+% ohpc_validation_newline
+% ohpc_command while true; do
+% ohpc_command    deployment_pending=false
+% ohpc_command    while read line; do
+% ohpc_command        dp=$(echo $line | cut -d ":" -f 2)
+% ohpc_command          if [ "$dp" != " completed" ];
+% ohpc_command          then
+% ohpc_command               deployment_pending=true
+% ohpc_command          fi
+% ohpc_command    done <<< `nodedeploy compute`
+% ohpc_command    if $deployment_pending;
+% ohpc_command     then
+% ohpc_command          echo "deployment still pending"
+% ohpc_command          deployment_pending=false
+% ohpc_command          sleep 60
+% ohpc_command     else
+% ohpc_command          break
+% ohpc_command     fi
+% ohpc_command done
+% end_ohpc_run
+
+
+\section{Install \OHPC{} Components} \label{sec:basic_install}
+\input{common/install_ohpc_components_intro}
+
+\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
+\input{common/enable_local_ohpc_repo_confluent}
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+% ohpc_validation_newline
+% ohpc_command dnf repolist | grep -q OpenHPC
+% ohpc_command if [ $? -ne 0 ];then
+% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+% ohpc_command    exit 1
+% ohpc_command fi
+% end_ohpc_run
+
+\input{common/rocky_repos}
+
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) (*\install*) epel-release
+
+# Enable crb on sms
+[sms](*\#*) /usr/bin/crb enable
+\end{lstlisting}
+% end_ohpc_run
+
+Now \OHPC{} packages can be installed. To add the base package on the SMS
+issue the following
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*)  (*\install*) ohpc-base
+\end{lstlisting}
+% end_ohpc_run
+
+\input{common/automation}
+
+\subsection{Setup time synchronization service on {\em master} node} \label{sec:add_ntp}
+\input{common/time}
+
+%\input{common/enable_pxe}
+
+
+\subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
+\input{common/install_slurm}
+
+\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\input{common/ibsupport_sms_centos}
+
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_centos}
+
+\vspace*{0.2cm}
+\subsubsection{Add \OHPC{} components} \label{sec:add_components}
+\input{common/add_to_compute_confluent_intro}
+
+%\newpage
+% begin_ohpc_run
+% ohpc_validation_comment Add OpenHPC components to compute instance
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add Slurm client support meta-package
+[sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
+
+# Add Network Time Protocol (NTP) support
+[sms](*\#*) (*\chrootinstall*) ntp
+
+# Add kernel drivers
+[sms](*\#*) (*\chrootinstall*) kernel
+
+# Enable crb 
+[sms](*\#*) nodeshell compute /usr/bin/crb enable
+
+# Include nfs-utils  
+[sms](*\#*) (*\chrootinstall*) nfs-utils
+
+# Include modules user environment
+[sms](*\#*) (*\chrootinstall*) lmod-ohpc
+\end{lstlisting}
+
+
+% end_ohpc_run
+
+% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
+% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Optionally add IB support and enable
+[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\vspace*{-0.25cm}
+\subsubsection{Customize system configuration} \label{sec:master_customization}
+\input{common/confluent_customize}
+
+% Additional commands when additional computes are requested
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Update basic slurm configuration if additional computes defined
+% ohpc_validation_comment This is performed on the SMS, nodes will pick it up config file is copied there later
+% ohpc_command if [ ${num_computes} -gt 4 ];then
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command fi
+% end_ohpc_run
+
+%\clearpage
+\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
+\input{common/compute_customizations_intro}
+
+\paragraph{Increase locked memory limits}
+\input{common/memlimits_confluent}
+
+\paragraph{Enable ssh control via resource manager}
+\input{common/slurm_pam_confluent}
+
+\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+\input{common/lustre-client}
+\input{common/lustre-client-centos-confluent}
+\input{common/lustre-client-post-confluent}
+
+\vspace*{0.4cm}
+
+\paragraph{Add \clustershell{}}
+\input{common/clustershell}
+
+\paragraph{Add \genders{}}
+\input{common/genders}
+
+\paragraph{Add Magpie}
+\input{common/magpie}
+
+\paragraph{Add \conman{}} \label{sec:add_conman}
+\input{common/conman}
+
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
+\input{common/nhc_slurm}
+
+%\subsubsection{Identify files for synchronization} \label{sec:file_import}
+%\input{common/import_confluent_files}
+%\input{common/import_confluent_files_slurm}
+
+%%%\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+%%%\input{common/conman_post}
+
+\section{Install \OHPC{} Development Components}
+\input{common/dev_intro}
+
+%\vspace*{-0.15cm}
+%\clearpage
+\subsection{Development Tools} \label{sec:install_dev_tools}
+\input{common/dev_tools}
+
+\vspace*{-0.15cm}
+\subsection{Compilers} \label{sec:install_compilers}
+\input{common/compilers}
+
+%\clearpage
+\subsection{MPI Stacks} \label{sec:mpi}
+\input{common/mpi_slurm}
+
+\subsection{Performance Tools} \label{sec:install_perf_tools}
+\input{common/perf_tools}
+
+\subsection{Setup default development environment}
+\input{common/default_dev}
+
+%\vspace*{0.2cm}
+\subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
+\input{common/third_party_libs_intro}
+
+\input{common/third_party_libs}
+\input{common/third_party_mpi_libs_x86}
+
+\vspace*{.6cm}
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\input{common/oneapi_enabled_builds_slurm}
+
+\section{Resource Manager Startup} \label{sec:rms_startup}
+\input{common/slurm_startup_confluent}
+
+\section{Run a Test Job} \label{sec:test_job}
+\input{common/confluent_slurm_test_job}
+
+\clearpage
+\appendix
+{\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
+
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\input{common/automation_appendix}
+\input{common/upgrade_confluent}
+\input{common/test_suite}
+\input{common/customization_appendix_centos}
+\input{manifest}
+\input{common/signature}
+
+
+\end{document}
+
+    
+
+
+
+    
+

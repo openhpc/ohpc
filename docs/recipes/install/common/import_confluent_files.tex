@@ -1,0 +1,16 @@
+The \Confluent{} system includes functionality to synchronize files located on the
+SMS server for distribution to managed hosts. This is one way to
+distribute user credentials to {\em compute} nodes (alternatively, you may
+prefer to use a central authentication service like LDAP). To import local file-based
+credentials, issue the following to enable the {\em synclist} feature and
+register user credential files:
+
+% begin_ohpc_run
+% ohpc_comment_header Import files \ref{sec:file_import}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSSHORT}{\baseosshort{}}1]
+# Add desired credential files to synclist
+[sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /var/lib/confluent/public/os/rocky-9.4-x86_64-default
+[sms](*\#*) echo "/etc/group -> /etc/group" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default
+[sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default
+\end{lstlisting}
+% \end_ohpc_run

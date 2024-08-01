@@ -1,0 +1,44 @@
+Prior to booting the {\em compute} hosts, we configure them to use PXE as their
+next boot mode. After the initial PXE, ensuing boots will return to using the default boot device
+specified in the BIOS.
+
+% begin_ohpc_run
+% ohpc_comment_header Set nodes to netboot \ref{sec:boot_computes}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) nodesetboot compute network
+\end{lstlisting}
+% end_ohpc_run
+
+At this point, the {\em master} server should be able to boot the newly defined
+compute nodes. This is done by using the \texttt{nodepower} \Confluent{} command
+leveraging IPMI protocol set up during the the {\em compute} node definition
+in \S~\ref{sec:confluent_add_nodes}. The following power cycles each of the
+desired hosts.
+
+
+% begin_ohpc_run
+% ohpc_comment_header Boot compute nodes
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) nodepower compute boot
+\end{lstlisting}
+% end_ohpc_run
+
+Once kicked off, the boot process should take about 5-10
+minutes (depending on BIOS post times).  You can monitor the
+provisioning by using the \texttt{nodeconsole} command, which displays serial console
+for a selected node. Note that the escape sequence
+is \texttt{CTRL-e c .} typed sequentially.
+
+Successful provisioning can be verified by a parallel command on the compute
+nodes. The \Confluent{}-provided
+\texttt{nodeshell} command, which uses \Confluent{} node names and groups.  
+For example, to run a command on
+the newly imaged compute hosts using \texttt{nodeshell}, execute the following:
+
+\begin{lstlisting}[language=bash]
+[sms](*\#*) nodeshell compute uptime
+c1:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+c2:  12:56:50 up 13 min,  0 users,  load average: 0.00, 0.02, 0.05
+c3:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.02, 0.05
+c4:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+\end{lstlisting}
