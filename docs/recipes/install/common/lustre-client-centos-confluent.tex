@@ -1,0 +1,27 @@
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Enable Optional packages
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_lustre_client} -eq 1 ]];then
+% ohpc_indent 5
+
+% ohpc_validation_comment Install Lustre client on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+    # Add Lustre client software to master host
+    [sms](*\#*) (*\install*) lustre-client-ohpc
+    \end{lstlisting}
+    % end_ohpc_run
+    
+    % begin_ohpc_run
+    % ohpc_validation_comment Enable lustre on compute nodes
+    \begin{lstlisting}[language=bash,keywords={},upquote=true]
+    # Enable lustre on compute nodes
+    [sms](*\#*) (*\chrootinstall*) lustre-client-ohpc
+    
+    # Create mount point and file system mount
+    [sms](*\#*) nodeshell compute mkdir /mnt/lustre
+    [sms](*\#*) nodeshell compute echo  \
+            "\""${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock,retry=2 0 0"\"" \>\> /etc/fstab
+    \end{lstlisting}
+    % end_ohpc_run
+    

@@ -1,0 +1,61 @@
+% -*- mode: latex; fill-column: 120; -*-
+
+The next step is adding \OHPC{} components to the {\em compute} nodes that at this
+point are running basic OSes.  This process will leverage two \Confluent{}-provided
+commands: \texttt{nodeshell} to run \texttt{\pkgmgr{}} installer on all the
+nodes in parallel  and \texttt{nodersync} to distribute configuration files from the
+SMS to the {\em compute} nodes.
+
+\noindent To do this, repositories on the {\em compute} nodes need to be configured
+properly.
+
+\Confluent{} has automatically setup an  OS repository on the SMS and configured the
+nodes to use it, but it has  also enabled online OS repositories.
+
+
+\noindent Next, we alse add the OHPC repo to the compute nodes \S\ref{sec:enable_repo}
+
+% begin_ohpc_run
+% ohpc_comment_header Setup nodes repositories and Install OHPC components \ref{sec:add_components}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add OpenHPC repo 
+[sms](*\#*) (*\chrootinstall*) http://repos.openhpc.community/OpenHPC/3/EL_9/x86_64/ohpc-release-3-1.el9.x86_64.rpm
+\end{lstlisting}
+% end_ohpc_run
+
+The {\em compute} nodes also need access to the EPEL repository, a required
+dependency for \OHPC{} packages. 
+
+% begin_ohpc_run
+% ohpc_comment_header Configure access to EPEL repo
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add epel repo
+[sms](*\#*) (*\chrootinstall*) epel-release
+
+\end{lstlisting}
+% end_ohpc_run
+
+
+\noindent Additionally, a workaround is needed for \OHPC{} documentation files,
+which are installed into a read-only NFS share /opt/ohpc/pub. Any package
+attempting to write to that directory will fail to install. The following
+prevents that by directing \texttt{rpm} not to install documentation files on
+the {\em compute} nodes:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) nodeshell compute echo -e %_excludedocs 1 \>\> ~/.rpmmacros
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Now \OHPC{} and other cluster-related software components can be
+installed on the nodes. The first step is to install a base compute package:
+% begin_ohpc_run
+% ohpc_comment_header Add OpenHPC base components to compute image
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Install compute node base meta-package
+[sms](*\#*) (*\chrootinstall*) ohpc-base-compute
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Next, we can include additional components:

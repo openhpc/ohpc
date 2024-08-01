@@ -1,24 +1,23 @@
 In order to utilize \InfiniBand{} or Omni-Path as the underlying high speed interconnect, it is
 generally necessary to increase the locked memory settings for system
 users. This can be accomplished by updating
-the \texttt{/etc/security/limits.conf} file and this should be performed within
-the {\em compute} image and on all job submission hosts. In this recipe, jobs
+the \texttt{/etc/security/limits.conf} file and this should be performed
+on all job submission hosts. In this recipe, jobs
 are submitted from the {\em master} host, and the following commands can be
 used to update the maximum locked memory settings on both the master host and
-the compute image:
+compute nodes:
 
 % begin_ohpc_run
-% ohpc_validation_newline 
+% ohpc_validation_newline
 % ohpc_validation_comment Update memlock settings
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Update memlock settings on master
 [sms](*\#*) perl -pi -e 's/# End of file/\* soft memlock unlimited\n$&/s' /etc/security/limits.conf
 [sms](*\#*) perl -pi -e 's/# End of file/\* hard memlock unlimited\n$&/s' /etc/security/limits.conf
-
-# Update memlock settings within compute image
-[sms](*\#*) perl -pi -e 's/# End of file/\* soft memlock unlimited\n$&/s' $CHROOT/etc/security/limits.conf
-[sms](*\#*) perl -pi -e 's/# End of file/\* hard memlock unlimited\n$&/s' $CHROOT/etc/security/limits.conf
+# Update memlock settings on compute
+[sms](*\#*) nodeshell compute perl -pi -e "'s/# End of file/\* soft memlock unlimited\n$&/s' \
+            /etc/security/limits.conf"
+[sms](*\#*) nodeshell compute perl -pi -e "'s/# End of file/\* hard memlock unlimited\n$&/s' \
+            /etc/security/limits.conf"
 \end{lstlisting}
 % end_ohpc_run
-
-

@@ -1,0 +1,32 @@
+At this point, all of the packages necessary to use \Confluent{} on the {\em master}
+host should be installed. Next, we enable support for local provisioning using
+a second private interface (refer to Figure~\ref{fig:physical_arch})
+
+% begin_ohpc_run
+% ohpc_comment_header Complete basic Confluent setup for master node \ref{sec:setup_confluent}
+%\begin{verbatim}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Enable internal interface for provisioning
+[sms](*\#*) ip link set dev ${sms_eth_internal} up
+[sms](*\#*) ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
+
+\end{lstlisting}
+%\end{verbatim}
+% end_ohpc_run
+
+
+\noindent \Confluent{} requires a network domain name specification for system-wide name
+resolution. This value can be set to match your local DNS schema or given a
+unique identifier such as `local`. A default group called everything is 
+automatically added to every node. It provides a method to indicate global settings.
+Attributes may all be specified on the command line, and an example set could be:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Define local domainname, deployment protocol and dns 
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+[sms](*\#*) nodegroupattrib everything deployment.useinsecureprotocols=${deployment_protocols} dns.domain=${dns_domain} 
+[sms](*\#*) nodegroupattrib everything dns.servers=${dns_servers} net.ipv4_gateway=${ipv4_gateway}
+\end{lstlisting}
+
+\noindent We will also define 

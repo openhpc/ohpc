@@ -1,0 +1,16 @@
+\subsection{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
+
+To finalize the \Confluent{} provisioning configuration, this section first highlights
+packing of the image from the chroot environment followed by the
+registration of desired compute nodes. To assemble the final compute image, run
+\texttt{packimage} as follows:
+
+% begin_ohpc_run
+% ohpc_comment_header Finalize Confluent provisioning configuration \ref{sec:assemble_bootstrap}
+% ohpc_validation_newline
+% ohpc_validation_comment Pack compute image
+\begin{lstlisting}[language=bash,upquote=true,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,
+    literate={-}{-}1 {BOSSHORT}{\baseosshort{}}1 {ARCH}{\arch{}}1]
+[sms](*\#*) packimage BOSSHORT-ARCH-netboot-compute
+\end{lstlisting}
+% end_ohpc_run

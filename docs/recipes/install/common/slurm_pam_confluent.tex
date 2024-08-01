@@ -1,0 +1,14 @@
+An additional optional customization that is recommended is to
+restrict \texttt{ssh} access on compute nodes to only allow access by users who
+have an active job associated with the node. This can be enabled via the use of
+a pluggable authentication module (PAM) provided as part of the \SLURM{} package
+installs. To enable this feature on {\em compute} nodes, issue the
+following:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Enable slurm pam module
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) nodeshell compute echo "\""account required pam_slurm.so"\"" \>\> /etc/pam.d/sshd
+\end{lstlisting}
+% end_ohpc_run

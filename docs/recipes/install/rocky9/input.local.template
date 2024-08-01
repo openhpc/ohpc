@@ -21,6 +21,9 @@ sms_eth_internal="${sms_eth_internal:-eth1}"
 # Subnet netmask for internal cluster network
 internal_netmask="${internal_netmask:-255.255.0.0}"
 
+# ipv4 gateway 
+ipv4_gateway="${ipv4_gateway:-172.16.0.2}"
+
 # Local ntp server for time synchronization
 ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
 
@@ -31,11 +34,24 @@ bmc_password="${bmc_password:-unknown}"
 # Additional time to wait for compute nodes to provision (seconds)
 provision_wait="${provision_wait:-180}"
 
-# Local domainname for cluster (xCAT recipe only)
+# DNS Local domainname for cluster (xCAT and Confluent recipe only)
+dns_servers="${dns_servers:-172.30.0.254}"
 domain_name="${domain_name:-local}"
 
 # Path to copy of OS ISO image (xCAT recipe only)
 iso_path="${iso_path:-}"
+
+# Osdeployment Initialize Options (Confluent recipe only)
+initialize_options="${initialize_options:-usklpta}"
+deployment_protocols="${deployment_protocols:-firmware}"
+
+
+
+# Path to local repository web roots (Confluent reciRocky-9.4-x86_64-dvd.isope only)
+ohpc_repo_dir_confluent="${ohpc_repo_dir:-/var/lib/confluent/public/ohpc}"
+ohpc_repo_remote_dir="${ohpc_repo_remote_dir:-/confluent-public/ohpc}"
+epel_repo_dir_confluent="${epel_repo_dir:-/var/lib/confluent/public/epel}"
+epel_repo_remote_dir="${epel_repo_remote_dir:-/confluent-public/epel}"
 
 # Path to local repository web roots (xCAT recipe only)
 ohpc_repo_dir="${ohpc_repo_dir:-/install/ohpc}"

@@ -1,0 +1,59 @@
+% -*- mode: latex; fill-column: 120; -*-
+
+With the provisioning services enabled, the next step is to define
+a system image that can subsequently be
+used to provision one or more {\em compute} nodes. The following subsections highlight this process.
+
+\subsubsection{Build initial BOS image} \label{sec:assemble_bos}
+The following steps illustrate the process to build a minimal, default image for use with \Confluent{}. To begin, you will
+first need to have a local copy of the ISO image available for the underlying OS. In this recipe, the relevant ISO image
+is \texttt{Rocky-9.4-x86\_64-dvd.iso} (available from the Rocky
+\href{https://rockylinux.org/download/}{\color{blue}download} page).
+We initialize the image
+creation process using the \texttt{osdeploy} command assuming that the necessary ISO image is available locally in
+\texttt{\$\{iso\_path\}} as follows:
+
+The \texttt{osdeploy initialize} command is used to prepare a confluent server to deploy deploy operating systems.
+For first time setup, run osdeploy initialize interactively to be walked through the various options using: 
+\texttt{osdeploy initialize -i}
+
+% begin_ohpc_run
+% ohpc_comment_header Initialize OS images for use with Confluent \ref{sec:assemble_bos}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
+[sms](*\#*) osdeploy initialize -${initialize_options}
+[sms](*\#*) osdeploy import ${iso_path}
+
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Once completed, OS image should be available for use within \Confluent{}. These can be queried via:
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
+# Query available images
+[sms](*\#*) osdeploy list
+Distributions:
+  rocky-8.5-x86_64
+  rocky-9.4-x86_64
+Profiles:
+  rhel-9.4-x86_64-default
+  rocky-8.5-x86_64-default
+\end{lstlisting}
+
+If needing to copy files from the sms node to the compute nodes during deployment, this can be done by
+modifying the syncfiles file that is created when \texttt{osdeploy import} command is run. For an environment
+that has no DNS server and needs to have /etc/hosts file synced amongst all the nodes, the following command
+should be run.   
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Sync the hosts file in cluster
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
+  [sms](*\#*) echo "/etc/hosts -> /etc/hosts" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default/syncfiles
+
+\end{lstlisting}
+% end_ohpc_run
+  
+
+%The \texttt{CHROOT} environment variable highlights the path and is used by
+%subsequent commands to augment the basic installation.
+

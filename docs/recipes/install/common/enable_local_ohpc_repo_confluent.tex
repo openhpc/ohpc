@@ -1,0 +1,30 @@
+To begin, enable use of the \OHPC{} repository by adding it to the local list
+of available package repositories. Note that this requires network access from
+your {\em master} server to the \OHPC{} repository, or alternatively, that
+the \OHPC{} repository be mirrored locally.  In cases where network external
+connectivity is available, \OHPC{} provides an \texttt{ohpc-release} package
+that includes GPG keys for package signing and enabling the repository.  The
+example which follows illustrates installation of the \texttt{ohpc-release}
+package directly from the \OHPC{} build server.
+
+% begin_ohpc_run
+% ohpc_validation_comment Add OpenHPC components to compute instance
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add OpenHPC repo 
+[sms](*\#*) (*\install*) http://repos.openhpc.community/OpenHPC/3/EL_9/x86_64/ohpc-release-3-1.el9.x86_64.rpm
+\end{lstlisting}
+% end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small Many sites may find it useful or necessary to maintain a local copy of the
+\OHPC{} repositories. To facilitate this need, standalone tar
+archives are provided -- one containing a repository of binary packages as well as any
+available updates, and one containing a repository of source RPMS. The tar files
+also contain a simple bash script to configure the package manager to use the
+local repository after download. To use, simply unpack the tarball where you
+would like to host the local repository and execute the \texttt{make\_repo.sh} script.
+Tar files for this release can be found at \href{http://repos.openhpc.community/dist/\OHPCVersion}
+        {\color{blue}{http://repos.openhpc.community/dist/\OHPCVersion}}
+\end{tcolorbox}
+\end{center}

@@ -1,0 +1,34 @@
+\input{common/localflock-tooltip}
+
+The default underlying network type used by \Lustre{} is {\em tcp}. If your
+external \Lustre{} file system is to be mounted using a network type other than
+{\em tcp}, additional configuration files are necessary to identify the desired
+network type. The example below illustrates creation of modprobe configuration files
+instructing \Lustre{} to use an \InfiniBand{} network with the \textbf{o2ib} LNET driver
+attached to \texttt{ib0}. Note that these modifications are made to both the
+{\em master} host and {\em compute} nodes.
+
+%x\clearpage
+% begin_ohpc_run
+% ohpc_validation_comment Enable o2ib for Lustre
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
+[sms](*\#*) nodeshell compute echo "\""options lnet networks=o2ib\(ib0\)"\"" \>\> /etc/modprobe.d/lustre.conf
+\end{lstlisting}
+% end_ohpc_run
+
+With the \Lustre{} configuration complete, the client can be mounted on the {\em master}
+and {\em compute} hosts as follows:
+% begin_ohpc_run
+% ohpc_validation_comment mount Lustre client on master and compute
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) mkdir /mnt/lustre
+[sms](*\#*) mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
+
+# Mount on compute nodes
+[sms](*\#*) nodeshell compute mount /mnt/lustre
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% ohpc_validation_newline
+% end_ohpc_run

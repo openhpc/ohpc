@@ -1,0 +1,127 @@
+\subsection{Upgrading OpenHPC Packages}  \label{appendix:upgrade}
+
+
+As newer \OHPC{} releases are made available, users are encouraged to upgrade
+their locally installed packages against the latest repository versions to
+obtain access to bug fixes and newer component versions. This can be
+accomplished with the underlying package manager as \OHPC{} packaging maintains
+versioning state across releases. Also, package builds available from the
+\OHPC{} repositories have ``\texttt{-ohpc}'' appended to their names so that
+wild cards can be used as a simple way to obtain updates. The following general
+procedure highlights a method for upgrading existing installations.
+When upgrading from a minor release older than v\OHPCVerTree{}, you will first
+need to update your local \OHPC{} repository configuration to point against the
+v\OHPCVerTree{} release (or update your locally hosted mirror). Refer to
+\S\ref{sec:enable_repo} for more details on enabling the latest
+repository. In contrast, when upgrading between micro releases on the same
+branch (e.g. from v\OHPCVerTree{} to \OHPCVerTree{}.2), there is no need to
+adjust local package manager configurations when using the public repository as
+rolling updates are pre-configured.
+
+The initial step, when using a local mirror as described in
+\S\ref{sec:enable_repo}, is downloading a new tarball from \texttt{http://build.openhpc.community/dist}.
+After this, move (or remove) the old repository directory, unpack
+the new tarball and run the \texttt{make\_repo.sh} script. In the following,
+substitute \texttt{x.x.x} with the desired version number.
+
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1
+        {VER2}{\OHPCVersion{}}1]
+[sms](*\#*) wget http://repos.openhpc.community/dist/x.x.x/OpenHPC-x.x.x.OSREPO.ARCH.tar
+[sms](*\#*) mv $ohpc_repo_dir "$ohpc_repo_dir"_old
+[sms](*\#*) mkdir -p $ohpc_repo_dir
+[sms](*\#*) tar xvf OpenHPC-x.x.x.OSREPO.ARCH.tar -C $ohpc_repo_dir
+[sms](*\#*) $ohpc_repo_dir/make_repo.sh
+\end{lstlisting}
+
+The {\em compute} hosts will pickup new packages automatically as long as the
+repository location on the SMS stays the same. If you prefer to use a different
+location, setup repositories on the nodes as described in
+\S\ref{sec:enable_repo}.
+
+The actual update is performed as follows:
+\begin{enumerate*}
+\item (Optional) Ensure repo metadata is current (on head and compute nodes.)
+  Package managers will naturally do this on their own over time,
+  but if you are wanting to access updates immediately after a new release,
+  the following can be used to sync to the latest.
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*)  (*\clean*)
+[sms](*\#*)  nodeshell compute (*\clean*)
+\end{lstlisting}
+
+\item Upgrade master (SMS) node
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*)  (*\upgrade*) "*-ohpc"
+\end{lstlisting}
+
+\item Upgrade packages on compute nodes
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) nodeshell compute  (*\upgrade*) "*-ohpc"
+\end{lstlisting}
+
+\nottoggle{isxCATstateful}{\item Rebuild image(s)
+
+\iftoggleverb{isWarewulf}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) wwvnfs --chroot $CHROOT
+\end{lstlisting}
+\fi
+
+\iftoggleverb{isxCAT}
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,
+    literate={-}{-}1 {BOSVER}{\baseos{}}1 {ARCH}{\arch{}}1]
+[sms](*\#*) packimage BOSVER-x86_64-netboot-compute
+\end{lstlisting}
+\fi
+}
+
+\end{enumerate*}
+
+\noindent Note that to update running services such as a resource manager a
+service restart (or a full reboot) is required.
+
+%%% \subsubsection{New component variants}
+%%%
+%%% As newer variants of key compiler/MPI stacks are released, \OHPC{} will
+%%% periodically add toolchains enabling the latest variant. To stay consistent
+%%% throughout the build hierarchy, minimize recompilation requirements for existing
+%%% binaries, and allow for multiple variants to coexist, unique delimiters are
+%%% used to distinguish RPM package names and module hierarchy.
+%%%
+%%% In the case of a fresh install, \OHPC{} recipes default to installation of the
+%%% latest toolchains available in a given release branch. However, if upgrading a
+%%% previously installed system, administrators can {\em opt-in} to enable new
+%%% variants as they become available. To illustrate this point, consider the
+%%% previous \OHPC{} 1.3.2 release as an example which contained an {``openmpi''}
+%%% MPI variant providing OpenMPI 1.10.x along with runtimes and libraries compiled
+%%% with this toolchain. That release also contained the {``llvm4''} compiler
+%%% family which has been updated to {``llvm5''} in \OHPC{} 1.3.3.  In the case
+%%% where an admin would like to enable the newer {``openmpi3''} toolchain,
+%%% installation of these additions is simplified with the use of \OHPC{}'s
+%%% meta-packages (see Table~\ref{table:groups} in Appendix
+%%% \ref{appendix:manifest}).  The following example illustrates adding the
+%%% complete ``openmpi3'' toolchain.  Note that we leverage the convenience
+%%% meta-packages containing MPI-dependent builds, and we also update the
+%%% modules environment to make it the default.
+%%%
+%%% \begin{lstlisting}[language=bash,keywords={}]
+%%% # Update default environment
+%%% [sms](*\#*) (*\remove*) lmod-defaults-gnu7-openmpi-ohpc
+%%% [sms](*\#*) (*\install*) lmod-defaults-gnu7-openmpi3-ohpc
+%%%
+%%% # Install OpenMPI 3.x-compiled meta-packages with dependencies
+%%% [sms](*\#*)  (*\install*) ohpc-gnu7-perf-tools \
+%%%                          ohpc-gnu7-io-libs \
+%%%                          ohpc-gnu7-python-libs \
+%%%                          ohpc-gnu7-runtimes \
+%%%                          ohpc-gnu7-openmpi3-parallel-libs
+%%%
+%%% # Install LLVM/Clang 5.x
+%%% [sms](*\#*)  (*\install*) llvm5-compilers-ohpc
+%%% \end{lstlisting}
+%%%
+%%%

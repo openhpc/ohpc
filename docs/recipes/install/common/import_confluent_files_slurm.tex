@@ -1,0 +1,23 @@
+\noindent Similarly, to import the
+%global Slurm configuration file and the
+cryptographic
+key
+%and associated file permissions
+that is required by the {\em munge}
+authentication library to be available on every host in the resource management
+pool, issue the following:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) echo "/etc/munge/munge.key -> /etc/munge/munge.key" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default
+\end{lstlisting}
+% \end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+The ``\texttt{nodeapply compute -F}'' command can be used to distribute changes made to any
+defined synchronization files on the SMS host. Users wishing to automate this process may
+want to consider adding a crontab entry to perform this action at defined intervals.
+\end{tcolorbox}
+\end{center}

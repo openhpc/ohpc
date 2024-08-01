@@ -1,0 +1,75 @@
+In section \S\ref{sec:basic_install}, the \SLURM{} resource manager was
+installed and configured on the  {\em master} host. \SLURM{} clients were also
+installed, but have not been configured yet. To do so, \SLURM{} and
+\texttt{munge} configuration files need to be copied to the nodes. This can be
+accomplished as follows:
+
+% begin_ohpc_run
+% ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) nodersync /etc/slurm/slurm.conf compute:/etc/slurm/slurm.conf
+[sms](*\#*) nodersync /etc/munge/munge.key compute:/etc/munge/munge.key
+\end{lstlisting}
+% end_ohpc_run
+
+
+With \SLURM{} configured, we can now startup the
+resource manager services in preparation for running user jobs. Generally, this
+is a two-step process that requires starting up the controller daemons on the {\em
+ master} host and the client daemons on each of the {\em compute} hosts.
+%Since the {\em compute} hosts were booted into an image that included the SLURM client
+%components, the daemons should already be running on the {\em compute}
+%hosts.
+Note that \SLURM{} leverages the use of the {\em munge} library to provide
+authentication services and this daemon also needs to be running on all hosts
+within the resource management pool.
+%The munge daemons should already
+%be running on the {\em compute} subsystem at this point,
+The following commands can be used to startup the necessary services to support
+resource management under \SLURM{}.
+
+%\iftoggle{isCentOS}{\clearpage}
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+# Start munge and slurm controller on master host
+[sms](*\#*) systemctl enable munge
+[sms](*\#*) systemctl enable slurmctld
+[sms](*\#*) systemctl start munge
+[sms](*\#*) systemctl start slurmctld
+
+# Start slurm clients on compute hosts
+[sms](*\#*) nodeshell compute systemctl enable munge
+[sms](*\#*) nodeshell compute systemctl enable slurmd
+[sms](*\#*) nodeshell compute systemctl start munge
+[sms](*\#*) nodeshell compute systemctl start slurmd
+\end{lstlisting}
+% end_ohpc_run
+
+%%% In the default configuration, the {\em compute} hosts will be initialized in an
+%%% {\em unknown} state. To place the hosts into production such that they are
+%%% eligible to schedule user jobs, issue the following:
+
+%%% % begin_ohpc_run
+%%% \begin{lstlisting}[language=bash]
+%%% [sms](*\#*) scontrol update partition=normal state=idle
+%%% \end{lstlisting}
+%%% % end_ohpc_run
+
+After this, check status of the nodes within \SLURM{} by using the
+\texttt{sinfo} command. All compute nodes should be in an {\em idle} state
+(without asterisk). If the state is reported as {\em unknown}, the following
+might help:
+
+%%% % begin_ohpc_run
+\begin{lstlisting}[language=bash]
+[sms](*\#*) scontrol update partition=normal state=idle
+\end{lstlisting}
+%%% % end_ohpc_run
+
+In case of additional \SLURM{} issues, ensure that the configuration file fits
+your hardware and that it is identical across the nodes. Also, verify
+that \SLURM{} user id is the same on the SMS and {\em compute} nodes. You may
+also consult
+\href{https://slurm.schedmd.com/troubleshoot.html}{\color{blue}\SLURM{}
+Troubleshooting Guide}.
