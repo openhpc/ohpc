@@ -47,7 +47,7 @@ skip_x86  = ["-arm1"]
 compiler_families=["gnu13", "intel"]
 mpi_families=["openmpi5","mpich","mvapich2","impi"]
 
-standalone = ["docs","test-suite"]
+standalone = ["docs","test-suite","warewulf"]
 mpi_dependent = ["cubew","otf2","cubelib","opari2","scorep","scalasca"]
 skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-compilers-devel","arm-compilers-devel"]
 
