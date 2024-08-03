@@ -50,7 +50,6 @@ BuildRequires: unzip
 Requires: dhcp-server
 
 %if 0%{?suse_version} || 0%{?sle_version}
-BuildRequires: distribution-release
 BuildRequires: systemd-rpm-macros
 BuildRequires: go > 1.20
 BuildRequires: firewall-macros
@@ -62,7 +61,6 @@ Requires: firewalld
 Requires: ipxe-bootimgs
 %else
 # Assume Fedora-based OS (>= RHEL 9) if not SUSE-based
-BuildRequires: system-release
 BuildRequires: systemd
 BuildRequires: golang > 1.20
 BuildRequires: firewalld-filesystem
@@ -85,13 +83,7 @@ system for large clusters of bare metal and/or virtual systems.
 
 
 %build
-# No network access in OBS, so module downloads will break builds
-%if 0%{?OHPC_BUILD} || !0%{?update_mods}
 export OFFLINE_BUILD=1
-%else
-export OFFLINE_BUILD=0
-%endif
-
 # Install to sharedstatedir by redirecting LOCALSTATEDIR
 make defaults \
     PREFIX=%{_prefix} \
@@ -116,6 +108,7 @@ make api
 
 %install
 export NO_BRP_STALE_LINK_ERROR=yes
+export OFFLINE_BUILD=1
 make install DESTDIR=%{buildroot}
 make installapi DESTDIR=%{buildroot}
 
