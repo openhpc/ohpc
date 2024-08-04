@@ -62,6 +62,7 @@ Requires: ipxe-bootimgs
 %else
 # Assume Fedora-based OS (>= RHEL 9) if not SUSE-based
 BuildRequires: systemd
+BuildRequires: gcc
 BuildRequires: golang > 1.20
 BuildRequires: firewalld-filesystem
 Requires: tftp-server

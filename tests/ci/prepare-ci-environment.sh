@@ -139,6 +139,9 @@ dnf_openeuler() {
 	fi
 	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
 	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats
+	# This repository contains golang 1.21 copied from 24.03
+	# shellcheck disable=SC2016
+	echo -e '[go.1.21]\nname=go.1.21\nbaseurl=https://repos.openhpc.community/.staging/golang-1.21-openEuler-24.03-LTS/$basearch/\nenabled=1\ngpgcheck=0' >/etc/yum.repos.d/go.1.21.repo
 }
 
 print_env
