@@ -556,7 +556,7 @@ for i in "${required_pkg[@]}"; do
 		if [ $? -eq 0 ]; then
 			echo "$i installed successfully"
 		else
-			echo "Failed to install thirdparty package $i required by PTL"
+			echo "Failed to install third-party package $i required by PTL"
 		fi
 	fi
 done
