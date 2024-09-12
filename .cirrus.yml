@@ -23,7 +23,7 @@ task:
   test_script: |
     export SKIP_CI_SPECS="${SKIP_CI_SPECS}${JOB_SKIP_CI_SPECS}"
     chown ohpc -R tests
-    tests/ci/setup_slurm_and_run_tests.sh ohpc gnu13 $(tests/ci/cirrus_get_changed_files.sh)
+    tests/ci/setup_slurm_and_run_tests.sh ohpc gnu14 $(tests/ci/cirrus_get_changed_files.sh)
 
 openeuler_task:
   name: openEuler on aarch64
@@ -45,4 +45,4 @@ openeuler_task:
   test_script: |
     export SKIP_CI_SPECS="${SKIP_CI_SPECS}${JOB_SKIP_CI_SPECS}"
     chown ohpc -R tests
-    tests/ci/setup_slurm_and_run_tests.sh ohpc gnu13 $(tests/ci/cirrus_get_changed_files.sh)
+    tests/ci/setup_slurm_and_run_tests.sh ohpc gnu14 $(tests/ci/cirrus_get_changed_files.sh)

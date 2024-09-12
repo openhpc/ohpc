@@ -65,7 +65,7 @@ jobs:
   build_on_rhel:
     strategy:
       matrix:
-        compiler: [gnu13, intel]
+        compiler: [gnu14, intel]
     runs-on: ubuntu-latest
     name: Build on RHEL (${{ matrix.compiler}})
     container:
@@ -105,7 +105,7 @@ jobs:
   test_on_rhel:
     strategy:
       matrix:
-        compiler: [gnu13, intel]
+        compiler: [gnu14, intel]
     runs-on: ubuntu-latest
     name: Test on RHEL
     env:
@@ -185,7 +185,7 @@ jobs:
   test_on_openEuler:
     strategy:
       matrix:
-        compiler: [gnu13]
+        compiler: [gnu14]
     env:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
@@ -246,7 +246,7 @@ jobs:
   test_on_leap:
     strategy:
       matrix:
-        compiler: [gnu13]
+        compiler: [gnu14]
     env:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
