@@ -48,6 +48,13 @@ elif [ "${OHPC_COMPILER_FAMILY}" = "gnu13" ]; then
 	export F77=gfortran
 	module purge
 	module load gnu13
+elif [ "${OHPC_COMPILER_FAMILY}" = "gnu14" ]; then
+	export CC=gcc
+	export CXX=g++
+	export FC=gfortran
+	export F77=gfortran
+	module purge
+	module load gnu14
 elif [ "${OHPC_COMPILER_FAMILY}" = "gnu9" ]; then
 	export CC=gcc
 	export CXX=g++
