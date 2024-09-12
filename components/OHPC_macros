@@ -79,13 +79,18 @@ BuildRequires: ohpc-buildroot
 # these choices can be overridden by specifing the compiler_family/mpi_family
 # variables via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu13}
+%{!?compiler_family: %global compiler_family gnu14}
 %{!?mpi_family: %global mpi_family openmpi5}
 %{!?python_family: %global python_family python3}
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
+%if "%{compiler_family}" == "gnu14"
+BuildRequires: gnu14-compilers%{PROJ_DELIM} >= 14.1.0
+Requires:      gnu14-compilers%{PROJ_DELIM} >= 14.1.0
+%global gnu_family gnu14
+%endif
 %if "%{compiler_family}" == "gnu13"
 BuildRequires: gnu13-compilers%{PROJ_DELIM} >= 13.1.0
 Requires:      gnu13-compilers%{PROJ_DELIM} >= 13.1.0
