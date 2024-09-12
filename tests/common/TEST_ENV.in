@@ -8,7 +8,7 @@ PYTHON_FAMILIES="@PYTHON_FAMILIES@"
 BEEGFS_TEST_PATH="/mnt/beegfs"
 LUSTRE_TEST_PATH="/mnt/lustre/ohpc-test"
 NUM_COMPUTES=2
-GCC_DEFAULT="gnu13"
+GCC_DEFAULT="gnu14"
 export BATS_USE_MKTEMP=1
 export OMPI_MCA_rmaps_base_oversubscribe=1
 #

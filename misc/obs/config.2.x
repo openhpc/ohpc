@@ -44,7 +44,7 @@ skip_x86  = ["-arm1"]
 
 # define compiler/MPI families: first entry in list is defined to be parent in OBS
 #compiler_families=["gnu13","intel","arm1"]
-compiler_families=["gnu13", "intel"]
+compiler_families=["gnu14", "intel"]
 mpi_families=["openmpi5","mpich","mvapich2","impi"]
 
 standalone = ["docs","test-suite","warewulf"]

@@ -15,7 +15,7 @@ export BATS_JUNIT_CLASS=OpenCoarrays
 
 ./bootstrap || exit 1
 
-for compiler in gnu13 ; do
+for compiler in gnu14 ; do
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "
