@@ -27,7 +27,7 @@ Release:       1
 License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/perf-tools
 URL:           https://geopm.github.io
-Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
+Source0:       https://github.com/geopm/geopm/archive/refs/tags/v%{version}.tar.gz
 # Based on https://patch-diff.githubusercontent.com/raw/geopm/geopm/pull/1141.patch
 Patch0:        gnu12.patch
 Patch1:        https://github.com/geopm/geopm/commit/4b70c27c058fc826270a487778226f4719a1df8a.patch
@@ -87,7 +87,7 @@ including support for static control.
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "gnu13"
+%if "%{compiler_family}" == "gnu14"
 export CFLAGS="$CFLAGS -Wno-error=stringop-truncation"
 %endif
 %if "%{compiler_family}" == "intel"
@@ -95,7 +95,7 @@ export CXXFLAGS="${CXXFLAGS} -Wno-error"
 %endif
 ./autogen.sh
 
-%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu13"
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu14"
 # The combination of impi and GCC 12 does not work as
 # expected and needs these additional fixes.
 sed -e 's,\sFFLAGS=$MPI_F77FLAGS,FFLAGS="-I$MPI_DIR/include $MPI_F77FLAGS",g' -i configure

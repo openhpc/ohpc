@@ -14,7 +14,7 @@
 %define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu13
+%global gnu_family gnu14
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
@@ -79,9 +79,13 @@ find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python3||" {} \;
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+export CFLAGS="${CFLAGS} -fno-strict-aliasing"
+
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 module load fftw
+export CFLAGS="${CFLAGS} -Wno-implicit-int"
+export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
 %endif
 
 module load %{python_module_prefix}numpy
@@ -114,7 +118,6 @@ include_dirs = $OPENBLAS_INC
 EOF
 %endif
 
-CFLAGS="%{optflags} -fno-strict-aliasing" \
 %if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
 %__python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
@@ -140,6 +143,8 @@ LDFLAGS="-shared -rtlib=compiler-rt -lm" \
 
 %if "%{compiler_family}" == "%{gnu_family}"
 module load openblas
+export CFLAGS="${CFLAGS} -Wno-implicit-int"
+export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
 %endif
 
 module load %{python_module_prefix}numpy

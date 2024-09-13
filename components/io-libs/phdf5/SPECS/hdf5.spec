@@ -27,6 +27,8 @@ URL:       http://www.hdfgroup.org/HDF5
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
 
 BuildRequires: zlib-devel make
+BuildRequires: perl(File::Compare)
+BuildRequires: perl(File::Copy)
 
 %if "%{compiler_family}" == "intel"
 BuildRequires: libtool%{PROJ_DELIM}
@@ -70,7 +72,7 @@ export MPICC=mpicc
 export MPIFC=mpifc
 export MPICXX=mpicxx
 
-%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu13"
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu14"
 # This is not really the perfect solution, but impi does not have
 # the necessary files for gfortran 12. It seems to work with
 # the files from gfortran 11.1.0.
