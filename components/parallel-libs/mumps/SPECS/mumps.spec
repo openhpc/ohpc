@@ -13,7 +13,7 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu13
+%global gnu_family gnu14
 
 # Base package name
 %define pname mumps

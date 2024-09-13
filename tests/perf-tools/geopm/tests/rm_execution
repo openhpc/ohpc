@@ -8,7 +8,14 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-check_rms
+setup() {
+	if [ -n "$SIMPLE_CI" ]; then
+		skip "Not supported in simple CI setup"
+	fi
+
+	check_rms
+}
+
 rm=$RESOURCE_MANAGER
 
 testname="perf-tools/geopm"
