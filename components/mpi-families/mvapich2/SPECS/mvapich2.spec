@@ -96,6 +96,9 @@ across multiple networks.
 #   Rerun configure with FFLAGS=-fallow-argument-mismatch
 # This seems to fix the build.
 export FFLAGS=-fallow-argument-mismatch
+%if "%{compiler_family}" == "gnu14"
+export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
+%endif
 %endif
 %if "%{compiler_family}" == "intel"
 export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
