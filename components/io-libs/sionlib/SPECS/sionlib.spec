@@ -67,6 +67,9 @@ CONFIGURE_OPTIONS="--compiler=llvm "
 %if "%{compiler_family}" == "gnu13"
 CONFIGURE_OPTIONS="--compiler=gnu "
 %endif
+%if "%{compiler_family}" == "gnu14"
+CONFIGURE_OPTIONS="--compiler=gnu "
+%endif
 
 %if "%{mpi_family}" == "impi"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel2 "
