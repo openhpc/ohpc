@@ -58,6 +58,9 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %define openblas_target TARGET=ARMV8 NUM_THREADS=256
 %define nbjobs_option MAKE_NB_JOBS=4
 %endif
+%if "%{compiler_family}" == "gnu14"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration -Wno-incompatible-pointer-types"
+%endif
 
 make %{?openblas_target} USE_THREAD=1 USE_OPENMP=1 %{?nbjobs_option} \
         PREFIX=%{buildroot}%{install_path}
