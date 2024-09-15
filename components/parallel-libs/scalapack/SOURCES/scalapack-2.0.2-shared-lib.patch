@@ -28,7 +28,7 @@ diff -urN scalapack/scalapack-2.0.2-orig/SLmake.inc.example scalapack/scalapack-
 -FCFLAGS       = -O3
 -CCFLAGS       = -O3
 +NOOPT         = -fPIC
-+FCFLAGS       = $(CFLAGS) $(NOOPT) $(GNU13FCFLAGS)
++FCFLAGS       = $(CFLAGS) $(NOOPT) $(GNU14FCFLAGS)
 +CCFLAGS       = $(CFLAGS) $(NOOPT)
  FCLOADER      = $(FC)
  CCLOADER      = $(CC)
