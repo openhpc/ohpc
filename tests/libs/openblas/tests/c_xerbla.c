@@ -5,7 +5,7 @@
 #include "common.h"
 #include "cblas_test.h"
 
-void cblas_xerbla(blasint info, char *rout, char *form, ...)
+void cblas_xerbla(blasint info, OPENBLAS_CONST char *rout, OPENBLAS_CONST char *form, ...)
 {
    extern int cblas_lerr, cblas_info, cblas_ok;
    extern int link_xerbla;
