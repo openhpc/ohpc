@@ -71,17 +71,16 @@ cp SLmake.inc.example SLmake.inc
 
 %build
 %ohpc_setup_compiler
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-implicit-int"
+
 %if "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
 %{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
 %{__cat} SLmake.inc
 export CFLAGS="${CFLAGS} -fsimdmath"
 %endif
-%if "%{compiler_family}" == "intel" || "%{compiler_family}" == "arm1"
-export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
-export CFLAGS="${CFLAGS} -Wno-implicit-int"
-%endif
-%if "%{compiler_family}" == "gnu13"
+%if "%{compiler_family}" == "gnu14"
 module load openblas
 # configure fails with:
 #   The Fortran compiler gfortran does not accept programs that
@@ -89,7 +88,7 @@ module load openblas
 #   the option -fallow-argument-mismatch.
 #   Rerun configure with FFLAGS=-fallow-argument-mismatch
 # This seems to fix the build.
-export GNU13FCFLAGS=-fallow-argument-mismatch
+export GNU14FCFLAGS=-fallow-argument-mismatch
 %endif
 make lib
 
