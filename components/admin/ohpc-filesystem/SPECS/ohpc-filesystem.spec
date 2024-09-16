@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %if 0%{?rhel} >= 9 || 0%{?openEuler} || 0%{?sle_version} >= 150400
-%define version 3.1
+%define version 3.2
 %else
 %define version 2.7
 %endif

@@ -29,7 +29,7 @@
 %global debug_package   %{nil}
 
 %if 0%{?rhel} >= 9 || 0%{?openEuler}
-%{!?dist: %global dist 300.ohpc}
+%{!?dist: %global dist 320.ohpc}
 %else
 %{!?dist: %global dist 27.ohpc}
 %endif

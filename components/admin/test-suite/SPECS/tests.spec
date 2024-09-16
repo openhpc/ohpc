@@ -12,7 +12,7 @@
 
 Summary:   Integration test suite for OpenHPC
 Name:      test-suite%{PROJ_DELIM}
-Version:   3.1.0
+Version:   3.2.0
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
