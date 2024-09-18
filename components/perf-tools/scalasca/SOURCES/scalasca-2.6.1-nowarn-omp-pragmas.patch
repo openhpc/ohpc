@@ -1,0 +1,39 @@
+This patch fixes a missing $ in configure, which causes following checks to
+fail if they produce any output to stdout or stderr.
+
+diff -Nrup scalasca-2.6.1.orig/build-config/m4/scalasca_nowarn_omp_pragmas.m4 scalasca-2.6.1/build-config/m4/scalasca_nowarn_omp_pragmas.m4
+--- scalasca-2.6.1.orig/build-config/m4/scalasca_nowarn_omp_pragmas.m4	2022-12-14 11:55:38.810618928 +0100
++++ scalasca-2.6.1/build-config/m4/scalasca_nowarn_omp_pragmas.m4	2023-09-27 09:47:31.155201804 +0200
+@@ -62,7 +62,7 @@ AS_CASE([$_scalasca_nowarn_omp_pragmas],
+ AC_SUBST([NOWARN_OMP_PRAGMAS_]_AC_LANG_PREFIX[FLAGS])
+ 
+ dnl Reset environment
+-ac_[]_AC_LANG_ABBREV[]_werror_flag=_scalasca_save_[]_AC_LANG_ABBREV[]_werror_flag
++ac_[]_AC_LANG_ABBREV[]_werror_flag=$_scalasca_save_[]_AC_LANG_ABBREV[]_werror_flag
+ ])
+ 
+ 
+diff -Nrup scalasca-2.6.1.orig/build-backend/configure scalasca-2.6.1/build-backend/configure
+--- scalasca-2.6.1.orig/build-backend/configure	2022-12-14 11:56:16.350709778 +0100
++++ scalasca-2.6.1/build-backend/configure	2023-09-27 09:49:35.847822426 +0200
+@@ -21128,7 +21128,7 @@ case $_scalasca_nowarn_omp_pragmas in #(
+ esac
+ 
+ 
+-ac_cxx_werror_flag=_scalasca_save_cxx_werror_flag
++ac_cxx_werror_flag=$_scalasca_save_cxx_werror_flag
+ 
+  if test "x${ac_cv_prog_cxx_openmp}" != "xunsupported" \
+                 && test "x${enable_openmp}" != "xno"; then
+diff -Nrup scalasca-2.6.1.orig/build-mpi/configure scalasca-2.6.1/build-mpi/configure
+--- scalasca-2.6.1.orig/build-mpi/configure	2022-12-14 11:56:33.574751469 +0100
++++ scalasca-2.6.1/build-mpi/configure	2023-09-27 09:49:06.135678364 +0200
+@@ -21878,7 +21878,7 @@ case $_scalasca_nowarn_omp_pragmas in #(
+ esac
+ 
+ 
+-ac_cxx_werror_flag=_scalasca_save_cxx_werror_flag
++ac_cxx_werror_flag=$_scalasca_save_cxx_werror_flag
+ 
+  if test "x${ac_cv_prog_cxx_openmp}" != "xunsupported" \
+                 && test "x${enable_openmp}" != "xno"; then

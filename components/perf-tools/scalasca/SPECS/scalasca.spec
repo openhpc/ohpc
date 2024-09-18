@@ -33,6 +33,7 @@ Requires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8
 Requires: cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.4
 Requires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
 Requires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.2
+Patch1:   scalasca-2.6.1-nowarn-omp-pragmas.patch
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -56,6 +57,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch -P 1 -p1
 
 %build
 
