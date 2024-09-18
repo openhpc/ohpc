@@ -30,6 +30,7 @@ Source0:   https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/scorep-%{v
 %if 0%{?suse_version}
 Patch1:    scorep-8.4-opensuse-libbfd-additional-libs.patch
 %endif
+Patch2:    scorep-8.4-gcc-update-fake-gmp-header.patch
 
 BuildRequires: automake
 BuildRequires: bison
@@ -76,6 +77,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %if 0%{?suse_version}
 %patch -P 1 -p1
 %endif
+%patch -P 2 -p1
 
 %build
 
