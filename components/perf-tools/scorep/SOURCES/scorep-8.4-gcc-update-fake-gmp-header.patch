@@ -1,0 +1,42 @@
+This patch replaces the GMP header used by Score-P during configure. This header is used
+when checking for gcc-plugin.h, building the plug-in and linking it to work around issues
+with installations where GMP is not available since Score-P v1.4.1.
+The previous header did work up-to GCC 13, but changes in GCC 14 cause the header check to fail,
+which disables the GCC plug-in in Score-P. This resulted in a lack of functionality,
+namely compile-time filtering.
+
+With this patch, the configure check now passes correctly once again.
+
+---
+--- a/src/adapters/compiler/gcc-plugin/fake-gmp/gmp.h
++++ b/src/adapters/compiler/gcc-plugin/fake-gmp/gmp.h
+@@ -1,7 +1,7 @@
+ /*
+  * This file is part of the Score-P software (http://www.score-p.org)
+  *
+- * Copyright (c) 2015,
++ * Copyright (c) 2015, 2024,
+  * Technische Universitaet Dresden, Germany
+  *
+  * This software may be modified and distributed under the terms of
+@@ -13,6 +13,16 @@
+ #ifndef SCOREP_FAKE_GMP_H
+ #define SCOREP_FAKE_GMP_H
+
+-typedef void* mpz_t;
++struct __fake_mpz_struct
++{
++    int empty;
++};
++
++typedef struct __fake_mpz_struct  mpz_t[ 1 ];
++typedef struct __fake_mpz_struct* mpz_ptr;
++
++void mpz_init( mpz_ptr );
++
++void mpz_clear( mpz_ptr );
+
+ #endif /* SCOREP_FAKE_GMP_H */
+--
+
+
