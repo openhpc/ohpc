@@ -21,7 +21,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Release:        1%{?dist}
-Version:        4.2.1
+Version:        4.4.1
 Source0:        https://cran.r-project.org/src/base/R-4/R-%{version}.tar.gz
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
