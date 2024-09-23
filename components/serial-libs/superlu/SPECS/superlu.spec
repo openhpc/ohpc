@@ -62,10 +62,8 @@ Docu can be found on http://www.netlib.org.
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "arm1" || "%{compiler_family}" == "intel"
-export DEFAULT_OPTS="${DEFAULT_OPTS} -Wno-implicit-int"
+export DEFAULT_OPTS="${CFLAGS} -Wno-implicit-int"
 export DEFAULT_OPTS="${DEFAULT_OPTS} -Wno-implicit-function-declaration"
-%endif
 %if "%{compiler_family}" == "arm1"
 export DEFAULT_OPTS="${DEFAULT_OPTS} -fsimdmath"
 %endif
