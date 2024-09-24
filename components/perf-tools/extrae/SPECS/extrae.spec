@@ -68,18 +68,20 @@ export compiler_vars="CC=${CC} CXX=${CXX} MPIF90=mpiifort $compiler_vars"
 export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
 ./bootstrap
 export LDFLAGS="$LDFLAGS -lz"
+%if 0%{?sle_version}
+export LDFLAGS="$LDFLAGS -lsframe"
+%endif
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath -fPIC"
+export CXXFLAGS="${CXXFLAGS} -fsimdmath -fPIC"
+export FCFLAGS="${FCFLAGS} -fsimdmath -fPIC"
+%endif
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
     --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR \
 %if "%{mpi_family}" == "impi"
     --with-mpi-libs=$MPI_DIR/lib/release \
-%endif
-%if "%{compiler_family}" == "arm1"
-    CFLAGS="${CFLAGS} -fsimdmath -fPIC -Wno-implicit-function-declaration" \
-    CXXFLAGS="${CXXFLAGS} -fsimdmath -fPIC" \
-    FCFLAGS="${FCFLAGS} -fsimdmath -fPIC" \
-%endif
-%if "%{compiler_family}" == "intel"
-    CFLAGS="${CFLAGS} -Wno-implicit-function-declaration" \
 %endif
     || { cat config.log && exit 1; }
 

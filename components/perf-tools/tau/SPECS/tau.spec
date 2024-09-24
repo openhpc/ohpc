@@ -151,8 +151,8 @@ export FFLAGS="$FFLAGS -I${MPI_INCLUDE_DIR}"
 %if "%{compiler_family}" == "arm1"
 export CFLAGS="${CFLAGS} -fsimdmath"
 %endif
-%if "%{compiler_family}" == "intel"
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+%if "%{compiler_family}" == "intel"
 export CFLAGS="${CFLAGS} -Wno-register"
 %endif
 
