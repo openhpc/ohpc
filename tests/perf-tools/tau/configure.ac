@@ -41,6 +41,7 @@ fi
 # set compilers to use Tau wrappers
 
 OHPC_COMPILER_FAMILY
+OHPC_DISTRO_FAMILY
 
 CC=tau_cc.sh
 CXX=tau_cxx.sh
@@ -78,6 +79,10 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
    if test "x$LMOD_FAMILY_MPI" = "xmvapich2" ;then
       LDFLAGS="$LDFLAGS -lfmpich"
    fi
+fi
+
+if test "x$DISTRO_FAMILY" = "xSLES" ; then
+   LDFLAGS="$LDFLAGS -lsframe"
 fi
 
 # Set subdirectories

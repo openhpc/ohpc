@@ -69,13 +69,11 @@ module load boost
 module load flex
 export LDFLAGS="-L$FLEX_LIB"
 %endif
-%if "%{compiler_family}" == "arm1" || "%{compiler_family}" == "intel"
 export CFLAGS="${CFLAGS} -Wno-implicit-int"
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CXXFLAGS="${CXXFLAGS} -Wno-implicit-int"
 export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
 export CXXFLAGS="${CXXFLAGS} -Wno-register"
-%endif
 %if "%{compiler_family}" == "arm1"
 export CFLAGS="${CFLAGS} -fsimdmath"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
