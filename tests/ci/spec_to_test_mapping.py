@@ -4,8 +4,9 @@
 # and which tests to enable in the test suite.
 # This script will return three shell arrays (TESTS, ADMIN_TESTS and PKGS).
 
-import os
 import sys
+import csv
+import os
 
 # This dictionary defines the mapping
 # 'path/to/file.spec': [
@@ -255,6 +256,22 @@ test_map = {
     ],
 }
 
+# Check which base OS we are using
+reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
+
+python_prefix = 'python3'
+
+for row in reader:
+    key = row.pop('NAME')
+    if key in ['ID_LIKE', 'ID']:
+        for item in list(row.items())[0]:
+            if 'rhel' in item:
+                python_prefix = 'python3.11'
+                break
+            if 'suse' in item:
+                python_prefix = 'python311'
+                break
+
 skip_ci_specs = []
 skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
 if skip_ci_specs_env:
@@ -285,6 +302,8 @@ for i in sys.argv[1:]:
         if len(test_map[i][1]) > 0:
             admin_tests += f'--enable-{test_map[i][1]}'
         pkgs += test_map[i][2]
+
+pkgs = pkgs.replace('python3', python_prefix)
 
 print(
     'TESTS=(%s) ADMIN_TESTS=(%s) PKGS=(%s)' % (
