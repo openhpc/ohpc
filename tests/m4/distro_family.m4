@@ -40,7 +40,7 @@ if test -r "/etc/os-release"; then
    else  
       AC_MSG_RESULT([unknown])
       echo
-      AC_ERROR([Unknown or unsupported distribution specified in /etc/os-release.])
+      AC_MSG_ERROR(Unknown or unsupported distribution specified in /etc/os-release.)
    fi
 
    AC_SUBST(DISTRO_FAMILY)
@@ -48,7 +48,7 @@ if test -r "/etc/os-release"; then
 else
    AC_MSG_RESULT([unknown])
    echo
-   AC_ERROR([Expected /etc/os-release file not present.])
+   AC_MSG_ERROR(Expected /etc/os-release file not present.)
 fi
 
 ])
