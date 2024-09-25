@@ -14,6 +14,7 @@ codespell-lint:
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
+		../../tests/perf-tools/dimemas/tests/test_module \
 		../../tests/perf-tools/extrae/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
@@ -42,6 +43,7 @@ whitespace-lint:
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
 		tests/user-env/ompi_info \
+		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
 		tests/perf-tools/omb/tests/rm_execution \
 		tests/perf-tools/scalasca/tests/rm_execution \
@@ -75,6 +77,7 @@ shellcheck-lint:
 		../../tests/apps/hpcg/run \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
+		../../tests/perf-tools/dimemas/tests/test_module \
 		../../tests/perf-tools/extrae/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
@@ -95,6 +98,7 @@ shfmt-lint:
 		../../tests/apps/hpcg/run \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
+		../../tests/perf-tools/dimemas/tests/test_module \
 		../../tests/perf-tools/extrae/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
