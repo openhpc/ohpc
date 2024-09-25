@@ -44,7 +44,7 @@ unset OMP_NUM_THREADS
 	fi
     done
 
-    run mpi2prv -f TRACE.mpits 
+    run mpi2prv -f TRACE.mpits
 
     run ls heat_mpi.prv
     assert_success

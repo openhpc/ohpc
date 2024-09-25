@@ -15,7 +15,7 @@ export BATS_JUNIT_CLASS=rms-harness
 
 ./bootstrap || exit 1
 
-for compiler in ${$COMPILER_FAMILIES} ; do
+for compiler in ${COMPILER_FAMILIES} ; do
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "

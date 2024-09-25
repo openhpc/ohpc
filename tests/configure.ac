@@ -4,7 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([test-suite], [2.0.0], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE([1.14])
+AM_INIT_AUTOMAKE([1.14 -Wno-portability])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 OHPC_DISTRO_FAMILY
