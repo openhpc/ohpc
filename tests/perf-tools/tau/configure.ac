@@ -66,8 +66,8 @@ AC_C_CONST
 # Define include path and library linkage from environment variables
 # which should be provided via module loads.
 
-CFLAGS="-I${TAU_INC} ${CFLAGS} -fopenmp"
-CXXFLAGS="-I${TAU_INC} ${CXXFLAGS} -fopenmp"
+CFLAGS="-I${TAU_INC} ${CFLAGS}"
+CXXFLAGS="-I${TAU_INC} ${CXXFLAGS}"
 FCFLAGS="-I${TAU_INC} ${FCLAGS}"
 FFLAGS="-I${TAU_INC} ${FCLAGS}"
 LDFLAGS="-L${TAU_LIB} -lTAU ${LDFLAGS}"
@@ -79,6 +79,11 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
    if test "x$LMOD_FAMILY_MPI" = "xmvapich2" ;then
       LDFLAGS="$LDFLAGS -lfmpich"
    fi
+   CFLAGS="${CFLAGS} -qopenmp"
+   CXXFLAGS="${CXXFLAGS} -qopenmp"
+else
+   CFLAGS="${CFLAGS} -fopenmp"
+   CXXFLAGS="${CXXFLAGS} -fopenmp"
 fi
 
 if test "x$DISTRO_FAMILY" = "xSLES" ; then

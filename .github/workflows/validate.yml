@@ -143,6 +143,7 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/serial-libs/openblas/SPECS/openblas.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/dev-tools/scipy/SPECS/python-scipy.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/serial-libs/R/SPECS/R.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/tau/SPECS/tau.spec"
         fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
