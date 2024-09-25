@@ -25,7 +25,7 @@ for compiler in $COMPILER_FAMILIES ; do
     echo "-------------------------------------------------------"
 
     module purge          || exit 1
-    module load prun  || exit 1
+    module load prun      || exit 1
     module load $compiler || exit 1
     module load $mpi      || exit 1
     module load extrae    || exit 1
