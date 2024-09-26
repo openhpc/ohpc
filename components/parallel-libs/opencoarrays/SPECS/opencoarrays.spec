@@ -21,7 +21,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        ABI to leverage the parallel programming features of the Fortran 2018 DIS
 License:        BSD-3-clause
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        2.10.0
+Version:        2.10.2
 Release:        1%{?dist}
 Source0:        https://github.com/sourceryinstitute/OpenCoarrays/releases/download/%{version}/OpenCoarrays-%{version}.tar.gz
 Patch1:         opencoarrays-disable-get-comm-test.patch
@@ -54,6 +54,7 @@ TS 18508 Additional Parallel Features in Fortran.
 %{__mkdir_p} build-opencoarrays
 cd build-opencoarrays
 module load cmake
+export CFLAGS="${CFLAGS} -Wno-int-conversion"
 cmake -DCMAKE_INSTALL_PREFIX=%{install_path} ..
 
 make %{?_smp_mflags} VERBOSE=1
