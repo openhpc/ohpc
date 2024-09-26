@@ -50,7 +50,7 @@ linear systems that the author is aware of.
 Docu can be found on http://www.netlib.org.
 
 %prep
-%setup -q -n SuperLU_%{version}
+%setup -q -n superlu-%{version}
 %patch -p1
 %patch1 -p1
 
