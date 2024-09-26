@@ -26,6 +26,7 @@ fi
 	prun-ohpc \
 	openmpi5-"${COMPILER_FAMILY}"-ohpc \
 	mpich-"${COMPILER_FAMILY}"-ohpc \
+	lmod-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc \
 	slurm-slurmd-ohpc \
 	slurm-slurmctld-ohpc \
 	slurm-example-configs-ohpc \
