@@ -58,14 +58,15 @@ Docu can be found on http://www.netlib.org.
 %ohpc_setup_compiler
 export DEFAULT_OPTS="${CFLAGS} -Wno-implicit-int -Wno-implicit-function-declaration -fPIC -DPIC"
 export BLAS_LIB_EXPORT="-lopenblas"
+export USE_VENDOR_BLAS=1
 %if "%{compiler_family}" == "arm1"
 export DEFAULT_OPTS="${DEFAULT_OPTS} -fsimdmath"
 %endif
 
-cmake -S . -B build -DCMAKE_INSTALL_PREFIX=./build -DUSE_VENDOR_BLAS=1 -DCMAKE_C_FLAGS="${DEFAULT_OPTS}"
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX=./build -DCMAKE_C_FLAGS="${DEFAULT_OPTS}"
 cmake --build build --target superlu
 
-mkdir tmp
+mkdir tmp lib
 (cd tmp; ar -x ../build/SRC/libsuperlu.a)
 $FC -shared -Wl,-soname,libsuperlu.so.7 -o lib/libsuperlu.so tmp/*.o
 
