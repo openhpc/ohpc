@@ -62,7 +62,7 @@ export BLAS_LIB_EXPORT="-lopenblas"
 export DEFAULT_OPTS="${DEFAULT_OPTS} -fsimdmath"
 %endif
 
-cmake -S . -B build -DCMAKE_INSTALL_PREFIX=./build -DUSE_VENDOR_BLAS -DCMAKE_C_FLAGS="${DEFAULT_OPTS}"
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX=./build -DUSE_VENDOR_BLAS=1 -DCMAKE_C_FLAGS="${DEFAULT_OPTS}"
 cmake --build build --target superlu
 
 mkdir tmp
