@@ -1,22 +1,24 @@
-diff -aruN SuperLU_4.3.orig/TESTING/ddrive.c SuperLU_4.3/TESTING/ddrive.c
---- SuperLU_4.3.orig/TESTING/ddrive.c	2011-10-27 21:49:47.000000000 +0200
-+++ SuperLU_4.3/TESTING/ddrive.c	2012-12-20 22:14:43.026465899 +0100
-@@ -11,6 +11,7 @@
-  * Purpose:             MAIN test program
+diff --git i/TESTING/ddrive.c w/TESTING/ddrive.c
+index 9bb18db..30037f4 100644
+--- i/TESTING/ddrive.c
++++ w/TESTING/ddrive.c
+@@ -29,6 +29,7 @@ at the top-level directory.
   */
+ #include <getopt.h>
  #include <string.h>
 +#include <unistd.h>
  #include "slu_ddefs.h"
+ #include "MATGEN/matgen.h"
  
- #define NTESTS    5      /* Number of test types */
-diff -aruN SuperLU_4.3.orig/TESTING/sdrive.c SuperLU_4.3/TESTING/sdrive.c
---- SuperLU_4.3.orig/TESTING/sdrive.c	2011-10-27 21:49:47.000000000 +0200
-+++ SuperLU_4.3/TESTING/sdrive.c	2012-12-20 22:14:43.030465752 +0100
-@@ -11,6 +11,7 @@
-  * Purpose:             MAIN test program
+diff --git i/TESTING/sdrive.c w/TESTING/sdrive.c
+index e2623d8..90bc782 100644
+--- i/TESTING/sdrive.c
++++ w/TESTING/sdrive.c
+@@ -29,6 +29,7 @@ at the top-level directory.
   */
+ #include <getopt.h>
  #include <string.h>
 +#include <unistd.h>
  #include "slu_sdefs.h"
- 
- #define NTESTS    5      /* Number of test types */
+ #include "MATGEN/matgen.h"
+

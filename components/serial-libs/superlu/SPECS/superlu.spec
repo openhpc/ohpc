@@ -19,20 +19,16 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
-Version:        5.2.1
+Version:        7.0.0
 Release:        0%{?dist}
-Source0:        http://crd-legacy.lbl.gov/%7Exiaoye/SuperLU/%{pname}_%{version}.tar.gz
-# PATCH-FEATURE-OPENSUSE superlu-5.1-make.patch : add compiler and build flags in make.inc
-Patch:          superlu-5.2-make.patch
+Source0:        https://github.com/xiaoyeli/%{pname}/archive/refs/tags/v%{version}.tar.gz
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
-Patch1:         superlu-4.3-include.patch
-# PATCH-FIX-UPSTREAM superlu-4.3-dont-opt-away.diff
-Patch2:         superlu-4.3-dont-opt-away.diff
+Patch:         superlu-4.3-include.patch
 # PATCH-FIX-OPENSUSE superlu-5.1-remove-hsl.patch [bnc#796236]
 # The Harwell Subroutine Library (HSL) routine m64ad.c have been removed
 # from the original sources for legal reasons. This patch disables the inclusion of
 # this routine in the library which, however, remains fully functional
-Patch3:         superlu-5.1-disable-hsl.patch
+Patch1:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
@@ -40,7 +36,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  make
+BuildRequires:  make cmake
 BuildRequires:  tcsh
 
 # Default library install path
@@ -57,22 +53,21 @@ Docu can be found on http://www.netlib.org.
 %setup -q -n SuperLU_%{version}
 %patch -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
 %ohpc_setup_compiler
-export DEFAULT_OPTS="${CFLAGS} -Wno-implicit-int"
-export DEFAULT_OPTS="${DEFAULT_OPTS} -Wno-implicit-function-declaration"
+export DEFAULT_OPTS="${CFLAGS} -Wno-implicit-int -Wno-implicit-function-declaration -fPIC -DPIC"
+export BLAS_LIB_EXPORT="-lopenblas"
 %if "%{compiler_family}" == "arm1"
 export DEFAULT_OPTS="${DEFAULT_OPTS} -fsimdmath"
 %endif
 
-make lib
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX=./build -DUSE_VENDOR_BLAS -DCMAKE_C_FLAGS="${DEFAULT_OPTS}"
+cmake --build build --target superlu
 
 mkdir tmp
-(cd tmp; ar -x ../SRC/libsuperlu.a)
-$FC -shared -Wl,-soname,libsuperlu.so.4 -o lib/libsuperlu.so tmp/*.o
+(cd tmp; ar -x ../build/SRC/libsuperlu.a)
+$FC -shared -Wl,-soname,libsuperlu.so.7 -o lib/libsuperlu.so tmp/*.o
 
 %install
 mkdir -p %{buildroot}%{install_path}/lib
@@ -80,8 +75,8 @@ mkdir -p %{buildroot}%{install_path}/include
 install -m644 SRC/*.h %{buildroot}%{install_path}/include
 install -m755 lib/libsuperlu.so %{buildroot}%{install_path}/lib/libsuperlu.so.%{version}
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu.so.%{version} libsuperlu.so.4
-ln -s libsuperlu.so.4 libsuperlu.so
+ln -s libsuperlu.so.%{version} libsuperlu.so.7
+ln -s libsuperlu.so.7 libsuperlu.so
 popd
 
 # OpenHPC module file
