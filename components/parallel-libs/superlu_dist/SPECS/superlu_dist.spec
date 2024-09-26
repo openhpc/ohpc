@@ -98,16 +98,15 @@ module load openblas
 %define blas_lib -L$OPENBLAS_LIB -lopenblas
 %endif
 
-%if "%{compiler_family}" == "arm1"
-%define blas_lib -armpl
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CFLAGS="${CFLAGS} -Wno-implicit-int"
+
+%if "%{compiler_family}" == "arm1"
+%define blas_lib -armpl
 %endif
 
 %if "%{compiler_family}" == "intel"
 %define blas_lib  -L$MKLROOT/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
-export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
-export CFLAGS="${CFLAGS} -Wno-implicit-int"
 %undefine _hardened_build
 %endif
 
