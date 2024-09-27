@@ -36,7 +36,7 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			    'serial-libs' => 'Serial / Threaded Libraries');
 			
 			 
-my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9","gnu12","gnu13","arm1");
+my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9","gnu12","gnu13","gnu14","arm1");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","openmpi4","impi","mpich");
 
 my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",

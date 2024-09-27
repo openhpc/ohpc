@@ -7,7 +7,7 @@ fabrics.  These MPI stacks can be installed as follows:
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi5-gnu13-ohpc mpich-ofi-gnu13-ohpc
+[sms](*\#*) (*\install*) openmpi5-gnu14-ohpc mpich-ofi-gnu14-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -30,7 +30,7 @@ instead as a drop-in MPICH replacement:
 % ohpc_command if [[ ${enable_mpich_ucx} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) mpich-ucx-gnu13-ohpc
+[sms](*\#*) (*\install*) mpich-ucx-gnu14-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -43,7 +43,7 @@ highlighted is below.
 \begin{lstlisting}[language=bash]
 [sms](*\#*) module avail mpich
 
--------------------- /opt/ohpc/pub/moduledeps/gnu13 ---------------------
+-------------------- /opt/ohpc/pub/moduledeps/gnu14 ---------------------
    mpich/3.4.3-ofi    mpich/3.4.3-ucx (D)
 \end{lstlisting}
 

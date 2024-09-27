@@ -41,7 +41,7 @@ MVAPICH2 (psm2) &                              &                                
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi5-pmix-gnu13-ohpc mpich-ofi-gnu13-ohpc
+[sms](*\#*) (*\install*) openmpi5-pmix-gnu14-ohpc mpich-ofi-gnu14-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -61,7 +61,7 @@ semantics. Alternatively, a site can choose to install the {\texttt ucx} variant
 instead as a drop-in MPICH replacement:
 
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) mpich-ucx-gnu13-ohpc
+[sms](*\#*) (*\install*) mpich-ucx-gnu14-ohpc
 \end{lstlisting}
 
 In the case where both MPICH variants are installed, two modules will be
@@ -71,7 +71,7 @@ highlighted is below.
 \begin{lstlisting}[language=bash]
 [sms](*\#*) module avail mpich
 
--------------------- /opt/ohpc/pub/moduledeps/gnu13---------------------
+-------------------- /opt/ohpc/pub/moduledeps/gnu14---------------------
    mpich/3.4.3-ofi    mpich/3.4.3-ucx (D)
 \end{lstlisting}
 
@@ -84,7 +84,7 @@ MVAPICH2 family is available for use:
 % ohpc_command if [[ ${enable_ib} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) mvapich2-gnu13-ohpc
+[sms](*\#*) (*\install*) mvapich2-gnu14-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -97,7 +97,7 @@ variant of MVAPICH2 instead:
 % ohpc_command if [[ ${enable_opa} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) mvapich2-psm2-gnu13-ohpc
+[sms](*\#*) (*\install*) mvapich2-psm2-gnu14-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi

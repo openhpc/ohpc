@@ -18,7 +18,7 @@ sub usage {
 
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","mpi-families",
                         "parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
-my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9","gnu12","gnu13","arm1");
+my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9","gnu12","gnu13","gnu14","arm1");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","openmpi4","openmpi5","impi","mpich");
 
 my @single_package_exceptions = ();
@@ -77,11 +77,11 @@ $mpi_exceptions{"mkl-blacs"} = 1;
 my %page_breaks = ();
 if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"mpiP-gnu-impi-ohpc"} = 2;
-    $page_breaks{"pdtoolkit-gnu13-ohpc"} = 2;
+    $page_breaks{"pdtoolkit-gnu14-ohpc"} = 2;
 #    $page_breaks{"pdtoolkit-gnu13-ohpc"} = 3;
-    $page_breaks{"pnetcdf-gnu13-impi-ohpc"} = 2;
-    $page_breaks{"mumps-gnu13-impi-ohpc"} = 2;
-    $page_breaks{"superlu_dist-gnu13-impi-ohpc"} = 3;
+    $page_breaks{"pnetcdf-gnu14-impi-ohpc"} = 2;
+    $page_breaks{"mumps-gnu14-impi-ohpc"} = 2;
+    $page_breaks{"superlu_dist-gnu14-impi-ohpc"} = 3;
 } elsif ( $ENV{'PWD'} =~ /\S+\/aarch64\// ) {
     $page_breaks{"scalapack-gnu9-mpich-ohpc"} = 2;
 }
