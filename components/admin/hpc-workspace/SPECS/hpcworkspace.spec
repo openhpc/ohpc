@@ -13,7 +13,7 @@
 %define pname hpc-workspace
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 1.4.0
+Version: 1.5.0
 Release: 1%{?dist}
 Summary: Temporary workspace management
 License: GPL
