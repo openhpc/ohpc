@@ -16,7 +16,7 @@
 
 Name: ohpc-filesystem
 Version: %{version}
-Release: %{?dist}.1
+Release: %{?dist}.2
 Summary: Common top-level OpenHPC directories
 
 Group:   ohpc/admin
@@ -48,7 +48,7 @@ builds.
 
 %install
 # The ohpc-filesystems owns all the common directories
-mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/{apps,doc,compiler,libs,moduledeps,modulefiles,mpi}
+mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/{apps,bin,doc,compiler,libs,moduledeps,modulefiles,mpi}
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs
 
@@ -83,6 +83,7 @@ EOF
 %dir /opt/ohpc/admin/
 %dir /opt/ohpc/pub/
 %dir /opt/ohpc/pub/apps/
+%dir /opt/ohpc/pub/bin/
 %dir /opt/ohpc/pub/doc/
 %dir /opt/ohpc/pub/compiler/
 %dir /opt/ohpc/pub/libs/

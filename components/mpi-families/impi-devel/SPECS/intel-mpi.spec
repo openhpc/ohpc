@@ -26,7 +26,7 @@
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2024.0
-Release:   %{?dist}.1
+Release:   %{?dist}.2
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
@@ -34,6 +34,7 @@ BuildArch: x86_64
 AutoReq:   no
 
 Source1:   mod_generator_impi.sh
+Source2:   ohpc-update-modules-mpi
 
 #!BuildIgnore: post-build-checks
 
@@ -57,10 +58,26 @@ MPI Library.
 # Mod generator for PSXE support
 install -D -m755 %{SOURCE1}  %{buildroot}/%{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
 
+# Mod generator for oneAPI support
+sed -e 's|@@oneapi_manifest@@|%{oneapi_manifes}|' \
+    -e 's|@@OHPC_ADMIN@@|%{OHPC_ADMIN}|' \
+    -e 's|@@OHPC_MODULEDEPS@@|%{OHPC_MODULEDEPS}|' \
+    -e 's|@@OHPC_MODULES@@|%{OHPC_MODULES}|' \
+    -e 's|@@exact_deps@@|%{exact_deps}|' \
+    -e 's|@@exact_mpi_ver@@|%{exact_mpi_ver}|' \
+    -e 's|@@gnu_major_ver@@|%{gnu_major_ver}|' %{SOURCE3} > ohpc-update-modules-mpi
+install -D -m755 ohpc-update-modules-mpi %{buildroot}/%{OHPC_BIN}/ohpc-update-modules-mpi
+
 # Module directories
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi
+
+
+# Regenerate module files when components are added or removed
+%transfiletriggerin -- /opt/intel/oneapi/mpi
+%{OHPC_BIN}/ohpc-update-modules-mpi
+
 
 %pre
 if ! [ -d /opt/intel/oneapi/mpi/%{exact_mpi_ver}/etc/modulefiles ]; then
@@ -72,162 +89,7 @@ fi
 
 
 %post
-# Don't clobber/overwrite existing files
-# Write the new file .rpmnew
-testfile () {
-    if [ -e $1 ]; then
-       echo "$1.rpmnew"
-    else
-       echo "$1"
-    fi
-}
-
-# Create an OpenHPC module file for each version found in compilers
-rm -f %{oneapi_manifest}
-
-# Regenerate the oneAPI modules directory  (since MPI may have just been added)
-echo "Generating new oneAPI modulefiles"
-/opt/intel/oneapi/modulefiles-setup.sh --ignore-latest --force --output-dir=%{OHPC_MODULEDEPS}/oneapi/ > /dev/null
-if [ ! -d %{OHPC_MODULEDEPS}/oneapi/compiler ]; then
-    echo "ERROR: Failed to create oneAPI module directory"
-    exit 1
-fi
-
-# Set system defaults for default OBS oneAPI modules
-for tool in %{exact_deps}; do
-  filename=%{OHPC_MODULEDEPS}/oneapi/${tool%%/*}/.version
-  echo "#%Module1.0" > ${filename}
-  echo "set  ModulesVersion  \"${tool##*/}\"" >> ${filename}
-done
-
-# Create an OpenHPC module file for each MPI version found
-echo "Creating OpenHPC-style modulefiles for local oneAPI MPI installation(s)."
-for mpis in %{OHPC_MODULEDEPS}/oneapi/mpi/2*; do
-    ver=$(basename "$mpis")
-    echo "--> Installing modulefile for version=${ver}"
-    modname=$(testfile %{OHPC_MODULEDEPS}/intel/impi/$ver)
-
-    # Get value for MPI_DIR
-    eval $(%{OHPC_ADMIN}/lmod/lmod/libexec/lmod --expert use %{OHPC_MODULEDEPS}/oneapi)
-    eval $(%{OHPC_ADMIN}/lmod/lmod/libexec/lmod --expert load mpi/$ver)
-    MPIDIR=$I_MPI_ROOT
-    eval $(%{OHPC_ADMIN}/lmod/lmod/libexec/lmod --expert unload mpi/$ver)
-    eval $(%{OHPC_ADMIN}/lmod/lmod/libexec/lmod --expert unuse %{OHPC_MODULEDEPS}/oneapi)
-
-    cat << EOF > ${modname}
-#%Module1.0#####################################################################
-
-set version "$ver"
-
-proc ModulesHelp { } {
-global version
-puts stderr "\nThis module loads the Intel MPI environment.\n"
-puts stderr "   mpiifort  (Fortran source)"
-puts stderr "   mpiicc    (C   source)"
-puts stderr "   mpiicpc   (C++ source)"
-puts stderr "\nVersion \$version\n"
-}
-
-module-whatis "Name: Intel MPI"
-module-whatis "Version: \$version"
-module-whatis "Category: library, runtime support"
-module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
-module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library"
-
-# For convenience, redirect standard mpicc/mpicxx/mpifort
-# to use oneAPI icc/icpc/ifort instead of gcc/g++/gfortran
-setenv I_MPI_CC   icx
-setenv I_MPI_CXX  icpx
-setenv I_MPI_FC   ifx
-setenv I_MPI_F77  ifx
-setenv I_MPI_F90  ifx
-
-setenv MPI_DIR    "${MPIDIR}"
-
-prepend-path      MODULEPATH       %{OHPC_MODULEDEPS}/oneapi
-prepend-path      MODULEPATH       %{OHPC_MODULEDEPS}/intel-impi
-
-module load "mpi/\$version"
-
-prepend-path    LIBRARY_PATH    "${MPIDIR}/libfabric/lib"
-prepend-path    LIBRARY_PATH    "${MPIDIR}/lib"
-
-family "MPI"
-EOF
-
-    md5sum ${modname} >> %{oneapi_manifest}
-
-    modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/$ver)
-
-    cat << EOF > ${modname}
-#%Module1.0#####################################################################
-
-set version "$ver"
-
-proc ModulesHelp { } {
-global version
-puts stderr "\nThis module loads the Intel MPI environment for use with the GNU"
-puts stderr "compiler toolchain\n"
-puts stderr "mpif90       (Fortran source)"
-puts stderr "mpicc        (C   source)"
-puts stderr "mpicxx       (C++ source)"
-puts stderr "\nVersion \$version\n"
-}
-
-module-whatis "Name: Intel MPI"
-module-whatis "Version: \$version"
-module-whatis "Category: library, runtime support"
-module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
-module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
-
-setenv MPI_DIR    "${MPIDIR}"
-
-prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/oneapi
-prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
-
-module load "mpi/\$version"
-
-prepend-path    LIBRARY_PATH    "${MPIDIR}/libfabric/lib"
-prepend-path    LIBRARY_PATH    "${MPIDIR}/lib"
-
-family "MPI"
-EOF
-
-    md5sum ${modname} >> %{oneapi_manifest}
-
-    # support for gnu major version
-    orig_modname=$modname
-    modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/$ver)
-    cp ${orig_modname} ${modname}
-    sed -i "s,%{OHPC_MODULEDEPS}/gnu-impi,%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}-impi," ${modname}
-    md5sum ${modname} >> %{oneapi_manifest}
-
-done
-
-# Default Intel(R) MPI Versions to match OpenHPC build version
-modname=$(testfile %{OHPC_MODULEDEPS}/intel/impi/.version)
-
-cat << EOF > ${modname}
-#%Module1.0#####################################################################
-set     ModulesVersion      "%{exact_mpi_ver}"
-EOF
-
-md5sum ${modname} >> %{oneapi_manifest}
-
-modname=$(testfile %{OHPC_MODULEDEPS}/gnu/impi/.version)
-
-cat << EOF > ${modname}
-#%Module1.0#####################################################################
-set     ModulesVersion      "%{exact_mpi_ver}"
-EOF
-
-md5sum ${modname} >> %{oneapi_manifest}
-
-# support for gnu major version
-orig_modname=$modname
-modname=$(testfile  %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version)
-cp ${orig_modname} ${modname}
-md5sum ${modname} >> %{oneapi_manifest}
+%{OHPC_BIN}/ohpc-update-modules-mpi
 
 %preun -p /bin/bash
 # Check current files against the manifest
@@ -490,6 +352,7 @@ fi
 
 %files -n %{psxemod}
 %{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
+%{OHPC_BIN}/ohpc-update-modules-mpi
 %dir %{OHPC_MODULEDEPS}/intel/impi
 %dir %{OHPC_MODULEDEPS}/gnu/impi
 %dir %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi
