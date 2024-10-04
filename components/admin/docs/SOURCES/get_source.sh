@@ -1,33 +1,34 @@
 #!/usr/bin/env bash
 
-set -x
+set -xe
 
 # Note: The current working directory is the component's SPEC folder
 OHPC_ROOT_FOLDER="../../../.."
 
 # The folder that will contain the .git/ and docs/ folders
-DOCS_OHPC_FOLDER=docs-ohpc
+DOCS_OHPC_FOLDER="docs-ohpc"
 
 cleanup() {
-    rm -rf ${DOCS_OHPC_FOLDER}
-    find ${OHPC_ROOT_FOLDER}/docs/recipes/install/ -name "vc.tex" -delete
+    rm -rf "${DOCS_OHPC_FOLDER}"
+    find "${OHPC_ROOT_FOLDER}/docs/recipes/install/" -name "vc.tex" -delete
 }
 trap cleanup EXIT
 
 # 1. Prepare
 cleanup
-mkdir -p ${DOCS_OHPC_FOLDER}
+mkdir -p "${DOCS_OHPC_FOLDER}"
 
 # 2. Copy the Git metadata
-cp -r ${OHPC_ROOT_FOLDER}/.git ${DOCS_OHPC_FOLDER}
+cp -r "${OHPC_ROOT_FOLDER}/.git" "${DOCS_OHPC_FOLDER}"
 
 # 3. Copy the local docs/
-cp -r ${OHPC_ROOT_FOLDER}/docs ${DOCS_OHPC_FOLDER}
+cp -r "${OHPC_ROOT_FOLDER}/docs" "${DOCS_OHPC_FOLDER}"
 
 # 4. Add dummy vc.tex to the docs
-for makefile in `find ${DOCS_OHPC_FOLDER}/docs/recipes/install/ -name "Makefile"`; do
-    folder=$(dirname ${makefile})
-    cat <<'EOF' > ${folder}/vc.tex
+find "${DOCS_OHPC_FOLDER}"/docs/recipes/install/ -name "Makefile" -print0 | while IFS= read -r -d '' makefile
+do
+    folder=$(dirname "${makefile}")
+    cat <<'EOF' > "${folder}"/vc.tex
 %%% Define Git specific macros.
 \gdef\GITHash{5ffbf3e2ed0ed558c1ae5672f7e5023298b7c2a9}%
 \gdef\GITAbrHash{5ffbf3e}%
@@ -55,4 +56,4 @@ EOF
 done
 
 # 5. Create docs-ohpc.tar
-tar cf ../SOURCES/docs-ohpc.tar ${DOCS_OHPC_FOLDER}
+tar cf ../SOURCES/docs-ohpc.tar "${DOCS_OHPC_FOLDER}"
