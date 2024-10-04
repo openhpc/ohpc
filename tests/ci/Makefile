@@ -70,6 +70,8 @@ shellcheck-lint:
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
 		../../components/admin/prun/SOURCES/prun \
+		../../components/admin/docs/SOURCES/get_source.sh \
+		../../components/admin/test-suite/SOURCES/get_source.sh \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
