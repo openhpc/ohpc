@@ -8,13 +8,15 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-if [ ! -z "$SIMPLE_CI" ]; then
-	skip "Not supported in simple CI setup"
-fi
-
 if [ -n "$IPMI_PASSWORD" ];then
     export IPMI_PASSWORD
 fi
+
+setup() {
+    if [ -n "$SIMPLE_CI" ]; then
+        skip "Not supported in simple CI setup"
+    fi
+}
 
 @test "[OOB] ipmitool exists" {
     run which ipmitool
