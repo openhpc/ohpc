@@ -81,7 +81,6 @@ SERVER logdir="/var/log/conman"
 SERVER logfile="/var/log/conman.log"
 SERVER loopback=ON
 SERVER pidfile="/var/run/conman.pid"
-SERVER resetcmd="powerman -0 %N; sleep 3; powerman -1 %N"
 SERVER tcpwrappers=ON
 SERVER timestamp=1h
 GLOBAL seropts="115200,8n1"
