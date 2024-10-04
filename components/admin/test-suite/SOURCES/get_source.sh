@@ -9,16 +9,16 @@ OHPC_ROOT_FOLDER="../../../.."
 TESTS_OHPC_FOLDER=tests-ohpc
 
 cleanup() {
-    rm -rf ${TESTS_OHPC_FOLDER}
+    rm -rf "${TESTS_OHPC_FOLDER}"
 }
 trap cleanup EXIT
 
 # 1. Prepare
 cleanup
-mkdir -p ${TESTS_OHPC_FOLDER}
+mkdir -p "${TESTS_OHPC_FOLDER}"
 
 # 2. Copy the local docs/
-cp -r ${OHPC_ROOT_FOLDER}/tests ${TESTS_OHPC_FOLDER}
+cp -r "${OHPC_ROOT_FOLDER}/tests" "${TESTS_OHPC_FOLDER}"
 
 # 3. Create tests-ohpc.tar
-tar cf ../SOURCES/tests-ohpc.tar ${TESTS_OHPC_FOLDER}
+tar cf ../SOURCES/tests-ohpc.tar "${TESTS_OHPC_FOLDER}"
