@@ -8,15 +8,16 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-if [ ! -z "$SIMPLE_CI" ]; then
-	skip "Not supported in simple CI setup"
-fi
-
 if [ -n "$IPMI_PASSWORD" ];then
     export IPMI_PASSWORD
 fi
 
 @test "[warewulf-ipmi] ipmitool lanplus protocol" {
+  
+    if [ -n "$SIMPLE_CI" ]; then
+        skip "Not supported in simple CI setup"
+    fi
+    
     rpm -q --quiet warewulf-ipmi-ohpc || skip "Warewulf not installed, skipping warewulf-ipmitool check"
 
     run wwsh ipmi powerstatus c1
