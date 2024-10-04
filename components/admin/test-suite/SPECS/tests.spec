@@ -20,6 +20,8 @@ BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc
 Source0:   tests-ohpc.tar
 
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Compare)
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
