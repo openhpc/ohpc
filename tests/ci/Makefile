@@ -45,6 +45,8 @@ shellcheck-lint:
 		../../misc/shell-functions \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
+		../../components/admin/docs/SOURCES/get_source.sh \
+		../../components/admin/test-suite/SOURCES/get_source.sh \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families \
 		../../components/OHPC_setup_mpi \
