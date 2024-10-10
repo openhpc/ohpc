@@ -20,7 +20,7 @@
 
 Summary: The Adaptable IO System v2 (ADIOS2)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.8.3
+Version: 2.10.1
 Release: 1%{?dist}
 License: Apache License 2.0
 Group:   %{PROJ_NAME}/io-libs
@@ -101,10 +101,10 @@ export MPICXX=mpicxx
 cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_path} \
     -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_C_COMPILER=${MPICC} \
+    -DCMAKE_CXX_COMPILER=${MPICXX} \
     -DBUILD_SHARED_LIBS=ON \
-    -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-    -DCMAKE_SKIP_RPATH:BOOL=ON \
-    -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE \
     -DADIOS2_USE_MPI=ON \
     -DADIOS2_USE_HDF5=ON -DHDF5_ROOT="${HDF5_DIR}" \
     -DADIOS2_USE_ZeroMQ=OFF \
