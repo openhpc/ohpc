@@ -254,6 +254,11 @@ test_map = {
         '',
         ''
     ],
+    'components/dev-tools/valgrind/SPECS/valgrind.spec': [
+        'valgrind',
+        '',
+        '',
+    ],
 }
 
 # Check which base OS we are using
