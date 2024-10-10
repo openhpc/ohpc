@@ -17,12 +17,12 @@
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.14.0
+Version:   1.14.5
 Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
-Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
+Source0:   https://github.com/HDFGroup/%{pname}/archive/refs/tags/%{pname}_%{version}.tar.gz
 
 BuildRequires: zlib-devel make
 
@@ -46,7 +46,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{pname}_%{version}
 
 %build
 
