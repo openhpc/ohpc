@@ -49,6 +49,9 @@ puts stderr "Setup default login environment"
 
 prepend-path     PATH   %{OHPC_PUB}/bin
 
+# include local packages installed via spack
+prepend-path MODULEPATH %{OHPC_MODULEDEPS}/spack/
+
 if { [ expr [module-info mode load] || [module-info mode display] ] } {
         prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
         module try-add autotools

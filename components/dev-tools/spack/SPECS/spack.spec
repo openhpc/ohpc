@@ -13,7 +13,7 @@
 %define pname spack
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.21.2
+Version:	0.22.2
 Release:	%{?dist}.1
 Summary:	HPC software package management
 
@@ -21,6 +21,8 @@ Group:		%{PROJ_NAME}/dev-tools
 License:	LGPL
 URL:		https://github.com/spack/spack
 Source0:	https://github.com/spack/%{pname}/archive/v%{version}.tar.gz
+Patch0:		modules.yaml.patch
+Patch1:		config.yaml.patch
 
 BuildRequires: rsync
 BuildRequires: python3
@@ -48,7 +50,7 @@ Requires: gnupg2
 Requires: gpg2
 %endif
 
-%global install_path %{OHPC_ADMIN}/%{pname}/%version
+%global install_path %{OHPC_APPS}/%{pname}/%version
 # Turn off the brp-python-bytecompile script
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
@@ -70,10 +72,15 @@ same package.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch -P 0 -p 1
+%patch -P 1 -p 1
 
 # cleanup any recipes that have hard-coded /bin/env in them as this will
 # prevent installation on Leap
 grep -rl '#!/bin/env ' . | xargs -i@ sed -i 's|#!/bin/env|#!/usr/bin/env|g' @
+
+sed -e "s,@@OHPC_APPS@@,%{OHPC_APPS},g" -i etc/spack/defaults/config.yaml
+sed -e "s,@@OHPC_MODULEDEPS@@,%{OHPC_MODULEDEPS},g" -i etc/spack/defaults/modules.yaml
 
 %install
 mkdir -p %{buildroot}%{install_path}
@@ -83,8 +90,8 @@ rsync -a --exclude=.gitignore {etc,bin,lib,var,share} %{buildroot}%{install_path
 rm -f %{buildroot}/%{install_path}/var/spack/repos/builtin/packages/patchelf/test/hello
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack
-%{__cat} << EOF > %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack/%{version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/spack
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/spack/%{version}
 #%Module1.0#####################################################################
 
 module-whatis "Name: Spack"
@@ -97,11 +104,13 @@ set     version             %{version}
 set     SPACK_ROOT          %{install_path}
 
 prepend-path   PATH         %{install_path}/bin
-prepend-path   MODULEPATH   %{install_path}/share/spack/modules/
+prepend-path   MODULEPATH   %{OHPC_MODULEDEPS}/%{pname}/
 
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/%{pname}/
+%{__mkdir} -p %{buildroot}/%{OHPC_APPS}/%{pname}/local
 
 %files
 %{OHPC_HOME}
