@@ -10,7 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_version 12.3.0
+%global gnu_version 12.4.0
 %global gnu_major_ver gnu12
 %global pname %{gnu_major_ver}-compilers
 
