@@ -1,0 +1,27 @@
+--- a/etc/spack/defaults/modules.yaml	2024-09-21 10:39:55.000000000 +0000
++++ b/etc/spack/defaults/modules.yaml	2024-10-01 15:05:36.648000000 +0000
+@@ -38,17 +38,22 @@
+   default:
+     # Where to install modules
+     roots:
+-     tcl:    $spack/share/spack/modules
++     tcl:    @@OHPC_MODULEDEPS@@/spack
+      lmod:   $spack/share/spack/lmod
++    arch_folder: false
+     # What type of modules to use ("tcl" and/or "lmod")
+-    enable: []
++    enable: ["tcl"]
+ 
+     tcl:
++      hide_implicits: true
++      projections:
++        all: '{name}/{version}-{compiler.name}-{compiler.version}-{architecture}'
+       all:
+         autoload: direct
+ 
+     # Default configurations if lmod is enabled
+     lmod:
++      hide_implicits: true
+       all:
+         autoload: direct
+       hierarchy:

@@ -1,0 +1,11 @@
+--- a/etc/spack/defaults/config.yaml	2024-09-21 10:39:55.000000000 +0000
++++ b/etc/spack/defaults/config.yaml	2024-10-01 15:05:36.648000000 +0000
+@@ -17,7 +17,7 @@
+   # This is the path to the root of the Spack install tree.
+   # You can use $spack here to refer to the root of the spack instance.
+   install_tree:
+-    root: $spack/opt/spack
++    root: @@OHPC_APPS@@/spack/local
+     projections:
+       all: "{architecture}/{compiler.name}-{compiler.version}/{name}-{version}-{hash}"
+     # install_tree can include an optional padded length (int or boolean)
