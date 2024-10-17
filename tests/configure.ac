@@ -129,6 +129,14 @@ AC_ARG_ENABLE([spack],
 	 [],[enable_spack=yes])
 AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" ) 
 
+#------------------------------------------------------------------------------------------
+# lmod
+AC_ARG_ENABLE([lmod],
+	 [AS_HELP_STRING([--enable-lod],[Enable lmod tests (default=yes, root only)])],
+	 [],[enable_lmod=yes])
+AM_CONDITIONAL(LMOD_ENABLED,test "x$enable_lmod" = "xyes" ) 
+
+
 #-----------------
 # User level tests
 #-----------------
@@ -520,6 +528,7 @@ AC_OUTPUT( Makefile
        fs/beegfs/Makefile
        fs/lustre/Makefile
        dev-tools/easybuild/Makefile
+       admin/lmod/Makefile
        admin/spack/Makefile
        dev-tools/mpi4py/Makefile
        dev-tools/mpi4py/tests/Makefile
@@ -606,6 +615,11 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Spack..................... : disabled
     fi
 
+    if test "x$enable_lmod" = "xyes"; then
+       echo '    'Lmod...................... : enabled
+    else
+       echo '    'Lmod...................... : disabled
+    fi
 
 else
 

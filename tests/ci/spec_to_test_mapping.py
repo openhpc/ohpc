@@ -259,6 +259,11 @@ test_map = {
         '',
         '',
     ],
+    'components/admin/lmod/SPECS/lmod.spec': [
+        '',
+        'lmod',
+        ''
+    ],
 }
 
 # Check which base OS we are using
