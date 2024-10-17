@@ -107,7 +107,8 @@ do
         if test $status -ne 0
         then
             echo "  FAILED!"
-	    return_val=`expr $status + $return_val`
+            diff -u $srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst tmp.test > $fname.tst.diff.log
+            return_val=`expr $status + $return_val`
         else
           dumpout $fname.h5 >tmp.test
           rm -f $fname.h5
@@ -125,14 +126,15 @@ do
              if test $NumOfLines -gt $NumOfFinds 
              then
                 echo "  FAILED!"
-	        return_val=`expr $status + $return_val`
+                diff -u $srcdir/testfiles/$H5_LIBVER_DIR/$fname.ddl tmp.test > $fname.ddl.diff.log
+                return_val=`expr $status + $return_val`
              else
                 echo "  *Inconsequential differance* ... Passed"
-		return_val=`expr $return_val`
+                return_val=`expr $return_val`
              fi
           else
-              echo "  Passed"
-	      return_val=`expr $status + $return_val`
+             echo "  Passed"
+             return_val=`expr $status + $return_val`
           fi
         fi
     fi
@@ -166,6 +168,7 @@ else
     if test $status -ne 0
     then
         echo "  FAILED!"
+        diff -u $srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst tmp.test > $fname.tst.diff.log
     else
         dumpout $fname.h5 >tmp.test
         rm -f $fname.h5
@@ -174,6 +177,7 @@ else
         if test $status -ne 0
         then
             echo "  FAILED!"
+            diff -u $srcdir/testfiles/$H5_LIBVER_DIR/$fname$USE_ALT.ddl tmp.test > $fname$USE_ALT.ddl.diff.log
         else
             echo "  Passed"
         fi
@@ -199,6 +203,7 @@ else
     if test $status -ne 0
     then
         echo "  FAILED!"
+        diff -u $srcdir/testfiles/$H5_LIBVER_DIR/$fname.tst tmp.test > $fname.tst.diff.log
     else
         dumpout -n $fname.h5 >tmp.test
         rm -f $fname.h5
@@ -207,6 +212,7 @@ else
         if test $status -ne 0
         then
             echo "  FAILED!"
+            diff -u $srcdir/testfiles/$H5_LIBVER_DIR/$fname.ddl tmp.test > $fname.ddl.diff.log
         else
             echo "  Passed"
         fi
