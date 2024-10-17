@@ -1,0 +1,9 @@
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster (Cont.)
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+# Define provisioning image for hosts
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=BOSVER --bootstrap=`uname -r` \
+    --files=dynamic_hosts,passwd,group,shadow,munge.key,network
+\end{lstlisting}
+
+

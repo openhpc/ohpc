@@ -1,0 +1,9 @@
+\noindent Similarly, to import the cryptographic
+key that is required by the {\em munge} authentication library to be available
+on every host in the resource management pool, issue the following:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwsh file import /etc/munge/munge.key
+\end{lstlisting}
+% \end_ohpc_run

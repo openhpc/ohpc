@@ -1,0 +1,322 @@
+\documentclass[letterpaper]{article}
+\usepackage{common/ohpc-doc}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+% Include git variables
+\input{vc.tex}
+
+% Define Base OS and other local macros
+\newcommand{\baseOS}{Rocky 9.3}
+\newcommand{\OSRepo}{Rocky\_9.3}
+\newcommand{\OSTree}{EL\_9}
+\newcommand{\OSTag}{el9}
+\newcommand{\baseos}{rocky9.3}
+\newcommand{\baseosshort}{rocky9}
+\newcommand{\provisioner}{Warewulf}
+\newcommand{\provheader}{\provisioner{}}
+\newcommand{\rms}{SLURM}
+\newcommand{\rmsshort}{slurm}
+\newcommand{\arch}{x86\_64}
+
+% Define package manager commands
+\newcommand{\pkgmgr}{dnf}
+\newcommand{\addrepo}{wget -P /etc/yum.repos.d}
+\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
+\newcommand{\clean}{dnf clean expire-cache}
+\newcommand{\chrootclean}{dnf --installroot=\$CHROOT clean expire-cache}
+\newcommand{\install}{dnf -y install}
+\newcommand{\chrootinstall}{dnf -y --installroot=\$CHROOT install}
+\newcommand{\groupinstall}{dnf -y groupinstall}
+\newcommand{\groupchrootinstall}{dnf -y --installroot=\$CHROOT groupinstall}
+\newcommand{\remove}{dnf -y remove}
+\newcommand{\upgrade}{dnf -y upgrade}
+\newcommand{\chrootupgrade}{dnf -y --installroot=\$CHROOT upgrade}
+\newcommand{\tftppkg}{syslinux-tftpboot}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2.1/dists/beegfs-rhel8.repo}
+
+% boolean for os-specific formatting
+\toggletrue{isCentOS}
+\toggletrue{isCentOS_ww_slurm_x86}
+\toggletrue{isSLURM}
+\toggletrue{isWarewulf}
+\toggletrue{isx86}
+\toggletrue{isCentOS_x86}
+
+\begin{document}
+\graphicspath{{common/figures/}}
+\thispagestyle{empty}
+
+% Title Page
+\input{common/title}
+% Disclaimer
+\input{common/legal}
+
+\newpage
+\tableofcontents
+\newpage
+
+% Introduction  --------------------------------------------------
+
+\section{Introduction} \label{sec:introduction}
+\input{common/install_header}
+\input{common/intro} \\
+
+\input{common/base_edition/edition}
+\input{common/audience}
+\input{common/requirements}
+\input{common/inputs}
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+% ohpc_validation_newline
+% ohpc_command dnf repolist | grep -q OpenHPC
+% ohpc_command if [ $? -ne 0 ];then
+% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+% ohpc_command    exit 1
+% ohpc_command fi
+% end_ohpc_run
+
+% Base Operating System --------------------------------------------
+
+\section{Install Base Operating System (BOS)}
+\input{common/bos}
+
+%\clearpage
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Disable firewall
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) systemctl disable firewalld
+[sms](*\#*) systemctl stop firewalld
+\end{lstlisting}
+% end_ohpc_run
+
+% ------------------------------------------------------------------
+
+\section{Install \OHPC{} Components} \label{sec:basic_install}
+\input{common/install_ohpc_components_intro.tex}
+
+\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
+\input{common/enable_ohpc_repo}
+\input{common/rocky_repos}
+\input{common/automation}
+
+
+\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
+\input{common/install_provisioning_intro}
+\input{common/enable_pxe}
+\input{common/time}
+
+\vspace*{0.15cm}
+\subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
+\input{common/install_slurm}
+
+\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\input{common/ibsupport_sms_centos}
+
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_centos}
+
+\vspace*{-0.15cm}
+\subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
+\input{common/warewulf_setup}
+\input{common/warewulf_setup_centos}
+
+
+\subsection{Define {\em compute} image for provisioning}
+\input{common/warewulf_mkchroot_rocky}
+
+\subsubsection{Add \OHPC{} components} \label{sec:add_components}
+\input{common/add_to_compute_chroot_intro}
+
+%\newpage
+% begin_ohpc_run
+% ohpc_validation_comment Add SLURM and other components to compute instance
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
+# install. Note that these will be synchronized with future updates via the provisioning system.
+[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
+# Add Slurm client support meta-package and enable munge and slurmd
+[sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
+[sms](*\#*) chroot $CHROOT systemctl enable munge
+[sms](*\#*) chroot $CHROOT systemctl enable slurmd
+
+# Register Slurm server with computes (using "configless" option)
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
+
+# Add Network Time Protocol (NTP) support
+[sms](*\#*) (*\chrootinstall*) chrony
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip} iburst" >> $CHROOT/etc/chrony.conf
+
+# Add kernel drivers (matching kernel version on SMS node)
+[sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
+
+# Include modules user environment
+[sms](*\#*) (*\chrootinstall*) lmod-ohpc
+\end{lstlisting}
+% end_ohpc_run
+
+\vspace*{.2cm}
+\subsubsection{Customize system configuration} \label{sec:master_customization}
+\input{common/warewulf_chroot_customize_centos}
+\input{common/oneapi_mountpoint}
+\input{common/restart_nfs}
+
+% Additional commands when additional computes are requested
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Update basic slurm configuration if additional computes defined
+% ohpc_command if [ ${num_computes} -gt 4 ];then
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+
+% ohpc_command fi
+% end_ohpc_run
+
+%\clearpage
+\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
+\input{common/compute_customizations_intro}
+
+%\clearpage
+\paragraph{Enable \InfiniBand{} drivers}
+\input{common/ibsupport_compute_centos.tex}
+
+\paragraph{Enable \OmniPath{} drivers}
+\input{common/opasupport_compute_centos.tex}
+
+\vspace*{0.28cm}
+\paragraph{Increase locked memory limits}
+\input{common/memlimits}
+
+\vspace*{-.17cm}
+\paragraph{Enable ssh control via resource manager}
+\input{common/slurm_pam}
+
+\vspace*{-.17cm}
+\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+\input{common/install_beegfs_client_centos}
+
+\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+\input{common/lustre-client}
+%\vspace*{0.25cm}
+\input{common/lustre-client-centos}
+\input{common/lustre-client-post}
+
+%\vspace*{.45cm}
+\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
+\input{common/syslog}
+
+\paragraph{Add \clustershell{}}
+\input{common/clustershell}
+
+\paragraph{Add \genders{}}
+\input{common/genders}
+
+\paragraph{Add Magpie}
+\input{common/magpie}
+
+\paragraph{Add \conman{}} \label{sec:add_conman}
+\input{common/conman}
+
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
+\input{common/nhc_slurm}
+
+\vspace*{0.3cm}
+\paragraph{Add \GEOPM{}} \label{sec:add_geopm}
+\input{common/geopm_config}
+
+%\clearpage
+\subsubsection{Import files} \label{sec:file_import}
+\input{common/import_ww_files}
+%\vspace*{0.3cm}
+\input{common/import_ww_files_slurm}
+\input{common/import_ww_files_ib_centos}
+%\vspace*{0.3cm}
+\input{common/finalize_provisioning}
+%\vspace*{0.2cm}
+\input{common/add_ww_hosts_intro}
+\input{common/add_ww_hosts_slurm}
+\input{common/add_ww_hosts_finalize}
+
+%\clearpage
+\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+\input{common/charliecloud_centos_warewulf_post}
+\input{common/conman_post}
+\input{common/kargs_post}
+
+\vspace*{-0.1cm}
+\subsubsection{Optionally configure stateful provisioning}
+\input{common/stateful}
+
+%\vspace*{-0.4cm}
+\clearpage
+\subsection{Boot compute nodes} \label{sec:boot_computes}
+\input{common/reset_computes}
+
+%\clearpage
+\section{Install \OHPC{} Development Components}
+\input{common/dev_intro.tex}
+
+%\vspace*{-0.15cm}
+\subsection{Development Tools} \label{sec:install_dev_tools}
+\input{common/dev_tools}
+
+\vspace*{-0.15cm}
+\subsection{Compilers} \label{sec:install_compilers}
+\input{common/compilers}
+
+%\clearpage
+\subsection{MPI Stacks} \label{sec:mpi}
+\input{common/mpi_slurm}
+
+\subsection{Performance Tools} \label{sec:install_perf_tools}
+\input{common/perf_tools_with_geopm}
+
+\subsection{Setup default development environment}
+\input{common/default_dev}
+
+\vspace*{0.3cm}
+\subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
+\input{common/third_party_libs_intro}
+\input{common/third_party_libs_petsc_centos}
+\input{common/third_party_libs}
+\vspace*{0.1cm}
+\input{common/third_party_mpi_libs_x86}
+\vspace*{0.5cm}
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\input{common/oneapi_enabled_builds_slurm.tex}
+
+\clearpage
+\section{Resource Manager Startup} \label{sec:rms_startup}
+\input{common/slurm_startup}
+
+\section{Post-boot compute node configuration} \label{sec:post_boot}
+\input{common/post_boot}
+
+\section{Run a Test Job} \label{sec:test_job}
+\input{common/slurm_test_job}
+
+\clearpage
+\appendix
+%\section*{Appendices}
+{\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
+
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\input{common/automation_appendix}
+\input{common/upgrade}
+\input{common/test_suite}
+\input{common/customization_appendix_centos}
+\input{manifest}
+\input{common/signature}
+
+
+\end{document}
+

@@ -1,0 +1,14 @@
+The \Warewulf{} system includes functionality to import arbitrary files from
+the provisioning server for distribution to managed hosts. This is one way to
+distribute user credentials to {\em compute} nodes. To import local file-based
+credentials, issue the following:
+
+% begin_ohpc_run
+% ohpc_comment_header Import files \ref{sec:file_import}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwsh file import /etc/passwd
+[sms](*\#*) wwsh file import /etc/group
+[sms](*\#*) wwsh file import /etc/shadow
+
+\end{lstlisting}
+% \end_ohpc_run

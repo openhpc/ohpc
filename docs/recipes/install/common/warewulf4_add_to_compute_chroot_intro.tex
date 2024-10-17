@@ -1,0 +1,33 @@
+The \texttt{wwmkchroot} process used in the previous step is designed to
+provide a minimal \baseOS{} configuration. Next, we add additional components
+to include resource management client services, NTP support, and
+other additional packages to support the default \OHPC{} environment. This
+process augments the chroot-based install performed by \texttt{wwmkchroot} to
+modify the base provisioning image and will access the BOS and \OHPC{}
+repositories to resolve package install requests. We begin by installing a few
+common base packages:
+
+% begin_ohpc_run
+% ohpc_comment_header Add OpenHPC base components to compute image \ref{sec:add_components}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Install compute node base meta-package
+[sms](*\#*) (*\chrootinstall*) ohpc-base-compute
+\end{lstlisting}
+% end_ohpc_run
+
+To access the remote
+repositories by hostname (and not IP addresses), the chroot environment needs
+to be updated to enable DNS resolution. Assuming that the {\em master} host has
+a working DNS configuration in place, the chroot environment can be updated
+with a copy of the configuration as follows:
+
+% begin_ohpc_run
+% ohpc_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Now, we can include additional required components to the compute
+instance including resource manager client, NTP, and development environment modules support.
+

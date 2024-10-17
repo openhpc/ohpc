@@ -1,0 +1,74 @@
+\subsection{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
+
+\Warewulf{} employs a two-stage boot process for provisioning nodes via
+creation of a bootstrap image that is used to initialize the process, and a virtual node
+file system capsule containing the full system image. This section highlights
+creation of the necessary provisioning images, followed by the registration of
+desired compute nodes.
+
+\subsubsection{Assemble bootstrap image}
+
+The bootstrap image includes the runtime kernel and associated modules, as well
+as some simple scripts to complete the provisioning process. The
+following commands highlight the inclusion of additional drivers and creation
+of the bootstrap image based on the running kernel.
+
+%\iftoggle{isCentOS_ww_slurm_aarch}{\clearpage}
+
+% begin_ohpc_run
+% ohpc_comment_header Assemble bootstrap image \ref{sec:assemble_bootstrap}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# (Optional) Include drivers from kernel updates;  needed if enabling additional kernel modules on computes
+[sms](*\#*) export WW_CONF=/etc/warewulf/bootstrap.conf
+[sms](*\#*) echo "drivers += updates/kernel/" >> $WW_CONF
+
+# Build bootstrap image
+[sms](*\#*) wwbootstrap `uname -r`
+\end{lstlisting}
+% end_ohpc_run
+
+\subsubsection{Assemble Virtual Node File System (VNFS) image}
+
+With the local site customizations in place, the following step uses the
+\texttt{wwvnfs} command to assemble a VNFS capsule from the chroot environment
+defined for the {\em compute} instance.
+
+% begin_ohpc_run
+% ohpc_validation_comment Assemble VNFS
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwvnfs --chroot $CHROOT
+\end{lstlisting}
+% end_ohpc_run
+
+\iftoggle{isCentOS_ww_slurm_aarch}{\vspace*{0.4cm}}
+
+\iftoggle{isSLES_ww_slurm_aarch}{\vspace*{-0.1cm}}
+
+\subsubsection{Register nodes for provisioning}
+
+In preparation for provisioning, we can now define the desired network settings
+for four example compute nodes with the underlying provisioning system and
+restart the \texttt{dhcp} service. Note the use of variable names for the
+desired compute hostnames, node IPs, and MAC addresses which should be modified
+to accommodate local settings and hardware.  By default, \Warewulf{} uses
+network interface names of the \texttt{eth\#} variety and adds kernel boot
+arguments to maintain this scheme on newer kernels. Consequently, when specifying
+the desired provisioning interface via the \texttt{\$eth\_provision} variable,
+it should follow this convention. Alternatively, if you prefer to use the
+predictable network interface naming scheme (e.g. names like \texttt{en4s0f0}),
+additional steps are included to alter the default kernel boot arguments and take
+the \texttt{eth\#} named interface down after bootstrapping so the normal init
+process can bring it up again using the desired name.
+
+\iftoggleverb{isx86}
+Also included in these steps are commands
+to enable \Warewulf{} to manage IPoIB settings and corresponding definitions of
+IPoIB addresses for the compute nodes. This is typically optional unless you
+are planning to include a \Lustre{} client mount over \InfiniBand{}.
+\fi
+The final step
+in this process associates the VNFS image assembled in previous steps with the
+newly defined compute nodes, utilizing the user credential files and munge key
+that were imported in \S\ref{sec:file_import}.
+
+
