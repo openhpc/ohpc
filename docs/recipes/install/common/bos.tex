@@ -5,6 +5,7 @@ follow the distro provided directions to install the BOS on your chosen {\em
 master} host.  Alternatively, if choosing to use a pre-installed server, please
 verify that it is provisioned with the required \baseOS{} distribution. \\
 
+\ifnottoggleverb{isWarewulf4}
 Prior to beginning the installation process of \OHPC{} components, several additional
 considerations are noted here for the SMS host configuration. First,
 the installation recipe herein assumes that
@@ -15,6 +16,7 @@ your SMS host.
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) echo ${sms_ip} ${sms_name} >> /etc/hosts
 \end{lstlisting}
+\fi
 
 While it is theoretically possible to enable SELinux on a cluster provisioned
 with \provisioner{},

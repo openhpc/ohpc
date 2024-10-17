@@ -1,0 +1,29 @@
+\iftoggleverb{isx86}
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, define IPoIB network settings (required if planning to mount Lustre over IB)
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Optionally define IPoIB network settings (required if planning to mount Lustre/BeeGFS over IB)
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+  wwctl node set --yes ${c_name[$i]} --netdev=ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
+done
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% ohpc_validation_newline
+% end_ohpc_run
+\fi
+
+Finally, we reconfigure build the overlays and update the Warewulf configuration.
+It is necessary to rebuild the overlays whenever a overlay is modified.
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+# build the overlays for all the nodes
+[sms](*\#*) wwctl overlay build
+
+# Update Warewulf configure 
+[sms](*\#*) wwctl configure --all
+\end{lstlisting}
+% end_ohpc_run

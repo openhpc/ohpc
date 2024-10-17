@@ -57,6 +57,8 @@
 \newtoggle{isaarch}
 \newtoggle{ispbs}
 \newtoggle{isWarewulf}
+\newtoggle{isWarewulf3}
+\newtoggle{isWarewulf4}
 \newtoggle{isSLURM}
 \newtoggle{isxCAT}
 \newtoggle{isxCATstateful}
@@ -75,6 +77,12 @@
   \ifcsdef{etb@tgl@#1}
 	  {\csname etb@tgl@#1\endcsname\iftrue\iffalse}
           {\etb@noglobal\etb@err@notoggle{#1}\iffalse}%
+}
+% inverse of above
+\newcommand{\ifnottoggleverb}[1]{%
+  \ifcsdef{etb@tgl@#1}
+    {\csname etb@tgl@#1\endcsname\iffalse\iftrue}
+          {\etb@noglobal\etb@err@notoggle{#1}\iftrue}%
 }
 
 \pagestyle{fancy}

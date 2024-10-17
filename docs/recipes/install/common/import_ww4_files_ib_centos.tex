@@ -1,0 +1,19 @@
+%\iftoggle{isCentOS}{\clearpage}
+
+\noindent Finally, to add {\em optional} support for controlling IPoIB
+interfaces (see \S\ref{sec:add_ofed}), \OHPC{} includes a
+template file for \Warewulf{} that can optionally be imported and used later to provision
+\texttt{ib0} network settings.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwctl overlay mkdir generic /etc/sysconfig/network-scripts/
+[sms](*\#*) wwctl overlay import generic /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww \
+ /etc/sysconfig/network-scripts/ifcfg-ib0.ww
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run

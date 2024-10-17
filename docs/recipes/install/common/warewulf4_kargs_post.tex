@@ -1,0 +1,12 @@
+\noindent If any components have added to the boot time kernel command line arguments for the compute nodes,
+the following command is required to store the configuration in Warewulf:
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, add arguments to bootstrap kernel
+% ohpc_command if [[ ${enable_kargs} -eq 1 ]]; then
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Set optional compute node kernel command line arguments.
+[sms](*\#*) wwctl node set --yes --kernelargs="${kargs}" "${compute_regex}"
+\end{lstlisting}
+% ohpc_command fi
+% end_ohpc_run
