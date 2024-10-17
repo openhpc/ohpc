@@ -41,6 +41,11 @@ if SPACK_ENABLED
 endif
 
 
+if LMOD_ENABLED
+   SUBDIRS += admin/lmod
+endif
+
+
 else # non root tests
 
 if CHARLIECLOUD_ENABLED
