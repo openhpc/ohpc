@@ -55,6 +55,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_create.ddl tmp.test > h5ex_g_create.ddl.diff.log
 else
     echo "  Passed"
 fi
@@ -75,6 +76,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_iterate.tst tmp.test > h5ex_g_iterate.tst.diff.log
 else
     echo "  Passed"
 fi
@@ -95,6 +97,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_traverse.tst tmp.test > h5ex_g_traverse.tst.diff.log
 else
     echo "  Passed"
 fi
@@ -115,6 +118,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_visit.tst tmp.test > h5ex_g_visit.tst.diff.log
 else
     echo "  Passed"
 fi
@@ -128,6 +132,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_compact.tst tmp.test > h5ex_g_compact.tst.diff.log
 else
   dumpout h5ex_g_compact1.h5 >tmp.test
   cmp -s tmp.test $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_compact1.ddl
@@ -135,6 +140,7 @@ else
   if test $status -ne 0
   then
       echo "  FAILED!"
+      diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_compact1.ddl tmp.test > h5ex_g_compact1.ddl.diff.log
   else
     dumpout h5ex_g_compact2.h5 >tmp.test
     cmp -s tmp.test $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_compact2.ddl
@@ -142,6 +148,7 @@ else
     if test $status -ne 0
     then
         echo "  FAILED!"
+        diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_compact2.ddl tmp.test > h5ex_g_compact2.ddl.diff.log
     else
         echo "  Passed"
     fi
@@ -159,6 +166,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_phase.tst tmp.test > h5ex_g_phase.tst.diff.log
 else
     echo "  Passed"
 fi
@@ -173,6 +181,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_corder.tst tmp.test > h5ex_g_corder.tst.diff.log
 else
     echo "  Passed"
 fi
@@ -187,6 +196,7 @@ status=$?
 if test $status -ne 0
 then
     echo "  FAILED!"
+    diff -u $srcdir/testfiles/$H5_LIBVER_DIR/h5ex_g_intermediate.tst tmp.test > h5ex_g_intermediate.tst.diff.log
 else
     echo "  Passed"
 fi

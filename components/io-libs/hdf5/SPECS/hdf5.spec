@@ -25,6 +25,8 @@ URL:       http://www.hdfgroup.org/HDF5
 Source0:   https://github.com/HDFGroup/%{pname}/archive/refs/tags/%{pname}_%{version}.tar.gz
 
 BuildRequires: zlib-devel make
+BuildRequires: perl(File::Compare)
+BuildRequires: perl(File::Copy)
 
 %if "%{compiler_family}" == "intel"
 BuildRequires: libtool%{PROJ_DELIM}
@@ -68,8 +70,8 @@ autoreconf -if
 sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-flags
 sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-cxxflags
 # delete special flags no longer available
-echo "" > config/intel-warnings/18
-sed '/-Wp64/d' -i config/intel-warnings/15
+echo "" > config/intel-warnings/classic/18
+sed '/-Wp64/d' -i config/intel-warnings/classic/15
 %endif
 
 ./configure --prefix=%{install_path} \
