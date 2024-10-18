@@ -424,7 +424,7 @@ select information.
 %prep
 # when the rel number is one, the tarball filename does not include it
 %setup -q -n %{slurm_source_dir}
-%patch0 -p1
+%patch -P 0 -p 1
 
 %build
 %if 0%{?rhel} || 0%{?openEuler}

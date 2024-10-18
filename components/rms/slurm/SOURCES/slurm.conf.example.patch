@@ -1,5 +1,5 @@
---- orig/etc/slurm.conf.example	2023-10-11 22:23:30.000000000 +0300
-+++ new/etc/slurm.conf.ohpc	2023-11-24 15:01:18.989659566 +0200
+--- a/etc/slurm.conf.example	2024-10-18 13:23:42.997000000 +0000
++++ b/etc/slurm.conf.example	2024-10-18 13:24:29.375000000 +0000
 @@ -57,7 +57,7 @@
  StateSaveLocation=/var/spool/slurmctld
  SwitchType=switch/none
@@ -9,7 +9,17 @@
  #TaskProlog=
  #TopologyPlugin=topology/tree
  #TmpFS=/tmp
-@@ -122,7 +122,7 @@
+@@ -93,6 +93,9 @@
+ #SchedulerTimeSlice=30
+ SchedulerType=sched/backfill
+ SelectType=select/cons_tres
++# This is added to silence the following warning:
++# slurmctld: select/cons_tres: select_p_node_init: select/cons_tres SelectTypeParameters not specified, using default value: CR_Core_Memory
++SelectTypeParameters=CR_Core_Memory
+ #
+ #
+ # JOB PRIORITY
+@@ -122,7 +125,7 @@
  #JobCompLoc=
  #JobCompPass=
  #JobCompPort=
