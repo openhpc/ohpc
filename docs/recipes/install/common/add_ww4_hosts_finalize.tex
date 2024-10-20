@@ -16,12 +16,15 @@
 % end_ohpc_run
 \fi
 
-\input{common/wwnodescan}
+Finally, we reconfigure build the overlays and update the Warewulf configuration.
+It is necessary to rebuild the overlays whenever a overlay is modified.
 
 % begin_ohpc_run
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Restart dhcp / update PXE
-[sms](*\#*) systemctl restart dhcpd
-[sms](*\#*) wwsh pxe update
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+# build the overlays for all the nodes
+[sms](*\#*) wwctl overlay build
+
+# Update Warewulf configure 
+[sms](*\#*) wwctl configure --all
 \end{lstlisting}
 % end_ohpc_run

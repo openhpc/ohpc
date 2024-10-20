@@ -7,13 +7,14 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{Rocky 9.3}
-\newcommand{\OSRepo}{Rocky\_9.3}
+\newcommand{\baseOS}{Rocky 9.4}
+\newcommand{\OSRepo}{Rocky\_9.4}
 \newcommand{\OSTree}{EL\_9}
 \newcommand{\OSTag}{el9}
-\newcommand{\baseos}{rocky9.3}
+\newcommand{\baseos}{rocky-9.4}
+\newcommand{\baseostag}{9}
 \newcommand{\baseosshort}{rocky9}
-\newcommand{\provisioner}{Warewulf}
+\newcommand{\provisioner}{Warewulf4}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
@@ -27,19 +28,21 @@
 \newcommand{\chrootclean}{dnf --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{dnf -y install}
 \newcommand{\chrootinstall}{dnf -y --installroot=\$CHROOT install}
+\newcommand{\containerinstall}{wwctl container exec \baseos{} /bin/bash <<EOF}
 \newcommand{\groupinstall}{dnf -y groupinstall}
 \newcommand{\groupchrootinstall}{dnf -y --installroot=\$CHROOT groupinstall}
 \newcommand{\remove}{dnf -y remove}
 \newcommand{\upgrade}{dnf -y upgrade}
 \newcommand{\chrootupgrade}{dnf -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
-\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2.1/dists/beegfs-rhel8.repo}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.4.5/dists/beegfs-rhel9.repo}
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
 \toggletrue{isCentOS_ww_slurm_x86}
 \toggletrue{isSLURM}
 \toggletrue{isWarewulf}
+\toggletrue{isWarewulf4}
 \toggletrue{isx86}
 \toggletrue{isCentOS_x86}
 
@@ -88,8 +91,7 @@
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) systemctl disable firewalld
-[sms](*\#*) systemctl stop firewalld
+[sms](*\#*) systemctl disable --now firewalld
 \end{lstlisting}
 % end_ohpc_run
 
@@ -105,7 +107,7 @@
 
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
-\input{common/install_provisioning_intro}
+\input{common/install_provisioning_warewulf4_intro}
 \input{common/enable_pxe}
 \input{common/time}
 
@@ -121,50 +123,40 @@
 
 \vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
-\input{common/warewulf_setup}
-\input{common/warewulf_setup_centos}
-
+\input{common/warewulf4_setup}
+\input{common/warewulf4_setup_centos}
 
 \subsection{Define {\em compute} image for provisioning}
-\input{common/warewulf_mkchroot_rocky}
+\input{common/warewulf4_mkchroot_rocky}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
-\input{common/add_to_compute_chroot_intro}
+\input{common/warewulf4_add_to_compute_chroot_intro}
 
 %\newpage
 % begin_ohpc_run
 % ohpc_validation_comment Add SLURM and other components to compute instance
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
-# install. Note that these will be synchronized with future updates via the provisioning system.
-[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
+[sms](*\#*) (*\containerinstall*) 
+  # Add Slurm client support meta-package and enable munge and slurmd
+  (*\install*) ohpc-slurm-client
+  systemctl enable munge
+  systemctl enable slurmd
 
-# Add Slurm client support meta-package and enable munge and slurmd
-[sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
-[sms](*\#*) chroot $CHROOT systemctl enable munge
-[sms](*\#*) chroot $CHROOT systemctl enable slurmd
+  # Add Network Time Protocol (NTP) support
+  (*\install*) chrony
 
-# Register Slurm server with computes (using "configless" option)
-[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
+  # Include modules user environment
+  (*\install*) lmod-ohpc
 
-# Add Network Time Protocol (NTP) support
-[sms](*\#*) (*\chrootinstall*) chrony
-# Identify master host as local NTP server
-[sms](*\#*) echo "server ${sms_ip} iburst" >> $CHROOT/etc/chrony.conf
-
-# Add kernel drivers (matching kernel version on SMS node)
-[sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
-
-# Include modules user environment
-[sms](*\#*) (*\chrootinstall*) lmod-ohpc
+  # defer image rebuild
+  /bin/false
+EOF
 \end{lstlisting}
 % end_ohpc_run
 
 \vspace*{.2cm}
 \subsubsection{Customize system configuration} \label{sec:master_customization}
-\input{common/warewulf_chroot_customize_centos}
 \input{common/oneapi_mountpoint}
-\input{common/restart_nfs}
 
 % Additional commands when additional computes are requested
 
@@ -192,10 +184,6 @@
 \vspace*{0.28cm}
 \paragraph{Increase locked memory limits}
 \input{common/memlimits}
-
-\vspace*{-.17cm}
-\paragraph{Enable ssh control via resource manager}
-\input{common/slurm_pam}
 
 \vspace*{-.17cm}
 \paragraph{Add \beegfs{}} \label{sec:add_beegfs}
@@ -233,29 +221,23 @@
 
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
-\input{common/import_ww_files}
+\input{common/import_ww4_files}
 %\vspace*{0.3cm}
-\input{common/import_ww_files_slurm}
+\input{common/import_ww4_files_slurm}
 \input{common/import_ww_files_ib_centos}
 %\vspace*{0.3cm}
-\input{common/finalize_provisioning}
+\input{common/finalize_warewulf4_provisioning}
 %\vspace*{0.2cm}
-\input{common/add_ww_hosts_intro}
-\input{common/add_ww_hosts_slurm}
-\input{common/add_ww_hosts_finalize}
+\input{common/add_ww4_hosts_intro}
+\input{common/add_ww4_hosts_finalize}
+\input{common/add_ww4_hosts_slurm}
 
-%\clearpage
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/charliecloud_centos_warewulf_post}
 \input{common/conman_post}
 \input{common/kargs_post}
 
-\vspace*{-0.1cm}
-\subsubsection{Optionally configure stateful provisioning}
-\input{common/stateful}
-
 %\vspace*{-0.4cm}
-\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
 
@@ -291,10 +273,6 @@
 \vspace*{0.5cm}
 \subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
 \input{common/oneapi_enabled_builds_slurm.tex}
-
-\clearpage
-\section{Resource Manager Startup} \label{sec:rms_startup}
-\input{common/slurm_startup}
 
 \section{Post-boot compute node configuration} \label{sec:post_boot}
 \input{common/post_boot}

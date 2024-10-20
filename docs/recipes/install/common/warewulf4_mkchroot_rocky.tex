@@ -3,46 +3,32 @@ customize a system image that can subsequently be used to provision one or more
 {\em compute} nodes. The following subsections highlight this process.
 
 \subsubsection{Build initial BOS image} \label{sec:assemble_bos}
-The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
-\baseOS{}. The following steps illustrate the process to build a minimal, default
-image for use with \Warewulf{}. We begin by defining a directory structure on the
-{\em master} host that will represent the root filesystem of the compute node. The
-default location for this example is in
-\texttt{/opt/ohpc/admin/images/\baseos{}}.
+\Warewulf{} 4 supports using container images as the base file system for 
+provisioning, and it can import these images directly from an OCI registry like
+Docker Hub. Container images must be created especially for use with \Warewulf{}
+since they need to include things like a kernel and an init system. In this 
+example we will import our base image from a set maintained by the \Warewulf{}
+community on the GitHub container registry.
 
-\begin{center}
-  \begin{tcolorbox}[]
-    \small \Warewulf{} is configured by default to access an external
-    repository (download.rockylinux.org) during the \texttt{wwmkchroot} process.  If
-    the master host cannot reach the public Rocky mirrors, or if you prefer to
-    access a locally cached mirror, set the \texttt{\$\{YUM\_MIRROR\}}
-    environment variable to your desired repo location {\em prior} to running
-    the \texttt{wwmkchroot} command below. For example:
-
-% begin_ohpc_run
-% ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,keywords={}]
-# Override default OS repository (optional) - set YUM_MIRROR variable to desired repo location
-[sms](*\#*) export YUM_MIRROR=${BOS_MIRROR}
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% end_ohpc_run
-
-\end{tcolorbox}
-\end{center}
+The \texttt{wwctl container exec} command runs the commands below it, these commands 
+also be run interactively one a time with the command \texttt{wwctl container 
+shell \baseos{}}. The final command \texttt{/bin/false} prevents the image from
+rebuilding, this is also true for any final command that fails.
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
-# Define chroot location
-[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/BOSVER
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1{BOSTAG}{\baseostag{}}1]
+# Import the base image from ghcr
+[sms](*\#*) wwctl container import docker://ghcr.io/warewulf/warewulf-rockylinux:BOSTAG BOSVER --syncuser
 
-# Build initial chroot image
-[sms](*\#*) wwmkchroot -v rocky-9 $CHROOT
-# Enable OpenHPC and EPEL repos inside chroot
-[sms](*\#*) dnf -y --installroot $CHROOT install epel-release
-[sms](*\#*) cp -p /etc/yum.repos.d/OpenHPC*.repo $CHROOT/etc/yum.repos.d
+# Enable OpenHPC inside image and update container
+[sms](*\#*) (*\containerinstall*)
+  (*\install*) http://repos.openhpc.community/OpenHPC/3/EL_9/x86_64/ohpc-release-3-1.el9.x86_64.rpm
+  (*\pkgmgr*) -y update
+  /bin/false
+EOF
+
+# Define chroot location 
+[sms](*\#*) export CHROOT=/srv/warewulf/chroots/BOSVER/rootfs
 \end{lstlisting}
 % end_ohpc_run

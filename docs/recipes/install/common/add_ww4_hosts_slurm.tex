@@ -1,9 +1,11 @@
+Now that the nodes are defined, we can start munge and Slurm.  This must be done
+after the nodes are defined and the Warewulf configuration is updated.
+
 % begin_ohpc_run
-% ohpc_validation_comment Add hosts to cluster (Cont.)
+% ohpc_validation_comment Enable and start munge and slurmctld (Cont.)
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
-# Define provisioning image for hosts
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=BOSVER --bootstrap=`uname -r` \
-    --files=dynamic_hosts,passwd,group,shadow,munge.key,network
+# Enable and start munge and slurmctld
+[sms](*\#*) systemctl enable --now munge
+[sms](*\#*) systemctl enable --now slurmctld
 \end{lstlisting}
-
-
+% end_ohpc_run

@@ -3,18 +3,17 @@ With the \OHPC{} repository enabled, we can now begin adding desired components 
 logical components together in order to help aid in this process. For
 reference, a complete list of available group aliases and RPM packages available
 via \OHPC{} are provided in Appendix~\ref{appendix:manifest}. To add
-support for provisioning services, the following commands illustrate addition
-of a common base package followed by the Warewulf provisioning system.
+support for provisioning services, the following command adds a common base
+package followed along with the Warewulf provisioning system. Then the main
+Warewulf configuration file is edited to reflect the environment.
 
 %\nottoggle{isCentOS}{\clearpage}
 
 % begin_ohpc_run
 % ohpc_comment_header Add baseline OpenHPC and provisioning services \ref{sec:add_provisioning}
 \begin{lstlisting}[language=bash,keywords={}]
-# Install base meta-packages
-[sms](*\#*) (*\install*) ohpc-base
-[sms](*\#*) (*\install*) ohpc-warewulf
-[sms](*\#*) (*\install*) hwloc-ohpc
+# Install base packages
+[sms](*\#*) (*\install*) ohpc-base warewulf-ohpc hwloc-ohpc
 \end{lstlisting}
 % end_ohpc_run
 

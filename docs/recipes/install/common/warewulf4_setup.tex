@@ -1,15 +1,5 @@
 At this point, all of the packages necessary to use \Warewulf{} on the {\em
-master} host should be installed. Next, we need to update several
-configuration files in order to allow \Warewulf{} to work with \baseOS{} and to
+master} host should be installed. Next, we need to update the configuration 
+to allow \Warewulf{} to work with \baseOS{}, update the hosts file, and to
 support local provisioning using a second private interface (refer to
 Figure~\ref{fig:physical_arch}).
-%\vspace*{-0.05cm}
-\begin{center}
-\begin{tcolorbox}[]
-\small
-By default, \Warewulf{} is configured to
-provision over the \texttt{eth1} interface and the steps below include updating
-this setting to override with a potentially alternatively-named interface specified by
-\texttt{\$\{sms\_eth\_internal\}}.
-\end{tcolorbox}
-\end{center}

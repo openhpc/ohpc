@@ -1,21 +1,25 @@
 % begin_ohpc_run
 % ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
-%\begin{verbatim}
-
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Configure Warewulf provisioning to use desired internal interface
-[sms](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
-
 # Enable internal interface for provisioning
 [sms](*\#*) ip link set dev ${sms_eth_internal} up
 [sms](*\#*) ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
 
-# Restart/enable relevant services to support provisioning
-[sms](*\#*) systemctl enable httpd.service
-[sms](*\#*) systemctl restart httpd
-[sms](*\#*) systemctl enable dhcpd.service
-[sms](*\#*) systemctl enable tftp.socket
-[sms](*\#*) systemctl start tftp.socket
+# Edit the warewulf.conf file to use appropriate interface and settings
+[sms](*\#*) perl -pi -e "s/ipaddr:.*/ipaddr: ${sms_ip}/" /etc/warewulf/warewulf.conf
+[sms](*\#*) perl -pi -e "s/netmask:.*/netmask: ${internal_netmask}/" /etc/warewulf/warewulf.conf
+[sms](*\#*) perl -pi -e "s/network:.*/network: ${internal_network}/" /etc/warewulf/warewulf.conf
+[sms](*\#*) perl -pi -e "s/range start:.*/range start: ${c_ip[0]}/" /etc/warewulf/warewulf.conf
+[sms](*\#*) perl -pi -e "s/range start:.*/range start: ${c_ip[$((num_computes-1))]}/" /etc/warewulf/warewulf.conf
+[sms](*\#*) perl -pi -e "s/mount: false/mount: true/" /etc/warewulf/warewulf.conf
+
+# Configure /etc/hostname on master and compute nodes
+[sms](*\#*) perl -pi -e "s/warewulf/\${sms_name}/" /srv/warewulf/overlays/host/etc/hosts.ww
+[sms](*\#*) perl -pi -e "s/warewulf/\${sms_name}/" /srv/warewulf/overlays/general/etc/hosts.ww
+
+# Configuring Warewulf will restart/enable relevant services to support provisioning
+[sms](*\#*) systemctl enable --now warewulfd
+[sms](*\#*) wwctl overlay build
+[sms](*\#*) wwctl configure --all
 \end{lstlisting}
-%\end{verbatim}
 % end_ohpc_run

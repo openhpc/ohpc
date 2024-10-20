@@ -1,9 +1,17 @@
-\noindent Similarly, to import the cryptographic
+\noindent Similarly, we can configure Slurm and import the cryptographic
 key that is required by the {\em munge} authentication library to be available
 on every host in the resource management pool, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /etc/munge/munge.key
+# Configure Slurm server in the overlay (using "configless" option)
+[sms](*\#*) wwctl overlay mkdir generic /etc/sysconfig/
+[sms](*\#*) wwctl overlay import generic <(echo SLURMD_OPTIONS="--conf-server \${sms_ip}") /etc/sysconfig/slurmd
+  
+# Configure munge
+[sms](*\#*) wwctl overlay mkdir generic --mode 0700 /etc/munge
+[sms](*\#*) wwctl overlay import generic /etc/munge/munge.key
+[sms](*\#*) wwctl overlay chown generic /etc/munge/munge.key $(id -u munge) $(id -g munge)
+[sms](*\#*) wwctl overlay chown generic /etc/munge $(id -u munge) $(id -g munge)
 \end{lstlisting}
 % \end_ohpc_run

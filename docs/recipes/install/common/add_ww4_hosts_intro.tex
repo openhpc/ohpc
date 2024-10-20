@@ -1,28 +1,11 @@
 %\iftoggle{isx86}{\clearpage}
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster
-
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
-# Set provisioning interface as the default networking device
-[sms](*\#*) echo "GATEWAYDEV=${eth_provision}" > /tmp/network.$$
-[sms](*\#*) wwsh -y file import /tmp/network.$$ --name network
-[sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
-
-# Add nodes to Warewulf data store
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+# add the nodes with --discoverable so warewulf will identify new mac addresses
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-                wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
-        done
+  wwctl node add --discoverable=yes --container=BOSVER \
+    --ipaddr=${c_ip[$i]} --netmask=${internal_netmask} ${compute_prefix}$i
+done
 \end{lstlisting}
 % end_ohpc_run
-
-%\iftoggle{isCentOS_ww_pbs_x86}{\clearpage}
-
-%\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
-
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Additional step required if desiring to use predictable network interface
-# naming schemes (e.g. en4s0f0). Skip if using eth# style names.
-[sms](*\#*) export kargs="${kargs} net.ifnames=1,biosdevname=1"
-[sms](*\#*) wwsh provision set --postnetdown=1 "${compute_regex}"
-\end{lstlisting}
-
