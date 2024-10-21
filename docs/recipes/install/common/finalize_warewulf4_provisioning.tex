@@ -1,0 +1,24 @@
+\subsection{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
+
+\Warewulf{} provisions a node with an image then customizes it with overlays. 
+This section highlights creation of the node image and overlays, followed by the 
+registration of desired compute nodes.
+
+\subsubsection{Build container image and overlays}
+
+The bootstrap image includes the runtime kernel and associated modules, as well
+as some simple scripts to complete the provisioning process.
+
+% begin_ohpc_run
+% ohpc_comment_header Assemble bootstrap image \ref{sec:assemble_bootstrap}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
+# Build image
+[sms](*\#*) wwctl container build BOSVER
+[sms](*\#*) wwctl overlay build
+\end{lstlisting}
+% end_ohpc_run
+
+\subsubsection{Register nodes for provisioning}
+
+Nodes can be registered for provisioning using the following syntax.
+

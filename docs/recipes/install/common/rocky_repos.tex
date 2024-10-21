@@ -20,6 +20,6 @@ enabled by default.  In contrast, the CRB repository is typically
 disabled in a standard install, but can be enabled from EPEL as follows:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) dnf install dnf-plugins-core
+[sms](*\#*) dnf -y install dnf-plugins-core
 [sms](*\#*) dnf config-manager --set-enabled crb
 \end{lstlisting}

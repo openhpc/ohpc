@@ -94,6 +94,9 @@ from the OpenHPC software stack.
 #pushd docs/recipes/install/centos8/x86_64/warewulf/slurm
 #make ; %{parser} steps.tex > recipe.sh ; popd
 
+pushd docs/recipes/install/rocky9/x86_64/warewulf4/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
 pushd docs/recipes/install/rocky9/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
@@ -169,6 +172,10 @@ install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 
 # x86_64 guides
+
+%define lpath rocky9/x86_64/warewulf4/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
 %define lpath rocky9/x86_64/warewulf/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
