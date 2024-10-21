@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         adios2::IO bpIO = adios.DeclareIO("ReadBP");
 
         /** Engine derived class, spawned to start IO operations */
-        adios2::Engine bpReader = bpIO.Open(filename, adios2::Mode::Read);
+        adios2::Engine bpReader = bpIO.Open(filename, adios2::Mode::ReadRandomAccess);
 
         const std::map<std::string, adios2::Params> variables =
             bpIO.AvailableVariables();
