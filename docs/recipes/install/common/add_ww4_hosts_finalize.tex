@@ -6,9 +6,8 @@
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Optionally define IPoIB network settings (required if planning to mount Lustre/BeeGFS over IB)
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
-        done
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
+  wwctl node set --yes ${c_name[$i]} --netdev=ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
+done
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
