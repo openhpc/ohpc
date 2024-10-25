@@ -25,6 +25,7 @@ Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 
 Source0:   https://github.com/HDFGroup/%{pname}/archive/refs/tags/%{pname}_%{version}.tar.gz
+Patch1:    fix-intel-compiler.patch
 
 BuildRequires: zlib-devel make
 BuildRequires: perl(File::Compare)
@@ -50,6 +51,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
 %setup -q -n  %{pname}-%{pname}_%{version}
+%patch -P1 -p1
 
 %build
 # override with newer config.guess for aarch64

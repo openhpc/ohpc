@@ -1,0 +1,21 @@
+--- a/config/cmake/HDF5UseFortran.cmake	2024-10-25 15:16:10.038600011 +0300
++++ b/config/cmake/HDF5UseFortran.cmake	2024-10-25 15:16:40.464403575 +0300
+@@ -218,10 +218,6 @@
+     string (REGEX REPLACE "," ";" VAR "${pac_validLogicalKinds}")
+ 
+     set(CMAKE_REQUIRED_QUIET TRUE)
+-    set(save_CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS})
+-    if (CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+-       set(CMAKE_Fortran_FLAGS "-warn error")
+-    endif ()
+ 
+     foreach (KIND ${VAR})
+       unset(MPI_LOGICAL_KIND CACHE)
+@@ -248,7 +244,6 @@
+        message (FATAL_ERROR "Failed to determine LOGICAL KIND for MPI")
+     endif ()
+     set(CMAKE_REQUIRED_QUIET FALSE)
+-    set(CMAKE_Fortran_FLAGS ${save_CMAKE_Fortran_FLAGS})
+   endif()
+ endif()
+ 
