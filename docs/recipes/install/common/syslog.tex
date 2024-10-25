@@ -14,7 +14,7 @@ forward their logs to the SMS, and to allow the SMS to accept these log requests
 [sms](*\#*) systemctl restart rsyslog
 
 # Define compute node forwarding destination
-[sms](*\#*) echo "*.* action(type=\"omfwd\" Target=\"${sms_ip}\" Port=\"514\" "\
+[sms](*\#*) echo "*.* action(type=\"omfwd\" Target=\"${sms_ip}\" Port=\"514\" " \
    "Protocol=\"udp\")">> $CHROOT/etc/rsyslog.conf
 
 # Disable most local logging on computes. Emergency and boot logs will remain on the compute nodes
