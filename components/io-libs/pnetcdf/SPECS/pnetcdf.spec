@@ -32,6 +32,8 @@ BuildRequires:  grep
 BuildRequires:  make
 BuildRequires:  m4
 BuildRequires:  zlib-devel
+BuildRequires: perl(File::Compare)
+BuildRequires: perl(File::Copy)
 
 %if "%{compiler_family}" == "intel"
 BuildRequires: libtool%{PROJ_DELIM}
