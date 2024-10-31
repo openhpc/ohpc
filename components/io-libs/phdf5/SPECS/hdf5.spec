@@ -18,13 +18,13 @@
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      p%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.14.5
+Version:   1.14.0
 Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 
-Source0:   https://github.com/HDFGroup/%{pname}/archive/refs/tags/%{pname}_%{version}.tar.gz
+Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
 
 BuildRequires: zlib-devel make
 BuildRequires: perl(File::Compare)
@@ -49,7 +49,7 @@ structure, such as images, arrays of vectors, and structured and unstructured
 grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
-%setup -q -n  %{pname}-%{pname}_%{version}
+%setup -q -n %{pname}-%{version}
 
 %build
 # override with newer config.guess for aarch64
@@ -94,8 +94,8 @@ autoreconf -if
 sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-flags
 sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-cxxflags
 # delete special flags no longer available
-echo "" > config/intel-warnings/classic/18
-sed '/-Wp64/d' -i config/intel-warnings/classic/15
+echo "" > config/intel-warnings/18
+sed '/-Wp64/d' -i config/intel-warnings/15
 %endif
 
 ./configure --prefix=%{install_path} \
