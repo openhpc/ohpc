@@ -4,7 +4,7 @@
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
 wwctl node add --container=rocky-9.4 \
-    --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} --netmask=${internal_netmask} ${c_name[i]}
+    --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} ${c_name[i]}
 done
 \end{lstlisting}
 % end_ohpc_run

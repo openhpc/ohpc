@@ -21,6 +21,9 @@ sms_eth_internal="${sms_eth_internal:-eth1}"
 # Subnet netmask for internal cluster network
 internal_netmask="${internal_netmask:-255.255.0.0}"
 
+# Subnet network for internal cluster network
+internal_network="${internal_network:-172.16.0.0}"
+
 # ipv4 gateway 
 ipv4_gateway="${ipv4_gateway:-172.16.0.2}"
 
