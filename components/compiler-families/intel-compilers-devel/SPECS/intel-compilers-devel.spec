@@ -19,16 +19,15 @@
 # version, but the build system was already using a newer version, then
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version.  Newer versions may still be installed in parallel.
-%define exact_intel_ver 2024.0
-%define exact_intel_ver_module 2024.0.0
-%define exact_mkl_ver 2024.0
-%define exact_classic_ver 2023.2.1
-%define exact_deps compiler/2024.0.0 mkl/%{exact_mkl_ver} oclfpga/2024.0.0 compiler-rt/2024.0.0 debugger/2024.0.0 tbb/2021.11
+%define exact_intel_ver 2025.0
+%define exact_intel_ver_module 2025.0.1
+%define exact_mkl_ver 2025.0
+%define exact_deps umf/0.9.1 compiler/2025.0.1 mkl/%{exact_mkl_ver} compiler-rt/2025.0.1 debugger/2025.0.0 tbb/2022.0.0
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2024.0
-Release:   %{?dist}.3
+Version:   2025.0
+Release:   %{?dist}.1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
@@ -42,8 +41,6 @@ Source3:   ohpc-update-modules-intel
 #!BuildIgnore: post-build-checks
 
 Requires: gcc libstdc++-devel
-Requires(pre): intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_classic_ver}
-Requires: intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-%{exact_classic_ver}
 Requires: intel-oneapi-dpcpp-cpp-%{exact_intel_ver}
 Requires: intel-oneapi-mkl-devel-%{exact_mkl_ver}
 Requires: intel-oneapi-compiler-fortran-%{exact_intel_ver}
@@ -72,7 +69,7 @@ install -D -m644 %{SOURCE2} -t %{buildroot}%{repodir}/
 install -D -m755 %{SOURCE1} %{buildroot}/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
 # Mod generator for oneAPI support
-sed -e 's|@@oneapi_manifest@@|%{oneapi_manifes}|' \
+sed -e 's|@@oneapi_manifest@@|%{oneapi_manifest}|' \
     -e 's|@@OHPC_MODULEDEPS@@|%{OHPC_MODULEDEPS}|' \
     -e 's|@@OHPC_MODULES@@|%{OHPC_MODULES}|' \
     -e 's|@@exact_deps@@|%{exact_deps}|' \
@@ -104,7 +101,6 @@ fi
 
 %post -p /bin/bash
 %{OHPC_BIN}/ohpc-update-modules-intel
-
 
 %preun -p /bin/bash
 if [ $1 -eq 0 ]; then
