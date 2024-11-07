@@ -1,19 +1,30 @@
 R-gnu12-ohpc 4.2.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 R-gnu13-ohpc 4.2.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
+R-gnu14-ohpc 4.4.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
+cubelib-gnu14-ohpc 4.8.2 http://www.scalasca.org/software/cube-4.x/download.html ohpc/serial-libs CUBE Uniform Behavioral Encoding generic presentation library component
+cubelib-intel-ohpc 4.8.2 http://www.scalasca.org/software/cube-4.x/download.html ohpc/serial-libs CUBE Uniform Behavioral Encoding generic presentation library component
 gsl-gnu12-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 gsl-gnu13-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
+gsl-gnu14-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 gsl-intel-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 metis-gnu12-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-gnu13-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
+metis-gnu14-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-intel-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 openblas-gnu12-ohpc 0.3.21 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
 openblas-gnu13-ohpc 0.3.21 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
+openblas-gnu14-ohpc 0.3.28 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
+opari2-gnu14-ohpc 2.0.8 https://www.vi-hps.org/projects/score-p/ ohpc/serial-libs An OpenMP runtime performance measurement instrumenter
+opari2-intel-ohpc 2.0.8 https://www.vi-hps.org/projects/score-p/ ohpc/serial-libs An OpenMP runtime performance measurement instrumenter
 plasma-gnu12-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 plasma-gnu13-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
+plasma-gnu14-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 plasma-intel-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 scotch-gnu12-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 scotch-gnu13-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
+scotch-gnu14-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 scotch-intel-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 superlu-gnu12-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-gnu13-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
-superlu-intel-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
+superlu-gnu14-ohpc 7.0.0 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
+superlu-intel-ohpc 7.0.0 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations

@@ -1,19 +1,22 @@
 conman-ohpc 0.3.1 http://dun.github.io/conman/ ohpc/admin ConMan: The Console Manager
-docs-ohpc 3.1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+docs-ohpc 3.2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
-genders-ohpc 1.27 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
-hpc-workspace-ohpc 1.4.0 https://github.com/holgerBerger/hpc-workspace ohpc/admin Temporary workspace management
+genders-ohpc 1.29 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
+hpc-workspace-ohpc 1.5.0 https://github.com/holgerBerger/hpc-workspace ohpc/admin Temporary workspace management
 lmod-defaults-gnu12-mpich-ofi-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu12-mpich-ucx-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu12-mvapich2-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu12-openmpi4-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu13-mvapich2-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu13-openmpi5-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-ohpc 8.7.37 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
+lmod-defaults-gnu14-mpich-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu14-mvapich2-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu14-openmpi5-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-ohpc 8.7.53 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
 losf-ohpc 0.56.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating system framework for managing HPC clusters
 mrsh-ohpc 2.12 https://github.com/chaos/mrsh ohpc/admin Remote shell program that uses munge authentication
 nhc-ohpc 1.4.3 https://github.com/mej/nhc/ ohpc/admin LBNL Node Health Check
 ohpc-release 3 https://github.com/openhpc/ohpc ohpc/admin OpenHPC release files
 pdsh-ohpc 2.35 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell program
 prun-ohpc 2.2 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch
-test-suite-ohpc 3.1.0 https://github.com/openhpc/ohpc/tests ohpc/admin Integration test suite for OpenHPC
+test-suite-ohpc 3.2.0 https://github.com/openhpc/ohpc ohpc/admin Integration test suite for OpenHPC

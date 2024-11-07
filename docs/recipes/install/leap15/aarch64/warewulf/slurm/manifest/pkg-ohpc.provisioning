@@ -12,4 +12,5 @@ warewulf-provision-ohpc-server-ipxe-aarch64 3.10.0 http://warewulf.lbl.gov/ ohpc
 warewulf-provision-ohpc-server-ipxe-x86_64 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - iPXE Bootloader for x86_64
 warewulf-provision-ohpc-initramfs-aarch64 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for aarch64
 warewulf-provision-ohpc-initramfs-x86_64 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for x86_64
-warewulf-ohpc 4.4.0 https://github.com/hpcng/warewulf ohpc/provisioning A provisioning system for large clusters of bare metal and/or virtual systems
+warewulf-dracut-ohpc 4.5.5 https://github.com/hpcng/warewulf ohpc/provisioning A dracut module for loading a Warewulf container image
+warewulf-ohpc 4.5.5 https://github.com/hpcng/warewulf ohpc/provisioning A provisioning system for large clusters of bare metal and/or virtual systems

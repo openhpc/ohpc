@@ -3,17 +3,17 @@ openpbs-execution-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for an e
 openpbs-client-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for a client host
 openpbs-server-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for a server host
 pmix-ohpc 4.2.9 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
-slurm-devel-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
-slurm-example-configs-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
-slurm-sview-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
-slurm-pam_slurm-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
-slurm-perlapi-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
-slurm-contribs-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
-slurm-sackd-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm authentication daemon
-slurm-slurmd-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
-slurm-slurmctld-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
-slurm-slurmdbd-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
-slurm-libpmi-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
-slurm-torque-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
-slurm-openlava-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
+slurm-devel-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-example-configs-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
+slurm-sview-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
+slurm-pam_slurm-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-contribs-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-sackd-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm authentication daemon
+slurm-slurmd-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
+slurm-slurmctld-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
+slurm-slurmdbd-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-libpmi-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
+slurm-torque-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
+slurm-openlava-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm

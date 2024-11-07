@@ -1,5 +1,6 @@
 gnu12-compilers-ohpc 12.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 gnu13-compilers-ohpc 13.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+gnu14-compilers-ohpc 14.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 intel-oneapi-toolkit-release-ohpc 2024.0 https://github.com/openhpc/ohpc ohpc/compiler-families Intel(R) oneAPI HPC Toolkit Repository Setup
 intel-psxe-compilers-devel-ohpc 2024.0 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE
 intel-compilers-devel-ohpc 2024.0 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) oneAPI HPC Toolkit

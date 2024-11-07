@@ -1,8 +1,8 @@
-EasyBuild-ohpc 4.9.1 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
+EasyBuild-ohpc 4.9.4 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
 automake-ohpc 1.16.5 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU tool for automatically creating Makefiles
 autoconf-ohpc 2.71 http://www.gnu.org/software/autoconf/ ohpc/dev-tools A GNU tool for automatically configuring source code
 cmake-ohpc 3.24.2 https://cmake.org/ ohpc/dev-tools CMake is an open-source, cross-platform family of tools designed to build, test and package software.
-hwloc-ohpc 2.9.3 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portable Hardware Locality
+hwloc-ohpc 2.11.1 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portable Hardware Locality
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 python3-scipy-gnu12-impi-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python3-scipy-gnu12-mpich-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
@@ -12,9 +12,14 @@ python3.11-scipy-gnu13-impi-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scien
 python3.11-scipy-gnu13-mpich-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python3.11-scipy-gnu13-mvapich2-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python3.11-scipy-gnu13-openmpi5-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python3.11-scipy-gnu14-impi-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python3.11-scipy-gnu14-mpich-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python3.11-scipy-gnu14-mvapich2-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python3.11-scipy-gnu14-openmpi5-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python3-numpy-gnu12-ohpc 1.19.5 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python3-numpy-intel-ohpc 1.19.5 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python3.11-numpy-gnu13-ohpc 1.26.4 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
+python3.11-numpy-gnu14-ohpc 1.26.4 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python3.11-numpy-intel-ohpc 1.26.4 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python3-mpi4py-gnu12-impi-ohpc 3.1.4 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-gnu12-mpich-ohpc 3.1.4 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
@@ -28,9 +33,13 @@ python3.11-mpi4py-gnu13-impi-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/de
 python3.11-mpi4py-gnu13-mpich-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3.11-mpi4py-gnu13-mvapich2-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3.11-mpi4py-gnu13-openmpi5-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
+python3.11-mpi4py-gnu14-impi-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
+python3.11-mpi4py-gnu14-mpich-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
+python3.11-mpi4py-gnu14-mvapich2-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
+python3.11-mpi4py-gnu14-openmpi5-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3.11-mpi4py-intel-impi-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3.11-mpi4py-intel-mpich-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3.11-mpi4py-intel-mvapich2-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3.11-mpi4py-intel-openmpi5-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
-spack-ohpc 0.21.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
-valgrind-ohpc 3.20.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger
+spack-ohpc 0.22.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
+valgrind-ohpc 3.23.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger

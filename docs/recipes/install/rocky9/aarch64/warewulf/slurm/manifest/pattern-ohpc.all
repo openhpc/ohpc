@@ -36,6 +36,20 @@ ohpc-gnu13-python-libs Collection of python related library builds for use with 
 ohpc-gnu13-python3-libs Collection of python3 related library builds for use with GNU compiler toolchain
 ohpc-gnu13-runtimes Collection of runtimes for use with GNU compiler toolchain
 ohpc-gnu13-serial-libs Collection of serial library builds for use with GNU compiler toolchain
+ohpc-gnu14-geopm Global Extensible Open Power Manager for use with GNU compiler toolchain
+ohpc-gnu14-io-libs Collection of IO library builds for use with GNU compiler toolchain
+ohpc-gnu14-mpich-io-libs Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu14-mpich-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu14-mpich-perf-tools Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu14-openmpi5-io-libs Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu14-openmpi5-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu14-openmpi5-perf-tools Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu14-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain
+ohpc-gnu14-perf-tools Collection of performance tool builds for use with GNU compiler toolchain
+ohpc-gnu14-python-libs Collection of python related library builds for use with GNU compiler toolchain
+ohpc-gnu14-python3-libs Collection of python3 related library builds for use with GNU compiler toolchain
+ohpc-gnu14-runtimes Collection of runtimes for use with GNU compiler toolchain
+ohpc-gnu14-serial-libs Collection of serial library builds for use with GNU compiler toolchain
 ohpc-slurm-client Collection of client packages for SLURM
 ohpc-slurm-server Collection of server packages for SLURM
 ohpc-warewulf Collection of base packages for Warewulf provisioning

@@ -6,14 +6,21 @@ adios2-gnu13-impi-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html 
 adios2-gnu13-mpich-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-gnu13-mvapich2-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-gnu13-openmpi5-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
-adios2-intel-impi-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
-adios2-intel-mpich-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
-adios2-intel-mvapich2-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-intel-openmpi4-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
-adios2-intel-openmpi5-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-gnu14-impi-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-gnu14-mpich-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-gnu14-mvapich2-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-gnu14-openmpi5-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-intel-impi-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-intel-mpich-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-intel-mvapich2-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-intel-openmpi5-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+cubew-gnu14-ohpc 4.8.2 http://www.scalasca.org/software/cube-4.x/download.html ohpc/io-libs CUBE Uniform Behavioral Encoding generic presentation writer component
+cubew-intel-ohpc 4.8.2 http://www.scalasca.org/software/cube-4.x/download.html ohpc/io-libs CUBE Uniform Behavioral Encoding generic presentation writer component
 hdf5-gnu12-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 hdf5-gnu13-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
-hdf5-intel-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+hdf5-gnu14-ohpc 1.14.5 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+hdf5-intel-ohpc 1.14.5 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 netcdf-cxx-gnu12-impi-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu12-mpich-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu12-mvapich2-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
@@ -23,6 +30,11 @@ netcdf-cxx-gnu13-mpich-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ o
 netcdf-cxx-gnu13-mvapich2-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu13-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu13-openmpi5-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-impi-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-mpich-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-mvapich2-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-openmpi5-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-intel-impi-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-intel-mpich-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-intel-mvapich2-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
@@ -39,6 +51,11 @@ netcdf-fortran-gnu13-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcd
 netcdf-fortran-gnu13-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu13-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu13-openmpi5-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-openmpi5-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-intel-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-intel-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-intel-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
@@ -54,11 +71,24 @@ netcdf-gnu13-mpich-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/
 netcdf-gnu13-mvapich2-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu13-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu13-openmpi5-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-impi-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-mpich-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-mvapich2-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-openmpi5-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-impi-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-mpich-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-mvapich2-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-openmpi5-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+otf2-gnu14-impi-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-gnu14-mpich-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-gnu14-mvapich2-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-gnu14-openmpi5-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-intel-impi-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-intel-mpich-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-intel-mvapich2-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-intel-openmpi5-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
 phdf5-gnu12-impi-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu12-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu12-mvapich2-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
@@ -67,6 +97,10 @@ phdf5-gnu13-impi-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general
 phdf5-gnu13-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu13-mvapich2-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu13-openmpi5-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+phdf5-gnu14-impi-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+phdf5-gnu14-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+phdf5-gnu14-mvapich2-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+phdf5-gnu14-openmpi5-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-intel-impi-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-intel-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-intel-mvapich2-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
@@ -80,6 +114,10 @@ pnetcdf-gnu13-impi-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCD
 pnetcdf-gnu13-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu13-mvapich2-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu13-openmpi5-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
+pnetcdf-gnu14-impi-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
+pnetcdf-gnu14-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
+pnetcdf-gnu14-mvapich2-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
+pnetcdf-gnu14-openmpi5-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-intel-impi-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-intel-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-intel-mvapich2-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
@@ -93,6 +131,10 @@ sionlib-gnu13-impi-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.
 sionlib-gnu13-mpich-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu13-mvapich2-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu13-openmpi5-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
+sionlib-gnu14-impi-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
+sionlib-gnu14-mpich-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
+sionlib-gnu14-mvapich2-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
+sionlib-gnu14-openmpi5-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-intel-impi-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-intel-mpich-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-intel-mvapich2-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files

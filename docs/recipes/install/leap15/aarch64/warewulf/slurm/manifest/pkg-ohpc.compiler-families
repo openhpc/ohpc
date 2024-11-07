@@ -1,3 +1,4 @@
 arm1-compilers-devel-ohpc 3.0 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Arm HPC compiler
 gnu12-compilers-ohpc 12.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 gnu13-compilers-ohpc 13.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+gnu14-compilers-ohpc 14.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files

@@ -1,12 +1,15 @@
-EasyBuild-ohpc 4.9.1 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
+EasyBuild-ohpc 4.9.4 https://easybuilders.github.io/easybuild ohpc/dev-tools Software build and installation framework
 R-gnu12-ohpc 4.2.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 R-gnu13-ohpc 4.2.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
+R-gnu14-ohpc 4.4.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 adios2-arm1-mpich-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-arm1-openmpi4-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-gnu12-mpich-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-gnu12-openmpi4-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-gnu13-mpich-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 adios2-gnu13-openmpi5-ohpc 2.8.3 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-gnu14-mpich-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
+adios2-gnu14-openmpi5-ohpc 2.10.1 https://adios2.readthedocs.io/en/latest/index.html ohpc/io-libs The Adaptable IO System v2 (ADIOS2)
 arm1-compilers-devel-ohpc 3.0 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Arm HPC compiler
 autoconf-ohpc 2.71 http://www.gnu.org/software/autoconf/ ohpc/dev-tools A GNU tool for automatically configuring source code
 automake-ohpc 1.16.5 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU tool for automatically creating Makefiles
@@ -16,16 +19,22 @@ boost-gnu12-mpich-ohpc 1.81.0 http://www.boost.org ohpc/parallel-libs Free peer-
 boost-gnu12-openmpi4-ohpc 1.81.0 http://www.boost.org ohpc/parallel-libs Free peer-reviewed portable C++ source libraries
 boost-gnu13-mpich-ohpc 1.81.0 http://www.boost.org ohpc/parallel-libs Free peer-reviewed portable C++ source libraries
 boost-gnu13-openmpi5-ohpc 1.81.0 http://www.boost.org ohpc/parallel-libs Free peer-reviewed portable C++ source libraries
+boost-gnu14-mpich-ohpc 1.81.0 http://www.boost.org ohpc/parallel-libs Free peer-reviewed portable C++ source libraries
+boost-gnu14-openmpi5-ohpc 1.81.0 http://www.boost.org ohpc/parallel-libs Free peer-reviewed portable C++ source libraries
 charliecloud-ohpc 0.15 https://hpc.github.io/charliecloud/ ohpc/runtimes Lightweight user-defined software stacks for high-performance computing
 cmake-ohpc 3.24.2 https://cmake.org/ ohpc/dev-tools CMake is an open-source, cross-platform family of tools designed to build, test and package software.
 conman-ohpc 0.3.1 http://dun.github.io/conman/ ohpc/admin ConMan: The Console Manager
+cubelib-gnu14-ohpc 4.8.2 http://www.scalasca.org/software/cube-4.x/download.html ohpc/serial-libs CUBE Uniform Behavioral Encoding generic presentation library component
+cubew-gnu14-ohpc 4.8.2 http://www.scalasca.org/software/cube-4.x/download.html ohpc/io-libs CUBE Uniform Behavioral Encoding generic presentation writer component
 dimemas-arm1-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-arm1-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu12-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu12-openmpi4-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu13-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu13-openmpi5-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-docs-ohpc 3.1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+dimemas-gnu14-mpich-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu14-openmpi5-ohpc 5.4.2 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+docs-ohpc 3.2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 extrae-arm1-mpich-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-arm1-openmpi4-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
@@ -33,37 +42,48 @@ extrae-gnu12-mpich-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu12-openmpi4-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu13-mpich-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu13-openmpi5-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-gnu14-mpich-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-gnu14-openmpi5-ohpc 3.8.3 https://tools.bsc.es ohpc/perf-tools Extrae tool
 fftw-arm1-mpich-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-arm1-openmpi4-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu12-mpich-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu12-openmpi4-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu13-mpich-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu13-openmpi5-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
+fftw-gnu14-mpich-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
+fftw-gnu14-openmpi5-ohpc 3.3.10 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 flex-ohpc 2.6.4 https://github.com/westes/flex ohpc/distro-packages Fast Lexical Analyzer Generator
-genders-compat-ohpc 1.27 https://github.com/chaos/genders System Environment/Base Compatibility Library
-genders-ohpc 1.27 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
+genders-compat-ohpc 1.29 https://github.com/chaos/genders System Environment/Base Compatibility Library
+genders-ohpc 1.29 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
 gnu12-compilers-ohpc 12.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 gnu13-compilers-ohpc 13.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+gnu14-compilers-ohpc 14.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 gsl-arm1-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 gsl-gnu12-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 gsl-gnu13-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
+gsl-gnu14-ohpc 2.7.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 hdf5-arm1-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 hdf5-gnu12-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 hdf5-gnu13-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
-hpc-workspace-ohpc 1.4.0 https://github.com/holgerBerger/hpc-workspace ohpc/admin Temporary workspace management
-hwloc-ohpc 2.9.3 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portable Hardware Locality
+hdf5-gnu14-ohpc 1.14.5 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+hpc-workspace-ohpc 1.5.0 https://github.com/holgerBerger/hpc-workspace ohpc/admin Temporary workspace management
+hwloc-ohpc 2.11.1 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portable Hardware Locality
 hypre-arm1-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-arm1-openmpi4-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu12-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu12-openmpi4-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu13-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu13-openmpi5-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-gnu14-mpich-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-gnu14-openmpi5-ohpc 2.18.1 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 imb-arm1-mpich-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-arm1-openmpi4-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu12-mpich-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu12-openmpi4-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu13-mpich-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu13-openmpi5-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
+imb-gnu14-mpich-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
+imb-gnu14-openmpi5-ohpc 2021.3 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 libfabric-ohpc 1.18.0 http://www.github.com/ofiwg/libfabric ohpc/mpi-families User-space RDMA Fabric Interfaces
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 likwid-gnu12-ohpc 5.2.2 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Performance tools for the Linux console
@@ -72,23 +92,30 @@ lmod-defaults-gnu12-mpich-ofi-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admi
 lmod-defaults-gnu12-mpich-ucx-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu12-openmpi4-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu13-openmpi5-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-ohpc 8.7.37 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
+lmod-defaults-gnu14-mpich-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu14-openmpi5-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-ohpc 8.7.53 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
 losf-ohpc 0.56.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating system framework for managing HPC clusters
 magpie-ohpc 3.0 https://github.com/LLNL/magpie ohpc/rms Scripts for running Big Data software in HPC environments
 metis-arm1-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-gnu12-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-gnu13-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
+metis-gnu14-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 mfem-arm1-mpich-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mfem-arm1-openmpi4-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mfem-gnu12-mpich-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mfem-gnu12-openmpi4-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mfem-gnu13-mpich-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mfem-gnu13-openmpi5-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu14-mpich-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
+mfem-gnu14-openmpi5-ohpc 4.4 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mpich-ofi-arm1-ohpc 3.4.3 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ofi-gnu12-ohpc 3.4.3 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ofi-gnu13-ohpc 3.4.3 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ofi-gnu14-ohpc 3.4.3 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ucx-gnu12-ohpc 3.4.3 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-ucx-gnu13-ohpc 3.4.3 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ucx-gnu14-ohpc 3.4.3 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mrsh-ohpc 2.12 https://github.com/chaos/mrsh ohpc/admin Remote shell program that uses munge authentication
 mrsh-rsh-compat-ohpc 2.12 https://github.com/chaos/mrsh System Environment/Base rsh compatibility package for mrcp/mrlogin/mrsh
 mrsh-server-ohpc 2.12 https://github.com/chaos/mrsh System Environment/Daemons Servers for remote access commands (mrsh, mrlogin, mrcp)
@@ -98,6 +125,8 @@ mumps-gnu12-mpich-ohpc 5.2.1 http://graal.ens-lyon.fr/MUMPS/ ohpc/parallel-libs 
 mumps-gnu12-openmpi4-ohpc 5.2.1 http://graal.ens-lyon.fr/MUMPS/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu13-mpich-ohpc 5.2.1 http://graal.ens-lyon.fr/MUMPS/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu13-openmpi5-ohpc 5.2.1 http://graal.ens-lyon.fr/MUMPS/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu14-mpich-ohpc 5.2.1 http://graal.ens-lyon.fr/MUMPS/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu14-openmpi5-ohpc 5.2.1 http://graal.ens-lyon.fr/MUMPS/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 netcdf-arm1-mpich-ohpc 4.9.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-arm1-openmpi4-ohpc 4.9.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-cxx-arm1-mpich-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
@@ -107,6 +136,9 @@ netcdf-cxx-gnu12-openmpi4-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf
 netcdf-cxx-gnu13-mpich-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu13-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu13-openmpi5-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-mpich-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
+netcdf-cxx-gnu14-openmpi5-ohpc 4.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-fortran-arm1-mpich-ohpc 4.6.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-arm1-openmpi4-ohpc 4.6.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu12-mpich-ohpc 4.6.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
@@ -114,11 +146,17 @@ netcdf-fortran-gnu12-openmpi4-ohpc 4.6.0 http://www.unidata.ucar.edu/software/ne
 netcdf-fortran-gnu13-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu13-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu13-openmpi5-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-fortran-gnu14-openmpi5-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-gnu12-mpich-ohpc 4.9.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu12-openmpi4-ohpc 4.9.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu13-mpich-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu13-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu13-openmpi5-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-mpich-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu14-openmpi5-ohpc 4.9.2 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 nhc-ohpc 1.4.3 https://github.com/mej/nhc/ ohpc/admin LBNL Node Health Check
 omb-arm1-mpich-ohpc 6.1 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 omb-arm1-openmpi4-ohpc 6.1 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
@@ -126,22 +164,32 @@ omb-gnu12-mpich-ohpc 6.1 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/per
 omb-gnu12-openmpi4-ohpc 6.1 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 omb-gnu13-mpich-ohpc 7.3 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
 omb-gnu13-openmpi5-ohpc 7.3 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu14-mpich-ohpc 7.3 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu14-openmpi5-ohpc 7.3 https://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+opari2-gnu14-ohpc 2.0.8 https://www.vi-hps.org/projects/score-p/ ohpc/serial-libs An OpenMP runtime performance measurement instrumenter
 openblas-gnu12-ohpc 0.3.21 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
 openblas-gnu13-ohpc 0.3.21 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
+openblas-gnu14-ohpc 0.3.28 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
 opencoarrays-gnu12-mpich-ohpc 2.10.0 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu12-openmpi4-ohpc 2.10.0 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu13-mpich-ohpc 2.10.0 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 opencoarrays-gnu13-openmpi5-ohpc 2.10.0 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
+opencoarrays-gnu14-mpich-ohpc 2.10.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
+opencoarrays-gnu14-openmpi5-ohpc 2.10.2 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 openmpi4-arm1-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-gnu12-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-gnu13-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi4-pmix-gnu12-ohpc 4.1.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi5-gnu13-ohpc 5.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi5-gnu14-ohpc 5.0.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openmpi5-pmix-gnu13-ohpc 5.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi5-pmix-gnu14-ohpc 5.0.5 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
 openpbs-client-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for a client host
 openpbs-devel-ohpc 22.05.11 http://www.openpbs.org Development/System OpenPBS Development Package
 openpbs-execution-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for an execution host
 openpbs-server-ohpc 22.05.11 http://www.openpbs.org ohpc/rms OpenPBS for a server host
+otf2-gnu14-mpich-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
+otf2-gnu14-openmpi5-ohpc 3.0.3 http://score-p.org ohpc/io-libs Open Trace Format 2 library
 papi-ohpc 6.0.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 paraver-ohpc 4.10.4 https://tools.bsc.es ohpc/perf-tools Paraver
 pdsh-mod-genders-ohpc 2.35 https://github.com/chaos/pdsh System Environment/Base Provides libgenders support for pdsh
@@ -150,20 +198,26 @@ pdsh-ohpc 2.35 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell pr
 pdtoolkit-arm1-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 pdtoolkit-gnu12-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 pdtoolkit-gnu13-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
+pdtoolkit-gnu14-ohpc 3.25.1 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 petsc-arm1-mpich-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-arm1-openmpi4-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu12-mpich-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu12-openmpi4-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu13-mpich-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu13-openmpi5-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu14-mpich-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu14-openmpi5-ohpc 3.18.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 phdf5-arm1-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-arm1-openmpi4-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu12-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu12-openmpi4-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu13-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu13-openmpi5-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+phdf5-gnu14-mpich-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
+phdf5-gnu14-openmpi5-ohpc 1.14.0 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 plasma-gnu12-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 plasma-gnu13-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
+plasma-gnu14-ohpc 21.8.29 https://icl.utk.edu/plasma/overview/index.html ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 pmix-ohpc 4.2.9 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
 pnetcdf-arm1-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-arm1-openmpi4-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
@@ -171,6 +225,8 @@ pnetcdf-gnu12-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetC
 pnetcdf-gnu12-openmpi4-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu13-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu13-openmpi5-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
+pnetcdf-gnu14-mpich-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
+pnetcdf-gnu14-openmpi5-ohpc 1.12.3 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 prun-ohpc 2.2 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch
 ptscotch-arm1-mpich-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 ptscotch-arm1-openmpi4-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
@@ -178,6 +234,8 @@ ptscotch-gnu12-mpich-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/
 ptscotch-gnu12-openmpi4-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 ptscotch-gnu13-mpich-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 ptscotch-gnu13-openmpi5-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
+ptscotch-gnu14-mpich-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
+ptscotch-gnu14-openmpi5-ohpc 7.0.1 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 python3-Cython-ohpc 0.29.33 http://www.cython.org ohpc/distro-packages The Cython compiler for writing C extensions for the Python language
 python3-mpi4py-arm1-mpich-ohpc 3.1.4 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-arm1-openmpi4-ohpc 3.1.4 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
@@ -190,88 +248,112 @@ python3-scipy-gnu12-openmpi4-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scie
 python311-Cython-ohpc 0.29.37 http://www.cython.org ohpc/distro-packages The Cython compiler for writing C extensions for the Python language
 python311-mpi4py-gnu13-mpich-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python311-mpi4py-gnu13-openmpi5-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
+python311-mpi4py-gnu14-mpich-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
+python311-mpi4py-gnu14-openmpi5-ohpc 3.1.5 https://github.com/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python311-numpy-gnu13-ohpc 1.26.4 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
+python311-numpy-gnu14-ohpc 1.26.4 https://github.com/numpy/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python311-scipy-gnu13-mpich-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python311-scipy-gnu13-openmpi5-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python311-scipy-gnu14-mpich-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python311-scipy-gnu14-openmpi5-ohpc 1.5.4 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 scalapack-arm1-mpich-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
 scalapack-arm1-openmpi4-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
 scalapack-gnu12-mpich-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
 scalapack-gnu12-openmpi4-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
 scalapack-gnu13-mpich-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
 scalapack-gnu13-openmpi5-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
+scalapack-gnu14-mpich-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
+scalapack-gnu14-openmpi5-ohpc 2.2.0 https://netlib.org/scalapack/ ohpc/parallel-libs A subset of LAPACK routines redesigned for heterogeneous computing
 scalasca-arm1-mpich-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scalasca-arm1-openmpi4-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scalasca-gnu12-mpich-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scalasca-gnu12-openmpi4-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scalasca-gnu13-mpich-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scalasca-gnu13-openmpi5-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-gnu14-mpich-ohpc 2.6.1 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-gnu14-openmpi5-ohpc 2.6.1 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scorep-arm1-mpich-ohpc 7.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-arm1-openmpi4-ohpc 7.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu12-mpich-ohpc 7.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu12-openmpi4-ohpc 7.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu13-mpich-ohpc 7.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu13-openmpi5-ohpc 7.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-gnu14-mpich-ohpc 8.4 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-gnu14-openmpi5-ohpc 8.4 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scotch-arm1-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 scotch-gnu12-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 scotch-gnu13-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
+scotch-gnu14-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 sionlib-arm1-mpich-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-arm1-openmpi4-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu12-mpich-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu12-openmpi4-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu13-mpich-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu13-openmpi5-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
+sionlib-gnu14-mpich-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
+sionlib-gnu14-openmpi5-ohpc 1.7.7 https://apps.fz-juelich.de/jsc/sionlib/docu/index.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 slepc-arm1-mpich-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-arm1-openmpi4-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu12-mpich-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu12-openmpi4-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu13-mpich-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu13-openmpi5-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slurm-contribs-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-devel-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
-slurm-example-configs-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
-slurm-libpmi-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
-slurm-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
-slurm-ohpc-slurmrestd 23.11.6 https://slurm.schedmd.com/ System Environment/Base Slurm REST API translator
-slurm-openlava-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
-slurm-pam_slurm-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
-slurm-perlapi-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
-slurm-sackd-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm authentication daemon
-slurm-slurmctld-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
-slurm-slurmd-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
-slurm-slurmdbd-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
-slurm-sview-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
-slurm-torque-ohpc 23.11.6 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
-spack-ohpc 0.21.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
+slepc-gnu14-mpich-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-gnu14-openmpi5-ohpc 3.18.0 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slurm-contribs-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-devel-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-example-configs-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
+slurm-libpmi-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
+slurm-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-ohpc-slurmrestd 23.11.10 https://slurm.schedmd.com/ System Environment/Base Slurm REST API translator
+slurm-openlava-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
+slurm-pam_slurm-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-sackd-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm authentication daemon
+slurm-slurmctld-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
+slurm-slurmd-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
+slurm-slurmdbd-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-sview-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
+slurm-torque-ohpc 23.11.10 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
+spack-ohpc 0.22.2 https://github.com/spack/spack ohpc/dev-tools HPC software package management
 superlu-arm1-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-gnu12-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-gnu13-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
+superlu-gnu14-ohpc 7.0.0 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu_dist-arm1-mpich-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-arm1-openmpi4-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu12-mpich-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu12-openmpi4-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu13-mpich-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu13-openmpi5-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu14-mpich-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu14-openmpi5-ohpc 6.4.0 https://portal.nersc.gov/project/sparse/superlu/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 tau-gnu12-mpich-ohpc 2.31.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu12-openmpi4-ohpc 2.31.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu13-mpich-ohpc 2.31.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu13-openmpi5-ohpc 2.31.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-test-suite-ohpc 3.1.0 https://github.com/openhpc/ohpc/tests ohpc/admin Integration test suite for OpenHPC
+tau-gnu14-mpich-ohpc 2.31.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu14-openmpi5-ohpc 2.31.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+test-suite-ohpc 3.2.0 https://github.com/openhpc/ohpc ohpc/admin Integration test suite for OpenHPC
 trilinos-gnu12-mpich-ohpc 13.4.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu12-openmpi4-ohpc 13.4.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu13-mpich-ohpc 13.4.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu13-openmpi5-ohpc 13.4.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
-ucx-cma-ohpc 1.15.0 http://www.openucx.org System Environment/Libraries UCX CMA support
-ucx-ib-ohpc 1.15.0 http://www.openucx.org System Environment/Libraries UCX RDMA support
-ucx-ohpc 1.15.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging
-ucx-rdmacm-ohpc 1.15.0 http://www.openucx.org System Environment/Libraries UCX RDMA connection manager support
-valgrind-ohpc 3.20.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger
+trilinos-gnu14-mpich-ohpc 13.4.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu14-openmpi5-ohpc 13.4.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
+ucx-cma-ohpc 1.17.0 http://www.openucx.org System Environment/Libraries UCX CMA support
+ucx-ib-ohpc 1.17.0 http://www.openucx.org System Environment/Libraries UCX RDMA support
+ucx-ohpc 1.17.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging
+ucx-rdmacm-ohpc 1.17.0 http://www.openucx.org System Environment/Libraries UCX RDMA connection manager support
+valgrind-ohpc 3.23.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger
 warewulf-cluster-ohpc 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - HPC cluster configuration
 warewulf-common-ohpc 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Scalable systems management suite for high performance clusters
 warewulf-common-ohpc-localdb 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Install local database server
+warewulf-dracut-ohpc 4.5.5 https://github.com/hpcng/warewulf ohpc/provisioning A dracut module for loading a Warewulf container image
 warewulf-ipmi-ohpc 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - IPMI support
 warewulf-ipmi-ohpc-initramfs-aarch64 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Add IPMI to aarch64 initramfs
 warewulf-ipmi-ohpc-initramfs-x86_64 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Add IPMI to x86_64 initramfs
-warewulf-ohpc 4.4.0 https://github.com/hpcng/warewulf ohpc/provisioning A provisioning system for large clusters of bare metal and/or virtual systems
+warewulf-ohpc 4.5.5 https://github.com/hpcng/warewulf ohpc/provisioning A provisioning system for large clusters of bare metal and/or virtual systems
 warewulf-provision-ohpc 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - System provisioning core
 warewulf-provision-ohpc-gpl_sources 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - GPL sources used in Warewulf provisioning
 warewulf-provision-ohpc-initramfs-aarch64 3.10.0 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - initramfs base for aarch64
