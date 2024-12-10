@@ -17,7 +17,7 @@
 
 Summary:   Performance tools for the Linux console
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   5.3.0
+Version:   5.4.1
 Release:   1%{?dist}
 License:   GPL-3.0+
 Group:     %{PROJ_NAME}/perf-tools
@@ -186,4 +186,3 @@ chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
 %doc INSTALL README.md
 %license COPYING
 %doc %{install_path}/man/man1/*
-%doc %{install_path}/share/likwid/docs/*
