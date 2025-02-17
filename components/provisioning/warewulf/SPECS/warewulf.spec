@@ -25,7 +25,7 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.5.5
+Version: 4.5.6
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
