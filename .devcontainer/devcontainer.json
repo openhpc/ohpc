@@ -1,0 +1,18 @@
+{
+  "name": "OpenHPC Development",
+  "image": "registry.docker.com/library/rockylinux:9",
+  "remoteUser": "vscode",
+  "postCreateCommand": "sudo ./tests/ci/prepare-ci-environment.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.go",
+        "ms-vscode.makefile-tools"
+      ]
+    }
+  }
+}
