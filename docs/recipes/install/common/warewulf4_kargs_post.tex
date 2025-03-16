@@ -6,7 +6,7 @@ the following command is required to store the configuration in Warewulf:
 % ohpc_command if [[ ${enable_kargs} -eq 1 ]]; then
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Set optional compute node kernel command line arguments.
-[sms](*\#*) wwctl node set --yes --kernelargs="${kargs}" "${compute_regex}"
+[sms](*\#*) wwctl profile set --yes nodes --kernelargs="${kargs}"
 \end{lstlisting}
 % ohpc_command fi
 % end_ohpc_run

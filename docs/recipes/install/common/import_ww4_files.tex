@@ -2,16 +2,18 @@ The \Warewulf{} system includes functionality to import arbitrary files from
 the provisioning server for distribution to managed hosts through a system 
 called "overlays". Some files, like \texttt{/etc/passwd}, and \texttt{/etc/hosts}
 handled in this way by default.  Here we add directories and files to the 
-\texttt{generic} overlay that is applied to all nodes. 
+\texttt{nodesconfig} overlay that is applied to all nodes. 
 
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add the following to support unprivileged user namespaces for tools like Apptainer
-[sms](*\#*) wwctl overlay import generic /etc/subuid
-[sms](*\#*) wwctl overlay import generic /etc/subgid
+[sms](*\#*) wwctl overlay import --parents nodeconfig /etc/subuid
+[sms](*\#*) wwctl overlay import --parents nodeconfig /etc/subgid
 
-# Identify master host as local NTP server
-[sms](*\#*) echo "server ${sms_ip} iburst" | wwctl overlay import generic <(cat) /etc/chrony.conf
+# Identify master host as local NTP server, configure it with a template with a Tag
+[sms](*\#*) echo 'server {{.Tags.ntpserver}} iburst' | \
+  wwctl overlay import --parents nodeconfig <(cat) /etc/chrony.conf.ww
+[sms](*\#*) wwctl profile set --yes nodes --tagadd ntpserver=${sms_ip}
 \end{lstlisting}
 % \end_ohpc_run

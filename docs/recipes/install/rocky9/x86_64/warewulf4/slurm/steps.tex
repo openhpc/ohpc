@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{Rocky 9.4}
-\newcommand{\OSRepo}{Rocky\_9.4}
+\newcommand{\baseOS}{Rocky 9}
+\newcommand{\OSRepo}{Rocky\_9}
 \newcommand{\OSTree}{EL\_9}
 \newcommand{\OSTag}{el9}
-\newcommand{\baseos}{rocky-9.4}
+\newcommand{\baseos}{rocky-9}
 \newcommand{\baseosshort}{rocky9}
 \newcommand{\provisioner}{Warewulf4}
 \newcommand{\provheader}{\provisioner{}}
@@ -134,7 +134,7 @@
 % begin_ohpc_run
 % ohpc_validation_comment Add SLURM and other components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
-[sms](*\#*) wwctl container exec rocky-9.4 /bin/bash <<- EOF 
+[sms](*\#*) wwctl image exec --build=false rocky-9 /bin/bash <<- EOF 
   # Add Slurm client support meta-package and enable munge and slurmd
   dnf -y install ohpc-slurm-client
   systemctl enable munge

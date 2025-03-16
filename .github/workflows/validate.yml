@@ -161,6 +161,9 @@ jobs:
         path: tests/**/*.log.xml
 
   build_on_openEuler:
+    env:
+      JOB_SKIP_CI_SPECS: |
+        components/provisioning/warewulf/SPECS/warewulf.spec
     runs-on: ubuntu-latest
     name: Build on openEuler
     container:
@@ -177,6 +180,7 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
+        export SKIP_CI_SPECS="${{ env.JOB_SKIP_CI_SPECS }}"
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
@@ -197,6 +201,7 @@ jobs:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
         components/perf-tools/likwid/SPECS/likwid.spec
+        components/provisioning/warewulf/SPECS/warewulf.spec
     runs-on: ubuntu-latest
     name: Test on openEuler
     container:

@@ -10,11 +10,12 @@ Warewulf configuration file is edited to reflect the environment.
 %\nottoggle{isCentOS}{\clearpage}
 
 % begin_ohpc_run
-% ohpc_comment_header Add baseline OpenHPC and provisioning services \ref{sec:add_provisioning}
+% ohpc_comment_header Add baseline OpenHPC\ref{sec:add_provisioning}
 \begin{lstlisting}[language=bash,keywords={}]
 # Install base packages
-[sms](*\#*) (*\install*) ohpc-base warewulf-ohpc hwloc-ohpc
+[sms](*\#*) (*\install*) ohpc-base
+
+# Install Warewulf
+[sms](*\#*) (*\install*) warewulf-ohpc hwloc-ohpc
 \end{lstlisting}
 % end_ohpc_run
-
-

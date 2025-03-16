@@ -258,7 +258,3 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %files dracut
 %defattr(-, root, root)
 %{_prefix}/lib/dracut/modules.d/90wwinit
-
-%changelog
-* Mon Mar 03 2025 Timothy Middelkoop <tmiddelkoop@internet2.edu>
-- Merged/combined spec from 4.6.0

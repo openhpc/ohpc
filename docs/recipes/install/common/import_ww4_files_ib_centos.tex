@@ -10,8 +10,8 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwctl overlay mkdir generic /etc/sysconfig/network-scripts/
-[sms](*\#*) wwctl overlay import generic /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww \
+# Import the template file for the ib interface
+[sms](*\#*) wwctl overlay import --parents nodeconfig /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww \
  /etc/sysconfig/network-scripts/ifcfg-ib0.ww
 \end{lstlisting}
 % ohpc_indent 0

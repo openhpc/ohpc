@@ -12,19 +12,21 @@
 [sms](*\#*) perl -pi -e 's/template:.*/template: static/' /etc/warewulf/warewulf.conf
 [sms](*\#*) perl -pi -e "s/range start:.*/range start: ${c_ip[0]}/" /etc/warewulf/warewulf.conf
 [sms](*\#*) perl -pi -e "s/range end:.*/range end: ${c_ip[$((num_computes-1))]}/" /etc/warewulf/warewulf.conf
-[sms](*\#*) perl -pi -e "s/mount: false/mount: true/" /etc/warewulf/warewulf.conf
+
+# Edit the nodes.conf to mount /opt
+[sms](*\#*) perl -pi -e "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" /etc/warewulf/nodes.conf
+
+# Create a new "nodes" profile and inherit the "default" profile
+[sms](*\#*) wwctl profile add nodes --profile default --comment "Nodes profile"
+
+# Create a new "nodeconfig" overlay to store node configuration files, set the profile to use it
+[sms](*\#*) wwctl overlay create nodeconfig 
+[sms](*\#*) wwctl profile set --yes nodes --system-overlays nodeconfig
 
 # Set default network configuration
-[sms](*\#*) wwctl profile set -y default --netmask=${internal_netmask}
-[sms](*\#*) wwctl profile set -y default --gateway=${ipv4_gateway}
-[sms](*\#*) wwctl profile set -y default --netdev=default --nettagadd=DNS=${dns_servers}
-
-# Configure /etc/hostname on master and compute nodes
-[sms](*\#*) perl -pi -e "s/warewulf/${sms_name}/" /srv/warewulf/overlays/host/rootfs/etc/hosts.ww
-[sms](*\#*) perl -pi -e "s/warewulf/${sms_name}/" /srv/warewulf/overlays/generic/rootfs/etc/hosts.ww
-
-# Bugfix: dhcpd.template does not set next-server
-[sms](*\#*) echo "next-server ${sms_ip};" >> /srv/warewulf/overlays/host/rootfs/etc/dhcpd.conf.ww
+[sms](*\#*) wwctl profile set -y nodes --netdev=default --netmask=${internal_netmask}
+[sms](*\#*) wwctl profile set -y nodes --netdev=default --gateway=${ipv4_gateway}
+[sms](*\#*) wwctl profile set -y nodes --netdev=default --nettagadd=DNS=${dns_servers}
 
 # Configuring Warewulf will restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl enable --now warewulfd
@@ -33,10 +35,4 @@
 # Generate ssh keys (usually generated on login)
 [sms](*\#*) bash /etc/profile.d/ssh_setup.sh
 \end{lstlisting}
-% end_ohpc_run
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Update /etc/hosts template to have ${hostname}.localdomain as the first host entry
-% ohpc_command sed -e 's_\({{$node.Id.Get}}{{end}}\)_{{$node.Id.Get}}.localdomain \1_g' -i /srv/warewulf/overlays/host/rootfs/etc/hosts.ww
 % end_ohpc_run
