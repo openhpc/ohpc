@@ -49,12 +49,15 @@ the {\em compute} nodes:
 % end_ohpc_run
 
 \noindent Now \OHPC{} and other cluster-related software components can be
-installed on the nodes. The first step is to install a base compute package:
+installed on the nodes. The first step is to install a base compute package
+and disable the firewall on the compute nodes:
 % begin_ohpc_run
 % ohpc_comment_header Add OpenHPC base components to compute image
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Install compute node base meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-base-compute
+# Disable firewall for computes
+[sms](*\#*) nodeshell compute systemctl disable --now firewalld
 \end{lstlisting}
 % end_ohpc_run
 
