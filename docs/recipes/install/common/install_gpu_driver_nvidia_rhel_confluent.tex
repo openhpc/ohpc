@@ -1,0 +1,20 @@
+To add the optional NVIDIA GPU driver to the compute nodes, an
+additional external \pkgmgr{} repository provided by NVIDIA
+must be configured. Once the repository is configured the
+GPU driver and the corresponding toolkit needs to be installed:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_nvidia_gpu_driver} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add NVIDIA GPU driver repository
+[sms](*\#*) nodeshell compute dnf -y config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
+# Install the GPU driver
+[sms](*\#*) nodeshell compute dnf -y module install nvidia-driver:latest-dkms
+# Install the toolkit
+[sms](*\#*) nodeshell compute dnf -y install cuda-toolkit
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
