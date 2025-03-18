@@ -1,4 +1,4 @@
-lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint shfmt-lint
+lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint shfmt-lint clang-format-lint
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
@@ -117,3 +117,8 @@ shfmt-lint:
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
+
+clang-format-lint:
+	@echo "Running 'clang-format' on selected source code files"
+	clang-format --dry-run --Werror \
+		../dev-tools/cuda/add.cu
