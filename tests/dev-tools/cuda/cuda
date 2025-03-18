@@ -1,0 +1,30 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 3
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
+fi
+
+setup() {
+	check_rms
+}
+
+teardown() {
+	rm -f add_cuda
+}
+
+@test "[dev-tools/cuda] run nvidia-smi" {
+	run_serial_binary nvidia-smi
+}
+
+@test "[dev-tools/cuda] check for /usr/local/cuda/bin/nvcc" {
+	run_serial_binary /usr/local/cuda/bin/nvcc --version
+}
+
+@test "[dev-tools/cuda] build cuda example and run it" {
+	/usr/local/cuda/bin/nvcc add.cu -o add_cuda
+	run_serial_binary ./add_cuda
+}

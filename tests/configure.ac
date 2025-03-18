@@ -269,6 +269,12 @@ AC_ARG_ENABLE([easybuild],
    [AX_OPTION_DEFAULT(type=long,enable_easybuild,yes)])
 AM_CONDITIONAL(EASYBUILD_ENABLED,test "x$enable_easybuild" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# cuda
+AC_ARG_ENABLE([cuda],
+   [AS_HELP_STRING([--enable-cuda],[Enable cuda tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_cuda,no)])
+AM_CONDITIONAL(CUDA_ENABLED,test "x$enable_cuda" = "xyes" )
+#------------------------------------------------------------------------------------------
 # GEOPM
 AC_ARG_ENABLE([geopm],
    [AS_HELP_STRING([--enable-geopm],[Enable geopm tests (default=yes)])],[],
@@ -528,6 +534,7 @@ AC_OUTPUT( Makefile
        fs/beegfs/Makefile
        fs/lustre/Makefile
        dev-tools/easybuild/Makefile
+       dev-tools/cuda/Makefile
        admin/lmod/Makefile
        admin/spack/Makefile
        dev-tools/mpi4py/Makefile
@@ -673,6 +680,12 @@ echo    Dev Tools:
        echo '    'EasyBuild................. : enabled
     else
        echo '    'EasyBuild................. : disabled
+    fi
+
+    if test "x$enable_cuda" = "xyes"; then
+       echo '    'cuda...................... : enabled
+    else
+       echo '    'cuda...................... : disabled
     fi
 
     if test "x$enable_hwloc" = "xyes"; then

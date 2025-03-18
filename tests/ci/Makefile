@@ -77,6 +77,7 @@ shellcheck-lint:
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
 	shellcheck --exclude=SC2239,SC1091 \
 		../../tests/apps/hpcg/run \
+		../../tests/dev-tools/cuda/cuda \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
@@ -98,6 +99,7 @@ shfmt-lint:
 	shfmt \
 		-w -d -ln bats \
 		../../tests/apps/hpcg/run \
+		../../tests/dev-tools/cuda/cuda \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \

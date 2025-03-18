@@ -56,6 +56,10 @@ if EASYBUILD_ENABLED
    SUBDIRS += dev-tools/easybuild
 endif
 
+if CUDA_ENABLED
+   SUBDIRS += dev-tools/cuda
+endif
+
 if LUSTRE_ENABLED
    SUBDIRS += fs/lustre
 endif
