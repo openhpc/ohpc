@@ -22,8 +22,8 @@
 
 % Define package manager commands
 \newcommand{\pkgmgr}{dnf}
-\newcommand{\addrepo}{wget -P /etc/yum.repos.d}
-\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
+\newcommand{\addrepo}{dnf -y config-manager --add-repo}
+\newcommand{\chrootaddrepo}{dnf --installroot=\$CHROOT config-manager --add-repo}
 \newcommand{\clean}{dnf clean expire-cache}
 \newcommand{\chrootclean}{dnf --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{dnf -y install}
@@ -176,6 +176,9 @@
 %\vspace*{0.25cm}
 \input{common/lustre-client-centos}
 \input{common/lustre-client-post}
+
+\paragraph{Add GPU driver}
+\input{common/install_gpu_driver_nvidia_rhel_warewulf4}
 
 %\vspace*{.45cm}
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
