@@ -1,0 +1,65 @@
+To add the optional NVIDIA GPU driver to the compute nodes, an
+additional external \pkgmgr{} repository provided by NVIDIA
+must be configured. Once the repository is configured the
+GPU driver and the corresponding toolkit needs to be installed.
+
+\OHPC{} provides a convenience package to enable the NVIDIA
+repository locally along with compatibility packages that integrate
+the NVIDIA compiler within the standard \OHPC{} user environment.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_nvidia_gpu_driver} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add NVIDIA GPU driver repository to the SMS
+[sms](*\#*) (*\install*) cuda-repo-ohpc
+# Install the toolkit on the SMS
+[sms](*\#*) (*\install*) nvidia-driver-cuda cuda-devel-ohpc
+# Enable NVIDIA repository inside image and install it.  Disable autorebuild.
+[sms](*\#*) wwctl image exec --build=false rocky-9 /bin/bash <<- EOF
+  dnf -y install cuda-repo-ohpc
+  dnf -y module install nvidia-driver:latest-dkms
+  KVER=$(rpm -q --queryformat='%{version}-%{release}.%{arch}\n' \
+         kernel-core | sort -r | head -1)
+  dkms autoinstall --verbose -k \${KVER}
+  dkms status
+EOF
+
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+As noted in \S\ref{sec:master_customization}, the default installation path for
+\OHPC{} (\texttt{/opt/ohpc/pub}) is exported over NFS from the {\em master} to the
+compute nodes, but the NVIDIA toolkit packages install to a top-level path of
+\texttt{/usr/local/cuda-VERSION}. To make the NVIDIA compiler available to the compute
+nodes one must add an additional NFS export
+for \texttt{/usr/local/cuda-VERSION} that is mounted on desired compute nodes.
+\end{tcolorbox}
+\end{center}
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_nvidia_gpu_driver} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+
+[sms](*\#*) CUDA_VERSION=$(rpm -q --queryformat='%{version}' cuda-devel-ohpc)
+[sms](*\#*) yq ".nfs.[\"export paths\"] \
+    += [{\"path\": \"/usr/local/cuda-${CUDA_VERSION}\", \
+    \"export options\": \"ro,no_subtree_check\"}]" \
+    -i /etc/warewulf/warewulf.conf
+[sms](*\#*) yq ".nodeprofiles.nodes.resources.fstab \
+    +=[{\"file\": \"/usr/local/cuda-${CUDA_VERSION}\", \
+    \"mntops\" : \"defaults\", \
+    \"spec\": \"warewulf:/usr/local/cuda-${CUDA_VERSION}\", \
+    \"vfstype\": \"nfs\"}]" -i /etc/warewulf/nodes.conf
+
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
