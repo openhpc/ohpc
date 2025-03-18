@@ -217,6 +217,7 @@ while( <IN> ) {
             my $local_indent = $indent + 3; # further indent contents of loop
         do {
             $next_line = <IN>;
+            $next_line = update_cmd($next_line);
             # trim leading and trailing space
             $next_line =~ s/^\s+|\s+$//g;
 
