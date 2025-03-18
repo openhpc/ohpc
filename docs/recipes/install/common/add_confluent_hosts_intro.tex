@@ -4,13 +4,13 @@
 attributes in \Confluent{} database.
 These hosts are grouped logically into a group named {\em
 compute} to facilitate group-level commands used later in the recipe. The compute
-group has to be defined first before we can add any nodes to the group using the 
+group has to be defined first before we can add any nodes to the group using the
 {\texttt nodegroup define} command. Note the
 use of variable names for the desired compute hostnames, node IPs, MAC
 addresses, and BMC login credentials, which should be modified to accommodate
 local settings and hardware. To enable serial console access via  \Confluent{},
 {\texttt console.method}
-property is also defined. 
+property is also defined.
 
 % begin_ohpc_run
 % ohpc_validation_newline
@@ -21,8 +21,8 @@ property is also defined.
 
 # Define nodes as objects in confluent database
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-nodedefine ${c_name[$i]} groups=everything,compute hardwaremanagement.manager=${c_bmc[$i]} \ 
-secret.hardwaremanagementuser=${bmc_username} secret.hardwaremanagementpassword=${bmc_password} \ 
+nodedefine ${c_name[$i]} groups=everything,compute hardwaremanagement.manager=${c_bmc[$i]} \
+secret.hardwaremanagementuser=${bmc_username} secret.hardwaremanagementpassword=${bmc_password} \
 net.hwaddr=${c_mac[$i]} net.ipv4_address=${c_ip[$i]}
         done
 \end{lstlisting}
@@ -71,7 +71,7 @@ fields are associated with the corresponding hostname attributes.
 
 % begin_ohpc_run
 % ohpc_validation_newline
-% ohpc_validation_comment Generating lines to append to local /etc/hosts 
+% ohpc_validation_comment Generating lines to append to local /etc/hosts
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Add nodes to /etc/hosts
 [sms](*\#*) confluent2hosts -a compute
