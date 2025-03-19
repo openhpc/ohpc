@@ -18,9 +18,9 @@
 # Create a new "nodes" profile and inherit the "default" profile
 [sms](*\#*) wwctl profile add nodes --profile default --comment "Nodes profile"
 
-# Create a new "nodeconfig" overlay to store node configuration files, set the profile to use it
+# Create a new "nodeconfig" overlay to store node configuration files and use the syncuser overlay.
 [sms](*\#*) wwctl overlay create nodeconfig
-[sms](*\#*) wwctl profile set --yes nodes --system-overlays nodeconfig
+[sms](*\#*) wwctl profile set --yes nodes --system-overlays nodeconfig --runtime-overlays syncuser
 
 # Set default network configuration
 [sms](*\#*) wwctl profile set -y nodes --netdev=default --netmask=${internal_netmask}

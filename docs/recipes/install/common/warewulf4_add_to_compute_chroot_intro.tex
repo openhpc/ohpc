@@ -6,7 +6,7 @@ process modifies the base provisioning image and will access the BOS and \OHPC{}
 repositories to resolve package install requests.
 
 The instructions below are designed to be copied and pasted all at once into
-a terminal.  Alternatively you can run `wwctl image shell rocky-9'
+a terminal.  Alternatively you can run `wwctl image shell \baseos{}`'
 to "run" the node image interactively and run the commands one at a time, this
 method is recommended.
 
@@ -15,9 +15,9 @@ common base packages:
 
 % begin_ohpc_run
 % ohpc_comment_header Add OpenHPC base components to compute image \ref{sec:add_components}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1 {\ }{\ }1]
 # Install compute node base meta-package
-[sms](*\#*) wwctl image exec --build=false rocky-9 /bin/bash <<- EOF
+[sms](*\#*) wwctl image exec --build=false BOSVER /bin/bash <<- EOF
   dnf -y install ohpc-base-compute
 EOF
 \end{lstlisting}

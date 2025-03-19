@@ -107,6 +107,7 @@ Requires: dracut-network
 Requires: curl
 Requires: cpio
 Requires: dmidecode
+Requires: initscripts-service
 
 %description dracut
 Warewulf is a stateless and diskless provisioning

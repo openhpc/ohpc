@@ -13,6 +13,7 @@
 \newcommand{\OSTag}{el9}
 \newcommand{\baseos}{rocky-9}
 \newcommand{\baseosshort}{rocky9}
+\newcommand{\osimage}{rockylinux:9}
 \newcommand{\provisioner}{Warewulf4}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
@@ -125,29 +126,11 @@
 \input{common/warewulf4_setup_centos}
 
 \subsection{Define {\em compute} image for provisioning}
-\input{common/warewulf4_mkchroot_rocky}
+\input{common/warewulf4_mkchroot}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/warewulf4_add_to_compute_chroot_intro}
-
-%\newpage
-% begin_ohpc_run
-% ohpc_validation_comment Add SLURM and other components to compute instance
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
-[sms](*\#*) wwctl image exec --build=false rocky-9 /bin/bash <<- EOF
-  # Add Slurm client support meta-package and enable munge and slurmd
-  dnf -y install ohpc-slurm-client
-  systemctl enable munge
-  systemctl enable slurmd
-
-  # Add Network Time Protocol (NTP) support
-  dnf -y install chrony
-
-  # Include modules user environment
-  dnf -y install lmod-ohpc
-EOF
-\end{lstlisting}
-% end_ohpc_run
+\input{common/warewulf4_add_to_compute_chroot_slurm}
 
 \vspace*{.2cm}
 \subsubsection{Customize system configuration} \label{sec:master_customization}

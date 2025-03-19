@@ -18,17 +18,17 @@ the image from rebuilding (it will show an error) and rebuild later with the
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
-# Import the base image from ghcr
-[sms](*\#*) wwctl image import docker://ghcr.io/warewulf/warewulf-rockylinux:9 BOSVER --syncuser
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1 {OSIMAGE}{\osimage{}}1]
+# Import the base image from Warewulf
+[sms](*\#*) wwctl image import docker://ghcr.io/warewulf/warewulf-OSIMAGE BOSVER --syncuser
 
 # Enable OpenHPC inside image and update image.  Disable autorebuild.
-[sms](*\#*) wwctl image exec --build=false rocky-9 /bin/bash <<- EOF
+[sms](*\#*) wwctl image exec --build=false BOSVER /bin/bash <<- EOF
   dnf -y install http://repos.openhpc.community/OpenHPC/3/EL_9/x86_64/ohpc-release-3-1.el9.x86_64.rpm
   dnf -y update
 EOF
 
 # Define chroot location
-[sms](*\#*) export CHROOT=/srv/warewulf/chroots/BOSVER/rootfs
+[sms](*\#*) export CHROOT=$(wwctl image show BOSVER)
 \end{lstlisting}
 % end_ohpc_run
