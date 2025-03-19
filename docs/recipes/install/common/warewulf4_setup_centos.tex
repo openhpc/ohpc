@@ -10,8 +10,7 @@
 [sms](*\#*) perl -pi -e "s/netmask:.*/netmask: ${internal_netmask}/" /etc/warewulf/warewulf.conf
 [sms](*\#*) perl -pi -e "s/network:.*/network: ${internal_network}/" /etc/warewulf/warewulf.conf
 [sms](*\#*) perl -pi -e 's/template:.*/template: static/' /etc/warewulf/warewulf.conf
-[sms](*\#*) perl -pi -e "s/range start:.*/range start: ${c_ip[0]}/" /etc/warewulf/warewulf.conf
-[sms](*\#*) perl -pi -e "s/range end:.*/range end: ${c_ip[$((num_computes-1))]}/" /etc/warewulf/warewulf.conf
+[sms](*\#*) sed '/range start:/d;/range end:/d;' -i /etc/warewulf/warewulf.conf
 
 # Edit the nodes.conf to mount /opt
 [sms](*\#*) perl -pi -e "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" /etc/warewulf/nodes.conf
@@ -27,6 +26,9 @@
 [sms](*\#*) wwctl profile set -y nodes --netdev=default --netmask=${internal_netmask}
 [sms](*\#*) wwctl profile set -y nodes --netdev=default --gateway=${ipv4_gateway}
 [sms](*\#*) wwctl profile set -y nodes --netdev=default --nettagadd=DNS=${dns_servers}
+
+# Update /etc/hosts template to have ${hostname}.localdomain as the first host entry
+[sms](*\#*) wwctl overlay cat host /etc/hosts.ww  | sed -e 's_\({{$node.Id}}{{end}}\)_{{$node.Id}}.localdomain \1_g' | EDITOR=tee wwctl overlay edit host /etc//hosts.ww
 
 # Configuring Warewulf will restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl enable --now warewulfd
