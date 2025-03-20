@@ -28,7 +28,9 @@
 [sms](*\#*) wwctl profile set -y nodes --netdev=default --nettagadd=DNS=${dns_servers}
 
 # Update /etc/hosts template to have ${hostname}.localdomain as the first host entry
-[sms](*\#*) wwctl overlay cat host /etc/hosts.ww  | sed -e 's_\({{$node.Id}}{{end}}\)_{{$node.Id}}.localdomain \1_g' | EDITOR=tee wwctl overlay edit host /etc//hosts.ww
+[sms](*\#*) wwctl overlay cat host /etc/hosts.ww | \
+  sed -e 's_\({{$node.Id}}{{end}}\)_{{$node.Id}}.localdomain \1_g' | \
+  EDITOR=tee wwctl overlay edit host /etc/hosts.ww
 
 # Configuring Warewulf will restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl enable --now warewulfd
