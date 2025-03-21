@@ -65,9 +65,13 @@ jobs:
   build_on_rhel:
     strategy:
       matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
         compiler: [gnu14, intel]
-    runs-on: ubuntu-latest
-    name: Build on RHEL (${{ matrix.compiler}})
+        exclude:
+          - os: ubuntu-24.04-arm
+            compiler: intel
+    runs-on: ${{ matrix.os }}
+    name: Build on RHEL (${{ matrix.os }}/${{ matrix.compiler}})
     container:
       image: docker.io/library/rockylinux:9
       volumes:
@@ -87,18 +91,25 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}"
         if [ "${{ matrix.compiler }}" == "intel" ]; then
-          export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }} components/serial-libs/openblas/SPECS/openblas.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/serial-libs/openblas/SPECS/openblas.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/dev-tools/scipy/SPECS/python-scipy.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/serial-libs/R/SPECS/R.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/parallel-libs/opencoarrays/SPECS/opencoarrays.spec"
+        fi
+        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v4
       with:
-        name: rhel-rpms-${{ matrix.compiler }}
+        name: rhel-rpms-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: |
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
@@ -108,9 +119,13 @@ jobs:
   test_on_rhel:
     strategy:
       matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
         compiler: [gnu14, intel]
-    runs-on: ubuntu-latest
-    name: Test on RHEL
+        exclude:
+          - os: ubuntu-24.04-arm
+            compiler: intel
+    runs-on: ${{ matrix.os }}
+    name: Test on RHEL (${{ matrix.os }}/${{ matrix.compiler}})
     env:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
@@ -135,7 +150,7 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
       with:
-        name: rhel-rpms-${{ matrix.compiler }}
+        name: rhel-rpms-${{ matrix.compiler }}-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
     - name: Run CI Tests
       run: |
@@ -147,6 +162,12 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/tau/SPECS/tau.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/parallel-libs/opencoarrays/SPECS/opencoarrays.spec"
         fi
+        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
+        fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
@@ -156,16 +177,19 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-results-${{ matrix.compiler }}
+        name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: tests/**/*.log.xml
 
   build_on_openEuler:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
     env:
       JOB_SKIP_CI_SPECS: |
         components/provisioning/warewulf/SPECS/warewulf.spec
-    runs-on: ubuntu-latest
-    name: Build on openEuler
+    runs-on: ${{ matrix.os }}
+    name: Build on openEuler (${{ matrix.os }})
     container:
       image: docker.io/openeuler/openeuler:22.03-lts-sp3
     steps:
@@ -181,12 +205,18 @@ jobs:
     - name: Validate Build
       run: |
         export SKIP_CI_SPECS="${{ env.JOB_SKIP_CI_SPECS }}"
+        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
+        fi
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v4
       with:
-        name: openEuler-rpms
+        name: openEuler-rpms-${{ matrix.os }}
         retention-days: 1
         path: |
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
@@ -197,13 +227,14 @@ jobs:
     strategy:
       matrix:
         compiler: [gnu14]
+        os: [ubuntu-latest, ubuntu-24.04-arm]
     env:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
         components/perf-tools/likwid/SPECS/likwid.spec
         components/provisioning/warewulf/SPECS/warewulf.spec
-    runs-on: ubuntu-latest
-    name: Test on openEuler
+    runs-on: ${{ matrix.os }}
+    name: Test on openEuler (${{ matrix.os }}/${{ matrix.compiler}})
     container:
       image: docker.io/openeuler/openeuler:22.03-lts-sp3
     needs: build_on_openEuler
@@ -219,18 +250,27 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
       with:
-        name: openEuler-rpms
+        name: openEuler-rpms-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
     - name: Run CI Tests
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
+        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
+        fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
 
   build_on_leap:
-    runs-on: ubuntu-latest
-    name: Build on LEAP
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    name: Build on LEAP (${{ matrix.os }})
     container:
       image: registry.opensuse.org/opensuse/leap:15.5
     steps:
@@ -243,12 +283,19 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
+        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
+          export SKIP_CI_SPECS="${{ env.JOB_SKIP_CI_SPECS }}"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
+        fi
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v4
       with:
-        name: leap-rpms
+        name: leap-rpms-${{ matrix.os }}
         retention-days: 1
         path: |
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
@@ -259,12 +306,13 @@ jobs:
     strategy:
       matrix:
         compiler: [gnu14]
+        os: [ubuntu-latest, ubuntu-24.04-arm]
     env:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
         components/perf-tools/likwid/SPECS/likwid.spec
-    runs-on: ubuntu-latest
-    name: Test on LEAP
+    runs-on: ${{ matrix.os }}
+    name: Test on LEAP (${{ matrix.os }}/${{ matrix.compiler}})
     container:
       image: registry.opensuse.org/opensuse/leap:15.5
     needs: build_on_leap
@@ -278,11 +326,17 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
       with:
-        name: leap-rpms
+        name: leap-rpms-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
     - name: Run CI Tests
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
+        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
+        fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
