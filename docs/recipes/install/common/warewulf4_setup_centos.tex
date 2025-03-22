@@ -23,9 +23,10 @@
 [sms](*\#*) wwctl profile set --yes nodes --system-overlays nodeconfig --runtime-overlays syncuser
 
 # Set default network configuration
-[sms](*\#*) wwctl profile set -y nodes --netdev=default --netmask=${internal_netmask}
-[sms](*\#*) wwctl profile set -y nodes --netdev=default --gateway=${ipv4_gateway}
-[sms](*\#*) wwctl profile set -y nodes --netdev=default --nettagadd=DNS=${dns_servers}
+[sms](*\#*) wwctl profile set -y nodes --netname=default --netdev=${eth_provision}
+[sms](*\#*) wwctl profile set -y nodes --netname=default --netmask=${internal_netmask}
+[sms](*\#*) wwctl profile set -y nodes --netname=default --gateway=${ipv4_gateway}
+[sms](*\#*) wwctl profile set -y nodes --netname=default --nettagadd=DNS=${dns_servers}
 
 # Update /etc/hosts template to have ${hostname}.localdomain as the first host entry
 [sms](*\#*) wwctl overlay cat host /etc/hosts.ww | \
