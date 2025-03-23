@@ -17,7 +17,7 @@ admin         = ["conman","docs","examples","ganglia","genders","lmod-defaults",
 	         "losf","meta-packages","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe",
 		 "ohpc-filesystem","ohpc-release","hpc-workspace",
 		 "pdsh","prun","test-suite"]
-dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","mpi4py","numpy",
+dev-tools     = ["autoconf","automake","cmake","cuda-devel","easybuild","hwloc","libtool","mpi4py","numpy",
 	         "scipy","spack","valgrind"]
 distro-packages = ["python-Cython","flex"]
 fs            = ["lustre-client"]
@@ -40,7 +40,7 @@ mpi-families=["impi-devel","mpich","mvapich2","openmpi","libfabric","ucx"]
 
 # define patterns for a given arch in which to disable builds
 skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","likwid-arm1","geopm",
-            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1","cuda-devel"]
 skip_x86  = ["-arm1"]
 
 # define compiler/MPI families: first entry in list is defined to be parent in OBS
@@ -53,7 +53,7 @@ compiler_dependent = ["!openmpi", "!mpich", "!mvapich2", "!openblas", "!R", "lik
 
 standalone = ["docs", "test-suite", "warewulf", "!gnu-compilers", "!ohpc-filesystem",
 	      "!impi-devel", "meta-packages", "!easybuild", "!spack", "!hwloc", "!ucx",
-	      "lmod", "!genders", "!hpc-workspace", "!valgrind", "!slurm"]
+	      "lmod", "!genders", "!hpc-workspace", "!valgrind", "!slurm", "cuda-devel"]
 #mpi_dependent = ["cubew", "otf2", "cubelib", "opari2", "sionlib", "fftw", "scalapack",
 #		 "scorep", "scalasca", "scipy", "phdf5", "netcdf", "netcdf-fortran",
 #		 "netcdf-cxx", "lmod-defaults", "geopm", "mumps", "omb",
@@ -61,7 +61,7 @@ standalone = ["docs", "test-suite", "warewulf", "!gnu-compilers", "!ohpc-filesys
 #		 "opencoarrays", "hypre", "mpi4py", "dimemas", "adios2",
 #		 "trilinos", "petsc", "slepc", "superlu_dist", "mfem"]
 skip_on_distro_openEuler_22.03 = ["-arm1","-intel","-impi","impi-devel","intel-compilers-devel",
-				  "arm-compilers-devel","warewulf"]
+				  "arm-compilers-devel","warewulf","cuda-devel"]
 openblas_compiler=["gnu14"]
 R_compiler=["gnu14"]
 opencoarrays_compiler=["gnu14"]
