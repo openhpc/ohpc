@@ -7,22 +7,23 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\OS}{Rocky}
-\newcommand{\baseOS}{\OS{[} 9.4}
-\newcommand{\OSRepo}{\OS{}\_9.4}
+\newcommand{\OS}{AlmaLinux}
+\newcommand{\baseOS}{\OS{} 9}
+\newcommand{\OSRepo}{\OS{}\_9}
 \newcommand{\OSTree}{EL\_9}
 \newcommand{\OSTag}{el9}
-\newcommand{\baseos}{rocky9.4}
-\newcommand{\baseosshort}{rocky9}
+\newcommand{\baseos}{almalinux-9}
+\newcommand{\baseosshort}{almalinux9}
+\newcommand{\osimage}{almalinux:9}
 \newcommand{\provisioner}{confluent}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
 \newcommand{\arch}{x86\_64}
 
-\newcommand{\isoimage}{Rocky-9.4-x86\_64-dvd.iso}
-\newcommand{\downloadpage}{https://rockylinux.org/download/}
-\newcommand{\confluentprofile}{rocky-9.4-x86\_64-default}
+\newcommand{\isoimage}{AlmaLinux-9.5-x86\_64-dvd.iso}
+\newcommand{\downloadpage}{https://almalinux.org/get-almalinux/}
+\newcommand{\confluentprofile}{alma-9.5-x86\_64-default}
 
 % Define package manager commands
 \newcommand{\pkgmgr}{dnf}
@@ -157,7 +158,7 @@
 % ohpc_command fi
 % end_ohpc_run
 
-\input{common/rocky_repos}
+\input{common/almalinux_repos}
 
 
 % begin_ohpc_run

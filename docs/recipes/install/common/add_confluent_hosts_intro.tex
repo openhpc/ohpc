@@ -91,7 +91,7 @@ accomplished as follows:
 % ohpc_validation_comment Complete networking setup, associate provisioning image
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSSHORT}{\baseosshort{}}1 {IMAGE}{\installimage{}}1]
 # Associate desired provisioning image for computes
-[sms](*\#*) nodedeploy -n compute -p rocky-9.4-x86_64-default
+[sms](*\#*) nodedeploy -n compute -p (*\confluentprofile*)
 \end{lstlisting}
 
 %%% If the Lustre client was enabled for computes in \S\ref{sec:lustre_client}, you

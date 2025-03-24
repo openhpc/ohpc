@@ -15,8 +15,8 @@ credential files on {\em compute} nodes:
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
 # Create a sync file for pushing user credentials to the nodes
-[sms](*\#*) echo "/etc/passwd -> /etc/passwd" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default/syncfiles
-[sms](*\#*) echo "/etc/group -> /etc/group"   >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default/syncfiles
+[sms](*\#*) echo "/etc/passwd -> /etc/passwd" >> /var/lib/confluent/public/os/(*\confluentprofile*)/syncfiles
+[sms](*\#*) echo "/etc/group -> /etc/group"   >> /var/lib/confluent/public/os/(*\confluentprofile*)/syncfiles
 
 # Use Confluent to distribute credentials to nodes
 [sms](*\#*) nodeapply -F compute

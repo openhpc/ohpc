@@ -51,6 +51,7 @@ my $cudarepo           = "";
 my $verlong            = "";
 my $OSTree             = "";
 my $image              = "";
+my $confluentprofile   = "";
 
 # parse package command macro's from input file
 open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
@@ -92,6 +93,10 @@ while( my $line = <IN> ) {
         $OSimage = $1;
     } elsif( $line =~ /\\newcommand\{\\remove\}\{(.+)\}/ ) {
         $remove = $1;
+    } elsif( $line =~ /\\newcommand\{\\confluentprofile\}\{(.+)\}/ ) {
+        $confluentprofile = $1;
+	# undo latex escape for underscore
+	$confluentprofile =~ s/\\_/_/;
     } elsif( $line =~ /\\newcommand\{\\arch\}\{(.+)\}/ ) {
         $arch = $1;
 	# undo latex escape for x86
@@ -300,6 +305,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
     $cmd =~ s/\(\*\\remove\*\)/$remove/;
+    $cmd =~ s/\(\*\\confluentprofile\*\)/$confluentprofile/;
     $cmd =~ s/\(\*\\addrepo\*\)/$addrepo/;
     $cmd =~ s/\(\*\\chrootaddrepo\*\)/$chrootaddrepo/;
     $cmd =~ s/\(\*\\beegfsrepo\*\)/$beegfsrepo/;

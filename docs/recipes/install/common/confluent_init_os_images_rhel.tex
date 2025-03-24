@@ -7,8 +7,8 @@ used to provision one or more {\em compute} nodes. The following subsections hig
 \subsubsection{Build initial BOS image} \label{sec:assemble_bos}
 The following steps illustrate the process to build a minimal, default image for use with \Confluent{}. To begin, you will
 first need to have a local copy of the ISO image available for the underlying OS. In this recipe, the relevant ISO image
-is \texttt{Rocky-9.4-x86\_64-dvd.iso} (available from the Rocky
-\href{https://rockylinux.org/download/}{\color{blue}download} page).
+is \texttt{\isoimage{}} (available from the \OS{}
+\href{\downloadpage{}}{\color{blue}download} page).
 We initialize the image
 creation process using the \texttt{osdeploy} command assuming that the necessary ISO image is available locally in
 \texttt{\$\{iso\_path\}} as follows:
@@ -32,11 +32,13 @@ For first time setup, run osdeploy initialize interactively to be walked through
 # Query available images
 [sms](*\#*) osdeploy list
 Distributions:
-  rocky-8.5-x86_64
-  rocky-9.4-x86_64
+  alma-9.5-x86_64
+  rhel-9.5-x86_64
+  rocky-9.5-x86_64
 Profiles:
-  rhel-9.4-x86_64-default
-  rocky-8.5-x86_64-default
+  alma-9.5-x86_64-default
+  rhel-9.5-x86_64-default
+  rocky-9.5-x86_64-default
 \end{lstlisting}
 
 If needing to copy files from the sms node to the compute nodes during deployment, this can be done by
@@ -48,7 +50,7 @@ should be run.
 % ohpc_validation_newline
 % ohpc_validation_comment Sync the hosts file in cluster
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
-  [sms](*\#*) echo "/etc/hosts -> /etc/hosts" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default/syncfiles
+  [sms](*\#*) echo "/etc/hosts -> /etc/hosts" >> /var/lib/confluent/public/os/(*\confluentprofile*)/syncfiles
 
 \end{lstlisting}
 % end_ohpc_run

@@ -9,8 +9,8 @@ register user credential files:
 % ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSSHORT}{\baseosshort{}}1]
 # Add desired credential files to synclist
-[sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /var/lib/confluent/public/os/rocky-9.4-x86_64-default
-[sms](*\#*) echo "/etc/group -> /etc/group" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default
-[sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> /var/lib/confluent/public/os/rocky-9.4-x86_64-default
+[sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /var/lib/confluent/public/os/(*\confluentprofile*)
+[sms](*\#*) echo "/etc/group -> /etc/group" >> /var/lib/confluent/public/os/(*\confluentprofile*)
+[sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> /var/lib/confluent/public/os/(*\confluentprofile*)
 \end{lstlisting}
 % \end_ohpc_run
