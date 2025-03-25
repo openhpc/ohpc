@@ -9,17 +9,15 @@ GPU driver and the corresponding toolkit needs to be installed:
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add NVIDIA GPU driver repository to the SMS
-[sms](*\#*) (*\addrepo*) (*\cudarepo*)
+[sms](*\#*) (*\install*) cuda-repo-ohpc
 # Add NVIDIA GPU driver repository to the compute nodes
-[sms](*\#*) (*\chrootaddrepo*) (*\cudarepo*)
+[sms](*\#*) (*\chrootinstall*) cuda-repo-ohpc
 # Install the GPU driver on the compute nodes
 [sms](*\#*) nodeshell compute dnf -y module install nvidia-driver:latest-dkms
-# Install the toolkit on the compute nodes
-[sms](*\#*) (*\chrootinstall*) cuda-toolkit
-# Install the toolkit on the SMS
-[sms](*\#*) (*\install*) cuda-toolkit nvidia-driver-cuda
 # Enable DKMS service to automatically rebuild driver
 [sms](*\#*) nodeshell compute systemctl enable dkms
+# Install the toolkit on the SMS
+[sms](*\#*) (*\install*) cuda-devel-ohpc nvidia-driver-cuda
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
