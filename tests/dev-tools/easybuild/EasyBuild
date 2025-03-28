@@ -27,10 +27,10 @@ module load EasyBuild
     export EASYBUILD_PREFIX=$EB_TEST_TMPDIR
     eb --show-config
     assert_success
-    eb bzip2-1.0.6.eb
+    eb bzip2-1.0.8.eb --robot
     assert_success
     module use $EASYBUILD_PREFIX/modules/all
-    module load bzip2/1.0.6
+    module load bzip2/1.0.8
     assert_success
     test -f $EBROOTBZIP2/bin/bzip2
     assert_success
