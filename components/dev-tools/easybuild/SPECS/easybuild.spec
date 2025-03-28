@@ -17,7 +17,7 @@
 
 Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   4.9.4
+Version:   5.0.0
 Release:   %{?dist}.1
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
@@ -104,13 +104,13 @@ EOF
 
 for file in \
 	easybuild/easyconfigs/p/PyTorch/PyTorch-check-cpp-extension.py \
-	easybuild/scripts/bootstrap_eb.py \
 	easybuild/scripts/clean_gists.py \
 	easybuild/scripts/findPythonDeps.py \
 	easybuild/scripts/fix_docs.py \
 	easybuild/scripts/mk_tmpl_easyblock_for.py \
+	lib/python%{python3_version}/site-packages/easybuild/easyblocks/p/pytorch.py \
 	easybuild/scripts/rpath_args.py; do
-	sed -e "s,^#\!/usr/bin/env python,#\!/usr/bin/env python3,g" \
+	sed -e "s,^#\!\s*/usr/bin/env python,#\!/usr/bin/env python3,g" \
 		-i %{buildroot}/%{install_path}/${file}
 done
 
