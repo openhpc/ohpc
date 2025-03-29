@@ -112,6 +112,7 @@ jobs:
         name: rhel-rpms-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: |
+          /home/ohpc/rpmbuild/RPMS/aarch64/*rpm
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
@@ -219,6 +220,7 @@ jobs:
         name: openEuler-rpms-${{ matrix.os }}
         retention-days: 1
         path: |
+          /home/ohpc/rpmbuild/RPMS/aarch64/*rpm
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
@@ -298,6 +300,7 @@ jobs:
         name: leap-rpms-${{ matrix.os }}
         retention-days: 1
         path: |
+          /home/ohpc/rpmbuild/RPMS/aarch64/*rpm
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
