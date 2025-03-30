@@ -15,5 +15,13 @@ handled in this way by default.  Here we add directories and files to the
 [sms](*\#*) echo 'server {{.Tags.ntpserver}} iburst' | \
   wwctl overlay import --parents nodeconfig <(cat) /etc/chrony.conf.ww
 [sms](*\#*) wwctl profile set --yes nodes --tagadd ntpserver=${sms_ip}
+
+# Configure systemd and NetworkManger to wait for the network to be fully up.
+[sms](*\#*) cat <<- EOF | wwctl overlay import --parents nodeconfig <(cat) \
+  /etc/systemd/system/NetworkManager-wait-online.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/nm-online -q
+EOF
 \end{lstlisting}
 % \end_ohpc_run
