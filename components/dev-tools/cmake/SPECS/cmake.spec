@@ -12,8 +12,8 @@
 
 %define pname cmake
 
-%define major_version 3.24
-%define minor_version 2
+%define major_version 4.0
+%define minor_version 0
 
 Summary: CMake is an open-source, cross-platform family of tools designed to build, test and package software.
 Name:    %{pname}%{PROJ_DELIM}
@@ -30,6 +30,7 @@ BuildRequires:  ncurses-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
+BuildRequires:  jsoncpp-devel
 
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  expat-devel
@@ -55,8 +56,9 @@ of your choice.
 --no-system-librhash \
 --no-system-libuv \
 --no-system-libarchive \
---no-system-jsoncpp \
+--no-system-cppdap \
 --no-qt-gui \
+--parallel=$(nproc) \
 --prefix=%{install_path}
 
 %build
