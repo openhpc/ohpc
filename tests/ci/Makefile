@@ -78,6 +78,7 @@ shellcheck-lint:
 	shellcheck --exclude=SC2239,SC1091 \
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
+		../../tests/dev-tools/cmake/test_cmake \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
@@ -100,6 +101,8 @@ shfmt-lint:
 		-w -d -ln bats \
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
+		../../tests/dev-tools/cmake/test_cmake \
+		../../tests/dev-tools/cmake/run \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
