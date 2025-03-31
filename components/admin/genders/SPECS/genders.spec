@@ -12,11 +12,11 @@
 %define pname genders
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 1.29
+Version: 1.32
 Release: 1%{?dist}
 Summary: Static cluster configuration database
 License: GPL
-Source0:  https://github.com/chaos/genders/archive/genders-1-29-1.tar.gz
+Source0: https://github.com/chaos/genders/archive/genders-1-32-1.tar.gz
 Group:   %{PROJ_NAME}/admin
 URL:     https://github.com/chaos/genders
 
@@ -25,6 +25,7 @@ BuildRequires: gcc-c++ make
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: python3
+BuildRequires: python3-setuptools
 BuildRequires: python3-devel
 
 %if 0%{?rhel_version} || 0%{?openEuler}
@@ -61,7 +62,7 @@ genders API that is compatible with earlier releases of genders
 %{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %global _with_perl_vendor_arch --with-perl-vendor-arch}}
 
 %prep
-%setup  -q -n %{pname}-%{pname}-1-29-1
+%setup  -q -n %{pname}-%{pname}-1-32-1
 
 %build
 
