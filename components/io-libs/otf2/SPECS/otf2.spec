@@ -18,7 +18,7 @@
 
 Summary:        Open Trace Format 2 library
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.0.3
+Version:        3.1.1
 Release:        1%{?dist}
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/io-libs
