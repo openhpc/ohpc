@@ -17,7 +17,7 @@
 
 Summary:        An OpenMP runtime performance measurement instrumenter
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        2.0.8
+Version:        2.0.9
 Release:        1%{?dist}
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
