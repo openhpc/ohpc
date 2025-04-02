@@ -18,43 +18,41 @@
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   8.4
+Version:   9.0
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/scorep-%{version}/scorep-%{version}.tar.gz
-# For OpenSUSE, we are required to patch the binutils detection.
-# OpenSUSE ships a broken binutils-devel package, where dependencies need to be resolved
-# manually, unlike Alma/RHEL/Fedora/Arch Linux and others.
-%if 0%{?suse_version}
-Patch1:    scorep-8.4-opensuse-libbfd-additional-libs.patch
+%if "%{mpi_family}" == "impi"
+Patch1:    scorep-9.0-build-Add-MPIF08-configure-check-for-Intel-MPI.patch
 %endif
-Patch2:    scorep-8.4-gcc-update-fake-gmp-header.patch
-
 BuildRequires: automake
 BuildRequires: bison
 BuildRequires: binutils-devel
 BuildRequires: chrpath
-BuildRequires: cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
-BuildRequires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
+BuildRequires: cmake
+BuildRequires: cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.9
+BuildRequires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.9
 BuildRequires: fdupes
 BuildRequires: gcc-c++
+BuildRequires: gotcha-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: libunwind-devel
 BuildRequires: make
-BuildRequires: opari2-%{compiler_family}%{PROJ_DELIM} >= 2.0
-BuildRequires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
+BuildRequires: opari2-%{compiler_family}%{PROJ_DELIM} >= 2.0.9
+BuildRequires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.1
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
 %endif
 BuildRequires: which
 Requires:      binutils-devel
-Requires:      cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
-Requires:      cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8.2
+Requires:      cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.9
+Requires:      cubew-%{compiler_family}%{PROJ_DELIM} >= 4.9
+Requires:      gotcha-%{compiler_family}%{PROJ_DELIM}
 Requires:      libunwind-devel
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
-Requires:      opari2-%{compiler_family}%{PROJ_DELIM} >= 2.0
-Requires:      otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
+Requires:      opari2-%{compiler_family}%{PROJ_DELIM} >= 2.0.9
+Requires:      otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.1
 Requires:      papi%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
@@ -74,10 +72,9 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%if 0%{?suse_version}
+%if "%{mpi_family}" == "impi"
 %patch -P 1 -p1
 %endif
-%patch -P 2 -p1
 
 %build
 
@@ -92,6 +89,7 @@ module load cubew
 module load cubelib
 module load opari2
 module load otf2
+module load gotcha
 
 %if "%{compiler_family}" == "intel"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-nocross-compiler-suite=oneapi "
@@ -121,6 +119,12 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
+# Work around static binutils in OpenSUSE Leap 15
+%if 0%{?suse_version}
+export LIBBFD_EXTRA_LIBS="-liberty -lz -ldl -lsframe"
+CONFIGURE_OPTIONS="${CONFIGURE_OPTIONS}"
+%endif
+
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="$CFLAGS"
 ./configure --prefix=%{install_path} \
@@ -129,6 +133,7 @@ export CXXFLAGS="$CFLAGS"
             --disable-silent-rules \
             --enable-backend-test-runs \
             --with-platform=linux \
+            --with-libgotcha=${GOTCHA_DIR} \
             CC="$CC" \
             CXX="$CXX" \
             F77="$F77" \
@@ -150,20 +155,6 @@ make -C build-score CC=$CC V=1 %{?_smp_mflags}
 
 make V=1 %{?_smp_mflags}
 
-# GNU compilers bring their own libstdc++, which is required for C++
-# code to work correctly. Due to rpathing issues however, Score-P
-# causes the wrong libstdc++ to be linked (the system one instead of
-# the gnu14 installation). This causes issues when running code.
-# This will be fixed in Score-P v9.0. Until then, fix the paths
-# manually be replacing the added /usr/lib64 and /lib64 library paths
-# by the gnu14 ones. We need to do this after make, since it is
-# generated during the build process.
-%if "%{compiler_family}" == "gnu14"
-%{__sed} -i -e 's#"/lib64"#"/opt/ohpc/pub/compiler/gcc/14.2.0/lib64"#g' src/scorep_config_library_dependencies_backend_inc.hpp
-%{__sed} -i -e 's#"/usr/lib64"#"/opt/ohpc/pub/compiler/gcc/14.2.0/lib/../lib64"#g' src/scorep_config_library_dependencies_backend_inc.hpp
-make V=1 %{?_smp_mflags}
-%endif
-
 %install
 
 export NO_BRP_CHECK_RPATH=true
@@ -178,6 +169,7 @@ module load cubew
 module load cubelib
 module load opari2
 module load otf2
+module load gotcha
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
@@ -215,6 +207,7 @@ depends-on cubelib
 depends-on cubew
 depends-on opari2
 depends-on otf2
+depends-on gotcha
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
