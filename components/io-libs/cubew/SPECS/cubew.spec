@@ -14,16 +14,15 @@
 
 # Base package name
 %define pname cubew
-%define shortv 4.8
 
 Summary:        CUBE Uniform Behavioral Encoding generic presentation writer component
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        4.8.2
+Version:        4.9
 Release:        1%{?dist}
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/io-libs
 URL:            http://www.scalasca.org/software/cube-4.x/download.html
-Source0:        http://apps.fz-juelich.de/scalasca/releases/cube/%shortv/dist/cubew-%{version}.tar.gz
+Source0:        https://perftools.pages.jsc.fz-juelich.de/cicd/cubew/tags/cubew-%{version}/cubew-%{version}.tar.gz
 BuildRequires:  chrpath
 BuildRequires:  file
 BuildRequires:  gcc-c++
@@ -101,6 +100,8 @@ make check
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # don't package static libs
+# May not be necessary anymore starting with
+# v4.9, but doesn't do any harm.
 rm -rf $RPM_BUILD_ROOT%{install_path}/lib/*.a \
        $RPM_BUILD_ROOT%{install_path}/lib/*.la
 
