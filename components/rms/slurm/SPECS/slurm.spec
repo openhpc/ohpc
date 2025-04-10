@@ -30,7 +30,7 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	23.11.10
+Version:	24.11.3
 %global rel	1
 Release:	%{?dist}.1
 Summary:	Slurm Workload Manager
@@ -553,6 +553,8 @@ rm -f %{buildroot}/%{_mandir}/man1/sjobexitmod.1
 rm -f %{buildroot}/%{_mandir}/man1/sjstat.1
 %{buildroot}/%{_bindir}/sjstat --roff > %{buildroot}/%{_mandir}/man1/sjstat.1
 
+mkdir -p --mode=0700 %{buildroot}%{_var}/log/slurm
+
 # Build conditional file list for main package
 LIST=./slurm.files
 touch $LIST
@@ -616,6 +618,11 @@ touch $LIST
 %endif
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 
+# Fix the bash completions links to not contain the build root
+cd %{buildroot}/%{_datadir}/bash-completion/completions/
+for i in s*; do ln -sf slurm_completion.sh $i || true; done
+cd -
+
 %post -n %{pname}-example-configs%{PROJ_DELIM}
 if [ ! -e /etc//munge/munge.key -a -c /dev/urandom ]; then
   /bin/dd if=/dev/urandom bs=1 count=1024 \
@@ -626,6 +633,7 @@ fi
 
 %files -f slurm.files
 %{_datadir}/doc
+%{_datadir}/bash-completion/completions/*
 %{_bindir}/s*
 %exclude %{_bindir}/seff
 %exclude %{_bindir}/sjobexitmod
@@ -713,6 +721,7 @@ fi
 %{_sbindir}/slurmdbd
 %{_libdir}/slurm/accounting_storage_mysql.so
 %{_unitdir}/slurmdbd.service
+%attr(0700,slurm,slurm) %dir %{_var}/log/slurm
 #############################################################################
 
 %files -n %{pname}-libpmi%{PROJ_DELIM}
