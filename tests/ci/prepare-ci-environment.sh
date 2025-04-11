@@ -142,6 +142,8 @@ dnf_openeuler() {
 	# This repository contains golang 1.21 copied from 24.03
 	# shellcheck disable=SC2016
 	echo -e '[go.1.21]\nname=go.1.21\nbaseurl=https://repos.openhpc.community/.staging/golang-1.21-openEuler-24.03-LTS/$basearch/\nenabled=1\ngpgcheck=0' >/etc/yum.repos.d/go.1.21.repo
+	# We need to have the latest glibc installed for valgrind tests on openEuler
+	"${PKG_MANAGER}" "${YES}" upgrade
 }
 
 print_env
