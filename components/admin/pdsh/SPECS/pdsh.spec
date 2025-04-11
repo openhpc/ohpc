@@ -129,6 +129,7 @@ Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{versio
 %{?_with_torque:BuildRequires: torque-devel}
 
 BuildRequires: ncurses-devel
+BuildRequires: munge-devel
 BuildRequires: readline-devel
 BuildRequires: pam-devel
 BuildRequires: make gcc
@@ -375,6 +376,7 @@ ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 %{_bindir}/rpdcp
 %exclude %{install_path}/lib/pdsh/genders.*
 %exclude %{install_path}/lib/pdsh/slurm.*
+%exclude %{install_path}/lib/pdsh/mcmd.*
 
 %if 0%{?OHPC_BUILD}
 # dir %{OHPC_PUB}/share/doc
@@ -390,4 +392,5 @@ ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 %if %{?_with_slurm:1}%{!?_with_slurm:0}
 %files -n pdsh-mod-slurm%{PROJ_DELIM}
 %{install_path}/lib/pdsh/slurm.*
+%{install_path}/lib/pdsh/mcmd.*
 %endif
