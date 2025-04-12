@@ -162,7 +162,7 @@ if ( ! $?MANPATH ) then
     setenv MANPATH ":"
 endif
 # Initialize MANPATH if unset, then safely append Lmod's man directory using addto helper
-setenv MANPATH ` ${OHPC_ADMIN}/lmod/lmod/libexec/addto MANPATH ${OHPC_ADMIN}/lmod/lmod/share/man `
+setenv MANPATH `${OHPC_ADMIN}/lmod/lmod/libexec/addto MANPATH ${OHPC_ADMIN}/lmod/lmod/share/man`
 
 # Initialize modules system
 source %{OHPC_ADMIN}/lmod/lmod/init/csh >/dev/null
