@@ -10,29 +10,35 @@
 
 ## Inserted by OHPC
 %include %{_sourcedir}/OHPC_macros
+%global pname warewulf
+## End OHPC
 
 %global debug_package %{nil}
 
-%global api 0
+%if 0%{?suse_version}
+%global tftpdir /srv/tftpboot
+%else
+# Assume Fedora-based OS if not SUSE-based
+%global tftpdir /var/lib/tftpboot
+%endif
+%global srvdir %{_sharedstatedir}
 
-# Base package name
-%global pname warewulf
-
-# Group for warewulfd and other WW operations
 %global wwgroup warewulf
 
 %if 0%{?fedora}
 %define _build_id_links none
 %endif
 
+## Inserted by OHPC
 # Service directories (change /var/lib/* default to match WW3 build)
 %global tftpdir /srv/tftpboot
 %global srvdir /srv
 %global statedir /srv
+## End OHPC
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.6.0
+Version: 4.6.1
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
@@ -49,6 +55,7 @@ Conflicts: warewulf-provision
 Conflicts: warewulf-ipmi
 
 %if 0%{?suse_version} || 0%{?sle_version}
+#BuildRequires: distribution-release ## OHPC Removed
 BuildRequires: systemd-rpm-macros
 BuildRequires: go > 1.20
 BuildRequires: firewall-macros
@@ -61,6 +68,7 @@ Requires: firewalld
 Requires: ipxe-bootimgs
 %else
 # Assume Red Hat/Fedora build
+#BuildRequires: system-release ## OHPC Removed
 BuildRequires: systemd
 BuildRequires: golang > 1.20
 BuildRequires: firewalld-filesystem
@@ -84,41 +92,20 @@ Requires: dhcp
 BuildRequires: git
 BuildRequires: make
 BuildRequires: gpgme-devel
-%if %{api}
-BuildRequires: libassuan-devel
-%endif
+BuildRequires: python3-devel
 
 Recommends: logrotate
 Recommends: ipmitool
+
 
 %description
 Warewulf is a stateless and diskless provisioning
 system for large clusters of bare metal and/or virtual systems.
 
-%package dracut
-Summary: dracut module for loading a Warewulf image
-BuildArch: noarch
-
-Requires: dracut
-%if 0%{?suse_version}
-%else
-Requires: dracut-network
-%endif
-Requires: curl
-Requires: cpio
-Requires: dmidecode
-Requires: initscripts-service
-
-%description dracut
-Warewulf is a stateless and diskless provisioning
-system for large clusters of bare metal and/or virtual systems.
-
-This subpackage contains a dracut module that can be used to generate
-an initramfs that can fetch and boot a Warewulf node image from a
-Warewulf server.
 
 %prep
 %setup -q -n %{pname}-%{version} -b0 %if %{?with_offline:-a2}
+
 
 %build
 export OFFLINE_BUILD=1
@@ -140,11 +127,9 @@ make defaults \
     WWCLIENTDIR=/warewulf \
     IPXESOURCE=/usr/share/ipxe \
     DRACUTMODDIR=/usr/lib/dracut/modules.d \
+    SOSPLUGINS=%{python3_sitelib}/sos/report/plugins \
     CACHEDIR=%{_localstatedir}/cache
 make build
-%if %{api}
-make api
-%endif
 
 
 %install
@@ -152,16 +137,13 @@ export OFFLINE_BUILD=1
 export NO_BRP_STALE_LINK_ERROR=yes
 make install \
     DESTDIR=%{buildroot}
-%if %{api}
-make installapi \
-    DESTDIR=%{buildroot}
-%endif
 
 ## Inserted by OHPC
 # For RH, tftpboot directory is hardcoded
 %if 0%{?rhel}
 ln -s %{_sharedstatedir}/tftpboot %{buildroot}%{tftpdir}
 %endif
+## END OHPC
 
 %if 0%{?suse_version} || 0%{?sle_version}
 yq e '
@@ -170,8 +152,10 @@ yq e '
   .tftp.ipxe."00:09" = "ipxe-x86_64.efi" |
   .tftp.ipxe."00:0B" = "snp-arm64.efi" ' \
   -i %{buildroot}%{_sysconfdir}/warewulf/warewulf.conf
+%else
+make install-sos \
+    DESTDIR=%{buildroot}
 %endif
-
 
 %pre
 getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
@@ -198,6 +182,7 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %dir %{_sysconfdir}/warewulf
 %config(noreplace) %{_sysconfdir}/warewulf/warewulf.conf
 %config(noreplace) %attr(0640,-,%{wwgroup}) %{_sysconfdir}/warewulf/nodes.conf
+%config(noreplace) %attr(0600,-,-) %{_sysconfdir}/warewulf/auth.conf
 %config(noreplace) %{_sysconfdir}/warewulf/examples
 %config(noreplace) %{_sysconfdir}/warewulf/ipxe
 %config(noreplace) %{_sysconfdir}/warewulf/grub
@@ -244,16 +229,52 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %dir %{_docdir}/warewulf
 %license %{_docdir}/warewulf/LICENSE.md
 
-%if %{api}
-%{_bindir}/wwapi*
-%config(noreplace) %{_sysconfdir}/warewulf/wwapi*.conf
-%endif
-
 ## Inserted by OHPC
 %if 0%{?rhel}
 %{tftpdir}
 %endif
+## End OHPC
+
+%package dracut
+Summary: dracut module for loading a Warewulf image
+BuildArch: noarch
+
+Requires: dracut
+%if 0%{?suse_version}
+%else
+Requires: dracut-network
+%endif
+Requires: curl
+Requires: cpio
+Requires: dmidecode
+
+%description dracut
+Warewulf is a stateless and diskless provisioning system for large clusters of
+bare metal and/or virtual systems.
+
+This subpackage contains a dracut module that can be used to generate an
+initramfs that can fetch and boot a Warewulf node image from a Warewulf server.
 
 %files dracut
 %defattr(-, root, root)
 %{_prefix}/lib/dracut/modules.d/90wwinit
+
+
+%if 0%{?suse_version} || 0%{?sle_version}
+%else
+%package sos
+Summary: sos plugin for Warewulf
+BuildArch: noarch
+Requires: sos
+
+%description sos
+Warewulf is a stateless and diskless provisioning system for large clusters of
+bare metal and/or virtual systems.
+
+This subpackage contains an sos module that can be used to include information
+about Warewulf in an sos report.
+
+%files sos
+%{python3_sitelib}/sos/report/plugins/warewulf.py
+%{python3_sitelib}/sos/report/plugins/__pycache__/warewulf.*.pyc
+%endif
