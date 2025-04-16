@@ -16,7 +16,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.7.53
+Version:   8.7.59
 Release:   %{?dist}.1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
@@ -45,7 +45,7 @@ BuildRequires: lua53-devel
 BuildRequires: procps
 Requires: lua53-luafilesystem
 Requires: lua53-luaposix
-Requires: (lua-lmod-apparmor-abstractions%{PROJ_DELIM} if apparmor-abstractions)
+Requires: (lmod-apparmor-abstractions%{PROJ_DELIM} if apparmor-abstractions)
 Conflicts: Modules
 %endif
 
@@ -60,14 +60,14 @@ Lmod: An Environment Module System based on Lua, Reads TCL Modules,
 Supports a Software Hierarchy
 
 %if 0%{?sle_version}
-%package apparmor-abstractions%{PROJ_DELIM}
+%package -n %{pname}-apparmor-abstractions%{PROJ_DELIM}
 Summary:        Apparmor bash Abstraction for Lmod
 BuildRequires:  apparmor-abstractions
 BuildRequires:  apparmor-rpm-macros
 Requires:       apparmor-abstractions
 BuildArch:      noarch
 
-%description apparmor-abstractions%{PROJ_DELIM}
+%description -n %{pname}-apparmor-abstractions%{PROJ_DELIM}
 Profile for shell source scripts for lua-lmod
 %endif
 
@@ -206,7 +206,7 @@ EOF
 %{_bindir}/modulecmd
 
 %if 0%{?sle_version}
-%files  apparmor-abstractions%{PROJ_DELIM}
+%files -n %{pname}-apparmor-abstractions%{PROJ_DELIM}
 %dir %{_sysconfdir}/apparmor.d/abstractions/bash.d
 %{_sysconfdir}/apparmor.d/abstractions/bash.d/lmod
 %endif
