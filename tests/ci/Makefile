@@ -12,6 +12,7 @@ codespell-lint:
 		../../tests/ci/spec_to_test_mapping.py \
 		../../components/admin/prun/SOURCES/prun \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
+		../../tests/common/functions \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
@@ -42,6 +43,7 @@ whitespace-lint:
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
+		tests/common/functions \
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
@@ -67,6 +69,7 @@ shellcheck-lint:
 		../../misc/shell-functions \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
+		../../tests/common/functions \
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
 		../../components/admin/prun/SOURCES/prun \
@@ -119,6 +122,7 @@ shfmt-lint:
 		../../tests/libs/plasma/tests/test_module
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
+		../../tests/common/functions \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
 
 clang-format-lint:
