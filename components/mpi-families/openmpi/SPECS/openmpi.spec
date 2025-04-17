@@ -43,7 +43,7 @@ Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   5.0.5
+Version:   5.0.7
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
@@ -51,6 +51,8 @@ URL:       http://www.open-mpi.org
 Source0:   http://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-%{version}.tar.bz2
 Source3:   pbs-config
 Patch0:    openmpi-5.x-pbs-config.patch
+# https://github.com/open-mpi/ompi/pull/13105.patch
+Patch1:    https://github.com/open-mpi/ompi/pull/13105.patch
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -147,6 +149,7 @@ communication techniques.
 
 %setup -q -n openmpi-%{version}
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 # OpenHPC compiler designation
