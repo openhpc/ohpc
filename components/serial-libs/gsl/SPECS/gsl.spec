@@ -17,7 +17,7 @@
 
 Summary:   GNU Scientific Library (GSL)
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.7.1
+Version:   2.8
 Release:   1%{?dist}
 License:   GPL
 Group:     %{PROJ_NAME}/serial-libs
@@ -55,7 +55,7 @@ lends itself to being used in very high level languages (VHLLs).
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-./configure CFLAGS="-O2" --prefix=%{install_path} \
+./configure CFLAGS="$CFLAGS -O2" --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
             --disable-static || { cat config.log && exit 1; }
 make %{?_smp_mflags}
