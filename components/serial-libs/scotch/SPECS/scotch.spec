@@ -15,16 +15,15 @@
 %define pname scotch
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:	6.0.6
+Version:	7.0.7
 Release:	1%{?dist}
 Summary:	Graph, mesh and hypergraph partitioning library
 License:	CeCILL-C
 Group:		%{PROJ_NAME}/serial-libs
-URL:		http://www.labri.fr/perso/pelegrin/%{pname}/
-Source0:	https://gforge.inria.fr/frs/download.php/file/37622/scotch_6.0.6.tar.gz
+URL:		https://gitlab.inria.fr/scotch/scotch
+Source0:	https://gitlab.inria.fr/scotch/scotch/-/archive/v%{version}/scotch-v%{version}.tar.bz2
 Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
 Source2:	%{pname}-rpmlintrc
-Patch0:		scotch-6.0.4-destdir.patch
 
 BuildRequires:	flex bison make
 %if 0%{?rhel} || 0%{?openEuler}
@@ -44,8 +43,7 @@ Scotch is a software package for graph and mesh/hypergraph partitioning and
 sparse matrix ordering.
 
 %prep
-%setup -q -n %{pname}_%{version}
-%patch0 -p1
+%setup -q -n %{pname}-v%{version}
 
 %build
 # OpenHPC compiler/mpi designation
