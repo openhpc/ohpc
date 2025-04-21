@@ -56,12 +56,11 @@ whitespace-lint:
 		tests/perf-tools/scorep/tests/test_module \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
-		tests/libs/plasma/tests/rm_execution \
-		tests/libs/plasma/tests/test_module \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		tests/libs/phdf5/ohpc-tests/test_compiler_families \
 		tests/libs/phdf5/tests/rm_execution \
 		tests/libs/phdf5/tests/test_module \
+		tests/libs/plasma/tests/* \
 		\*.tex
 
 shellcheck-lint:
@@ -142,4 +141,6 @@ clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
 	clang-format --dry-run --Werror \
 		../libs/phdf5/tests/C_mpi_test.c \
-		../dev-tools/cuda/add.cu
+		../dev-tools/cuda/add.cu \
+		../../tests/libs/plasma/tests/*.c \
+		../../tests/libs/plasma/tests/*.h

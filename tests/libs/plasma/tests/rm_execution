@@ -1,4 +1,4 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
 load ./common/test_helper_functions || exit 1
@@ -27,16 +27,6 @@ ARGS=0
 	fi
 
 	run_serial_binary ./C_test $ARGS
-	assert_success
-}
-
-@test "[$TESTNAME/F_test] F_test under resource manager ($RM/$LMOD_FAMILY_COMPILER)" {
-	skip
-	if [ ! -s F_test ]; then
-		flunk "F_test binary does not exist"
-	fi
-
-	run_serial_binary ./F_test $ARGS
 	assert_success
 }
 
