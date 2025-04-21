@@ -1,16 +1,17 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
+# shellcheck disable=SC1091
+
+export MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 # HDF5 tests using h5cc, h5c++, h5fc
 
-cd libs/hdf5/test-h5-wrappers-new/ || exit 1
+pushd libs/hdf5/test-h5-wrappers-new/ >/dev/null || exit 1
 
 export BATS_JUNIT_CLASS=HDF5
 
@@ -18,30 +19,29 @@ export BATS_JUNIT_CLASS=HDF5
 
 ./bootstrap || exit 1
 
+for COMPILER in ${COMPILER_FAMILIES}; do
 
-for compiler in $COMPILER_FAMILIES ; do
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "User Libraries: HDF5 tests using h5 wrappers: ${COMPILER}"
+	echo "-------------------------------------------------------"
 
-    echo " "
-    echo " "
-    echo "-------------------------------------------------------"
-    echo "User Libraries: HDF5 tests using h5 wrappers: $compiler"
-    echo "-------------------------------------------------------"
+	module purge || exit 1
+	module load "${COMPILER}" || exit 1
+	module load hdf5 || exit 1
+	module load autotools || exit 1
 
-    module purge          || exit 1
-    module load $compiler || exit 1
-    module load hdf5      || exit 1
-    module load autotools || exit 1    
+	./configure || exit 1
+	make -j 4 check || status=1
 
-    ./configure           || exit 1
-    make -j 4 check       || status=1
+	save_logs_compiler_family ohpc_module "${COMPILER}"
 
-#    save_logs_compiler_family ohpc_module $compiler
-
-    make distclean
+	make distclean
 
 done
 
-cd -
+popd >/dev/null || exit 1
 
 # HDF5 tests using module environment variables
 
@@ -51,25 +51,25 @@ cd libs/hdf5/test-env-variables-new || exit 1
 
 ./bootstrap || exit 1
 
-for compiler in $COMPILER_FAMILIES ; do
+for COMPILER in ${COMPILER_FAMILIES}; do
 
-    echo " "
-    echo " "
-    echo "----------------------------------------------------------"
-    echo "User Libraries: HDF5 tests using env variables: $compiler"
-    echo "----------------------------------------------------------"
+	echo " "
+	echo " "
+	echo "----------------------------------------------------------"
+	echo "User Libraries: HDF5 tests using env variables: ${COMPILER}"
+	echo "----------------------------------------------------------"
 
-    module purge          || exit 1
-    module load $compiler || exit 1
-    module load hdf5      || exit 1
+	module purge || exit 1
+	module load "${COMPILER}" || exit 1
+	module load hdf5 || exit 1
 
-    ./configure           || exit 1
-    make -j 4 check       || status=1
+	./configure || exit 1
+	make -j 4 check || status=1
 
-    save_logs_compiler_family ohpc_module $compiler
+	save_logs_compiler_family ohpc_module "${COMPILER}"
 
-    make distclean
+	make distclean
 
 done
 
-exit ${status}
+exit "${status}"

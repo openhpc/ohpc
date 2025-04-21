@@ -222,6 +222,9 @@ AC_CONFIG_FILES([FORTRAN/H5D/test.sh], [chmod +x FORTRAN/H5D/test.sh])
 AC_CONFIG_FILES([FORTRAN/H5G/test.sh], [chmod +x FORTRAN/H5G/test.sh])
 AC_CONFIG_FILES([FORTRAN/H5T/test.sh], [chmod +x FORTRAN/H5T/test.sh])
 
+CFLAGS="${CFLAGS} -Wno-unused-but-set-variable -Wno-format -Wno-switch"
+FCFLAGS="${FCFLAGS} -Wno-unused-variable -Wno-conversion"
+
 # Configure
 AC_OUTPUT
 
@@ -230,13 +233,10 @@ echo '-------------------------------------------------- SUMMARY ---------------
 echo
 echo Package version............... : $PACKAGE-$VERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
-echo
-echo C compiler.................... : `which $CC`
-echo C++ compiler.................. : `which $CXX`
-echo Fortran compiler ............. : `which $FC`
+echo C compiler.................... : $(which $H5C)
+echo Fortran compiler ............. : $(which $H5FC)
 echo
 echo C compiler flags.............. : $CFLAGS
-echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FCFLAGS
 echo
 echo '-------------------------------------------------------------------------------------------------------------'

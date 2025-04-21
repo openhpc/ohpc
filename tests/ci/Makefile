@@ -23,6 +23,7 @@ codespell-lint:
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/test_module \
+		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
@@ -57,6 +58,7 @@ whitespace-lint:
 		tests/libs/superlu_dist/tests/test_module \
 		tests/libs/plasma/tests/rm_execution \
 		tests/libs/plasma/tests/test_module \
+		tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		\*.tex
 
 shellcheck-lint:
@@ -77,6 +79,7 @@ shellcheck-lint:
 		../../components/admin/test-suite/SOURCES/get_source.sh \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
+		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
 	shellcheck --exclude=SC2239,SC1091 \
 		../../tests/apps/hpcg/run \
@@ -123,6 +126,7 @@ shfmt-lint:
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/common/functions \
+		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
 
 clang-format-lint:
