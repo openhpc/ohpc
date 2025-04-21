@@ -28,7 +28,7 @@ struct routines_t {
 // use { "", NULL }  entries for missing precisions.
 struct routines_t routines[] =
 {
-    { "dgesv", test_dgesv },
+    { "zhesv", test_zhesv },
     { NULL, NULL }  // last entry
 };
 
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 {
 
     //const char *routine = argv[1];
-    const char *routine = "dgesv";
+    const char *routine = "zhesv";
 
     // Ensure that ParamDesc has an entry for every param_label_t value.
     assert(PARAM_SIZEOF == sizeof(ParamDesc)/sizeof(param_desc_t) - 1);

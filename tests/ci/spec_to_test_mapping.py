@@ -254,6 +254,11 @@ test_map = {
         '',
         ''
     ],
+    'components/serial-libs/plasma/SPECS/plasma.spec': [
+        'plasma',
+        '',
+        ''
+    ],
     'components/dev-tools/valgrind/SPECS/valgrind.spec': [
         'valgrind',
         '',

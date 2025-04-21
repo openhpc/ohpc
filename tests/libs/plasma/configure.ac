@@ -30,12 +30,12 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -qopenmp -DHAVE_MKL"
   FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS} -qopenmp"
   FCFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lplasma_core_blas -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
 else
   CFLAGS="-I ${PLASMA_INC} ${CFLAGS} -I${OPENBLAS_INC} -fopenmp"
   FFLAGS="-I ${PLASMA_INC} ${FFLAGS} -fopenmp"
   FCFLAGS="-I ${PLASMA_INC} ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -L${OPENBLAS_LIB} -lopenblas -lpthread -lm ${LDFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lplasma_core_blas -L${OPENBLAS_LIB} -lopenblas -lpthread -lm ${LDFLAGS}"
 fi
 
 
