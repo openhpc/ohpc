@@ -8,32 +8,29 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# plasma - Parallel Linear Algebra Software for Multicore Architectures
-
 %global ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 %global pname plasma
-%global lapack_ver 3.10.1
 
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version: 21.8.29
+Version: 24.8.7
 Release: 1%{?dist}
 Summary: Parallel Linear Algebra Software for Multicore Architectures
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/serial-libs
-URL:     https://icl.utk.edu/plasma/overview/index.html
+URL:     https://github.com/icl-utk-edu/plasma/
 Source0: https://github.com/icl-utk-edu/plasma/releases/download/%{version}/plasma-%{version}.tar.gz
-Source1: https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v%{lapack_ver}.tar.gz
-Source2: make.inc
-Patch0:  plasma-21.8.29-configure.patch
-Patch1:  plasma-21.8.29-tools.patch
-Patch2:  plasma-21.8.29-makefile.patch
+Patch0:  https://github.com/icl-utk-edu/plasma/pull/48.patch
+# Tell cmake to include the Fortran plasma_mod.o in the shared object
+Patch1:  cmake-fortran.patch
+# Exclude functions from plasma_mod.o which do not seem to be implemented.
+Patch2:  fortran_gen.patch
 
 #!BuildIgnore: post-build-checks
 
+BuildRequires: cmake%{PROJ_DELIM}
 BuildRequires: python3
-BuildRequires: doxygen
 BuildRequires: make
 BuildRequires: sed
 BuildRequires: lua-devel >= 5.3
@@ -57,15 +54,10 @@ least squares problems, eigenvalue problems, and singular value problems.
 
 
 %prep
-%setup -q -a 1 -n %{pname}-%{version}
-cp %{SOURCE2} .
-# Convert scripts to Python3; clean up indentation first
-# Patches created using 2to3
-sed -i "s/\t/    /g;s/^\s*$//;1s|^#!.*env.*python.*$|#!/usr/bin/python3|" \
-    configure.py config/*.py tools/*.py
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%setup -q -n %{pname}-%{version}
+%patch -P 0 -p 1
+%patch -P 1 -p 1
+%patch -P 2 -p 1
 
 %build
 %ohpc_setup_compiler
@@ -74,50 +66,44 @@ sed -i "s/\t/    /g;s/^\s*$//;1s|^#!.*env.*python.*$|#!/usr/bin/python3|" \
 module load openblas
 %endif
 
-make prefix=%{install_path} \
-%if 0%{?sle_version} || 0%{?suse_version}
-     lua_dir=/usr/include/lua%{luaver} \
-%else
-     lua_dir=/usr/include \
-%endif
-%if "%{compiler_family}" == "intel"
-   CFLAGS="-fPIC -std=c99 -I${MKLROOT}/include -fopenmp \
-     -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY -DHAVE_MKL \
-     -DBLAS_RETURN_COMPLEX_AS_ARGUMENT -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR" \
-   FCFLAGS="-fPIC -std=f2008 -fopenmp" \
-   LDFLAGS="-fPIC -L${MKLROOT}/lib/intel64 -L${CMPLR_ROOT}/linux/compiler/lib/intel64_lin -fopenmp" \
-   LIBS="-lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lifcore -lm" \
-%else
-%if "%{compiler_family}" == "arm1"
-   CFLAGS="-fPIC -std=c99 -fopenmp \
-     -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY  \
-     -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR" \
-   FCFLAGS="-fPIC -std=f2008 -fopenmp" \
-   LDFLAGS="-fPIC -fopenmp" \
-   LIBS="-armpl -lm" \
-%else
-   CFLAGS="-fPIC -std=c99 -I${OPENBLAS_DIR}/include -fopenmp -DHAVE_OPENMP_DEPEND -DHAVE_OPENMP_PRIORITY -DHAVE_OPENBLAS -DHAVE_LAPACKE_DLASCL -DHAVE_LAPACKE_DLANTR -DHAVE_LAPACKE_DLASSQ" \
-   FCFLAGS="-fPIC -std=f2008 -fopenmp" \
-   LDFLAGS="-fPIC -L${OPENBLAS_DIR}/lib -fopenmp" \
-   LIBS="-lopenblas -lm" \
-%endif
-%endif
-     all
-make prefix=%{install_path} docs
+module load cmake
 
+# Generate fortran bindings
+python3 tools/codegen.py -p s -p d -p c include/*h
+python3 tools/fortran_gen.py --prefix include/ include/plasma*h
+# Create plasma.mod
+${FC} -fPIC -c -o include/plasma_mod.o include/plasma_mod.f90
+
+mkdir build
+cd build
+cmake \
+	-DPLASMA_DETECT_LUA=1 \
+	-DCMAKE_C_FLAGS="$CFLAGS" \
+	-DCMAKE_INSTALL_PREFIX=%{install_path} \
+%if "%{compiler_family}" == "intel"
+	-DCMAKE_EXE_LINKER_FLAGS_INIT="-lifcore" \
+%endif
+	..
+
+# The build system defines PLASMA_USE_LUA twice. In the header and on the
+# command-line. Let's remove one of those.
+sed "/PLASMA_USE_LUA/d" -i ../include/plasma_config.h
+
+cmake --build . -v %{?_smp_mflags}
 
 %install
-# Compiler is needed on RHEL for make install
 %ohpc_setup_compiler
 
-mkdir -p %{buildroot}%{install_path}
-make prefix=%{buildroot}%{install_path} CFLAGS="-fPIC" LDFLAGS="-fPIC" install
+module load cmake
+cd build
+DESTDIR="%{buildroot}" cmake --install .
+cd ..
 
-# Correct the paths in the config file
-sed -i "s|%{buildroot}||" %{buildroot}%{install_path}/lib/pkgconfig/plasma.pc
+# Needed for compatibility with older versions shipped by OpenHPC.
+install -m 644 include/core_lapack*h %{buildroot}%{install_path}/include
 
-# Remove static libraries
-rm -f %{buildroot}%{install_path}/lib/*.a
+# Install fortran bindings
+install -m 644 plasma.mod %{buildroot}%{install_path}/include
 
 # OpenHPC module file
 mkdir -p %{buildroot}%{module_path}
@@ -142,12 +128,11 @@ depends_on("openblas")
 %endif
 
 prepend_path( "PATH",            "%{install_path}/bin")
-prepend_path( "MANPATH",         "%{install_path}/share/man")
 prepend_path( "INCLUDE",         "%{install_path}/include")
-prepend_path( "LD_LIBRARY_PATH", "%{install_path}/lib")
+prepend_path( "LD_LIBRARY_PATH", "%{install_path}/lib64")
 
 setenv("%{PNAME}_DIR", "%{install_path}")
-setenv("%{PNAME}_LIB", "%{install_path}/lib")
+setenv("%{PNAME}_LIB", "%{install_path}/lib64")
 setenv("%{PNAME}_INC", "%{install_path}/include")
 
 EOF
@@ -159,4 +144,4 @@ ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM}.lua %{buildroot}%{module_path}/default
 %{install_path}
 %{module_path}
 %license LICENSE
-%doc README.md docs/html
+%doc README.md

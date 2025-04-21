@@ -1,0 +1,72 @@
+From 984531d38fa16d8890cdf1e78d6e4ca00907b899 Mon Sep 17 00:00:00 2001
+From: Adrian Reber <areber@redhat.com>
+Date: Mon, 21 Apr 2025 11:18:07 +0200
+Subject: [PATCH] tools: handle INT_MAX and INT_MIN in fortran_gen.py
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Using fortran_gen.py with the current header files results in errors:
+
+$ python3 tools/fortran_gen.py  --prefix include/  include/plasma*h
+Exported file: include/plasma_mod.f90
+$ gfortran -c -o include/plasma_mod.o include/plasma_mod.f90
+include/plasma_mod.f90:33:57:
+
+   33 |     integer, parameter :: PlasmaDatatypeUnknown = INT_MIN
+      |                                                         1
+Error: Symbol ‘int_min’ at (1) has no IMPLICIT type
+include/plasma_mod.f90:72:54:
+
+   72 |     integer, parameter :: PlasmaConstUnknown = INT_MIN
+      |                                                      1
+Error: Symbol ‘int_min’ at (1) has no IMPLICIT type
+include/plasma_mod.f90:84:54:
+
+   84 |     integer, parameter :: PlasmaErrorUnknown = INT_MIN
+      |                                                      1
+Error: Symbol ‘int_min’ at (1) has no IMPLICIT type
+include/plasma_mod.f90:88:54:
+
+   88 |     integer, parameter :: PlasmaInoutUnknown = INT_MAX
+      |                                                      1
+Error: Symbol ‘int_max’ at (1) has no IMPLICIT type; did you mean ‘c_intmax_t’?
+include/plasma_mod.f90:92:60:
+
+   92 |     integer, parameter :: PlasmaHouseholderUnknown = INT_MAX
+      |                                                            1
+Error: Symbol ‘int_max’ at (1) has no IMPLICIT type; did you mean ‘c_intmax_t’?
+include/plasma_mod.f90:96:54:
+
+   96 |     integer, parameter :: PlasmaAbledUnknown = INT_MAX
+      |                                                      1
+Error: Symbol ‘int_max’ at (1) has no IMPLICIT type; did you mean ‘c_intmax_t’?
+include/plasma_mod.f90:104:54:
+
+  104 |     integer, parameter :: PlasmaParamUnknown = INT_MAX
+      |                                                      1
+Error: Symbol ‘int_max’ at (1) has no IMPLICIT type; did you mean ‘c_intmax_t’?
+
+With this change INT_MAX is converted to c_intmax_t and INT_MIN to -c_intmax_t.
+
+Signed-off-by: Adrian Reber <areber@redhat.com>
+---
+ tools/fortran_gen.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/fortran_gen.py b/tools/fortran_gen.py
+index 1ac030e..0f9ece8 100755
+--- a/tools/fortran_gen.py
++++ b/tools/fortran_gen.py
+@@ -112,6 +112,11 @@ def polish_file(whole_file):
+     clean_file = re.sub(r";", "\n", clean_file)
+     clean_file = re.sub(r"}", "}\n", clean_file)
+ 
++    # Replace INT_MAX with c_intmax_t
++    clean_file = re.sub("INT_MAX", "c_intmax_t", clean_file)
++    # Replace -INT_MIN with -c_intmax_t
++    clean_file = re.sub("INT_MIN", "-c_intmax_t", clean_file)
++
+     return clean_file
+ 
+ def preprocess_list(initial_list):
