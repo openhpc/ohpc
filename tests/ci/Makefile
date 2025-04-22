@@ -59,6 +59,9 @@ whitespace-lint:
 		tests/libs/plasma/tests/rm_execution \
 		tests/libs/plasma/tests/test_module \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
+		tests/libs/phdf5/ohpc-tests/test_compiler_families \
+		tests/libs/phdf5/tests/rm_execution \
+		tests/libs/phdf5/tests/test_module \
 		\*.tex
 
 shellcheck-lint:
@@ -80,6 +83,7 @@ shellcheck-lint:
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
+		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
 		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
 	shellcheck --exclude=SC2239,SC1091 \
 		../../tests/apps/hpcg/run \
@@ -92,6 +96,8 @@ shellcheck-lint:
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
+		../../tests/libs/phdf5/tests/rm_execution \
+		../../tests/libs/phdf5/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
@@ -121,15 +127,19 @@ shfmt-lint:
 		../../tests/perf-tools/scorep/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
+		../../tests/libs/phdf5/tests/rm_execution \
+		../../tests/libs/phdf5/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/common/functions \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
+		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
 	clang-format --dry-run --Werror \
+		../libs/phdf5/tests/C_mpi_test.c \
 		../dev-tools/cuda/add.cu

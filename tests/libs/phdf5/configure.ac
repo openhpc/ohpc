@@ -58,7 +58,7 @@ FCFLAGS="-I ${HDF5_INC} ${FCLAGS}"
 LDFLAGS="-L${HDF5_LIB} ${LDFLAGS}"
 
 # Set subdirectories
-AC_CONFIG_FILES(Makefile tests/Makefile tests/ohpc_module/Makefile)
+AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
 AC_OUTPUT()
@@ -66,7 +66,7 @@ AC_OUTPUT()
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
-echo Package version............... : $PACKAGE-$VERSION
+echo Package version................ : $PACKAGE-$VERSION
 echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
 echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
 echo

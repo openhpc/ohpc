@@ -1,38 +1,35 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
 check_rms
-rm=$RESOURCE_MANAGER
+export RM=$RESOURCE_MANAGER
 
 CMD_TIMEOUT="1:20"
 NODES=2
-TASKS=`tasks_count 8`
+TASKS=$(tasks_count 8)
 ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
 
-@test "[libs/PHDF5] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s C_mpi_test ];then
-	flunk "C_mpi_test binary does not exist"
-    fi
+@test "[libs/PHDF5] MPI C binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s C_mpi_test ]; then
+		flunk "C_mpi_test binary does not exist"
+	fi
 
-    run_mpi_binary -t $CMD_TIMEOUT ./C_mpi_test $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t $CMD_TIMEOUT ./C_mpi_test "$ARGS" $NODES "$TASKS"
+	assert_success
 }
 
-@test "[libs/PHDF5] Parallel Fortran binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s F_mpi_test ];then
-	flunk "F_mpi_test binary does not exist"
-    fi
+@test "[libs/PHDF5] Parallel Fortran binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s F_mpi_test ]; then
+		flunk "F_mpi_test binary does not exist"
+	fi
 
-    run_mpi_binary -t $CMD_TIMEOUT ./F_mpi_test $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t $CMD_TIMEOUT ./F_mpi_test "$ARGS" $NODES "$TASKS"
+	assert_success
 }
-
-
-
