@@ -5,17 +5,17 @@ diff -urN scalapack/scalapack-2.0.2-orig/Makefile scalapack/scalapack-2.0.2/Make
  
  all: lib exe example
  
--lib: blacslib toolslib pblaslib redistlib scalapacklib
-+lib: blacslib toolslib pblaslib redistlib scalapacklib shared
+-SCALAPACKLIBS=toolslib pblaslib redistlib scalapacklib
++SCALAPACKLIBS=toolslib pblaslib redistlib scalapacklib shared
  
- exe: blacsexe pblasexe redistexe scalapackexe
- 
+ $(SCALAPACKLIBS): blacslib
+ lib: $(SCALAPACKLIBS)
 @@ -107,3 +107,6 @@
  cleanexample:
  	( cd EXAMPLE; $(MAKE) clean )
  
 +shared: scalapacklib
-+	( mkdir tmp ; cd tmp ; ar x ../$(SCALAPACKLIB) ; $(CC) -shared -o ../libscalapack.so.2.0.2 * -Wl,-soname=libscalapack.so.2 ; cd .. )
++	( mkdir tmp ; cd tmp ; ar x ../$(SCALAPACKLIB) ; $(CC) -shared -o ../libscalapack.so.2.2.2 * -Wl,-soname=libscalapack.so.2 ; cd .. )
 +
 diff -urN scalapack/scalapack-2.0.2-orig/SLmake.inc.example scalapack/scalapack-2.0.2/SLmake.inc.example
 --- scalapack/scalapack-2.0.2-orig/SLmake.inc.example	2011-11-01 18:24:54.000000000 +0100
@@ -28,7 +28,7 @@ diff -urN scalapack/scalapack-2.0.2-orig/SLmake.inc.example scalapack/scalapack-
 -FCFLAGS       = -O3
 -CCFLAGS       = -O3
 +NOOPT         = -fPIC
-+FCFLAGS       = $(CFLAGS) $(NOOPT) $(GNU14FCFLAGS)
++FCFLAGS       = $(FFLAGS) $(NOOPT) $(GNU14FCFLAGS)
 +CCFLAGS       = $(CFLAGS) $(NOOPT)
  FCLOADER      = $(FC)
  CCLOADER      = $(CC)

@@ -25,14 +25,13 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogeneous computing
 License:        netlib ScaLAPACK License
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        2.2.0
+Version:        2.2.2
 Release:        1%{?dist}
 # This is freely distributable without any restrictions.
 Url:            https://netlib.org/scalapack/
 Source0:        https://github.com/Reference-ScaLAPACK/scalapack/archive/refs/tags/v%{version}.tar.gz
 Source1:        baselibs.conf
-Patch0:         scalapack-2.0.2-shared-lib.patch
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Patch0:         scalapack-2.2.2-shared-lib.patch
 BuildRequires:  make
 
 %description
@@ -73,6 +72,7 @@ cp SLmake.inc.example SLmake.inc
 %ohpc_setup_compiler
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CFLAGS="${CFLAGS} -Wno-implicit-int"
+export FFLAGS="${FCFLAGS}"
 
 %if "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
@@ -100,8 +100,8 @@ install -m 644 SLmake.inc ${RPM_BUILD_ROOT}%{install_path}/etc
 install -m 755 *so* ${RPM_BUILD_ROOT}%{install_path}/lib
 
 pushd ${RPM_BUILD_ROOT}%{install_path}/lib
-ln -fs libscalapack.so.2.0.2 libscalapack.so.2
-ln -s libscalapack.so.2.0.2 libscalapack.so
+ln -fs libscalapack.so.2.2.2 libscalapack.so.2
+ln -s libscalapack.so.2.2.2 libscalapack.so
 popd
 
 # OpenHPC module file
