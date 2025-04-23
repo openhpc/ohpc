@@ -1,11 +1,12 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
+# shellcheck disable=SC1091
+#
+export MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 cd libs/scalapack || exit 1
@@ -15,34 +16,33 @@ export BATS_JUNIT_CLASS=scalapack
 
 ./bootstrap || exit 1
 
-for compiler in $COMPILER_FAMILIES ; do
+for COMPILER in ${COMPILER_FAMILIES}; do
 
-    # gnu families only
-    [[ ! $compiler =~ gnu ]] && continue
-    
-    for mpi in $MPI_FAMILIES ; do
+	# gnu families only
+	[[ ! "${COMPILER}" =~ gnu ]] && continue
 
-	echo " "
-	echo " "
-	echo "-------------------------------------------------------"
-	echo "Libraries: scalapack tests: $compiler-$mpi"
-	echo "-------------------------------------------------------"
+	for MPI in ${MPI_FAMILIES}; do
 
-	module purge          || exit 1
-        module load prun      || exit 1
-	module load $compiler || exit 1
-	module load $mpi      || exit 1
-	module load scalapack || exit 1
+		echo " "
+		echo " "
+		echo "-------------------------------------------------------"
+		echo "Libraries: scalapack tests: ${COMPILER}-${MPI}"
+		echo "-------------------------------------------------------"
 
-	./configure           || exit 1
-	make clean            || exit 1
-	make -k check         || status=1
+		module purge || exit 1
+		module load prun || exit 1
+		module load "${COMPILER}" || exit 1
+		module load "${MPI}" || exit 1
+		module load scalapack || exit 1
 
-        save_logs_mpi_family tests $compiler $mpi
+		./configure || exit 1
+		make clean || exit 1
+		make -k check || status=1
 
-	make distclean
-    done
+		save_logs_mpi_family tests "${COMPILER}" "${MPI}"
+
+		make distclean
+	done
 done
 
-exit ${status}
-
+exit "${status}"

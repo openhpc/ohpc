@@ -26,6 +26,9 @@ codespell-lint:
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
+		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
+		../../tests/libs/scalapack/tests/rm_execution \
+		../../tests/libs/scalapack/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 
@@ -57,7 +60,10 @@ whitespace-lint:
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
-		tests/libs/phdf5/ohpc-tests/test_compiler_families \
+		tests/libs/phdf5/ohpc-tests/test_mpi_families \
+		tests/libs/scalapack/ohpc-tests/test_mpi_families \
+		tests/libs/scalapack/tests/rm_execution \
+		tests/libs/scalapack/tests/test_module \
 		tests/libs/phdf5/tests/rm_execution \
 		tests/libs/phdf5/tests/test_module \
 		tests/libs/plasma/tests/* \
@@ -99,6 +105,9 @@ shellcheck-lint:
 		../../tests/libs/phdf5/tests/test_module \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
+		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
+		../../tests/libs/scalapack/tests/rm_execution \
+		../../tests/libs/scalapack/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 	shellcheck --exclude=SC1091,SC2030,SC2031 \
@@ -128,6 +137,9 @@ shfmt-lint:
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/phdf5/tests/rm_execution \
 		../../tests/libs/phdf5/tests/test_module \
+		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
+		../../tests/libs/scalapack/tests/rm_execution \
+		../../tests/libs/scalapack/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 	shfmt -w -d \

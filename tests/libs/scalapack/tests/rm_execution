@@ -1,59 +1,64 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
 # -*-sh-*-
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-testname="libs/ScaLAPACK"
+	TESTNAME="libs/ScaLAPACK"
 
-NODES=2
-TASKS=`tasks_count 8`
-ARGS=0
+	NODES=2
+	TASKS=$(tasks_count 8)
+	ARGS=0
 
-if [ ! -z "$SIMPLE_CI" ]; then
-    export OMPI_MCA_btl="self,tcp"
-    TASKS=4
-fi
+	if [ -n "${SIMPLE_CI}" ]; then
+		export OMPI_MCA_btl="self,tcp"
+		TASKS=4
+	fi
 
-@test "[$testname/PCSCAEX] CPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s pcscaex ];then
-	flunk "pcscaex binary does not exist"
-    fi
-
-    run_mpi_binary ./pcscaex $ARGS $NODES $TASKS
-    assert_success
+	export TESTNAME NODES TASKS ARGS
 }
 
-@test "[$testname/PDSCAEX] DPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s pdscaex ];then
-	flunk "pdscaex binary does not exist"
-    fi
+@test "[$TESTNAME/PCSCAEX] CPCGESV under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s pcscaex ]; then
+		flunk "pcscaex binary does not exist"
+	fi
 
-    run_mpi_binary ./pdscaex $ARGS $NODES $TASKS
-    assert_success
+	echo run_mpi_binary ./pcscaex "${ARGS}" "${NODES}" "${TASKS}"
+	printenv
+	run_mpi_binary ./pcscaex "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname/PSSCAEX] SPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s psscaex ];then
-	flunk "psscaex binary does not exist"
-    fi
+@test "[$TESTNAME/PDSCAEX] DPCGESV under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s pdscaex ]; then
+		flunk "pdscaex binary does not exist"
+	fi
 
-    run_mpi_binary ./psscaex $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary ./pdscaex "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname/PZSCAEX] ZPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s pzscaex ];then
-	flunk "pzscaex binary does not exist"
-    fi
+@test "[$TESTNAME/PSSCAEX] SPCGESV under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s psscaex ]; then
+		flunk "psscaex binary does not exist"
+	fi
 
-    run_mpi_binary ./pzscaex $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary ./psscaex "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
+}
+
+@test "[$TESTNAME/PZSCAEX] ZPCGESV under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	if [ ! -s pzscaex ]; then
+		flunk "pzscaex binary does not exist"
+	fi
+
+	run_mpi_binary ./pzscaex "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
