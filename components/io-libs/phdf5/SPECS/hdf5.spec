@@ -78,6 +78,12 @@ export MPICXX=mpicxx
 # the files from gfortran 11.1.0.
 export FCFLAGS="-I $MPI_DIR/include/mpi/gfortran/11.1.0 $FCFLAGS"
 export FCFLAGS="$FCFLAGS -Wno-array-temporaries"
+# The current configure script resets all flags if it finds the
+# string "Intel" in the output of the fortran compiler.
+# As we are using the "Intel" MPI it will find the string
+# but not because it is an Intel compiler. Fortunately
+# it is possible to set compiler flags via I_MPI_FCFLAGS.
+export I_MPI_FCFLAGS="$FCFLAGS"
 export CFLAGS="$CFLAGS -Wno-redundant-decls"
 %endif
 
