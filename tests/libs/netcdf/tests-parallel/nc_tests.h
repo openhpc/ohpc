@@ -27,10 +27,10 @@ for conditions of use.
 /** Useful define for tests. */
 /** \{ */
 #define MEGABYTE 1048576
-#define HALF_MEG (MEGABYTE/2)
+#define HALF_MEG (MEGABYTE / 2)
 #define MILLION 1000000
 #define SIXTEEN_MEG 16777216
-#define FOUR_MEG (SIXTEEN_MEG/4)
+#define FOUR_MEG (SIXTEEN_MEG / 4)
 #define THIRTY_TWO_MEG (SIXTEEN_MEG * 2)
 #define SIXTY_FOUR_MEG (SIXTEEN_MEG * 4)
 #define ONE_TWENTY_EIGHT_MEG (SIXTEEN_MEG * 8)

@@ -37,6 +37,4 @@ CXX_read_LDFLAGS  = $(CXX_LDFLAGS)
 TESTS            += test_CXX_module
 TESTS            += test_Fortran_module
 endif
-TESTS            += nctest
-TESTS            += compare_test_files.sh
 TESTS            += test_netcdf

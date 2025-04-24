@@ -1,172 +1,196 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 8
 # -*-sh-*-
 
 load ./common/test_helper_functions
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
+setup_file() {
+	check_rms
 
-check_rms
+	TESTNAME="libs/NetCDF"
+	if [ "${PARALLEL_ENABLED}" == "no" ]; then
+		DELIMITER="${LMOD_FAMILY_COMPILER}"
+	else
+		DELIMITER="${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI}"
+	fi
 
-testname="libs/NetCDF"
-if [ "$PARALLEL_ENABLED" == "no" ]; then
-	delimiter="$LMOD_FAMILY_COMPILER"
-else
-	delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
-fi
-
-@test "[$testname] ncdump availability ($delimiter)" {
-    run which ncdump
-    assert_success
-
-    run ncdump simple_xy_nc4.nc.ref
-    assert_success
+	export TESTNAME DELIMITER
 }
 
-@test "[$testname] verify nc4/hdf5 available for C interface ($delimiter)" {
-    run nc-config --has-nc4
-    assert_output "yes"
-    run nc-config --has-hdf5
-    assert_output "yes"
+setup() {
+	C_DATA="$(mktemp)"
+	F_DATA="$(mktemp)"
+	CXX_DATA="$(mktemp)"
+	TEST_DATA="$(mktemp)"
+
+	export C_DATA F_DATA CXX_DATA TEST_DATA
 }
 
-@test "[$testname] verify nc4 available for Fortran interface ($delimiter)" {
-    if [ "$ALL_ENABLED" == "no" ]; then
-        skip "Skipping Fortran tests as requested"
-    fi
-    run nf-config --has-nc4
-    assert_output "yes"
+teardown() {
+	rm -f "${C_DATA}" "${F_DATA}" "${CXX_DATA}" "${TEST_DATA}"
 }
 
-@test "[$testname] verify nc4 available for C++ interface ($delimiter)" {
-    skip "option no longer supported"
-    run ncxx4-config --has-nc4
-    assert_output "yes"
+@test "[${TESTNAME}] ncdump availability (${DELIMITER})" {
+	run which ncdump
+	assert_success
+
+	run ncdump simple_xy_nc4.nc.ref
+	assert_success
 }
 
-@test "[$testname] C write/read  ($RESOURCE_MANAGER/$delimiter)" {
-    if [ ! -x C_write ];then
-        flunk "C_write binary not available"
-    fi
+@test "[${TESTNAME}] nctest availability (${DELIMITER})" {
+	if [ ! -x nctest ]; then
+		flunk "nctest binary not available"
+	fi
 
-    if [ ! -x C_read ];then
-        flunk "C_read binary not available"
-    fi
+	run ./nctest
+	assert_success
 
-    rm -f simple_xy_nc4.nc
+	run ls nctest_classic.nc
+	assert_success
+	cmp nctest_classic.nc ref_nctest_classic.nc
+	cmp nctest_64bit_offset.nc ref_nctest_64bit_offset.nc
+}
 
-    run ./C_read
-    assert_failure
+@test "[${TESTNAME}] verify nc4/hdf5 available for C interface (${DELIMITER})" {
+	run nc-config --has-nc4
+	assert_output "yes"
+	run nc-config --has-hdf5
+	assert_output "yes"
+}
 
-    run run_serial_binary ./C_write
-    assert_success
+@test "[${TESTNAME}] verify nc4 available for Fortran interface (${DELIMITER})" {
+	if [ "$ALL_ENABLED" == "no" ]; then
+		skip "Skipping Fortran tests as requested"
+	fi
+	run nf-config --has-nc4
+	assert_output "yes"
+}
 
-    run run_serial_binary ./C_read
-    assert_success
+@test "[${TESTNAME}] verify nc4 available for C++ interface (${DELIMITER})" {
+	skip "option no longer supported"
+	run ncxx4-config --has-nc4
+	assert_output "yes"
+}
 
-    # Verify contents against C ref
+@test "[${TESTNAME}] C write/read  ($RESOURCE_MANAGER/${DELIMITER})" {
+	if [ ! -x C_write ]; then
+		flunk "C_write binary not available"
+	fi
 
-    ncdump -n test simple_xy_nc4.nc.ref > .c.data.ascii
-    ncdump -n test simple_xy_nc4.nc     > .test.data.ascii
+	if [ ! -x C_read ]; then
+		flunk "C_read binary not available"
+	fi
 
-    run ls .c.data.ascii
-    assert_success
+	rm -f simple_xy_nc4.nc
 
-    run ls .test.data.ascii
-    assert_success
+	run ./C_read
+	assert_failure
 
-    run diff .c.data.ascii .test.data.ascii
-    assert_success
+	run run_serial_binary ./C_write
+	assert_success
 
-    rm -f .c.data.ascii
-    rm -f .test.data.ascii
-    rm -f simple_xy_nc4.nc
+	run run_serial_binary ./C_read
+	assert_success
+
+	# Verify contents against C ref
+
+	ncdump -n test simple_xy_nc4.nc.ref >"${C_DATA}"
+	ncdump -n test simple_xy_nc4.nc >"${TEST_DATA}"
+
+	run ls "${C_DATA}"
+	assert_success
+
+	run ls "${TEST_DATA}"
+	assert_success
+
+	run diff "${C_DATA}" "${TEST_DATA}"
+	assert_success
+
+	rm -f simple_xy_nc4.nc
 
 }
 
+@test "[${TESTNAME}] Fortran write/read ($RESOURCE_MANAGER/${DELIMITER})" {
+	printenv
+	if [ "$ALL_ENABLED" == "no" ]; then
+		skip "Skipping Fortran tests as requested"
+	fi
+	if [ ! -x F90_write ]; then
+		flunk "F90_write binary not available"
+	fi
 
-@test "[$testname] Fortran write/read ($RESOURCE_MANAGER/$delimiter)" {
-    if [ "$ALL_ENABLED" == "no" ]; then
-        skip "Skipping Fortran tests as requested"
-    fi
-    if [ ! -x F90_write ];then
-        flunk "F90_write binary not available"
-    fi
+	if [ ! -x F90_read ]; then
+		flunk "F90_read binary not available"
+	fi
 
-    if [ ! -x F90_read ];then
-        flunk "F90_read binary not available"
-    fi
+	rm -f simple_xy_nc4.nc
 
-    rm -f simple_xy_nc4.nc
+	run run_serial_binary ./F90_write
+	assert_success
 
-    run run_serial_binary ./F90_write
-    assert_success
+	run ls simple_xy_nc4.nc
+	assert_success
 
-    run ls simple_xy_nc4.nc
-    assert_success
+	run run_serial_binary ./F90_read
+	assert_success
 
-    run run_serial_binary ./F90_read
-    assert_success
+	# Verify contents against C ref
 
-    # Verify contents against C ref
+	ncdump -n test simple_xy_nc4.nc.ref >"${C_DATA}"
+	ncdump -n test simple_xy_nc4.nc >"${F_DATA}"
 
-    ncdump -n test simple_xy_nc4.nc.ref > .c.data.ascii
-    ncdump -n test simple_xy_nc4.nc > .f.data.ascii
+	run ls "${C_DATA}"
+	assert_success
 
-    run ls .c.data.ascii
-    assert_success
+	run ls "${F_DATA}"
+	assert_success
 
-    run ls .f.data.ascii
-    assert_success
+	run diff "${C_DATA}" "${F_DATA}"
+	assert_success
 
-    run diff .c.data.ascii .f.data.ascii
-    assert_success
-
-    rm -f .c.data.ascii
-    rm -f .f.data.ascii
-    rm -f simple_xy_nc4.nc
+	rm -f simple_xy_nc4.nc
 }
 
-@test "[$testname] C++ write/read ($RESOURCE_MANAGER/$delimiter)" {
-    if [ "$ALL_ENABLED" == "no" ]; then
-        skip "Skipping C++ tests as requested"
-    fi
-    if [ ! -x CXX_write ];then
-        flunk "CXX_write binary not available"
-    fi
+@test "[${TESTNAME}] C++ write/read ($RESOURCE_MANAGER/${DELIMITER})" {
+	if [ "$ALL_ENABLED" == "no" ]; then
+		skip "Skipping C++ tests as requested"
+	fi
+	if [ ! -x CXX_write ]; then
+		flunk "CXX_write binary not available"
+	fi
 
-    if [ ! -x CXX_read ];then
-        flunk "CXX_read binary not available"
-    fi
+	if [ ! -x CXX_read ]; then
+		flunk "CXX_read binary not available"
+	fi
 
-    rm -f simple_xy_nc4.nc
+	rm -f simple_xy_nc4.nc
 
-    run run_serial_binary ./CXX_write
-    assert_success
+	run run_serial_binary ./CXX_write
+	assert_success
 
-    run ls simple_xy.nc
-    assert_success
+	run ls simple_xy.nc
+	assert_success
 
-    run run_serial_binary ./CXX_read
-    assert_success
+	run run_serial_binary ./CXX_read
+	assert_success
 
-    # Verify contents against C ref
+	# Verify contents against C ref
 
-    ncdump -n test simple_xy_nc4.nc.ref > .c.data.ascii
-    ncdump -n test simple_xy.nc > .cxx.data.ascii
+	ncdump -n test simple_xy_nc4.nc.ref >"${C_DATA}"
+	ncdump -n test simple_xy.nc >"${CXX_DATA}"
 
-    run ls .c.data.ascii
-    assert_success
+	run ls "${C_DATA}"
+	assert_success
 
-    run ls .cxx.data.ascii
-    assert_success
+	run ls "${CXX_DATA}"
+	assert_success
 
-    run diff .c.data.ascii .cxx.data.ascii
-    assert_success
+	run diff "${C_DATA}" "${CXX_DATA}"
+	assert_success
 
-    rm -f .c.data.ascii
-    rm -f .cxx.data.ascii
-    rm -f simple_xy.nc
+	rm -f simple_xy.nc
 }

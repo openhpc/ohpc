@@ -1,89 +1,96 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
 load ./common/test_helper_functions
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-testname="libs/NetCDF"
-delimiter="$RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+	TESTNAME="libs/NetCDF"
+	DELIMITER="${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI}"
 
-if [ ! -z "$SIMPLE_CI" ]; then
-    export OMPI_MCA_btl="self,tcp"
-fi
+	if [ -n "${SIMPLE_CI}" ]; then
+		export OMPI_MCA_btl="self,tcp"
+	fi
 
-@test "[$testname] C parallel I/O  ($delimiter)" {
-    if [ ! -x C_parallel ];then
-        flunk "C_parallel binary not available"
-    fi
-
-    rm -f tst_parallel.nc
-
-    run_mpi_binary ./C_parallel "atest" 2 4
-    assert_success
-
-    run ls tst_parallel.nc
-    assert_success
-
-    # Verify contents against reference file
-
-    ncdump -n test tst_parallel.nc.ref > .ref.data.ascii
-    ncdump -n test tst_parallel.nc     > .test.data.ascii
-
-    run ls .ref.data.ascii
-    assert_success
-
-    run ls .test.data.ascii
-    assert_success
-
-    run diff .ref.data.ascii .test.data.ascii
-    assert_success
-
-    rm -f .ref.data.ascii
-    rm -f .test.data.ascii
-    rm -f tst_parallel.nc
+	export TESTNAME DELIMITER
 }
 
+setup() {
+	REF_DATA="$(mktemp)"
+	TEST_DATA="$(mktemp)"
 
-@test "[$testname] Fortran parallel I/O ($delimiter)" {
-    if [ "$ALL_ENABLED" == "no" ]; then
-        skip "Skipping Fortran tests as requested"
-    fi
-    if [ ! -x F90_parallel ];then
-        flunk "F90_parallel binary not available"
-    fi
-
-    rm -f f90tst_parallel.nc
-
-    run_mpi_binary -t "00:02:00" ./F90_parallel "atest" 2 4
-    assert_success
-
-    run ls f90tst_parallel.nc
-    assert_success
-
-    # Verify contents against reference file
-
-    ncdump -n test f90tst_parallel.nc.ref > .ref.data.ascii
-    ncdump -n test f90tst_parallel.nc     > .test.data.ascii
-
-    run ls .ref.data.ascii
-    assert_success
-
-    run ls .test.data.ascii
-    assert_success
-
-    run diff .ref.data.ascii .test.data.ascii
-    assert_success
-
-    rm -f .ref.data.ascii
-    rm -f .test.data.ascii
-    rm -f f90tst_parallel.nc
+	export REF_DATA TEST_DATA
 }
 
+teardown() {
+	rm -f "${REF_DATA}" "${TEST_DATA}"
+}
 
+@test "[${TESTNAME}] C parallel I/O  (${DELIMITER})" {
+	if [ ! -x C_parallel ]; then
+		flunk "C_parallel binary not available"
+	fi
+
+	rm -f tst_parallel.nc
+
+	run_mpi_binary ./C_parallel "atest" 2 4
+	assert_success
+
+	run ls tst_parallel.nc
+	assert_success
+
+	# Verify contents against reference file
+
+	ncdump -n test tst_parallel.nc.ref >"${REF_DATA}"
+	ncdump -n test tst_parallel.nc >"${TEST_DATA}"
+
+	run ls "${REF_DATA}"
+	assert_success
+
+	run ls "${TEST_DATA}"
+	assert_success
+
+	run diff "${REF_DATA}" "${TEST_DATA}"
+	assert_success
+
+	rm -f tst_parallel.nc
+}
+
+@test "[${TESTNAME}] Fortran parallel I/O (${DELIMITER})" {
+	if [ "$ALL_ENABLED" == "no" ]; then
+		skip "Skipping Fortran tests as requested"
+	fi
+	if [ ! -x F90_parallel ]; then
+		flunk "F90_parallel binary not available"
+	fi
+
+	rm -f f90tst_parallel.nc
+
+	run_mpi_binary -t "00:02:00" ./F90_parallel "atest" 2 4
+	assert_success
+
+	run ls f90tst_parallel.nc
+	assert_success
+
+	# Verify contents against reference file
+
+	ncdump -n test f90tst_parallel.nc.ref >"${REF_DATA}"
+	ncdump -n test f90tst_parallel.nc >"${TEST_DATA}"
+
+	run ls "${REF_DATA}"
+	assert_success
+
+	run ls "${TEST_DATA}"
+	assert_success
+
+	run diff "${REF_DATA}" "${TEST_DATA}"
+	assert_success
+
+	rm -f f90tst_parallel.nc
+}

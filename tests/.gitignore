@@ -14,3 +14,7 @@ Makefile
 .deps/
 *.trs
 job*out
+*.log.xml
+*.log
+report.xml
+*.o

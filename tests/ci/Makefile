@@ -26,6 +26,11 @@ codespell-lint:
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
+		../../tests/libs/netcdf/ohpc-tests/test_mpi_families \
+		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
+		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
+		../../tests/libs/netcdf/tests/test_C_module \
+		../../tests/libs/netcdf/tests/test_netcdf \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
 		../../tests/libs/scalapack/tests/test_module \
@@ -61,6 +66,11 @@ whitespace-lint:
 		tests/libs/superlu_dist/tests/test_module \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		tests/libs/phdf5/ohpc-tests/test_mpi_families \
+		tests/libs/netcdf/ohpc-tests/test_mpi_families \
+		tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
+		tests/libs/netcdf/tests/test_C_module \
+		tests/libs/netcdf/tests/test_netcdf \
+		tests/libs/netcdf/tests-parallel/test_pnetcdf \
 		tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		tests/libs/scalapack/tests/rm_execution \
 		tests/libs/scalapack/tests/test_module \
@@ -103,6 +113,9 @@ shellcheck-lint:
 		../../tests/perf-tools/scalasca/tests/test_module \
 		../../tests/libs/phdf5/tests/rm_execution \
 		../../tests/libs/phdf5/tests/test_module \
+		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
+		../../tests/libs/netcdf/tests/test_C_module \
+		../../tests/libs/netcdf/tests/test_netcdf \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
@@ -137,6 +150,11 @@ shfmt-lint:
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/phdf5/tests/rm_execution \
 		../../tests/libs/phdf5/tests/test_module \
+		../../tests/libs/netcdf/ohpc-tests/test_mpi_families \
+		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
+		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
+		../../tests/libs/netcdf/tests/test_C_module \
+		../../tests/libs/netcdf/tests/test_netcdf \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
 		../../tests/libs/scalapack/tests/test_module \
@@ -152,6 +170,10 @@ shfmt-lint:
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
 	clang-format --dry-run --Werror \
+		../libs/netcdf/tests/*.c \
+		../libs/netcdf/tests/*.h \
+		../libs/netcdf/tests-parallel/*.c \
+		../libs/netcdf/tests-parallel/*.h \
 		../libs/phdf5/tests/C_mpi_test.c \
 		../dev-tools/cuda/add.cu \
 		../../tests/libs/plasma/tests/*.c \

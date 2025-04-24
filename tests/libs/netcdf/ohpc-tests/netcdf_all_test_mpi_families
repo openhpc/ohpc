@@ -7,10 +7,10 @@ export MAKEFLAGS=""
 
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
-cd libs/netcdf            || exit 1
+cd libs/netcdf || exit 1
 export BATS_JUNIT_CLASS=NetCDF
 
 # bootstrap the local autotools project if necessary
@@ -20,8 +20,8 @@ if [ -n "${SIMPLE_CI}" ]; then
 	export OMPI_MCA_btl="self,tcp"
 fi
 
-for compiler in ${COMPILER_FAMILIES} ; do
-	for mpi in ${MPI_FAMILIES} ; do
+for compiler in ${COMPILER_FAMILIES}; do
+	for mpi in ${MPI_FAMILIES}; do
 		export PARALLEL_ENABLED=yes
 		export ALL_ENABLED=yes
 		echo " "
@@ -30,19 +30,19 @@ for compiler in ${COMPILER_FAMILIES} ; do
 		echo "User Libraries: NetCDF tests: ${compiler}-${mpi}"
 		echo "----------------------------------------------------------"
 
-		module purge                || exit 1
-		module load prun            || exit 1
-		module load "${compiler}"   || exit 1
-		module load "${mpi}"        || exit 1
-		module load netcdf          || exit 1
-		module load netcdf-cxx      || exit 1
-		module load netcdf-fortran  || exit 1
+		module purge || exit 1
+		module load prun || exit 1
+		module load "${compiler}" || exit 1
+		module load "${mpi}" || exit 1
+		module load netcdf || exit 1
+		module load netcdf-cxx || exit 1
+		module load netcdf-fortran || exit 1
 
-		./configure --enable-all    || exit 1
-		make clean                  || exit 1
-		make -k check               || status=1
+		./configure --enable-all || exit 1
+		make clean || exit 1
+		make -k check || status=1
 
-		save_logs_mpi_family tests          "${compiler}" "${mpi}"
+		save_logs_mpi_family tests "${compiler}" "${mpi}"
 		save_logs_mpi_family tests-parallel "${compiler}" "${mpi}"
 
 		make distclean
@@ -58,16 +58,16 @@ for compiler in ${COMPILER_FAMILIES} ; do
 	echo "User Libraries: NetCDF tests: ${compiler}"
 	echo "----------------------------------------------------------"
 
-	module purge                   || exit 1
-	module load prun               || exit 1
-	module load "${compiler}"      || exit 1
-	module load netcdf             || exit 1
-	module load netcdf-cxx         || exit 1
-	module load netcdf-fortran     || exit 1
+	module purge || exit 1
+	module load prun || exit 1
+	module load "${compiler}" || exit 1
+	module load netcdf || exit 1
+	module load netcdf-cxx || exit 1
+	module load netcdf-fortran || exit 1
 
 	./configure --enable-all --disable-parallel || exit 1
-	make clean                     || exit 1
-	make -k check                  || status=1
+	make clean || exit 1
+	make -k check || status=1
 
 	save_logs_compiler_family tests "${compiler}"
 
