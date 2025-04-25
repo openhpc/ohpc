@@ -49,7 +49,8 @@
 
 #include <mpi.h>
 #include <stdio.h>
-#if (((defined __STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) || (defined HAVE_STDINT_H))
+#if (((defined __STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) || \
+     (defined HAVE_STDINT_H))
 #include <stdint.h>
 #endif /* (((defined __STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) || (defined HAVE_STDINT_H)) */
 #include <stdlib.h>
@@ -62,62 +63,64 @@
 /*                   */
 /*********************/
 
-int
-main (
-int                 argc,
-char *              argv[])
+int main(int argc, char *argv[])
 {
-  SCOTCH_Strat        stradat;
+	SCOTCH_Strat stradat;
 
-  SCOTCH_errorProg (argv[0]);
+	SCOTCH_errorProg(argv[0]);
 
-  printf ("Parallel mapping strategy, SCOTCH_STRATDEFAULT\n");
+	printf("Parallel mapping strategy, SCOTCH_STRATDEFAULT\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphMapBuild (&stradat, SCOTCH_STRATDEFAULT, 16, 16, 0.03);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphMapBuild(&stradat, SCOTCH_STRATDEFAULT, 16, 16, 0.03);
+	SCOTCH_stratExit(&stradat);
 
-  printf ("Parallel mapping strategy, SCOTCH_STRATRECURSIVE\n");
+	printf("Parallel mapping strategy, SCOTCH_STRATRECURSIVE\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphMapBuild (&stradat, SCOTCH_STRATRECURSIVE, 16, 16, 0.03);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphMapBuild(&stradat, SCOTCH_STRATRECURSIVE, 16, 16,
+				   0.03);
+	SCOTCH_stratExit(&stradat);
 
-  printf ("Parallel ordering strategy, SCOTCH_STRATDEFAULT\n");
+	printf("Parallel ordering strategy, SCOTCH_STRATDEFAULT\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATDEFAULT, 1, 0, 0.2);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphOrderBuild(&stradat, SCOTCH_STRATDEFAULT, 1, 0, 0.2);
+	SCOTCH_stratExit(&stradat);
 
-  printf ("Parallel ordering strategy, SCOTCH_STRATLEVELMAX\n");
+	printf("Parallel ordering strategy, SCOTCH_STRATLEVELMAX\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEVELMAX, 1, 3, 0.2);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphOrderBuild(&stradat, SCOTCH_STRATLEVELMAX, 1, 3, 0.2);
+	SCOTCH_stratExit(&stradat);
 
-  printf ("Parallel ordering strategy, SCOTCH_STRATLEVELMIN\n");
+	printf("Parallel ordering strategy, SCOTCH_STRATLEVELMIN\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEVELMIN, 1, 3, 0.2);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphOrderBuild(&stradat, SCOTCH_STRATLEVELMIN, 1, 3, 0.2);
+	SCOTCH_stratExit(&stradat);
 
-  printf ("Parallel ordering strategy, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN\n");
+	printf("Parallel ordering strategy, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN, 1, 3, 0.2);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphOrderBuild(
+		&stradat, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN, 1, 3,
+		0.2);
+	SCOTCH_stratExit(&stradat);
 
-  printf ("Parallel ordering strategy, SCOTCH_STRATLEAFSIMPLE\n");
+	printf("Parallel ordering strategy, SCOTCH_STRATLEAFSIMPLE\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEAFSIMPLE, 1, 0, 0.2);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphOrderBuild(&stradat, SCOTCH_STRATLEAFSIMPLE, 1, 0,
+				     0.2);
+	SCOTCH_stratExit(&stradat);
 
-  printf ("Parallel ordering strategy, SCOTCH_STRATSEPASIMPLE\n");
+	printf("Parallel ordering strategy, SCOTCH_STRATSEPASIMPLE\n");
 
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATSEPASIMPLE, 1, 0, 0.2);
-  SCOTCH_stratExit (&stradat);
+	SCOTCH_stratInit(&stradat);
+	SCOTCH_stratDgraphOrderBuild(&stradat, SCOTCH_STRATSEPASIMPLE, 1, 0,
+				     0.2);
+	SCOTCH_stratExit(&stradat);
 
-  return (0);
+	return (0);
 }

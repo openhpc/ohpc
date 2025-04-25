@@ -39,6 +39,8 @@ codespell-lint:
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
 		../../tests/libs/scalapack/tests/test_module \
+		../../tests/libs/ptscotch/tests/rm_execution \
+		../../tests/libs/ptscotch/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 
@@ -86,6 +88,8 @@ whitespace-lint:
 		tests/libs/scalapack/tests/test_module \
 		tests/libs/phdf5/tests/rm_execution \
 		tests/libs/phdf5/tests/test_module \
+		tests/libs/ptscotch/tests/rm_execution \
+		tests/libs/ptscotch/tests/test_module \
 		tests/libs/plasma/tests/* \
 		\*.tex
 
@@ -136,6 +140,8 @@ shellcheck-lint:
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
 		../../tests/libs/scalapack/tests/test_module \
+		../../tests/libs/ptscotch/tests/rm_execution \
+		../../tests/libs/ptscotch/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 	shellcheck --exclude=SC1091,SC2030,SC2031 \
@@ -178,6 +184,8 @@ shfmt-lint:
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
 		../../tests/libs/scalapack/tests/test_module \
+		../../tests/libs/ptscotch/tests/rm_execution \
+		../../tests/libs/ptscotch/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module
 	shfmt -w -d \
@@ -192,6 +200,7 @@ clang-format-lint:
 	clang-format --dry-run --Werror \
 		../libs/netcdf/tests/*.cpp \
 		../libs/netcdf/tests/*.c \
+		../libs/ptscotch/tests/*.c \
 		../libs/netcdf/tests/*.h \
 		../libs/netcdf/tests-parallel/*.c \
 		../libs/netcdf/tests-parallel/*.h \
