@@ -25,7 +25,7 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.6.1
+Version:        4.6.2
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:        https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
