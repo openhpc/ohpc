@@ -18,7 +18,7 @@
 %define pname pt%{base_pname}
 
 Name:	%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 7.0.1
+Version: 7.0.7
 Release: 1%{?dist}
 Summary: Graph, mesh and hypergraph partitioning library using MPI
 License: CeCILL-C
@@ -27,7 +27,6 @@ URL: http://www.labri.fr/perso/pelegrin/scotch/
 Source0: https://gitlab.inria.fr/scotch/scotch/-/archive/v%{version}/scotch-v%{version}.tar.bz2
 Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
-Patch0:  scotch-6.0.4-destdir.patch
 
 BuildRequires:	flex bison make
 BuildRequires:  zlib-devel
@@ -48,7 +47,6 @@ sparse matrix ordering.
 
 %prep
 %setup -q -n %{base_pname}-v%{version}
-%patch0 -p1
 sed s:@RPMFLAGS@:"${CFLAGS} -fPIC": < %SOURCE1 > src/Makefile.inc
 
 %build
