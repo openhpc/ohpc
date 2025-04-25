@@ -20,7 +20,7 @@ program simple_xy_rd
   implicit none
 
   ! This is the name of the data file and variable.
-  character (len = *), parameter :: FILE_NAME = "simple_xy_nc4.nc"
+  character (len = *), parameter :: FILE_NAME = "simple_xy_nc4_f.nc"
   character (len = *), parameter :: VAR_NAME = "data"
 
   ! We are reading 2D data, a 12 x 6 grid. 

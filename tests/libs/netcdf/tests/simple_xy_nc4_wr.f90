@@ -19,7 +19,7 @@ program simple_xy_wr
   use netcdf
   implicit none
 
-  character (len = *), parameter :: FILE_NAME = "simple_xy_nc4.nc"
+  character (len = *), parameter :: FILE_NAME = "simple_xy_nc4_f.nc"
   integer, parameter :: NDIMS = 2
   integer, parameter :: NX = 6, NY = 12
   integer :: ncid, varid, dimids(NDIMS)

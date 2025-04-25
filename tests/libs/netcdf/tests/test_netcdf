@@ -87,6 +87,7 @@ teardown() {
 
 	rm -f simple_xy_nc4.nc
 
+	ls -la
 	run ./C_read
 	assert_failure
 
@@ -127,12 +128,12 @@ teardown() {
 		flunk "F90_read binary not available"
 	fi
 
-	rm -f simple_xy_nc4.nc
+	rm -f simple_xy_nc4_f.nc
 
 	run run_serial_binary ./F90_write
 	assert_success
 
-	run ls simple_xy_nc4.nc
+	run ls simple_xy_nc4_f.nc
 	assert_success
 
 	run run_serial_binary ./F90_read
@@ -141,7 +142,7 @@ teardown() {
 	# Verify contents against C ref
 
 	ncdump -n test simple_xy_nc4.nc.ref >"${C_DATA}"
-	ncdump -n test simple_xy_nc4.nc >"${F_DATA}"
+	ncdump -n test simple_xy_nc4_f.nc >"${F_DATA}"
 
 	run ls "${C_DATA}"
 	assert_success
@@ -152,7 +153,7 @@ teardown() {
 	run diff "${C_DATA}" "${F_DATA}"
 	assert_success
 
-	rm -f simple_xy_nc4.nc
+	rm -f simple_xy_nc4_f.nc
 }
 
 @test "[${TESTNAME}] C++ write/read ($RESOURCE_MANAGER/${DELIMITER})" {
@@ -167,7 +168,7 @@ teardown() {
 		flunk "CXX_read binary not available"
 	fi
 
-	rm -f simple_xy_nc4.nc
+	rm -f simple_xy.nc
 
 	run run_serial_binary ./CXX_write
 	assert_success

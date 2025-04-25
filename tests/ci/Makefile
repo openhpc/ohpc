@@ -30,6 +30,8 @@ codespell-lint:
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
 		../../tests/libs/netcdf/tests/test_C_module \
+		../../tests/libs/netcdf/tests/test_CXX_module \
+		../../tests/libs/netcdf/tests/test_Fortran_module \
 		../../tests/libs/netcdf/tests/test_netcdf \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
@@ -69,6 +71,8 @@ whitespace-lint:
 		tests/libs/netcdf/ohpc-tests/test_mpi_families \
 		tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		tests/libs/netcdf/tests/test_C_module \
+		tests/libs/netcdf/tests/test_CXX_module \
+		tests/libs/netcdf/tests/test_Fortran_module \
 		tests/libs/netcdf/tests/test_netcdf \
 		tests/libs/netcdf/tests-parallel/test_pnetcdf \
 		tests/libs/scalapack/ohpc-tests/test_mpi_families \
@@ -115,6 +119,8 @@ shellcheck-lint:
 		../../tests/libs/phdf5/tests/test_module \
 		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
 		../../tests/libs/netcdf/tests/test_C_module \
+		../../tests/libs/netcdf/tests/test_CXX_module \
+		../../tests/libs/netcdf/tests/test_Fortran_module \
 		../../tests/libs/netcdf/tests/test_netcdf \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
@@ -154,6 +160,8 @@ shfmt-lint:
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
 		../../tests/libs/netcdf/tests/test_C_module \
+		../../tests/libs/netcdf/tests/test_CXX_module \
+		../../tests/libs/netcdf/tests/test_Fortran_module \
 		../../tests/libs/netcdf/tests/test_netcdf \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
@@ -170,6 +178,7 @@ shfmt-lint:
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
 	clang-format --dry-run --Werror \
+		../libs/netcdf/tests/*.cpp \
 		../libs/netcdf/tests/*.c \
 		../libs/netcdf/tests/*.h \
 		../libs/netcdf/tests-parallel/*.c \
