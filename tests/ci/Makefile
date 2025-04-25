@@ -23,6 +23,9 @@ codespell-lint:
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/test_module \
+		../../tests/perf-tools/omb/tests/rm_execution \
+		../../tests/perf-tools/omb/tests/test_module \
+		../../tests/perf-tools/omb/ohpc-tests/test_mpi_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
@@ -64,6 +67,9 @@ whitespace-lint:
 		tests/perf-tools/scorep/tests/instrumenter_test \
 		tests/perf-tools/scorep/tests/rm_execution \
 		tests/perf-tools/scorep/tests/test_module \
+		tests/perf-tools/omb/tests/rm_execution \
+		tests/perf-tools/omb/tests/test_module \
+		tests/perf-tools/omb/ohpc-tests/test_mpi_families \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
@@ -115,6 +121,9 @@ shellcheck-lint:
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
+		../../tests/perf-tools/omb/tests/rm_execution \
+		../../tests/perf-tools/omb/tests/test_module \
+		../../tests/perf-tools/omb/ohpc-tests/test_mpi_families \
 		../../tests/libs/phdf5/tests/rm_execution \
 		../../tests/libs/phdf5/tests/test_module \
 		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
@@ -152,6 +161,9 @@ shfmt-lint:
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/test_module \
+		../../tests/perf-tools/omb/tests/rm_execution \
+		../../tests/perf-tools/omb/tests/test_module \
+		../../tests/perf-tools/omb/ohpc-tests/test_mpi_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/phdf5/tests/rm_execution \

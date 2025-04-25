@@ -10,20 +10,21 @@ else
 	ERROR "TEST_ENV does not exist"
 fi
 
-setup() {
-	CMD_TIMEOUT="6:00"
+setup_file() {
+	TIMEOUT="6:00"
 	check_rms
-	export rm="$RESOURCE_MANAGER"
+
+	export TIMEOUT
 }
 
-@test "[OMB] run osu_bw on 2 nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[OMB] run osu_bw on 2 nodes under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	EXE=osu_bw
 
-	run_mpi_binary -t "$CMD_TIMEOUT" "$EXE" "-m 512" 2 2
+	run_mpi_binary -t "$TIMEOUT" "$EXE" "-m 512" 2 2
 	assert_success
 }
 
-@test "[OMB] run osu_latency on 2 nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[OMB] run osu_latency on 2 nodes under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	EXE=osu_latency
 
 	if [[ "$LMOD_FAMILY_MPI" == "openmpi5" ]]; then
@@ -32,6 +33,6 @@ setup() {
 		MESSAGE_SIZE=512
 	fi
 
-	run_mpi_binary -t "$CMD_TIMEOUT" "$EXE" "-m $MESSAGE_SIZE" 2 2
+	run_mpi_binary -t "$TIMEOUT" "$EXE" "-m $MESSAGE_SIZE" 2 2
 	assert_success
 }

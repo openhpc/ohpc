@@ -1,14 +1,13 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
+export MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
-cd perf-tools/omb         || exit 1
+cd perf-tools/omb || exit 1
 
 export BATS_JUNIT_CLASS=omb
 
@@ -16,29 +15,29 @@ export BATS_JUNIT_CLASS=omb
 
 ./bootstrap || exit 1
 
-for compiler in $COMPILER_FAMILIES ; do
-    for mpi in $MPI_FAMILIES ; do
+for COMPILER in $COMPILER_FAMILIES; do
+	for MPI in $MPI_FAMILIES; do
 
-	echo " "
-	echo " "
-	echo "-------------------------------------------------------"
-	echo "Libraries: IMB tests: $compiler-$mpi"
-	echo "-------------------------------------------------------"
+		echo " "
+		echo " "
+		echo "-------------------------------------------------------"
+		echo "Libraries: IMB tests: ${COMPILER}-${MPI}"
+		echo "-------------------------------------------------------"
 
-	module purge          || exit 1
-        module load prun      || exit 1
-	module load $compiler || exit 1
-	module load $mpi      || exit 1
-	module load omb       || exit 1
+		module purge || exit 1
+		module load prun || exit 1
+		module load "${COMPILER}" || exit 1
+		module load "${MPI}" || exit 1
+		module load omb || exit 1
 
-	./configure           || exit 1
-	make clean            || exit 1
-	make -k check         || status=1
+		./configure || exit 1
+		make clean || exit 1
+		make -k check || status=1
 
-        save_logs_mpi_family tests $compiler $mpi
+		save_logs_mpi_family tests "${COMPILER}" "${MPI}"
 
-	make distclean
-    done
+		make distclean
+	done
 done
 
-exit ${status}
+exit "${status}"
