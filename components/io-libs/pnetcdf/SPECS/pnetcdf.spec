@@ -20,22 +20,22 @@
 
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.12.3
-%global    sonum 1
+Version:   1.14.0
 Release:   1%{?dist}
 License:   NetCDF
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://cucis.ece.northwestern.edu/projects/PnetCDF
 Source0:   https://parallel-netcdf.github.io/Release/pnetcdf-%{version}.tar.gz
+# https://github.com/Parallel-NetCDF/PnetCDF/pull/178.patch
+Patch0:    0001-Fix-errors-when-building-an-RPM.patch
 
-BuildRequires:  grep
-BuildRequires:  make
-BuildRequires:  m4
-BuildRequires:  zlib-devel
-
-%if "%{compiler_family}" == "intel"
+BuildRequires: grep
+BuildRequires: make
+BuildRequires: m4
+BuildRequires: zlib-devel
+BuildRequires: perl(File::Compare)
+BuildRequires: perl(File::Copy)
 BuildRequires: libtool%{PROJ_DELIM}
-%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -49,6 +49,7 @@ attributes, and variables (> 2B array elements).
 %prep
 
 %setup -q -n pnetcdf-%{version}
+%patch -P 0 -p 1
 
 %build
 
@@ -61,10 +62,8 @@ cp /usr/lib/rpm/config.guess bin
 %endif
 %endif
 
-%if "%{compiler_family}" == "intel"
 export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
 autoreconf -if
-%endif
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
@@ -94,7 +93,7 @@ FCFLAGS="${FCFLAGS} -fPIC" \
 FFLAGS="${F77FLAGS} -fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
-%{__make}
+make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler/mpi designation
@@ -129,6 +128,7 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
