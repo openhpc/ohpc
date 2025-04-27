@@ -63,14 +63,6 @@
 #define LON_UNITS "degrees_east"
 #define MAX_ATT_LEN 80
 
-/* Handle errors by printing an error message and exiting with a
- * non-zero status. */
-#define CHECK_ERR { \
-    if (err != NC_NOERR) { \
-        nerrs++; \
-        printf("Error: %s at line %d (%s)\n", __FILE__,__LINE__,ncmpi_strerror(err)); } }
-
-
 int
 main(int argc, char **argv)
 {
