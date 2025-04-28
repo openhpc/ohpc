@@ -1,0 +1,37 @@
+From 53768c70e0a00ebad9f585e2052eadec141a8bf0 Mon Sep 17 00:00:00 2001
+From: Adrian Reber <areber@redhat.com>
+Date: Mon, 28 Apr 2025 12:08:14 +0200
+Subject: [PATCH] Handle GCC 15 errors
+
+Without this patch GCC 15 will create this error:
+
+```
+ In file included from ncmpidump.c:22:
+ ncmpidump.h:19:7: error: cannot use keyword 'false' as enumeration constant
+    19 | enum {false=0, true=1};
+       |       ^~~~~
+ ncmpidump.h:19:7: note: 'false' is a keyword with '-std=c23' onwards
+```
+
+Signed-off-by: Adrian Reber <areber@redhat.com>
+---
+ src/utils/ncmpidump/ncmpidump.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/utils/ncmpidump/ncmpidump.h b/src/utils/ncmpidump/ncmpidump.h
+index 96ba2694..290c16e9 100644
+--- a/src/utils/ncmpidump/ncmpidump.h
++++ b/src/utils/ncmpidump/ncmpidump.h
+@@ -16,7 +16,9 @@
+ #define  Printf  (void) printf
+ 
+ typedef int boolean;
++#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L
+ enum {false=0, true=1};
++#endif
+ 
+ struct ncdim {			/* dimension */
+     char name[NC_MAX_NAME];
+-- 
+2.49.0
+
