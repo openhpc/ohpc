@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname hypre
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.18.1
+Version:        2.33.0
 Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        Apache-2.0 or MIT
@@ -110,11 +110,6 @@ config/bootstrap
     F77="mpif77 $FLAGS"
 
 mkdir -p hypre/lib
-pushd FEI_mv/femli
-make %{?_smp_mflags} all CC="mpicc $FLAGS" \
-                         CXX="mpicxx $FLAGS" \
-                         F77="mpif77 $FLAGS"
-popd
 make %{?_smp_mflags} all CC="mpicc $FLAGS" \
                          CXX="mpicxx $FLAGS" \
                          F77="mpif77 $FLAGS"
