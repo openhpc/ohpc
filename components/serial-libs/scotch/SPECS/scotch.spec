@@ -49,7 +49,7 @@ sparse matrix ordering.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 %if "%{compiler_family}" == "gnu15"
-export CFLAGS="${CFLAGS} -std=gnu89"
+export CFLAGS="${CFLAGS} -std=gnu17"
 %endif
 sed s:@RPMFLAGS@:"${CFLAGS} -fPIC": < %{SOURCE1} > src/Makefile.inc
 
