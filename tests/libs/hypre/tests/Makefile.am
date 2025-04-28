@@ -1,5 +1,7 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
+AM_CFLAGS               = -Wno-implicit-function-declaration
+
 TESTS                   = ex1
 check_PROGRAMS          = ex1
 ex1_SOURCES             = ex1.c
