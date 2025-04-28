@@ -13,17 +13,18 @@
 %global ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %global pname boost
+%define version_exp %(tr "." "_" <<< %{version})
 
 Summary:        Free peer-reviewed portable C++ source libraries
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.81.0
-%define version_exp 1_81_0
+Version:        1.88.0
 Release:        1%{?dist}
 License:        Boost
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
-Source0:        https://boostorg.jfrog.io/artifactory/main/release/%{version}/source/boost_%{version_exp}.tar.gz
+Source0:        https://archives.boost.io/release/%{version}/source/boost_%{version_exp}.tar.bz2
 Patch0:         boost-1.79.0-oneapi_pch.patch
+Patch1:         boost-1.57.0-python-abi_letters.patch
 
 %if 0%{?sle_version}
 BuildRequires:  libbz2-devel
@@ -71,8 +72,8 @@ for all users with minimal restrictions.
 
 %prep
 %setup -q -n %{pname}_%{version_exp}
-%patch0 -p1
-
+%patch -P 0 -p 1
+%patch -P 1 -p 1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -111,9 +112,9 @@ cat << "EOF" >> rpm-config.jam
 %if 0%{?rhel} >= 9 || 0%{?openEuler}
 using python : %{python3_version} : %{__python3} : /usr/include/python%{python3_version} ;
 %else
-using python : %{python3_version} : %{__python3} : /usr/include/python%{python3_version}m ;
+using python : %{python3_version} : %{__python3} : /usr/include/python%{python3_version}m : : : : m ;
 %endif
-%if "%{compiler_family}" == "gnu9" || "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
 import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
