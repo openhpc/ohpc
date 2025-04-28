@@ -200,7 +200,7 @@ test_map = {
         ''
     ],
     'components/parallel-libs/boost/SPECS/boost.spec': [
-        'boost',
+        'boost boost-mpi',
         '',
         ''
     ],
@@ -313,7 +313,8 @@ for i in sys.argv[1:]:
             pkgs += ' '
 
         if len(test_map[i][0]) > 0:
-            tests += f'--enable-{test_map[i][0]}'
+            for test in test_map[i][0].split():
+                tests += f'--enable-{test} '
         if len(test_map[i][1]) > 0:
             admin_tests += f'--enable-{test_map[i][1]}'
         pkgs += test_map[i][2]
