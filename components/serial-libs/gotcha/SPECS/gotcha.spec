@@ -33,6 +33,9 @@ BuildRequires:  python3-Sphinx
 %else
 BuildRequires:  python3dist(sphinx)
 %endif
+%if "%{compiler_family}" == "intel"
+BuildRequires:  intel-oneapi-runtime-opencl
+%endif
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # Default library install path
