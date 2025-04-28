@@ -28,6 +28,7 @@ URL:       http://cucis.ece.northwestern.edu/projects/PnetCDF
 Source0:   https://parallel-netcdf.github.io/Release/pnetcdf-%{version}.tar.gz
 # https://github.com/Parallel-NetCDF/PnetCDF/pull/178.patch
 Patch0:    0001-Fix-errors-when-building-an-RPM.patch
+Patch1:    0001-Handle-GCC-15-errors.patch
 
 BuildRequires: grep
 BuildRequires: make
@@ -50,6 +51,7 @@ attributes, and variables (> 2B array elements).
 
 %setup -q -n pnetcdf-%{version}
 %patch -P 0 -p 1
+%patch -P 1 -p 1
 
 %build
 
