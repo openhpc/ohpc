@@ -13,15 +13,15 @@ https://community.intel.com/t5/Intel-MPI-Library/MPI-f08-with-polymorphic-argume
 When this bug is triggered, disable the entire MPIF08 support.
 Steps on how to solve this are already described in OPEN_ISSUES.
 
-Signed-off-by: Jan Andre Reuter <j.reuter@fz-juelich.de>
 ---
- OPEN_ISSUES                   |  6 +++---
- build-config/m4/scorep_mpi.m4 | 18 ++++++++++++++++++
- build-mpi/configure           | 26 ++++++++++++++++++++++++++
- 3 files changed, 47 insertions(+), 3 deletions(-)
+ OPEN_ISSUES                                   |  6 ++---
+ build-config/m4/scorep_mpi.m4                 | 18 +++++++++++++
+ build-mpi/configure                           | 26 +++++++++++++++++++
+ src/adapters/mpi/f08/SCOREP_Mpi_F08_Abort.f90 |  3 +++
+ 4 files changed, 50 insertions(+), 3 deletions(-)
 
 diff --git a/OPEN_ISSUES b/OPEN_ISSUES
-index 69fe817..44a9fc7 100644
+index 69fe817..acdd31b 100644
 --- a/OPEN_ISSUES
 +++ b/OPEN_ISSUES
 @@ -266,9 +266,9 @@ various Score-P components.
@@ -31,14 +31,14 @@ index 69fe817..44a9fc7 100644
 -    - Compilation of Score-P fails with oneAPI's mpiifx (several versions
 -      affected) due to an error in their F08 bindings. A workaround is
 -      described here:
-+    - Configure will disable MPIF08 support with oneAPI's mpiifx (several 
++    - Configure will disable MPIF08 support with oneAPI's mpiifx (several
 +      versions affected) if it detects an error in their F08 bindings. A
-+      workaround, enabling support, is described here:
++      workaround, thus enabling support in Score-P, is described here:
  
          https://community.intel.com/t5/Intel-MPI-Library/MPI-f08-with-polymorphic-argument-CLASS/m-p/1590421/highlight/true#M11660
  
 diff --git a/build-config/m4/scorep_mpi.m4 b/build-config/m4/scorep_mpi.m4
-index fb89a42..6398441 100644
+index fb89a42..742490f 100644
 --- a/build-config/m4/scorep_mpi.m4
 +++ b/build-config/m4/scorep_mpi.m4
 @@ -461,6 +461,24 @@ AC_LINK_IFELSE(AC_LANG_SOURCE([[program pmpi_funcs
@@ -60,14 +60,14 @@ index fb89a42..6398441 100644
 +    type(MPI_Request) :: recvreq
 +
 +    call MPI_Irecv(baz, 1, dtype, 0, 0, MPI_COMM_SELF, recvreq)
-+end subroutine test]]), [], [scorep_mpi_usempif08_supported="no, due to a bug in the MPI library"])
++end subroutine test]]), [], [scorep_mpi_usempif08_supported="no, see OPEN_ISSUES for a workaround"])
 +fi
 +
  AC_MSG_RESULT([$scorep_mpi_usempif08_supported])
  ac_ext="${ac_ext_save}"
  AC_LANG_POP([Fortran])
 diff --git a/build-mpi/configure b/build-mpi/configure
-index 39901d4..4119823 100755
+index 39901d4..5f0b618 100755
 --- a/build-mpi/configure
 +++ b/build-mpi/configure
 @@ -44669,6 +44669,32 @@ rm -f core conftest.err conftest.$ac_objext \
@@ -95,7 +95,7 @@ index 39901d4..4119823 100755
 +if ac_fn_fc_try_compile "$LINENO"; then :
 +
 +else
-+  scorep_mpi_usempif08_supported="no, due to a bug in the MPI library"
++  scorep_mpi_usempif08_supported="no, see OPEN_ISSUES for a workaround"
 +fi
 +rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 +fi
@@ -103,6 +103,20 @@ index 39901d4..4119823 100755
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $scorep_mpi_usempif08_supported" >&5
  case "$scorep_mpi_usempif08_supported" in #(
    yes|ok|yes[\ ,]*) :
+diff --git a/src/adapters/mpi/f08/SCOREP_Mpi_F08_Abort.f90 b/src/adapters/mpi/f08/SCOREP_Mpi_F08_Abort.f90
+index 55d17ea..922d2bf 100644
+--- a/src/adapters/mpi/f08/SCOREP_Mpi_F08_Abort.f90
++++ b/src/adapters/mpi/f08/SCOREP_Mpi_F08_Abort.f90
+@@ -31,6 +31,9 @@ subroutine MPI_Init_thread_f08(required, provided, ierror)
+     integer, intent(in) :: required
+     integer, intent(out) :: provided
+     integer, optional, intent(out) :: ierror
++
++    provided = 0
++
+     write (*, *) "[Score-P] Support for 'USE mpi_f08' is disabled in", &
+         " this Score-P installation."
+     write (*, *) "          Please view 'scorep.summary' for details. "
 -- 
 2.43.0
 
