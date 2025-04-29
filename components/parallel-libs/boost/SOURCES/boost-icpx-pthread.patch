@@ -1,0 +1,11 @@
+--- a/tools/build/src/engine/build.sh.orig	2025-04-29 12:50:49.221000000 +0000
++++ b/tools/build/src/engine/build.sh	2025-04-29 12:54:13.605000000 +0000
+@@ -180,7 +180,7 @@
+     fi
+     # Intel oneAPI (intel-linux)
+     if test_toolset intel-linux && test_path icpx ; then
+-        if test_compiler icpx -x c++ -std=c++11 ; then B2_TOOLSET=intel-linux ; return ${TRUE} ; fi
++        if test_compiler icpx -x c++ -std=c++11 -pthread; then B2_TOOLSET=intel-linux ; return ${TRUE} ; fi
+     fi
+     if test_toolset intel-linux && test_path icc ; then
+         if test_compiler icc -x c++ -std=c++11 ; then B2_TOOLSET=intel-linux ; return ${TRUE} ; fi
