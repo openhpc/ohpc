@@ -13,11 +13,11 @@
 %global ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %global pname boost
-%define version_exp %(tr "." "_" <<< %{version})
 
 Summary:        Free peer-reviewed portable C++ source libraries
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.88.0
+%define version_exp 1_88_0
 Release:        1%{?dist}
 License:        Boost
 Group:          %{PROJ_NAME}/parallel-libs
