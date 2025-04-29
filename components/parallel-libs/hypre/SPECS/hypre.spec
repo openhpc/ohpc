@@ -32,10 +32,7 @@ Source0:        https://github.com/hypre-space/hypre/archive/v%{version}.tar.gz#
 BuildRequires:  make
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-%if "%{compiler_family}" == "intel"
-BuildRequires: libtool%{PROJ_DELIM}
-%endif
+Requires:       lmod%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
@@ -77,10 +74,6 @@ export CFLAGS="${CFLAGS} -fsimdmath"
 
 FLAGS="${CFLAGS} -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
 cd src
-%if "%{compiler_family}" == "intel"
-export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
-config/bootstrap
-%endif
 ./configure \
     --prefix=%{install_path} \
     --with-MPI \
