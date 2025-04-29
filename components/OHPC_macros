@@ -223,3 +223,11 @@ Requires:      %{python_prefix}
 
 %{?OHPC_CUSTOM_DELIM: %global OHPC_CUSTOM_PKG_DELIM -%{OHPC_CUSTOM_DELIM}}
 %{?OHPC_CUSTOM_DELIM: %global PROJ_DELIM -%{OHPC_CUSTOM_DELIM}%{PROJ_DELIM}}
+
+# Handle different package names accross distributions.
+
+%if 0%{?suse_version}
+%global procps procps
+%else
+%global procps procps-ng
+%endif
