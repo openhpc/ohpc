@@ -25,6 +25,7 @@ Url:            http://www.boost.org
 Source0:        https://archives.boost.io/release/%{version}/source/boost_%{version_exp}.tar.bz2
 Patch0:         boost-1.79.0-oneapi_pch.patch
 Patch1:         boost-1.57.0-python-abi_letters.patch
+Patch2:         boost-icpx-pthread.patch
 
 %if 0%{?sle_version}
 BuildRequires:  libbz2-devel
@@ -75,6 +76,7 @@ for all users with minimal restrictions.
 %setup -q -n %{pname}_%{version_exp}
 %patch -P 0 -p 1
 %patch -P 1 -p 1
+%patch -P 2 -p 1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -106,7 +108,7 @@ export CXX=mpicxx
 export MPICC=$CC
 export MPICXX=$CXX
 
-export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
+export RPM_OPT_FLAGS="$CFLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
 
 cat << "EOF" >> rpm-config.jam
@@ -115,10 +117,10 @@ using python : %{python3_version} : %{__python3} : /usr/include/python%{python3_
 %else
 using python : %{python3_version} : %{__python3} : /usr/include/python%{python3_version}m : : : : m ;
 %endif
-%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
 import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
 using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
 %endif
 using mpi : $MPICXX ;
