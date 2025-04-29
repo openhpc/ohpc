@@ -38,7 +38,7 @@ BuildRequires:  libquadmath0
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 BuildRequires:  python3-numpy
-BuildRequires:  glibc-devel >= 2.28-101
+BuildRequires:  glibc-devel
 %ifarch x86_64
 BuildRequires:  libquadmath-devel
 %endif
@@ -54,6 +54,7 @@ BuildRequires:  libstdc++-devel
 BuildRequires:  libicu-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
+BuildRequires:  %{procps}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
