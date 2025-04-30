@@ -264,6 +264,11 @@ test_map = {
         '',
         '',
     ],
+    'components/serial-libs/metis/SPECS/metis.spec': [
+        'metis',
+        '',
+        '',
+    ],
     'components/admin/lmod/SPECS/lmod.spec': [
         '',
         'lmod',
