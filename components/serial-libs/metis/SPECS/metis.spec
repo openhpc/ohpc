@@ -21,7 +21,7 @@ Release: 1%{?dist}
 License: ASL 2.0
 Group:   %{PROJ_NAME}/serial-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
-Source0: http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-%{version}.tar.gz
+Source0: https://github.com/mfem/tpls/raw/refs/heads/gh-pages/metis-5.1.0.tar.gz
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
