@@ -80,6 +80,9 @@ export CXXFLAGS="${CXXFLAGS} -Wno-register"
 export CFLAGS="${CFLAGS} -fsimdmath"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
 %endif
+%if "%{compiler_family}" == "gnu15"
+export CFLAGS="${CFLAGS} -std=gnu17"
+%endif
 
 ./configure --prefix=%{install_path} \
             --with-boost=$BOOST_DIR || cat config.log
