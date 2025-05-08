@@ -19,6 +19,15 @@
  #
  #
  # JOB PRIORITY
+@@ -118,7 +118,7 @@
+ #AccountingStorageHost=
+ #AccountingStoragePass=
+ #AccountingStoragePort=
+-AccountingStorageType=accounting_storage/slurmdbd
++#AccountingStorageType=accounting_storage/slurmdbd
+ #AccountingStorageUser=
+ #AccountingStoreFlags=
+ #JobCompHost=
 @@ -122,7 +125,7 @@
  #JobCompLoc=
  #JobCompPass=
