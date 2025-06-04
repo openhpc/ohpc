@@ -1,0 +1,48 @@
+% -*- mode: latex; fill-column: 120; -*-
+\OpenCHAMI{} uses cloudinit for post boot node configuration. We will establish
+some basic cloudinit configurations here. But later we will build a cloudinit
+template that injects the munge key into the system at boot.
+
+
+Let's create a directory to hold our default cloud-init configuration and create an
+SSH key pair that we can use for SSH access later
+
+% begin_ohpc_run
+% ohpc_comment_header Create SSH keys \ref{sec:cloudinit}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) mkdir -p /opt/ohpc/admin/cloud-init
+[sms](*\#*) cd /opt/ohpc/admin/cloud-init
+[sms](*\#*) ssh-keygen -t ed25519 -q -f "$HOME/.ssh/id_openchami" -N ""
+[sms](*\#*) export master_key=$(cat ~/.ssh/id_openchami.pub)
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+Now we can define the payload to update the defaults
+% begin_ohpc_run
+% ohpc_comment_header Create cloud-init payload \ref{sec:cloudinit}
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+[sms](*\#*) cat > /opt/ohpc/admin/cloud-init/defaults.yaml <<EOF
+[sms](*\#*) ---
+[sms](*\#*) base-url: "http://${sms_ip}:8081/cloud-init"
+[sms](*\#*) cluster-name: "${compute_prefix^^}"
+[sms](*\#*) nid-length: 1
+[sms](*\#*) public-keys:
+[sms](*\#*) - "${master_key}"
+[sms](*\#*) short-name: "${compute_prefix}"
+[sms](*\#*) EOF
+[sms](*\#*) for i in /root/.ssh/id*pub; do \
+		file=${i} yq '.public-keys +=loadstr(strenv(file))' -i /opt/ohpc/admin/cloud-init/defaults.yaml; \
+	done
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+And then finally upload our payload
+% begin_ohpc_run
+% ohpc_comment_header Upload the cloud-init defaults \ref{sec:boot_params_set}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) ochami cloud-init defaults set -f yaml -d @/opt/ohpc/admin/cloud-init/defaults.yaml
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

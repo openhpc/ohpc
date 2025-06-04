@@ -289,7 +289,7 @@ sub check_for_section_replacement {
             chomp( $secnum );
 
         if( $secnum eq "" ) {
-        die __LINE__ . ": Unable to query section number, verify latex build is up to date"
+        die __LINE__ . ": Unable to query section number ($secname), verify latex build is up to date"
         }
 
         $replacementText = "(Section $secnum)";

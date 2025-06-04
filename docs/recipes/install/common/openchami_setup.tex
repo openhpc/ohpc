@@ -1,0 +1,109 @@
+At this point, all of the packages necessary to use
+\OpenCHAMI{} on the {\em master} host should be installed. Next, we create
+and enable the Container Registry and S3 Object store.
+These are optional if you have an existing S3 or Container Registry available for use at your local site.
+
+\begin{center}
+\begin{tcolorbox}[]
+\small The S3 and registry containers are configured as \href{https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html}{Podman Quadlets},
+which interface with systemd allowing you to perform normal systemd operations on them like:
+\begin{lstlisting}[language=bash]
+systemctl status registry
+systemctl restart minio-server
+journalctl -u registry
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}
+
+First create local directories for container storage
+% begin_ohpc_run
+% ohpc_comment_header Create directories for registry and S3 containers
+%\begin{verbatim}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+[sms](*\#*) mkdir -p /opt/ohpc/admin/data/oci
+[sms](*\#*) mkdir -p /opt/ohpc/admin/data/s3
+\end{lstlisting}
+%\end{verbatim}
+% end_ohpc_run
+
+Now create the container registry quadlet definition
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_comment_header Create container registry quadlet
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+[sms](*\#*) cat > /etc/containers/systemd/registry.container <<EOF
+[sms](*\#*) # registry.container
+[sms](*\#*) [Unit]
+[sms](*\#*) Description=Image OCI Registry
+[sms](*\#*) After=network-online.target
+[sms](*\#*) Requires=network-online.target
+[sms](*\#*)
+[sms](*\#*) [Container]
+[sms](*\#*) ContainerName=registry
+[sms](*\#*) HostName=registry
+[sms](*\#*) Image=docker.io/library/registry:latest
+[sms](*\#*) Volume=/opt/ohpc/admin/data/oci:/var/lib/registry:Z
+[sms](*\#*) PublishPort=5000:5000
+
+[sms](*\#*) [Service]
+[sms](*\#*) TimeoutStartSec=0
+[sms](*\#*) Restart=always
+[sms](*\#*)
+[sms](*\#*) [Install]
+[sms](*\#*) WantedBy=multi-user.target
+[sms](*\#*) EOF
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+Then create the local S3 object store quadlet definition
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_comment_header Create Minio S3 object storage quadlet
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+[sms](*\#*) cat > /etc/containers/systemd/minio.container <<EOF
+[sms](*\#*) [Unit]
+[sms](*\#*) Description=Minio S3
+[sms](*\#*) After=local-fs.target network-online.target
+[sms](*\#*) Wants=local-fs.target network-online.target
+[sms](*\#*)
+[sms](*\#*) [Container]
+[sms](*\#*) ContainerName=minio-server
+[sms](*\#*) Image=docker.io/minio/minio:latest
+[sms](*\#*) # Volumes
+[sms](*\#*) Volume=/opt/ohpc/admin/data/s3:/data:Z
+
+[sms](*\#*) # Ports
+[sms](*\#*) PublishPort=9000:9000
+[sms](*\#*) PublishPort=9091:9001
+
+[sms](*\#*) # Environment Variables
+[sms](*\#*) Environment=MINIO_ROOT_USER=admin
+[sms](*\#*) Environment=MINIO_ROOT_PASSWORD=password1234
+[sms](*\#*)
+[sms](*\#*) # Command to run in container
+[sms](*\#*) Exec=server /data --console-address :9001
+[sms](*\#*)
+[sms](*\#*) [Service]
+[sms](*\#*) Restart=always
+
+[sms](*\#*) [Install]
+[sms](*\#*) WantedBy=multi-user.target
+[sms](*\#*) EOF
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+We need to reload the system daemon, and to allow the MinIO,
+and OCI Registry containers to start.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Reload Systemd daemon and start the s3 (minio) and container registry
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+[sms](*\#*) systemctl daemon-reload
+[sms](*\#*) systemctl start minio.service
+[sms](*\#*) systemctl start registry.service
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

@@ -1,0 +1,21 @@
+
+\OpenCHAMI{} runs its own internal proxy for services which may not interact well
+if you run another httpd server. Here we set the no proxy variable to prevent lookups.
+% begin_ohpc_run
+% ohpc_comment_header OpenCHAMI No Proxy Settings \ref{sec:openchami_noproxy}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) export additonal_no_proxy="${sms_name},opaal,opaal-idp,smd,smd-init,hydra,cloud-init,acme-deploy,bss,haproxy,postgres,step-ca,configurator"
+[sms](*\#*) if [ -z "$no_proxy" ]; then
+[sms](*\#*)     export no_proxy="$additonal_no_proxy"
+[sms](*\#*) else
+[sms](*\#*)     export no_proxy="$no_proxy,$additonal_no_proxy"
+[sms](*\#*) fi
+[sms](*\#*) if [ -z "$NO_PROXY" ]; then
+[sms](*\#*)     export NO_PROXY="$additonal_no_proxy"
+[sms](*\#*) else
+[sms](*\#*)     export NO_PROXY="$NO_PROXY,$additonal_no_proxy"
+[sms](*\#*) fi
+
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

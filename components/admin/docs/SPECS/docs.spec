@@ -79,6 +79,7 @@ for recipe_path in \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
+	"rocky10/x86_64/openchami/slurm" \
 ; do
 	pushd "%{recipe_base}/${recipe_path}"
 	make ; %{parser} steps.tex > recipe.sh ; popd
@@ -97,6 +98,7 @@ for recipe_path in \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
+	"rocky10/x86_64/openchami/slurm" \
 ; do
 	install -m 0644 -p -D "%{recipe_base}/${recipe_path}/steps.pdf" "%{recipe_dest}/${recipe_path}/Install_guide.pdf"
 	install -m 0755 -p -D "%{recipe_base}/${recipe_path}/recipe.sh" "%{recipe_dest}/${recipe_path}/recipe.sh"
