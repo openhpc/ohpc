@@ -1,0 +1,29 @@
+% -*- mode: latex; fill-column: 120; -*-
+\OpenCHAMI{} can do dynamic discovery, but here we will do node discovery by YAML file.
+The YAML file can be imported by the discover command creating a way for adding nodes that
+do not have redfish capabilities, or when you just want to provide a list of nodes.
+
+
+Create the nodes.yaml file the static discovery will use to populate SMD
+% begin_ohpc_run
+% ohpc_comment_header Discovering Nodes \ref{sec:static_node_discovery}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) mkdir -p /opt/ohpc/admin/nodes
+[sms](*\#*) export ${compute_prefix^^}_ACCESS_TOKEN=$(bash -lc 'gen_access_token')
+[sms](*\#*) echo "nodes:" > /opt/ohpc/admin/nodes/nodes.yaml
+[sms](*\#*) for((i=0; i < $num_computes; i++)); do
+		/usr/libexec/openchami/ohpc-nodes.sh ${c_name[$i]} $i ${c_bmc[$i]} ${c_mac[$i]} ${c_ip[$i]}
+       done
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+
+Now use the generated file to populate the SMD database
+% begin_ohpc_run
+% ohpc_comment_header Passing ochami the nodes \ref{sec:static_node_discovery}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) ochami discover static -f yaml -d @/opt/ohpc/admin/nodes/nodes.yaml
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

@@ -1,0 +1,44 @@
+% -*- mode: latex; fill-column: 120; -*-
+Boot Script Service (BSS) is what provides the path to vmlinuz and the initrd, and provides the kernel parameters to the node during iPXE.
+
+Get some data from our images to create our BSS payload.
+% begin_ohpc_run
+% ohpc_comment_header Get info from image to use for BSS \ref{sec:boot_params_set}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) export s3Output=$(s3cmd ls -Hr s3://boot-images/)
+[sms](*\#*) export os=$(echo "$s3Output" | awk '{print $4}' | grep 'boot-images/compute')
+[sms](*\#*) export ramfs=$(echo "$s3Output" | awk '{print $4}' | grep 'initram')
+[sms](*\#*) export hdrs=$(echo "$s3Output" | awk '{print $4}' | grep 'vmlinuz')
+[sms](*\#*) export params="nomodeset ro root=live:http://${sms_ip}:9000/${os:5} \
+                           ip=dhcp overlayroot=tmpfs overlayroot_cfgdisk=disabled \
+			   apparmor=0 selinux=0 console=ttyS0,115200 ip6=off \
+			   cloud-init=enabled ds=nocloud-net;s=http://${sms_ip}:8081/cloud-init"
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+Create a yaml payload for BSS
+% begin_ohpc_run
+% ohpc_comment_header Define the BSS payload \ref{sec:boot_params_set}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) cat >> /opt/ohpc/admin/nodes/compute-boot.yaml <<EOF
+[sms](*\#*) kernel: 'http://${sms_ip}:9000/${hdrs:5}'
+[sms](*\#*) initrd: 'http://${sms_ip}:9000/${ramfs:5}'
+[sms](*\#*) params: '${params}'
+[sms](*\#*) macs:
+[sms](*\#*) EOF
+[sms](*\#*) for((i=0; i < $num_computes; i++)); do
+                 echo "  - ${c_mac[$i]}" >> /opt/ohpc/admin/nodes/compute-boot.yaml
+      done
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+And then finally upload our payload
+% begin_ohpc_run
+% ohpc_comment_header Upload the BSS payload \ref{sec:boot_params_set}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) ochami bss boot params set -f yaml -d @/opt/ohpc/admin/nodes/compute-boot.yaml
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

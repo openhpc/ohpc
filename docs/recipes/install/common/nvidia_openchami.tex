@@ -1,0 +1,30 @@
+% begin_ohpc_run
+\noindent If planning to install the NVIDIA toolkit, register the
+following additional path (\texttt{/opt/nvidia}) to share with the compute nodes:
+% ohpc_command if [[ ${enable_nvidia_gpu_driver} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Add NVIDIA GPU driver repository to the SMS
+[sms](*\#*) (*\install*) cuda-repo-ohpc
+# Add NVIDIA GPU driver repository to the compute nodes
+[sms](*\#*) yq -i '.repos += [{"alias":"cuda-rhel9-x86_64", "url":"https://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64", "gpg":"https://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/D42D0685.pub" }]' /opt/ohpc/admin/images/compute-prod.yaml
+# Install the GPU driver on the compute nodes
+[sms](*\#*) yq -i '.modules += {"install": ["nvidia-driver:latest-dkms"]}' /opt/ohpc/admin/images/compute-prod.yaml
+# Enable DKMS service to automatically rebuild driver
+[sms](*\#*) yq -i '.cmds += [{"cmd":"systemctl enable dkms"}]' /opt/ohpc/admin/images/compute-prod.yaml
+# Install the toolkit on the SMS
+[sms](*\#*) (*\install*) cuda-devel-ohpc nvidia-driver-cuda
+# (Optional) Setup NFS mount for /opt/nvidia
+[sms](*\#*) echo "/opt/nvidia *(ro,no_subtree_check)" >> /etc/exports
+[sms](*\#*) exportfs -a
+
+# Create mount point and file system mount
+[sms](*\#*) nodeshell compute mkdir /opt/nvidia
+[sms](*\#*) nodeshell compute echo \
+        "\""${sms_ip}:/opt/nvidia /opt/nvidia nfs nfsvers=3,nodev,nosuid 0 0"\"" \>\> /etc/fstab
+# Mount NFS shares
+[sms](*\#*) nodeshell compute mount /opt/nvidia
+
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi

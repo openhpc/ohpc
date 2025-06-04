@@ -1,0 +1,42 @@
+\OpenCHAMI{} provides a cloud-init server that can be used, in conjunction with
+the cloud-init client, to provide post-boot configurations. The configuration
+below is a minimal configuration that should at least let the root user login
+using the public key and distribute the munge key file to all compute nodes.
+
+% begin_ohpc_run ohpc_comment_header Cloudinit \ref{sec:cloudinit}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) export munge_key=$(cat /etc/munge/munge.key | base64 -w 0)
+[sms](*\#*) cat > /opt/ohpc/admin/cloud-init/compute.yaml <<EOF
+[sms](*\#*) - name: compute
+[sms](*\#*)   description: "compute template"
+[sms](*\#*)   file:
+[sms](*\#*)     encoding: plain
+[sms](*\#*)     content: |
+[sms](*\#*)       ## template: jinja
+[sms](*\#*)       #cloud-config
+[sms](*\#*)       merge_how:
+[sms](*\#*)       - name: list
+[sms](*\#*)         settings: [append]
+[sms](*\#*)       - name: dict
+[sms](*\#*)         settings: [no_replace, recurse_list]
+[sms](*\#*)       users:
+[sms](*\#*)         - name: root
+[sms](*\#*)           ssh_authorized_keys: {{ ds.meta_data.instance_data.v1.public_keys }}
+[sms](*\#*)       write_files:
+[sms](*\#*)         - content: ${munge_key}
+[sms](*\#*)           path: /etc/munge/munge.key
+[sms](*\#*)           permissions: '0400'
+[sms](*\#*)           owner: munge:munge
+[sms](*\#*)           encoding: base64
+[sms](*\#*) EOF
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run
+
+Once you are done updating cloud-init you can post the file to the cloud-init server
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) ochami cloud-init group set -f yaml -d @/opt/ohpc/admin/cloud-init/compute.yaml
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

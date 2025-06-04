@@ -1,0 +1,8 @@
+.DS_store
+*.md
+steps.aux
+steps.log
+steps.out
+steps.pdf	
+steps.tex	
+steps.toc

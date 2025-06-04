@@ -1,0 +1,13 @@
+% -*- mode: latex; fill-column: 120; -*-
+\OpenCHAMI{} is very configurable, and it has a client that allows you do most of the configuration
+via the command line, so installing that client makes management much easier.
+% begin_ohpc_run
+% ohpc_comment_header OpenCHAMI Client Install \ref{sec:openchami_client_install}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) dnf install -y \
+	https://github.com/OpenCHAMI/ochami/releases/download/v0.3.4/ochami_0.3.4_linux_amd64.rpm
+[sms](*\#*) yes | ochami config cluster set --system --default \
+	${compute_prefix} cluster.uri https://${sms_name}:8443
+\end{lstlisting}
+% ohpc_validation_newline
+% end_ohpc_run

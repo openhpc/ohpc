@@ -74,7 +74,7 @@ This guide presents a simple cluster installation procedure using components
 from the OpenHPC software stack.
 
 %prep
-%setup -n docs-ohpc
+%setup -q -n docs-ohpc
 
 %build
 
@@ -87,6 +87,7 @@ for recipe_path in \
 	"rocky9/x86_64/warewulf/openpbs" \
 	"rocky9/x86_64/xcat/slurm" \
 	"rocky9/x86_64/confluent/slurm" \
+	"rocky9/x86_64/openchami/slurm" \
 	"rocky9/x86_64/xcat_stateful/slurm" \
 	"almalinux9/x86_64/warewulf/slurm" \
 	"almalinux9/x86_64/warewulf/openpbs" \
@@ -126,6 +127,7 @@ for recipe_path in \
 	"rocky9/x86_64/warewulf/openpbs" \
 	"rocky9/x86_64/xcat/slurm" \
 	"rocky9/x86_64/confluent/slurm" \
+	"rocky9/x86_64/openchami/slurm" \
 	"rocky9/x86_64/xcat_stateful/slurm" \
 	"almalinux9/x86_64/warewulf/slurm" \
 	"almalinux9/x86_64/warewulf/openpbs" \
