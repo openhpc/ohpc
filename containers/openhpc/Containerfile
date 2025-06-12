@@ -1,0 +1,24 @@
+FROM registry.docker.com/rockylinux/rockylinux:9
+
+## Base install
+ARG ARCH=aarch64
+RUN dnf install -y http://repos.openhpc.community/OpenHPC/3/EL_9/$ARCH/ohpc-release-3-1.el9.$ARCH.rpm
+
+RUN dnf install -y dnf-plugins-core && \
+    dnf config-manager --set-enabled crb && \
+    dnf upgrade -y && \
+    dnf install -y unzip jq procps-ng iproute bind-utils findutils && \
+    dnf install -y ohpc-base
+
+## Configure common image
+RUN dnf install -y munge && \
+    /usr/sbin/create-munge-key
+
+## Common packages
+RUN dnf install -y iputils vim rsync unzip git
+
+## Create user
+ARG USER=auser
+RUN useradd --create-home --shell=/bin/bash --user-group $USER && \
+    install -dp /project /scratch && \
+    install -v -dp --owner=$USER --group=$USER /project/$USER /scratch/$USER
