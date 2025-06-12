@@ -1,4 +1,5 @@
 FROM registry.docker.com/rockylinux/rockylinux:9
+## Update ../container/Containerfile with any changes made here.
 
 ## Base install
 ARG ARCH=aarch64
