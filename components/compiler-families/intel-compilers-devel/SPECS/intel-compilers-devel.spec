@@ -13,7 +13,6 @@
 %define pname intel-compilers-devel
 %define keyname GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
 %define oneapi_manifest %{OHPC_MODULES}/intel/.rpm-manifest
-%define psxe_manifest %{OHPC_MODULES}/intel/.manifest
 # Using a minimum version has been problematic as DNF will happily
 # install newer versions during build time. If the user has the minimum
 # version, but the build system was already using a newer version, then
@@ -33,9 +32,8 @@ URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 AutoReq:   no
-Source1:   mod_generator.sh
-Source2:   oneAPI.repo
-Source3:   ohpc-update-modules-intel
+Source1:   oneAPI.repo
+Source2:   ohpc-update-modules-intel
 
 
 #!BuildIgnore: post-build-checks
@@ -50,10 +48,11 @@ Recommends: intel-hpckit-%{exact_intel_ver}
 Provides OpenHPC-style compatible modules for use with the Intel(R) oneAPI
 HPC Toolkit.
 
+%package -n intel-oneapi-toolkit-release%{PROJ_DELIM}
+Summary:   Intel(R) oneAPI HPC Toolkit Repository Setup
 
-%prep
-%build
-
+%description -n intel-oneapi-toolkit-release%{PROJ_DELIM}
+Installs and configures the online repository for the Intel(R) oneAPI Toolkit.
 
 %install
 %if 0%{?suse_version} || 0%{?sle_version}
@@ -63,10 +62,7 @@ HPC Toolkit.
 %endif
 
 # Install RPM key and yum repo
-install -D -m644 %{SOURCE2} -t %{buildroot}%{repodir}/
-
-# Mod generator for PSXE support
-install -D -m755 %{SOURCE1} %{buildroot}/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
+install -D -m644 %{SOURCE1} -t %{buildroot}%{repodir}/
 
 # Mod generator for oneAPI support
 sed -e 's|@@oneapi_manifest@@|%{oneapi_manifest}|' \
@@ -75,7 +71,7 @@ sed -e 's|@@oneapi_manifest@@|%{oneapi_manifest}|' \
     -e 's|@@exact_deps@@|%{exact_deps}|' \
     -e 's|@@exact_intel_ver@@|%{exact_intel_ver}|' \
     -e 's|@@exact_intel_ver_module@@|%{exact_intel_ver_module}|' \
-    -e 's|@@exact_mkl_ver@@|%{exact_mkl_ver}|' %{SOURCE3} > ohpc-update-modules-intel
+    -e 's|@@exact_mkl_ver@@|%{exact_mkl_ver}|' %{SOURCE2} > ohpc-update-modules-intel
 install -D -m755 ohpc-update-modules-intel %{buildroot}/%{OHPC_BIN}/ohpc-update-modules-intel
 
 # Module directories
@@ -138,188 +134,5 @@ fi
 %dir %{OHPC_MODULEDEPS}/gnu/mkl
 %ghost %{oneapi_manifest}
 
-################################################################################
-
-%package -n intel-oneapi-toolkit-release%{PROJ_DELIM}
-Summary:   Intel(R) oneAPI HPC Toolkit Repository Setup
-
-%description -n intel-oneapi-toolkit-release%{PROJ_DELIM}
-Installs and configures the online repository for the Intel(R) oneAPI Toolkit.
-
-
 %files -n intel-oneapi-toolkit-release%{PROJ_DELIM}
-%{repodir}/%{basename:%{SOURCE2}}
-
-################################################################################
-
-%define psxemod intel-psxe-compilers-devel%{PROJ_DELIM}
-
-%package -n %{psxemod}
-Summary: OpenHPC compatibility package for Intel(R) Parallel Studio XE
-
-Obsoletes: %pname%{PROJ_DELIM} < %{version}
-
-%description -n %{psxemod}
-Provides OpenHPC-style compatible modules for use with the Intel(R) Parallel
-Studio compiler suite.
-
-
-%pre -n %{psxemod} -p /bin/bash
-# Since OpenHPC 2.0 will not upgrade 1.x, there's no need for
-# older intel-compilers-devel upgrade patches
-
-# Verify psxe compilers are installed. Punt if not detected.
-echo "Checking for local PSXE compiler installation(s)."
-icc_subpath="linux/bin/intel64/icc$"
-versions_all=$(rpm -qal | grep "${icc_subpath}" | grep -v "oneapi")
-
-if [ $? -eq 1 ];then
-    echo " "
-    echo "Error: Unable to detect local Parallel Studio installation. The toolchain"
-    echo "       providing ${icc_subpath} must be installed prior to this compatibility package"
-    echo " "
-    exit 1
-fi
-
-# Verify min version expectations
-min_ver="19.1.0"
-declare -a versions=()
-declare -a topDirs=()
-for file in ${versions_all}; do
-    version=$(rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file})
-    echo "--> Version ${version} detected"
-    if [ "$min_ver" = "$(printf '${version}\n${min_ver}' | sort -V | head -n 1)" ]; then
-        echo "Warning: ${version} < $min_ver, skipping"
-    else
-        versions+="${version}"
-        topDirs+="$(echo $file | sed "s,/$icc_subpath,,")"
-    fi
-done
-
-if [ -z "${versions}" ]; then
-    echo ""
-    echo "Error: local PSXE compatibility support is for versions > ${min_ver}"
-    echo " "
-    exit 1
-fi
-
-mkdir -p %{_localstatedir}/lib/rpm-state/%{name}/
-printf "%s\n" ${versions[@]} > %{_localstatedir}/lib/rpm-state/%{name}/rpm-install-versions
-printf "%s\n" ${topDirs[@]} > %{_localstatedir}/lib/rpm-state/%{name}/rpm-install-dirs
-
-
-%post -n %{psxemod}
-scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
-declare -a versions=()
-declare -a topDirs=()
-readarray -t versions < %{_localstatedir}/lib/rpm-state/%{name}/rpm-install-versions
-readarray -t topDirs < %{_localstatedir}/lib/rpm-state/%{name}/rpm-install-dirs
-rm -rf %{_localstatedir}/lib/rpm-state/%{name}/
-
-echo "Creating OpenHPC-style modulefiles for local PSXE compiler installation(s)."
-
-# initialize manifest to log files created during this process
-rm -f %{psxe_manifest}
-
-# Create modulefiles for each locally detected installation.
-for (( x=0; x < ${#versions[@]}; x++ )); do
-    topDir=${topDirs[$x]}
-    version=${versions[$x]}
-    echo "--> Installing modulefile for version=${version}"
-
-    # Check for compilervars before writing a file
-    if [ ! -e ${topDir}/linux/bin/compilervars.sh ]; then
-	   echo "Error: Unable to access compilervars.sh"
-           echo "       Skipping modules for (${topDir})"
-	   break
-    fi
-
-    # Main module
-    cat << EOF > %{OHPC_MODULES}/intel/${version}
-#%Module1.0#####################################################################
-
-set version "${version}"
-
-proc ModulesHelp { } {
-global version
-puts stderr "\nSee the man pages for icc, icpc, and ifort for detailed information"
-puts stderr "on available compiler options and command-line syntax."
-puts stderr "\nVersion \$version\n"
-}
-
-module-whatis "Name: Intel(R) Compiler"
-module-whatis "Version: \$version"
-module-whatis "Category: compiler, runtime support"
-module-whatis "Description: Intel(R) Compiler Family (C/C++/Fortran for x86_64)"
-module-whatis "URL: http://software.intel.com/en-us/articles/intel-compilers/"
-
-set     version    \$version
-
-# update module path hierarchy
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
-
-family "compiler"
-EOF
-
-    echo "%{OHPC_MODULES}/intel/${version}" >> %{psxe_manifest}
-
-    # Append with environment vars parsed directlry from mpivars.sh
-    ${scanner} ${topDir}/linux/bin/compilervars.sh -arch intel64 -platform linux >> %{OHPC_MODULES}/intel/${version}
-        if [ $? -ne 0 ]; then
-           echo "ERROR: Could not generate content for %{OHPC_MODULES}/intel/${version}"
-           break
-        fi
-
-    # .version file
-    cat << EOF > %{OHPC_MODULES}/intel/.version.${version}
-#%Module1.0#####################################################################
-set     ModulesVersion      "${version}"
-EOF
-
-    echo "%{OHPC_MODULES}/intel/.version.${version}" >> %{psxe_manifest}
-
-    # Provide standalone module for use with GNU toolchain
-    mkdir -p %{OHPC_MODULEDEPS}/gnu/mkl
-
-    cat << EOF > %{OHPC_MODULEDEPS}/gnu/mkl/${version}
-#%Module1.0#####################################################################
-
-set version "${version}
-
-proc ModulesHelp { } {
-global version
-puts stderr "\nSets MKLROOT environment variable\n"
-puts stderr "\$version"
-}
-
-module-whatis "Name: Intel(R) Math Kernel Library"
-module-whatis "Version: \$version"
-module-whatis "Category: library, runtime support"
-module-whatis "Description: Intel Math Kernel Library for C/C++ and Fortran"
-module-whatis "URL: https://software.intel.com/en-us/en-us/intel-mkl"
-
-setenv        MKLROOT            ${topDir}/linux/mkl
-prepend-path  LD_LIBRARY_PATH    ${topDir}/linux/mkl/lib/intel64
-EOF
-
-    echo "%{OHPC_MODULEDEPS}/gnu/mkl/${version}" >> %{psxe_manifest}
-
-done
-
-
-%preun -n %{psxemod}
-if [ -s %{psxe_manifest} ]; then
-    while IFS= read -r file; do
-        if [ -e $file ]; then
-            rm -f $file
-        fi
-    done < %{psxe_manifest}
-else
-   echo "WARNING: Manifest not found"
-fi
-
-
-%files -n %{psxemod}
-%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
-%dir %{OHPC_MODULES}/intel
-%ghost %{psxe_manifest}
+%{repodir}/%{basename:%{SOURCE1}}
