@@ -2,7 +2,7 @@
 
 This is a simple single-user container environment for learning and testing Slurm on OpenHPC 3.x with Rocky9.
 
-The cluster contains a head node, login node, and 8 compute nodes as separate containers with a shared docker network and shared docker storage.  The containers are named `openhpc-head`, `openhpc-login` and `openhpc-node-[0-7]` respectively and will overwrite/delete any local containers with those names.  Shared storage is in /project and /scratch in volumes `openhpc-container-project` and `openhpc-container-scratch` respectively.  The /home directory is not shared. 
+The cluster contains a head node, login node, and 8 compute nodes as separate containers with a shared docker network and shared docker storage.  The containers are named `openhpc-head`, `openhpc-login` and `openhpc-node-[0-7]` respectively and will overwrite/delete any local containers with those names.  Shared storage is in /project and /scratch in volumes `openhpc-container-project` and `openhpc-container-scratch` respectively.  The /home directory is not shared.
 
 ## Run the cluster
 

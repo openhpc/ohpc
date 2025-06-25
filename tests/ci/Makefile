@@ -95,6 +95,7 @@ whitespace-lint:
 		tests/libs/ptscotch/tests/test_module \
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		tests/libs/plasma/tests/* \
+		containers/* \
 		\*.tex
 
 shellcheck-lint:
@@ -119,7 +120,9 @@ shellcheck-lint:
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
-		../../tests/libs/netcdf/ohpc-tests/test_mpi_families
+		../../tests/libs/netcdf/ohpc-tests/test_mpi_families \
+		../../containers/*.sh \
+		../../containers/examples/mpi/*.sh
 	shellcheck --exclude=SC2239,SC1091 \
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
@@ -203,7 +206,9 @@ shfmt-lint:
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
-		../../components/rms/slurm/SOURCES/slurm.epilog.clean
+		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
+		../../containers/*.sh \
+		../../containers/examples/mpi/*.sh
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
@@ -219,4 +224,5 @@ clang-format-lint:
 		../libs/phdf5/tests/C_mpi_test.c \
 		../dev-tools/cuda/add.cu \
 		../../tests/libs/plasma/tests/*.c \
-		../../tests/libs/plasma/tests/*.h
+		../../tests/libs/plasma/tests/*.h \
+		../../containers/examples/mpi/mpi.c

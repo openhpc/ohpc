@@ -1,4 +1,5 @@
 #!/bin/bash
 
 container=${CONTAINER:-docker}
-exec $container exec -it openhpc-login sudo -u $USER -i $*
+# shellcheck disable=SC2048,SC2086
+exec "${container}" exec -it openhpc-login sudo -u "${USER}" -i $*

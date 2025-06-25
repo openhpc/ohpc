@@ -31,7 +31,7 @@ RUN dnf install -y ohpc-base-compute lmod-ohpc \
     git patch file zstd bzip2 xz \
     python3 python3-pip \
     gcc-c++ gcc-gfortran \
-    ohpc-gnu13-runtimes gnu13-compilers-ohpc \ 
+    ohpc-gnu13-runtimes gnu13-compilers-ohpc \
     openmpi5-pmix-gnu13-ohpc openblas-gnu13-ohpc netcdf-gnu13-openmpi5-ohpc
 
 ## Compilers, runtimes, and libraries.

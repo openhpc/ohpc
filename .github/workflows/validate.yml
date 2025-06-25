@@ -46,6 +46,7 @@ jobs:
         globs: |
           README.md
           CONTRIBUTING.md
+          containers/README.md
 
   lint:
     strategy:
