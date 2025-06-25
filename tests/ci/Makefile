@@ -5,6 +5,7 @@ codespell-lint:
 	cd ../..; codespell $$(find components -name "*.spec") \
 		README.md \
 		CONTRIBUTING.md \
+		containers/README \
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
