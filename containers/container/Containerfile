@@ -44,6 +44,9 @@ RUN dnf install -y spack-ohpc ohpc-gnu13-openmpi5-parallel-libs \
 RUN passwd -d $USER && \
   echo "$USER ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/20-$USER
 
+RUN dnf clean all && \
+    rm -rf /var/cache/dnf /var/log/dnf.librepo.log /var/log/dnf.rpm.log /var/log/hawkey.log
+
 ## User entry point
 WORKDIR /home/$USER
 USER $USER:$USER

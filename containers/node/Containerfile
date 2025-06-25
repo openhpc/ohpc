@@ -16,4 +16,7 @@ RUN dnf install -y ohpc-slurm-client
 RUN dnf install -y spack-ohpc ohpc-gnu13-openmpi5-parallel-libs \
     ohpc-gnu13-python-libs ohpc-gnu13-runtimes
 
+RUN dnf clean all && \
+    rm -rf /var/cache/dnf /var/log/dnf.librepo.log /var/log/dnf.rpm.log /var/log/hawkey.log
+
 CMD ["/bin/bash", "-c", "sudo -u munge /usr/sbin/munged -f && while ! /usr/sbin/slurmd -D -s --conf-server head ; do sleep 2 ; done"]
