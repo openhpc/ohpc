@@ -18,15 +18,12 @@
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   9.0
+Version:   9.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/scorep-%{version}/scorep-%{version}.tar.gz
-%if "%{mpi_family}" == "impi"
-Patch1:    scorep-9.0-build-Add-MPIF08-configure-check-for-Intel-MPI.patch
-%endif
 BuildRequires: automake
 BuildRequires: bison
 BuildRequires: binutils-devel
@@ -72,9 +69,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%if "%{mpi_family}" == "impi"
-%patch -P 1 -p1
-%endif
 
 %build
 
