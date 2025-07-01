@@ -3,48 +3,49 @@ lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint shfmt-lint clan
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
 	cd ../..; codespell $$(find components -name "*.spec") \
+		$$(find docs/recipes) \
 		README.md \
 		CONTRIBUTING.md \
-		containers/README \
-		../../tests/ci/check_spec.py \
-		../../tests/ci/run_build.py \
-		../../misc/build_order.py \
-		../../misc/obs/obs_config.py \
-		../../tests/ci/spec_to_test_mapping.py \
-		../../components/admin/prun/SOURCES/prun \
-		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
-		../../tests/common/functions \
-		../../tests/user-env/mem_limits \
-		../../tests/user-env/ompi_info \
-		../../tests/perf-tools/dimemas/tests/test_module \
-		../../tests/perf-tools/extrae/tests/test_module \
-		../../tests/perf-tools/omb/tests/rm_execution \
-		../../tests/perf-tools/scalasca/tests/rm_execution \
-		../../tests/perf-tools/scalasca/tests/test_module \
-		../../tests/perf-tools/scorep/tests/instrumenter_test \
-		../../tests/perf-tools/scorep/tests/rm_execution \
-		../../tests/perf-tools/scorep/tests/test_module \
-		../../tests/perf-tools/omb/tests/rm_execution \
-		../../tests/perf-tools/omb/tests/test_module \
-		../../tests/perf-tools/omb/ohpc-tests/test_mpi_families \
-		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
-		../../tests/libs/superlu_dist/tests/rm_execution \
-		../../tests/libs/superlu_dist/tests/test_module \
-		../../tests/libs/netcdf/ohpc-tests/test_mpi_families \
-		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
-		../../tests/libs/netcdf/tests-parallel/test_pnetcdf \
-		../../tests/libs/netcdf/tests/test_C_module \
-		../../tests/libs/netcdf/tests/test_CXX_module \
-		../../tests/libs/netcdf/tests/test_Fortran_module \
-		../../tests/libs/netcdf/tests/test_netcdf \
-		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
-		../../tests/libs/scalapack/tests/rm_execution \
-		../../tests/libs/scalapack/tests/test_module \
-		../../tests/libs/ptscotch/tests/rm_execution \
-		../../tests/libs/ptscotch/tests/test_module \
-		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
-		../../tests/libs/plasma/tests/rm_execution \
-		../../tests/libs/plasma/tests/test_module
+		containers \
+		tests/ci/check_spec.py \
+		tests/ci/run_build.py \
+		misc/build_order.py \
+		misc/obs/obs_config.py \
+		tests/ci/spec_to_test_mapping.py \
+		components/admin/prun/SOURCES/prun \
+		components/rms/slurm/SOURCES/slurm.epilog.clean \
+		tests/common/functions \
+		tests/user-env/mem_limits \
+		tests/user-env/ompi_info \
+		tests/perf-tools/dimemas/tests/test_module \
+		tests/perf-tools/extrae/tests/test_module \
+		tests/perf-tools/omb/tests/rm_execution \
+		tests/perf-tools/scalasca/tests/rm_execution \
+		tests/perf-tools/scalasca/tests/test_module \
+		tests/perf-tools/scorep/tests/instrumenter_test \
+		tests/perf-tools/scorep/tests/rm_execution \
+		tests/perf-tools/scorep/tests/test_module \
+		tests/perf-tools/omb/tests/rm_execution \
+		tests/perf-tools/omb/tests/test_module \
+		tests/perf-tools/omb/ohpc-tests/test_mpi_families \
+		tests/libs/hdf5/ohpc-tests/test_compiler_families \
+		tests/libs/superlu_dist/tests/rm_execution \
+		tests/libs/superlu_dist/tests/test_module \
+		tests/libs/netcdf/ohpc-tests/test_mpi_families \
+		tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
+		tests/libs/netcdf/tests-parallel/test_pnetcdf \
+		tests/libs/netcdf/tests/test_C_module \
+		tests/libs/netcdf/tests/test_CXX_module \
+		tests/libs/netcdf/tests/test_Fortran_module \
+		tests/libs/netcdf/tests/test_netcdf \
+		tests/libs/scalapack/ohpc-tests/test_mpi_families \
+		tests/libs/scalapack/tests/rm_execution \
+		tests/libs/scalapack/tests/test_module \
+		tests/libs/ptscotch/tests/rm_execution \
+		tests/libs/ptscotch/tests/test_module \
+		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
+		tests/libs/plasma/tests/rm_execution \
+		tests/libs/plasma/tests/test_module
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"

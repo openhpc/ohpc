@@ -32,7 +32,7 @@ sub parse_changes {
             $name    = $1;
             $version = $2;
         } else {
-            die("Unknown format in raw changlog files");
+            die("Unknown format in raw changelog files");
         }
 
         # Check if this is a compiler/MPI family package

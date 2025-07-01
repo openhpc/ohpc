@@ -115,7 +115,7 @@ c_ip[1]=${c_ip[1]:-172.16.1.2}
 c_ip[2]=${c_ip[2]:-172.16.1.3}
 c_ip[3]=${c_ip[3]:-172.16.1.4}
 
-# compute node MAC addreses for provisioning interface
+# compute node MAC addresses for provisioning interface
 c_mac[0]=${c_mac[0]:-00:1a:2b:3c:4f:56}
 c_mac[1]=${c_mac[1]:-00:1a:2b:3c:4f:57}
 c_mac[2]=${c_mac[2]:-00:1a:2b:3c:4f:58}
