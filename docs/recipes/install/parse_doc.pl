@@ -190,6 +190,7 @@ while( <IN> ) {
             my $next_line;
             do {
                 $next_line = <IN>;
+                $next_line = update_cmd($next_line);
                 # trim leading and trailing space
                 $next_line =~ s/^\s+|\s+$//g;
 
@@ -313,7 +314,7 @@ sub update_cmd {
     $cmd =~ s/BOSVER/$BaseOS/;
     $cmd =~ s/OSIMAGE/$OSimage/;
     $cmd =~ s/BOSSHORT/$BaseOSshort/;
-    $cmd =~ s/ARCH/$arch/;
+    $cmd =~ s/ARCH/$arch/g;
     $cmd =~ s/VERLONG/$verlong/g;
     $cmd =~ s/OSTREE/$OSTree/;
     $cmd =~ s/IMAGE/$image/;

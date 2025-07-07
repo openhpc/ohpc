@@ -146,6 +146,12 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 # aarch64-based recipes
 #----------------------
 
+pushd docs/recipes/install/rocky9/aarch64/warewulf4/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
+pushd docs/recipes/install/almalinux9/aarch64/warewulf4/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
 pushd docs/recipes/install/rocky9/aarch64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
@@ -247,6 +253,14 @@ install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHP
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
 # aarch64 guides
+
+%define lpath rocky9/aarch64/warewulf4/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+%define lpath almalinux9/aarch64/warewulf4/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
 %define lpath rocky9/aarch64/warewulf/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
