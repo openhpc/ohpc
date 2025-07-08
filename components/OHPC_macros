@@ -29,11 +29,7 @@
 %global OHPC_UTILS      %{OHPC_PUB}/utils
 %global debug_package   %{nil}
 
-%if 0%{?rhel} >= 9 || 0%{?openEuler}
-%{!?dist: %global dist 320.ohpc}
-%else
-%{!?dist: %global dist 27.ohpc}
-%endif
+%{!?dist: %global dist 400.ohpc}
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Update package docs location to include version info (to allow
@@ -51,22 +47,6 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # Instead of having Source[1-9]: OHPC_macros in every SPEC file,
 # this sets Source42 for all SPEC files which include OHPC_macros.
 Source42: OHPC_macros
-
-# Pre-process global OS version macros for operation outside OBS
-# Supports build on clone distros without requiring distro-specific
-# macros defined in each specfile.
-%if 0%{!?rhel_version:1}
-%{?centos_version:%global rhel_version %{centos_version}}
-%{?scientificlinux_version:%global rhel_version %{scientific_version}}
-%if 0%{?rhel} == 7
-    # OBS defines rhel_version to 700 for RHEL7
-    %global rhel_version 700
-%endif
-%if 0%{?rhel} == 8
-    # OBS defines rhel_version to 800 for RHEL8
-    %global rhel_version 800
-%endif
-%endif
 
 # OpenHPC packages also require ohpc-buildroot to access macros used to define
 # compiler and MPI families
