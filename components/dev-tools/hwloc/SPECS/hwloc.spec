@@ -13,7 +13,7 @@
 %define pname hwloc
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        2.12.0
+Version:        2.12.1
 Release:        %{?dist}.1
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
@@ -29,8 +29,6 @@ BuildRequires:  libtool
 BuildRequires:  cairo-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  ncurses-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  transfig
 %if 0%{?sle_version}
 BuildRequires:  libnuma-devel
 %else
