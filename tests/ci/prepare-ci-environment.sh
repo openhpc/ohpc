@@ -2,17 +2,57 @@
 
 # shellcheck disable=SC2086
 
-set -x
 set -e
 
-FACTORY_VERSION=3.4
+usage() {
+	echo "Usage: $0 [options] <intel>"
+	echo
+	echo "Options:"
+	echo "  --pre-release  Disable setting OHPC_RELEASE"
+	echo "  --help         Display this help message"
+	echo
+	echo "Parameters:"
+	echo " intel           Enable Intel OneAPI toolkit"
+}
+
+FACTORY_VERSION=4.0
 ENABLE_ONEAPI=""
+PRE_RELEASE=""
+
+while getopts ":-:" opt; do
+	case ${opt} in
+	-)
+		case "${OPTARG}" in
+		pre-release)
+			PRE_RELEASE="yes"
+			;;
+		help)
+			usage
+			exit 0
+			;;
+		*)
+			echo "Invalid option: --${OPTARG}" >&2
+			usage
+			exit 1
+			;;
+		esac
+		;;
+	\?)
+		echo "Invalid option: -${OPTARG}" >&2
+		usage
+		exit 1
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
 if [ $# -eq 1 ]; then
 	if [ "${1}" = "intel" ]; then
 		ENABLE_ONEAPI="intel-oneapi-toolkit-release-ohpc"
 	fi
 fi
 
+set -x
 if [ ! -e /etc/os-release ]; then
 	echo "Cannot detect OS without /etc/os-release"
 	exit 1
@@ -27,8 +67,8 @@ UNAME_M=$(uname -m)
 YES="-n"
 
 OBS_SERVER="http://obs.openhpc.community:82/"
-PROJECT="OpenHPC3:"
-REPOSITORY_URL="http://repos.openhpc.community/OpenHPC/3/"
+PROJECT="OpenHPC4:"
+REPOSITORY_URL="http://repos.openhpc.community/OpenHPC/4/"
 
 retry_counter=0
 max_retries=5
@@ -94,17 +134,19 @@ if [ "${ID}" = "openEuler" ]; then
 fi
 
 loop_command "${PKG_MANAGER}" "${YES}" install "${COMMON_PKGS}"
-if [ "${PKG_MANAGER}" = "dnf" ]; then
-	# If there is a release, this is the place to install the corresponding
-	# release RPM. As long as there is no release RPM only the OBS repository
-	# is used directly.
-	if [ "${ID}" = "openEuler" ]; then
-		OHPC_RELEASE="${REPOSITORY_URL}openEuler_22.03/${UNAME_M}/ohpc-release-3-1.oe2203.${UNAME_M}.rpm"
+if [ "${PRE_RELEASE}" != "yes" ]; then
+	if [ "${PKG_MANAGER}" = "dnf" ]; then
+		# If there is a release, this is the place to install the corresponding
+		# release RPM. As long as there is no release RPM only the OBS repository
+		# is used directly.
+		if [ "${ID}" = "openEuler" ]; then
+			OHPC_RELEASE="${REPOSITORY_URL}openEuler_22.03/${UNAME_M}/ohpc-release-3-1.oe2203.${UNAME_M}.rpm"
+		else
+			OHPC_RELEASE="${REPOSITORY_URL}EL_10/${UNAME_M}/ohpc-release-3-1.el10.${UNAME_M}.rpm"
+		fi
 	else
-		OHPC_RELEASE="${REPOSITORY_URL}EL_9/${UNAME_M}/ohpc-release-3-1.el9.${UNAME_M}.rpm"
+		OHPC_RELEASE="${REPOSITORY_URL}Leap_15/${UNAME_M}/ohpc-release-3-1.leap15.${UNAME_M}.rpm"
 	fi
-else
-	OHPC_RELEASE="${REPOSITORY_URL}Leap_15/${UNAME_M}/ohpc-release-3-1.leap15.${UNAME_M}.rpm"
 fi
 
 if [ "${FACTORY_VERSION}" != "" ]; then
@@ -113,7 +155,7 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 		if [ "${ID}" = "openEuler" ]; then
 			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}openEuler_22.03"
 		else
-			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_9"
+			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_10"
 		fi
 		FACTORY_REPOSITORY_DESTINATION="/etc/yum.repos.d/obs.repo"
 	else
