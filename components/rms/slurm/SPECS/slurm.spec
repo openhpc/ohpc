@@ -81,7 +81,10 @@ Patch0: slurm.conf.example.patch
 #  Options that are off by default (enable with --with <opt>)
 %bcond_with cray
 %bcond_with cray_network
+%if 0%{?rhel} < 10
 %bcond_with slurmrestd
+%bcond_with jwt
+%endif
 %bcond_with slurmsmwd
 %bcond_with multiple_slurmd
 %bcond_with ucx
@@ -95,7 +98,6 @@ Patch0: slurm.conf.example.patch
 %bcond_with numa
 %bcond_with pmix
 %bcond_with nvml
-%bcond_with jwt
 %bcond_with yaml
 %bcond_with freeipmi
 
