@@ -16,7 +16,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.7.59
+Version:   8.7.64
 Release:   %{?dist}.1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
@@ -35,6 +35,7 @@ BuildRequires: lua-filesystem
 BuildRequires: lua-posix
 Requires: lua-filesystem
 Requires: lua-posix
+Requires: lua
 Provides: environment(modules)
 Obsoletes: environment-modules
 %endif
