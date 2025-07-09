@@ -40,7 +40,7 @@ build_srpm() {
 	SRPM=$(rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define "compiler_family ${COMPILER_FAMILY}" --define "mpi_family ${MPI_FAMILY}" "${MPI_DEPENDENT[@]}" "${SPEC}" 2>/dev/null)
 	RESULT=$?
 
-	echo "${SRPM}" | tail -1 | awk -F\  '{ print $2 }'
+	echo "${SRPM}" | grep "Wrote:" | awk -F\  '{ print $2 }'
 
 	return "${RESULT}"
 }
