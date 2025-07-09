@@ -116,6 +116,11 @@ Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 %undefine _annotated_build
 %endif
 
+# Disable warning during build concerning source_date_epoch_from_changelog
+%if 0%{?rhel} >= 10
+%undefine source_date_epoch_from_changelog
+%endif
+
 %endif
 
 # Disable generation of .build-id links
