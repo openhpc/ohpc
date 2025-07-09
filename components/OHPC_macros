@@ -64,6 +64,12 @@ BuildRequires: ohpc-buildroot
 %{!?mpi_family: %global mpi_family openmpi5}
 %{!?python_family: %global python_family python3}
 
+# Disable warning during build concerning source_date_epoch_from_changelog
+%if 0%{?rhel} >= 10
+%undefine source_date_epoch_from_changelog
+%global __brp_check_rpaths %{nil}
+%endif
+
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
@@ -115,12 +121,6 @@ Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 %if 0%{?rhel} >= 8
 %undefine _annotated_build
 %endif
-
-# Disable warning during build concerning source_date_epoch_from_changelog
-%if 0%{?rhel} >= 10
-%undefine source_date_epoch_from_changelog
-%endif
-
 %endif
 
 # Disable generation of .build-id links
