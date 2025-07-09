@@ -3,10 +3,10 @@ name: Validate
 on:
   push:
     branches:
-      - 3.x
+      - 4.x
   pull_request:
     branches:
-      - 3.x
+      - 4.x
 
 env:
   SKIP_CI_SPECS: |
@@ -21,7 +21,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: docker.io/library/rockylinux:9
+      image: docker.io/library/almalinux:10
 
     steps:
     - name: Setup
@@ -67,14 +67,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
-        compiler: [gnu14, intel]
+        compiler: [gnu14] # skip intel for now
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
     runs-on: ${{ matrix.os }}
     name: Build on RHEL (${{ matrix.os }}/${{ matrix.compiler}})
     container:
-      image: docker.io/library/rockylinux:9
+      image: docker.io/library/almalinux:10
       volumes:
         - /usr:/host/usr
         - /opt:/host/opt
@@ -87,7 +87,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh ${{ matrix.compiler }}
+      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
@@ -119,6 +119,7 @@ jobs:
           /tmp/empty
 
   test_on_rhel:
+    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
@@ -132,7 +133,7 @@ jobs:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
     container:
-      image: docker.io/library/rockylinux:9
+      image: docker.io/library/almalinux:10
       options: --privileged
       volumes:
         - /usr:/host/usr
@@ -147,7 +148,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh ${{ matrix.compiler }}
+      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
@@ -186,6 +187,7 @@ jobs:
         path: tests/**/*.log.xml
 
   build_on_openEuler:
+    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
@@ -229,6 +231,7 @@ jobs:
           /tmp/empty
 
   test_on_openEuler:
+    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         compiler: [gnu14]
@@ -271,6 +274,7 @@ jobs:
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
 
   build_on_leap:
+    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
@@ -309,6 +313,7 @@ jobs:
           /tmp/empty
 
   test_on_leap:
+    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         compiler: [gnu14]
