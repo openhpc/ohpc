@@ -75,8 +75,8 @@ Profile for shell source scripts for lua-lmod
 %setup -q -n Lmod-%{version}
 
 # OpenHPC patches
-%patch1 -p1
-%patch2 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
 
 %build
 unset MODULEPATH
