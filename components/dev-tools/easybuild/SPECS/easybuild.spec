@@ -29,6 +29,7 @@ Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild_eas
 Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild_framework-%{version}.tar.gz
 BuildRequires: python3-devel python3-pip
 BuildRequires: python3-setuptools
+BuildRequires: python3-wheel
 Requires:  python3
 Requires:  patch
 #!BuildIgnore: post-build-checks
