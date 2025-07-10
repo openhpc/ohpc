@@ -10,6 +10,10 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+# Following flags need to be unset to build gcc on RHEL 10
+%undefine _package_note_flags
+%undefine _auto_set_build_flags
+
 %global gnu12_version 12.2.0
 %global gnu12_gmp_version 6.2.1
 %global gnu12_mpc_version 1.2.1
@@ -20,7 +24,7 @@
 %global gnu13_mpc_version 1.3.1
 %global gnu13_mpfr_version 4.2.1
 
-%global gnu14_version 14.2.0
+%global gnu14_version 14.3.0
 %global gnu14_gmp_version 6.3.0
 %global gnu14_mpc_version 1.3.1
 %global gnu14_mpfr_version 4.2.1
