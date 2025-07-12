@@ -42,7 +42,6 @@ BuildRequires:  texlive-geometry
 %endif
 
 %if 0%{?rhel} || 0%{?openEuler}
-BuildRequires:  texlive-texconfig
 BuildRequires:  texlive-metafont
 BuildRequires:  texlive-cm
 BuildRequires:  texlive-helvetic
@@ -55,11 +54,14 @@ BuildRequires:  latexmk
 
 %if 0%{?rhel}
 BuildRequires:  texlive-pdftex-def
+BuildRequires:  texlive-extensions
+BuildRequires:  texlive-latexconfig
 BuildRequires:  texlive-epstopdf-pkg
 BuildRequires:  tex
 %endif
 
 %if 0%{?openEuler}
+BuildRequires:  texlive-texconfig
 BuildRequires:  texlive-pdftex
 BuildRequires:  texlive-epstopdf
 BuildRequires:  texlive-collection-basic
