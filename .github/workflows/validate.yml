@@ -363,3 +363,15 @@ jobs:
         name: event-file
         retention-days: 1
         path: ${{ github.event_path }}
+
+  test_parse_doc:
+    name: Run bats tests
+    runs-on: ubuntu-latest
+    container:
+      image: registry.fedoraproject.org/fedora:latest
+    steps:
+    - name: Setup
+      run: dnf -y install bats
+    - uses: actions/checkout@v4
+    - name: Run bats tests
+      run: ./tests/ci/test_parse_doc.bats

@@ -12,6 +12,7 @@ codespell-lint:
 		misc/build_order.py \
 		misc/obs/obs_config.py \
 		tests/ci/spec_to_test_mapping.py \
+		tests/ci/test_parse_doc.bats \
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
@@ -59,6 +60,7 @@ flake8-lint:
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
+		tests/ci/test_parse_doc.bats \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
@@ -110,6 +112,7 @@ shellcheck-lint:
 		../../misc/shell-functions \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
+		../../tests/ci/test_parse_doc.bats \
 		../../tests/common/functions \
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
@@ -165,6 +168,7 @@ shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
 	shfmt \
 		-w -d -ln bats \
+		../../tests/ci/test_parse_doc.bats \
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/test_cmake \
