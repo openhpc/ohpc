@@ -78,5 +78,5 @@ EOF
 
 	run "${PARSE_DOC_SCRIPT}" "${TEST_TEX_FILE}"
 	[ "${status}" -eq 0 ]
-	echo "${output}" | grep -q 'echo "x86_64 is ARCH"'
+	echo "${output}" | grep -q 'echo "x86_64 is x86_64"'
 }
