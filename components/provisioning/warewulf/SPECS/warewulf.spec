@@ -38,7 +38,7 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.6.1
+Version: 4.6.2
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
@@ -219,6 +219,11 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %{_datadir}/warewulf/overlays/wwclient/rootfs/*
 %{_datadir}/warewulf/overlays/wwinit/rootfs/*
 %{_datadir}/warewulf/overlays/localtime/rootfs/*
+%{_datadir}/warewulf/overlays/sfdisk/rootfs/*
+%{_datadir}/warewulf/overlays/mkfs/rootfs/*
+%{_datadir}/warewulf/overlays/mkswap/rootfs/*
+%{_datadir}/warewulf/overlays/systemd.mount/rootfs/*
+%{_datadir}/warewulf/overlays/systemd.swap/rootfs/*
 
 %{_bindir}/wwctl
 %{_prefix}/lib/firewalld/services/warewulf.xml
