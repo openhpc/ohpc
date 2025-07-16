@@ -30,7 +30,9 @@ Source9:  compute.cfg
 Source10: example.modulefile
 Source11: example-mpi-dependent.modulefile
 Source12: ifcfg-ib0.centos
-
+Source13: chrony.conf.ww
+Source14: NetworkManager-wait-online.service.d.override.conf
+Source15: slurmd.ww
 
 %description
 
@@ -40,8 +42,6 @@ OpenHPC development environment.
 %prep
 
 %{__cp} %SOURCE0 .
-
-%build
 
 %install
 
@@ -56,6 +56,9 @@ install -D -m 0644 %SOURCE7  %{buildroot}%{OHPC_HOME}/pub/examples/ganglia/gmond
 install -D -m 0644 %SOURCE8  %{buildroot}%{OHPC_HOME}/pub/examples/openpbs/job.mpi
 install -D -m 0644 %SOURCE10 %{buildroot}%{OHPC_HOME}/pub/examples/example.modulefile
 install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-dependent.modulefile
+install -D -m 0644 %SOURCE13 %{buildroot}%{OHPC_HOME}/pub/examples/chrony.conf.ww
+install -D -m 0644 %SOURCE14 %{buildroot}%{OHPC_HOME}/pub/examples/network/NetworkManager-wait-online.service.d/override.conf
+install -D -m 0644 %SOURCE15  %{buildroot}%{OHPC_HOME}/pub/examples/slurm/slurmd.ww
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 

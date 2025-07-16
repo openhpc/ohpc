@@ -5,8 +5,8 @@ on every host in the resource management pool, issue the following:
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Configure Slurm server in the overlay (using "configless" option) using a tag in a template file (slurmd.ww)
-[sms](*\#*) echo SLURMD_OPTIONS='--conf-server {{.Tags.slurmctld}}' | \
-  wwctl overlay import --parents nodeconfig <(cat) /etc/sysconfig/slurmd.ww
+[sms](*\#*) wwctl overlay import --parents nodeconfig \
+ /opt/ohpc/pub/examples/slurm/slurmd.ww /etc/sysconfig/slurmd.ww
 
 # Set the value of the slurmctld tag to the $sms_ip for the nodes profile.
 [sms](*\#*) wwctl profile set --yes nodes --tagadd slurmctld=${sms_ip}

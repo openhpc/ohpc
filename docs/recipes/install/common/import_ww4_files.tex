@@ -12,16 +12,13 @@ handled in this way by default.  Here we add directories and files to the
 [sms](*\#*) wwctl overlay import --parents nodeconfig /etc/subgid
 
 # Identify master host as local NTP server, configure it with a template with a Tag
-[sms](*\#*) echo 'server {{.Tags.ntpserver}} iburst' | \
-  wwctl overlay import --parents nodeconfig <(cat) /etc/chrony.conf.ww
+[sms](*\#*) wwctl overlay import --parents nodeconfig \
+ /opt/ohpc/pub/examples/chrony.conf.ww /etc/chrony.conf.ww
 [sms](*\#*) wwctl profile set --yes nodes --tagadd ntpserver=${sms_ip}
 
 # Configure systemd and NetworkManger to wait for the network to be fully up.
-[sms](*\#*) cat <<- EOF | wwctl overlay import --parents nodeconfig <(cat) \
-  /etc/systemd/system/NetworkManager-wait-online.service.d/override.conf
-[Service]
-ExecStart=
-ExecStart=/usr/bin/nm-online -q
-EOF
+[sms](*\#*) wwctl overlay import --parents nodeconfig \
+ /opt/ohpc/pub/examples/network/NetworkManager-wait-online.service.d/override.conf \
+ /etc/systemd/system/NetworkManager-wait-online.service.d/override.conf
 \end{lstlisting}
 % \end_ohpc_run

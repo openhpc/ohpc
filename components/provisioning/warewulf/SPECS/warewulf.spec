@@ -44,6 +44,8 @@ License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
 URL:     https://github.com/warewulf/warewulf
 Source0: https://github.com/warewulf/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
+# OpenHPC modifications to the warewulf template files
+Patch0:  hosts.ww.patch
 
 ExclusiveOS: linux
 
@@ -105,6 +107,7 @@ system for large clusters of bare metal and/or virtual systems.
 
 %prep
 %setup -q -n %{pname}-%{version} -b0 %if %{?with_offline:-a2}
+%patch -P 0 -p1
 
 
 %build

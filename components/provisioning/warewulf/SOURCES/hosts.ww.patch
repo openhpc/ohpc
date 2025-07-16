@@ -1,0 +1,11 @@
+--- a/overlays/host/rootfs/etc/hosts.ww.orig	2025-07-15 17:50:42.920000000 +0000
++++ b/overlays/host/rootfs/etc/hosts.ww	2025-07-15 17:51:17.214024833 +0000
+@@ -10,7 +10,7 @@
+ {{- range $devname, $netdev := $node.NetDevs}}{{/* for each network device on the node */}}
+ {{- if $netdev.Ipaddr}}{{/* if we have an ip address on this network device */}}
+ {{- /* emit the node name as hostname if this is the primary */}}
+-{{$netdev.Ipaddr}} {{if $netdev.Primary}}{{$node.Id}}{{end}} {{$node.Id}}-{{$devname}} {{if $netdev.Device}}{{$node.Id}}-{{$netdev.Device}}{{end}}
++{{$netdev.Ipaddr}} {{if $netdev.Primary}}{{$node.Id}}.localdomain {{$node.Id}}{{end}} {{$node.Id}}-{{$devname}} {{if $netdev.Device}}{{$node.Id}}-{{$netdev.Device}}{{end}}
+ {{- end }}{{/* if ip */}}
+ {{- end }}{{/* for each network device */}}
+ {{- end }}{{/* for each node */}}
