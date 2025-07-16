@@ -158,8 +158,7 @@ shellcheck-lint:
 		../../tests/libs/ptscotch/tests/test_module \
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		../../tests/libs/plasma/tests/rm_execution \
-		../../tests/libs/plasma/tests/test_module
-	shellcheck --exclude=SC1091,SC2030,SC2031 \
+		../../tests/libs/plasma/tests/test_module \
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/test_module
