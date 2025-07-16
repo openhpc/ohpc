@@ -50,7 +50,7 @@ MPI Library.
 # Mod generator for oneAPI support
 sed -e 's|@@oneapi_manifest@@|%{oneapi_manifest}|' \
     -e 's|@@OHPC_ADMIN@@|%{OHPC_ADMIN}|' \
-    -e 's|@@OHPC_MODULEDEPS@@|%{OHPC_MODULEDEPS}|' \
+    -e 's|@@OHPC_MODULEDEPS@@|%{OHPC_MODULEDEPS}|g' \
     -e 's|@@OHPC_MODULES@@|%{OHPC_MODULES}|' \
     -e 's|@@exact_deps@@|%{exact_deps}|' \
     -e 's|@@exact_mpi_ver@@|%{exact_mpi_ver}|' \
