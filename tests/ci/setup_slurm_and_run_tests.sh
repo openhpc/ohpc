@@ -15,7 +15,10 @@ if hash zypper > /dev/null 2>&1; then
 	PKG=("zypper" "-n" "--no-gpg-checks")
 fi
 
-# First install slurm and needed packages
+# First remove a possible conflicts from a previous run
+"${PKG[@]}" remove lmod-defaults-*-ohpc || true
+
+# Then install slurm and needed packages
 "${PKG[@]}" install \
 	hostname \
 	make \
@@ -100,7 +103,7 @@ srun -N2 hostname
 # This script returns three array variables:
 #  PKGS and TESTS and ADMIN_TESTS
 # shellcheck disable=SC2068 # (we want individual elements)
-eval "$(tests/ci/spec_to_test_mapping.py $@)"
+eval "$(tests/ci/spec_to_test_mapping.py --compiler-family "${COMPILER_FAMILY}" $@)"
 
 if [ "${#PKGS[@]}" -gt 0 ]; then
 	"${PKG[@]}" install "${PKGS[@]}"

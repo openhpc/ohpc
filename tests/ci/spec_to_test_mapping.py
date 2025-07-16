@@ -7,6 +7,7 @@
 import sys
 import csv
 import os
+import argparse
 
 # This dictionary defines the mapping
 # 'path/to/file.spec': [
@@ -43,11 +44,11 @@ test_map = {
     'components/io-libs/adios2/SPECS/adios2.spec': [
         'adios2',
         '',
-        'openmpi5-gnu14-ohpc \
-            mpich-gnu14-ohpc \
-            python3-numpy-gnu14-ohpc \
-            python3-mpi4py-gnu14-mpich-ohpc \
-            python3-mpi4py-gnu14-openmpi5-ohpc'
+        ('openmpi5-COMPILER_FAMILY-ohpc '
+         'mpich-COMPILER_FAMILY-ohpc '
+         'python3-numpy-COMPILER_FAMILY-ohpc '
+         'python3-mpi4py-COMPILER_FAMILY-mpich-ohpc '
+         'python3-mpi4py-COMPILER_FAMILY-openmpi5-ohpc')
     ],
     'components/io-libs/hdf5/SPECS/hdf5.spec': [
         'hdf5',
@@ -127,7 +128,8 @@ test_map = {
     'components/parallel-libs/superlu_dist/SPECS/superlu_dist.spec': [
         'superlu_dist',
         '',
-        'scalapack-gnu14-openmpi5-ohpc scalapack-gnu14-mpich-ohpc'
+        ('scalapack-COMPILER_FAMILY-openmpi5-ohpc '
+         'scalapack-COMPILER_FAMILY-mpich-ohpc')
     ],
     'components/parallel-libs/trilinos/SPECS/trilinos.spec': [
         'trilinos',
@@ -137,17 +139,17 @@ test_map = {
     'components/perf-tools/extrae/SPECS/extrae.spec': [
         'extrae',
         '',
-        'lmod-defaults-gnu14-openmpi5-ohpc'
+        'lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc'
     ],
     'components/perf-tools/geopm/SPECS/geopm.spec': [
         'geopm',
         '',
-        'lmod-defaults-gnu14-openmpi5-ohpc'
+        'lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc'
     ],
     'components/perf-tools/likwid/SPECS/likwid.spec': [
         'likwid',
         '',
-        'lmod-defaults-gnu14-openmpi5-ohpc'
+        'lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc'
     ],
     'components/perf-tools/papi/SPECS/papi.spec': [
         'papi',
@@ -157,17 +159,18 @@ test_map = {
     'components/perf-tools/scorep/SPECS/scorep.spec': [
         'scorep',
         '',
-        'lmod-defaults-gnu14-openmpi5-ohpc'
+        'lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc'
     ],
     'components/perf-tools/scalasca/SPECS/scalasca.spec': [
         'scalasca',
         '',
-        'lmod-defaults-gnu14-openmpi5-ohpc'
+        'lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc'
     ],
     'components/perf-tools/tau/SPECS/tau.spec': [
         'tau',
         '',
-        'lmod-defaults-gnu14-openmpi5-ohpc man bc'
+        ('lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc '
+         'man bc')
     ],
     'components/mpi-families/openmpi/SPECS/openmpi5.spec': [
         'slurm',
@@ -217,7 +220,7 @@ test_map = {
     'components/perf-tools/dimemas/SPECS/dimemas.spec': [
         'dimemas',
         '',
-        'lmod-defaults-gnu14-openmpi5-ohpc'
+        'lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc'
     ],
     'components/runtimes/charliecloud/SPECS/charliecloud.spec': [
         'charliecloud',
@@ -227,12 +230,14 @@ test_map = {
     'components/io-libs/netcdf-fortran/SPECS/netcdf-fortran.spec': [
         'netcdf',
         '',
-        'netcdf-cxx-gnu14-openmpi5-ohpc netcdf-cxx-gnu14-mpich-ohpc'
+        ('netcdf-cxx-COMPILER_FAMILY-openmpi5-ohpc '
+         'netcdf-cxx-COMPILER_FAMILY-mpich-ohpc')
     ],
     'components/io-libs/netcdf-cxx/SPECS/netcdf-cxx.spec': [
         'netcdf',
         '',
-        'netcdf-fortran-gnu14-openmpi5-ohpc netcdf-fortran-gnu14-mpich-ohpc'
+        ('netcdf-fortran-COMPILER_FAMILY-openmpi5-ohpc '
+         'netcdf-fortran-COMPILER_FAMILY-mpich-ohpc')
     ],
     'components/perf-tools/imb/SPECS/imb.spec': [
         'imb',
@@ -300,7 +305,12 @@ for spec in skip_ci_specs:
     if spec in test_map:
         test_map.pop(spec)
 
-if len(sys.argv) <= 1:
+parser = argparse.ArgumentParser()
+parser.add_argument('--compiler-family', required=True, help='Compiler family')
+parser.add_argument('specs', nargs='*')
+args = parser.parse_args()
+
+if not args.specs:
     print('TESTS=() ADMIN_TESTS=() PKGS=()')
     sys.exit(0)
 
@@ -308,7 +318,7 @@ tests = ''
 admin_tests = ''
 pkgs = ''
 
-for i in sys.argv[1:]:
+for i in args.specs:
     if i in test_map.keys():
         if len(tests) > 0:
             tests += ' '
@@ -325,6 +335,8 @@ for i in sys.argv[1:]:
         pkgs += test_map[i][2]
 
 pkgs = pkgs.replace('python3', python_prefix)
+
+pkgs = pkgs.replace('COMPILER_FAMILY', args.compiler_family)
 
 print(
     'TESTS=(%s) ADMIN_TESTS=(%s) PKGS=(%s)' % (
