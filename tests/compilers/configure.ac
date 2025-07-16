@@ -19,9 +19,15 @@ AC_PROG_CC
 AC_PROG_FC
 AC_PROG_CXX
 
-CFLAGS="${CFLAGS} -fopenmp"
-CXXFLAGS="${CXXFLAGS} -fopenmp"
-FCFLAGS="${FCFLAGS} -fopenmp"
+if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
+  CFLAGS="${CFLAGS} -qopenmp"
+  CXXFLAGS="${CXXFLAGS} -qopenmp"
+  FCFLAGS="${FCFLAGS} -qopenmp"
+else
+  CFLAGS="${CFLAGS} -fopenmp"
+  CXXFLAGS="${CXXFLAGS} -fopenmp"
+  FCFLAGS="${FCFLAGS} -fopenmp"
+fi
 
 AC_OUTPUT( Makefile tests/Makefile)
 
