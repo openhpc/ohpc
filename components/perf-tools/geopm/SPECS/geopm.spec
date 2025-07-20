@@ -87,7 +87,7 @@ including support for static control.
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "gnu14"
+%if "%{compiler_family}" == "gnu15"
 export CFLAGS="$CFLAGS -Wno-error=stringop-truncation"
 %endif
 %if "%{compiler_family}" == "intel"
@@ -95,7 +95,7 @@ export CXXFLAGS="${CXXFLAGS} -Wno-error"
 %endif
 ./autogen.sh
 
-%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu14"
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu15"
 # The combination of impi and GCC 12 does not work as
 # expected and needs these additional fixes.
 sed -e 's,\sFFLAGS=$MPI_F77FLAGS,FFLAGS="-I$MPI_DIR/include $MPI_F77FLAGS",g' -i configure
