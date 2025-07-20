@@ -41,8 +41,47 @@ AMD64/MacOSX.
 %setup -q -n %{pname}-%{version}
 
 %build
-./configure --prefix=%{install_path} \
-	    --libexecdir=%{install_path}/lib || { cat config.log && exit 1; }
+
+# Following is taken from the Fedora spec file:
+
+	
+# LTO triggers undefined symbols in valgrind.  But valgrind has a
+# --enable-lto configure time option that we will use instead.
+%define _lto_cflags %{nil}
+
+# Filter out "hardening" flags that don't make sense for valgrind.
+# -fstack-protector just cannot work (valgrind would have to implement
+# its own version since it doesn't link with glibc and handles stack
+# setup itself). We patch some flags back in just for those helper
+# programs where it does make sense.
+#
+# -Wl,-z,now doesn't make sense for static linked tools
+# and would prevent using the vgpreload libraries on binaries that
+# don't link themselves against libraries (like pthread) which symbols
+# are needed (but only if the inferior itself would use them).
+#
+# -O2 doesn't work for the vgpreload libraries either. They are meant
+# to not be optimized to show precisely what happened. valgrind adds
+# -O2 itself wherever suitable.
+#
+# Also disable strict symbol checks because the vg_preload library
+# will use hidden/undefined symbols from glibc like __libc_freeres.
+	
+%undefine _strict_symbol_defs_build
+
+CFLAGS="`echo " %{optflags} " | sed 's/ -fstack-protector\([-a-z]*\) / / g;s/ -O2 / /g;'`"
+export CFLAGS
+
+	
+%if 0%{?__global_ldflags:1}
+LDFLAGS="`echo " %{__global_ldflags} " | sed 's/ -Wl,-z,now / / g;'`"
+%endif
+export LDFLAGS
+
+./configure \
+		--prefix=%{install_path} \
+		--enable-lto \
+		--libexecdir=%{install_path}/lib || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install
