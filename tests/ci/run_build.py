@@ -22,7 +22,7 @@ parser.add_argument(
 parser.add_argument(
     'specfiles',
     help='list of specfiles to check',
-    nargs='+',
+    nargs='*',
 )
 parser.add_argument(
     '--compiler-family',
