@@ -61,12 +61,13 @@ working filesystems in an HPC environment.
 
 %prep
 %setup -q -n %{pname}-%{version}
+sed -e 's,-Os",-Os -fPIE",g' -i CMakeLists.txt
 
 %build
 cmake \
   -DCMAKE_INSTALL_PREFIX=%{install_path} \
   .
-make
+make VERBOSE=1
 
 %install
 make DESTDIR=%{buildroot} install
