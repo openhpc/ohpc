@@ -10,7 +10,6 @@ codespell-lint:
 		tests/ci/check_spec.py \
 		tests/ci/run_build.py \
 		misc/build_order.py \
-		misc/obs/obs_config.py \
 		tests/ci/spec_to_test_mapping.py \
 		tests/ci/test_parse_doc.bats \
 		components/admin/prun/SOURCES/prun \
@@ -54,7 +53,6 @@ flake8-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
-		../../misc/obs/obs_config.py \
 		../../tests/ci/spec_to_test_mapping.py
 
 whitespace-lint:
