@@ -67,7 +67,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
-        compiler: [gnu14] # skip intel for now
+        compiler: [gnu15] # skip intel for now
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
@@ -123,7 +123,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
-        compiler: [gnu14, intel]
+        compiler: [gnu15, intel]
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
@@ -234,7 +234,7 @@ jobs:
     if: ${{ false }}  # disable for now
     strategy:
       matrix:
-        compiler: [gnu14]
+        compiler: [gnu15]
         os: [ubuntu-latest, ubuntu-24.04-arm]
     env:
       JOB_SKIP_CI_SPECS: |
@@ -316,7 +316,7 @@ jobs:
     if: ${{ false }}  # disable for now
     strategy:
       matrix:
-        compiler: [gnu14]
+        compiler: [gnu15]
         os: [ubuntu-latest, ubuntu-24.04-arm]
     env:
       JOB_SKIP_CI_SPECS: |
