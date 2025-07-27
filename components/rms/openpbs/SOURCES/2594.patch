@@ -1,0 +1,22 @@
+From 8aacde7246d7b56a8c775c13e8f23233970b94c6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?V=C3=A1clav=20Chlumsk=C3=BD?= <chlumskyvaclav@gmail.com>
+Date: Wed, 14 Jun 2023 07:35:42 +0200
+Subject: [PATCH] compile with Python 3.11
+
+---
+ src/lib/Libpython/pbs_python_external.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/Libpython/pbs_python_external.c b/src/lib/Libpython/pbs_python_external.c
+index e0c33fca08..5fdf55718b 100644
+--- a/src/lib/Libpython/pbs_python_external.c
++++ b/src/lib/Libpython/pbs_python_external.c
+@@ -54,7 +54,7 @@
+ #ifdef PYTHON
+ 
+ #include <pbs_python_private.h> /* private python file  */
+-#include <eval.h>		/* For PyEval_EvalCode  */
++#include <Python.h>		/* Includes eval.h for PyEval_EvalCode  */
+ #include <pythonrun.h>		/* For Py_SetPythonHome */
+ #include <sys/types.h>
+ #include <sys/stat.h>

@@ -15,7 +15,7 @@
 %endif
 
 %if !%{defined pbs_version}
-%define pbs_version 22.05.11
+%define pbs_version 23.06.06
 %endif
 
 %if !%{defined pbs_release}
@@ -62,6 +62,9 @@ Vendor: Altair Engineering, Inc.
 Prefix: %{?pbs_prefix}%{!?pbs_prefix:%{_prefix}}
 
 Patch1: hwloc.patch
+# compile with Python 3.11
+# https://github.com/openpbs/openpbs/pull/2594
+Patch2: 2594.patch
 
 %bcond_with alps
 %bcond_with ptl
@@ -415,20 +418,15 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
-%attr(644, root, root) %{pbs_prefix}/lib*/libpbs.la
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
 %config(noreplace) %{_sysconfdir}/profile.d/pbs.*
-%exclude %{_sysconfdir}/profile.d/ptl.csh
-%exclude %{_sysconfdir}/profile.d/ptl.sh
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %else
 %exclude %{_unitdir}/pbs.service
 %endif
 %exclude %{pbs_prefix}/unsupported/fw
-%exclude %{pbs_prefix}/unsupported/*.pyc
-%exclude %{pbs_prefix}/unsupported/*.pyo
 %exclude %{pbs_prefix}/lib*/*.a
 %exclude %{pbs_prefix}/include/*
 %doc README.md
@@ -440,12 +438,9 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
-%attr(644, root, root) %{pbs_prefix}/lib*/libpbs.la
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
 %config(noreplace) %{_sysconfdir}/profile.d/pbs.*
-%exclude %{_sysconfdir}/profile.d/ptl.csh
-%exclude %{_sysconfdir}/profile.d/ptl.sh
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %else
@@ -471,8 +466,6 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %exclude %{pbs_prefix}/sbin/pbs_server.bin
 %exclude %{pbs_prefix}/sbin/pbsfs
 %exclude %{pbs_prefix}/unsupported/fw
-%exclude %{pbs_prefix}/unsupported/*.pyc
-%exclude %{pbs_prefix}/unsupported/*.pyo
 %exclude %{pbs_prefix}/lib*/*.a
 %exclude %{pbs_prefix}/include/*
 %doc README.md
@@ -483,12 +476,9 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
-%attr(644, root, root) %{pbs_prefix}/lib*/libpbs.la
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
 %config(noreplace) %{_sysconfdir}/profile.d/pbs.*
-%exclude %{_sysconfdir}/profile.d/ptl.csh
-%exclude %{_sysconfdir}/profile.d/ptl.sh
 %exclude %{pbs_prefix}/bin/mpiexec
 %exclude %{pbs_prefix}/bin/pbs_attach
 %exclude %{pbs_prefix}/bin/pbs_tmrsh
@@ -522,8 +512,6 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %exclude %{pbs_prefix}/sbin/pbs_upgrade_job
 %exclude %{pbs_prefix}/sbin/pbsfs
 %exclude %{pbs_prefix}/unsupported/fw
-%exclude %{pbs_prefix}/unsupported/*.pyc
-%exclude %{pbs_prefix}/unsupported/*.pyo
 %exclude %{_unitdir}/pbs.service
 %exclude %{pbs_prefix}/lib*/*.a
 %exclude %{pbs_prefix}/include/*
@@ -541,9 +529,6 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %defattr(-,root,root, -)
 %dir %{ptl_prefix}
 %{ptl_prefix}/*
-%{_sysconfdir}/profile.d/ptl.csh
-%{_sysconfdir}/profile.d/ptl.sh
-%config(noreplace) %{_sysconfdir}/profile.d/ptl.*
 
 %post %{pbs_ptl}
 installed_pkg="$(pip3 list)"
