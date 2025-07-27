@@ -38,12 +38,9 @@ Requires: ucx-ib%{PROJ_DELIM}
 %define FABRIC_DELIM -ucx
 %else
 %define with_ofi 1
-BuildRequires: libfabric%{PROJ_DELIM}
+BuildRequires: libfabric-devel
 BuildRequires: rdma-core-devel
-%ifarch x86_64
-BuildRequires: libpsm2-devel
-%endif
-Requires: libfabric%{PROJ_DELIM}
+Requires: libfabric
 %define FABRIC_DELIM -ofi
 %endif
 
@@ -66,6 +63,7 @@ Requires: prun%{PROJ_DELIM} >= 1.2
 BuildRequires: perl
 Requires: perl
 BuildRequires: zlib-devel make
+BuildRequires: libnl3-devel
 %if 0%{?suse_version}
 BuildRequires:  libnuma-devel
 %else
@@ -94,7 +92,7 @@ Message Passing Interface (MPI) standard.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p0
+%patch -P 0 -p 0
 
 %build
 # OpenHPC compiler designation
@@ -105,9 +103,6 @@ export CPATH=${PMIX_INC}
 %endif
 %if 0%{with_ucx}
 module load ucx
-%endif
-%if 0%{with_ofi}
-module load libfabric
 %endif
 
 %if "%{compiler_family}" == "gnu12" || "%{compiler_family}" == "gnu13" || "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
@@ -134,7 +129,7 @@ export FFLAGS=-fallow-argument-mismatch
             --with-device=ch4:ucx --with-ucx=$UCX_DIR \
 %endif
 %if 0%{with_ofi}
-            --with-device=ch4:ofi --with-libfabric=$LIBFABRIC_DIR \
+            --with-device=ch4:ofi --with-libfabric \
 %endif
     || { cat config.log && exit 1; }
 
@@ -186,9 +181,6 @@ prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 %if 0%{with_ucx}
 depends-on ucx
-%endif
-%if 0%{with_ofi}
-depends-on libfabric
 %endif
 family "MPI"
 EOF
