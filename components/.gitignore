@@ -11,6 +11,7 @@ admin/docs/SOURCES/docs-ohpc.tar
 admin/genders/SOURCES/genders-*.tar.gz
 admin/lmod/SOURCES/lmod-*.tar.gz
 admin/losf/SOURCES/losf-*.tar.gz
+admin/hpc-workspace/SOURCES/*.tar.gz
 admin/mrsh/SOURCES/mrsh-*.tar.gz
 admin/nhc/SOURCES/nhc-*.tar.gz
 admin/pdsh/SOURCES/pdsh-*.tar.gz
@@ -26,10 +27,8 @@ dev-tools/autoconf/SOURCES/autoconf-*.tar.gz
 dev-tools/automake/SOURCES/automake-*.tar.gz
 dev-tools/annobin/SOURCES/annobin-*.tar.xz
 dev-tools/cmake/SOURCES/cmake-*.tar.gz
-dev-tools/easybuild/SOURCES/easybuild-*.tar.gz
-dev-tools/easybuild/SOURCES/easybuild-easyblocks-*.tar.gz
-dev-tools/easybuild/SOURCES/easybuild-easyconfigs-*.tar.gz
-dev-tools/easybuild/SOURCES/easybuild-framework-*.tar.gz
+dev-tools/cuda-devel/SOURCES/cuda*repo
+dev-tools/easybuild/SOURCES/easybuild*.tar.gz
 dev-tools/hwloc/SOURCES/hwloc-*.tar.bz2
 dev-tools/libtool/SOURCES/libtool-*.tar.gz
 dev-tools/mpi4py/SOURCES/mpi4py-*.tar.gz
@@ -47,7 +46,7 @@ distro-packages/python-setuptools/SOURCES/setuptools-*.tar.gz
 distro-packages/sigar/SOURCES/sigar-*.tar.gz
 fs/shine/SOURCES/v*.tar.gz
 fs/lustre-client/SOURCES/lustre-*.tar.gz
-io-libs/adios2/SOURCES/adios2-*.tar.gz
+io-libs/adios2/SOURCES/*.tar.gz
 io-libs/*hdf5/SOURCES/hdf5*.tar.*
 io-libs/netcdf-cxx/SOURCES/v*.tar.gz
 io-libs/netcdf-fortran/SOURCES/v*.tar.gz
@@ -59,7 +58,7 @@ mpi-families/mpich/SOURCES/mpich-*.tar.gz
 mpi-families/mvapich2/SOURCES/mvapich2-*.tar.gz
 mpi-families/openmpi/SOURCES/openmpi-*.tar.bz2
 mpi-families/ucx/SOURCES/ucx-*.tar.gz
-parallel-libs/boost/SOURCES/boost*.tar.gz
+parallel-libs/boost/SOURCES/boost*.tar*
 parallel-libs/fftw/SOURCES/fftw-*.tar.gz
 parallel-libs/hypre/SOURCES/hypre-*.tar.gz
 parallel-libs/mfem/SOURCES/mfem-*.tar
@@ -75,7 +74,7 @@ parallel-libs/superlu_dist/SOURCES/superlu_dist-*.tar
 parallel-libs/trilinos/SOURCES/trilinos-release-*.tar.gz
 perf-tools/dimemas/SOURCES/dimemas-*src.tar.bz2
 perf-tools/extrae/SOURCES/extrae-*src.tar.bz2
-perf-tools/geopm/SOURCES/geopm-*.tar.gz
+perf-tools/geopm/SOURCES/*.tar.gz
 perf-tools/imb/SOURCES/IMB-v*.tar.gz
 perf-tools/likwid/SOURCES/v*.tar.gz
 perf-tools/msr-safe/SOURCES/msr-safe-*.tar.gz
@@ -101,6 +100,7 @@ rms/pmix/SOURCES/pmix-*.tar.bz2
 rms/slurm/SOURCES/slurm-*.tar.bz2
 runtimes/charliecloud/SOURCES/charliecloud-*.tar.gz
 serial-libs/R/SOURCES/R-*.tar.gz
+serial-libs/cubelib/SOURCES/cubelib*tar.gz
 serial-libs/gsl/SOURCES/gsl-*.tar.gz
 serial-libs/metis/SOURCES/*.tar.gz
 serial-libs/openblas/SOURCES/openblas-*.tar.gz
