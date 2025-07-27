@@ -23,7 +23,7 @@ Version:        7.0.0
 Release:        0%{?dist}
 Source0:        https://github.com/xiaoyeli/%{pname}/archive/refs/tags/v%{version}.tar.gz
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
-Patch:         superlu-4.3-include.patch
+Patch0:         superlu-4.3-include.patch
 # PATCH-FIX-OPENSUSE superlu-5.1-remove-hsl.patch [bnc#796236]
 # The Harwell Subroutine Library (HSL) routine m64ad.c have been removed
 # from the original sources for legal reasons. This patch disables the inclusion of
@@ -51,8 +51,8 @@ Docu can be found on http://www.netlib.org.
 
 %prep
 %setup -q -n superlu-%{version}
-%patch -p1
-%patch1 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 
 %build
 %ohpc_setup_compiler
