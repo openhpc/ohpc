@@ -16,18 +16,6 @@
 # Base package name/config
 %define pname openmpi5
 
-%ifarch aarch64 || ppc64le
-%define with_psm 0
-%define with_psm2 0
-%else
-%if 0%{?rhel}
-%define with_psm 0
-%else
-%define with_psm 0
-%endif
-%define with_psm2 0
-%endif
-
 %{!?with_lustre: %define with_lustre 0}
 %{!?with_slurm: %define with_slurm 0}
 %{!?with_tm: %global with_tm 1}
@@ -43,7 +31,7 @@ Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   5.0.7
+Version:   5.0.8
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
@@ -51,8 +39,6 @@ URL:       http://www.open-mpi.org
 Source0:   http://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-%{version}.tar.bz2
 Source3:   pbs-config
 Patch0:    openmpi-5.x-pbs-config.patch
-# https://github.com/open-mpi/ompi/pull/13105.patch
-Patch1:    https://github.com/open-mpi/ompi/pull/13105.patch
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -72,12 +58,9 @@ BuildRequires:  libevent-devel
 BuildRequires:  pmix%{PROJ_DELIM}
 %endif
 %if 0%{with_ofi}
-BuildRequires:  libfabric%{PROJ_DELIM}
+BuildRequires:  libfabric-devel
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  libibverbs-devel
-%endif
-%ifarch x86_64
-BuildRequires:  libpsm2-devel
 %endif
 %endif
 %if 0%{with_ucx}
@@ -108,10 +91,6 @@ BuildRequires:  lustre-client%{PROJ_DELIM}
 
 BuildRequires:  rdma-core-devel
 
-%if %{with_psm}
-BuildRequires:  infinipath-psm infinipath-psm-devel
-%endif
-
 %if %{with_tm}
 BuildRequires:  openpbs-server%{PROJ_DELIM} openpbs-devel%{PROJ_DELIM}
 BuildRequires:  openssl-devel
@@ -121,10 +100,6 @@ BuildRequires:  openssl-devel
 %global __requires_exclude ^libpbs.so.*$
 %else
 %global __requires_exclude %{__requires_exclude}|^libpbs.so.*$
-%endif
-
-%if %{with_psm2}
-BuildRequires:  libpsm2-devel >= 10.2.0
 %endif
 
 Requires: prun%{PROJ_DELIM} >= 1.2
@@ -149,7 +124,6 @@ communication techniques.
 
 %setup -q -n openmpi-%{version}
 %patch -P0 -p1
-%patch -P1 -p1
 
 %build
 # OpenHPC compiler designation
@@ -167,8 +141,7 @@ BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
 %endif
 
 %if 0%{with_ofi}
-module load libfabric
-BASEFLAGS="$BASEFLAGS --with-libfabric=${LIBFABRIC_DIR}"
+BASEFLAGS="$BASEFLAGS --with-libfabric"
 %endif
 
 %if 0%{with_ucx}
@@ -176,12 +149,6 @@ module load ucx
 BASEFLAGS="$BASEFLAGS --with-ucx=${UCX_DIR}"
 %endif
 
-%if %{with_psm}
-  BASEFLAGS="$BASEFLAGS --with-psm"
-%endif
-%if %{with_psm2}
-  BASEFLAGS="$BASEFLAGS --with-psm2"
-%endif
 %if %{with_tm}
   BASEFLAGS="$BASEFLAGS --with-tm"
 %endif
@@ -195,6 +162,9 @@ export BASEFLAGS
 %{__cp} %{SOURCE3} .
 %{__chmod} 700 pbs-config
 export PATH="$PWD:$PATH"
+# The ordering of the static lib and the dependencies is wrong.
+# To build with openpbs support it needs a -lz after libpbs.a
+sed -e 's,\(${LIBS} ${ess_tm_LIBS} ${ess_tm_LDFLAGS}\),\1 -lz,g' -i 3rd-party/prrte/configure
 %endif
 
 ./configure ${BASEFLAGS} || { cat config.log && exit 1; }
@@ -254,9 +224,6 @@ prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 depends-on hwloc
 %if 0%{with_ucx}
 depends-on ucx
-%endif
-%if 0%{with_ofi}
-depends-on libfabric
 %endif
 family "MPI"
 EOF
