@@ -105,6 +105,7 @@ BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 
 %global __requires_exclude ^lib(cilkrts|ifcoremt|ifport|imf|intlc|iomp5|irc|irng|mkl_.*|svml)\\.so(\\.[25])?\\(.*\\)\\(64bit\\)$
+%global toolchain intel
 %endif
 
 %if "%{compiler_family}" == "arm1"
