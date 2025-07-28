@@ -67,7 +67,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
-        compiler: [gnu15] # skip intel for now
+        compiler: [gnu15, intel]
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
