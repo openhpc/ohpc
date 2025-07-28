@@ -17,8 +17,6 @@
 
 %{!?with_slurm: %global with_slurm 0}
 %{!?with_pbs: %global with_pbs 0}
-%{!?with_psm: %global with_psm 0}
-%{!?with_psm2: %global with_psm2 0}
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 %{!?COMM_DELIM: %global COMM_DELIM %{nil}}
 
@@ -45,18 +43,6 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-%if 0%{with_psm}
-BuildRequires:  infinipath-psm infinipath-psm-devel
-Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
-%endif
-
-%if 0%{with_psm2}
-BuildRequires:  libpsm2-devel >= 10.2.0
-Requires:       libpsm2 >= 10.2.0
-Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
-%endif
-
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed
 BuildRequires: rdma-core-devel infiniband-diags-devel
@@ -77,14 +63,14 @@ BuildRequires: zlib-devel
 MVAPICH2 is a high performance MPI-2 implementation (with initial
 support for MPI-3) for InfiniBand, 10GigE/iWARP and RoCE.  MVAPICH2
 provides underlying support for several interfaces (such as OFA-IB,
-OFA-iWARP, OFA-RoCE, PSM, Shared Memory, and TCP) for portability
+OFA-iWARP, OFA-RoCE, Shared Memory, and TCP) for portability
 across multiple networks.
 
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p1
+%patch -P 0 -p 1
+%patch -P 1 -p 1
 
 %build
 %ohpc_setup_compiler
@@ -105,6 +91,7 @@ export CFLAGS="${CFLAGS} -std=gnu17"
 %endif
 %if "%{compiler_family}" == "intel"
 export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
+export FFLAGS="-DFLANG"
 %endif
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
@@ -115,9 +102,6 @@ export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
 	    --enable-g=dbg \
             --with-device=ch3:mrail \
 	    --disable-ibv-dlopen \
-%if 0%{?with_pwm} || 0%{?with_psm2}
-            --with-device=ch3:psm \
-%endif
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
