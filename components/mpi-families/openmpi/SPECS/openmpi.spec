@@ -59,6 +59,9 @@ BuildRequires:  pmix%{PROJ_DELIM}
 %endif
 %if 0%{with_ofi}
 BuildRequires:  libfabric-devel
+# OBS is not clever enough to always pull in the right
+# libfabric.so.1()(64bit) provider
+Requires: libfabric
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  libibverbs-devel
 %endif
