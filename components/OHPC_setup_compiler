@@ -119,7 +119,7 @@ if [ "${arch}" == "x86_64" ]; then
 	if [ -e /etc/os-release ]; then
 		# shellcheck disable=SC1091
 		. /etc/os-release
-		if [ -n "${PLATFORM_ID}" ] && [ "${PLATFORM_ID}" == "platform:el9" ]; then
+		if [ -n "${PLATFORM_ID}" ] && [ "${PLATFORM_ID}" == "platform:el10" ]; then
 			# RHEL 10 has switched to the optimization baseline 'x86-64-v3'
 			ARCH_OPTS="${ARCH_OPTS} -march=x86-64-v3"
 		fi
