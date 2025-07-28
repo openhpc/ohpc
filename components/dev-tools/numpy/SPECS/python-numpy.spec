@@ -58,10 +58,6 @@ basic linear algebra and random number generation.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "intel"
-COMPILER_FLAG="--compiler=intelem"
-%endif
-
 %if "%{compiler_family}" == "arm1"
 cat > site.cfg << EOF
 [openblas]
