@@ -38,6 +38,7 @@ chdir $inputDir;
 my $BaseOS             = "";
 my $BaseOSshort        = "";
 my $OSimage            = "";
+my $OSTag              = "";
 my $arch               = "";
 my $Install            = "";
 my $chrootInstall      = "";
@@ -91,6 +92,8 @@ while( my $line = <IN> ) {
         $BaseOSshort = $1;
     } elsif( $line =~ /\\newcommand\{\\osimage\}\{(.+)\}/ ) {
         $OSimage = $1;
+    } elsif( $line =~ /\\newcommand\{\\OSTag\}\{(.+)\}/ ) {
+        $OSTag = $1;
     } elsif( $line =~ /\\newcommand\{\\remove\}\{(.+)\}/ ) {
         $remove = $1;
     } elsif( $line =~ /\\newcommand\{\\confluentprofile\}\{(.+)\}/ ) {
@@ -313,6 +316,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\cudarepo\*\)/$cudarepo/;
     $cmd =~ s/BOSVER/$BaseOS/;
     $cmd =~ s/OSIMAGE/$OSimage/;
+    $cmd =~ s/TAG/$OSTag/;
     $cmd =~ s/BOSSHORT/$BaseOSshort/;
     $cmd =~ s/ARCH/$arch/g;
     $cmd =~ s/VERLONG/$verlong/g;
