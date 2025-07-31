@@ -48,7 +48,7 @@ BuildRequires:  latexmk
 
 %if 0%{?rhel}
 BuildRequires:  texlive-latexconfig
-BuildRequires:  texlive-extensions
+BuildRequires:  texlive-tikzfill
 BuildRequires:  texlive-pdftex-def
 BuildRequires:  texlive-epstopdf-pkg
 BuildRequires:  tex
@@ -67,7 +67,7 @@ This guide presents a simple cluster installation procedure using components
 from the OpenHPC software stack.
 
 %prep
-%setup -n docs-ohpc
+%setup -q -n docs-ohpc
 
 %build
 
