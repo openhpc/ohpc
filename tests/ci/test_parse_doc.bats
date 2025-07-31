@@ -80,3 +80,37 @@ EOF
 	[ "${status}" -eq 0 ]
 	echo "${output}" | grep -q 'echo "x86_64 is x86_64"'
 }
+
+@test "Test TAG handling" {
+	cat >"${TEST_TEX_FILE}" <<EOF
+\\newcommand{\\install}{'install'}
+\\newcommand{\\chrootinstall}{'chrootinstall'}
+\\newcommand{\\groupinstall}{'groupinstall'}
+\\newcommand{\\groupchrootinstall}{'groupchrootinstall'}
+\\newcommand{\\OSTag}{4.0}
+% begin_ohpc_run
+[sms](*\\#*) echo "OpenHPC version TAG"
+% end_ohpc_run
+EOF
+
+	run "${PARSE_DOC_SCRIPT}" "${TEST_TEX_FILE}"
+	[ "${status}" -eq 0 ]
+	echo "${output}" | grep -q 'echo "OpenHPC version 4.0"'
+}
+
+@test "Test OSTREE handling" {
+	cat >"${TEST_TEX_FILE}" <<EOF
+\\newcommand{\\install}{'install'}
+\\newcommand{\\chrootinstall}{'chrootinstall'}
+\\newcommand{\\groupinstall}{'groupinstall'}
+\\newcommand{\\groupchrootinstall}{'groupchrootinstall'}
+\\newcommand{\\OSTree}{EL_10}
+% begin_ohpc_run
+[sms](*\\#*) echo "Repository path OSTREE"
+% end_ohpc_run
+EOF
+
+	run "${PARSE_DOC_SCRIPT}" "${TEST_TEX_FILE}"
+	[ "${status}" -eq 0 ]
+	echo "${output}" | grep -q 'echo "Repository path EL_10"'
+}
