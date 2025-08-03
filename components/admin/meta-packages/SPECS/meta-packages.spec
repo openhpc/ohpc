@@ -97,9 +97,6 @@ Requires:  librdmacm
 Requires:  NetworkManager
 Requires:  perl-interpreter
 Recommends: (singularity-ce or singularity or apptainer)
-%ifarch x86_64
-Requires:  libpsm2
-%endif
 %endif
 %if 0%{?openEuler}
 # For valgrind on openEuler we need to glibc-debuginfo on the compute nodes
