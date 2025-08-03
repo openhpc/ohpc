@@ -26,7 +26,10 @@ if test -r "/etc/os-release"; then
       AC_MSG_RESULT([RHEL])
       DISTRO_FAMILY=RHEL
    elif grep -q "platform:el9" /etc/os-release; then
-      AC_MSG_RESULT([CentOS9])
+      AC_MSG_RESULT([EL9])
+      DISTRO_FAMILY=CentOS
+   elif grep -q "platform:el10" /etc/os-release; then
+      AC_MSG_RESULT([EL10])
       DISTRO_FAMILY=CentOS
    elif grep -q "SLES" /etc/os-release; then
       AC_MSG_RESULT([SLES])
