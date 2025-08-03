@@ -20,7 +20,7 @@
 
 Summary: The Adaptable IO System v2 (ADIOS2)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.10.1
+Version: 2.10.2
 Release: 1%{?dist}
 License: Apache License 2.0
 Group:   %{PROJ_NAME}/io-libs
@@ -30,6 +30,7 @@ AutoReq: no
 
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  bzip2-devel
+BuildRequires:  yaml-cpp-devel
 %endif
 %if 0%{?suse_version}
 BuildRequires:  libbz2-devel
@@ -112,6 +113,7 @@ cmake \
     -DADIOS2_USE_Python=ON \
     -DADIOS2_USE_SST=ON \
     -DADIOS2_USE_BZip2=ON \
+    -DADIOS2_USE_EXTERNAL_YAMLCPP=ON \
     -DBUILD_TESTING=OFF \
     -DADIOS2_BUILD_EXAMPLES=OFF \
     -DPYTHON_EXECUTABLE=%{__python} \
