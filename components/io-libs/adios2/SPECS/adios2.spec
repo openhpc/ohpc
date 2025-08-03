@@ -20,12 +20,14 @@
 
 Summary: The Adaptable IO System v2 (ADIOS2)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.10.1
+Version: 2.10.2
 Release: 1%{?dist}
 License: Apache License 2.0
 Group:   %{PROJ_NAME}/io-libs
 Url:     https://adios2.readthedocs.io/en/latest/index.html
 Source0: https://github.com/ornladios/ADIOS2/archive/refs/tags/v%{version}.tar.gz
+# Taken from https://github.com/ornladios/ADIOS2/pull/4578
+Patch0:  cstdint.patch
 AutoReq: no
 
 %if 0%{?rhel} || 0%{?openEuler}
@@ -61,6 +63,7 @@ how they process the data.
 
 %prep
 %setup -q -n %{PNAME}-%{version}
+%patch -P 0 -p 1
 
 %build
 mkdir adios2-build
