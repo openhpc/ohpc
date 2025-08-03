@@ -25,10 +25,9 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.18.1
+Version:        3.23.5
 Release:        1%{?dist}
-Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
-Patch1:         petsc.rpath.patch
+Source0:        https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-%{version}.tar.gz
 Url:            http://www.mcs.anl.gov/petsc/
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -57,7 +56,6 @@ differential equations.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
 
 
 %build
@@ -88,16 +86,12 @@ unset FCFLAGS
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
 %{__python3} ./config/configure.py \
         --prefix=%{install_path} \
-%if "%{compiler_family}" == "gnu12"
-        --FFLAGS="-fPIC -ffree-line-length-512" \
-%else
-        --FFLAGS="-fPIC" \
-%endif
+        --FFLAGS="${FOPTFLAGS} -fPIC" \
 %if "%{compiler_family}" == "intel"
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
-        --CFLAGS="-fPIC -DPIC" \
-        --CXXFLAGS="-fPIC -DPIC" \
+        --CFLAGS="${COPTFLAGS} -fPIC -DPIC" \
+        --CXXFLAGS="${CXXOPTFLAGS} -fPIC -DPIC" \
         --with-scalapack-dir=$SCALAPACK_DIR \
 %if "%{compiler_family}" == "arm1"
         --with-blas-lapack-lib=$ARMPL_LIBRARIES/libarmpl.so \
@@ -130,7 +124,7 @@ unset FCFLAGS
         --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
         --with-hdf5-include=$HDF5_INC || cat configure.log
 
-make
+make %{?_smp_mflags}
 
 %install
 
