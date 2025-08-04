@@ -19,21 +19,16 @@
 %define pname mumps
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.2.1
+Version:        5.8.1
 Release:        1%{?dist}
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
 Group:          %{PROJ_NAME}/parallel-libs
-Url:            http://graal.ens-lyon.fr/MUMPS/
-Source0:        http://graal.ens-lyon.fr/MUMPS/MUMPS_%{version}.tar.gz
-Source1:        Makefile.gnu.openmpi.inc
-Source2:        Makefile.gnu.impi.inc
-Source3:        Makefile.mkl.intel.impi.inc
-Source4:        Makefile.mkl.intel.openmpi.inc
-Source5:        Makefile.arm.impi.inc
-Source6:        Makefile.arm.openmpi.inc
-Patch0:         mumps-5.0.1-shared-mumps.patch
-Patch1:         mumps-5.0.0-shared-pord.patch
+Url:            https://mumps-solver.org/
+Source0:        http://mumps-solver.org/MUMPS_%{version}.tar.gz
+Source1:        Makefile.gnu.inc
+Source2:        Makefile.mkl.intel.inc
+Source3:        Makefile.arm.inc
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 %if 0%{?rhel} || 0%{?openEuler}
@@ -61,8 +56,6 @@ C interfaces, and can interface with ordering tools such as Scotch.
 
 %prep
 %setup -q -n MUMPS_%{version}
-%patch0 -p1
-%patch1 -p1
 
 %build
 %ohpc_setup_compiler
@@ -76,93 +69,39 @@ module load scalapack
 module load scalapack openblas
 %endif
 
-# Select appropriate Makefile.inc with MKL
-%if "%{mpi_family}" == "impi"
-%global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "%{gnu_family}"
-cp -f %{S:2} Makefile.inc
-%endif
-%if "%{compiler_family}" == "intel"
-cp -f %{S:3} Makefile.inc
-%endif
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:5} Makefile.inc
-%endif
-%endif
-
-%if "%{mpi_family}" == "mpich"
-%global MUMPS_MPI $OHPC_MPI_FAMILY
-export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "%{gnu_family}"
-cp -f %{S:2} Makefile.inc
-%endif
-%if "%{compiler_family}" == "intel"
-cp -f %{S:3} Makefile.inc
-%endif
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:5} Makefile.inc
-%endif
-%endif
-
-%if "%{mpi_family}" == "mvapich2"
-%global MUMPS_MPI $OHPC_MPI_FAMILY
-export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "%{gnu_family}"
-cp -f %{S:2} Makefile.inc
-%endif
-%if "%{compiler_family}" == "intel"
-cp -f %{S:3} Makefile.inc
-%endif
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:5} Makefile.inc
-%endif
-%endif
-
-%if "%{mpi_family}" == "openmpi"
-%global MUMPS_MPI openmpi
-export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "%{gnu_family}"
 cp -f %{S:1} Makefile.inc
 %endif
 %if "%{compiler_family}" == "intel"
-cp -f %{S:4} Makefile.inc
+cp -f %{S:2} Makefile.inc
 %endif
 %if "%{compiler_family}" == "arm1"
-cp -f %{S:6} Makefile.inc
-%endif
-%endif
-
-%if "%{mpi_family}" == "openmpi4"
-%global MUMPS_MPI openmpi
-export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
-%if "%{compiler_family}" == "intel"
-cp -f %{S:4} Makefile.inc
-%else
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:6} Makefile.inc
-%else
-cp -f %{S:1} Makefile.inc
-%endif
-%endif
+cp -f %{S:3} Makefile.inc
 %endif
 
 %if "%{mpi_family}" == "openmpi5"
 %global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
-%if "%{compiler_family}" == "intel"
-cp -f %{S:4} Makefile.inc
 %else
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:6} Makefile.inc
-%else
-cp -f %{S:1} Makefile.inc
-%endif
-%endif
+%global MUMPS_MPI $OHPC_MPI_FAMILY
+export LIBS="-L$MPI_DIR/lib -lmpi"
 %endif
 
 %if "%{compiler_family}" == "%{gnu_family}"
 export FCFLAGS="$FCFLAGS -fallow-argument-mismatch"
+export FCFLAGS="$FCFLAGS -Wno-unused-dummy-argument"
+export FCFLAGS="$FCFLAGS -Wno-misleading-indentation"
+export FCFLAGS="$FCFLAGS -Wno-unused-function"
+export FCFLAGS="$FCFLAGS -Wno-unused-variable"
+export FCFLAGS="$FCFLAGS -Wno-maybe-uninitialized"
+export FCFLAGS="$FCFLAGS -Wno-conversion"
+export FCFLAGS="$FCFLAGS -Wno-target-lifetime"
+export FCFLAGS="$FCFLAGS -Wno-argument-mismatch"
+
+export CFLAGS="$CFLAGS -Wno-unused-function"
+export CFLAGS="$CFLAGS -Wno-strict-aliasing"
+export CFLAGS="$CFLAGS -Wno-misleading-indentation"
 %endif
 %if "%{compiler_family}" == "arm1"
 export CFLAGS="$CFLAGS -fsimdmath"
@@ -171,7 +110,7 @@ export CFLAGS="$CFLAGS -fsimdmath"
 make MUMPS_MPI=%{MUMPS_MPI} \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
-     OPTC="$CFLAGS" OPTF="$FCFLAGS" all
+     OPTC="$CFLAGS" OPTF="$FCFLAGS" allshared %{?_smp_mflags}
 
 
 %install
@@ -182,9 +121,9 @@ make MUMPS_MPI=%{MUMPS_MPI} \
 %{__mkdir} -p %{buildroot}%{install_path}/PORD/include
 %{__mkdir} -p %{buildroot}%{install_path}/etc
 
-rm PORD/lib/sort*
-mv PORD/lib/*so* lib/.
-mv PORD/include/* include/.
+rm -v PORD/lib/sort*
+mv -v PORD/lib/*so* lib/.
+mv -v PORD/include/* include/.
 
 install -m 755 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include

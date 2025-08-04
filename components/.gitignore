@@ -101,6 +101,7 @@ rms/slurm/SOURCES/slurm-*.tar.bz2
 runtimes/charliecloud/SOURCES/charliecloud-*.tar.gz
 serial-libs/R/SOURCES/R-*.tar.gz
 serial-libs/cubelib/SOURCES/cubelib*tar.gz
+serial-libs/gotcha/SOURCES/gotcha-*.tar.gz
 serial-libs/gsl/SOURCES/gsl-*.tar.gz
 serial-libs/metis/SOURCES/*.tar.gz
 serial-libs/openblas/SOURCES/openblas-*.tar.gz
