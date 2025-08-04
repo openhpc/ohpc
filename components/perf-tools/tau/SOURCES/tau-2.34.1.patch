@@ -1,0 +1,92 @@
+--- a/include/Profile/OpenMPLayer.h	2024-11-06 01:07:38.000000000 +0000
++++ b/include/Profile/OpenMPLayer.h	2025-08-04 15:46:49.500000000 +0000
+@@ -24,12 +24,10 @@
+ //////////////////////////////////////////////////////////////////////
+ 
+ #ifdef TAU_OPENMP
+-extern "C" {
+ #include <omp.h>
+ #ifndef _OPENMP
+ #define _OPENMP
+ #endif /* _OPENMP */
+-}
+ #include <mutex>
+ class OpenMPLayer
+ { // Layer for RtsLayer to interact with OpenMP
+--- a/src/Profile/pomp2_fwrapper.cpp	2024-11-06 01:07:38.000000000 +0000
++++ b/src/Profile/pomp2_fwrapper.cpp	2025-08-04 15:44:39.347215520 +0000
+@@ -42,7 +42,6 @@
+ #include <stdlib.h>
+ #endif /* TAU_NEC_SX */
+ 
+- extern "C"{
+ 
+ #include <config.h>
+ 
+@@ -291,4 +290,3 @@
+ {
+   return omp_get_max_threads();
+ }
+-}
+--- a/Makefile.skel	2025-08-04 15:54:08.953000000 +0000
++++ b/Makefile.skel	2025-08-04 15:54:29.132504081 +0000
+@@ -50,8 +50,8 @@
+ EXPORTS = utils src/Profile
+ 
+ # Example Programs
+-EXAMPLES = examples/instrument examples/threads \
+-examples/cthreads examples/fortran examples/f90 $(MPIEXAMPLES) $(PDTEXAMPLE)
++#EXAMPLES = examples/instrument examples/threads \
++#examples/cthreads examples/fortran examples/f90 $(MPIEXAMPLES) $(PDTEXAMPLE)
+ 
+ # PC++ Support
+ #PCXX#PCXX=lang_support/pc++#ENDIF#
+@@ -146,7 +146,7 @@
+ #PGI_OPENACC#TAU_CUPTI_AVAIL= #ENDIF#
+ 
+ # Plugin directory
+-PLUGINS=plugins
++#PLUGINS=plugins
+ #TAU_BUILD_LLVM_PLUGIN#LLVM_PLUGIN=plugins/llvm #ENDIF#
+ #IBM64#PLUGINS= #ENDIF#
+ #NOPLUGINS#PLUGINS= #ENDIF#
+--- a/utils/Makefile	2025-08-04 15:56:14.322713084 +0000
++++ b/utils/Makefile	2025-08-04 15:57:10.500324656 +0000
+@@ -84,7 +84,7 @@
+ tau_events.o: 	tau_events.cpp
+ 		$(CXX) $(CFLAGS)  -c tau_events.cpp
+ 
+-tau_instrumentor: tau_instrumentor.o tau_instrument.o tau_selective.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
++tau_instrumentor: tau_instrumentor.o tau_instrument.o tau_selective.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_instrumentor.o tau_instrument.o tau_selective.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
+ 
+ tau_instrumentor.o: tau_instrumentor.cpp 
+@@ -123,13 +123,13 @@
+ tau_trace2json.o: tau_trace2json.cpp
+ 		$(CXX) $(CFLAGS) -std=c++11  $< -c 
+ 
+-tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
++tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_wrap.o tau_selective.o tau_instrument.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
+ 
+ tau_wrap.o: tau_wrap.cpp 
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) -I$(PDTDIR)/include -c tau_wrap.cpp $(WRAPOPTS)
+ 
+-tau_ompcheck: tau_ompcheck.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
++tau_ompcheck: tau_ompcheck.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so 
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_ompcheck.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
+ 
+ tau_ompcheck.o: tau_ompcheck.cpp 
+@@ -142,10 +142,10 @@
+ 		gcc -c perf2tau.c -I$(PERFINCDIR)
+ 
+ 
+-$(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a:
++$(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so:
+ 		@echo 
+ 		@echo "******************************************************"
+-		@echo "PDT Configuration Error. $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a not found."
++		@echo "PDT Configuration Error. $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so not found."
+ 	        @echo "Please configure PDT again and then install TAU."
+ 		@echo 
+ 		@echo "******************************************************"

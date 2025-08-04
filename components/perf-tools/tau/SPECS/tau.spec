@@ -18,21 +18,14 @@
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.31.1
+Version:   2.34.1
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
-Patch1:    tau-2.31.1-add-explicit-linking-option.patch
-Patch2:    tau-2.31.1-shared_libpdb.patch
-Patch3:    tau-2.31.1-disable_examples.patch
-Patch4:    tau-2.31.1-ucontext.patch
-Patch5:    tau-2.31.1-testplugins_makefile.patch
-Patch6:    tau-2.31.1-paraprof.patch
-Patch7:    tau-2.31.1-python2to3.patch
-Patch8:    tau-2.31.1-profileparam_argc.patch
+Patch1:    tau-2.34.1.patch
 
 Provides:  lib%{PNAME}.so()(64bit)(%{PROJ_NAME})
 Provides:  perl(ebs2otf)
@@ -92,17 +85,7 @@ automatic instrumentation tool.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
-%global _default_patch_fuzz 1
-
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
+%patch -P 1 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
