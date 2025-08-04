@@ -62,7 +62,7 @@ fi
 . /etc/os-release
 
 PKG_MANAGER=zypper
-COMMON_PKGS="wget python3 jq man ccache"
+COMMON_PKGS="wget python3 jq man"
 UNAME_M=$(uname -m)
 YES="-n"
 
@@ -171,7 +171,7 @@ dnf_rhel() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats "${ENABLE_ONEAPI}"
+	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats ccache "${ENABLE_ONEAPI}"
 }
 
 dnf_openeuler() {
