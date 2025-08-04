@@ -348,11 +348,8 @@ Summary:   OpenHPC python3 libraries for GNU
 Requires:  %{python_prefix}-mpi4py-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  %{python_prefix}-mpi4py-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
-Requires:  %{python_prefix}-scipy-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  %{python_prefix}-scipy-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  %{python_prefix}-mpi4py-%{compiler_family}-mvapich2%{PROJ_DELIM}
-Requires:  %{python_prefix}-scipy-%{compiler_family}-mvapich2%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-%{compiler_family}-python3-libs
 Collection of python3 related library builds for use with GNU compiler toolchain
