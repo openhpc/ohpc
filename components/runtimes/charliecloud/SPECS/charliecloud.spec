@@ -23,32 +23,22 @@
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.15
+Version:   0.40
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
-URL:       https://hpc.github.io/%{pname}/
-Source0:   https://github.com/hpc/charliecloud/releases/download/v%{version}/charliecloud-%{version}.tar.gz
+URL:       https://charliecloud.io/
+Source0:   https://gitlab.com/charliecloud/main/-/package_files/204172900/download#/charliecloud-%{version}.tar.gz
 Source1:   Build
 
 BuildRequires: make
 BuildRequires: gcc
-%if 0%{?centos_version} || 0%{?rhel_version}
-BuildRequires: python36
-%endif
-%if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: python3
-%endif
 
-Requires:  %{name}%{?_isa} = %{version}-%{release}
-Requires:  bash
-Requires:  wget
-%if 0%{?centos_version} || 0%{?rhel_version}
-Requires:  python36
-%endif
-%if 0%{?sles_version} || 0%{?suse_version}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: bash
+Requires: wget
 Requires: python3
-%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
@@ -65,16 +55,15 @@ the performance and functionality already on offer.
 Container images can be built using Docker or anything else that can generate
 a standard Linux filesystem tree.
 
-For more information: https://hpc.github.io/charliecloud/
+For more information: %{URL}
 
 %prep
 %setup -q -n %{pname}-%{version}
-%{versionize_script python3 test/docs-sane}
-%{versionize_script python3 test/make-perms-test}
 
 %build
-./configure --prefix=%{install_path}
-CFLAGS="-std=c11 -fPIC -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
+export CFLAGS="$CFLAGS -Wno-error=format-security"
+./configure --prefix=%{install_path} --enable-buggy-build
+make %{?mflags}
 
 
 %install
@@ -119,26 +108,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-cat > README.EL7 <<EOF
-For RHEL7 you must increase the number of available user namespaces to a non-
-zero number (note the number below is taken from the default for RHEL8):
-
-  echo user.max_user_namespaces=3171 >/etc/sysctl.d/51-userns.conf
-  reboot
-
-Note for versions below RHEL7.6, you will also need to enable user namespaces:
-
-  grubby --args=namespace.unpriv_enable=1 --update-kernel=ALL
-  reboot
-EOF
-
-cat > README.TEST <<EOF
-Charliecloud comes with a fairly comprehensive Bats test suite. For testing
-instructions visit: https://hpc.github.io/charliecloud/test.html
-EOF
-
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%doc LICENSE README.rst README.TEST %{?el7:README.EL7}
+%doc LICENSE README.rst
 %{OHPC_PUB}
