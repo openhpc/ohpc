@@ -15,6 +15,7 @@ codespell-lint:
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
+		tests/dev-tools/easybuild/EasyBuild \
 		tests/user-env/mem_limits \
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
@@ -65,6 +66,7 @@ whitespace-lint:
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
 		tests/common/functions \
+		tests/dev-tools/easybuild/EasyBuild \
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
@@ -130,6 +132,7 @@ shellcheck-lint:
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/test_cmake \
+		../../tests/dev-tools/easybuild/EasyBuild \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
@@ -170,6 +173,7 @@ shfmt-lint:
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/test_cmake \
 		../../tests/dev-tools/cmake/run \
+		../../tests/dev-tools/easybuild/EasyBuild \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
