@@ -114,6 +114,10 @@ TESTS_FAILED=1
 
 set +e
 
+# AppArmor on the Ubuntu GitHub Actions host might block
+# access to /etc/shadow.
+chmod 644 /etc/shadow
+
 sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -delete"
 
 # Always running at least with '--enable-modules'. No need to check for
