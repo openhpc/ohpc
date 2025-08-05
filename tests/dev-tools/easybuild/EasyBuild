@@ -1,38 +1,46 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 3
 # -*-sh-*-
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
-module load EasyBuild
+setup() {
+	module load EasyBuild
+}
 
 @test "[EasyBuild] check for RPM" {
-    run check_if_rpm_installed "EasyBuild${DELIM}"
-    assert_success
+	run check_if_rpm_installed "EasyBuild${DELIM}"
+	assert_success
 }
 
 @test "[EasyBuild] test executable" {
-    run eb --help
-    assert_success
-    run eb --version
-    assert_success
+	run eb --help
+	assert_success
+	run eb --version
+	assert_success
 }
 
-@test "[EasyBuild] quick test install of bzip2" {
-    EB_TEST_TMPDIR=$(mktemp -d)
-    export EASYBUILD_PREFIX=$EB_TEST_TMPDIR
-    eb --show-config
-    assert_success
-    eb bzip2-1.0.8.eb --robot
-    assert_success
-    module use $EASYBUILD_PREFIX/modules/all
-    module load bzip2/1.0.8
-    assert_success
-    test -f $EBROOTBZIP2/bin/bzip2
-    assert_success
-    rm -r $EB_TEST_TMPDIR
+@test "[EasyBuild] test install of tmux" {
+	EB_TEST_TMPDIR=$(mktemp -d)
+	export EASYBUILD_PREFIX="${EB_TEST_TMPDIR}"
+	eb --show-config
+	assert_success
+	eb tmux-3.4.eb --robot
+	assert_success
+	module use "${EASYBUILD_PREFIX}"/modules/all
+	module load tmux/3.4
+	assert_success
+	test -f "${EBROOTBZIP2}"/bin/tmux
+	assert_success
+	"${EBROOTBZIP2}"/bin/tmux new-session -d
+	assert_success
+	"${EBROOTBZIP2}"/bin/tmux list-session
+	assert_success
+	"${EBROOTBZIP2}"/bin/tmux kill-session
+	assert_success
+	rm -r "${EB_TEST_TMPDIR}"
 }
