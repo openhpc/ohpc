@@ -631,6 +631,10 @@ Requires:  omb-intel-mvapich2%{PROJ_DELIM}
 Requires:  omb-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  tau-intel-impi%{PROJ_DELIM}
+Requires:  tau-intel-mpich%{PROJ_DELIM}
+Requires:  tau-intel-mvapich2%{PROJ_DELIM}
+Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
@@ -649,6 +653,7 @@ Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and Intel(R) MP
 Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-impi%{PROJ_DELIM}
+Requires:  tau-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scorep-intel-impi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -660,6 +665,7 @@ Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and MPICH
 Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-mpich%{PROJ_DELIM}
+Requires:  tau-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -671,6 +677,7 @@ Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and MVAPICH2
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-mvapich2%{PROJ_DELIM}
+Requires:  tau-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
 Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -682,6 +689,7 @@ Summary:   OpenHPC performance tools for Intel(R) oneAPI Toolkit and OpenMPI
 Requires:  imb-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
