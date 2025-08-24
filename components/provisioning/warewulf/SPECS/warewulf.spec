@@ -46,6 +46,7 @@ URL:     https://github.com/warewulf/warewulf
 Source0: https://github.com/warewulf/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
 # OpenHPC modifications to the warewulf template files
 Patch0:  hosts.ww.patch
+Patch1:  dnsmasq.patch
 
 ExclusiveOS: linux
 
@@ -74,7 +75,9 @@ Requires: ipxe-bootimgs
 BuildRequires: systemd
 BuildRequires: golang > 1.20
 BuildRequires: firewalld-filesystem
+%if ! (0%{?rhel} >= 10)
 Requires: tftp-server
+%endif
 Requires: nfs-utils
 %if 0%{?rhel} < 8
 Requires: ipxe-bootimgs
@@ -84,13 +87,13 @@ Requires: ipxe-bootimgs-aarch64
 %endif
 %endif
 
-%if 0%{?rhel} >= 10 || 0%{?suse_version} || 0%{?fedora}
+%if 0%{?rhel} >= 10
 Requires: dnsmasq
 %else
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} >= 8 || 0%{?suse_version} || 0%{?fedora}
 Requires: dhcp-server
 %else
-# rhel < 8
+# rhel < 8 and others
 Requires: dhcp
 %endif
 %endif
@@ -112,6 +115,7 @@ system for large clusters of bare metal and/or virtual systems.
 %prep
 %setup -q -n %{pname}-%{version} -b0
 %patch -P 0 -p1
+%patch -P 1 -p1
 
 
 %build
@@ -151,6 +155,14 @@ make install \
 ln -s %{_sharedstatedir}/tftpboot %{buildroot}%{tftpdir}
 %endif
 ## END OHPC
+
+%if 0%{?rhel} >= 10
+sed -i '
+  s/systemd name: dhcpd/systemd name: dnsmasq/
+  s/systemd name: tftp/systemd name: dnsmasq/
+  /- dsa/d' \
+  -i %{buildroot}%{_sysconfdir}/warewulf/warewulf.conf
+%endif
 
 %if 0%{?suse_version} || 0%{?sle_version}
 yq e '
