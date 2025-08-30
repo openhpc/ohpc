@@ -140,7 +140,7 @@ if [ "${PRE_RELEASE}" != "yes" ]; then
 		# release RPM. As long as there is no release RPM only the OBS repository
 		# is used directly.
 		if [ "${ID}" = "openEuler" ]; then
-			OHPC_RELEASE="${REPOSITORY_URL}openEuler_22.03/${UNAME_M}/ohpc-release-4-1.oe2203.${UNAME_M}.rpm"
+			OHPC_RELEASE="${REPOSITORY_URL}openEuler_24.03/${UNAME_M}/ohpc-release-4-1.oe2403.${UNAME_M}.rpm"
 		else
 			OHPC_RELEASE="${REPOSITORY_URL}EL_10/${UNAME_M}/ohpc-release-4-1.el10.${UNAME_M}.rpm"
 		fi
@@ -153,7 +153,7 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 	FACTORY_REPOSITORY="${OBS_SERVER}""${PROJECT}"/"${FACTORY_VERSION}":/Factory/
 	if [ "${PKG_MANAGER}" = "dnf" ]; then
 		if [ "${ID}" = "openEuler" ]; then
-			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}openEuler_22.03"
+			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}openEuler_24.03"
 		else
 			FACTORY_REPOSITORY="${FACTORY_REPOSITORY}EL_10"
 		fi
@@ -179,11 +179,9 @@ dnf_openeuler() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
+	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/openhpc/OpenHPC/repo/openeuler-24.03_LTS_SP2/openhpc-OpenHPC-openeuler-24.03_LTS_SP2.repo
 	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats
-	# This repository contains golang 1.21 copied from 24.03
-	# shellcheck disable=SC2016
-	echo -e '[go.1.21]\nname=go.1.21\nbaseurl=https://repos.openhpc.community/.staging/golang-1.21-openEuler-24.03-LTS/$basearch/\nenabled=1\ngpgcheck=0' >/etc/yum.repos.d/go.1.21.repo
+
 	# We need to have the latest glibc installed for valgrind tests on openEuler
 	"${PKG_MANAGER}" "${YES}" upgrade
 }
