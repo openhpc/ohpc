@@ -195,7 +195,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build on openEuler (${{ matrix.os }})
     container:
-      image: docker.io/openeuler/openeuler:22.03-lts-sp3
+      image: docker.io/openeuler/openeuler:24.03-lts-sp2
     steps:
     - name: Switch repo
       run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
@@ -242,7 +242,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Test on openEuler (${{ matrix.os }}/${{ matrix.compiler}})
     container:
-      image: docker.io/openeuler/openeuler:22.03-lts-sp3
+      image: docker.io/openeuler/openeuler:24.03-lts-sp2
     needs: build_on_openEuler
     steps:
     - name: Switch repo
