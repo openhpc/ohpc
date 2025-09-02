@@ -82,12 +82,8 @@ Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
 
 # Requirements from https://gcc.gnu.org/install/prerequisites.htmlzypper
-%if 0%{?openEuler}
-BuildRequires:  gcc-toolset-12-gcc-c++
-BuildRequires:  gcc-toolset-12-libstdc++-devel
-%else
+
 BuildRequires:  gcc-c++
-%endif
 BuildRequires:  binutils >= 2.30
 BuildRequires:  make >= 3.80
 BuildRequires:  gettext-devel >= 0.14.5
@@ -144,11 +140,6 @@ ln -s mpfr-%{gnu15_mpfr_version} mpfr
 %endif
 
 %build
-
-%if 0%{?openEuler}
-export PATH=/opt/openEuler/gcc-toolset-12/root/usr/bin:$PATH
-export LD_LIBRARY_PATH=/opt/openEuler/gcc-toolset-12/root/usr/lib64:$LD_LIBRARY_PATH
-%endif
 
 mkdir obj
 cd obj
