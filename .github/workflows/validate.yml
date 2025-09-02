@@ -185,7 +185,6 @@ jobs:
         path: tests/**/*.log.xml
 
   build_on_openEuler:
-    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
@@ -229,7 +228,6 @@ jobs:
           /tmp/empty
 
   test_on_openEuler:
-    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         compiler: [gnu15]
