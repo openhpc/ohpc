@@ -47,25 +47,25 @@
 %global gnu_version %{gnu15_version}
 %endif
 
-Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{gnu12_version}/gcc-%{gnu12_version}.tar.xz
-Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gnu12_gmp_version}.tar.bz2
-Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{gnu12_mpc_version}.tar.gz
-Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{gnu12_mpfr_version}.tar.gz
+Source0:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu12_version}/gcc-%{gnu12_version}.tar.xz
+Source1:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu12_gmp_version}.tar.bz2
+Source2:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu12_mpc_version}.tar.gz
+Source3:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu12_mpfr_version}.tar.gz
 
-Source4:   https://ftp.gnu.org/gnu/gcc/gcc-%{gnu13_version}/gcc-%{gnu13_version}.tar.xz
-Source5:   https://ftp.gnu.org/gnu/gmp/gmp-%{gnu13_gmp_version}.tar.bz2
-Source6:   https://ftp.gnu.org/gnu/mpc/mpc-%{gnu13_mpc_version}.tar.gz
-Source7:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{gnu13_mpfr_version}.tar.gz
+Source4:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu13_version}/gcc-%{gnu13_version}.tar.xz
+Source5:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu13_gmp_version}.tar.bz2
+Source6:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu13_mpc_version}.tar.gz
+Source7:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu13_mpfr_version}.tar.gz
 
-Source8:   https://ftp.gnu.org/gnu/gcc/gcc-%{gnu14_version}/gcc-%{gnu14_version}.tar.xz
-Source9:   https://ftp.gnu.org/gnu/gmp/gmp-%{gnu14_gmp_version}.tar.bz2
-Source10:   https://ftp.gnu.org/gnu/mpc/mpc-%{gnu14_mpc_version}.tar.gz
-Source11:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{gnu14_mpfr_version}.tar.gz
+Source8:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu14_version}/gcc-%{gnu14_version}.tar.xz
+Source9:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu14_gmp_version}.tar.bz2
+Source10:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu14_mpc_version}.tar.gz
+Source11:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu14_mpfr_version}.tar.gz
 
-Source12:   https://ftp.gnu.org/gnu/gcc/gcc-%{gnu15_version}/gcc-%{gnu15_version}.tar.xz
-Source13:   https://ftp.gnu.org/gnu/gmp/gmp-%{gnu15_gmp_version}.tar.bz2
-Source14:   https://ftp.gnu.org/gnu/mpc/mpc-%{gnu15_mpc_version}.tar.gz
-Source15:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
+Source12:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu15_version}/gcc-%{gnu15_version}.tar.xz
+Source13:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu15_gmp_version}.tar.bz2
+Source14:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu15_mpc_version}.tar.gz
+Source15:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
 
 %global pname %{gnu_major_ver}-compilers
 
