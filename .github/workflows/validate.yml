@@ -185,7 +185,6 @@ jobs:
         path: tests/**/*.log.xml
 
   build_on_openEuler:
-    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
@@ -203,7 +202,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh
+      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
@@ -251,7 +250,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh
+      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
