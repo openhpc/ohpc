@@ -40,6 +40,11 @@ Requires: ucx-ib%{PROJ_DELIM}
 %define with_ofi 1
 BuildRequires: libfabric-devel
 BuildRequires: rdma-core-devel
+%ifarch x86_64
+%if 0%{?openEuler}
+BuildRequires: libpsm2-devel
+%endif
+%endif
 Requires: libfabric
 %define FABRIC_DELIM -ofi
 %endif
