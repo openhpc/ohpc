@@ -55,7 +55,7 @@ BuildRequires:  tex
 %endif
 
 %if 0%{?openEuler}
-BuildRequires:  texlive-texconfig
+BuildRequires:  texlive-texlive-scripts-extra
 BuildRequires:  texlive-pdftex
 BuildRequires:  texlive-epstopdf
 BuildRequires:  texlive-collection-basic
