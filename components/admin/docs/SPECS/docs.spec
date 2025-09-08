@@ -10,6 +10,9 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+%define recipe_base docs/recipes/install
+%define recipe_dest %{buildroot}/%{OHPC_PUB}/doc/recipes
+
 Name:           docs%{PROJ_DELIM}
 Version:        3.4.0
 Release:        1
@@ -74,107 +77,40 @@ from the OpenHPC software stack.
 %setup -n docs-ohpc
 
 %build
-%if 0%{?suse_version}
-%define source_path docs/recipes/install/leap15
-%else
-%if 0%{?rhel}
-%define source_path docs/recipes/install/centos8
-%endif
-%if 0%{?openEuler}
-%define source_path docs/recipes/install/openeuler22.03
-%endif
-%endif
 
 %define parser ../../../../parse_doc.pl
 
-#----------------------
-# x86_64-based recipes
-#----------------------
-
-#pushd docs/recipes/install/centos8/x86_64/warewulf/slurm
-#make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/x86_64/warewulf4/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/x86_64/warewulf4/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/x86_64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/x86_64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/x86_64/xcat/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/x86_64/confluent/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/x86_64/xcat_stateful/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/x86_64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/x86_64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/x86_64/xcat/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/x86_64/xcat_stateful/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/x86_64/confluent/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/leap15/x86_64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/leap15/x86_64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/openeuler22.03/x86_64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/openeuler22.03/x86_64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-#----------------------
-# aarch64-based recipes
-#----------------------
-
-pushd docs/recipes/install/rocky9/aarch64/warewulf4/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/aarch64/warewulf4/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/aarch64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/rocky9/aarch64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/aarch64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/almalinux9/aarch64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/leap15/aarch64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/leap15/aarch64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/openeuler22.03/aarch64/warewulf/slurm
-make ; %{parser} steps.tex > recipe.sh ; popd
-
-pushd docs/recipes/install/openeuler22.03/aarch64/warewulf/openpbs
-make ; %{parser} steps.tex > recipe.sh ; popd
+for recipe_path in \
+	"rocky9/x86_64/warewulf4/slurm" \
+	"almalinux9/x86_64/warewulf4/slurm" \
+	"rocky9/x86_64/warewulf/slurm" \
+	"rocky9/x86_64/warewulf/openpbs" \
+	"rocky9/x86_64/xcat/slurm" \
+	"rocky9/x86_64/confluent/slurm" \
+	"rocky9/x86_64/xcat_stateful/slurm" \
+	"almalinux9/x86_64/warewulf/slurm" \
+	"almalinux9/x86_64/warewulf/openpbs" \
+	"almalinux9/x86_64/xcat/slurm" \
+	"almalinux9/x86_64/xcat_stateful/slurm" \
+	"almalinux9/x86_64/confluent/slurm" \
+	"leap15/x86_64/warewulf/slurm" \
+	"leap15/x86_64/warewulf/openpbs" \
+	"openeuler22.03/x86_64/warewulf/slurm" \
+	"openeuler22.03/x86_64/warewulf/openpbs" \
+	"rocky9/aarch64/warewulf4/slurm" \
+	"almalinux9/aarch64/warewulf4/slurm" \
+	"rocky9/aarch64/warewulf/slurm" \
+	"rocky9/aarch64/warewulf/openpbs" \
+	"almalinux9/aarch64/warewulf/slurm" \
+	"almalinux9/aarch64/warewulf/openpbs" \
+	"leap15/aarch64/warewulf/slurm" \
+	"leap15/aarch64/warewulf/openpbs" \
+	"openeuler22.03/aarch64/warewulf/slurm" \
+	"openeuler22.03/aarch64/warewulf/openpbs" \
+; do
+	pushd "%{recipe_base}/${recipe_path}"
+	make ; %{parser} steps.tex > recipe.sh ; popd
+done
 
 %install
 
@@ -183,123 +119,42 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 
-# x86_64 guides
-
-%define lpath rocky9/x86_64/warewulf4/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/x86_64/warewulf4/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath rocky9/x86_64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath rocky9/x86_64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath rocky9/x86_64/confluent/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-
-%define lpath rocky9/x86_64/xcat/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath rocky9/x86_64/xcat_stateful/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-
-%define lpath almalinux9/x86_64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/x86_64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/x86_64/xcat/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/x86_64/xcat_stateful/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/x86_64/confluent/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-
-%define lpath leap15/x86_64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath leap15/x86_64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath openeuler22.03/x86_64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath openeuler22.03/x86_64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-# aarch64 guides
-
-%define lpath rocky9/aarch64/warewulf4/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/aarch64/warewulf4/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath rocky9/aarch64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath rocky9/aarch64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/aarch64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath almalinux9/aarch64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath leap15/aarch64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath leap15/aarch64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath openeuler22.03/aarch64/warewulf/slurm
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
-
-%define lpath openeuler22.03/aarch64/warewulf/openpbs
-install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
-install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+for recipe_path in \
+	"rocky9/x86_64/warewulf4/slurm" \
+	"almalinux9/x86_64/warewulf4/slurm" \
+	"rocky9/x86_64/warewulf/slurm" \
+	"rocky9/x86_64/warewulf/openpbs" \
+	"rocky9/x86_64/xcat/slurm" \
+	"rocky9/x86_64/confluent/slurm" \
+	"rocky9/x86_64/xcat_stateful/slurm" \
+	"almalinux9/x86_64/warewulf/slurm" \
+	"almalinux9/x86_64/warewulf/openpbs" \
+	"almalinux9/x86_64/xcat/slurm" \
+	"almalinux9/x86_64/xcat_stateful/slurm" \
+	"almalinux9/x86_64/confluent/slurm" \
+	"leap15/x86_64/warewulf/slurm" \
+	"leap15/x86_64/warewulf/openpbs" \
+	"openeuler22.03/x86_64/warewulf/slurm" \
+	"openeuler22.03/x86_64/warewulf/openpbs" \
+	"rocky9/aarch64/warewulf4/slurm" \
+	"almalinux9/aarch64/warewulf4/slurm" \
+	"rocky9/aarch64/warewulf/slurm" \
+	"rocky9/aarch64/warewulf/openpbs" \
+	"almalinux9/aarch64/warewulf/slurm" \
+	"almalinux9/aarch64/warewulf/openpbs" \
+	"leap15/aarch64/warewulf/slurm" \
+	"leap15/aarch64/warewulf/openpbs" \
+	"openeuler22.03/aarch64/warewulf/slurm" \
+	"openeuler22.03/aarch64/warewulf/openpbs" \
+; do
+	install -m 0644 -p -D "%{recipe_base}/${recipe_path}/steps.pdf" "%{recipe_dest}/${recipe_path}/Install_guide.pdf"
+	install -m 0755 -p -D "%{recipe_base}/${recipe_path}/recipe.sh" "%{recipe_dest}/${recipe_path}/recipe.sh"
+done
 
 # input file templates
-#install -m 0644 -p docs/recipes/install/centos8/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos8/input.local
-install -m 0644 -p docs/recipes/install/rocky9/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/rocky9/input.local
-install -m 0644 -p docs/recipes/install/almalinux9/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/almalinux9/input.local
-install -m 0644 -p docs/recipes/install/leap15/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/leap15/input.local
-install -m 0644 -p docs/recipes/install/openeuler22.03/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/openeuler22.03/input.local
+for distro in "rocky9" "almalinux9" "leap15" "openeuler22.03"; do
+	install -m 0644 -p "%{recipe_base}/${distro}/input.local.template" "%{recipe_dest}/${distro}/input.local"
+done
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
