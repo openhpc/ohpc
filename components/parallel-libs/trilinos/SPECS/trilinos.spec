@@ -16,10 +16,10 @@
 
 # Base package name
 %define pname trilinos
-%define ver_exp 13-4-0
+%define ver_exp 16-1-0
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        13.4.0
+Version:        16.1.0
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 # Trilinos is licensed on a per-package basis. Refer to https://trilinos.github.io/license.html
@@ -28,14 +28,12 @@ Group:          %{PROJ_NAME}/parallel-libs
 Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-13_0_0-destdir_fix.patch
-Patch1:         trilinos-13_2_0-lapack_nothrow.patch
-Patch2:         cstdint.patch
 
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python3
 
 BuildRequires:  make
-BuildRequires:  cmake
+BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
@@ -46,7 +44,9 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  pnetcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python3
+BuildRequires:  python3-devel
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
@@ -74,15 +74,15 @@ For a summary of included packages see https://trilinos.github.io/packages.html
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
 %patch -P0 -p1
-%patch -P1 -p1
-%patch -P2 -p1
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+module load cmake
 module load boost
 module load netcdf
+module load pnetcdf
 module load phdf5
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
@@ -171,8 +171,8 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
         -DMPI_FORTRAN_COMPILER:FILEPATH=mpif90                          \
         -DTPL_ENABLE_Netcdf:BOOL=ON                                     \
-        -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
-        -DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
+        -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC};${PNETCDF_INC}"       \
+        -DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB};${PNETCDF_LIB}"       \
         -DTPL_ENABLE_HDF5:BOOL=ON                                       \
         -DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"                          \
         -DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"                          \
@@ -194,12 +194,16 @@ cd ..
 
 %install
 %ohpc_setup_compiler
+
+module load cmake
 cd build
 make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
 # fix unversioned python interpreter
 sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/bin/phalanx_create_evaluator.py
+sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/lib64/tests/exomerge_unit_test.py
+sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/lib64/tests/test_exodus3.py
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -250,5 +254,5 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc INSTALL README RELEASE_NOTES
+%doc README.md RELEASE_NOTES
 %license Copyright.txt LICENSE
