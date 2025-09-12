@@ -1,19 +1,26 @@
 % begin_ohpc_run
 % ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Enable internal interface for provisioning
-[sms](*\#*) ip link set dev ${sms_eth_internal} up
-[sms](*\#*) ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
 
 # Edit the warewulf.conf file to use appropriate interface and settings
-[sms](*\#*) perl -pi -e "s/ipaddr:.*/ipaddr: ${sms_ip}/" /etc/warewulf/warewulf.conf
-[sms](*\#*) perl -pi -e "s/netmask:.*/netmask: ${internal_netmask}/" /etc/warewulf/warewulf.conf
-[sms](*\#*) perl -pi -e "s/network:.*/network: ${internal_network}/" /etc/warewulf/warewulf.conf
-[sms](*\#*) perl -pi -e 's/template:.*/template: static/' /etc/warewulf/warewulf.conf
-[sms](*\#*) sed '/range start:/d;/range end:/d;' -i /etc/warewulf/warewulf.conf
+[sms](*\#*) yq -i '.ipaddr = "'${sms_ip}'"' /etc/warewulf/warewulf.conf
+[sms](*\#*) yq -i '.netmask = "'${internal_netmask}'"' /etc/warewulf/warewulf.conf
+[sms](*\#*) yq -i '.network = "'${internal_network}'"' /etc/warewulf/warewulf.conf
+[sms](*\#*) yq -i '.dhcp["range start"] = "'${internal_network}'"' /etc/warewulf/warewulf.conf
+[sms](*\#*) yq -i '.dhcp["range end"] = "static"' /etc/warewulf/warewulf.conf
 
-# Edit the nodes.conf to mount /opt
+# Edit the nodes.conf to mount /opt on boot
 [sms](*\#*) perl -pi -e "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" /etc/warewulf/nodes.conf
+
+# Configure dnsmasq to listen on the internal network interface.
+[sms](*\#*) echo "interface=${sms_eth_internal}" > /etc/dnsmasq.d/ww4-interface.conf
+
+# Turn on debugging messages
+[sms](*\#*) yq -i '.nodeprofiles.default.kernel.args -= ["quiet"]' /etc/warewulf/nodes.conf
+[sms](*\#*) echo "log-debug" >> /etc/dnsmasq.d/ww4-interface.conf
+
+# Enable and start the warewulfd service before using wwctl.
+[sms](*\#*) systemctl enable --now warewulfd
 
 # Create a new "nodes" profile and inherit the "default" profile
 [sms](*\#*) wwctl profile add nodes --profile default --comment "Nodes profile"
@@ -29,7 +36,6 @@
 [sms](*\#*) wwctl profile set -y nodes --netname=default --nettagadd=DNS=${dns_servers}
 
 # Configuring Warewulf will restart/enable relevant services to support provisioning
-[sms](*\#*) systemctl enable --now warewulfd
 [sms](*\#*) wwctl configure --all
 
 # Generate ssh keys (usually generated on login)

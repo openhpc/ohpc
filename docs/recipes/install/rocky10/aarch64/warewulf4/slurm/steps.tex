@@ -7,14 +7,14 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{Rocky 9}
-\newcommand{\OSRepo}{Rocky\_9}
-\newcommand{\OSTree}{EL\_9}
-\newcommand{\OSTag}{el9}
-\newcommand{\baseos}{rocky-9}
-\newcommand{\baseosshort}{rocky9}
-\newcommand{\osimage}{rockylinux:9}
-\newcommand{\provisioner}{Warewulf4}
+\newcommand{\baseOS}{Rocky 10}
+\newcommand{\OSRepo}{Rocky\_10}
+\newcommand{\OSTree}{EL\_10}
+\newcommand{\OSTag}{el10}
+\newcommand{\baseos}{rocky-10}
+\newcommand{\baseosshort}{rocky10}
+\newcommand{\osimage}{rockylinux:10}
+\newcommand{\provisioner}{Warewulf 4.x}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
@@ -34,7 +34,7 @@
 \newcommand{\upgrade}{dnf -y upgrade}
 \newcommand{\chrootupgrade}{dnf -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
-\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.4.5/dists/beegfs-rhel9.repo}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_8.1/dists/beegfs-rhel10.repo}
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}

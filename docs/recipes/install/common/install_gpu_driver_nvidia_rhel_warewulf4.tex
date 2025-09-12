@@ -17,7 +17,7 @@ the NVIDIA compiler within the standard \OHPC{} user environment.
 # Install the toolkit on the SMS
 [sms](*\#*) (*\install*) nvidia-driver-cuda cuda-devel-ohpc
 # Enable NVIDIA repository inside image and install it.  Disable autorebuild.
-[sms](*\#*) wwctl image exec --build=false BOSVER /bin/bash <<- EOF
+[sms](*\#*) wwctl image exec --build=false BOSVER -- /bin/bash -ex <<- EOF
   dnf -y install cuda-repo-ohpc
   dnf -y module install nvidia-driver:latest-dkms
   KVER=$(rpm -q --queryformat='%{version}-%{release}.%{arch}\n' \

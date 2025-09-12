@@ -16,9 +16,14 @@ common base packages:
 % begin_ohpc_run
 % ohpc_comment_header Add OpenHPC base components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1 {\ }{\ }1]
+
 # Install compute node base meta-package
-[sms](*\#*) wwctl image exec --build=false BOSVER /bin/bash <<- EOF
+[sms](*\#*) wwctl image exec --build=false BOSVER -- /bin/bash -ex <<- EOF
+  dnf -y install epel-release
   dnf -y install ohpc-base-compute
+
+  # Services enabled via preset go in this directory
+  install -dvp /etc/systemd/system-preset
 EOF
 \end{lstlisting}
 % end_ohpc_run

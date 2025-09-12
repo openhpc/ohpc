@@ -5,7 +5,7 @@ reference, a complete list of available group aliases and RPM packages available
 via \OHPC{} are provided in Appendix~\ref{appendix:manifest}. To add
 support for provisioning services, the following command adds a common base
 package followed along with the Warewulf provisioning system. Then the main
-Warewulf configuration file is edited to reflect the environment.
+Warewulf configuration files are edited to reflect the environment.
 
 %\nottoggle{isCentOS}{\clearpage}
 
@@ -13,9 +13,21 @@ Warewulf configuration file is edited to reflect the environment.
 % ohpc_comment_header Add baseline OpenHPC\ref{sec:add_provisioning}
 \begin{lstlisting}[language=bash,keywords={}]
 # Install base packages
+[sms](*\#*) (*\install*) epel-release
 [sms](*\#*) (*\install*) ohpc-base
 
 # Install Warewulf
-[sms](*\#*) (*\install*) warewulf-ohpc hwloc-ohpc
+[sms](*\#*) (*\install*) warewulf-ohpc
+
+# Create the tftpboot directory (not created by dnsmasq)
+[sms](*\#*) install -d -m 0755 /var/lib/tftpboot
+
+# Add public_content_t type to tftpboot directory and contents
+[sms](*\#*) semanage fcontext -a -t public_content_t "/var/lib/tftpboot(/.*)?"
+[sms](*\#*) restorecon -R -v /var/lib/tftpboot
+
+## FIXME: Install yq for editing yaml files
+[sms](*\#*) (*\install*) https://kojipkgs.fedoraproject.org/packages/yq/4.47.1/2.el9/aarch64/yq-4.47.1-2.el9.$(uname -m).rpm
+
 \end{lstlisting}
 % end_ohpc_run
