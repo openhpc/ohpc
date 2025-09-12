@@ -7,5 +7,5 @@
 -    root: $spack/opt/spack
 +    root: @@OHPC_APPS@@/spack/local
      projections:
-       all: "{architecture}/{compiler.name}-{compiler.version}/{name}-{version}-{hash}"
+       all: "{architecture.platform}-{architecture.target}/{name}-{version}-{hash}"
      # install_tree can include an optional padded length (int or boolean)
