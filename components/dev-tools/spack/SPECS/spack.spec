@@ -11,9 +11,10 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname spack
+%define spack_packages_version 2025.07.0
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.23.1
+Version:	1.0.1
 Release:	%{?dist}.1
 Summary:	HPC software package management
 
@@ -21,8 +22,10 @@ Group:		%{PROJ_NAME}/dev-tools
 License:	LGPL
 URL:		https://github.com/spack/spack
 Source0:	https://github.com/spack/%{pname}/archive/v%{version}.tar.gz
+Source1:	https://github.com/spack/spack-packages/archive/refs/tags/v%{spack_packages_version}.tar.gz
 Patch0:		modules.yaml.patch
 Patch1:		config.yaml.patch
+Patch2:		repos.yaml.patch
 
 BuildRequires: rsync
 BuildRequires: python3
@@ -51,6 +54,7 @@ Requires: gpg2
 %endif
 
 %global install_path %{OHPC_APPS}/%{pname}/%version
+%global spack_packages_path %{OHPC_APPS}/%{pname}/spack-packages-%{spack_packages_version}
 # Turn off the brp-python-bytecompile script
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
@@ -71,20 +75,28 @@ same package.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version} -a1
 %patch -P 0 -p 1
 %patch -P 1 -p 1
+%patch -P 2 -p 1
 
 # cleanup any recipes that have hard-coded /bin/env in them as this will
 # prevent installation on Leap
 grep -rl '#!/bin/env ' . | xargs -i@ sed -i 's|#!/bin/env|#!/usr/bin/env|g' @
 
+# This binary has GLIBC_2.2.5 which does not exist on EL9 aarch64
+rm -f spack-packages-%{spack_packages_version}/repos/spack_repo/builtin/packages/patchelf/test/hello
+
 sed -e "s,@@OHPC_APPS@@,%{OHPC_APPS},g" -i etc/spack/defaults/config.yaml
 sed -e "s,@@OHPC_MODULEDEPS@@,%{OHPC_MODULEDEPS},g" -i etc/spack/defaults/modules.yaml
+sed -e "s,@@SPACK_PACKAGES_PATH@@,%{spack_packages_path}/spack_repo/builtin,g" -i etc/spack/defaults/repos.yaml
 
 %install
 mkdir -p %{buildroot}%{install_path}
 rsync -a --exclude=.gitignore {etc,bin,lib,var,share} %{buildroot}%{install_path}
+
+mkdir -p %{buildroot}%{spack_packages_path}
+rsync -a spack-packages-%{spack_packages_version}/repos/ %{buildroot}%{spack_packages_path}/
 
 # remove embedded binary with /usr/tce rpaths that breaks Leap 15.3 builds
 rm -f %{buildroot}/%{install_path}/var/spack/repos/builtin/packages/patchelf/test/hello
@@ -96,9 +108,10 @@ rm -f %{buildroot}/%{install_path}/var/spack/repos/builtin/packages/patchelf/tes
 
 module-whatis "Name: Spack"
 module-whatis "Version: %{version}"
+module-whatis "Packages Version: %{spack_packages_version}"
 module-whatis "Category: System/Configuration"
 module-whatis "Description: Spack package management"
-module-whatis "URL: https://github.com/LLNL/spack/"
+module-whatis "URL: %{url}"
 
 set     version             %{version}
 set     SPACK_ROOT          %{install_path}

@@ -1,0 +1,10 @@
+--- a/etc/spack/defaults/repos.yaml	2025-08-12 00:22:01.000000000 +0000
++++ b/etc/spack/defaults/repos.yaml	2025-09-12 12:00:20.902750935 +0000
+@@ -11,6 +11,4 @@
+ #   ~/.spack/repos.yaml
+ # -------------------------------------------------------------------------
+ repos:
+-  builtin:
+-    git: https://github.com/spack/spack-packages.git
+-    branch: releases/v2025.07
++  builtin: @@SPACK_PACKAGES_PATH@@
