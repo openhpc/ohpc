@@ -207,7 +207,7 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
-        export SKIP_CI_SPECS="${{ env.JOB_SKIP_CI_SPECS }}"
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
@@ -289,8 +289,8 @@ jobs:
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
       run: |
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
-          export SKIP_CI_SPECS="${{ env.JOB_SKIP_CI_SPECS }}"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
