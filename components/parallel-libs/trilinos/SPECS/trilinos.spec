@@ -113,7 +113,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
-        -DTrilinos_INSTALL_LIB_DIR="%{install_path}/lib"                                \
+        -DTrilinos_INSTALL_LIB_DIR="%{install_path}/lib64"              \
 %if "%{compiler_family}" == "intel"
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
@@ -228,12 +228,12 @@ set     version                     %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
-setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_LIB        %{install_path}/lib64
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 # Autoload openblas for gnu and llvm builds
