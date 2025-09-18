@@ -75,6 +75,8 @@ from the OpenHPC software stack.
 
 for recipe_path in \
 	"almalinux10/x86_64/confluent/slurm" \
+	"rocky10/x86_64/warewulf4/slurm" \
+	"rocky10/aarch64/warewulf4/slurm" \
 ; do
 	pushd "%{recipe_base}/${recipe_path}"
 	make ; %{parser} steps.tex > recipe.sh ; popd
@@ -89,13 +91,15 @@ install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_N
 
 for recipe_path in \
 	"almalinux10/x86_64/confluent/slurm" \
+	"rocky10/x86_64/warewulf4/slurm" \
+	"rocky10/aarch64/warewulf4/slurm" \
 ; do
 	install -m 0644 -p -D "%{recipe_base}/${recipe_path}/steps.pdf" "%{recipe_dest}/${recipe_path}/Install_guide.pdf"
 	install -m 0755 -p -D "%{recipe_base}/${recipe_path}/recipe.sh" "%{recipe_dest}/${recipe_path}/recipe.sh"
 done
 
 # input file templates
-for distro in "almalinux10"; do
+for distro in "almalinux10" "rocky10"; do
 	install -m 0644 -p "%{recipe_base}/${distro}/input.local.template" "%{recipe_dest}/${distro}/input.local"
 done
 
