@@ -14,6 +14,8 @@
 
 # Configure dnsmasq to listen on the internal network interface.
 [sms](*\#*) echo "interface=${sms_eth_internal}" > /etc/dnsmasq.d/ww4-interface.conf
+# Configure dnsmasq to disable DNS functionality
+[sms](*\#*) echo "port=0" >> /etc/dnsmasq.d/ww4-interface.conf
 
 # Turn on debugging messages
 [sms](*\#*) yq -i '.nodeprofiles.default.kernel.args -= ["quiet"]' /etc/warewulf/nodes.conf

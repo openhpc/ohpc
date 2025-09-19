@@ -22,6 +22,14 @@ the image from rebuilding (it will show an error) and rebuild later with the
 # Import the base image from Warewulf
 [sms](*\#*) wwctl image import docker://ghcr.io/warewulf/warewulf-OSIMAGE BOSVER --syncuser
 
+# Define chroot location
+[sms](*\#*) export CHROOT=$(wwctl image show BOSVER)
+
+# Enable wwclient on the compute nodes
+[sms](*\#*) wwctl image exec --build=false BOSVER -- /bin/bash -ex <<- EOF
+  echo "enable wwclient.service" > /etc/systemd/system-preset/90-wwclient.preset
+EOF
+
 # Enable OpenHPC inside image and update image.  Disable image build on exit, rebuild later.
 [sms](*\#*) wwctl image exec --build=false BOSVER -- /bin/bash -ex <<- EOF
 %% FIXME: Not yet released (remove this block released)
@@ -32,8 +40,5 @@ the image from rebuilding (it will show an error) and rebuild later with the
 %% end FIXME
   dnf -y update
 EOF
-
-# Define chroot location
-[sms](*\#*) export CHROOT=$(wwctl image show BOSVER)
 \end{lstlisting}
 % end_ohpc_run

@@ -12,9 +12,12 @@ Warewulf configuration files are edited to reflect the environment.
 % begin_ohpc_run
 % ohpc_comment_header Add baseline OpenHPC\ref{sec:add_provisioning}
 \begin{lstlisting}[language=bash,keywords={}]
+# Make sure required variables are set
+[sms](*\#*) : ${sms_eth_internal:?ERROR: sms_eth_internal not set}
+
 # Install base packages
 [sms](*\#*) (*\install*) epel-release
-[sms](*\#*) (*\install*) ohpc-base
+[sms](*\#*) (*\install*) ohpc-base yq
 
 # Install Warewulf
 [sms](*\#*) (*\install*) warewulf-ohpc
@@ -25,9 +28,6 @@ Warewulf configuration files are edited to reflect the environment.
 # Add public_content_t type to tftpboot directory and contents
 [sms](*\#*) semanage fcontext -a -t public_content_t "/var/lib/tftpboot(/.*)?"
 [sms](*\#*) restorecon -R -v /var/lib/tftpboot
-
-## FIXME: Install yq for editing yaml files
-[sms](*\#*) (*\install*) https://kojipkgs.fedoraproject.org/packages/yq/4.47.1/2.el9/aarch64/yq-4.47.1-2.el9.$(uname -m).rpm
 
 \end{lstlisting}
 % end_ohpc_run

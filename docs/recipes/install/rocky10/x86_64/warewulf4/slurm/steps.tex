@@ -7,13 +7,13 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{Rocky 9}
-\newcommand{\OSRepo}{Rocky\_9}
-\newcommand{\OSTree}{EL\_9}
+\newcommand{\baseOS}{Rocky 10}
+\newcommand{\OSRepo}{Rocky\_10}
+\newcommand{\OSTree}{EL\_10}
 \newcommand{\OSTag}{el9}
-\newcommand{\baseos}{rocky-9}
-\newcommand{\baseosshort}{rocky9}
-\newcommand{\osimage}{rockylinux:9}
+\newcommand{\baseos}{rocky-10}
+\newcommand{\baseosshort}{rocky10}
+\newcommand{\osimage}{rockylinux:10}
 \newcommand{\provisioner}{Warewulf4}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
@@ -200,10 +200,6 @@
 \input{common/nhc}
 \input{common/nhc_slurm}
 
-\vspace*{0.3cm}
-\paragraph{Add \GEOPM{}} \label{sec:add_geopm}
-\input{common/geopm_config}
-
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww4_files}
@@ -242,7 +238,7 @@
 \input{common/mpi_slurm}
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
-\input{common/perf_tools_with_geopm}
+\input{common/perf_tools}
 
 \subsection{Setup default development environment}
 \input{common/default_dev}
