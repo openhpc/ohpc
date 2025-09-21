@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 AM_FCFLAGS = "-I ./include"
 AM_CFLAGS = "-DADD_ -I ./include"
 

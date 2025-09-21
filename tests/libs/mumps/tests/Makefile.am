@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 TESTS                    = C_double
 check_PROGRAMS           = C_double

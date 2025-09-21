@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 check_PROGRAMS          = psscaex
 psscaex_SOURCES         = psscaex.f pdscaexinfo.f

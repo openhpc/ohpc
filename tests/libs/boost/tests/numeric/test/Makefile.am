@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT          = BATS_NO_SUMMARY=1
 AM_CXXFLAGS                = -I$(BOOST_ROOT) -I$(BOOST_INC) -I$(BOOST_INC)/boost/intel-mkl
 
 # Test compilations/execution
