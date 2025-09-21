@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT       = BATS_NO_SUMMARY=1
 
 check_PROGRAMS          = tutorial_0
 tutorial_0_SOURCES      = tutorial_0.c

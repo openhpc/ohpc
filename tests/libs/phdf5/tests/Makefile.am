@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 check_PROGRAMS         = C_mpi_test
 C_mpi_test_LDFLAGS     = -lhdf5

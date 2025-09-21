@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 TESTS                   = arrays_write
 check_PROGRAMS          = arrays_write

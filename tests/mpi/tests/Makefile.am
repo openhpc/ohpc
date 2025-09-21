@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 ###TESTS             = C_test
 ###check_PROGRAMS    = C_test

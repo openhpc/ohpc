@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 check_PROGRAMS    = mpi_exit mpi_hang
 mpi_exit_SOURCES  = mpi_exit.c

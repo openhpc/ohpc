@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 check_PROGRAMS    = nctest
 nctest_SOURCES    = add.c add.h atttests.c cdftests.c dimtests.c driver.c \

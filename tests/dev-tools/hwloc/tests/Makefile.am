@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 TESTS                   = hwloc_hello
 check_PROGRAMS          = hwloc_hello

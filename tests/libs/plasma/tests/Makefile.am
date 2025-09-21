@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 check_PROGRAMS    = C_test
 C_test_SOURCES    = test_zhesv.c test.c

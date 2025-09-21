@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 check_PROGRAMS          = dgraph_redist
 dgraph_redist_SOURCES   = test_scotch_dgraph_redist.c

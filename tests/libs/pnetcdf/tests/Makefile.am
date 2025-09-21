@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT           = BATS_NO_SUMMARY=1
 SUBDIRS                     = ohpc_module
 
 TESTS                       = pres_temp_4D_wr

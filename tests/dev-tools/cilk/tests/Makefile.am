@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT         = BATS_NO_SUMMARY=1
 
 check_PROGRAMS            = linear_recurrence
 linear_recurrence_SOURCES = linear_recurrence.cpp
