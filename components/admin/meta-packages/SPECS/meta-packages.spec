@@ -17,7 +17,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 3.3
+Version: 4.0
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
@@ -91,6 +91,7 @@ Requires:  numactl
 Requires:  python3
 Requires:  %{python_prefix}
 %if 0%{?rhel} || 0%{?openEuler}
+Requires:  libyaml-cpp
 Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
