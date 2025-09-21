@@ -61,6 +61,7 @@ codespell-lint:
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		tests/libs/plasma/tests/rm_execution \
 		tests/libs/plasma/tests/test_module \
+		tests/libs/fftw/tests/rm_execution \
 		tests/perf-tools/paraver/tests/test_module \
 		tests/perf-tools/paraver/tests/rm_execution \
 		tests/perf-tools/paraver/tests/trace.sh \
@@ -166,6 +167,7 @@ whitespace-lint:
 		tests/libs/ptscotch/tests/test_module \
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		tests/libs/plasma/tests/* \
+		tests/libs/fftw/tests/rm_execution \
 		tests/perf-tools/paraver/tests/test_module \
 		tests/perf-tools/paraver/tests/rm_execution \
 		tests/perf-tools/paraver/tests/trace.sh \
@@ -256,6 +258,7 @@ shellcheck-lint:
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
+		../../tests/libs/fftw/tests/rm_execution \
 		../../tests/libs/trilinos/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
@@ -332,6 +335,7 @@ shfmt-lint:
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
+		../../tests/libs/fftw/tests/rm_execution \
 		../../tests/perf-tools/paraver/tests/test_module \
 		../../tests/perf-tools/paraver/tests/rm_execution \
 		../../tests/libs/trilinos/tests/rm_execution \
@@ -389,6 +393,8 @@ clang-format-lint:
 		../dev-tools/cuda/add.cu \
 		../../tests/libs/plasma/tests/*.c \
 		../../tests/libs/plasma/tests/*.h \
+		../../tests/libs/fftw/tests/*.c \
+		../../tests/libs/fftw/tests/*.cpp \
 		../../tests/libs/superlu/tests/*.c \
 		../../tests/libs/trilinos/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c \
