@@ -46,7 +46,8 @@ codespell-lint:
 		tests/libs/ptscotch/tests/test_module \
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		tests/libs/plasma/tests/rm_execution \
-		tests/libs/plasma/tests/test_module
+		tests/libs/plasma/tests/test_module \
+		tests/libs/fftw/tests/rm_execution
 
 flake8-lint:
 	@echo "Running 'flake8' on selected Python files"
@@ -99,6 +100,7 @@ whitespace-lint:
 		tests/libs/ptscotch/tests/test_module \
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		tests/libs/plasma/tests/* \
+		tests/libs/fftw/tests/rm_execution \
 		containers/* \
 		\*.tex
 
@@ -160,6 +162,7 @@ shellcheck-lint:
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
+		../../tests/libs/fftw/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/test_module
@@ -205,7 +208,8 @@ shfmt-lint:
 		../../tests/libs/ptscotch/tests/test_module \
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		../../tests/libs/plasma/tests/rm_execution \
-		../../tests/libs/plasma/tests/test_module
+		../../tests/libs/plasma/tests/test_module \
+		../../tests/libs/fftw/tests/rm_execution
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/common/functions \
@@ -232,4 +236,6 @@ clang-format-lint:
 		../dev-tools/cuda/add.cu \
 		../../tests/libs/plasma/tests/*.c \
 		../../tests/libs/plasma/tests/*.h \
+		../../tests/libs/fftw/tests/*.c \
+		../../tests/libs/fftw/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c
