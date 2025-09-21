@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
 DEFS                    =
 AM_CFLAGS               = -Wno-implicit-function-declaration
