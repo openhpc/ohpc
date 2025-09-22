@@ -14,6 +14,7 @@ Warewulf configuration files are edited to reflect the environment.
 \begin{lstlisting}[language=bash,keywords={}]
 # Make sure required variables are set
 [sms](*\#*) : ${sms_eth_internal:?ERROR: sms_eth_internal not set}
+[sms](*\#*) : ${internal_network:?ERROR: internal_network not set}
 
 # Install base packages
 [sms](*\#*) (*\install*) epel-release
