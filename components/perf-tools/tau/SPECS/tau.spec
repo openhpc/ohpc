@@ -49,11 +49,11 @@ BuildRequires: postgresql-devel binutils-devel
 BuildRequires: zlib-devel python3-devel
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
-# Exclude libCg*.so that breaks install
+# Exclude requires that breaks install
 %if "0%{?__requires_exclude}" == "0"
-%global __requires_exclude ^libCg.*$
+%global __requires_exclude ^libCg.*$|.*SUNWprivate.*
 %else
-%global __requires_exclude %{__requires_exclude}|^libCg.*$
+%global __requires_exclude %{__requires_exclude}|^libCg.*$|.*SUNWprivate.*
 %endif
 
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
