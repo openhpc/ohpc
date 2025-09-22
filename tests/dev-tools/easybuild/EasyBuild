@@ -34,13 +34,13 @@ setup() {
 	module use "${EASYBUILD_PREFIX}"/modules/all
 	module load tmux/3.4
 	assert_success
-	test -f "${EBROOTBZIP2}"/bin/tmux
+	test -f "${EBROOTTMUX}"/bin/tmux
 	assert_success
-	"${EBROOTBZIP2}"/bin/tmux new-session -d
+	"${EBROOTTMUX}"/bin/tmux new-session -d
 	assert_success
-	"${EBROOTBZIP2}"/bin/tmux list-session
+	"${EBROOTTMUX}"/bin/tmux list-session
 	assert_success
-	"${EBROOTBZIP2}"/bin/tmux kill-session
+	"${EBROOTTMUX}"/bin/tmux kill-session
 	assert_success
 	rm -r "${EB_TEST_TMPDIR}"
 }
