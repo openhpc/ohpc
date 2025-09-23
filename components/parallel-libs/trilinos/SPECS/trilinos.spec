@@ -147,8 +147,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
 %endif
-        -DTrilinos_ENABLE_Epetra:BOOL=ON                                \
-        -DTrilinos_ENABLE_EpetraExt:BOOL=ON                             \
         -DTrilinos_ENABLE_MueLu:BOOL=ON                                 \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
