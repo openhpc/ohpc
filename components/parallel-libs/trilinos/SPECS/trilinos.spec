@@ -147,6 +147,8 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
 %endif
+        -DTrilinos_ENABLE_Epetra:BOOL=ON                                \
+        -DTrilinos_ENABLE_EpetraExt:BOOL=ON                             \
         -DTrilinos_ENABLE_MueLu:BOOL=ON                                 \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
@@ -154,9 +156,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
         -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
         -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
-%if 0%{?suse_version} >= 1210
         -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
-%endif
         -DTrilinos_ENABLE_EXAMPLES:BOOL=OFF                             \
         -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
