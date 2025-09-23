@@ -26,6 +26,7 @@ Warewulf configuration files are edited to reflect the environment.
 [sms](*\#*) install -d -m 0755 /var/lib/tftpboot
 
 # Add public_content_t type to tftpboot directory and contents
+[sms](*\#*) (*\install*) policycoreutils-python-utils
 [sms](*\#*) semanage fcontext -a -t public_content_t "/var/lib/tftpboot(/.*)?"
 [sms](*\#*) restorecon -R -v /var/lib/tftpboot
 
