@@ -1,110 +1,81 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 9
 # -*-sh-*-
 
 load ../../../common/test_helper_functions || exit 1
 source ../../../common/functions || exit 1
 
-if [ -s ../../../TEST_ENV ];then
-    source ../../../TEST_ENV
+if [ -s ../../../TEST_ENV ]; then
+	source ../../../TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	TESTNAME="libs/Trilinos"
+	NODES=2
+	TASKS=$(tasks_count 4)
+	ARGS=null
+	TIMEOUT="00:05:00"
 
-testname="libs/Trilinos"
+	check_rms
 
-NODES=2
-TASKS=`tasks_count 4`
-ARGS=null
-
-@test "[$testname] Kokkos-MemorySpace runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./lesson_kokkos_memspace.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
-
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
+	export TESTNAME NODES TASKS ARGS TIMEOUT
 }
 
-@test "[$testname] Tpetra-InitMPI runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./lesson_tpetra_init.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[${TESTNAME}] Kokkos-MemorySpace runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	EXE=./lesson_kokkos_memspace
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
+	fi
 
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] Tpetra-DataRedistribution runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./lesson_tpetra_dataredist.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[${TESTNAME}] Tpetra-InitMPI runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	EXE=./lesson_tpetra_init
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
+	fi
 
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] Epetra-DataRedistribution runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./lesson_epetra_dataredist.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[${TESTNAME}] Tpetra-DataRedistribution runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	EXE=./lesson_tpetra_dataredist
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
+	fi
 
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] Epetra-Galeri runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    skip "skip Epetra-Galeri in 2.x"
-    EXE=./lesson_epetra_galeri.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[${TESTNAME}] Teuchos-ParameterList runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	EXE=./lesson_teuchos_pl
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
+	fi
 
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] Epetra-Ifpack runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    skip "skip Epetra-Ifpack in 2.x"
-    EXE=./lesson_epetra_ifpack.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[${TESTNAME}] Teuchos-LAPACK runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	EXE=./lesson_teuchos_lapack
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
+	fi
 
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] Teuchos-ParameterList runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./lesson_teuchos_pl.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[${TESTNAME}] Teuchos-BLAS runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	EXE=./lesson_teuchos_blas
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
+	fi
 
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
-}
-
-@test "[$testname] Teuchos-LAPACK runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./lesson_teuchos_lapack.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
-
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
-}
-
-@test "[$testname] Teuchos-BLAS runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./lesson_teuchos_blas.exe
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
-
-    run_mpi_binary $EXE $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }

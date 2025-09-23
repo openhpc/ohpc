@@ -44,7 +44,7 @@ AMD64/MacOSX.
 
 # Following is taken from the Fedora spec file:
 
-	
+
 # LTO triggers undefined symbols in valgrind.  But valgrind has a
 # --enable-lto configure time option that we will use instead.
 %define _lto_cflags %{nil}
@@ -66,13 +66,13 @@ AMD64/MacOSX.
 #
 # Also disable strict symbol checks because the vg_preload library
 # will use hidden/undefined symbols from glibc like __libc_freeres.
-	
+
 %undefine _strict_symbol_defs_build
 
 CFLAGS="`echo " %{optflags} " | sed 's/ -fstack-protector\([-a-z]*\) / / g;s/ -O2 / /g;'`"
 export CFLAGS
 
-	
+
 %if 0%{?__global_ldflags:1}
 LDFLAGS="`echo " %{__global_ldflags} " | sed 's/ -Wl,-z,now / / g;'`"
 %endif
