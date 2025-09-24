@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     int      iam, info, ldb, ldx, nrhs;
     char     **cpp, c, *postfix;
     int ii, omp_mpi_level;
-    FILE *fp, *fopen();
+    FILE *fp;
     int cpp_defs();
 
     nprow = 1;  /* Default process rows.      */

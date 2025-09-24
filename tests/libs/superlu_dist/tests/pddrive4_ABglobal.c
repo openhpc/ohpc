@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     int      nrhs = 1;   /* Number of right-hand side. */
     char     trans[1];
     char     **cpp, c;
-    FILE *fp, *fopen();
+    FILE *fp;
 
     /* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 

@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     int      iam, info, ldb, ldx, nrhs;
     char     trans[1];
     char     **cpp, c;
-    FILE *fp, *fopen();
+    FILE *fp;
     extern int cpp_defs();
 
     nprow = 1;  /* Default process rows.      */

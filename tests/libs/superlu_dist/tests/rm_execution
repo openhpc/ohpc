@@ -1,12 +1,29 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 9
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ]; then
-	source ./common/TEST_ENV
+if [ -s ../../../TEST_ENV ]; then
+	source ../../../TEST_ENV
 fi
+
+setup_file() {
+	TESTNAME="libs/SuperLU_DIST"
+	NODES=2
+	TASKS=4
+	ARGS=null
+	TIMEOUT="00:05:00"
+	MV2_ENABLE_AFFINITY=0
+
+	check_rms
+
+	if [ -n "$SIMPLE_CI" ]; then
+		export OMPI_MCA_btl="self,tcp"
+	fi
+
+	export TESTNAME NODES TASKS ARGS TIMEOUT MV2_ENABLE_AFFINITY
+}
 
 setup() {
 	if [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] || [ "${LMOD_FAMILY_COMPILER}" == "intel" ]; then
@@ -14,91 +31,79 @@ setup() {
 	fi
 }
 
-check_rms
-export RM=$RESOURCE_MANAGER
-export TESTNAME="libs/superLU_dist"
-
-if [ -n "$SIMPLE_CI" ]; then
-	export OMPI_MCA_btl="self,tcp"
-fi
-NODES=2
-TASKS=4
-
-export MV2_ENABLE_AFFINITY=0
-
-@test "[$TESTNAME] PDGSSVX with full (default) options ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] PDGSSVX with full (default) options (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive ]; then
 		flunk "pddrive binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive "-r 2 -c 2 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive "-r 2 -c 2 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] pdgssvx_ABglobal with full (default) options ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] pdgssvx_ABglobal with full (default) options (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive_ABglobal ]; then
 		flunk "pddrive_ABglobal binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive_ABglobal "-r 1 -c 1 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] vary RHS ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] vary RHS (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive1 ]; then
 		flunk "pddrive1 binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive1 "-r 2 -c 2 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive1 "-r 2 -c 2 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] vary RHS ABglobal ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] vary RHS ABglobal (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive1_ABglobal ]; then
 		flunk "pddrive1_ABglobal binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive1_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive1_ABglobal "-r 1 -c 1 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] reuse permutation vector ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] reuse permutation vector (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive2 ]; then
 		flunk "pddrive2 binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive2 "-r 2 -c 2 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive2 "-r 2 -c 2 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] reuse permutation vector ABglobal ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] reuse permutation vector ABglobal (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive2_ABglobal ]; then
 		flunk "pddrive2_ABglobal binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive2_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive2_ABglobal "-r 1 -c 1 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] reuse symbolic factorization ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] reuse symbolic factorization (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive3 ]; then
 		flunk "pddrive3 binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive3 "-r 2 -c 2 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive3 "-r 2 -c 2 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] reuse symbolic factorization ABglobal ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] reuse symbolic factorization ABglobal (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s pddrive3_ABglobal ]; then
 		flunk "pddrive3_ABglobal binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive3_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive3_ABglobal "-r 1 -c 1 g20.rua" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[$TESTNAME] multi-grid ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$TESTNAME] multi-grid (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ -n "$SIMPLE_CI" ]; then
 		skip "The multi-grid test is too heavy for SIMPLE_CI environments, like Github Actions and Cirrus CI"
 	fi
@@ -107,6 +112,6 @@ export MV2_ENABLE_AFFINITY=0
 		flunk "pddrive4 binary does not exist"
 	fi
 
-	run_mpi_binary ./pddrive4 "g20.rua" $NODES 10
+	run_mpi_binary -t "${TIMEOUT}" ./pddrive4 "g20.rua" "${NODES}" 10
 	assert_success
 }

@@ -10,7 +10,7 @@ check_PROGRAMS               += superlu_mod
 superlu_mod_SOURCES           = superlu_mod.f90
 superlu_mod_FCFLAGS           = -c
 
-LIBS = -lstdc++
+LDADD = -lsuperlu_dist ${OHPC_BLAS} -lstdc++
 
 check_PROGRAMS               += pddrive
 pddrive_SOURCES               = pddrive.c dcreate_matrix.c
@@ -47,7 +47,3 @@ f_5x5_SOURCES                 = f_5x5.f90 superlupara.f90 superlu_mod.f90 sp_ien
 
 TESTS               = test_module
 TESTS              += rm_execution
-
-
-
-
