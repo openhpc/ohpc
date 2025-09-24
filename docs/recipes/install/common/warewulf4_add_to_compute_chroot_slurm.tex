@@ -6,8 +6,8 @@
     dnf -y install ohpc-slurm-client
 
     # Enable services to start on boot
-    echo "enable munge.service" > /etc/systemd/system-preset/90-munge.preset
-    echo "enable slurmd.service" > /etc/systemd/system-preset/90-slurmd.preset
+    systemctl enable munge.service
+    systemctl enable slurmd.service
 
     # Add Network Time Protocol (NTP) support
     dnf -y install chrony

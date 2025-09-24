@@ -25,12 +25,6 @@ the image from rebuilding (it will show an error) and rebuild later with the
 # Define chroot location
 [sms](*\#*) export CHROOT=$(wwctl image show BOSVER)
 
-# FIXME: Enable wwclient on the compute nodes
-[sms](*\#*) wwctl image exec --build=false BOSVER -- /bin/bash -ex <<- EOF
-  install -dvp /etc/systemd/system-preset
-  echo "enable wwclient.service" > /etc/systemd/system-preset/90-wwclient.preset
-EOF
-
 # Enable OpenHPC inside image and update image.  Disable image build on exit, rebuild later.
 [sms](*\#*) wwctl image exec --build=false BOSVER -- /bin/bash -ex <<- EOF
 %% FIXME: Not yet released (remove this block released)
