@@ -35,17 +35,20 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CFLAGS}"
   CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CXXFLAGS} -qopenmp"
   FFLAGS="-I ${HYPRE_INC} -I ${MKLROOT}/include ${FFLAGS}"
-  LDFLAGS="-L${HYPRE_LIB} -lHYPRE -L$MKLROOT/lib/intel64 -lmkl_rt -lm ${LDFLAGS}"
+  LDFLAGS="-L${HYPRE_LIB} -L$MKLROOT/lib/intel64 ${LDFLAGS}"
+  LIBS="-lHYPRE -lmkl_rt -lm"
 elif test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then
   CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CFLAGS}"
   CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CXXFLAGS} -fopenmp"
   FFLAGS="-I ${HYPRE_INC} ${FFLAGS}"
-  LDFLAGS="-L${HYPRE_LIB} -lHYPRE -armpl -lm ${LDFLAGS}"
+  LDFLAGS="-L${HYPRE_LIB} ${LDFLAGS}"
+  LIBS="-lHYPRE -armpl -lm"
 else
   CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CFLAGS}"
   CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CXXFLAGS} -fopenmp"
   FFLAGS="-I ${HYPRE_INC} ${FFLAGS}"
-  LDFLAGS="-L${HYPRE_LIB} -lHYPRE -L$OPENBLAS_LIB -lopenblas -lm ${LDFLAGS}"
+  LDFLAGS="-L${HYPRE_LIB} -L$OPENBLAS_LIB ${LDFLAGS}"
+  LIBS="-lHYPRE -lopenblas -lm"
 fi
 
 
@@ -69,5 +72,7 @@ echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FFLAGS
+echo
+echo Libs.......................... : $LIBS
 echo
 echo '-------------------------------------------------------------------------------------------------------------'

@@ -1,4 +1,6 @@
 
+LDADD                   = -lslepc -lpetsc
+
 TESTS                   = test4f
 check_PROGRAMS          = test4f
 test4f_SOURCES          = test4f.F

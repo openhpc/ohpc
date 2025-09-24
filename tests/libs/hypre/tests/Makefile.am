@@ -1,6 +1,8 @@
 
 AM_CFLAGS               = -Wno-implicit-function-declaration
 
+LDADD                   = ${LIBS}
+
 TESTS                   = ex1
 check_PROGRAMS          = ex1
 ex1_SOURCES             = ex1.c

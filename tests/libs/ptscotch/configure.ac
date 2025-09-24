@@ -28,7 +28,7 @@ AC_PROG_CC
 AC_C_CONST
 
 CFLAGS="-I ${PTSCOTCH_INC} ${CFLAGS}"
-LDFLAGS="-L${PTSCOTCH_LIB} -lptscotch -lscotch -lptscotcherrexit -lz -lbz2 -lm -lrt -pthread ${LDFLAGS}"
+LDFLAGS="-L${PTSCOTCH_LIB} -pthread ${LDFLAGS}"
 
 
 # Set subdirectories
