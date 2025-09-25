@@ -18,7 +18,7 @@ the image from rebuilding (it will show an error) and rebuild later with the
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1 {OSIMAGE}{\osimage{}}1 {ARCH}{\arch{}}1]
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1 {OSIMAGE}{\osimage{}}1 {ARCH}{\arch{}}1 {TAG}{\OSTag{}}1 {OSTREE}{\OSTree{}}1]
 # Import the base image from Warewulf
 [sms](*\#*) wwctl image import docker://ghcr.io/warewulf/warewulf-OSIMAGE BOSVER --syncuser
 
@@ -30,8 +30,8 @@ the image from rebuilding (it will show an error) and rebuild later with the
 %% FIXME: Not yet released (remove this block released)
 %%  dnf -y install http://repos.openhpc.community/OpenHPC/4/OSTREE/ARCH/ohpc-release-4-1.TAG.ARCH.rpm
   dnf -y install dnf-utils
-  dnf config-manager --add-repo http://obs.openhpc.community:82/OpenHPC4:/4.0:/Factory/EL_10/
-  rpm --import http://obs.openhpc.community:82/OpenHPC4:/4.0:/Factory/EL_10/repodata/repomd.xml.key
+  dnf config-manager --add-repo http://obs.openhpc.community:82/OpenHPC4:/4.0:/Factory/OSTREE/
+  rpm --import http://obs.openhpc.community:82/OpenHPC4:/4.0:/Factory/OSTREE/repodata/repomd.xml.key
 %% end FIXME
   dnf -y update
 EOF

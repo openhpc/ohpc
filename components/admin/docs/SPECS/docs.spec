@@ -78,6 +78,7 @@ for recipe_path in \
 	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
+	"openeuler24.03/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/openchami/slurm" \
@@ -98,6 +99,7 @@ for recipe_path in \
 	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
+	"openeuler24.03/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/openchami/slurm" \
@@ -107,7 +109,7 @@ for recipe_path in \
 done
 
 # input file templates
-for distro in "almalinux10" "rocky10"; do
+for distro in "almalinux10" "rocky10" "openeuler24.03"; do
 	install -m 0644 -p "%{recipe_base}/${distro}/input.local.template" "%{recipe_dest}/${distro}/input.local"
 done
 

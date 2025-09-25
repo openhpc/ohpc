@@ -7,18 +7,16 @@ requirements are to have access to the {\color{purple}{OS}},
 {\color{purple}{EPOL update}} repositories.  Note that the
 {\color{purple}{OS}}, {\color{purple}{Everything}} and {\color{purple}{EPOL
 main}} repositories are typically enabled by default.  To enable the
-{\color{purple}{EPOL update}} repository on openEuler-22.03, you can run the following
+{\color{purple}{EPOL update}} repository on openEuler-24.03, you can run the following
 command:
 
 % begin_ohpc_run
-% ohpc_command if [[ ${enable_epol_updates} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily]
-[sms](*\#*) (*\addrepo*) https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
+[sms](*\#*) (*\addrepo*) https://eur.openeuler.openatom.cn/coprs/openhpc/OpenHPC/repo/openeuler-24.03_LTS_SP2/openhpc-OpenHPC-openeuler-24.03_LTS_SP2.repo
 [sms](*\#*) (*\install*) openeuler-extra-repos
 \end{lstlisting}
 % ohpc_indent 0
-% ohpc_command fi
 % end_ohpc_run
 
 
