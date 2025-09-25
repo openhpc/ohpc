@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-mpi-devel
-%define gnu_major_ver 14
+%define gnu_major_ver 15
 %define oneapi_manifest %{OHPC_MODULEDEPS}/intel/impi/.rpm-manifest
 # Using a minimum version has been problematic as DNF will happily
 # install newer versions during build time. If the user has the minimum
