@@ -4,10 +4,9 @@
  */
 #include "slu_Cnames.h"
 
-int
-sp_ienv(int ispec)
+int sp_ienv(int ispec)
 {
-/*
+	/*
     Purpose   
     =======   
 
@@ -44,16 +43,22 @@ sp_ienv(int ispec)
     ===================================================================== 
 */
 
-    switch (ispec) {
-	case 1: return (3);
-	case 2: return (2);
-	case 3: return (10);
-	case 4: return (20);
-	case 5: return (10);
-        case 6: return (2);
-    }
+	switch (ispec) {
+	case 1:
+		return (3);
+	case 2:
+		return (2);
+	case 3:
+		return (10);
+	case 4:
+		return (20);
+	case 5:
+		return (10);
+	case 6:
+		return (2);
+	}
 
-    /* Invalid value for ISPEC */
-    return (-1);
+	/* Invalid value for ISPEC */
+	return (-1);
 
 } /* sp_ienv_ */

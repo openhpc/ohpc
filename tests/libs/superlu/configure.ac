@@ -17,7 +17,7 @@ if test "x$SUPERLU_DIR" = "x"; then
    echo
    AC_ERROR([SUPERLU_DIR not defined - please load superlu environment.])
 else
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
 fi
 
 OHPC_COMPILER_FAMILY
@@ -28,6 +28,9 @@ AC_PROG_CC
 if test "x$LMOD_FAMILY_COMPILER" = "xacfl"; then
    F77=${FC}
 fi
+if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
+   F77=${FC}
+fi
 AC_PROG_F77
 AC_PROG_CXX
 # Checks for typedefs, structures, and compiler characteristics.
@@ -36,7 +39,9 @@ AC_C_CONST
 # Define include path and library linkage from environment variables
 # which should be provided via module loads.
 
-CFLAGS="-I${SUPERLU_INC} ${CFLAGS}"
+CFLAGS="-I ${SUPERLU_INC} ${CFLAGS}"
+CXXFLAGS="-I ${SUPERLU_INC} ${CXXFLAGS}"
+FCFLAGS="-I ${SUPERLU_INC} ${FCFLAGS}"
 FFLAGS="-I${SUPERLU_INC} ${FFLAGS}"
 LDFLAGS="-L${SUPERLU_LIB} -lsuperlu ${OHPC_BLAS} ${LDFLAGS}"
 
@@ -54,11 +59,13 @@ echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`
-echo Fortran compiler ............. : `which $F77`
+echo Fortran compiler ............. : `which $FC`
+echo F77 compiler ................. : `which $F77`
 echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
-echo Fortran compiler flags........ : $FFLAGS
+echo Fortran compiler flags........ : $FCFLAGS
+echo F77 compiler flags............ : $FFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
 echo
 echo '-------------------------------------------------------------------------------------------------------------'

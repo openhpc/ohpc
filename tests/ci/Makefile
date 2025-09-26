@@ -31,6 +31,9 @@ codespell-lint:
 		tests/perf-tools/omb/tests/test_module \
 		tests/perf-tools/omb/ohpc-tests/test_mpi_families \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
+		tests/libs/superlu/tests/rm_execution \
+		tests/libs/superlu/tests/test_module \
+		tests/libs/superlu/ohpc-tests/test_compiler_families \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
 		tests/libs/netcdf/ohpc-tests/test_mpi_families \
@@ -82,6 +85,9 @@ whitespace-lint:
 		tests/perf-tools/omb/tests/rm_execution \
 		tests/perf-tools/omb/tests/test_module \
 		tests/perf-tools/omb/ohpc-tests/test_mpi_families \
+		tests/libs/superlu/tests/rm_execution \
+		tests/libs/superlu/tests/test_module \
+		tests/libs/superlu/ohpc-tests/test_compiler_families \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
@@ -154,6 +160,9 @@ shellcheck-lint:
 		../../tests/libs/netcdf/tests/test_CXX_module \
 		../../tests/libs/netcdf/tests/test_Fortran_module \
 		../../tests/libs/netcdf/tests/test_netcdf \
+		../../tests/libs/superlu/tests/rm_execution \
+		../../tests/libs/superlu/tests/test_module \
+		../../tests/libs/superlu/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
@@ -191,6 +200,9 @@ shfmt-lint:
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/omb/tests/test_module \
 		../../tests/perf-tools/omb/ohpc-tests/test_mpi_families \
+		../../tests/libs/superlu/tests/rm_execution \
+		../../tests/libs/superlu/tests/test_module \
+		../../tests/libs/superlu/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
 		../../tests/libs/phdf5/tests/rm_execution \
@@ -237,5 +249,6 @@ clang-format-lint:
 		../dev-tools/cuda/add.cu \
 		../../tests/libs/plasma/tests/*.c \
 		../../tests/libs/plasma/tests/*.h \
+		../../tests/libs/superlu/tests/*.c \
 		../../tests/libs/trilinos/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c
