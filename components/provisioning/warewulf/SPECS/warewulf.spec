@@ -87,7 +87,7 @@ Requires: ipxe-bootimgs-aarch64
 %endif
 %endif
 
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?openEuler}
 Requires: dnsmasq
 %else
 %if 0%{?rhel} >= 8 || 0%{?suse_version} || 0%{?fedora}
@@ -156,7 +156,7 @@ ln -s %{_sharedstatedir}/tftpboot %{buildroot}%{tftpdir}
 %endif
 ## END OHPC
 
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?openEuler}
 sed -i '
   s/systemd name: dhcpd/systemd name: dnsmasq/
   s/systemd name: tftp/systemd name: dnsmasq/
