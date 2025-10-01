@@ -1,6 +1,0 @@
-[nvhpc]
-name=NVIDIA HPC SDK
-baseurl=https://developer.download.nvidia.com/hpc-sdk/sles/$basearch
-enabled=1
-gpgcheck=1
-gpgkey=https://developer.download.nvidia.com/hpc-sdk/sles/RPM-GPG-KEY-NVIDIA-HPC-SDK

@@ -23,15 +23,12 @@ URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/dev-tools
 BuildArch: x86_64
 # These repositories are needed for the driver.
-Source1:   https://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
-Source2:   https://developer.download.nvidia.com/compute/cuda/repos/opensuse15/x86_64/cuda-opensuse15.repo
+Source1:   https://developer.download.nvidia.com/compute/cuda/repos/rhel10/x86_64/cuda-rhel10.repo
 # These repositories are needed for the toolkit. nvhpc install the cuda toolkit
 # in /opt in contrast to the normal cuda-toolkit which is installed in /usr/local.
 # /opt is easier to manage for NFS exports. nvhpc also comes with modulefiles.
 # https://developer.download.nvidia.com/hpc-sdk/rhel/nvhpc.repo
-Source3:   nvhpc-rhel.repo
-# https://developer.download.nvidia.com/hpc-sdk/sles/nvhpc.repo
-Source4:   nvhpc-sles.repo
+Source2:   nvhpc-rhel.repo
 
 #!BuildIgnore: post-build-checks
 
@@ -50,15 +47,9 @@ Installs and configures the online repository for the cuda toolkit
 
 
 %install
-%if 0%{?suse_version}
-%define repodir %{_sysconfdir}/zypp/repos.d
-%define cuda_repofile %{SOURCE2}
-%define nvhpc_repofile %{SOURCE4}
-%else
 %define repodir %{_sysconfdir}/yum.repos.d
 %define cuda_repofile %{SOURCE1}
-%define nvhpc_repofile %{SOURCE3}
-%endif
+%define nvhpc_repofile %{SOURCE2}
 
 install -D -m644 %{cuda_repofile} %{nvhpc_repofile} -t %{buildroot}%{repodir}
 
@@ -72,7 +63,7 @@ proc ModulesHelp { } { puts stderr "Activate cuda-toolkit %{dot_version} (nvhpc)
 module-whatis "Name: cuda-toolkit (nvhpc)"
 module-whatis "Version: %{dot_version}"
 
-# The default compiler from OpenHPC (currently gcc 14) is not supported
+# The default compiler from OpenHPC (currently gcc 15) is not supported
 # by nvhpc <= 25-1. We rely on the OS compiler for now.
 setenv		NVCC_PREPEND_FLAGS	"-ccbin /usr/bin/gcc"
 # Make the nvidia hpc_sdk module files visible
