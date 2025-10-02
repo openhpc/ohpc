@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname cuda-devel
-%define nvhpc_version 25-1
+%define nvhpc_version 25-9
 %define dot_version %(tr "-" "." <<< %{nvhpc_version})
 
 Summary:   OpenHPC compatibility package for cuda
@@ -53,18 +53,17 @@ Installs and configures the online repository for the cuda toolkit
 
 install -D -m644 %{cuda_repofile} %{nvhpc_repofile} -t %{buildroot}%{repodir}
 
-mkdir -p %{buildroot}/%{OHPC_MODULES}/cuda
+mkdir -p %{buildroot}/%{OHPC_MODULES}
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/cuda/%{dot_version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/cuda
 #%Module1.0#####################################################################
 
-proc ModulesHelp { } { puts stderr "Activate cuda-toolkit %{dot_version} (nvhpc)" }
+proc ModulesHelp { } { puts stderr "Activate cuda-toolkit (nvhpc)" }
 
 module-whatis "Name: cuda-toolkit (nvhpc)"
-module-whatis "Version: %{dot_version}"
 
 # The default compiler from OpenHPC (currently gcc 15) is not supported
-# by nvhpc <= 25-1. We rely on the OS compiler for now.
+# by nvhpc <= 25-9. We rely on the OS compiler for now.
 setenv		NVCC_PREPEND_FLAGS	"-ccbin /usr/bin/gcc"
 # Make the nvidia hpc_sdk module files visible
 append-path	MODULEPATH		/opt/nvidia/hpc_sdk/modulefiles

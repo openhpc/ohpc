@@ -1,11 +1,12 @@
 To add the optional NVIDIA GPU driver to the compute nodes, an
 additional external \pkgmgr{} repository provided by NVIDIA
-must be configured. Once the repository is configured the
-GPU driver and the corresponding toolkit needs to be installed.
+must be configured. Once the repository is configured, the
+GPU driver needs to be installed on the compute image and the
+corresponding toolkit installed on the SMS node.
 
 \OHPC{} provides a convenience package to enable the NVIDIA
 repository locally along with compatibility packages that integrate
-the NVIDIA compiler within the standard \OHPC{} user environment.
+the NVIDIA HPC SDK within the standard \OHPC{} user environment.
 
 % begin_ohpc_run
 % ohpc_validation_newline
@@ -16,10 +17,10 @@ the NVIDIA compiler within the standard \OHPC{} user environment.
 [sms](*\#*) (*\install*) cuda-repo-ohpc
 # Install the toolkit on the SMS
 [sms](*\#*) (*\install*) nvidia-driver-cuda cuda-devel-ohpc
-# Enable NVIDIA repository inside image and install it.  Disable autorebuild.
+# Install NVIDIA repository and GPU driver in the compute image
 [sms](*\#*) wwctl image exec --build=false BOSVER -- /bin/bash -ex <<- EOF
   dnf -y install cuda-repo-ohpc
-  dnf -y module install nvidia-driver:latest-dkms
+  dnf -y kmod-nvidia-latest-dkms nvidia-driver-cuda
   KVER=$(rpm -q --queryformat='%{version}-%{release}.%{arch}\n' \
          kernel-core | sort -r | head -1)
   dkms autoinstall --verbose -k \${KVER}
