@@ -63,6 +63,9 @@ epel_repo_dir="${epel_repo_dir:-/install/epel}"
 # Provisioning interface used by compute hosts (Warewulf recipe only)
 eth_provision="${eth_provision:-eth0}"
 
+# Compute disk config (Warewulf recipe only, set enable_todisk=1)
+node_disk=${node_disk:=/dev/sda}
+
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
 enable_opa="${enable_opa:-0}"
@@ -70,6 +73,7 @@ enable_opafm="${enable_opafm:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
 enable_mpich_ucx="${enable_mpich_ucx:-1}"
 enable_ipoib="${enable_ipoib:-0}"
+enable_todisk="${enable_todisk:-0}"
 
 enable_clustershell="${enable_clustershell:-0}"
 enable_ipmisol="${enable_ipmisol:-0}"

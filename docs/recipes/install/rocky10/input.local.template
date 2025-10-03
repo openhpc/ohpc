@@ -24,7 +24,7 @@ internal_netmask="${internal_netmask:-255.255.0.0}"
 # Subnet network for internal cluster network
 internal_network="${internal_network:-172.16.0.0}"
 
-# ipv4 gateway 
+# ipv4 gateway
 ipv4_gateway="${ipv4_gateway:-172.16.0.2}"
 
 # Local ntp server for time synchronization
@@ -50,7 +50,7 @@ deployment_protocols="${deployment_protocols:-firmware}"
 
 
 
-# Path to local repository web roots (Confluent reciRocky-9.4-x86_64-dvd.isope only)
+# Path to local repository web roots (Confluent recipe only)
 ohpc_repo_dir_confluent="${ohpc_repo_dir:-/var/lib/confluent/public/ohpc}"
 ohpc_repo_remote_dir="${ohpc_repo_remote_dir:-/confluent-public/ohpc}"
 epel_repo_dir_confluent="${epel_repo_dir:-/var/lib/confluent/public/epel}"
@@ -63,6 +63,9 @@ epel_repo_dir="${epel_repo_dir:-/install/epel}"
 # Provisioning interface used by compute hosts (Warewulf recipe only)
 eth_provision="${eth_provision:-eth0}"
 
+# Compute disk config (Warewulf recipe only, set enable_todisk=1)
+node_disk=${node_disk:=/dev/sda}
+
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
 enable_opa="${enable_opa:-0}"
@@ -70,6 +73,7 @@ enable_opafm="${enable_opafm:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
 enable_mpich_ucx="${enable_mpich_ucx:-1}"
 enable_ipoib="${enable_ipoib:-0}"
+enable_todisk="${enable_todisk:-0}"
 
 enable_clustershell="${enable_clustershell:-0}"
 enable_ipmisol="${enable_ipmisol:-0}"

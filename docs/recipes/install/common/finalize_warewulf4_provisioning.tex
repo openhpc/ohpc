@@ -4,6 +4,60 @@
 This section highlights creation of the node image and overlays, followed by the
 registration of desired compute nodes.
 
+\subsubsection{Two-Stage Provisioning (optional)}
+
+\Warewulf{} optionally supports two-stage provisioning to ramfs or disk on the
+compute nodes. The nodes are still stateless, but the image is copied to disk
+during the provisioning process and is reprovisioned on every boot.  This can be
+useful for cases when the compute node images are large, for example GPU
+drivers, or the compute nodes have limited memory.
+
+To configure two-stage provisioning, install Dracut and ignition (ignition can
+also be used to provision swap and local storage (see \Warewulf{} documentation
+for details) on the compute node.  The example below provisions to ramfs, which
+is the default.  To provision to disk, see the next section.  To aid in
+debugging, it is helpful to add \texttt{rd.shell} to the kernel arguments in
+Section~\ref{sec:optional_kargs} to aid in debugging.
+
+
+% begin_ohpc_run
+% ohpc_comment_header Two-Stage provision to ramfs
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
+## Install Dracut in the image
+[sms](*\#*) wwctl image exec --build=false BOSVER -- /usr/bin/dnf install -y warewulf-ohpc-dracut ignition gdisk
+
+## Configure Dracut.  Note the leading and trailing spaces in the quotes in "add_dracutmodules"
+[sms](*\#*) echo 'hostonly="no"' > $CHROOT/etc/dracut.conf.d/wwinit.conf
+[sms](*\#*) echo 'add_dracutmodules+=" wwinit ignition "' >> $CHROOT/etc/dracut.conf.d/wwinit.conf
+
+## Build the Dracut initramfs
+[sms](*\#*) wwctl image exec --build=false BOSVER -- /usr/bin/dracut --force --regenerate-all
+
+## Enable Dracut boot for compute nodes that use the "nodes" profile
+[sms](*\#*) wwctl profile set --yes nodes --tagadd IPXEMenuEntry=dracut
+\end{lstlisting}
+% end_ohpc_run
+
+Optionally, configure the compute node to provision to disk.  Two stage
+provisioning (previous step) must also be enabled.  The compute node will use,
+\textbf{and erase}, the disk specified by \texttt{node\_disk}.
+
+% begin_ohpc_run
+% ohpc_command if [[ ${enable_todisk} -eq 1 ]];then
+% ohpc_comment_header Configure two-stage provision-to-disk
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
+## Create the target "rootfs" partition and filesystem
+[sms](*\#*) wwctl profile set --yes nodes \
+  --diskname ${node_disk} --diskwipe \
+  --partname rootfs --partcreate --partnumber 1 \
+  --fsname rootfs --fswipe --fsformat ext4 --fspath /
+
+## Enable provision-to-disk for compute nodes that use the "nodes" profile
+[sms](*\#*) wwctl profile set nodes --yes --root=/dev/disk/by-partlabel/rootfs
+\end{lstlisting}
+% ohpc_command fi
+% end_ohpc_run
+
 \subsubsection{Build image image and overlays}
 
 The bootstrap image includes the runtime kernel and associated modules, as well
