@@ -73,6 +73,7 @@ enable_opafm="${enable_opafm:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
 enable_mpich_ucx="${enable_mpich_ucx:-1}"
 enable_ipoib="${enable_ipoib:-0}"
+enable_dracut="${enable_dracut:-1}"
 enable_todisk="${enable_todisk:-0}"
 
 enable_clustershell="${enable_clustershell:-0}"

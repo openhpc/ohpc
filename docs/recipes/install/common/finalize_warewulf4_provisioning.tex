@@ -21,6 +21,7 @@ Section~\ref{sec:optional_kargs} to aid in debugging.
 
 
 % begin_ohpc_run
+% ohpc_command if [[ ${enable_dracut} -eq 1 ]];then
 % ohpc_comment_header Two-Stage provision to ramfs
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
 ## Install Dracut in the image
@@ -36,6 +37,7 @@ Section~\ref{sec:optional_kargs} to aid in debugging.
 ## Enable Dracut boot for compute nodes that use the "nodes" profile
 [sms](*\#*) wwctl profile set --yes nodes --tagadd IPXEMenuEntry=dracut
 \end{lstlisting}
+% ohpc_command fi
 % end_ohpc_run
 
 Optionally, configure the compute node to provision to disk.  Two stage
@@ -43,7 +45,7 @@ provisioning (previous step) must also be enabled.  The compute node will use,
 \textbf{and erase}, the disk specified by \texttt{node\_disk}.
 
 % begin_ohpc_run
-% ohpc_command if [[ ${enable_todisk} -eq 1 ]];then
+% ohpc_command if [[ ${enable_dracut} -eq 1 && ${enable_todisk} -eq 1 ]];then
 % ohpc_comment_header Configure two-stage provision-to-disk
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
 ## Create the target "rootfs" partition and filesystem
