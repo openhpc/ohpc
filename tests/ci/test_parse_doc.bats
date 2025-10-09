@@ -114,3 +114,37 @@ EOF
 	[ "${status}" -eq 0 ]
 	echo "${output}" | grep -q 'echo "Repository path EL_10"'
 }
+
+@test "Test BASEURL handling" {
+	cat >"${TEST_TEX_FILE}" <<EOF
+\\newcommand{\\install}{'install'}
+\\newcommand{\\chrootinstall}{'chrootinstall'}
+\\newcommand{\\groupinstall}{'groupinstall'}
+\\newcommand{\\groupchrootinstall}{'groupchrootinstall'}
+\\newcommand{\\baseurl}{http://example.com/repo}
+% begin_ohpc_run
+[sms](*\\#*) echo "Base URL is BASEURL"
+% end_ohpc_run
+EOF
+
+	run "${PARSE_DOC_SCRIPT}" "${TEST_TEX_FILE}"
+	[ "${status}" -eq 0 ]
+	echo "${output}" | grep -q 'echo "Base URL is http://example.com/repo"'
+}
+
+@test "Test OSNAME handling" {
+	cat >"${TEST_TEX_FILE}" <<EOF
+\\newcommand{\\install}{'install'}
+\\newcommand{\\chrootinstall}{'chrootinstall'}
+\\newcommand{\\groupinstall}{'groupinstall'}
+\\newcommand{\\groupchrootinstall}{'groupchrootinstall'}
+\\newcommand{\\OS}{Rocky Linux}
+% begin_ohpc_run
+[sms](*\\#*) echo "Operating system is OSNAME"
+% end_ohpc_run
+EOF
+
+	run "${PARSE_DOC_SCRIPT}" "${TEST_TEX_FILE}"
+	[ "${status}" -eq 0 ]
+	echo "${output}" | grep -q 'echo "Operating system is Rocky Linux"'
+}

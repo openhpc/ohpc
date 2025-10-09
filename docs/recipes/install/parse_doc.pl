@@ -53,6 +53,8 @@ my $verlong            = "";
 my $OSTree             = "";
 my $image              = "";
 my $confluentprofile   = "";
+my $baseurl            = "";
+my $osname             = "";
 
 # parse package command macro's from input file
 open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
@@ -104,6 +106,10 @@ while( my $line = <IN> ) {
         $arch = $1;
 	# undo latex escape for x86
 	if ($arch eq "x86\\_64") { $arch = "x86_64";}
+    } elsif( $line =~ /\\newcommand\{\\baseurl\}\{(.+)\}/ ) {
+        $baseurl = $1;
+    } elsif( $line =~ /\\newcommand\{\\OS\}\{(.+)\}/ ) {
+        $osname = $1;
     }
 }
 close( IN );
@@ -322,6 +328,8 @@ sub update_cmd {
     $cmd =~ s/VERLONG/$verlong/g;
     $cmd =~ s/OSTREE/$OSTree/;
     $cmd =~ s/IMAGE/$image/;
+    $cmd =~ s/BASEURL/$baseurl/g;
+    $cmd =~ s/OSNAME/$osname/g;
 
     return( $cmd );
 } # end update_cmd
