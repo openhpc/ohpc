@@ -7,21 +7,22 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\OS}{Rocky}
-\newcommand{\baseOS}{\OS{[} 10}
+\newcommand{\OS}{AlmaLinux}
+\newcommand{\baseOS}{\OS{} 10}
 \newcommand{\OSRepo}{\OS{}\_10}
 \newcommand{\OSTree}{EL\_10}
 \newcommand{\OSTag}{el10}
-\newcommand{\baseos}{rocky10}
-\newcommand{\baseosshort}{rocky10}
+\newcommand{\baseos}{almalinux-10}
+\newcommand{\baseosshort}{almalinux10}
+\newcommand{\osimage}{almalinux:10}
 \newcommand{\provisioner}{OpenCHAMI}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
 \newcommand{\arch}{x86\_64}
-\newcommand{\baseurl}{https://dl.rockylinux.org/pub/rocky/}
+\newcommand{\baseurl}{https://repo.almalinux.org/almalinux/}
 
-\newcommand{\downloadpage}{https://rockylinux.org/download/}
+\newcommand{\downloadpage}{https://almalinux.org/get-almalinux/}
 \newcommand{\OpenCHAMI}{OpenCHAMI}
 \newcommand{\VERLONG}{0.0.31}
 % Define package manager commands
@@ -151,7 +152,7 @@
 % ohpc_command fi
 % end_ohpc_run
 
-\input{common/rocky_repos}
+\input{common/almalinux_repos}
 
 
 % begin_ohpc_run

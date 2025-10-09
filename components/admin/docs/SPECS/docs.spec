@@ -75,6 +75,7 @@ from the OpenHPC software stack.
 
 for recipe_path in \
 	"almalinux10/x86_64/confluent/slurm" \
+	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
@@ -94,6 +95,7 @@ install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_N
 
 for recipe_path in \
 	"almalinux10/x86_64/confluent/slurm" \
+	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \

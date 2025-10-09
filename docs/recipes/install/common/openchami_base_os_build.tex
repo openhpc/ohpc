@@ -18,12 +18,12 @@ of documentation files to reduce the size of the image:
 
 % begin_ohpc_run
 % ohpc_validation_comment Define nodocs image layer
-\begin{lstlisting}[language=bash,keywords={}]
+\begin{lstlisting}[language=bash,keywords={},literate={BOSSHORT}{\baseosshort{}}1 {BASEURL}{\baseurl{}}1 {OSNAME}{\OS{}}1]
 [sms](*\#*) echo -e "%_excludedocs 1" >> /opt/ohpc/admin/images/data/rpmmacros
 [sms](*\#*) cat > /opt/ohpc/admin/images/nodocs.yaml <<EOF
 [sms](*\#*) options:
 [sms](*\#*)   layer_type: 'base'
-[sms](*\#*)   name: 'rocky-nodocs'
+[sms](*\#*)   name: 'BOSSHORT-nodocs'
 [sms](*\#*)   publish_tags: '10'
 [sms](*\#*)   pkg_manager: 'dnf'
 [sms](*\#*)   parent: 'scratch'
@@ -63,26 +63,26 @@ memory.
 
 % begin_ohpc_run
 % ohpc_validation_comment Define base image layer
-\begin{lstlisting}[language=bash,keywords={}]
+\begin{lstlisting}[language=bash,keywords={},literate={BOSSHORT}{\baseosshort{}}1 {BASEURL}{\baseurl{}}1 {OSNAME}{\OS{}}1]
 [sms](*\#*) cat > /opt/ohpc/admin/images/base.yaml <<EOF
 [sms](*\#*) options:
 [sms](*\#*)   layer_type: 'base'
-[sms](*\#*)   name: 'rocky-base'
+[sms](*\#*)   name: 'BOSSHORT-base'
 [sms](*\#*)   publish_tags: '10'
 [sms](*\#*)   pkg_manager: 'dnf'
-[sms](*\#*)   parent: '${sms_name}:5000/${compute_prefix}/rocky-nodocs:10'
+[sms](*\#*)   parent: '${sms_name}:5000/${compute_prefix}/BOSSHORT-nodocs:10'
 [sms](*\#*)   publish_registry: '${sms_name}:5000/${compute_prefix}'
 [sms](*\#*)   registry_opts_pull:
 [sms](*\#*)     - '--tls-verify=false'
 [sms](*\#*)   registry_opts_push:
 [sms](*\#*)     - '--tls-verify=false'
 [sms](*\#*) repos:
-[sms](*\#*)   - alias: 'Rocky_10_BaseOS'
-[sms](*\#*)     url: 'https://dl.rockylinux.org/pub/rocky/10/BaseOS/x86_64/os/'
-[sms](*\#*)     gpg: 'https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-10'
-[sms](*\#*)   - alias: 'Rocky_10_AppStream'
-[sms](*\#*)     url: 'https://dl.rockylinux.org/pub/rocky/10/AppStream/x86_64/os/'
-[sms](*\#*)     gpg: 'https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-10'
+[sms](*\#*)   - alias: 'BOSSHORT_BaseOS'
+[sms](*\#*)     url: 'BASEURL10/BaseOS/x86_64/os/'
+[sms](*\#*)     gpg: 'BASEURL/RPM-GPG-KEY-OSNAME-10'
+[sms](*\#*)   - alias: 'BOSSHORT_AppStream'
+[sms](*\#*)     url: 'BASEURL10/AppStream/x86_64/os/'
+[sms](*\#*)     gpg: 'BASEURL/RPM-GPG-KEY-OSNAME-10'
 [sms](*\#*) package_groups:
 [sms](*\#*)   - 'Minimal Install'
 [sms](*\#*)   - 'Development Tools'
@@ -137,7 +137,7 @@ Now we can build on top of the base layer by setting it to be the parent of the 
 [sms](*\#*)   publish_tags:
 [sms](*\#*)     - '10'
 [sms](*\#*)   pkg_manager: 'dnf'
-[sms](*\#*)   parent: '${sms_name}:5000/${compute_prefix}/rocky-base:10'
+[sms](*\#*)   parent: '${sms_name}:5000/${compute_prefix}/BOSSHORT-base:10'
 [sms](*\#*)   publish_registry: '${sms_name}:5000/${compute_prefix}'
 [sms](*\#*)   registry_opts_pull:
 [sms](*\#*)     - '--tls-verify=false'
