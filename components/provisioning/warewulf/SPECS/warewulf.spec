@@ -29,6 +29,9 @@
 %define _build_id_links none
 %endif
 
+%define _overlaydir %{_datadir}/warewulf/overlays
+%global __brp_mangle_shebangs_exclude_from ^%{_overlaydir}/.*$
+
 ## Inserted by OHPC
 # Service directories (change /var/lib/* default to match WW3 build)
 %global tftpdir /srv/tftpboot
@@ -36,9 +39,10 @@
 %global statedir /srv
 ## End OHPC
 
+## Contains OHPC customizations
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.6.3
+Version: 4.6.4
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
@@ -59,7 +63,7 @@ Conflicts: warewulf-ipmi
 %if 0%{?suse_version} || 0%{?sle_version}
 #BuildRequires: distribution-release ## OHPC Removed
 BuildRequires: systemd-rpm-macros
-BuildRequires: go > 1.20
+BuildRequires: go >= 1.22
 BuildRequires: firewall-macros
 BuildRequires: firewalld
 BuildRequires: tftp
@@ -72,7 +76,7 @@ Requires: ipxe-bootimgs
 # Assume Red Hat/Fedora build
 #BuildRequires: system-release ## OHPC Removed
 BuildRequires: systemd
-BuildRequires: golang > 1.20
+BuildRequires: golang >= 1.22
 BuildRequires: firewalld-filesystem
 Requires: tftp-server
 Requires: nfs-utils
@@ -108,7 +112,7 @@ Recommends: ipmitool
 Warewulf is a stateless and diskless provisioning
 system for large clusters of bare metal and/or virtual systems.
 
-
+## OHPC customized. Add OHPC patches
 %prep
 %setup -q -n %{pname}-%{version}
 %patch -P 0 -p1
@@ -196,41 +200,42 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %{_sysconfdir}/bash_completion.d
 %config(noreplace) %{_sysconfdir}/logrotate.d
 
+## OHPC Modified
 %dir %{statedir}/warewulf
 %dir %{statedir}/warewulf/chroots
 %dir %{statedir}/warewulf/overlays
 
 %dir %{_datadir}/warewulf
 %{_datadir}/warewulf/bmc
-%dir %{_datadir}/warewulf/overlays
-%dir %{_datadir}/warewulf/overlays/*
-%dir %{_datadir}/warewulf/overlays/*/rootfs
-%{_datadir}/warewulf/overlays/NetworkManager/rootfs/*
-%{_datadir}/warewulf/overlays/debian.interfaces/rootfs/*
-%{_datadir}/warewulf/overlays/debug/rootfs/*
-%{_datadir}/warewulf/overlays/fstab/rootfs/*
-%{_datadir}/warewulf/overlays/host/rootfs/*
-%{_datadir}/warewulf/overlays/hostname/rootfs/*
-%{_datadir}/warewulf/overlays/hosts/rootfs/*
-%{_datadir}/warewulf/overlays/ifcfg/rootfs/*
-%{_datadir}/warewulf/overlays/ignition/rootfs/*
-%{_datadir}/warewulf/overlays/issue/rootfs/*
-%{_datadir}/warewulf/overlays/netplan/rootfs/*
-%{_datadir}/warewulf/overlays/resolv/rootfs/*
-%attr(700, -, -) %{_datadir}/warewulf/overlays/ssh.authorized_keys/rootfs/*
-%{_datadir}/warewulf/overlays/ssh.host_keys/rootfs/*
-%{_datadir}/warewulf/overlays/syncuser/rootfs/*
-%{_datadir}/warewulf/overlays/systemd.netname/rootfs/*
-%{_datadir}/warewulf/overlays/udev.netname/rootfs/*
-%{_datadir}/warewulf/overlays/wicked/rootfs/*
-%{_datadir}/warewulf/overlays/wwclient/rootfs/*
-%{_datadir}/warewulf/overlays/wwinit/rootfs/*
-%{_datadir}/warewulf/overlays/localtime/rootfs/*
-%{_datadir}/warewulf/overlays/sfdisk/rootfs/*
-%{_datadir}/warewulf/overlays/mkfs/rootfs/*
-%{_datadir}/warewulf/overlays/mkswap/rootfs/*
-%{_datadir}/warewulf/overlays/systemd.mount/rootfs/*
-%{_datadir}/warewulf/overlays/systemd.swap/rootfs/*
+%dir %{_overlaydir}
+%dir %{_overlaydir}/*
+%dir %{_overlaydir}/*/rootfs
+%{_overlaydir}/NetworkManager/rootfs/*
+%{_overlaydir}/debian.interfaces/rootfs/*
+%{_overlaydir}/debug/rootfs/*
+%{_overlaydir}/fstab/rootfs/*
+%{_overlaydir}/host/rootfs/*
+%{_overlaydir}/hostname/rootfs/*
+%{_overlaydir}/hosts/rootfs/*
+%{_overlaydir}/ifcfg/rootfs/*
+%{_overlaydir}/ignition/rootfs/*
+%{_overlaydir}/issue/rootfs/*
+%{_overlaydir}/netplan/rootfs/*
+%{_overlaydir}/resolv/rootfs/*
+%attr(700, -, -) %{_overlaydir}/ssh.authorized_keys/rootfs/*
+%{_overlaydir}/ssh.host_keys/rootfs/*
+%{_overlaydir}/syncuser/rootfs/*
+%{_overlaydir}/systemd.netname/rootfs/*
+%{_overlaydir}/udev.netname/rootfs/*
+%{_overlaydir}/wicked/rootfs/*
+%{_overlaydir}/wwclient/rootfs/*
+%{_overlaydir}/wwinit/rootfs/*
+%{_overlaydir}/localtime/rootfs/*
+%{_overlaydir}/sfdisk/rootfs/*
+%{_overlaydir}/mkfs/rootfs/*
+%{_overlaydir}/mkswap/rootfs/*
+%{_overlaydir}/systemd.mount/rootfs/*
+%{_overlaydir}/systemd.swap/rootfs/*
 
 %{_bindir}/wwctl
 %{_prefix}/lib/firewalld/services/warewulf.xml

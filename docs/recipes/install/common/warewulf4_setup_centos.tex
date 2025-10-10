@@ -15,6 +15,9 @@
 # Edit the nodes.conf to mount /opt
 [sms](*\#*) perl -pi -e "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" /etc/warewulf/nodes.conf
 
+# Enable and start the warewulfd service before using wwctl.
+[sms](*\#*) systemctl enable --now warewulfd
+
 # Create a new "nodes" profile and inherit the "default" profile
 [sms](*\#*) wwctl profile add nodes --profile default --comment "Nodes profile"
 
@@ -29,7 +32,6 @@
 [sms](*\#*) wwctl profile set -y nodes --netname=default --nettagadd=DNS=${dns_servers}
 
 # Configuring Warewulf will restart/enable relevant services to support provisioning
-[sms](*\#*) systemctl enable --now warewulfd
 [sms](*\#*) wwctl configure --all
 
 # Generate ssh keys (usually generated on login)
