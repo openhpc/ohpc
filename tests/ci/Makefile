@@ -12,6 +12,7 @@ codespell-lint:
 		misc/build_order.py \
 		tests/ci/spec_to_test_mapping.py \
 		tests/ci/test_parse_doc.bats \
+		docs/recipes/install/parse_doc.py \
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
@@ -59,12 +60,14 @@ flake8-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
-		../../tests/ci/spec_to_test_mapping.py
+		../../tests/ci/spec_to_test_mapping.py \
+		../../docs/recipes/install/parse_doc.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		tests/ci/test_parse_doc.bats \
+		docs/recipes/install/parse_doc.py \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \

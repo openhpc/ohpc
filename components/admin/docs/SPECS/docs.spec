@@ -24,6 +24,7 @@ Source0:        docs-ohpc.tar
 
 BuildRequires:  git
 BuildRequires:  make
+BuildRequires:  python3
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
@@ -71,7 +72,8 @@ from the OpenHPC software stack.
 
 %build
 
-%define parser ../../../../parse_doc.pl
+%define parser_perl ../../../../parse_doc.pl
+%define parser_python ../../../../parse_doc.py
 
 for recipe_path in \
 	"almalinux10/x86_64/confluent/slurm" \
@@ -84,7 +86,41 @@ for recipe_path in \
 	"rocky10/x86_64/openchami/slurm" \
 ; do
 	pushd "%{recipe_base}/${recipe_path}"
-	make ; %{parser} steps.tex > recipe.sh ; popd
+	make
+
+	# Generate output with both parsers
+	echo "Generating recipe.sh for ${recipe_path}..."
+	%{parser_perl} steps.tex > recipe_perl.sh
+	%{parser_python} steps.tex > recipe_python.sh
+
+	# Compare outputs and fail if they differ (ignoring comment-only differences)
+	echo "Comparing Perl and Python parser outputs for ${recipe_path}..."
+	if ! diff -u recipe_perl.sh recipe_python.sh > parser_diff.log 2>&1; then
+		# Filter out differences that are only comment lines (both added and removed)
+		# Keep only non-comment differences for evaluation (excluding diff headers)
+		if grep -E "^[+-]" parser_diff.log | grep -v -E "^[+-][[:space:]]*#" | grep -v -E "^[+-]{3}" | grep -q "^[+-]"; then
+			echo "ERROR: Parser outputs have significant differences for ${recipe_path}!"
+			echo "Differences found (ignoring comment-only lines):"
+			cat parser_diff.log
+			echo "Perl output (first 50 lines):"
+			head -50 recipe_perl.sh
+			echo "Python output (first 50 lines):"
+			head -50 recipe_python.sh
+			exit 1
+		else
+			echo "Note: Only comment line differences detected, parsers functionally equivalent"
+		fi
+	else
+		echo "Parser outputs are identical"
+	fi
+
+	# Use Python parser output as the final result
+	cp recipe_python.sh recipe.sh
+
+	# Clean up temporary files
+	rm -f recipe_perl.sh recipe_python.sh parser_diff.log
+
+	popd
 done
 
 %install

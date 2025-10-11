@@ -364,11 +364,14 @@ jobs:
   test_parse_doc:
     name: Run bats tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        parser: ["python", "perl"]
     container:
       image: registry.fedoraproject.org/fedora:latest
     steps:
     - name: Setup
-      run: dnf -y install bats
+      run: dnf -y install bats python3
     - uses: actions/checkout@v4
     - name: Run bats tests
-      run: ./tests/ci/test_parse_doc.bats
+      run: PARSE_DOC_TEST_IMPL="${{ matrix.parser }}" ./tests/ci/test_parse_doc.bats
