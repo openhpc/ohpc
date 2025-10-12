@@ -42,8 +42,8 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %prep
 %setup -q -n OpenBLAS-%{version}
 
-%patch2 -p1
-%patch3 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
 
 %build
 # OpenHPC compiler/mpi designation
