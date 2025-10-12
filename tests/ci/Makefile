@@ -13,6 +13,7 @@ codespell-lint:
 		tests/ci/spec_to_test_mapping.py \
 		tests/ci/test_parse_doc.bats \
 		docs/recipes/install/parse_doc.py \
+		docs/recipes/install/common/vc \
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
@@ -68,6 +69,7 @@ whitespace-lint:
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		tests/ci/test_parse_doc.bats \
 		docs/recipes/install/parse_doc.py \
+		docs/recipes/install/common/vc \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
@@ -135,6 +137,7 @@ shellcheck-lint:
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
+		../../docs/recipes/install/common/vc \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
@@ -237,6 +240,7 @@ shfmt-lint:
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
+		../../docs/recipes/install/common/vc \
 		../../containers/*.sh \
 		../../containers/examples/mpi/*.sh
 
