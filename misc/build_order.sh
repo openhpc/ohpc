@@ -26,23 +26,22 @@ fi
 
 DEPLIST=$(mktemp)
 
-trap 'rm -f ${DEPLIST}' EXIT QUIT HUP TERM
+#trap 'rm -f ${DEPLIST}' EXIT QUIT HUP TERM
 
 # If running on Fedora special defines are needed
 DISTRO=$(rpm --eval '0%{?fedora}')
 
 if [ "${DISTRO}" != "0" ]; then
-	FLAGS=(--undefine fedora --define "rhel 8")
+	FLAGS=(--undefine fedora --define "rhel 10")
 fi
 
-find . -name "*.spec" -print0 | while IFS= read -r -d '' file
-do
+find . -name "*.spec" -print0 | while IFS= read -r -d '' file; do
 	SPEC=$(basename "${file}")
-	NAMES=$(rpmspec -q "${file}" "${FLAGS[@]}" --queryformat '%{name}:' 2> /dev/null)
+	NAMES=$(rpmspec -q "${file}" "${FLAGS[@]}" --queryformat '%{name}:' 2>/dev/null)
 	# Let's hope the first name is the right one
 	NAME=$(echo "${NAMES}" | cut -d: -f1)
-	REQ=$(rpmspec -q "${file}" "${FLAGS[@]}" --requires 2> /dev/null)
-	BR=$(rpmspec -q "${file}" "${FLAGS[@]}" --buildrequires 2> /dev/null)
+	REQ=$(rpmspec -q "${file}" "${FLAGS[@]}" --requires 2>/dev/null)
+	BR=$(rpmspec -q "${file}" "${FLAGS[@]}" --buildrequires 2>/dev/null)
 	for j in ${REQ} ${BR}; do
 		if [[ ${j} != *"ohpc"* ]] || [[ ${j} == *"buildroot"* ]]; then
 			OIFS=${IFS}
@@ -51,13 +50,13 @@ do
 				# Does not have dependency on an OpenHPC package.
 				# Still necessary to track as it could be a
 				# dependency itself.
-				echo "${SPEC}:${x}:NA" >> "${DEPLIST}"
+				echo "${SPEC}:${x}:NA:${file}" >>"${DEPLIST}"
 			done
 			IFS=${OIFS}
 			continue
 		fi
 		# This is a real dependency on an OpenHPC package.
-		echo "${SPEC}:${NAME}:${j}" >> "${DEPLIST}"
+		echo "${SPEC}:${NAME}:${j}:${file}" >>"${DEPLIST}"
 	done
 done
 

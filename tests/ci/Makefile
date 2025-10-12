@@ -10,6 +10,8 @@ codespell-lint:
 		tests/ci/check_spec.py \
 		tests/ci/run_build.py \
 		misc/build_order.py \
+		misc/build_order.sh \
+		misc/dist/count_avail_packages.sh \
 		tests/ci/spec_to_test_mapping.py \
 		tests/ci/test_parse_doc.bats \
 		docs/recipes/install/parse_doc.py \
@@ -70,6 +72,8 @@ whitespace-lint:
 		tests/ci/test_parse_doc.bats \
 		docs/recipes/install/parse_doc.py \
 		docs/recipes/install/common/vc \
+		misc/build_order.sh \
+		misc/dist/count_avail_packages.sh \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
@@ -125,6 +129,7 @@ shellcheck-lint:
 		../../misc/build_order.sh \
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
+		../../misc/dist/count_avail_packages.sh \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../tests/ci/test_parse_doc.bats \
@@ -234,6 +239,8 @@ shfmt-lint:
 		../../tests/libs/trilinos/tests/rm_execution
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
+		../../misc/build_order.sh \
+		../../misc/dist/count_avail_packages.sh \
 		../../tests/common/functions \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \

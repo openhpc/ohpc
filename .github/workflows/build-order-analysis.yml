@@ -1,0 +1,165 @@
+name: Build Order Analysis
+
+on:
+  pull_request:
+    branches:
+      - 4.x
+    paths:
+      - 'components/**/*.spec'
+      - 'misc/build_order.sh'
+      - 'misc/build_order.py'
+
+permissions:
+  contents: read
+
+jobs:
+  build_order_analysis:
+    name: Analyze Package Build Order
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/library/almalinux:10
+
+    steps:
+    - name: Setup AlmaLinux Environment
+      run: |
+        dnf install -y epel-release git python3 rpm-build rpmdevtools
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Save PR context
+      run: |
+        mkdir -p artifacts
+        echo '${{ toJSON(github.event) }}' > artifacts/event.json
+
+    - name: Setup RPM build environment
+      run: |
+        # Create RPM build directories
+        mkdir -p $(rpm --eval '%{_topdir}')/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+
+        # Copy OHPC macros to RPM source directory
+        SOURCEDIR=$(rpm --eval '%{_sourcedir}')
+        cp components/OHPC_macros "${SOURCEDIR}/OHPC_macros"
+
+        echo "RPM source directory: ${SOURCEDIR}"
+        ls -la "${SOURCEDIR}/OHPC_macros"
+
+    - name: Run build order analysis
+      id: build_order
+      run: |
+        echo "Starting build order analysis..."
+
+        # Run the build order script and capture output
+        set +e  # Don't exit on errors to capture both success and failure
+
+        # Capture both stdout and stderr, and the exit code
+        OUTPUT_FILE="artifacts/build_order_output.txt"
+        ERROR_FILE="artifacts/build_order_error.txt"
+
+        ./misc/build_order.sh > "${OUTPUT_FILE}" 2> "${ERROR_FILE}"
+        EXIT_CODE=$?
+
+        echo "exit_code=${EXIT_CODE}" >> $GITHUB_OUTPUT
+
+        # Prepare the output for the comment
+        if [ ${EXIT_CODE} -eq 0 ]; then
+          echo "status=success" >> $GITHUB_OUTPUT
+          RESULT_SUMMARY="✅ **Build order analysis completed successfully**"
+        else
+          echo "status=failure" >> $GITHUB_OUTPUT
+          RESULT_SUMMARY="❌ **Build order analysis failed**"
+        fi
+
+        # Count total packages analyzed
+        TOTAL_SPECS=$(find . -name "*.spec" | wc -l)
+        echo "total_specs=${TOTAL_SPECS}" >> $GITHUB_OUTPUT
+
+        # Prepare the comment content
+        cat > artifacts/comment.md << 'EOF'
+        ## 📊 Build Order Analysis Results
+
+        **Environment:** AlmaLinux 10 Container
+        **Total Spec Files Analyzed:** ${TOTAL_SPECS}
+        **Status:** ${RESULT_SUMMARY}
+
+        ### 📋 Build Order Output
+        EOF
+
+        if [ -s "${OUTPUT_FILE}" ]; then
+          echo "" >> artifacts/comment.md
+
+          # Parse space-separated packages from build_order.sh output
+          BUILD_ORDER_LINE=$(cat "${OUTPUT_FILE}")
+
+          # Convert space-separated line to array
+          read -ra PACKAGES <<< "${BUILD_ORDER_LINE}"
+          TOTAL_PACKAGES=${#PACKAGES[@]}
+
+          echo "### 📦 Build Order (${TOTAL_PACKAGES} packages)" >> artifacts/comment.md
+          echo "" >> artifacts/comment.md
+
+          # Show first 15 packages by default (always visible)
+          for i in $(seq 0 $((TOTAL_PACKAGES < 15 ? TOTAL_PACKAGES - 1 : 14))); do
+            FULL_PATH="${PACKAGES[i]}"
+            # Extract filename from full path (remove ./ prefix and path)
+            FILENAME=$(basename "${FULL_PATH}")
+            # Create GitHub link using the full path (remove ./ prefix)
+            REPO_PATH="${FULL_PATH#./}"
+            echo "- 📄 [\`${FILENAME}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${GITHUB_SHA}/${REPO_PATH})" >> artifacts/comment.md
+          done
+
+          # If there are more than 15 packages, add a collapsible section for the rest
+          if [ "${TOTAL_PACKAGES}" -gt 15 ]; then
+            REMAINING=$((TOTAL_PACKAGES - 15))
+            echo "" >> artifacts/comment.md
+            echo "<details>" >> artifacts/comment.md
+            echo "<summary>➕ Show remaining ${REMAINING} packages</summary>" >> artifacts/comment.md
+            echo "" >> artifacts/comment.md
+
+            for i in $(seq 15 $((TOTAL_PACKAGES - 1))); do
+              FULL_PATH="${PACKAGES[i]}"
+              # Extract filename from full path (remove ./ prefix and path)
+              FILENAME=$(basename "${FULL_PATH}")
+              # Create GitHub link using the full path (remove ./ prefix)
+              REPO_PATH="${FULL_PATH#./}"
+              echo "- 📄 [\`${FILENAME}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${GITHUB_SHA}/${REPO_PATH})" >> artifacts/comment.md
+            done
+
+            echo "" >> artifacts/comment.md
+            echo "</details>" >> artifacts/comment.md
+          fi
+        fi
+
+        if [ ${EXIT_CODE} -ne 0 ] && [ -s "${ERROR_FILE}" ]; then
+          echo "" >> artifacts/comment.md
+          echo "### ❌ Error Details" >> artifacts/comment.md
+          echo "" >> artifacts/comment.md
+          echo "\`\`\`" >> artifacts/comment.md
+          cat "${ERROR_FILE}" >> artifacts/comment.md
+          echo "\`\`\`" >> artifacts/comment.md
+        fi
+
+        # Add metadata footer
+        echo "" >> artifacts/comment.md
+        echo "---" >> artifacts/comment.md
+        echo "*Analysis performed by OpenHPC Build Order CI*  " >> artifacts/comment.md
+        echo "*Commit: \`${GITHUB_SHA:0:8}\`*  " >> artifacts/comment.md
+        echo "*Workflow: [\`${GITHUB_RUN_ID}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})*" >> artifacts/comment.md
+
+        # Substitute variables in the comment
+        sed -i "s/\${TOTAL_SPECS}/${TOTAL_SPECS}/g" artifacts/comment.md
+        sed -i "s/\${RESULT_SUMMARY}/${RESULT_SUMMARY}/g" artifacts/comment.md
+
+    - name: Upload build order results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-order-analysis
+        retention-days: 5
+        path: artifacts/
+
+    - name: Set workflow status
+      if: steps.build_order.outputs.status == 'failure'
+      run: |
+        echo "Build order analysis failed"
+        exit 1

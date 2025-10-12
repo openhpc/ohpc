@@ -37,13 +37,14 @@ def topological_sort(source):
         if not next_emitted:
             # all entries have unmet deps, one of two things is wrong...
             raise ValueError(
-                "cyclic or missing dependency detected: %r" %
-                (next_pending,))
+                "cyclic or missing dependency detected: %r" % (next_pending,)
+            )
         pending = next_pending
         emitted = next_emitted
 
 
 spec_dict = {}
+spec_path_dict = {}  # Maps spec filename to full path
 dependency = {}
 
 if len(sys.argv) != 2:
@@ -52,21 +53,24 @@ if len(sys.argv) != 2:
 
 
 for line in open(sys.argv[1]):
-    line = line.rstrip().split(':')
+    line = line.rstrip().split(":")
     # The spec_dict is later used to translate
     # package names into spec files
     spec_dict[line[1]] = line[0]
+    # Store full path mapping if available (field 4)
+    if len(line) >= 4:
+        spec_path_dict[line[0]] = line[3]
     # Ignore the meta_packages
-    if line[1] == 'meta-packages':
+    if line[1] == "meta-packages":
         continue
     # Ignore non ohpc (Build)Requires
-    if line[2] == 'NA':
+    if line[2] == "NA":
         continue
     # Ignore kernel modules
-    if line[2].startswith('kmod'):
+    if line[2].startswith("kmod"):
         continue
     # Ignore the nagios_plugins
-    if line[2].startswith('nagios'):
+    if line[2].startswith("nagios"):
         continue
     # This tries to filter out versions with a "." or _isa with a "("
     if "." in line[2] or "(" in line[2]:
@@ -87,14 +91,14 @@ for v in dependency.values():
                 additional[spec_dict[value]] = []
         except KeyError as err:
             # Handle python_prefix rpm macro
-            if '-numpy-' in value:
-                spec_dict[value] = 'python-numpy.spec'
-            elif '-Cython-' in value:
-                spec_dict[value] = 'python-Cython.spec'
-            elif '-scipy-' in value:
-                spec_dict[value] = 'python-scipy.spec'
-            elif '-mpi4py-' in value:
-                spec_dict[value] = 'python-mpi4py.spec'
+            if "-numpy-" in value:
+                spec_dict[value] = "python-numpy.spec"
+            elif "-Cython-" in value:
+                spec_dict[value] = "python-Cython.spec"
+            elif "-scipy-" in value:
+                spec_dict[value] = "python-scipy.spec"
+            elif "-mpi4py-" in value:
+                spec_dict[value] = "python-mpi4py.spec"
             else:
                 print(err)
 
@@ -113,4 +117,8 @@ dep_list = [(k, set(v)) for (k, v) in dependency.items()]
 
 # Sort and print
 for i in topological_sort(dep_list):
-    print('%s' % i, end=' ')
+    # Use full path if available, otherwise fall back to spec filename
+    output_path = spec_path_dict.get(i, i)
+    print("%s" % output_path, end=" ")
+
+print("")
