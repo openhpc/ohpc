@@ -25,47 +25,45 @@ class ParseDocProcessor:
 
     # Pre-compiled regex patterns for better performance
     _PATTERNS = {
-        'macro': re.compile(r'\\newcommand\{\\(\w+)\}\{(.+)\}'),
-        'include': re.compile(r'^\\input\{(\S+)\}'),
-        'sms_prompt': re.compile(r'\[sms\]\(\*\\#\*\) (.+)'),
-        'sms_here_doc': re.compile(
-            r'\[sms\]\(\*\\#\*\) (.+ <<-[ ]*([^ ]+).*)'
-        ),
-        'sms_continuation': re.compile(r'\[sms\]\(\*\\#\*\) (.+) \\$'),
-        'sms_do_loop': re.compile(r'\[sms\]\(\*\\#\*\) (.+[ ]*;[ ]*do)$'),
-        'psql_prompt': re.compile(r'\[postgres\]\$ (.+)'),
-        'ci_comment': re.compile(r'% ohpc_ci_comment (.+)'),
-        'header_comment': re.compile(r'% ohpc_comment_header (.+)'),
-        'validation_comment': re.compile(r'% ohpc_validation_comment (.+)'),
-        'indent_directive': re.compile(r'% ohpc_indent (\d+)'),
-        'command_directive': re.compile(r'% ohpc_command (.+)'),
-        'disable_line': re.compile(r'^%%'),
-        'section_ref': re.compile(r'\\ref\{sec:(\S+)\}'),
-        'done_line': re.compile(r'[^#]*done'),
+        "macro": re.compile(r"\\newcommand\{\\(\w+)\}\{(.+)\}"),
+        "include": re.compile(r"^\\input\{(\S+)\}"),
+        "sms_prompt": re.compile(r"\[sms\]\(\*\\#\*\) (.+)"),
+        "sms_here_doc": re.compile(r"\[sms\]\(\*\\#\*\) (.+ <<-[ ]*([^ ]+).*)"),
+        "sms_continuation": re.compile(r"\[sms\]\(\*\\#\*\) (.+) \\$"),
+        "sms_do_loop": re.compile(r"\[sms\]\(\*\\#\*\) (.+[ ]*;[ ]*do)$"),
+        "psql_prompt": re.compile(r"\[postgres\]\$ (.+)"),
+        "ci_comment": re.compile(r"% ohpc_ci_comment (.+)"),
+        "header_comment": re.compile(r"% ohpc_comment_header (.+)"),
+        "validation_comment": re.compile(r"% ohpc_validation_comment (.+)"),
+        "indent_directive": re.compile(r"% ohpc_indent (\d+)"),
+        "command_directive": re.compile(r"% ohpc_command (.+)"),
+        "disable_line": re.compile(r"^%%"),
+        "section_ref": re.compile(r"\\ref\{sec:(\S+)\}"),
+        "done_line": re.compile(r"[^#]*done"),
     }
 
     # Macro name mappings for fast lookup
     _MACRO_MAP = {
-        'install': 'install',
-        'chrootinstall': 'chroot_install',
-        'groupinstall': 'group_install',
-        'groupchrootinstall': 'group_chroot_install',
-        'remove': 'remove',
-        'addrepo': 'addrepo',
-        'chrootaddrepo': 'chroot_addrepo',
-        'beegfsrepo': 'beegfs_repo',
-        'cudarepo': 'cuda_repo',
-        'VERLONG': 'ver_long',
-        'OSTree': 'os_tree',
-        'installimage': 'image',
-        'baseos': 'base_os',
-        'baseosshort': 'base_os_short',
-        'osimage': 'os_image',
-        'OSTag': 'os_tag',
-        'confluentprofile': 'confluent_profile',
-        'arch': 'arch',
-        'baseurl': 'base_url',
-        'OS': 'os_name',
+        "install": "install",
+        "chrootinstall": "chroot_install",
+        "groupinstall": "group_install",
+        "groupchrootinstall": "group_chroot_install",
+        "remove": "remove",
+        "addrepo": "addrepo",
+        "chrootaddrepo": "chroot_addrepo",
+        "beegfsrepo": "beegfs_repo",
+        "cudarepo": "cuda_repo",
+        "VERLONG": "ver_long",
+        "OSTree": "os_tree",
+        "installimage": "image",
+        "baseos": "base_os",
+        "baseosshort": "base_os_short",
+        "osimage": "os_image",
+        "OSTag": "os_tag",
+        "confluentprofile": "confluent_profile",
+        "arch": "arch",
+        "baseurl": "base_url",
+        "OS": "os_name",
     }
 
     def __init__(self, repo: str = "", ci_run: bool = False):
@@ -97,10 +95,10 @@ class ParseDocProcessor:
 
     def _parse_macros(self, file_path: Path) -> None:
         """Parse macro definitions with single file pass."""
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
-                if match := self._PATTERNS['macro'].match(line):
+                if match := self._PATTERNS["macro"].match(line):
                     macro_name, value = match.groups()
                     if attr_name := self._MACRO_MAP.get(macro_name):
                         # Apply LaTeX unescaping inline
@@ -109,8 +107,12 @@ class ParseDocProcessor:
 
     def _validate_macros(self) -> None:
         """Validate required macros are present."""
-        required = ['install', 'chroot_install', 'group_install',
-                    'group_chroot_install']
+        required = [
+            "install",
+            "chroot_install",
+            "group_install",
+            "group_chroot_install",
+        ]
         if not all(self.macros.get(name) for name in required):
             raise ValueError("Error: package manager macros not defined")
 
@@ -137,17 +139,18 @@ class ParseDocProcessor:
 
     def _aggregate_includes(self) -> Generator[str, None, None]:
         """Generator that yields lines from all included files."""
+
         def process_file(file_path: Path) -> Generator[str, None, None]:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, "r", encoding="utf-8") as f:
                     for line in f:
-                        if line.startswith('%%'):
+                        if line.startswith("%%"):
                             continue
 
-                        if match := self._PATTERNS['include'].match(line):
+                        if match := self._PATTERNS["include"].match(line):
                             include_name = match.group(1)
-                            if not include_name.endswith('.tex'):
-                                include_name += '.tex'
+                            if not include_name.endswith(".tex"):
+                                include_name += ".tex"
 
                             include_path = self._input_dir / include_name
                             yield from process_file(include_path)
@@ -161,10 +164,10 @@ class ParseDocProcessor:
 
     def _process_line(self, line: str, output: StringIO) -> None:
         """Process a single line with optimized pattern matching."""
-        line = line.rstrip('\n\r')
+        line = line.rstrip("\n\r")
 
         # Early returns for common cases
-        if self._PATTERNS['disable_line'].match(line):
+        if self._PATTERNS["disable_line"].match(line):
             return
 
         # Handle ohpc_run blocks with state tracking
@@ -175,7 +178,7 @@ class ParseDocProcessor:
             self._in_ohpc_run = False
             return
 
-        if not getattr(self, '_in_ohpc_run', False):
+        if not getattr(self, "_in_ohpc_run", False):
             return
 
         # Process special directives first (most common)
@@ -184,18 +187,18 @@ class ParseDocProcessor:
             return
 
         # Use match-case for Python 3.10+ or chained if-elif for older versions
-        if match := self._PATTERNS['ci_comment'].match(line):
+        if match := self._PATTERNS["ci_comment"].match(line):
             if self.ci_run:
                 output.write(f"# {match.group(1)} (CI only)\n")
-        elif match := self._PATTERNS['header_comment'].match(line):
+        elif match := self._PATTERNS["header_comment"].match(line):
             comment = self._process_section_refs(match.group(1))
             self._write_header(output, comment)
-        elif match := self._PATTERNS['validation_comment'].match(line):
+        elif match := self._PATTERNS["validation_comment"].match(line):
             comment = self._process_section_refs(match.group(1))
             output.write(f"{' ' * self._indent}# {comment}\n")
-        elif match := self._PATTERNS['indent_directive'].match(line):
+        elif match := self._PATTERNS["indent_directive"].match(line):
             self._indent = int(match.group(1))
-        elif match := self._PATTERNS['command_directive'].match(line):
+        elif match := self._PATTERNS["command_directive"].match(line):
             cmd = self._substitute_macros(match.group(1))
             output.write(f"{' ' * self._indent}{cmd}\n")
         else:
@@ -204,29 +207,32 @@ class ParseDocProcessor:
     def _process_command_line(self, line: str, output: StringIO) -> None:
         """Process command lines with optimized pattern matching."""
         # Check for CI-only commands early
-        if line.startswith('%') and not self.ci_run:
+        if line.startswith("%") and not self.ci_run:
             return
 
         # HERE document (less common, check later)
-        if match := self._PATTERNS['sms_here_doc'].search(line):
+        if match := self._PATTERNS["sms_here_doc"].search(line):
             self._process_here_doc(match, output)
         # Line continuation
-        elif match := self._PATTERNS['sms_continuation'].search(line):
+        elif match := self._PATTERNS["sms_continuation"].search(line):
             self._process_continuation(match, output)
         # Do loop
-        elif match := self._PATTERNS['sms_do_loop'].search(line):
+        elif match := self._PATTERNS["sms_do_loop"].search(line):
             self._process_do_loop(match, output)
         # Regular SMS prompt (most common)
-        elif match := self._PATTERNS['sms_prompt'].search(line):
+        elif match := self._PATTERNS["sms_prompt"].search(line):
             cmd = self._substitute_macros(match.group(1))
             output.write(f"{' ' * self._indent}{cmd}\n")
         # PostgreSQL prompt
-        elif match := self._PATTERNS['psql_prompt'].search(line):
+        elif match := self._PATTERNS["psql_prompt"].search(line):
             cmd = self._substitute_macros(match.group(1))
             output.write(f"{' ' * self._indent}{cmd}\n")
         # Plain comments with leading whitespace (from lstlisting blocks)
-        elif (line.startswith(' ') and line.strip().startswith('#') and
-              not line.strip().startswith('%%')):
+        elif (
+            line.startswith(" ")
+            and line.strip().startswith("#")
+            and not line.strip().startswith("%%")
+        ):
             comment = self._substitute_macros(line.strip())
             output.write(f"{' ' * self._indent}{comment}\n")
 
@@ -234,28 +240,26 @@ class ParseDocProcessor:
         """Optimized macro substitution using str.replace."""
         # Use replace() which is faster than regex for simple substitutions
         substitutions = [
-            ('(*\\install*)', self.macros.get('install', '')),
-            ('(*\\chrootinstall*)', self.macros.get('chroot_install', '')),
-            ('(*\\groupinstall*)', self.macros.get('group_install', '')),
-            ('(*\\groupchrootinstall*)',
-             self.macros.get('group_chroot_install', '')),
-            ('(*\\remove*)', self.macros.get('remove', '')),
-            ('(*\\confluentprofile*)',
-             self.macros.get('confluent_profile', '')),
-            ('(*\\addrepo*)', self.macros.get('addrepo', '')),
-            ('(*\\chrootaddrepo*)', self.macros.get('chroot_addrepo', '')),
-            ('(*\\beegfsrepo*)', self.macros.get('beegfs_repo', '')),
-            ('(*\\cudarepo*)', self.macros.get('cuda_repo', '')),
-            ('BOSVER', self.macros.get('base_os', '')),
-            ('OSIMAGE', self.macros.get('os_image', '')),
-            ('TAG', self.macros.get('os_tag', '')),
-            ('BOSSHORT', self.macros.get('base_os_short', '')),
-            ('ARCH', self.macros.get('arch', '')),
-            ('VERLONG', self.macros.get('ver_long', '')),
-            ('OSTREE', self.macros.get('os_tree', '')),
-            ('IMAGE', self.macros.get('image', '')),
-            ('BASEURL', self.macros.get('base_url', '')),
-            ('OSNAME', self.macros.get('os_name', '')),
+            ("(*\\install*)", self.macros.get("install", "")),
+            ("(*\\chrootinstall*)", self.macros.get("chroot_install", "")),
+            ("(*\\groupinstall*)", self.macros.get("group_install", "")),
+            ("(*\\groupchrootinstall*)", self.macros.get("group_chroot_install", "")),
+            ("(*\\remove*)", self.macros.get("remove", "")),
+            ("(*\\confluentprofile*)", self.macros.get("confluent_profile", "")),
+            ("(*\\addrepo*)", self.macros.get("addrepo", "")),
+            ("(*\\chrootaddrepo*)", self.macros.get("chroot_addrepo", "")),
+            ("(*\\beegfsrepo*)", self.macros.get("beegfs_repo", "")),
+            ("(*\\cudarepo*)", self.macros.get("cuda_repo", "")),
+            ("BOSVER", self.macros.get("base_os", "")),
+            ("OSIMAGE", self.macros.get("os_image", "")),
+            ("TAG", self.macros.get("os_tag", "")),
+            ("BOSSHORT", self.macros.get("base_os_short", "")),
+            ("ARCH", self.macros.get("arch", "")),
+            ("VERLONG", self.macros.get("ver_long", "")),
+            ("OSTREE", self.macros.get("os_tree", "")),
+            ("IMAGE", self.macros.get("image", "")),
+            ("BASEURL", self.macros.get("base_url", "")),
+            ("OSNAME", self.macros.get("os_name", "")),
         ]
 
         for old, new in substitutions:
@@ -275,17 +279,16 @@ class ParseDocProcessor:
         try:
             while True:
                 line = next(self._line_iterator)
-                line = self._substitute_macros(line.rstrip('\n\r').strip())
+                line = self._substitute_macros(line.rstrip("\n\r").strip())
                 output.write(f"{line}\n")
                 if line.startswith(delimiter):
                     break
         except StopIteration:
             pass
 
-    def _process_continuation(self, match: re.Match,
-                              output: StringIO) -> None:
+    def _process_continuation(self, match: re.Match, output: StringIO) -> None:
         """Process line continuation efficiently."""
-        if match.group(0).startswith('%') and not self.ci_run:
+        if match.group(0).startswith("%") and not self.ci_run:
             return
 
         cmd = self._substitute_macros(match.group(1))
@@ -294,12 +297,12 @@ class ParseDocProcessor:
         try:
             while True:
                 line = next(self._line_iterator)
-                line = line.rstrip('\n\r').strip()
+                line = line.rstrip("\n\r").strip()
                 output.write(f" {line}\n")
-                if not line.endswith(' \\'):
+                if not line.endswith(" \\"):
                     break
         except StopIteration:
-            output.write('\n')
+            output.write("\n")
 
     def _process_do_loop(self, match: re.Match, output: StringIO) -> None:
         """Process do loop with proper indentation."""
@@ -311,56 +314,58 @@ class ParseDocProcessor:
         try:
             while True:
                 line = next(self._line_iterator)
-                line = self._substitute_macros(line.rstrip('\n\r').strip())
+                line = self._substitute_macros(line.rstrip("\n\r").strip())
 
-                if self._PATTERNS['done_line'].search(line):
+                if self._PATTERNS["done_line"].search(line):
                     local_indent = self._indent
 
                 output.write(f"{' ' * local_indent}{line}\n")
 
-                if self._PATTERNS['done_line'].search(line):
+                if self._PATTERNS["done_line"].search(line):
                     break
         except StopIteration:
             pass
 
     def _process_section_refs(self, comment: str) -> str:
         """Process LaTeX section references efficiently."""
-        if '\\ref{sec:' not in comment:
+        if "\\ref{sec:" not in comment:
             return comment
 
         aux_file = self._input_dir / f"{self._basename}.aux"
         if not aux_file.exists():
-            return self._PATTERNS['section_ref'].sub('', comment)
+            return self._PATTERNS["section_ref"].sub("", comment)
 
         try:
-            with open(aux_file, 'r', encoding='utf-8') as f:
+            with open(aux_file, "r", encoding="utf-8") as f:
                 aux_content = f.read()
 
             def replace_ref(match: re.Match) -> str:
                 sec_name = match.group(1)
                 escaped_sec = re.escape(sec_name)
-                pattern = rf'\{{sec:{escaped_sec}\}}\{{\{{([^}}]+)\}}'
+                pattern = rf"\{{sec:{escaped_sec}\}}\{{\{{([^}}]+)\}}"
                 if sec_match := re.search(pattern, aux_content):
                     return f"(Section {sec_match.group(1)})"
-                raise ValueError(f"Unable to query section number "
-                                 f"({sec_name}), verify latex build is "
-                                 f"up to date")
+                raise ValueError(
+                    f"Unable to query section number "
+                    f"({sec_name}), verify latex build is "
+                    f"up to date"
+                )
 
-            return self._PATTERNS['section_ref'].sub(replace_ref, comment)
+            return self._PATTERNS["section_ref"].sub(replace_ref, comment)
 
         except (IOError, ValueError) as e:
             raise ValueError(f"Error processing section references: {e}")
 
     def _write_header(self, output: StringIO, comment: str) -> None:
         """Write formatted header comment."""
-        separator = '-' * len(comment)
+        separator = "-" * len(comment)
         output.write(f"\n# {separator}\n# {comment}\n# {separator}\n")
 
     @staticmethod
     def _unescape_latex(text: str) -> str:
         """Optimized LaTeX unescaping."""
         # Use translate for character-level replacements (faster than replace)
-        if '\\' in text:
+        if "\\" in text:
             text = text.replace(r"\_", "_").replace(r"\$", "$")
             if text == r"x86\_64":
                 text = "x86_64"
@@ -371,26 +376,28 @@ def main() -> None:
     """Optimized main entry point."""
     # Handle no arguments case efficiently
     if len(sys.argv) < 2:
-        print("Usage: parse_doc [--repo=<reponame>] [--ci_run] <filename>",
-              file=sys.stderr)
-        print("  --repo     Use a different repo for install commands",
-              file=sys.stderr)
-        print("  --ci_run   run additional 'CI only' commands",
-              file=sys.stderr)
+        print(
+            "Usage: parse_doc [--repo=<reponame>] [--ci_run] <filename>",
+            file=sys.stderr,
+        )
+        print("  --repo     Use a different repo for install commands", file=sys.stderr)
+        print("  --ci_run   run additional 'CI only' commands", file=sys.stderr)
         sys.exit(1)
 
     # Use simpler argument parsing for better performance
     parser = argparse.ArgumentParser(
         description="Parse LaTeX documentation files to extract "
-                    "command-line instructions",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        "command-line instructions",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    parser.add_argument('filename', type=Path, help='LaTeX file to process')
-    parser.add_argument('--repo', default="",
-                        help='Use a different repo for install commands')
-    parser.add_argument('--ci_run', action='store_true',
-                        help='Run additional "CI only" commands')
+    parser.add_argument("filename", type=Path, help="LaTeX file to process")
+    parser.add_argument(
+        "--repo", default="", help="Use a different repo for install commands"
+    )
+    parser.add_argument(
+        "--ci_run", action="store_true", help='Run additional "CI only" commands'
+    )
 
     try:
         args = parser.parse_args()
