@@ -73,9 +73,9 @@ solutions.
 
 %prep
 %setup -q -n superlu_dist-%{version}
-%patch1 -p1
+%patch -P 1 -p1
 # disable build of examples which don't get installed (karl@ices.utexas.edu - 3/6/19)
-%patch2 -p0
+%patch -P 2 -p0
 
 %if "%{compiler_family}" == "intel"
 cp %SOURCE3 make.inc
