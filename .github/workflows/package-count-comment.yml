@@ -1,0 +1,102 @@
+name: Package Count Analysis Comment
+
+on:
+  workflow_run:
+    workflows: [Package Count Analysis]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: read
+
+jobs:
+  comment:
+    name: Post Package Count Analysis Results
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion != 'skipped'
+
+    steps:
+    - name: Download artifacts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        mkdir -p artifacts && cd artifacts
+
+        artifacts_url="${{ github.event.workflow_run.artifacts_url }}"
+
+        gh api --paginate "$artifacts_url" -q '.artifacts[] | [.name, .archive_download_url] | @tsv' | while read artifact
+        do
+          IFS=$'\t' read name url <<< "$artifact"
+          if [ "$name" != "package-count-analysis" ]; then
+            continue
+          fi
+          gh api $url > "$name.zip"
+          unzip -d "$name" "$name.zip"
+        done
+
+        ls -alR
+
+    - name: Check for artifacts
+      id: artifact_check
+      run: |
+        if [ -e artifacts/package-count-analysis/event.json ] && [ -e artifacts/package-count-analysis/comment.md ]; then
+          echo "artifacts_found=true" >> $GITHUB_OUTPUT
+        else
+          echo "artifacts_found=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Post comment to PR
+      if: steps.artifact_check.outputs.artifacts_found == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          // Read the PR event and comment content
+          const event = JSON.parse(fs.readFileSync('artifacts/package-count-analysis/event.json', 'utf8'));
+          const commentBody = fs.readFileSync('artifacts/package-count-analysis/comment.md', 'utf8');
+
+          // Check if this originated from a pull request
+          if (!event.pull_request) {
+            console.log('Not a pull request event, skipping comment');
+            return;
+          }
+
+          const { owner, repo } = context.repo;
+          const prNumber = event.pull_request.number;
+
+          console.log(`Posting comment to PR #${prNumber}`);
+
+          // Look for existing package count analysis comment
+          const comments = await github.rest.issues.listComments({
+            owner,
+            repo,
+            issue_number: prNumber,
+          });
+
+          const existingComment = comments.data.find(comment =>
+            comment.body.includes('## 📦 Package Count Analysis Results') &&
+            comment.user.type === 'Bot'
+          );
+
+          if (existingComment) {
+            // Update existing comment
+            await github.rest.issues.updateComment({
+              owner,
+              repo,
+              comment_id: existingComment.id,
+              body: commentBody
+            });
+            console.log(`Updated existing comment ${existingComment.id}`);
+          } else {
+            // Create new comment
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body: commentBody
+            });
+            console.log('Created new comment');
+          }
