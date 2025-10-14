@@ -76,8 +76,8 @@ mkdir -p /run/munge
 
 /usr/sbin/munged -f
 /usr/sbin/slurmctld
-slurmd -N c0 || cat /var/log/slurm*
-slurmd -N c1 || cat /var/log/slurm*
+slurmd -N c0 --conf-server localhost || cat /var/log/slurm*
+slurmd -N c1 --conf-server localhost || cat /var/log/slurm*
 
 sinfo
 

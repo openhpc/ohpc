@@ -17,9 +17,9 @@ import argparse
 # ]
 test_map = {
     "components/rms/slurm/SPECS/slurm.spec": [
-        "munge",
         "",
-        "magpie-ohpc pdsh-mod-slurm-ohpc pdsh-ohpc",
+        "",
+        "",
     ],
     "components/dev-tools/hwloc/SPECS/hwloc.spec": [
         "hwloc",
