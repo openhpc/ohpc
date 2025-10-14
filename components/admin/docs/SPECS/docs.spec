@@ -80,6 +80,7 @@ for recipe_path in \
 	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
+	"openeuler24.03/x86_64/warewulf4/slurm" \
 	"openeuler24.03/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
@@ -135,6 +136,7 @@ for recipe_path in \
 	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
+	"openeuler24.03/x86_64/warewulf4/slurm" \
 	"openeuler24.03/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
