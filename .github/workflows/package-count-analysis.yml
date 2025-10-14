@@ -1,0 +1,129 @@
+name: Package Count Analysis
+
+on:
+  pull_request:
+    branches:
+      - 4.x
+      - 3.x
+    paths:
+      - 'components/**/*.spec'
+      - 'misc/dist/count_avail_packages.sh'
+
+permissions:
+  contents: read
+
+jobs:
+  package_count_analysis:
+    name: Analyze Available Package Counts
+    runs-on: ubuntu-latest
+    container:
+      image: registry.access.redhat.com/ubi10:latest
+
+    steps:
+    - name: Setup Environment
+      run: |
+        dnf install -y yum-utils git rpm-build rpmdevtools dnf-plugins-core curl
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for proper branch detection
+
+    - name: Save PR context
+      run: |
+        mkdir -p artifacts
+        echo '${{ toJSON(github.event) }}' > artifacts/event.json
+
+
+    - name: Run package count analysis
+      id: analysis
+      run: |
+        echo "Starting package count analysis..."
+
+        set +e  # Don't exit on errors to capture both success and failure
+
+        # Capture both stdout and stderr, and the exit code
+        OUTPUT_FILE="artifacts/output.md"
+        ERROR_FILE="artifacts/error.txt"
+
+        # Extract version from base ref (e.g., "4.x" -> "4")
+        VERSION="${GITHUB_BASE_REF%.x}"
+
+        ./misc/dist/count_avail_packages.sh --no-glow -f "${VERSION}" > "${OUTPUT_FILE}" 2> "${ERROR_FILE}"
+        EXIT_CODE=$?
+
+        echo "exit_code=${EXIT_CODE}" >> $GITHUB_OUTPUT
+
+        if [ ${EXIT_CODE} -eq 0 ]; then
+          echo "status=success" >> $GITHUB_OUTPUT
+        else
+          echo "status=failure" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Generate analysis comment
+      run: |
+        echo "Generating package count analysis comment..."
+
+        # Prepare status indicators
+        if [ "${{ steps.analysis.outputs.status }}" = "success" ]; then
+          ANALYSIS_RESULT="✅ **Factory repositories analysis completed successfully**"
+          OVERALL_STATUS="✅ **Analysis completed successfully**"
+        else
+          ANALYSIS_RESULT="❌ **Factory repositories analysis failed**"
+          OVERALL_STATUS="❌ **Analysis failed**"
+        fi
+
+        VERSION_INFO="OpenHPC ${GITHUB_BASE_REF%.x}.x"
+
+        # Prepare the comment content
+        cat > artifacts/comment.md << 'EOF'
+        ## 📦 Package Count Analysis Results
+
+        **Environment:** UBI 10 Container
+        **Target Branch:** `${{ github.base_ref }}`
+        **Version:** ${VERSION_INFO}
+        **Overall Status:** ${OVERALL_STATUS}
+
+        ### 🏭 Factory Repositories
+        **Status:** ${ANALYSIS_RESULT}
+        EOF
+
+        if [ -s "artifacts/output.md" ]; then
+          echo "" >> artifacts/comment.md
+          cat artifacts/output.md >> artifacts/comment.md
+        fi
+
+        if [ "${{ steps.analysis.outputs.status }}" != "success" ] && [ -s "artifacts/error.txt" ]; then
+          echo "" >> artifacts/comment.md
+          echo "#### ❌ Analysis Error Details" >> artifacts/comment.md
+          echo "" >> artifacts/comment.md
+          echo "\`\`\`" >> artifacts/comment.md
+          cat artifacts/error.txt >> artifacts/comment.md
+          echo "\`\`\`" >> artifacts/comment.md
+        fi
+
+        # Add metadata footer
+        echo "" >> artifacts/comment.md
+        echo "---" >> artifacts/comment.md
+        echo "*Analysis performed by OpenHPC Package Count CI*  " >> artifacts/comment.md
+        echo "*Commit: \`${GITHUB_SHA:0:8}\`*  " >> artifacts/comment.md
+        echo "*Workflow: [\`${GITHUB_RUN_ID}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})*" >> artifacts/comment.md
+
+        # Substitute variables in the comment
+        sed -i "s/\${VERSION_INFO}/${VERSION_INFO}/g" artifacts/comment.md
+        sed -i "s/\${OVERALL_STATUS}/${OVERALL_STATUS}/g" artifacts/comment.md
+        sed -i "s/\${ANALYSIS_RESULT}/${ANALYSIS_RESULT}/g" artifacts/comment.md
+
+    - name: Upload package count results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-count-analysis
+        retention-days: 5
+        path: artifacts/
+
+    - name: Set workflow status
+      if: steps.analysis.outputs.status == 'failure'
+      run: |
+        echo "Package count analysis failed"
+        exit 1
