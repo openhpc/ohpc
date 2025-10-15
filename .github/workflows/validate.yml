@@ -229,7 +229,6 @@ jobs:
           /tmp/empty
 
   test_on_openEuler:
-    if: ${{ false }}  # disable for now
     strategy:
       matrix:
         compiler: [gnu15]
@@ -258,85 +257,6 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         name: openEuler-rpms-${{ matrix.os }}
-        path: /home/ohpc/rpmbuild/RPMS
-    - name: Run CI Tests
-      run: |
-        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
-        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
-        fi
-        . /etc/profile.d/lmod.sh
-        chown ohpc -R tests
-        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
-
-  build_on_leap:
-    if: ${{ false }}  # disable for now
-    strategy:
-      matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm]
-    runs-on: ${{ matrix.os }}
-    name: Build on LEAP (${{ matrix.os }})
-    container:
-      image: registry.opensuse.org/opensuse/leap:15.5
-    steps:
-    - name: Install git
-      run: zypper -n update; zypper -n install git
-    - uses: actions/checkout@v4
-    - name: Setup
-      run: tests/ci/prepare-ci-environment.sh
-    - id: files
-      uses: Ana06/get-changed-files@v2.3.0
-    - name: Validate Build
-      run: |
-        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
-        if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
-        fi
-        . /etc/profile.d/lmod.sh
-        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
-        touch /tmp/empty
-    - uses: actions/upload-artifact@v4
-      with:
-        name: leap-rpms-${{ matrix.os }}
-        retention-days: 1
-        path: |
-          /home/ohpc/rpmbuild/RPMS/aarch64/*rpm
-          /home/ohpc/rpmbuild/RPMS/noarch/*rpm
-          /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
-          /tmp/empty
-
-  test_on_leap:
-    if: ${{ false }}  # disable for now
-    strategy:
-      matrix:
-        compiler: [gnu15]
-        os: [ubuntu-latest, ubuntu-24.04-arm]
-    env:
-      JOB_SKIP_CI_SPECS: |
-        components/runtimes/charliecloud/SPECS/charliecloud.spec
-        components/perf-tools/likwid/SPECS/likwid.spec
-    runs-on: ${{ matrix.os }}
-    name: Test on LEAP (${{ matrix.os }}/${{ matrix.compiler}})
-    container:
-      image: registry.opensuse.org/opensuse/leap:15.5
-    needs: build_on_leap
-    steps:
-    - name: Install git
-      run: zypper -n update; zypper -n install git
-    - uses: actions/checkout@v4
-    - name: Setup
-      run: tests/ci/prepare-ci-environment.sh
-    - id: files
-      uses: Ana06/get-changed-files@v2.3.0
-    - uses: actions/download-artifact@v4
-      with:
-        name: leap-rpms-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
     - name: Run CI Tests
       run: |
