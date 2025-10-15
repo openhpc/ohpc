@@ -1,174 +1,313 @@
 #!/bin/bash
 
+# Exit on any error, undefined variables, and pipe failures
+set -euo pipefail
 
-if [ "$#" -lt 1 ];then
-    echo "usage: `basename $0` [version]"
-    exit 1
-fi
+# Script configuration
+SCRIPT_NAME="$(basename "$0")"
+LOGFILE_PREFIX="pkg-ohpc"
+readonly SCRIPT_NAME
+readonly LOGFILE_PREFIX
 
-#which repoquery >& /dev/null || { echo "repoquery must be installed locally"; exit 1; }
+# Function to display usage information
+usage() {
+	cat <<EOF
+Usage: ${SCRIPT_NAME} [-n] <version>
 
+Options:
+    -n    Use natural sorting for package lists
+    -h    Display this help message
+
+Arguments:
+    version    OpenHPC version (e.g., 4.0, 3.1, 2.5)
+
+Examples:
+    ${SCRIPT_NAME} 4.0
+    ${SCRIPT_NAME} -n 3.1
+EOF
+}
+
+# Function to log messages with timestamp
+log() {
+	echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >&2
+}
+
+# Function to parse version components
+parse_version() {
+	local version="$1"
+
+	# Validate version format
+	if [[ ! "${version}" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+		log "ERROR: Invalid version format: ${version}"
+		log "Expected format: X.Y or X.Y.Z (e.g., 4.0, 3.1.2)"
+		exit 1
+	fi
+
+	major_ver="${version%%.*}"
+	minor_ver="${version%.*}"
+	micro_ver="${version##*.}"
+	minor_dig="${version#*.}"
+	minor_dig="${minor_dig%%.*}"
+
+	# Handle cases where micro version is not specified
+	if [[ "${micro_ver}" == "${minor_ver}" ]]; then
+		micro_ver=0
+	fi
+}
+
+# Function to detect base OS and architecture from current directory
+detect_platform() {
+	local pwd_path
+	pwd_path="$(pwd)"
+
+	# Detect architecture
+	case "${pwd_path}" in
+	*aarch64*) arch="aarch64" ;;
+	*x86_64*) arch="x86_64" ;;
+	*)
+		log "ERROR: Unable to detect architecture from path: ${pwd_path}"
+		log "Path must contain 'aarch64' or 'x86_64'"
+		exit 1
+		;;
+	esac
+
+	# Detect base OS based on version and path
+	case "${major_ver}" in
+	1)
+		case "${minor_ver}" in
+		1.0) [[ "${pwd_path}" == *centos7* ]] && baseos="CentOS_7.1" ;;
+		1.1 | 1.2)
+			case "${pwd_path}" in
+			*sles12*) baseos="SLE_12_SP1" ;;
+			*centos7*) baseos="CentOS_7.2" ;;
+			esac
+			;;
+		1.3)
+			case "${pwd_path}" in
+			*sles12*) baseos="SLE_12" ;;
+			*centos7*) baseos="CentOS_7" ;;
+			esac
+			;;
+		esac
+		;;
+	2)
+		case "${pwd_path}" in
+		*leap15*) baseos="Leap_15" ;;
+		*centos8*) baseos="CentOS_8" ;;
+		*rocky8*) baseos="EL_8" ;;
+		esac
+		;;
+	3)
+		case "${pwd_path}" in
+		*leap15*) baseos="Leap_15" ;;
+		*rocky9*) baseos="EL_9" ;;
+		*almalinux9*) baseos="EL_9" ;;
+		*openeuler22.03*) baseos="openEuler_22.03" ;;
+		esac
+		;;
+	4)
+		case "${pwd_path}" in
+		*rocky10*) baseos="EL_10" ;;
+		*almalinux10*) baseos="EL_10" ;;
+		*openeuler24.03*) baseos="openEuler_24.03" ;;
+		esac
+		;;
+	*)
+		log "ERROR: Unsupported major version: ${major_ver}"
+		exit 1
+		;;
+	esac
+
+	if [[ -z "${baseos:-}" ]]; then
+		log "ERROR: Unable to determine base OS"
+		log "Detected major version: ${major_ver}"
+		log "Current path: ${pwd_path}"
+		log "Supported combinations:"
+		log "  v1.x: centos7, sles12"
+		log "  v2.x: leap15, centos8, rocky8"
+		log "  v3.x: leap15, rocky9, almalinux9, openeuler22.03"
+		log "  v4.x: rocky10, almalinux10, openeuler24.03"
+		exit 1
+	fi
+}
+
+# Parse command line options
 naturalSort=0
 
-while getopts ":n" opt; do
-  case ${opt} in
-    n ) # process option t
-	  naturalSort=1
-      ;;
-    \? ) echo "Usage: cmd [-n]"
-      ;;
-  esac
+while getopts ":nh" opt; do
+	case ${opt} in
+	n)
+		naturalSort=1
+		;;
+	h)
+		usage
+		exit 0
+		;;
+	\?)
+		log "ERROR: Invalid option: -${OPTARG}"
+		usage
+		exit 1
+		;;
+	esac
 done
-shift $((OPTIND -1))
+shift $((OPTIND - 1))
 
-version=$1
-
-major_ver=`echo ${version} | cut -d '.' -f1`
-minor_ver=`echo ${version} | cut -d '.' -f1,2`
-micro_ver=`echo ${version} | cut -d '.' -f3`
-
-minor_dig=`echo ${version} | cut -d '.' -f2`
-
-if [[ -z $micro_ver ]];then
-    micro_ver=0
+# Validate arguments
+if [[ $# -ne 1 ]]; then
+	log "ERROR: Exactly one version argument required"
+	usage
+	exit 1
 fi
 
-logfile=pkg-ohpc
-rm -f ${logfile}.*
+version="$1"
 
-options=""
+# Parse version and detect platform
+parse_version "${version}"
+detect_platform
+
+# Clean up old files
+rm -f "${LOGFILE_PREFIX}".*
+
+# Set up architecture-specific skip patterns
 skip=""
-
-baseos=""
-arch=""
-
-
-
-echo $version | grep -E -q "^1.0"
-if [ $? -eq 0 ];then
-    pwd | grep -q centos7 && baseos="CentOS_7.1"
+if [[ "${arch}" == "aarch64" ]]; then
+	log "Detected aarch64 architecture - excluding incompatible packages"
+	skip="mvapich2|impi-ohpc|lmod-defaults-intel"
 fi
 
-echo $version | grep -E -q "^1.2|^1.1"
-if [ $? -eq 0 ];then
-    pwd | grep -q sles12  && baseos="SLE_12_SP1"
-    pwd | grep -q centos7 && baseos="CentOS_7.2"
+# Configure repository URLs
+readonly REPO_BASE_URL="http://repos.openhpc.community/.staging/OpenHPC"
+repobase="${REPO_BASE_URL}/${major_ver}/${baseos}"
+repoupdate=""
+
+if [[ ${minor_dig} -gt 0 ]]; then
+	repoupdate="${REPO_BASE_URL}/${major_ver}/update.${version}/${baseos}"
 fi
 
-echo $version | grep -E -q "^1.3"
-if [ $? -eq 0 ];then
-    pwd | grep -q sles12  && baseos="SLE_12"
-    pwd | grep -q centos7 && baseos="CentOS_7"
-fi
+# Include noarch packages in query
+arch_query="${arch},noarch"
 
-echo $version | grep -E -q "^2."
-if [ $? -eq 0 ];then
-    pwd | grep -q leap15  && baseos="Leap_15"
-    pwd | grep -q centos8 && baseos="CentOS_8"
-    pwd | grep -q rocky8 && baseos="EL_8"
-fi
-
-echo $version | grep -E -q "^3."
-if [ $? -eq 0 ];then
-    pwd | grep -q leap15  && baseos="Leap_15"
-    pwd | grep -q rocky9 && baseos="EL_9"
-    pwd | grep -q almalinux9 && baseos="EL_9"
-    pwd | grep -q openeuler22.03 && baseos="openEuler_22.03"
-fi
-
-echo $version | grep -E -q "^4."
-if [ $? -eq 0 ];then
-    pwd | grep -q rocky10 && baseos="EL_10"
-    pwd | grep -q almalinux10 && baseos="EL_10"
-    pwd | grep -q openeuler24.03 && baseos="openEuler_24.03"
-fi
-
-pwd | grep -q aarch64 && arch="aarch64"
-pwd | grep -q x86_64  && arch="x86_64"
-
-if [[ -z ${baseos} ]];then
-    echo "Unknown or unsupported base os"
-    exit 1;
-fi
-
-if [[ -z ${arch} ]];then
-    echo "Unknown or unsupported architecture"
-    exit 1;
-fi
-
-echo "Querying available packages for baseOS=${baseos}, arch=${arch}: minor_ver=${minor_ver}, micro_ver=${micro_ver}"
-
-if [[ "${arch}" == "aarch64" ]];then
-    echo "Querying aarch64..."
-    skip="mvapich2|impi-ohpc|lmod-defaults-intel"
-fi
-
-repobase="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/${baseos}"
-if [[ $minor_dig -gt -1 ]];then
-    repoupdate="http://repos.openhpc.community/.staging/OpenHPC/${major_ver}/update.${version}/${baseos}"
-fi
-
-# include noarch in query
-arch="$arch,noarch"
-
-# pick a sort pony
+# Set locale for consistent sorting
 export LC_COLLATE=C
 
-# query repo for ohpc packages
-if [[ $minor_dig -eq 0 ]];then
-    if [ -z "$skip" ];then
-	dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
-	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort >> ${logfile}.all
-    else
-	dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
-	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | grep -E -v  $skip | sort >> ${logfile}.all
-    fi
-
-    # query meta-packages
-    dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base \
-	--queryformat='%{Name} %{Group} %{Description}\n' ohpc* | grep  ohpc/meta-package | cut -d' ' -f1,3- | grep -e "^ohpc-"| sort > pattern-ohpc.all
-
-else
-    if [ -z "$skip" ];then
-	dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a --latest-limit 1 \
-	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
-	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort  >> ${logfile}.all
-    else
-	dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a --latest-limit 1 \
-	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
-	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | grep -E -v  $skip | sort >> ${logfile}.all
-    fi
-
-    # query meta-packages
-    dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base \
-	--repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
-	--queryformat='%{Name} %{Group} %{Description}\n' ohpc* | grep  ohpc/meta-package | cut -d' ' -f1,3- | grep -e "^ohpc-"| sort > pattern-ohpc.all
+log "Configuration:"
+log "  Version: ${version} (major=${major_ver}, minor=${minor_ver}, micro=${micro_ver})"
+log "  Base OS: ${baseos}"
+log "  Architecture: ${arch}"
+log "  Repository Base: ${repobase}"
+if [[ -n "${repoupdate}" ]]; then
+	log "  Repository Updates: ${repoupdate}"
+fi
+if [[ -n "${skip}" ]]; then
+	log "  Excluded packages: ${skip}"
 fi
 
-# include ohpc-release
-if [[ $micro_ver -eq 0 ]];then
-    info=`dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -q \
---queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
-else
-    info=`dnf repoquery --arch=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -q \
---repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
---queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+# Function to execute DNF repoquery with common parameters
+dnf_repoquery() {
+	local query_format="$1"
+	local pattern="$2"
+	local use_updates="${3:-false}"
+
+	local cmd_args=(
+		"dnf" "repoquery"
+		"--arch=${arch_query}"
+		"--repofrompath=ohpc-base,${repobase}"
+		"--repoid=ohpc-base"
+	)
+
+	if [[ "${use_updates}" == "true" && -n "${repoupdate}" ]]; then
+		cmd_args+=(
+			"--latest-limit" "1"
+			"--repofrompath=ohpc-update,${repoupdate}"
+			"--repoid=ohpc-update"
+		)
+	fi
+
+	cmd_args+=(
+		"--queryformat=${query_format}"
+	)
+
+	# Add pattern if specified, otherwise query all packages
+	if [[ -n "${pattern}" && "${pattern}" != "*" ]]; then
+		cmd_args+=("${pattern}")
+	fi
+
+	"${cmd_args[@]}"
+}
+
+# Function to filter packages based on skip patterns
+filter_packages() {
+	if [[ -n "${skip}" ]]; then
+		grep -E -v "${skip}"
+	else
+		cat
+	fi
+}
+
+# Query repository for OpenHPC packages
+log "Querying OpenHPC packages..."
+
+use_updates="false"
+if [[ ${minor_dig} -gt 0 ]]; then
+	use_updates="true"
 fi
-echo ${info} >>${logfile}.all
+
+# Query all OpenHPC packages
+dnf_repoquery '%{Name} %{Version} %{URL} %{Group} %{Summary}\n' '*' "${use_updates}" |
+	grep -e "-ohpc\b" |
+	filter_packages |
+	sort >>"${LOGFILE_PREFIX}.all"
+
+# Query meta-packages
+log "Querying meta-packages..."
+dnf_repoquery '%{Name} %{Group} %{Description}\n' 'ohpc*' "${use_updates}" |
+	grep 'ohpc/meta-package' |
+	cut -d' ' -f1,3- |
+	grep -e "^ohpc-" |
+	sort >pattern-ohpc.all
+
+# Include ohpc-release package
+log "Including ohpc-release package..."
+ohpc_release_info=$(dnf_repoquery '%{Name} %{Version} %{URL} %{Group} %{Summary}\n' 'ohpc-release' "${use_updates}")
+echo "${ohpc_release_info}" >>"${LOGFILE_PREFIX}.all"
+
+# Process package groups
+log "Processing package groups..."
+
+# Extract unique package groups
+groups=$(grep -o '\sohpc/[^ ]*' "${LOGFILE_PREFIX}.all" | sort -u | cut -d '/' -f 2)
+
+if [[ -z "${groups}" ]]; then
+	log "WARNING: No OpenHPC package groups found"
+	exit 0
+fi
 
 echo
-echo ++++ list of OpenHPC package groups
-groups=`grep -o '\sohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -d '/' -f 2`
-
-echo $groups
+echo "++++ List of OpenHPC package groups"
+echo "${groups}"
 echo
 
+# Generate group-specific package lists
 for grp in ${groups}; do
-    if [[ $naturalSort -eq 1 ]];then
-	grep "ohpc/${grp}" ${logfile}.all | sort   >& ${logfile}.${grp}
-    else
-	grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp}
-    fi
+	log "Processing group: ${grp}"
 
+	if [[ ${naturalSort} -eq 1 ]]; then
+		# Natural sorting (alphabetical)
+		grep "ohpc/${grp}" "${LOGFILE_PREFIX}.all" | sort >"${LOGFILE_PREFIX}.${grp}"
+	else
+		# Version-aware sorting
+		grep "ohpc/${grp}" "${LOGFILE_PREFIX}.all" | sort -k 1.1,1.2 -k2V >"${LOGFILE_PREFIX}.${grp}"
+	fi
+
+	# Log the number of packages in each group
+	package_count=$(wc -l <"${LOGFILE_PREFIX}.${grp}")
+	log "  Generated ${LOGFILE_PREFIX}.${grp} with ${package_count} packages"
 done
 
+log "Package listing completed successfully"
+log "Generated files:"
+log "  ${LOGFILE_PREFIX}.all - All OpenHPC packages"
+log "  pattern-ohpc.all - Meta-packages"
+for grp in ${groups}; do
+	log "  ${LOGFILE_PREFIX}.${grp} - ${grp} packages"
+done

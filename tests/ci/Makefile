@@ -16,6 +16,7 @@ codespell-lint:
 		tests/ci/test_parse_doc.bats \
 		docs/recipes/install/parse_doc.py \
 		docs/recipes/install/common/vc \
+		docs/recipes/install/common/listohpc \
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
@@ -81,6 +82,7 @@ whitespace-lint:
 		tests/ci/test_parse_doc.bats \
 		docs/recipes/install/parse_doc.py \
 		docs/recipes/install/common/vc \
+		docs/recipes/install/common/listohpc \
 		misc/build_order.sh \
 		misc/dist/count_avail_packages.sh \
 		components/admin/prun/SOURCES/prun \
@@ -152,6 +154,7 @@ shellcheck-lint:
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../docs/recipes/install/common/vc \
+		../../docs/recipes/install/common/listohpc \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
@@ -257,6 +260,7 @@ shfmt-lint:
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../docs/recipes/install/common/vc \
+		../../docs/recipes/install/common/listohpc \
 		../../containers/*.sh \
 		../../containers/examples/mpi/*.sh
 
