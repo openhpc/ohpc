@@ -17,7 +17,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 3.3
+Version: 3.4
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
@@ -421,6 +421,7 @@ Requires:  warewulf-provision%{PROJ_DELIM}
 Requires:  warewulf-provision%{PROJ_DELIM}-server
 Requires:  warewulf-provision%{PROJ_DELIM}-server-ipxe-%{_arch}
 Requires:  warewulf-vnfs%{PROJ_DELIM}
+Requires:  attr
 %description -n %{PROJ_NAME}-warewulf
 Collection of base packages for Warewulf provisioning
 
