@@ -47,6 +47,7 @@ jobs:
           README.md
           CONTRIBUTING.md
           containers/README.md
+          .github/workflows/README.md
 
   lint:
     strategy:

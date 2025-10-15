@@ -1,0 +1,176 @@
+name: Package Update Checker
+
+on:
+  # schedule:
+  #   # Run every hour at minute 0 (disabled for now)
+  #   - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    container:
+      image: registry.access.redhat.com/ubi10:latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        # Update package cache and install required packages
+        dnf update -y
+        dnf install -y rpm-build rpmdevtools curl jq git python3
+
+        # Verify essential tools are available
+        which rpmspec rpmdev-vercmp curl jq
+        rpm --version
+
+    - name: Run package update checker
+      id: check_updates
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Ensure we're in the repository root
+        cd $GITHUB_WORKSPACE
+
+        # Set up RPM build environment for container
+        echo "Setting up RPM environment in container"
+        mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+
+        # Make script executable
+        chmod +x misc/check_for_package_updates.sh
+
+        # Run the script and capture output and exit code
+        set +e
+        OUTPUT=$(misc/check_for_package_updates.sh -o markdown --no-glow 2>&1)
+        EXIT_CODE=$?
+        set -e
+
+        echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+
+        # Save output to file for later use
+        echo "$OUTPUT" > package_updates.md
+
+        echo "Script completed with exit code: $EXIT_CODE"
+        echo "Output length: $(echo "$OUTPUT" | wc -l) lines"
+
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+    - name: Manage GitHub issue
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          const exitCode = ${{ steps.check_updates.outputs.exit_code }};
+          const currentDate = '${{ steps.date.outputs.date }}';
+          const issueTitle = `📦 Package Upgrades Necessary - ${currentDate}`;
+
+          console.log(`Processing package updates with exit code: ${exitCode}`);
+
+          // Read the markdown output
+          let markdownOutput;
+          try {
+            markdownOutput = fs.readFileSync('package_updates.md', 'utf8');
+            console.log(`Read markdown output: ${markdownOutput.length} characters`);
+          } catch (error) {
+            console.error('Error reading package update results:', error);
+            markdownOutput = `Error reading package update results: ${error.message}`;
+          }
+
+          // Handle unexpected exit codes
+          if (exitCode !== 0 && exitCode !== 1) {
+            console.log(`Unexpected exit code ${exitCode}, treating as error condition`);
+            markdownOutput = `⚠️ Package update checker encountered an error (exit code: ${exitCode})\\n\\n${markdownOutput}`;
+          }
+
+          // Search for existing open issues with package upgrade title pattern
+          const { data: issues } = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: ['package-updates']
+          });
+
+          // Find the most recent package upgrade issue (if any)
+          const existingIssue = issues
+            .filter(issue => issue.title.includes('📦 Package Upgrades Necessary'))
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+
+          // Prepare issue body
+          const issueBody = [
+            `# Package Update Status - ${currentDate}`,
+            '',
+            'This issue tracks available package updates from GitHub releases.',
+            '',
+            `**Last checked:** ${new Date().toISOString()}`,
+            `**Status:** ${exitCode === 0 ? '✅ All packages up to date' : '🔄 Updates available'}`,
+            '',
+            '---',
+            '',
+            markdownOutput,
+            '',
+            '---',
+            '',
+            '*This issue is automatically managed by the Package Update Checker workflow.*'
+          ].join('\\n');
+
+          if (exitCode === 0) {
+            // No updates available
+            if (existingIssue) {
+              console.log(`Closing issue #${existingIssue.number} - no updates available`);
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                state: 'closed',
+                body: issueBody
+              });
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: '✅ All packages are now up to date. Closing this issue.'
+              });
+            } else {
+              console.log('No updates available and no open issue exists - nothing to do');
+            }
+          } else {
+            // Updates are available (exit code 1)
+            if (existingIssue) {
+              console.log(`Updating existing issue #${existingIssue.number} with latest package updates`);
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                title: issueTitle,
+                body: issueBody
+              });
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `🔄 Updated package status as of ${currentDate}`
+              });
+            } else {
+              console.log('Creating new issue for package updates');
+              const { data: newIssue } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: issueBody,
+                labels: ['package-updates', 'automation']
+              });
+
+              console.log(`Created new issue #${newIssue.number}`);
+            }
+          }
