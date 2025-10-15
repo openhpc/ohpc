@@ -28,7 +28,7 @@ are only building for distros newer than Leap 42.2
 %if 0%{?suse_version} < 1330
 mv macros-default-pythons macros/035-default-pythons
 %endif
-%patch1 -p1
+%patch -P 1 -p1
 
 %if 0%{?suse_version}
 %global install_path %{_sysconfdir}/rpm

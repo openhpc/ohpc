@@ -24,7 +24,7 @@ License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 
-Source0:   https://github.com/HDFGroup/%{pname}/archive/refs/tags/%{pname}_%{version}.tar.gz
+Source0:   https://github.com/HDFGroup/%{pname}/releases/download/%{pname}_%{version}/%{pname}-%{version}.tar.gz
 
 BuildRequires: zlib-devel make
 BuildRequires: perl(File::Compare)
@@ -49,7 +49,7 @@ structure, such as images, arrays of vectors, and structured and unstructured
 grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
-%setup -q -n %{pname}-%{pname}_%{version}
+%setup -q -n %{pname}-%{version}
 
 %build
 # override with newer config.guess for aarch64

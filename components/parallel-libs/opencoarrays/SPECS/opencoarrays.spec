@@ -44,7 +44,7 @@ TS 18508 Additional Parallel Features in Fortran.
 
 %prep
 %setup -q -n OpenCoarrays-%{version}
-%patch1 -p1
+%patch -P 1 -p1
 
 
 %build

@@ -8,11 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Simple check for other active LLVM versions; they will break this build
-%if 0%(which clang llvm-ar >/dev/null 2>&1; echo $?) == 0
-%{error: "LLVM found in PATH; cannot build LLVM with with another LLVM available"}
-%endif
-
 %include %{_sourcedir}/OHPC_macros
 
 %ifarch aarch64

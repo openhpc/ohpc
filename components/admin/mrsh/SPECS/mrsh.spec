@@ -63,10 +63,10 @@ rsh compatibility package for mrcp/mrlogin/mrsh
 %prep
 %setup -q -n %{pname}-%{version}
 %if 0%{?suse_version}
-%patch1 -p1
+%patch -P 1 -p1
 %endif
-%patch2 -p1
-%patch3 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
 ./autogen.sh
 
 %build

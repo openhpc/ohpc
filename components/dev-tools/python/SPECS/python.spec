@@ -99,26 +99,26 @@ modules that would pull in extra dependencies.
 %setup -q -n %{tarname}
 # patching
 # COMMON-PREP-BEGIN
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch7 -p1
-%patch8 -p1
-%patch10 -p1
-%patch13 -p1
-%patch17 -p1
-%patch20 -p1
-%patch22 -p1
-%patch24 -p1
-%patch33 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
+%patch -P 4 -p1
+%patch -P 5 -p1
+%patch -P 7 -p1
+%patch -P 8 -p1
+%patch -P 10 -p1
+%patch -P 13 -p1
+%patch -P 17 -p1
+%patch -P 20 -p1
+%patch -P 22 -p1
+%patch -P 24 -p1
+%patch -P 33 -p1
 # %if %{suse_version} == 1315 && !0%{?is_opensuse}
-# %patch34 -p1
+# %patch -P 34 -p1
 # %endif
-%patch35 -p1
-%patch36
-%patch37 -p1
+%patch -P 35 -p1
+%patch -P 36
+%patch -P 37 -p1
 
 # drop Autoconf version requirement
 sed -i 's/^version_required/dnl version_required/' configure.ac

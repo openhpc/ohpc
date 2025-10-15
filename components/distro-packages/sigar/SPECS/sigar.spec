@@ -73,8 +73,8 @@ Header files for developing against the Sigar API
 # setup -q -n hyperic-{name}-{sigar_hash}
 %setup -q -n %{pname}-%{sigar_hash}
 
-%patch100 -p1 -b .bz714249
-%patch101 -p1 -b .bz746288
+%patch -P 100 -p1 -b .bz714249
+%patch -P 101 -p1 -b .bz746288
 
 %build
 

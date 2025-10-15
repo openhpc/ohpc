@@ -42,7 +42,7 @@ BuildRequires: kernel-devel
 BuildRequires: kernel-abi-whitelists kernel-rpm-macros elfutils-libelf-devel
 %endif
 
-%kernel_module_package default
+#%kernel_module_package default
 
 %description
 Allows safer access to model specific registers (MSRs)

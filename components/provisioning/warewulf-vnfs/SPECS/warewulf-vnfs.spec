@@ -82,26 +82,26 @@ cd %{_builddir}
 %{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
 %setup -q -D
 %ifarch aarch64
-%patch0 -p1
-%patch1 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 %endif
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
+%patch -P 4 -p1
+%patch -P 5 -p1
+%patch -P 6 -p1
+%patch -P 7 -p1
+%patch -P 8 -p1
+%patch -P 9 -p1
+%patch -P 10 -p1
+%patch -P 11 -p1
+%patch -P 12 -p1
+%patch -P 13 -p1
+%patch -P 14 -p1
+%patch -P 15 -p1
 %define _default_patch_fuzz 2
-%patch16 -p1
-%patch17 -p2
+%patch -P 16 -p1
+%patch -P 17 -p2
 
 %build
 ./autogen.sh
