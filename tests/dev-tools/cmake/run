@@ -1,45 +1,41 @@
-#!/bin/bash
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
 
-cd "$(dirname "$0")" || exit 1
+setup_file() {
+	TESTNAME="dev-tools/cmake"
 
-source ./LOCAL_ENV || exit 1
-export BATS_JUNIT_CLASS=$TEST_DIR
-source ./common/TEST_ENV || exit 1
-source ./common/functions || exit 1
+	source "${BATS_TEST_DIRNAME}"/../../common/TEST_ENV
 
-for i in "$@"; do
-	case $i in
-	-c=* | --compiler=*)
-		COMPILER_FAMILIES="${i#*=}"
-		shift
-		;;
-	-m=* | --mpi=*)
-		MPI_FAMILIES="${i#*=}"
-		shift
-		;;
-	-t | --tap)
-		BATS_OPTS="$BATS_OPTS -t"
-		shift
-		;;
-	-x | --xml)
-		BATS_OPTS="$BATS_OPTS -x"
-		shift
-		;;
-	*)
-		echo "$0: Unknown option - $*"
-		# unknown option
-		;;
-	esac
-done
+	# Load required modules
+	module purge
+	module load cmake
+	module load "${GCC_DEFAULT}"
 
-echo " "
-echo " "
-echo "-------------------------------------------------------"
-echo "Dev Tools: CMake tests"
-echo "-------------------------------------------------------"
+	# Create build directory
+	BUILD="$(mktemp --directory)"
 
-module purge || exit 1
-module load cmake || exit 1
-module load ${GCC_DEFAULT} || exit 1
+	export TESTNAME BUILD
+}
 
-./test_cmake $BATS_OPTS
+teardown_file() {
+	# Clean up build directory
+	rm -rf "${BUILD}"
+}
+
+@test "[$TESTNAME] running cmake --system-information" {
+	cmake --system-information | grep ohpc
+}
+
+@test "[$TESTNAME] run cmake" {
+	cd "${BUILD}"
+	cmake "${BATS_TEST_DIRNAME}"/test
+}
+
+@test "[$TESTNAME] run make on generated Makefile" {
+	cd "${BUILD}"
+	VERBOSE=1 make
+}
+
+@test "[$TESTNAME] run compiled binary" {
+	"${BUILD}"/COnly
+}

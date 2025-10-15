@@ -1,1 +1,0 @@
-TEST_DIR=$(pwd | sed "s#$(cd $(readlink common); cd ..; pwd)##")
