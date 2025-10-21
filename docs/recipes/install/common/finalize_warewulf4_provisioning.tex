@@ -25,7 +25,8 @@ Section~\ref{sec:optional_kargs} to aid in debugging.
 % ohpc_comment_header Two-Stage provision to ramfs
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
 ## Install Dracut in the image
-[sms](*\#*) wwctl image exec --build=false BOSVER -- /usr/bin/dnf install -y warewulf-ohpc-dracut ignition gdisk
+[sms](*\#*) wwctl image exec --build=false BOSVER -- /usr/bin/dnf install -y warewulf-ohpc-dracut \
+  ignition gdisk
 
 ## Configure Dracut.  Note the leading and trailing spaces in the quotes in "add_dracutmodules"
 [sms](*\#*) echo 'hostonly="no"' > $CHROOT/etc/dracut.conf.d/wwinit.conf

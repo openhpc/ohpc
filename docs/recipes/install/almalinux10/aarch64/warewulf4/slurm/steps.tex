@@ -14,7 +14,7 @@
 \newcommand{\baseos}{almalinux-10}
 \newcommand{\baseosshort}{almalinux10}
 \newcommand{\osimage}{almalinux:10}
-\newcommand{\provisioner}{Warewulf 4.x}
+\newcommand{\provisioner}{Warewulf4}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
@@ -166,15 +166,15 @@
 \paragraph{Enable ssh control via resource manager}
 \input{common/slurm_pam}
 
-\vspace*{-.17cm}
-\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-\input{common/install_beegfs_client_centos}
+%\vspace*{-.17cm}
+%\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+%\input{common/install_beegfs_client_centos}
 
-\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-\input{common/lustre-client}
+%\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%\input{common/lustre-client}
 %\vspace*{0.25cm}
-\input{common/lustre-client-centos}
-\input{common/lustre-client-post}
+%\input{common/lustre-client-centos}
+%\input{common/lustre-client-post}
 
 \paragraph{Add GPU driver}
 \input{common/install_gpu_driver_nvidia_rhel_warewulf4}

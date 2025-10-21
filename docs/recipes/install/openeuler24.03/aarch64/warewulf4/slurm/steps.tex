@@ -14,7 +14,7 @@
 \newcommand{\baseos}{openeuler24.03}
 \newcommand{\baseosshort}{openeuler24.03}
 \newcommand{\osimage}{openeuler:24.03}
-\newcommand{\provisioner}{Warewulf 4.x}
+\newcommand{\provisioner}{Warewulf4}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
@@ -166,18 +166,18 @@
 \paragraph{Enable ssh control via resource manager}
 \input{common/slurm_pam}
 
-\vspace*{-.17cm}
-\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-\input{common/install_beegfs_client_centos}
+%\vspace*{-.17cm}
+%\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+%\input{common/install_beegfs_client_centos}
 
-\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-\input{common/lustre-client}
-%\vspace*{0.25cm}
-\input{common/lustre-client-centos}
-\input{common/lustre-client-post}
+%\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%\input{common/lustre-client}
+%%\vspace*{0.25cm}
+%\input{common/lustre-client-centos}
+%\input{common/lustre-client-post}
 
-\paragraph{Add GPU driver}
-\input{common/install_gpu_driver_nvidia_rhel_warewulf4}
+%\paragraph{Add GPU driver}
+%\input{common/install_gpu_driver_nvidia_rhel_warewulf4}
 
 %\vspace*{.45cm}
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
@@ -249,9 +249,9 @@
 \input{common/third_party_libs}
 \vspace*{0.1cm}
 \input{common/third_party_mpi_libs_x86}
-\vspace*{0.5cm}
-\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
-\input{common/oneapi_enabled_builds_slurm.tex}
+%\vspace*{0.5cm}
+%\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+%\input{common/oneapi_enabled_builds_slurm.tex}
 
 \clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
