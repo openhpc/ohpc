@@ -67,7 +67,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
-        compiler: [gnu14, intel]
+        compiler: [gnu15, intel]
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
@@ -122,7 +122,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
-        compiler: [gnu14, intel]
+        compiler: [gnu15, intel]
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
@@ -231,7 +231,7 @@ jobs:
   test_on_openEuler:
     strategy:
       matrix:
-        compiler: [gnu14]
+        compiler: [gnu15]
         os: [ubuntu-latest, ubuntu-24.04-arm]
     env:
       JOB_SKIP_CI_SPECS: |
@@ -311,7 +311,7 @@ jobs:
   test_on_leap:
     strategy:
       matrix:
-        compiler: [gnu14]
+        compiler: [gnu15]
         os: [ubuntu-latest, ubuntu-24.04-arm]
     env:
       JOB_SKIP_CI_SPECS: |

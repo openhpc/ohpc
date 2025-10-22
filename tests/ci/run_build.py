@@ -27,7 +27,7 @@ parser.add_argument(
 parser.add_argument(
     '--compiler-family',
     help='compiler family name to use for rebuild',
-    default='gnu14',
+    default='gnu15',
 )
 parser.add_argument(
     '--mpi-family',

@@ -18,7 +18,7 @@ SPEC=$1
 if [ $# -ge 2 ]; then
 	COMPILER_FAMILY=$2
 else
-	COMPILER_FAMILY=gnu14
+	COMPILER_FAMILY=gnu15
 fi
 
 if [ $# -ge 3 ]; then
