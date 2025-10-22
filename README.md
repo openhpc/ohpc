@@ -11,11 +11,13 @@ deploy and manage an HPC Linux cluster including provisioning tools, resource
 management, I/O clients, runtimes, development tools, containers, and a variety of
 scientific libraries.
 
-There are currently two release series: the [2.x][2xbranch] and the
-[3.x][3xbranch], which target different major Linux OS distributions:
+There are currently three release series: the [2.x][2xbranch], the
+[3.x][3xbranch] and the [4.x][4xbranch] which target different major Linux OS
+distributions:
 
 - The 2.x series targets EL8 and Leap15.
 - The 3.x series targets EL9, Leap 15 and openEuler 22.03.
+- The 4.x series targets EL10 and openEuler 24.03.
 
 ### Getting started
 
@@ -28,7 +30,7 @@ guides tailored for each supported provisioning system and resource manager
 with detailed example instructions for installing a cluster are also available.
 Copies of the ```ohpc-release``` package and installation guides along with
 more information is available on the relevant release series pages
-([2.x][2xbranch] or [3.x][3xbranch]).
+([2.x][2xbranch], [3.x][3xbranch] or [4.x][4xbranch]).
 
 ---
 
@@ -53,6 +55,7 @@ using the [System Registration Form][register].
 
 [2xbranch]: https://github.com/openhpc/ohpc/wiki/2.x
 [3xbranch]: https://github.com/openhpc/ohpc/wiki/3.x
+[4xbranch]: https://github.com/openhpc/ohpc/wiki/4.x
 [register]: https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI
 [submission]: https://github.com/openhpc/submissions
 [userlist]: https://groups.io/g/openhpc-users
