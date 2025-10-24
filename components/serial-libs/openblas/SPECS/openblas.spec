@@ -16,13 +16,13 @@
 %define pname openblas
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.3.29
+Version:        0.3.30
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
-Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
+Source0:        https://github.com/OpenMathLib/OpenBLAS/releases/download/v%{version}/OpenBLAS-%{version}.tar.gz
 # PATCH-FIX-UPSTREAM openblas-noexecstack.patch
 Patch2:         openblas-noexecstack.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
