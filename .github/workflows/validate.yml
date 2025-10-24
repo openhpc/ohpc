@@ -88,7 +88,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
+      run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
@@ -149,7 +149,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
+      run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
@@ -204,7 +204,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
+      run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Build
@@ -252,7 +252,7 @@ jobs:
       run: dnf -y install git
     - uses: actions/checkout@v4
     - name: Setup
-      run: tests/ci/prepare-ci-environment.sh --pre-release ${{ matrix.compiler }}
+      run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - uses: actions/download-artifact@v4
