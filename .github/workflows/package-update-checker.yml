@@ -1,9 +1,9 @@
 name: Package Update Checker
 
 on:
-  # schedule:
-  #   # Run every hour at minute 0 (disabled for now)
-  #   - cron: '0 * * * *'
+  schedule:
+    # Run every Monday at 6:00 AM UTC
+    - cron: '0 6 * * 1'
   workflow_dispatch: # Allow manual triggering
 
 permissions:

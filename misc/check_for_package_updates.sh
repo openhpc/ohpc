@@ -237,6 +237,161 @@ parse_github_repo() {
 	return 1
 }
 
+# Get latest version from GNU FTP directory listing
+get_latest_gnu_version() {
+	local project="$1" # e.g., "gcc", "gmp", "mpc", "mpfr"
+	local base_url="https://ftp.gnu.org/gnu/${project}/"
+
+	debug_info "Checking GNU ${project} directory listing at ${base_url}"
+
+	# Fetch directory listing
+	local listing
+	listing="$(curl -s "${base_url}" 2>/dev/null)" || {
+		debug_warn "Failed to fetch directory listing for GNU ${project}"
+		return 1
+	}
+
+	# Extract version directories/files based on project
+	local latest_version
+	case "${project}" in
+	"gcc")
+		# Extract gcc-X.Y.Z/ directories from HTML listing, find highest version
+		latest_version="$(echo "${listing}" | grep -oE 'href="gcc-[0-9]+\.[0-9]+\.[0-9]+/"' |
+			sed 's/href="gcc-//; s|/"||' | sort -V | tail -1)"
+		;;
+	"gmp" | "mpc" | "mpfr")
+		# Extract project-X.Y.Z.tar.* files from HTML listing, find highest version
+		latest_version="$(echo "${listing}" | grep -oE "href=\"${project}-[0-9]+\.[0-9]+(\.[0-9]+)?\.(tar\.(gz|bz2|xz)|tgz)\"" |
+			sed "s/href=\"${project}-//; s/\.tar\..*//" | sort -V | tail -1)"
+		;;
+	*)
+		debug_warn "Unknown GNU project: ${project}"
+		return 1
+		;;
+	esac
+
+	if [[ -z "${latest_version}" ]]; then
+		debug_warn "No version found for GNU ${project}"
+		return 1
+	fi
+
+	echo "${latest_version}"
+}
+
+# Check for GNU compilers updates
+check_gnu_compilers() {
+	local spec_file="$1"
+
+	debug_info "Processing GNU compilers spec file"
+
+	# Extract current versions from spec file
+	local spec_content
+	spec_content="$(cat "${spec_file}")"
+
+	# Extract default compiler family from OHPC_macros
+	local default_compiler_family
+	default_compiler_family="$(grep "compiler_family gnu" components/OHPC_macros | head -1 | sed 's/.*compiler_family \(gnu[0-9]*\).*/\1/')"
+
+	if [[ -z "${default_compiler_family}" || ! "${default_compiler_family}" =~ ^gnu[0-9]+$ ]]; then
+		debug_warn "Could not determine default compiler family from OHPC_macros, defaulting to gnu15"
+		default_compiler_family="gnu15"
+	fi
+
+	# Extract version number from compiler family (e.g., gnu15 -> 15)
+	local gnu_ver="${default_compiler_family#gnu}"
+
+	debug_info "Using default compiler family: ${default_compiler_family} (version ${gnu_ver})"
+
+	# Only check the default GNU compiler version
+	{
+		local gcc_version gmp_version mpc_version mpfr_version
+
+		# Extract current versions from spec file
+		gcc_version="$(echo "${spec_content}" | grep "^%global gnu${gnu_ver}_version" | awk '{print $3}')"
+		gmp_version="$(echo "${spec_content}" | grep "^%global gnu${gnu_ver}_gmp_version" | awk '{print $3}')"
+		mpc_version="$(echo "${spec_content}" | grep "^%global gnu${gnu_ver}_mpc_version" | awk '{print $3}')"
+		mpfr_version="$(echo "${spec_content}" | grep "^%global gnu${gnu_ver}_mpfr_version" | awk '{print $3}')"
+
+		if [[ -z "${gcc_version}" ]]; then
+			debug_info "No GNU ${gnu_ver} version found in spec file"
+			return 0
+		fi
+
+		debug_info "GNU ${gnu_ver}: GCC ${gcc_version}, GMP ${gmp_version}, MPC ${mpc_version}, MPFR ${mpfr_version}"
+
+		# Check for updates for each component
+		local component_name="gnu${gnu_ver}-compilers"
+
+		# Check GCC
+		local latest_gcc
+		latest_gcc="$(get_latest_gnu_version "gcc")" || {
+			echo "${component_name}|${gcc_version}|ERROR|Failed to fetch GCC releases|gnu.org/gcc" >>"${RESULTS_FILE}"
+			return 0
+		}
+
+		local gcc_comparison
+		gcc_comparison="$(compare_versions "${gcc_version}" "${latest_gcc}")"
+
+		if [[ "${gcc_comparison}" == "older" ]]; then
+			echo "${component_name}-gcc|${gcc_version}|${latest_gcc}|UPDATE_AVAILABLE|gnu.org/gcc" >>"${RESULTS_FILE}"
+		else
+			echo "${component_name}-gcc|${gcc_version}|${latest_gcc}|${gcc_comparison^^}|gnu.org/gcc" >>"${RESULTS_FILE}"
+		fi
+
+		# Check GMP
+		local latest_gmp
+		latest_gmp="$(get_latest_gnu_version "gmp")" || {
+			echo "${component_name}-gmp|${gmp_version}|ERROR|Failed to fetch GMP releases|gnu.org/gmp" >>"${RESULTS_FILE}"
+			return 0
+		}
+
+		local gmp_comparison
+		gmp_comparison="$(compare_versions "${gmp_version}" "${latest_gmp}")"
+
+		if [[ "${gmp_comparison}" == "older" ]]; then
+			echo "${component_name}-gmp|${gmp_version}|${latest_gmp}|UPDATE_AVAILABLE|gnu.org/gmp" >>"${RESULTS_FILE}"
+		else
+			echo "${component_name}-gmp|${gmp_version}|${latest_gmp}|${gmp_comparison^^}|gnu.org/gmp" >>"${RESULTS_FILE}"
+		fi
+
+		# Check MPC
+		local latest_mpc
+		latest_mpc="$(get_latest_gnu_version "mpc")" || {
+			echo "${component_name}-mpc|${mpc_version}|ERROR|Failed to fetch MPC releases|gnu.org/mpc" >>"${RESULTS_FILE}"
+			return 0
+		}
+
+		local mpc_comparison
+		mpc_comparison="$(compare_versions "${mpc_version}" "${latest_mpc}")"
+
+		if [[ "${mpc_comparison}" == "older" ]]; then
+			echo "${component_name}-mpc|${mpc_version}|${latest_mpc}|UPDATE_AVAILABLE|gnu.org/mpc" >>"${RESULTS_FILE}"
+		else
+			echo "${component_name}-mpc|${mpc_version}|${latest_mpc}|${mpc_comparison^^}|gnu.org/mpc" >>"${RESULTS_FILE}"
+		fi
+
+		# Check MPFR
+		local latest_mpfr
+		latest_mpfr="$(get_latest_gnu_version "mpfr")" || {
+			echo "${component_name}-mpfr|${mpfr_version}|ERROR|Failed to fetch MPFR releases|gnu.org/mpfr" >>"${RESULTS_FILE}"
+			return 0
+		}
+
+		local mpfr_comparison
+		mpfr_comparison="$(compare_versions "${mpfr_version}" "${latest_mpfr}")"
+
+		if [[ "${mpfr_comparison}" == "older" ]]; then
+			echo "${component_name}-mpfr|${mpfr_version}|${latest_mpfr}|UPDATE_AVAILABLE|gnu.org/mpfr" >>"${RESULTS_FILE}"
+		else
+			echo "${component_name}-mpfr|${mpfr_version}|${latest_mpfr}|${mpfr_comparison^^}|gnu.org/mpfr" >>"${RESULTS_FILE}"
+		fi
+
+		debug_info "GNU ${gnu_ver} (default) check completed"
+	}
+
+	return 0
+}
+
 # Get latest release from GitHub API
 get_latest_github_release() {
 	local repo="$1"
@@ -362,6 +517,13 @@ process_spec_file() {
 	local spec_file="$1"
 
 	debug_info "Processing $(basename "${spec_file}")"
+
+	# Special handling for GNU compilers spec file
+	if [[ "${spec_file}" == */gnu-compilers/SPECS/gnu-compilers.spec ]]; then
+		debug_info "Detected GNU compilers spec file - using special handling"
+		check_gnu_compilers "${spec_file}"
+		return $?
+	fi
 
 	# Extract package information
 	local pkg_info extract_result
