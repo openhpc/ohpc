@@ -19,7 +19,7 @@
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2021.3
+Version:   2021.10
 Release:   1%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
@@ -42,7 +42,8 @@ The generated benchmark data fully characterizes:
 
 %prep
 %setup -n mpi-benchmarks-IMB-v%{version}
-
+# delete -Werror from the Makefile
+sed -e "s,-Werror,,g" -i src_cpp/Makefile
 
 %build
 
