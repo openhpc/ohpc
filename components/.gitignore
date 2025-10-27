@@ -106,6 +106,7 @@ serial-libs/gotcha/SOURCES/gotcha-*.tar.gz
 serial-libs/gsl/SOURCES/gsl-*.tar.gz
 serial-libs/metis/SOURCES/*.tar.gz
 serial-libs/openblas/SOURCES/openblas-*.tar.gz
+serial-libs/openblas/SOURCES/OpenBLAS-*.tar.gz
 serial-libs/plasma/SOURCES/v*.tar.gz
 serial-libs/plasma/SOURCES/plasma*.tar.gz
 serial-libs/scotch/SOURCES/scotch*.tar.gz

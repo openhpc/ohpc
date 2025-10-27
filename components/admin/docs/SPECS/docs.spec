@@ -85,14 +85,10 @@ for recipe_path in \
 	"almalinux9/x86_64/warewulf4/slurm" \
 	"rocky9/x86_64/warewulf/slurm" \
 	"rocky9/x86_64/warewulf/openpbs" \
-	"rocky9/x86_64/xcat/slurm" \
 	"rocky9/x86_64/confluent/slurm" \
 	"rocky9/x86_64/openchami/slurm" \
-	"rocky9/x86_64/xcat_stateful/slurm" \
 	"almalinux9/x86_64/warewulf/slurm" \
 	"almalinux9/x86_64/warewulf/openpbs" \
-	"almalinux9/x86_64/xcat/slurm" \
-	"almalinux9/x86_64/xcat_stateful/slurm" \
 	"almalinux9/x86_64/confluent/slurm" \
 	"leap15/x86_64/warewulf/slurm" \
 	"leap15/x86_64/warewulf/openpbs" \
@@ -125,14 +121,10 @@ for recipe_path in \
 	"almalinux9/x86_64/warewulf4/slurm" \
 	"rocky9/x86_64/warewulf/slurm" \
 	"rocky9/x86_64/warewulf/openpbs" \
-	"rocky9/x86_64/xcat/slurm" \
 	"rocky9/x86_64/confluent/slurm" \
 	"rocky9/x86_64/openchami/slurm" \
-	"rocky9/x86_64/xcat_stateful/slurm" \
 	"almalinux9/x86_64/warewulf/slurm" \
 	"almalinux9/x86_64/warewulf/openpbs" \
-	"almalinux9/x86_64/xcat/slurm" \
-	"almalinux9/x86_64/xcat_stateful/slurm" \
 	"almalinux9/x86_64/confluent/slurm" \
 	"leap15/x86_64/warewulf/slurm" \
 	"leap15/x86_64/warewulf/openpbs" \
