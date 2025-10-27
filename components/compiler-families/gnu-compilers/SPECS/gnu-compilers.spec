@@ -29,7 +29,7 @@
 %global gnu14_mpc_version 1.3.1
 %global gnu14_mpfr_version 4.2.1
 
-%global gnu15_version 15.1.0
+%global gnu15_version 15.2.0
 %global gnu15_gmp_version 6.3.0
 %global gnu15_mpc_version 1.3.1
 %global gnu15_mpfr_version 4.2.2
