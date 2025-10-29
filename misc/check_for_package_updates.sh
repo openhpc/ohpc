@@ -25,15 +25,15 @@ OUTPUT_FORMAT="table"
 NO_GLOW=0
 
 # Cleanup function
+# shellcheck disable=SC2329
 cleanup() {
-	# shellcheck disable=SC2317
 	rm -rf "${TEMP_DIR}"
 }
 trap cleanup EXIT
 
 # Logging functions
+# shellcheck disable=SC2329
 log() {
-	# shellcheck disable=SC2317
 	echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >&2
 }
 
@@ -49,8 +49,8 @@ log_info() {
 	echo -e "${BLUE}[INFO]${NC} $*" >&2
 }
 
+# shellcheck disable=SC2329
 log_success() {
-	# shellcheck disable=SC2317
 	echo -e "${GREEN}[SUCCESS]${NC} $*" >&2
 }
 
