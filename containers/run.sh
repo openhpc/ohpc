@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 container=${CONTAINER:-docker}
 CONTAINER="${container}" ./build.sh
@@ -12,6 +13,7 @@ for I in {0..7}; do
 	"${container}" run -d --rm "${network}" "${volume}" --name=openhpc-node-"${I}" --hostname=node-"${I}" openhpc/node
 done
 
+set +e
 echo '=== Login Node (exit to shutdown cluster)'
 ./ssh.sh
 

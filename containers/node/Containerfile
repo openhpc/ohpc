@@ -1,4 +1,4 @@
-FROM openhpc/openhpc:3
+FROM openhpc/openhpc:4
 ## Update ../container/Containerfile with any changes made here.
 
 ## Base compute node
@@ -6,15 +6,15 @@ RUN dnf install -y ohpc-base-compute lmod-ohpc \
     git patch file zstd bzip2 xz \
     python3 python3-pip \
     gcc-c++ gcc-gfortran \
-    ohpc-gnu14-runtimes gnu14-compilers-ohpc \
-    openmpi5-pmix-gnu14-ohpc openblas-gnu14-ohpc netcdf-gnu14-openmpi5-ohpc
+    ohpc-gnu15-runtimes gnu15-compilers-ohpc \
+    openmpi5-pmix-gnu15-ohpc openblas-gnu15-ohpc netcdf-gnu15-openmpi5-ohpc
 
 ## Scheduler
 RUN dnf install -y ohpc-slurm-client
 
 ## Compilers, runtimes, and libraries.
-RUN dnf install -y spack-ohpc ohpc-gnu14-openmpi5-parallel-libs \
-    ohpc-gnu14-python-libs ohpc-gnu14-runtimes
+RUN dnf install -y spack-ohpc ohpc-gnu15-openmpi5-parallel-libs \
+    ohpc-gnu15-python-libs ohpc-gnu15-runtimes
 
 RUN dnf clean all && \
     rm -rf /var/cache/dnf /var/log/dnf.librepo.log /var/log/dnf.rpm.log /var/log/hawkey.log

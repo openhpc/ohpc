@@ -10,7 +10,7 @@ echo "=== setup ${container}"
 
 set -e
 echo '=== build openhpc'
-"${container}" build -t openhpc/openhpc:3 -f openhpc/Containerfile openhpc \
+"${container}" build -t openhpc/openhpc:4 -f openhpc/Containerfile openhpc \
 	--build-arg USER="${user}" \
 	--build-arg ARCH="${arch/arm64/aarch64}"
 

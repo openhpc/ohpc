@@ -1,22 +1,24 @@
-FROM registry.docker.com/rockylinux/rockylinux:9
+FROM registry.docker.com/rockylinux/rockylinux:10
 ## Update ../container/Containerfile with any changes made here.
 
 ## Base install
 ARG ARCH=aarch64
-RUN dnf install -y http://repos.openhpc.community/OpenHPC/3/EL_9/$ARCH/ohpc-release-3-1.el9.$ARCH.rpm
+RUN dnf install -y http://repos.openhpc.community/OpenHPC/4/EL_10/$ARCH/ohpc-release-4-1.el10.$ARCH.rpm
 
 RUN dnf install -y dnf-plugins-core && \
     dnf config-manager --set-enabled crb && \
     dnf upgrade -y && \
-    dnf install -y unzip jq procps-ng iproute bind-utils findutils && \
+    dnf install -y unzip jq yq procps-ng iproute bind-utils findutils && \
     dnf install -y ohpc-base
-
-## Configure common image
-RUN dnf install -y munge && \
-    /usr/sbin/create-munge-key
 
 ## Common packages
 RUN dnf install -y iputils vim rsync unzip git
+
+## Scheduler
+RUN dnf install -y munge && \
+    /usr/sbin/mungekey && \
+    chown -v munge:munge /etc/munge/munge.key && \
+    install -v -dp --owner munge --group munge /run/munge
 
 ## Create user
 ARG USER=auser

@@ -1,4 +1,4 @@
-FROM registry.docker.com/rockylinux/rockylinux:9
+FROM registry.docker.com/rockylinux/rockylinux:10
 ## This container is based on ../openhpc/Containerfile and ../node/Containerfile.
 ## The keeps it in a single file for simplicity, please keep containers in sync.
 ## The sections (delimited with a comment) are identical.  The scheduler has been removed.
@@ -7,12 +7,12 @@ FROM registry.docker.com/rockylinux/rockylinux:9
 
 ## Base install
 ARG ARCH=aarch64
-RUN dnf install -y http://repos.openhpc.community/OpenHPC/3/EL_9/$ARCH/ohpc-release-3-1.el9.$ARCH.rpm
+RUN dnf install -y http://repos.openhpc.community/OpenHPC/4/EL_10/$ARCH/ohpc-release-4-1.el10.$ARCH.rpm
 
 RUN dnf install -y dnf-plugins-core && \
     dnf config-manager --set-enabled crb && \
     dnf upgrade -y && \
-    dnf install -y unzip jq procps-ng iproute bind-utils findutils && \
+    dnf install -y unzip jq yq procps-ng iproute bind-utils findutils && \
     dnf install -y ohpc-base
 
 ## Common packages
@@ -31,12 +31,12 @@ RUN dnf install -y ohpc-base-compute lmod-ohpc \
     git patch file zstd bzip2 xz \
     python3 python3-pip \
     gcc-c++ gcc-gfortran \
-    ohpc-gnu14-runtimes gnu14-compilers-ohpc \
-    openmpi5-pmix-gnu14-ohpc openblas-gnu14-ohpc netcdf-gnu14-openmpi5-ohpc
+    ohpc-gnu15-runtimes gnu15-compilers-ohpc \
+    openmpi5-pmix-gnu15-ohpc openblas-gnu15-ohpc netcdf-gnu15-openmpi5-ohpc
 
 ## Compilers, runtimes, and libraries.
-RUN dnf install -y spack-ohpc ohpc-gnu14-openmpi5-parallel-libs \
-    ohpc-gnu14-python-libs ohpc-gnu14-runtimes
+RUN dnf install -y spack-ohpc ohpc-gnu15-openmpi5-parallel-libs \
+    ohpc-gnu15-python-libs ohpc-gnu15-runtimes
 
 ### Container configuration (unique to this container)
 

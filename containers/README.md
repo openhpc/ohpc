@@ -1,7 +1,7 @@
-# OpenHPC 3.x with Slurm running Rocky9 in a container
+# OpenHPC 4.x with Slurm running Rocky10 in a container
 
 This is a simple single-user container environment for learning and testing
-Slurm on OpenHPC 3.x with Rocky9.
+Slurm on OpenHPC 4.x with Rocky10.
 
 The cluster contains a head node, login node, and 8 compute nodes as separate
 containers with a shared docker network and shared docker storage.  The

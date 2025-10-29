@@ -1,4 +1,4 @@
-FROM openhpc/openhpc:3
+FROM openhpc/openhpc:4
 
 RUN dnf install -y ohpc-slurm-server
 
