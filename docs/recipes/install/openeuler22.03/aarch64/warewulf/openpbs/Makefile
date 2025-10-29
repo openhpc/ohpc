@@ -1,1 +1,1 @@
-../slurm/Makefile
+common/Makefile.recipe

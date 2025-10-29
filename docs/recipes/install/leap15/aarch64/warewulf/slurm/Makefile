@@ -1,1 +1,1 @@
-../../../x86_64/warewulf/slurm/Makefile
+common/Makefile.recipe
