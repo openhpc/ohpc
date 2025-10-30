@@ -11,7 +11,7 @@
 % <-- begin entry for adios2
 adios2-gnu12-impi-ohpc &
 \multirow{9}{*}{2.8.3} &
-\multirow{17}{\linewidth}{The Adaptable IO System v2 (ADIOS2). \newline {\color{logoblue} \url{https://adios2.readthedocs.io/en/latest/index.html}}}\\
+\multirow{21}{\linewidth}{The Adaptable IO System v2 (ADIOS2). \newline {\color{logoblue} \url{https://adios2.readthedocs.io/en/latest/index.html}}}\\
 adios2-gnu12-mpich-ohpc &
 & \\
 adios2-gnu12-mvapich2-ohpc &
@@ -28,13 +28,21 @@ adios2-gnu13-openmpi5-ohpc &
 & \\
 adios2-intel-openmpi4-ohpc &
 & \\
-\cline{1-2} adios2-gnu14-impi-ohpc &\multirow{8}{*}{2.10.1}
+\cline{1-2} adios2-gnu14-impi-ohpc &\multirow{5}{*}{2.10.1}
 & \\
 adios2-gnu14-mpich-ohpc &
 & \\
 adios2-gnu14-mvapich2-ohpc &
 & \\
 adios2-gnu14-openmpi5-ohpc &
+& \\
+\cline{1-2} adios2-gnu15-impi-ohpc &\multirow{8}{*}{2.10.2}
+& \\
+adios2-gnu15-mpich-ohpc &
+& \\
+adios2-gnu15-mvapich2-ohpc &
+& \\
+adios2-gnu15-openmpi5-ohpc &
 & \\
 adios2-intel-impi-ohpc &
 & \\
@@ -94,8 +102,8 @@ netcdf-cxx-gnu13-mvapich2-ohpc &
 
 % <-- begin entry for netcdf-cxx
 netcdf-cxx-gnu13-ohpc &
-\multirow{13}{*}{4.3.1} &
-\multirow{13}{\linewidth}{C++ Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
+\multirow{18}{*}{4.3.1} &
+\multirow{18}{\linewidth}{C++ Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
 netcdf-cxx-gnu13-openmpi5-ohpc &
 & \\
 netcdf-cxx-gnu14-impi-ohpc &
@@ -107,6 +115,16 @@ netcdf-cxx-gnu14-mvapich2-ohpc &
 netcdf-cxx-gnu14-ohpc &
 & \\
 netcdf-cxx-gnu14-openmpi5-ohpc &
+& \\
+netcdf-cxx-gnu15-impi-ohpc &
+& \\
+netcdf-cxx-gnu15-mpich-ohpc &
+& \\
+netcdf-cxx-gnu15-mvapich2-ohpc &
+& \\
+netcdf-cxx-gnu15-ohpc &
+& \\
+netcdf-cxx-gnu15-openmpi5-ohpc &
 & \\
 netcdf-cxx-intel-impi-ohpc &
 & \\
@@ -147,10 +165,10 @@ netcdf-fortran-gnu13-mvapich2-ohpc &
 % <-- begin entry for netcdf-fortran
 netcdf-fortran-gnu13-ohpc &
 \multirow{2}{*}{4.6.1} &
-\multirow{16}{\linewidth}{Fortran Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
+\multirow{17}{\linewidth}{Fortran Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
 netcdf-fortran-gnu13-openmpi5-ohpc &
 & \\
-\cline{1-2} netcdf-fortran-gnu14-impi-ohpc &\multirow{14}{*}{4.6.2}
+\cline{1-2} netcdf-fortran-gnu14-impi-ohpc &\multirow{15}{*}{4.6.2}
 & \\
 netcdf-fortran-gnu14-mpich-ohpc &
 & \\
@@ -159,6 +177,8 @@ netcdf-fortran-gnu14-mvapich2-ohpc &
 netcdf-fortran-gnu14-ohpc &
 & \\
 netcdf-fortran-gnu14-openmpi5-ohpc &
+& \\
+netcdf-fortran-gnu15-impi-ohpc &
 & \\
 netcdf-fortran-gnu15-mpich-ohpc &
 & \\
@@ -205,10 +225,10 @@ netcdf-gnu13-mvapich2-ohpc &
 % <-- begin entry for netcdf
 netcdf-gnu13-ohpc &
 \multirow{2}{*}{4.9.2} &
-\multirow{16}{\linewidth}{C Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
+\multirow{17}{\linewidth}{C Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
 netcdf-gnu13-openmpi5-ohpc &
 & \\
-\cline{1-2} netcdf-gnu14-impi-ohpc &\multirow{14}{*}{4.9.3}
+\cline{1-2} netcdf-gnu14-impi-ohpc &\multirow{15}{*}{4.9.3}
 & \\
 netcdf-gnu14-mpich-ohpc &
 & \\
@@ -217,6 +237,8 @@ netcdf-gnu14-mvapich2-ohpc &
 netcdf-gnu14-ohpc &
 & \\
 netcdf-gnu14-openmpi5-ohpc &
+& \\
+netcdf-gnu15-impi-ohpc &
 & \\
 netcdf-gnu15-mpich-ohpc &
 & \\
@@ -241,13 +263,15 @@ netcdf-intel-openmpi5-ohpc &
 
 % <-- begin entry for otf2
 otf2-gnu14-impi-ohpc &
-\multirow{11}{*}{3.1.1} &
-\multirow{11}{\linewidth}{Open Trace Format 2 library. \newline {\color{logoblue} \url{http://score-p.org}}}\\
+\multirow{12}{*}{3.1.1} &
+\multirow{12}{\linewidth}{Open Trace Format 2 library. \newline {\color{logoblue} \url{http://score-p.org}}}\\
 otf2-gnu14-mpich-ohpc &
 & \\
 otf2-gnu14-mvapich2-ohpc &
 & \\
 otf2-gnu14-openmpi5-ohpc &
+& \\
+otf2-gnu15-impi-ohpc &
 & \\
 otf2-gnu15-mpich-ohpc &
 & \\
@@ -269,7 +293,7 @@ otf2-intel-openmpi5-ohpc &
 % <-- begin entry for phdf5
 phdf5-gnu12-impi-ohpc &
 \multirow{9}{*}{1.14.0} &
-\multirow{20}{\linewidth}{A general purpose library and file format for storing scientific data. \newline {\color{logoblue} \url{http://www.hdfgroup.org/HDF5}}}\\
+\multirow{21}{\linewidth}{A general purpose library and file format for storing scientific data. \newline {\color{logoblue} \url{http://www.hdfgroup.org/HDF5}}}\\
 phdf5-gnu12-mpich-ohpc &
 & \\
 phdf5-gnu12-mvapich2-ohpc &
@@ -286,13 +310,15 @@ phdf5-gnu13-openmpi5-ohpc &
 & \\
 phdf5-intel-openmpi4-ohpc &
 & \\
-\cline{1-2} phdf5-gnu14-impi-ohpc &\multirow{11}{*}{1.14.6}
+\cline{1-2} phdf5-gnu14-impi-ohpc &\multirow{12}{*}{1.14.6}
 & \\
 phdf5-gnu14-mpich-ohpc &
 & \\
 phdf5-gnu14-mvapich2-ohpc &
 & \\
 phdf5-gnu14-openmpi5-ohpc &
+& \\
+phdf5-gnu15-impi-ohpc &
 & \\
 phdf5-gnu15-mpich-ohpc &
 & \\
@@ -314,7 +340,7 @@ phdf5-intel-openmpi5-ohpc &
 % <-- begin entry for pnetcdf
 pnetcdf-gnu12-impi-ohpc &
 \multirow{9}{*}{1.12.3} &
-\multirow{20}{\linewidth}{A Parallel NetCDF library (PnetCDF). \newline {\color{logoblue} \url{http://cucis.ece.northwestern.edu/projects/PnetCDF}}}\\
+\multirow{21}{\linewidth}{A Parallel NetCDF library (PnetCDF). \newline {\color{logoblue} \url{http://cucis.ece.northwestern.edu/projects/PnetCDF}}}\\
 pnetcdf-gnu12-mpich-ohpc &
 & \\
 pnetcdf-gnu12-mvapich2-ohpc &
