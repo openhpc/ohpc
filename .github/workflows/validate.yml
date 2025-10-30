@@ -263,10 +263,8 @@ jobs:
       matrix:
         parser: ["python", "perl"]
     container:
-      image: registry.fedoraproject.org/fedora:latest
+      image: ghcr.io/openhpc/ohpc-lint:latest
     steps:
-    - name: Setup
-      run: dnf -y install bats python3
     - uses: actions/checkout@v4
     - name: Run bats tests
       run: PARSE_DOC_TEST_IMPL="${{ matrix.parser }}" ./tests/ci/test_parse_doc.bats
