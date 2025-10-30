@@ -289,3 +289,6 @@ clang-format-lint:
 		../../tests/libs/fftw/tests/*.cpp \
 		../../tests/libs/trilinos/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c
+
+build-ohpc-ci:
+	podman build  -f Containerfile.ohpc-lint -t  ghcr.io/openhpc/ohpc-lint:latest

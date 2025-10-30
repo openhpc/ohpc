@@ -1,0 +1,3 @@
+FROM registry.fedoraproject.org/fedora:latest
+
+RUN dnf -y install codespell make ruff ShellCheck shfmt clang-tools-extra git
