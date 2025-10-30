@@ -35,34 +35,6 @@ jobs:
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         tests/ci/check_spec.py ${{ steps.files.outputs.added_modified }}
 
-  lint_markdown:
-    name: Run markdown linter
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Lint markdown
-      uses: DavidAnson/markdownlint-cli2-action@v15
-      with:
-        globs: |
-          README.md
-          CONTRIBUTING.md
-          containers/README.md
-          .github/workflows/README.md
-
-  lint:
-    strategy:
-      matrix:
-        step: [codespell, ruff-check, ruff-format, shellcheck, whitespace, shfmt, clang-format]
-    name: Run ${{ matrix.step }} linter
-    runs-on: ubuntu-latest
-    container:
-      image: registry.fedoraproject.org/fedora:latest
-    steps:
-    - name: Setup
-      run: dnf -y install codespell make ruff ShellCheck shfmt clang-tools-extra git
-    - uses: actions/checkout@v4
-    - name: Run ${{ matrix.step }}
-      run: make -C tests/ci/ ${{ matrix.step }}-lint
 
   build_on_rhel:
     strategy:

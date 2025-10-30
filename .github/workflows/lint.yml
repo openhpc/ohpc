@@ -1,0 +1,37 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - 4.x
+  pull_request:
+    branches:
+      - 4.x
+
+jobs:
+  lint_markdown:
+    name: Run markdown linter
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Lint markdown
+      uses: DavidAnson/markdownlint-cli2-action@v15
+      with:
+        globs: |
+          README.md
+          CONTRIBUTING.md
+          containers/README.md
+          .github/workflows/README.md
+
+  lint:
+    strategy:
+      matrix:
+        step: [codespell, ruff-check, ruff-format, shellcheck, whitespace, shfmt, clang-format]
+    name: Run ${{ matrix.step }} linter
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/openhpc/ohpc-lint:latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run ${{ matrix.step }}
+      run: make -C tests/ci/ ${{ matrix.step }}-lint
