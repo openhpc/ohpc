@@ -28,7 +28,7 @@ Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://charliecloud.io/
-Source0:   https://gitlab.com/charliecloud/main/-/package_files/204172900/download#/charliecloud-%{version}.tar.gz
+Source0:   https://gitlab.com/charliecloud/charliecloud/-/package_files/204172900/download#/charliecloud-%{version}.tar.gz
 Source1:   Build
 
 BuildRequires: make
