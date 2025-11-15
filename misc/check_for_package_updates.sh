@@ -3,7 +3,7 @@
 # Exit on any error, undefined variables, and pipe failures
 set -euo pipefail
 
-# Script to check for newer GitHub and GitLab releases of OpenHPC packages
+# Script to check for newer GitHub, GitLab, and PyPI releases of OpenHPC packages
 SCRIPT_NAME="$(basename "$0")"
 readonly SCRIPT_NAME
 TEMP_DIR="$(mktemp -d)"
@@ -72,7 +72,7 @@ usage() {
 	cat <<EOF
 Usage: ${SCRIPT_NAME} [OPTIONS]
 
-Check for newer GitHub and GitLab releases of OpenHPC packages by analyzing spec files.
+Check for newer GitHub, GitLab, and PyPI releases of OpenHPC packages by analyzing spec files.
 
 OPTIONS:
     -v, --verbose           Enable verbose output
@@ -92,11 +92,12 @@ EXAMPLES:
 
 NOTES:
     - Requires rpmspec and rpmdev-vercmp tools
-    - Supports GitHub (github.com) and GitLab (any GitLab instance) repositories
+    - Supports GitHub (github.com), GitLab (any GitLab instance), and PyPI repositories
     - GitHub API rate limits apply (60 requests/hour without token)
     - Use GITHUB_TOKEN environment variable for higher rate limits (5000 requests/hour)
     - Get a token at: https://github.com/settings/tokens (no special permissions needed)
     - GitLab repositories use public API endpoints (no authentication required)
+    - PyPI repositories use public API endpoints (no authentication required)
 
 EOF
 }
@@ -258,6 +259,23 @@ parse_gitlab_repo() {
 	return 1
 }
 
+# Parse PyPI package name from URL
+parse_pypi_package() {
+	local url="$1"
+
+	# Match PyPI URL patterns
+	# Examples:
+	# https://files.pythonhosted.org/packages/source/C/Cython/Cython-3.0.0.tar.gz
+	# https://pypi.io/packages/source/e/easybuild/easybuild-4.8.2.tar.gz
+	if [[ "${url}" =~ https://(files\.pythonhosted\.org|pypi\.io)/packages/source/[^/]+/([^/]+)/ ]]; then
+		local package_name="${BASH_REMATCH[2]}"
+		echo "${package_name}"
+		return 0
+	fi
+
+	return 1
+}
+
 # Get GitLab project ID from hostname and path
 get_gitlab_project_id() {
 	local hostname="$1"
@@ -339,6 +357,43 @@ get_latest_gitlab_release() {
 	fi
 
 	echo "${latest_tag}"
+}
+
+# Get latest version from PyPI API
+get_latest_pypi_version() {
+	local package_name="$1"
+	local api_url="https://pypi.org/pypi/${package_name}/json"
+
+	debug_info "Fetching PyPI package info from ${api_url}"
+
+	# Get package info (no authentication needed for public packages)
+	local package_info
+	package_info="$(curl -s "${api_url}" 2>/dev/null)" || {
+		debug_warn "Failed to fetch PyPI package info for ${package_name}"
+		return 1
+	}
+
+	# Check if we got an error
+	if echo "${package_info}" | jq -e '.message' &>/dev/null; then
+		local message
+		message="$(echo "${package_info}" | jq -r '.message')"
+		debug_warn "PyPI API error for ${package_name}: ${message}"
+		return 1
+	fi
+
+	# Get the latest version
+	local latest_version
+	latest_version="$(echo "${package_info}" | jq -r '.info.version' 2>/dev/null)" || {
+		debug_warn "Failed to parse PyPI version for ${package_name}"
+		return 1
+	}
+
+	if [[ "${latest_version}" == "null" || -z "${latest_version}" ]]; then
+		debug_warn "No version found for PyPI package ${package_name}"
+		return 1
+	fi
+
+	echo "${latest_version}"
 }
 
 # Get latest version from GNU FTP directory listing
@@ -751,15 +806,63 @@ process_spec_file() {
 		return 0
 	fi
 
-	# Not a GitHub or GitLab source
-	debug_info "Skipping ${name}: not a GitHub or GitLab source"
+	# Check if source is from PyPI
+	local pypi_package pypi_result
+
+	# Temporarily disable exit-on-error for command substitution
+	set +e
+	pypi_package="$(parse_pypi_package "${source0}")"
+	pypi_result=$?
+	set -e
+
+	if [[ ${pypi_result} -eq 0 ]]; then
+		debug_info "Checking PyPI package: ${pypi_package}"
+
+		# Get latest version
+		local latest_version version_result
+		# Temporarily disable exit-on-error for command substitution
+		set +e
+		latest_version="$(get_latest_pypi_version "${pypi_package}")"
+		version_result=$?
+		set -e
+
+		if [[ ${version_result} -ne 0 ]]; then
+			echo "${name}|${current_version}|ERROR|Failed to fetch PyPI version|pypi.org/project/${pypi_package}" >>"${RESULTS_FILE}"
+			return 0
+		fi
+
+		# Compare versions
+		local comparison
+		# Temporarily disable exit-on-error for command substitution
+		set +e
+		comparison="$(compare_versions "${current_version}" "${latest_version}")"
+		set -e
+
+		# Determine status
+		local status
+		case "${comparison}" in
+		"older") status="UPDATE_AVAILABLE" ;;
+		"same") status="UP_TO_DATE" ;;
+		"newer") status="AHEAD" ;;
+		*) status="UNKNOWN" ;;
+		esac
+
+		# Write result
+		echo "${name}|${current_version}|${latest_version}|${status}|pypi.org/project/${pypi_package}" >>"${RESULTS_FILE}"
+
+		debug_info "Result: ${name} ${current_version} -> ${latest_version} (${status})"
+		return 0
+	fi
+
+	# Not a GitHub, GitLab, or PyPI source
+	debug_info "Skipping ${name}: not a GitHub, GitLab, or PyPI source"
 	return 0
 }
 
 # Format and display results
 display_results() {
 	if [[ ! -s "${RESULTS_FILE}" ]]; then
-		log_info "No GitHub or GitLab sourced packages found"
+		log_info "No GitHub, GitLab, or PyPI sourced packages found"
 		return 0
 	fi
 
@@ -835,6 +938,9 @@ display_results() {
 						# GNU project: gnu.org/projectname -> https://ftpmirror.gnu.org/gnu/projectname/
 						local project_name="${repo#gnu.org/}"
 						repo_url="https://ftpmirror.gnu.org/gnu/${project_name}/"
+					elif [[ "${repo}" == pypi.org/project/* ]]; then
+						# PyPI: pypi.org/project/packagename -> https://pypi.org/project/packagename/
+						repo_url="https://${repo}/"
 					elif [[ "${repo}" == */* && "${repo}" != *"/"*"/"* ]]; then
 						# GitHub: owner/repo (contains exactly one slash)
 						repo_url="https://github.com/${repo}"
@@ -965,7 +1071,7 @@ main() {
 	check_dependencies
 	setup_rpm_environment
 
-	log_info "Scanning for OpenHPC packages with GitHub and GitLab sources..."
+	log_info "Scanning for OpenHPC packages with GitHub, GitLab, and PyPI sources..."
 	debug_info "Using temporary directory: ${TEMP_DIR}"
 
 	# Find and process all spec files
