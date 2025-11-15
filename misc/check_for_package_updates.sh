@@ -829,8 +829,22 @@ display_results() {
 					*) status_emoji="❓ ${status}" ;;
 					esac
 
+					# Generate appropriate URL based on repository type
+					local repo_url
+					if [[ "${repo}" == gnu.org/* ]]; then
+						# GNU project: gnu.org/projectname -> https://ftpmirror.gnu.org/gnu/projectname/
+						local project_name="${repo#gnu.org/}"
+						repo_url="https://ftpmirror.gnu.org/gnu/${project_name}/"
+					elif [[ "${repo}" == */* && "${repo}" != *"/"*"/"* ]]; then
+						# GitHub: owner/repo (contains exactly one slash)
+						repo_url="https://github.com/${repo}"
+					else
+						# GitLab or other: hostname/owner/repo (contains multiple slashes or hostname prefix)
+						repo_url="https://${repo}"
+					fi
+
 					printf "| %-30s | %-15s | %-20s | %-25s | [%s](%s) |\n" \
-						"${name}" "${current}" "${latest}" "${status_emoji}" "${repo}" "https://github.com/${repo}"
+						"${name}" "${current}" "${latest}" "${status_emoji}" "${repo}" "${repo_url}"
 				done <"${RESULTS_FILE}"
 			} >"${md_output}"
 
