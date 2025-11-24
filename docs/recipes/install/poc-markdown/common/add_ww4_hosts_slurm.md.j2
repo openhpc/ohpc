@@ -1,0 +1,10 @@
+Now that the nodes are defined, we can start munge and Slurm.  This must be done
+after the nodes are defined and the Warewulf configuration is updated.
+
+<!-- begin_ohpc_run -->
+```bash
+# Enable and start munge and slurmctld
+[sms]# systemctl enable --now munge
+[sms]# systemctl enable --now slurmctld
+```
+<!-- end_ohpc_run -->

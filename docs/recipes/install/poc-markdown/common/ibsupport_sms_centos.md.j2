@@ -1,0 +1,50 @@
+The following command adds OFED and PSM support using base distro-provided drivers
+to the chosen *master* host.
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_comment_header Optionally add InfiniBand support services on master node -->
+<!-- ohpc_command if [[ ${enable_ib} -eq 1 ]];then -->
+```bash
+[sms]# {{ groupinstall }} "InfiniBand Support"
+# Load IB services
+[sms]# udevadm trigger --type=devices --action=add
+[sms]# systemctl restart rdma-load-modules@infiniband.service
+```
+<!-- ohpc_command fi -->
+<!-- end_ohpc_run -->
+
+{{ include_with_marker('common/opensm.md.j2') }}
+
+With the {{ infiniband }} drivers included, you can also enable (optional) IPoIB functionality
+which provides a mechanism to send IP packets over the IB network. If you plan
+to mount a {{ lustre }} file system over {{ infiniband }}, then having IPoIB enabled is a requirement for the
+{{ lustre }} client. {{ ohpc }} provides a template configuration file to aid in setting up
+an *ib0* interface on the *master* host. To use, copy the template
+provided and update the `${sms_ipoib}` and
+`${ipoib_netmask}` entries to match local desired settings (alter ib0
+naming as appropriate if system contains dual-ported or multiple HCAs).
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_validation_newline -->
+<!-- ohpc_validation_comment Optionally enable IPoIB interface on SMS -->
+<!-- ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then -->
+<!-- ohpc_validation_comment Enable ib0 -->
+```bash
+[sms]# cp /opt/ohpc/pub/examples/network/centos/ifcfg-ib0 \
+	/etc/sysconfig/network-scripts
+
+# Define local IPoIB address and netmask
+[sms]# sed -i "s/master_ipoib/${sms_ipoib}/" \
+	/etc/sysconfig/network-scripts/ifcfg-ib0
+[sms]# sed -i "s/ipoib_netmask/${ipoib_netmask}/" \
+	/etc/sysconfig/network-scripts/ifcfg-ib0
+
+# configure NetworkManager to *not* override local /etc/resolv.conf
+[sms]# echo "[main]"   >  /etc/NetworkManager/conf.d/90-dns-none.conf
+[sms]# echo "dns=none" >> /etc/NetworkManager/conf.d/90-dns-none.conf
+# Start up NetworkManager to initiate ib0
+[sms]# systemctl start NetworkManager
+
+```
+<!-- ohpc_command fi -->
+<!-- end_ohpc_run -->

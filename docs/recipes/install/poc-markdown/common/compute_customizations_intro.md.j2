@@ -1,0 +1,30 @@
+This section highlights common additional customizations that can *optionally* be applied to the local cluster environment. These customizations include:
+
+{% if arch == "x86_64" %}
+- Add InfiniBand or Omni-Path drivers
+- Increase memlock limits
+{% endif %}
+
+{% if rms != "pbs" %}
+- Restrict ssh access to compute resources
+{% endif %}
+
+{% if arch == "x86_64" %}
+- Add BeeGFS client
+- Add Lustre client
+{% endif %}
+
+{% if provisioner == "warewulf4" %}
+- Enable syslog forwarding
+{% endif %}
+
+- Add ClusterShell
+- Add mrsh
+- Add genders
+- Add conman
+
+{% if rms == "slurm" %}
+- Add GEOPM
+{% endif %}
+
+Details on the steps required for each of these customizations are discussed further in the following sections.

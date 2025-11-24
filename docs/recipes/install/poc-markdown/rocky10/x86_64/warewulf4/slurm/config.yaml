@@ -1,0 +1,97 @@
+# Configuration variables for Rocky 10 x86_64 Warewulf4 Slurm recipe
+# Replaces LaTeX \newcommand macros from steps.tex
+
+# Base OS configuration
+baseOS: "Rocky 10"
+OSRepo: "Rocky_10"
+OSTree: "EL_10"
+ostree: "EL_10"
+OSTag: "el10"
+ostag: "el10"
+baseos: "rocky-10"
+baseosshort: "rocky10"
+osimage: "rockylinux:10"
+
+# Provisioning and resource management
+provisioner: "Warewulf4"
+provheader: "Warewulf4"
+rms: "SLURM"
+rmsshort: "slurm"
+
+# Architecture
+arch: "x86_64"
+
+# Compiler and MPI versions
+gnu_version: "gnu15"
+openmpi_version: "openmpi5"
+
+# Package manager commands
+pkgmgr: "dnf"
+addrepo: "dnf -y config-manager --add-repo"
+chrootaddrepo: "dnf --installroot=$CHROOT config-manager --add-repo"
+clean: "dnf clean expire-cache"
+chrootclean: "dnf --installroot=$CHROOT clean expire-cache"
+install: "dnf -y install"
+chrootinstall: "dnf -y --installroot=$CHROOT install"
+groupinstall: "dnf -y groupinstall"
+groupchrootinstall: "dnf -y --installroot=$CHROOT groupinstall"
+remove: "dnf -y remove"
+upgrade: "dnf -y upgrade"
+chrootupgrade: "dnf -y --installroot=$CHROOT upgrade"
+tftppkg: "syslinux-tftpboot"
+
+# Repository URLs
+beegfsrepo: "https://www.beegfs.io/release/beegfs_7.4.5/dists/beegfs-rhel9.repo"
+
+# Boolean toggles for conditional content
+isCentOS: true
+isCentOS_ww_slurm_x86: true
+isSLURM: true
+isWarewulf: true
+isWarewulf4: true
+isx86: true
+isaarch: false
+isCentOS_x86: true
+isxCAT: false
+isxCATstateful: false
+ispbs: false
+
+# Global constants (from ohpc-doc.sty)
+OHPCVersion: "4.0"
+OHPCVerTree: "4"
+
+# Product names
+OHPC: "OpenHPC"
+ohpc: "OpenHPC"
+Warewulf: "Warewulf"
+warewulf: "Warewulf"
+SLURM: "Slurm"
+InfiniBand: "InfiniBand"
+infiniband: "InfiniBand"
+OmniPath: "Omni-Path"
+beegfs: "BeeGFS"
+clustershell: "ClusterShell"
+conman: "ConMan"
+genders: "genders"
+nhc: "NHC"
+Lustre: "Lustre"
+lustre: "Lustre"
+os_name: "Rocky 10"
+intelr: "Intel®"
+enable_ib: false
+enable_opa: false
+enable_clustershell: false
+enable_genders: false
+enable_magpie: false
+enable_ipmisol: false
+add_ofed: false
+enable_ipoib: false
+optional_kargs: ""
+enable_dracut: false
+enable_kargs: false
+isWarewulf3: false
+install_cmd: "dnf -y install"
+enable_mpi_defaults: true
+enable_intel_packages: false
+provisioner_lower: "warewulf4"
+rms_short: "slurm"

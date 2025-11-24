@@ -1,0 +1,25 @@
+In order to utilize InfiniBand or Omni-Path as the underlying high speed
+interconnect, it is generally necessary to increase the locked memory settings
+for system users. This can be accomplished by updating the
+`/etc/security/limits.conf` file and this should be performed within the
+*compute* image and on all job submission hosts. In this recipe, jobs are
+submitted from the *SMS* host, and the following commands can be used to
+update the maximum locked memory settings on both the master host and the
+compute image:
+
+<!-- begin_ohpc_run --> <!-- ohpc_validation_newline -->
+<!-- ohpc_validation_comment Update memlock settings -->
+```bash
+# Update memlock settings on SMS
+[sms]# sed -i 's/\(# End of file\)/\* soft memlock unlimited\n\1/g' \
+	/etc/security/limits.conf
+[sms]# sed -i 's/\(# End of file\)/\* hard memlock unlimited\n\1/g' \
+	/etc/security/limits.conf
+
+# Update memlock settings within compute image
+[sms]# sed -i 's/\(# End of file\)/\* soft memlock unlimited\n\1/g' \
+	$CHROOT/etc/security/limits.conf
+[sms]# sed -i 's/\(# End of file\)/\* hard memlock unlimited\n\1/g' \
+	$CHROOT/etc/security/limits.conf
+```
+<!-- end_ohpc_run -->

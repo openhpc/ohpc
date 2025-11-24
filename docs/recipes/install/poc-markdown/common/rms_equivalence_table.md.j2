@@ -1,0 +1,8 @@
+| **Command** | **OpenPBS** | **SLURM** |
+|---|---|---|
+| Submit *batch* job | qsub [job script] | sbatch [job script] |
+| Request *interactive* shell | qsub -I /bin/bash | salloc |
+| Delete job | qdel [job id] | scancel [job id] |
+| Queue status | qstat -q | sinfo |
+| Job status | qstat -f [job id] | scontrol show job [job id] |
+| Node status | pbsnodes [node name] | scontrol show node [node id] |

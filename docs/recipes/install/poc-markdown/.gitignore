@@ -1,0 +1,22 @@
+# Generated markdown output
+steps.md
+
+# Generated PDFs
+# Note: Exclude figures directory which contains source PDFs
+*.pdf
+!common/figures/*.pdf
+
+# Generated HTML
+*.html
+
+# Generated recipe scripts
+recipe.sh
+
+# Build artifacts
+.config.merged.yaml
+.header-includes.tex
+.steps.md.j2.tmp
+vc.yaml
+
+# Symlink to common directory in build directories
+*/common

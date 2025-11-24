@@ -1,0 +1,60 @@
+### Installation Template
+
+This appendix highlights the availability of a companion installation script
+that is included with OpenHPC documentation. This script, when combined with
+local site inputs, can be used to implement a starting recipe for
+bare-metal system installation and configuration. This template script is used
+during validation efforts to test cluster installations and is provided as a
+convenience for administrators as a starting point for potential site
+customization.
+
+::: {.tip}
+Note that the template script provided is intended for use during
+initial installation and is not designed for repeated execution. If
+modifications are required after using the script initially, we recommend
+running the relevant subset of commands interactively.
+:::
+
+The template script relies on the use of a simple text file to define local
+site variables that were outlined in the Inputs section. By default, the
+template installation script attempts to use local variable settings sourced from
+the `/opt/ohpc/pub/doc/recipes/vanilla/input.local` file, however, this
+choice can be overridden by the use of the `${OHPC_INPUT_LOCAL}`
+environment variable. The template install script is intended for execution on
+the SMS **master** host and is installed as part of the `docs-ohpc`
+package into `/opt/ohpc/pub/doc/recipes/vanilla/recipe.sh`. After
+enabling the OpenHPC repository and reviewing the guide for additional
+information on the intent of the commands, the general starting approach for
+using this template is as follows:
+
+1. Install the `docs-ohpc` package
+
+```bash
+[sms]# {{ install }} docs-ohpc
+```
+
+2. Copy the provided template input file to use as a starting point to
+   define local site settings:
+
+```bash
+[sms]# cp /opt/ohpc/pub/doc/recipes/{{ baseosshort }}/input.local input.local
+```
+
+3. Update `input.local` with desired settings
+
+4. Copy the template installation script which contains command-line
+   instructions culled from this guide.
+
+```bash
+[sms]# cp -p /opt/ohpc/pub/doc/recipes/{{ baseosshort }}/{{ arch }}/{{ provisioner_lower }}/{{ rms_short }}/recipe.sh .
+```
+
+5. Review and edit `recipe.sh` to suite.
+
+6. Use environment variable to define local input file and execute
+   `recipe.sh` to perform a local installation.
+
+```bash
+[sms]# export OHPC_INPUT_LOCAL=./input.local
+[sms]# ./recipe.sh
+```

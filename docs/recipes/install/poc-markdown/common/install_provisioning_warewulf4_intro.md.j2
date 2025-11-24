@@ -1,0 +1,37 @@
+With the {{ ohpc }} repository enabled, we can now begin adding desired components onto the
+*master* server. This repository provides a number of aliases that group
+logical components together in order to help aid in this process. For
+reference, a complete list of available group aliases and RPM packages available
+via {{ ohpc }} are provided in Appendix [manifest](#package-manifest). To add
+support for provisioning services, the following command adds a common base
+package followed along with the Warewulf provisioning system. Then the main
+Warewulf configuration files are edited to reflect the environment.
+
+<!--
+nottoggle isCentOS: clearpage
+-->
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_comment_header Add baseline OpenHPC -->
+```bash
+# Make sure required variables are set
+[sms]# : ${sms_eth_internal:?ERROR: sms_eth_internal not set}
+[sms]# : ${internal_network:?ERROR: internal_network not set}
+
+# Install base packages
+[sms]# {{ install }} epel-release
+[sms]# {{ install }} ohpc-base yq
+
+# Install Warewulf
+[sms]# {{ install }} warewulf-ohpc
+
+# Create the tftpboot directory (not created by dnsmasq)
+[sms]# install -d -m 0755 /var/lib/tftpboot
+
+# Add public_content_t type to tftpboot directory and contents
+[sms]# {{ install }} policycoreutils-python-utils
+[sms]# semanage fcontext -a -t public_content_t "/var/lib/tftpboot(/.*)?"
+[sms]# restorecon -R -v /var/lib/tftpboot
+
+```
+<!-- end_ohpc_run -->

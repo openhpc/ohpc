@@ -1,0 +1,35 @@
+/* Styling for code blocks in HTML output */
+
+div.sourceCode {
+  background-color: #f5f5f5 !important;
+  border: 1px solid #cccccc !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+  margin: 1em 0 !important;
+}
+
+pre.sourceCode {
+  background-color: #f5f5f5 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+code.sourceCode {
+  background-color: transparent !important;
+}
+
+/* Styling for legal notice table */
+
+.legal-table table {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.legal-table table td:first-child {
+  width: 1% !important;
+  white-space: nowrap !important;
+}
+
+.legal-table table td:last-child {
+  width: auto !important;
+}

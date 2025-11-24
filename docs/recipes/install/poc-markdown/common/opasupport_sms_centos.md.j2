@@ -1,0 +1,13 @@
+The following command adds Omni-Path support using base distro-provided drivers
+to the chosen *master* host.
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_comment_header Optionally add Omni-Path support services on master node -->
+<!-- ohpc_command if [[ ${enable_opa} -eq 1 ]];then -->
+```bash
+[sms]# {{ install }} opa-basic-tools
+```
+<!-- ohpc_command fi -->
+<!-- end_ohpc_run -->
+
+{{ include_with_marker('common/opafm.md.j2') }}

@@ -1,0 +1,63 @@
+## Inputs
+
+As this recipe details installing a cluster starting from bare-metal, there is a requirement to define IP addresses and
+gather hardware MAC addresses in order to support a controlled provisioning process. These values are necessarily unique
+to the hardware being used, and this document uses variable substitution (`${variable}`) in the command-line
+examples that follow to highlight where local site inputs are required. A summary of the required and optional variables
+used throughout this recipe are presented below. Note that while the example definitions above correspond to a small
+4-node compute subsystem, the compute parameters are defined in array format to accommodate logical extension to larger
+node counts.
+
+**Required variables:**
+
+* `${sms_name}` - Hostname for SMS server
+* `${sms_ip}` - Internal IP address on SMS server
+{% if isxCAT %}
+* `${domain_name}` - Local network domain name
+{% endif %}
+* `${sms_eth_internal}` - Internal Ethernet interface on SMS
+{% if isWarewulf %}
+* `${eth_provision}` - Provisioning interface for computes
+{% endif %}
+* `${internal_network}` - Subnet network address for internal network
+* `${internal_netmask}` - Subnet netmask for internal network
+{% if isWarewulf4 %}
+* `${ipv4_gateway}` - Default gateway for the internal network
+* `${dns_servers}` - DNS resolver for the internal network
+{% endif %}
+* `${ntp_server}` - Local ntp server for time synchronization
+* `${bmc_username}` - BMC username for use by IPMI
+* `${bmc_password}` - BMC password for use by IPMI
+* `${num_computes}` - Total # of desired compute nodes
+* `${c_ip[0]}`, `${c_ip[1]}`, ... - Desired compute node addresses
+* `${c_bmc[0]}`, `${c_bmc[1]}`, ... - BMC addresses for computes
+* `${c_mac[0]}`, `${c_mac[1]}`, ... - MAC addresses for computes
+* `${c_name[0]}`, `${c_name[1]}`, ... - Host names for computes
+* `${compute_regex}` - Regex matching all compute node names (e.g. "c*")
+* `${compute_prefix}` - Prefix for compute node names (e.g. "c")
+{% if isxCAT %}
+* `${iso_path}` - Directory location of OS iso for xCAT install
+{% if not isxCATstateful %}
+* `${synclist}` - Filesystem location of xCAT synclist file
+{% endif %}
+{% endif %}
+{% if isxCATstateful %}
+* `${ohpc_repo_dir}` - Directory location of local {{ OHPC }} repository mirror
+* `${epel_repo_dir}` - Directory location of local EPEL repository mirror
+{% endif %}
+{% if isWarewulf4 %}
+* `${node_disk}` - Device path for disk to be used for provision-to-disk
+{% endif %}
+
+**Optional variables:**
+
+{% if isx86 %}
+* `${sysmgmtd_host}` - BeeGFS System Management host name
+* `${mgs_fs_name}` - Lustre MGS mount name
+* `${sms_ipoib}` - IPoIB address for SMS server
+* `${ipoib_netmask}` - Subnet netmask for internal IPoIB
+* `${c_ipoib[0]}`, `${c_ipoib[1]}`, ... - IPoIB addresses for computes
+{% endif %}
+{% if isWarewulf %}
+* `${kargs}` - Kernel boot arguments
+{% endif %}
