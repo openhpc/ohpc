@@ -56,41 +56,43 @@ To begin, enable use of the \OHPC{} repository...
 ```yaml
 # Variables
 baseOS: "Rocky 10"
-OSTree: "EL_10"
+ostree: "EL_10"
+ostag: "el10"
 arch: "x86_64"
 install: "dnf -y install"
 provisioner: "Warewulf4"
 rms: "SLURM"
+rmsshort: "slurm"
 
 # Toggles
 isCentOS: true
 isWarewulf4: true
 
-# Global names
-OHPC: "OpenHPC"
-SLURM: "Slurm"
+# Product names
+ohpc: "OpenHPC"
+warewulf: "Warewulf"
 ```
 
 **steps.md.j2:**
 ```markdown
-# {{ OHPC }} Installation Guide
+# {{ ohpc }} Installation Guide
 
 ## Introduction
 
 {% include 'common/intro.md.j2' %}
 
-### Enable {{ OHPC }} repository
+### Enable {{ ohpc }} repository
 
 {% include 'common/enable_ohpc_repo.md.j2' %}
 
-### Install {{ SLURM }}
+### Install {{ rms }}
 
 {% include 'common/install_slurm.md.j2' %}
 ```
 
 **common/enable_ohpc_repo.md.j2:**
 ```markdown
-To begin, enable use of the {{ OHPC }} repository...
+To begin, enable use of the {{ ohpc }} repository...
 
 {% if isCentOS %}
 \`\`\`bash
@@ -123,7 +125,8 @@ steps.md: steps.md.j2 config.yaml
 | Bold text | `\textbf{text}` | `**text**` |
 | Italic text | `\emph{text}` or `{\em text}` | `*text*` |
 | Inline code | `\texttt{code}` | `` `code` `` |
-| Comments | `% comment` | `{# comment #}` |
+| Comments (Jinja2) | `% comment` | `{# comment #}` |
+| Comments (script markers) | `% begin_ohpc_run` | `<!-- begin_ohpc_run -->` (HTML) |
 | Lists | `\begin{itemize}\item...\end{itemize}` | `* item` |
 | Links | `\href{url}{text}` | `[text](url)` |
 

@@ -2,29 +2,46 @@
 
 ## What Was Built
 
-A fully functional proof-of-concept demonstrating conversion of OpenHPC LaTeX documentation to Markdown with Jinja2 templating.
+A fully functional proof-of-concept demonstrating complete conversion of OpenHPC LaTeX documentation to Markdown with Jinja2 templating, including PDF generation, HTML output, and installation script extraction.
 
 ## Key Components
 
-### 1. Common Templates (Converted from LaTeX)
-- `common/title.md.j2` - Title page with version info
-- `common/enable_ohpc_repo.md.j2` - Repository setup instructions
-- `common/install_slurm.md.j2` - Slurm installation steps
-- `common/inputs.md.j2` - Required variables documentation
-- `common/warewulf4_setup.md.j2` - Warewulf configuration
+### 1. Common Templates (74 files converted from LaTeX)
+Complete coverage of all installation guide sections:
+- Title page, legal notice, introduction
+- Requirements, inputs, BOS installation
+- Repository setup (OpenHPC, Rocky, AlmaLinux)
+- Provisioning (Warewulf4 setup and configuration)
+- Resource management (Slurm installation and configuration)
+- Network support (InfiniBand, Omni-Path)
+- Customizations (NHC, clustershell, genders, conman, etc.)
+- Development tools, compilers, MPI stacks
+- Performance tools and libraries
+- Package manifests and tables
+- Automation and upgrade guides
 
 ### 2. Build Infrastructure
 - `common/generate_vc.sh` - Extracts git info to YAML (replaces `common/vc`)
-- `Makefile` - Orchestrates build process using jinja2-cli
+- `common/parse_doc_md.py` - Python script to extract recipe.sh from HTML comments
+- `common/update-toc.sh` - Generates table of contents with mdtoc
+- `common/header-includes.tex.j2` - LaTeX header for PDF customization
+- `common/format-filters.lua` - Pandoc Lua filter for format-specific rendering
+- `common/codeblock-styles.css` - CSS styling for HTML output
+- `Makefile` - Orchestrates complete build process (MD, PDF, HTML, recipe.sh)
 
-### 3. Recipe-Specific Files (Rocky 10 / x86_64 / Warewulf4 / Slurm)
-- `config.yaml` - All variables (OS, package manager, toggles)
-- `steps.md.j2` - Main document template
+### 3. Recipe-Specific Files (Rocky 10 and AlmaLinux 10)
+- `config.yaml` - All variables (OS, package manager, toggles, product names)
+- `steps.md.j2` - Main document template (229 lines)
+- `manifest.md.j2` - Package manifest template
+- `manifest/*.md.j2` - Individual package table templates
 
 ### 4. Generated Files
 - `vc.yaml` - Version control information from git
 - `.config.merged.yaml` - Merged configuration
-- `steps.md` - Final Markdown documentation
+- `steps.md` - Final Markdown documentation (2817 lines, 122KB)
+- `steps.pdf` - Professional PDF output (259KB, 44 pages)
+- `steps.html` - HTML documentation (222KB)
+- `recipe.sh` - Executable installation script (517 lines)
 
 ## Build Process Flow
 
@@ -79,7 +96,8 @@ A fully functional proof-of-concept demonstrating conversion of OpenHPC LaTeX do
 - Markdown: Simple HTML div with centered content in `title.md.j2`
 
 ### ✅ Script Generation Markers
-- Preserved as Jinja2 comments: `{# begin_ohpc_run #}`, `{# ohpc_command ... #}`
+- Preserved as HTML comments: `<!-- begin_ohpc_run -->`, `<!-- ohpc_command ... -->`
+- Post-processed by `parse_doc_md.py` to generate `recipe.sh`
 
 ### ✅ Makefile-Based Build
 - Uses standard `make` command
@@ -121,14 +139,22 @@ The build produces a complete Markdown document with:
 
 All variable substitutions work correctly, conditionals render properly, and includes are resolved.
 
-## File Size Comparison
+## Template Size Comparison
+
+Markdown templates are significantly more concise than LaTeX:
 
 | Metric | LaTeX | Markdown+Jinja2 | Reduction |
 |--------|-------|-----------------|-----------|
-| steps.tex lines | ~285 | 97 (steps.md.j2) | **66%** |
-| enable_ohpc_repo | 37 | 17 | **54%** |
-| install_slurm | ~60 | 37 | **38%** |
-| **Average** | - | - | **~50%** |
+| Main template | steps.tex (~285 lines) | steps.md.j2 (229 lines) | **20%** |
+| Individual templates | Verbose LaTeX syntax | Cleaner Markdown | **30-50%** |
+| Configuration | Embedded in .tex | Separate config.yaml | Separated |
+| Script markers | LaTeX comments | HTML comments | Clearer |
+
+The reduction comes from:
+- No LaTeX escape sequences (`\_`, `\$`, `\{`, etc.)
+- Simpler code block syntax (` ```bash ` vs `\begin{lstlisting}`)
+- Cleaner conditional syntax (`{% if %}` vs `\iftoggleverb{}`)
+- More readable variable substitution (`{{ var }}` vs `\var{}`)
 
 ## Advantages Demonstrated
 

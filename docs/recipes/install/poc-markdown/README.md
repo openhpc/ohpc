@@ -15,7 +15,7 @@ This POC replaces that with:
 - Markdown for document formatting
 - YAML configuration files for variables
 - Jinja2 templating for includes and conditionals
-- Jinja2 comments (`{# #}`) for script generation markers
+- HTML comments (`<!-- -->`) for script generation markers
 - Command-line jinja2 tool + Makefiles for building
 
 ## Directory Structure
@@ -53,8 +53,8 @@ poc-markdown/
 | `\texttt{}` | Inline code with backticks |
 | `\textbf{}` | Bold with `**text**` or `*text*` |
 | Title page headings | `<p style="font-size: Xpx;">` (avoids chapter numbers) |
-| `% begin_ohpc_run` | `{# begin_ohpc_run #}` |
-| `% ohpc_command` | `{# ohpc_command ... #}` |
+| `% begin_ohpc_run` | `<!-- begin_ohpc_run -->` |
+| `% ohpc_command` | `<!-- ohpc_command ... -->` |
 | TOC generation | `mdtoc` with `<!-- toc -->` markers |
 
 ## Building
@@ -103,9 +103,9 @@ This mirrors the current LaTeX system where `common/vc` generates `vc.tex`.
 
 ## Script Generation
 
-The special comment markers like `{# begin_ohpc_run #}` and `{# ohpc_command #}`
-are preserved in the output and can be post-processed to generate installation
-scripts, similar to the current LaTeX system.
+The special HTML comment markers like `<!-- begin_ohpc_run -->` and `<!-- ohpc_command -->`
+are preserved in the Markdown output and are post-processed by `parse_doc_md.py` to generate
+installation scripts (recipe.sh), similar to the current LaTeX system.
 
 ## Next Steps for Full Implementation
 

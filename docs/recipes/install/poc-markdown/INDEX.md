@@ -32,22 +32,32 @@ cat steps.md
 
 ## What Was Converted
 
-### Common Templates (5 files)
-1. `common/title.md.j2` - Title page
-2. `common/enable_ohpc_repo.md.j2` - Repository setup
-3. `common/install_slurm.md.j2` - Slurm installation
-4. `common/inputs.md.j2` - Input variables documentation
-5. `common/warewulf4_setup.md.j2` - Warewulf setup
+### Common Templates (74 files)
+The POC has been expanded to include comprehensive coverage:
+- Title and introduction templates
+- Repository and provisioning setup
+- Resource manager installation (Slurm)
+- Development tools, compilers, MPI stacks
+- Performance tools and libraries
+- Network configuration (InfiniBand, Omni-Path)
+- Customization and optional components
+- Package manifest templates
 
 ### Supporting Infrastructure
 - `common/generate_vc.sh` - Version control info extractor
-- `Makefile` - Build orchestration
+- `common/parse_doc_md.py` - Recipe script generator
+- `common/update-toc.sh` - Table of contents generator
+- `Makefile` - Build orchestration with PDF/HTML support
 - `config.yaml` - All recipe variables
+- Lua filters and CSS for format-specific rendering
 
 ## Generated Output
 
-- **steps.md**: 239 lines, 8.3KB
-- Includes title, TOC, installation steps, code blocks, notes
+- **steps.md**: 2817 lines, 122KB
+- **steps.pdf**: 259KB (44 pages)
+- **steps.html**: 222KB
+- **recipe.sh**: 517 lines (executable installation script)
+- Includes title, TOC, installation steps, code blocks, tips
 - All variables substituted correctly
 - Conditionals render properly
 - Includes resolved successfully
@@ -70,18 +80,28 @@ poc-markdown/
 ├── README.md                ← Architecture details
 ├── COMPARISON.md            ← LaTeX vs Markdown
 ├── SUMMARY.md               ← What was built
-├── common/
-│   ├── title.md.j2
-│   ├── enable_ohpc_repo.md.j2
-│   ├── install_slurm.md.j2
-│   ├── inputs.md.j2
-│   ├── warewulf4_setup.md.j2
-│   └── generate_vc.sh
-└── rocky10/x86_64/warewulf4/slurm/
-    ├── config.yaml          ← Recipe variables
-    ├── steps.md.j2          ← Main template
-    ├── Makefile             ← Build system
-    └── steps.md             ← Generated output
+├── PDF_GENERATION.md        ← PDF generation guide
+├── TOC_GENERATION.md        ← TOC generation guide
+├── common/                  ← 74 shared Jinja2 templates
+│   ├── *.md.j2              ← Content templates
+│   ├── generate_vc.sh       ← Version control extractor
+│   ├── parse_doc_md.py      ← Recipe script generator
+│   ├── update-toc.sh        ← TOC generator
+│   ├── header-includes.tex.j2 ← PDF header template
+│   ├── format-filters.lua   ← Pandoc Lua filter
+│   └── codeblock-styles.css ← HTML styling
+├── rocky10/x86_64/warewulf4/slurm/
+│   ├── config.yaml          ← Recipe variables
+│   ├── steps.md.j2          ← Main template
+│   ├── manifest.md.j2       ← Package manifest
+│   ├── manifest/*.md.j2     ← Package tables
+│   ├── Makefile             ← Build system
+│   ├── steps.md             ← Generated markdown
+│   ├── steps.pdf            ← Generated PDF
+│   ├── steps.html           ← Generated HTML
+│   └── recipe.sh            ← Generated install script
+└── almalinux10/x86_64/warewulf4/slurm/
+    └── (same structure as rocky10)
 ```
 
 ## Documentation Guide

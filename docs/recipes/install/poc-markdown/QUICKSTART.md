@@ -88,8 +88,8 @@ Automates the build process:
 Edit `config.yaml`:
 ```yaml
 baseOS: "AlmaLinux 10"
-OSTag: "el10"
-baseos: "alma-10"
+ostag: "el10"
+baseos: "almalinux-10"
 ```
 
 Rebuild:
@@ -135,10 +135,10 @@ Enable use of the \OHPC{} repository on \baseOS{}
 **After (Jinja2):**
 ```yaml
 baseOS: "Rocky 10"
-OHPC: "OpenHPC"
+ohpc: "OpenHPC"
 ```
 ```markdown
-Enable use of the {{ OHPC }} repository on {{ baseOS }}
+Enable use of the {{ ohpc }} repository on {{ baseOS }}
 ```
 
 ## Viewing the Output
