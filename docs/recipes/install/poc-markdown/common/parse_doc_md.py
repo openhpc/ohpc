@@ -119,7 +119,7 @@ class ParseDocMarkdownProcessor:
             comment = self._process_refs(match.group(1))
             output.write(f"# {comment}\n")
         elif match := self._PATTERNS["command_directive"].match(line.strip()):
-            cmd = self._substitute_variables(match.group(1))
+            cmd = match.group(1)
             output.write(f"{cmd}\n")
         elif self._in_code_block:
             self._process_command_line(line, output)
@@ -143,28 +143,15 @@ class ParseDocMarkdownProcessor:
             self._process_do_loop(match, output)
         # Regular SMS prompt
         elif match := self._PATTERNS["sms_prompt"].search(line):
-            cmd = self._substitute_variables(match.group(1))
+            cmd = match.group(1)
             output.write(f"{cmd}\n")
         # Plain comments
         elif line.startswith("#"):
-            comment = self._substitute_variables(line)
-            output.write(f"{comment}\n")
-
-    def _substitute_variables(self, cmd: str) -> str:
-        """Substitute Jinja2-style variables with config values."""
-        # Handle {{ variable }} syntax
-        def replace_var(match):
-            var_name = match.group(1).strip()
-            return str(self.config.get(var_name, f"{{{{ {var_name} }}}}"))
-
-        # Replace Jinja2 variables
-        cmd = re.sub(r'\{\{\s*(\w+)\s*\}\}', replace_var, cmd)
-
-        return cmd
+            output.write(f"{line}\n")
 
     def _process_here_doc(self, match: re.Match, output: StringIO) -> None:
         """Process HERE document."""
-        cmd = self._substitute_variables(match.group(1))
+        cmd = match.group(1)
         delimiter = match.group(2).strip()
 
         output.write(f"{cmd}\n")
@@ -179,7 +166,6 @@ class ParseDocMarkdownProcessor:
                 if self._PATTERNS["code_block_end"].match(line):
                     break
 
-                line = self._substitute_variables(line)
                 output.write(f"{line}\n")
                 if line.startswith(delimiter):
                     break
@@ -188,7 +174,7 @@ class ParseDocMarkdownProcessor:
 
     def _process_continuation(self, match: re.Match, output: StringIO) -> None:
         """Process line continuation."""
-        cmd = self._substitute_variables(match.group(1))
+        cmd = match.group(1)
         output.write(f"{cmd} \\")
 
         try:
@@ -205,8 +191,6 @@ class ParseDocMarkdownProcessor:
                 if line.startswith("[sms]#"):
                     line = line[6:].strip()
 
-                line = self._substitute_variables(line)
-
                 if line.endswith("\\"):
                     output.write(f"\n\t{line}")
                 else:
@@ -217,7 +201,7 @@ class ParseDocMarkdownProcessor:
 
     def _process_do_loop(self, match: re.Match, output: StringIO) -> None:
         """Process do loop with proper indentation."""
-        cmd = self._substitute_variables(match.group(1))
+        cmd = match.group(1)
         output.write(f"{cmd}\n")
 
         try:
@@ -232,8 +216,6 @@ class ParseDocMarkdownProcessor:
                 # Skip [sms]# prefix if present
                 if line.startswith("[sms]#"):
                     line = line[6:].strip()
-
-                line = self._substitute_variables(line)
 
                 # Add indentation for lines inside the do loop
                 if not self._PATTERNS["done_line"].search(line):
