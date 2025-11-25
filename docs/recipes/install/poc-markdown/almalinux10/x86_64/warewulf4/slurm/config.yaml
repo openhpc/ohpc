@@ -4,9 +4,7 @@
 # Base OS configuration
 baseOS: "AlmaLinux 10"
 OSRepo: "AlmaLinux_10"
-OSTree: "EL_10"
 ostree: "EL_10"
-OSTag: "el10"
 ostag: "el10"
 baseos: "almalinux-10"
 baseosshort: "almalinux10"
@@ -14,7 +12,6 @@ osimage: "almalinux:10"
 
 # Provisioning and resource management
 provisioner: "Warewulf4"
-provheader: "Warewulf4"
 rms: "SLURM"
 rmsshort: "slurm"
 
@@ -61,12 +58,9 @@ OHPCVersion: "4.0"
 OHPCVerTree: "4"
 
 # Product names
-OHPC: "OpenHPC"
 ohpc: "OpenHPC"
-Warewulf: "Warewulf"
 warewulf: "Warewulf"
 SLURM: "Slurm"
-InfiniBand: "InfiniBand"
 infiniband: "InfiniBand"
 OmniPath: "Omni-Path"
 beegfs: "BeeGFS"
@@ -74,7 +68,6 @@ clustershell: "ClusterShell"
 conman: "ConMan"
 genders: "genders"
 nhc: "NHC"
-Lustre: "Lustre"
 lustre: "Lustre"
 os_name: "AlmaLinux 10"
 intelr: "Intel®"
@@ -94,4 +87,3 @@ install_cmd: "dnf -y install"
 enable_mpi_defaults: true
 enable_intel_packages: false
 provisioner_lower: "warewulf4"
-rms_short: "slurm"

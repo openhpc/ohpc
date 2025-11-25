@@ -46,11 +46,11 @@
 ```
 <!-- end_ohpc_run -->
 
-# Install {{ OHPC }} Components
+# Install {{ ohpc }} Components
 
 {{ include_with_marker('common/install_ohpc_components_intro.md.j2') }}
 
-## Enable {{ OHPC }} repository for local use
+## Enable {{ ohpc }} repository for local use
 
 {{ include_with_marker('common/enable_ohpc_repo.md.j2') }}
 {{ include_with_marker('common/rocky_repos.md.j2') }}
@@ -66,7 +66,7 @@
 
 {{ include_with_marker('common/install_slurm.md.j2') }}
 
-## Optionally add {{ InfiniBand }} support services on *master* node
+## Optionally add {{ infiniband }} support services on *master* node
 
 {{ include_with_marker('common/ibsupport_sms_centos.md.j2') }}
 
@@ -74,7 +74,7 @@
 
 {{ include_with_marker('common/opasupport_sms_centos.md.j2') }}
 
-## Complete basic {{ Warewulf }} setup for *master* node
+## Complete basic {{ warewulf }} setup for *master* node
 
 {{ include_with_marker('common/warewulf4_setup.md.j2') }}
 {{ include_with_marker('common/warewulf4_setup_centos.md.j2') }}
@@ -83,7 +83,7 @@
 
 {{ include_with_marker('common/warewulf4_mkchroot.md.j2') }}
 
-### Add {{ OHPC }} components
+### Add {{ ohpc }} components
 
 {{ include_with_marker('common/warewulf4_add_to_compute_chroot_intro.md.j2') }}
 {{ include_with_marker('common/warewulf4_add_to_compute_chroot_slurm.md.j2') }}
@@ -108,7 +108,7 @@
 
 {{ include_with_marker('common/compute_customizations_intro.md.j2') }}
 
-#### Enable {{ InfiniBand }} drivers
+#### Enable {{ infiniband }} drivers
 
 {{ include_with_marker('common/ibsupport_compute_centos.md.j2') }}
 
@@ -168,7 +168,7 @@
 
 {{ include_with_marker('common/reset_computes.md.j2') }}
 
-# Install {{ OHPC }} Development Components
+# Install {{ ohpc }} Development Components
 
 {{ include_with_marker('common/dev_intro.md.j2') }}
 

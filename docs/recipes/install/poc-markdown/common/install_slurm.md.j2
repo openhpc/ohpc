@@ -1,4 +1,4 @@
-{{ OHPC }} provides multiple options for distributed resource management.
+{{ ohpc }} provides multiple options for distributed resource management.
 The following command adds the {{ SLURM }} workload manager server components to the
 chosen *master* host. Note that client-side components will be added to
 the corresponding compute image in a subsequent step.
@@ -35,7 +35,7 @@ for more detailed information on setting up a database configuration for {{ SLUR
 **Note:** SLURM requires enumeration of the physical hardware characteristics for
 compute nodes under its control. In particular, three configuration parameters
 combine to define consumable compute resources: *Sockets*, *CoresPerSocket*,
-and *ThreadsPerCore*. The default configuration file provided via {{ OHPC }}
+and *ThreadsPerCore*. The default configuration file provided via {{ ohpc }}
 assumes the nodes are named c1-c4 and are dual-socket, 8 cores per socket,
 and two threads per core for this 4-node example. If this does not reflect
 your local hardware, please update the configuration file at
