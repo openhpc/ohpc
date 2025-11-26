@@ -1,0 +1,98 @@
+# Makefile for building OpenHPC documentation from Jinja2 templates
+# Uses jinja2-cli tool to process templates with config.yaml variables
+
+# Output file
+OUTPUT := steps.md
+
+# Template file
+TEMPLATE := steps.md.j2
+TEMPLATE_WITH_MACROS := .steps.md.j2.tmp
+
+# Configuration files
+CONFIG := config.yaml
+VC_YAML := vc.yaml
+MERGED_CONFIG := .config.merged.yaml
+
+# Common templates directory (relative to this Makefile)
+COMMON_TEMPLATES := ../../../../common
+
+# Header includes file for PDF
+HEADER_TEX := .header-includes.tex
+
+# jinja2 command with search path for includes
+JINJA2 := jinja2
+JINJA2_FLAGS := --strict --format=yaml
+
+# Build the final markdown document
+all: common $(OUTPUT)
+
+# Create symlink to common directory for template includes
+common:
+	ln -sf $(COMMON_TEMPLATES) common
+
+# Generate version control YAML
+$(VC_YAML):
+	$(COMMON_TEMPLATES)/generate_vc.sh $(VC_YAML)
+
+# Merge config files
+$(MERGED_CONFIG): $(CONFIG) $(VC_YAML)
+	cat $(CONFIG) $(VC_YAML) > $(MERGED_CONFIG)
+
+$(OUTPUT): $(TEMPLATE) $(MERGED_CONFIG) $(wildcard $(COMMON_TEMPLATES)/*.md.j2)
+	@# Concatenate macros with template to make macros available in same scope
+	@cat $(COMMON_TEMPLATES)/macros.j2 $(TEMPLATE) > $(TEMPLATE_WITH_MACROS)
+	$(JINJA2) $(JINJA2_FLAGS) $(TEMPLATE_WITH_MACROS) $(MERGED_CONFIG) -o $(OUTPUT)
+	@rm -f $(TEMPLATE_WITH_MACROS)
+	$(COMMON_TEMPLATES)/update-toc.sh $(OUTPUT)
+
+# Generate header includes for PDF
+$(HEADER_TEX): $(COMMON_TEMPLATES)/header-includes.tex.j2 $(MERGED_CONFIG)
+	$(JINJA2) $(JINJA2_FLAGS) $(COMMON_TEMPLATES)/header-includes.tex.j2 $(MERGED_CONFIG) -o $(HEADER_TEX)
+
+# Clean generated files
+clean:
+	rm -f $(OUTPUT) $(VC_YAML) $(MERGED_CONFIG) $(TEMPLATE_WITH_MACROS) $(HEADER_TEX) steps.pdf recipe.sh steps.html
+
+# View the generated markdown
+view: $(OUTPUT)
+	less $(OUTPUT)
+
+# Generate PDF from markdown (optional, requires pandoc)
+# Note: The \newpage in title.md.j2 creates a page break after the title
+# --resource-path tells pandoc where to find images
+# --lua-filter handles right-aligned images and page breaks for both PDF and HTML
+pdf: $(OUTPUT) $(HEADER_TEX)
+	@echo "Checking code block line widths..."
+	@$(COMMON_TEMPLATES)/check-codeblock-width.sh $(OUTPUT)
+	pandoc $(OUTPUT) -o steps.pdf \
+		--pdf-engine=xelatex \
+		--number-sections \
+		--resource-path=.:$(COMMON_TEMPLATES) \
+		--lua-filter=$(COMMON_TEMPLATES)/format-filters.lua \
+		--fail-if-warnings \
+		-V geometry:margin=1in \
+		-V linkcolor:blue \
+		-V urlcolor:blue \
+		-H $(HEADER_TEX)
+
+# Generate HTML from markdown
+html: $(OUTPUT)
+	pandoc $(OUTPUT) -o steps.html \
+		--standalone \
+		--resource-path=.:$(COMMON_TEMPLATES) \
+		--lua-filter=$(COMMON_TEMPLATES)/format-filters.lua \
+		--css=$(COMMON_TEMPLATES)/codeblock-styles.css
+
+# Generate recipe script from markdown
+recipe: $(OUTPUT)
+	$(COMMON_TEMPLATES)/parse_doc_md.py $(OUTPUT) > recipe.sh
+	@chmod +x recipe.sh
+	@echo "Recipe script generated: recipe.sh"
+	@if command -v shellcheck >/dev/null 2>&1; then \
+		echo "Running shellcheck on recipe.sh..."; \
+		shellcheck --exclude=SC2154 recipe.sh || true; \
+	else \
+		echo "Info: shellcheck not installed (optional validation tool)"; \
+	fi
+
+.PHONY: all clean view pdf html recipe
