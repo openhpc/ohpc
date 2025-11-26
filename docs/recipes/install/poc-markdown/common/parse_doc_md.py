@@ -163,17 +163,20 @@ class ParseDocMarkdownProcessor:
         # Regular SMS prompt
         elif match := self._PATTERNS["sms_prompt"].search(line):
             cmd = match.group(1)
-            output.write(f"{cmd}\n")
+            indent = "  " * self._indent_level
+            output.write(f"{indent}{cmd}\n")
         # Plain comments
         elif line.startswith("#"):
-            output.write(f"{line}\n")
+            indent = "  " * self._indent_level
+            output.write(f"{indent}{line}\n")
 
     def _process_here_doc(self, match: re.Match, output: StringIO) -> None:
         """Process HERE document."""
         cmd = match.group(1)
         delimiter = match.group(2).strip()
 
-        output.write(f"{cmd}\n")
+        indent = "  " * self._indent_level
+        output.write(f"{indent}{cmd}\n")
 
         # Process remaining lines until delimiter
         try:
@@ -185,7 +188,7 @@ class ParseDocMarkdownProcessor:
                 if self._PATTERNS["code_block_end"].match(line):
                     break
 
-                output.write(f"{line}\n")
+                output.write(f"{indent}{line}\n")
                 if line.startswith(delimiter):
                     break
         except StopIteration:
@@ -194,7 +197,8 @@ class ParseDocMarkdownProcessor:
     def _process_continuation(self, match: re.Match, output: StringIO) -> None:
         """Process line continuation."""
         cmd = match.group(1)
-        output.write(f"{cmd} \\")
+        indent = "  " * self._indent_level
+        output.write(f"{indent}{cmd} \\")
 
         try:
             while True:
@@ -211,9 +215,9 @@ class ParseDocMarkdownProcessor:
                     line = line[6:].strip()
 
                 if line.endswith("\\"):
-                    output.write(f"\n\t{line}")
+                    output.write(f"\n{indent}\t{line}")
                 else:
-                    output.write(f"\n\t{line}\n")
+                    output.write(f"\n{indent}\t{line}\n")
                     break
         except StopIteration:
             output.write("\n")
@@ -221,7 +225,8 @@ class ParseDocMarkdownProcessor:
     def _process_do_loop(self, match: re.Match, output: StringIO) -> None:
         """Process do loop with proper indentation."""
         cmd = match.group(1)
-        output.write(f"{cmd}\n")
+        indent = "  " * self._indent_level
+        output.write(f"{indent}{cmd}\n")
 
         try:
             while True:
@@ -238,9 +243,9 @@ class ParseDocMarkdownProcessor:
 
                 # Add indentation for lines inside the do loop
                 if not self._PATTERNS["done_line"].search(line):
-                    output.write(f"   {line}\n")
+                    output.write(f"{indent}   {line}\n")
                 else:
-                    output.write(f"{line}\n")
+                    output.write(f"{indent}{line}\n")
 
                 if self._PATTERNS["done_line"].search(line):
                     break
