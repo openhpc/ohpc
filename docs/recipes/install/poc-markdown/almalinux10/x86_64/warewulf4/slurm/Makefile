@@ -88,5 +88,11 @@ recipe: $(OUTPUT)
 	$(COMMON_TEMPLATES)/parse_doc_md.py $(OUTPUT) > recipe.sh
 	@chmod +x recipe.sh
 	@echo "Recipe script generated: recipe.sh"
+	@if command -v shellcheck >/dev/null 2>&1; then \
+		echo "Running shellcheck on recipe.sh..."; \
+		shellcheck recipe.sh || true; \
+	else \
+		echo "Info: shellcheck not installed (optional validation tool)"; \
+	fi
 
 .PHONY: all clean view pdf html recipe
