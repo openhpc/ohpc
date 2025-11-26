@@ -26,7 +26,6 @@ class ParseDocMarkdownProcessor:
         "sms_here_doc": re.compile(r"\[sms\]# (.+ <<-?\s*([^ ]+).*)"),
         "sms_continuation": re.compile(r"\[sms\]# (.+) \\$"),
         "sms_do_loop": re.compile(r"\[sms\]# (.+[ ]*;[ ]*do)$"),
-        "ci_comment": re.compile(r"<!-- ohpc_ci_comment (.+) -->"),
         "header_comment": re.compile(r"<!-- ohpc_comment_header (.+) -->"),
         "validation_comment": re.compile(r"<!-- ohpc_validation_comment (.+) -->"),
         "command_directive": re.compile(r"<!-- ohpc_command (.+) -->"),
@@ -41,8 +40,7 @@ class ParseDocMarkdownProcessor:
         "fi_statement": re.compile(r"^\s*fi\s*$"),
     }
 
-    def __init__(self, ci_run: bool = False):
-        self.ci_run = ci_run
+    def __init__(self):
         self._input_dir = Path()
 
     def process_file(self, file_path: Path) -> str:
@@ -106,10 +104,7 @@ class ParseDocMarkdownProcessor:
             return
 
         # Process directives
-        if match := self._PATTERNS["ci_comment"].match(line.strip()):
-            if self.ci_run:
-                output.write(f"# {match.group(1)} (CI only)\n")
-        elif match := self._PATTERNS["header_comment"].match(line.strip()):
+        if match := self._PATTERNS["header_comment"].match(line.strip()):
             comment = self._process_refs(match.group(1))
             self._write_header(output, comment)
         elif match := self._PATTERNS["validation_comment"].match(line.strip()):
@@ -272,10 +267,9 @@ def main() -> None:
     """Main entry point."""
     if len(sys.argv) < 2:
         print(
-            "Usage: parse_doc_md.py [--ci_run] <markdown_file>",
+            "Usage: parse_doc_md.py <markdown_file>",
             file=sys.stderr,
         )
-        print("  --ci_run   Run additional 'CI only' commands", file=sys.stderr)
         sys.exit(1)
 
     parser = argparse.ArgumentParser(
@@ -284,14 +278,11 @@ def main() -> None:
     )
 
     parser.add_argument("filename", type=Path, help="Markdown file to process")
-    parser.add_argument(
-        "--ci_run", action="store_true", help='Run additional "CI only" commands'
-    )
 
     try:
         args = parser.parse_args()
 
-        processor = ParseDocMarkdownProcessor(ci_run=args.ci_run)
+        processor = ParseDocMarkdownProcessor()
         result = processor.process_file(args.filename)
 
         sys.stdout.write(result)
