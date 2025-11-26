@@ -11,10 +11,8 @@ Adapted from LaTeX version by Claude Code
 import argparse
 import re
 import sys
-import yaml
 from io import StringIO
 from pathlib import Path
-from typing import Dict, Generator
 
 
 class ParseDocMarkdownProcessor:
@@ -43,15 +41,9 @@ class ParseDocMarkdownProcessor:
         "fi_statement": re.compile(r"^\s*fi\s*$"),
     }
 
-    def __init__(self, config_file: Path = None, ci_run: bool = False):
+    def __init__(self, ci_run: bool = False):
         self.ci_run = ci_run
-        self.config: Dict[str, str] = {}
         self._input_dir = Path()
-
-        # Load configuration from YAML
-        if config_file and config_file.exists():
-            with open(config_file, 'r') as f:
-                self.config = yaml.safe_load(f)
 
     def process_file(self, file_path: Path) -> str:
         """Process markdown file and return generated bash script."""
@@ -275,10 +267,9 @@ def main() -> None:
     """Main entry point."""
     if len(sys.argv) < 2:
         print(
-            "Usage: parse_doc_md.py [--config=<config.yaml>] [--ci_run] <markdown_file>",
+            "Usage: parse_doc_md.py [--ci_run] <markdown_file>",
             file=sys.stderr,
         )
-        print("  --config   YAML configuration file with variable definitions", file=sys.stderr)
         print("  --ci_run   Run additional 'CI only' commands", file=sys.stderr)
         sys.exit(1)
 
@@ -289,22 +280,13 @@ def main() -> None:
 
     parser.add_argument("filename", type=Path, help="Markdown file to process")
     parser.add_argument(
-        "--config", type=Path, help="YAML configuration file"
-    )
-    parser.add_argument(
         "--ci_run", action="store_true", help='Run additional "CI only" commands'
     )
 
     try:
         args = parser.parse_args()
 
-        # Default config file location
-        config_file = args.config
-        if not config_file and args.filename.exists():
-            # Look for .config.merged.yaml in same directory
-            config_file = args.filename.parent / ".config.merged.yaml"
-
-        processor = ParseDocMarkdownProcessor(config_file=config_file, ci_run=args.ci_run)
+        processor = ParseDocMarkdownProcessor(ci_run=args.ci_run)
         result = processor.process_file(args.filename)
 
         sys.stdout.write(result)

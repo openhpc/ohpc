@@ -85,7 +85,7 @@ html: $(OUTPUT)
 
 # Generate recipe script from markdown
 recipe: $(OUTPUT)
-	$(COMMON_TEMPLATES)/parse_doc_md.py --config=$(MERGED_CONFIG) $(OUTPUT) > recipe.sh
+	$(COMMON_TEMPLATES)/parse_doc_md.py $(OUTPUT) > recipe.sh
 	@chmod +x recipe.sh
 	@echo "Recipe script generated: recipe.sh"
 
