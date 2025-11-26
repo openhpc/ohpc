@@ -37,6 +37,10 @@ class ParseDocMarkdownProcessor:
         "code_block_end": re.compile(r"^```\s*$"),
         "done_line": re.compile(r"[^#]*done"),
         "anchor_ref": re.compile(r"\[([^\]]+)\]\(#([^)]+)\)"),
+        "if_statement": re.compile(r"^\s*if\s+"),
+        "else_statement": re.compile(r"^\s*else\s*$"),
+        "elif_statement": re.compile(r"^\s*elif\s+"),
+        "fi_statement": re.compile(r"^\s*fi\s*$"),
     }
 
     def __init__(self, config_file: Path = None, ci_run: bool = False):
@@ -68,6 +72,7 @@ class ParseDocMarkdownProcessor:
         self._line_iterator = iter(lines)
         self._in_ohpc_run = False
         self._in_code_block = False
+        self._indent_level = 0
 
         # Process lines
         try:
@@ -119,10 +124,32 @@ class ParseDocMarkdownProcessor:
             comment = self._process_refs(match.group(1))
             output.write(f"# {comment}\n")
         elif match := self._PATTERNS["command_directive"].match(line.strip()):
-            cmd = match.group(1)
-            output.write(f"{cmd}\n")
+            cmd = match.group(1).strip()
+            self._write_indented_command(cmd, output)
         elif self._in_code_block:
             self._process_command_line(line, output)
+
+    def _write_indented_command(self, cmd: str, output: StringIO) -> None:
+        """Write command with proper indentation based on if/else/fi blocks."""
+        # Check what type of statement this is
+        is_if = self._PATTERNS["if_statement"].match(cmd)
+        is_elif = self._PATTERNS["elif_statement"].match(cmd)
+        is_else = self._PATTERNS["else_statement"].match(cmd)
+        is_fi = self._PATTERNS["fi_statement"].match(cmd)
+
+        # Adjust indentation for else and fi (decrease before writing)
+        if is_else or is_fi:
+            self._indent_level = max(0, self._indent_level - 1)
+
+        # Write the command with current indentation
+        indent = "  " * self._indent_level
+        output.write(f"{indent}{cmd}\n")
+
+        # Adjust indentation after writing (increase for if/elif/else)
+        if is_if or is_elif:
+            self._indent_level += 1
+        elif is_else:
+            self._indent_level += 1
 
     def _process_command_line(self, line: str, output: StringIO) -> None:
         """Process command lines in code blocks."""
