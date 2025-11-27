@@ -14,13 +14,13 @@
 <!-- ohpc_validation_comment  corresponding sections from the companion install guide. -->
 <!-- ohpc_validation_comment ----------------------------------------------------------------------------------------- -->
 <!-- ohpc_validation_newline -->
-<!-- ohpc_command inputFile=${OHPC_INPUT_LOCAL:-/opt/ohpc/pub/doc/recipes/{{ baseosshort }}/input.local} -->
+<!-- ohpc_command inputFile="${OHPC_INPUT_LOCAL:-/opt/ohpc/pub/doc/recipes/{{ baseosshort }}/input.local}" -->
 <!-- ohpc_validation_newline -->
-<!-- ohpc_command if [ ! -e ${inputFile} ];then -->
+<!-- ohpc_command if [ ! -e "${inputFile}" ];then -->
 <!-- ohpc_command    echo "Error: Unable to access local input file -> ${inputFile}" -->
 <!-- ohpc_command    exit 1 -->
 <!-- ohpc_command else -->
-<!-- ohpc_command    . ${inputFile} || { echo "Error sourcing ${inputFile}"; exit 1; } -->
+<!-- ohpc_command    . "${inputFile}" || { echo "Error sourcing ${inputFile}"; exit 1; } -->
 <!-- ohpc_command fi -->
 <!-- ohpc_validation_newline -->
 <!-- ohpc_validation_comment ---------------------------- Begin OpenHPC Recipe --------------------------------------- -->

@@ -29,9 +29,9 @@ Section {{ optional_kargs }} to aid in debugging.
 
 ## Configure Dracut. Note the leading and trailing spaces
 # in the quotes in "add_dracutmodules"
-[sms]# echo 'hostonly="no"' > $CHROOT/etc/dracut.conf.d/wwinit.conf
+[sms]# echo 'hostonly="no"' > "$CHROOT"/etc/dracut.conf.d/wwinit.conf
 [sms]# echo 'add_dracutmodules+=" wwinit ignition "' \
-	>> $CHROOT/etc/dracut.conf.d/wwinit.conf
+	>> "$CHROOT"/etc/dracut.conf.d/wwinit.conf
 
 ## Build the Dracut initramfs
 [sms]# wwctl image exec --build=false {{ baseos }} -- /usr/bin/dracut --force \

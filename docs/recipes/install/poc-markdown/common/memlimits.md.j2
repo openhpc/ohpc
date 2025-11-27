@@ -18,8 +18,8 @@ compute image:
 
 # Update memlock settings within compute image
 [sms]# sed -i 's/\(# End of file\)/\* soft memlock unlimited\n\1/g' \
-	$CHROOT/etc/security/limits.conf
+	"$CHROOT"/etc/security/limits.conf
 [sms]# sed -i 's/\(# End of file\)/\* hard memlock unlimited\n\1/g' \
-	$CHROOT/etc/security/limits.conf
+	"$CHROOT"/etc/security/limits.conf
 ```
 <!-- end_ohpc_run -->

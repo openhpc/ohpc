@@ -4,6 +4,6 @@ An additional optional customization that is recommended is to restrict `ssh` ac
 <!-- ohpc_validation_newline -->
 <!-- ohpc_validation_comment Enable slurm pam module -->
 ```bash
-[sms]# echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+[sms]# echo "account    required     pam_slurm.so" >> "$CHROOT"/etc/pam.d/sshd
 ```
 <!-- end_ohpc_run -->

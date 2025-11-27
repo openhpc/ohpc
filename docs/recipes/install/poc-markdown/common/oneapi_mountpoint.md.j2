@@ -8,6 +8,6 @@ following additional path (`/opt/intel`) to share with computes:
 [sms]# mkdir /opt/intel
 [sms]# echo "/opt/intel *(ro,no_subtree_check,fsid=12)" >> /etc/exports
 [sms]# echo "${sms_ip}:/opt/intel /opt/intel nfs nfsvers=4,nodev 0 0" \
-	>> $CHROOT/etc/fstab
+	>> "$CHROOT"/etc/fstab
 ```
 <!-- ohpc_command fi -->

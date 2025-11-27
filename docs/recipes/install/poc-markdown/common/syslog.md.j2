@@ -10,14 +10,14 @@ It is often desirable to consolidate system logging information for the cluster 
 
 # Define compute node forwarding destination
 [sms]# echo "*.* action(type=\"omfwd\" Target=\"${sms_ip}\" Port=\"514\" " \
-   "Protocol=\"udp\")">> $CHROOT/etc/rsyslog.conf
+   "Protocol=\"udp\")">> "$CHROOT"/etc/rsyslog.conf
 
 # Disable most local logging on computes.
 # Emergency and boot logs will remain on the compute nodes
-[sms]# sed -i "s/^\*\.info/#\*\.info/" $CHROOT/etc/rsyslog.conf
-[sms]# sed -i "s/^authpriv/#authpriv/" $CHROOT/etc/rsyslog.conf
-[sms]# sed -i "s/^mail/#mail/" $CHROOT/etc/rsyslog.conf
-[sms]# sed -i "s/^cron/#cron/" $CHROOT/etc/rsyslog.conf
-[sms]# sed -i "s/^uucp/#uucp/" $CHROOT/etc/rsyslog.conf
+[sms]# sed -i "s/^\*\.info/#\*\.info/" "$CHROOT"/etc/rsyslog.conf
+[sms]# sed -i "s/^authpriv/#authpriv/" "$CHROOT"/etc/rsyslog.conf
+[sms]# sed -i "s/^mail/#mail/" "$CHROOT"/etc/rsyslog.conf
+[sms]# sed -i "s/^cron/#cron/" "$CHROOT"/etc/rsyslog.conf
+[sms]# sed -i "s/^uucp/#uucp/" "$CHROOT"/etc/rsyslog.conf
 ```
 <!-- end_ohpc_run -->

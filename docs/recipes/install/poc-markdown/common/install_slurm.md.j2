@@ -50,6 +50,6 @@ that can be accessed [here](https://slurm.schedmd.com/configurator.html).
 <!-- ohpc_command if [[ ${update_slurm_nodeconfig} -eq 1 ]];then -->
 <!-- ohpc_command sed -i "s/^\(NodeName=\)/#\1/" /etc/slurm/slurm.conf -->
 <!-- ohpc_command sed -i "s/ Nodes=c\S\+ / Nodes=${compute_prefix}[1-${num_computes}] /" /etc/slurm/slurm.conf -->
-<!-- ohpc_command echo -e ${slurm_node_config} >> /etc/slurm/slurm.conf -->
+<!-- ohpc_command echo -e "${slurm_node_config}" >> /etc/slurm/slurm.conf -->
 <!-- ohpc_command fi -->
 <!-- end_ohpc_run -->
