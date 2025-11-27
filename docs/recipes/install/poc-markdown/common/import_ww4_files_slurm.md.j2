@@ -10,13 +10,13 @@ on every host in the resource management pool, issue the following:
  /opt/ohpc/pub/examples/slurm/slurmd.ww /etc/sysconfig/slurmd.ww
 
 # Set the value of the slurmctld tag to the $sms_ip for the nodes profile.
-[sms]# wwctl profile set --yes nodes --tagadd slurmctld=${sms_ip}
+[sms]# wwctl profile set --yes nodes --tagadd slurmctld="${sms_ip}"
 
 # Configure munge
 [sms]# wwctl overlay import --parents nodeconfig /etc/munge/munge.key
 [sms]# wwctl overlay chown nodeconfig /etc/munge/munge.key \
-	$(id -u munge) $(id -g munge)
-[sms]# wwctl overlay chown nodeconfig /etc/munge $(id -u munge) $(id -g munge)
+	"$(id -u munge)" "$(id -g munge)"
+[sms]# wwctl overlay chown nodeconfig /etc/munge "$(id -u munge)" "$(id -g munge)"
 [sms]# wwctl overlay chmod nodeconfig /etc/munge 0700
 ```
 <!-- end_ohpc_run -->

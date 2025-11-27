@@ -53,7 +53,7 @@ provisioning (previous step) must also be enabled.  The compute node will use,
 ```bash
 ## Create the target "rootfs" partition and filesystem
 [sms]# wwctl profile set --yes nodes \
-  --diskname ${node_disk} --diskwipe \
+  --diskname "${node_disk}" --diskwipe \
   --partname rootfs --partcreate --partnumber 1 \
   --fsname rootfs --fswipe --fsformat ext4 --fspath /
 

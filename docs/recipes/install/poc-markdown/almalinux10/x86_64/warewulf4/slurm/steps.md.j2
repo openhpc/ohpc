@@ -25,8 +25,7 @@
 <!-- ohpc_validation_newline -->
 <!-- ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding -->
 <!-- ohpc_validation_newline -->
-<!-- ohpc_command dnf repolist | grep -q OpenHPC -->
-<!-- ohpc_command if [ $? -ne 0 ];then -->
+<!-- ohpc_command if ! dnf repolist | grep -q OpenHPC; then -->
 <!-- ohpc_command    echo "Error: OpenHPC repository must be enabled locally" -->
 <!-- ohpc_command    exit 1 -->
 <!-- ohpc_command fi -->
@@ -95,7 +94,7 @@
 <!-- begin_ohpc_run -->
 <!-- ohpc_validation_newline -->
 <!-- ohpc_validation_comment Update basic slurm configuration if additional computes defined -->
-<!-- ohpc_command if [ ${num_computes} -gt 4 ];then -->
+<!-- ohpc_command if [ "${num_computes}" -gt 4 ];then -->
 <!-- ohpc_command 	sed -i "s/^\(NodeName=\)\S\+/\1${compute_prefix}[1-${num_computes}]/" \ -->
 <!-- ohpc_command 		/etc/slurm/slurm.conf -->
 <!-- ohpc_command 	sed -i "s/^\(PartitionName=\)normal \(Nodes=\)\S\+/\ -->

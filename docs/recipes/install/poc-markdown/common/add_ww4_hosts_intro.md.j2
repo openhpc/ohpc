@@ -1,8 +1,8 @@
 <!-- begin_ohpc_run -->
 ```bash
-[sms]# for ((i=0; i<$num_computes; i++)) ; do
+[sms]# for ((i=0; i<num_computes; i++)) ; do
     wwctl node add --image={{ baseos }} --profile=nodes --netname=default \
-        --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} ${c_name[i]}
+        --ipaddr="${c_ip[$i]}" --hwaddr="${c_mac[$i]}" "${c_name[i]}"
 done
 ```
 <!-- end_ohpc_run -->

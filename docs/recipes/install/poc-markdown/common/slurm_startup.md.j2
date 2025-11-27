@@ -11,7 +11,7 @@ resource management under Slurm.
 
 <!-- begin_ohpc_run -->
 <!-- ohpc_comment_header Allow for optional sleep to wait for provisioning to complete -->
-<!-- ohpc_command sleep ${provision_wait} -->
+<!-- ohpc_command sleep "${provision_wait}" -->
 <!-- end_ohpc_run -->
 
 <!-- begin_ohpc_run -->
@@ -24,7 +24,7 @@ resource management under Slurm.
 [sms]# systemctl start slurmctld
 
 # Start slurm clients on compute hosts
-[sms]# pdsh -w ${compute_prefix}[1-${num_computes}] systemctl start munge
-[sms]# pdsh -w ${compute_prefix}[1-${num_computes}] systemctl start slurmd
+[sms]# pdsh -w "${compute_prefix}[1-${num_computes}]" systemctl start munge
+[sms]# pdsh -w "${compute_prefix}[1-${num_computes}]" systemctl start slurmd
 ```
 <!-- end_ohpc_run -->

@@ -25,7 +25,8 @@ the image from rebuilding (it will show an error) and rebuild later with the
 	{{ baseos }} --syncuser
 
 # Define chroot location
-[sms]# export CHROOT=$(wwctl image show {{ baseos }})
+[sms]# CHROOT=$(wwctl image show {{ baseos }})
+[sms]# export CHROOT
 
 # Enable OpenHPC inside image and update image.
 #Disable image build on exit, rebuild later.

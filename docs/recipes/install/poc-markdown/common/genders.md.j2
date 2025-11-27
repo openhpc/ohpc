@@ -8,7 +8,7 @@ genders is a static cluster configuration database or node typing database used 
 
 # Generate a sample genders file
 [sms]# echo -e "${sms_name}\tsms" > /etc/genders
-[sms]# for ((i=0; i<$num_computes; i++)) ; do
+[sms]# for ((i=0; i<num_computes; i++)) ; do
           echo -e "${c_name[$i]}\tcompute,bmc=${c_bmc[$i]}"
     done >> /etc/genders
 ```

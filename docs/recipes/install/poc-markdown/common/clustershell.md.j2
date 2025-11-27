@@ -7,7 +7,7 @@ ClusterShell is an event-based Python library to execute commands in parallel ac
 [sms]# {{ install }} clustershell
 
 # Setup node definitions
-[sms]# cd /etc/clustershell/groups.d
+[sms]# cd /etc/clustershell/groups.d || exit
 [sms]# mv local.cfg local.cfg.orig
 [sms]# echo "adm: ${sms_name}" > local.cfg
 [sms]# echo "compute: ${compute_prefix}[1-${num_computes}]" >> local.cfg

@@ -10,9 +10,9 @@ order to work interactively.
 <!-- begin_ohpc_run -->
 <!-- ohpc_comment_header Boot compute nodes -->
 ```bash
-[sms]# for ((i=0; i<${num_computes}; i++)) ; do
-	ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} \
-		-P ${bmc_password} chassis power reset
+[sms]# for ((i=0; i<num_computes; i++)) ; do
+	ipmitool -E -I lanplus -H "${c_bmc[$i]}" -U "${bmc_username}" \
+		-P "${bmc_password}" chassis power reset
         done
 ```
 <!-- end_ohpc_run -->

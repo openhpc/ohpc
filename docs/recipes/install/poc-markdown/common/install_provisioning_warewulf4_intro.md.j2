@@ -15,8 +15,8 @@ nottoggle isCentOS: clearpage
 <!-- ohpc_comment_header Add baseline OpenHPC -->
 ```bash
 # Make sure required variables are set
-[sms]# : ${sms_eth_internal:?ERROR: sms_eth_internal not set}
-[sms]# : ${internal_network:?ERROR: internal_network not set}
+[sms]# : "${sms_eth_internal:?ERROR: sms_eth_internal not set}"
+[sms]# : "${internal_network:?ERROR: internal_network not set}"
 
 # Install base packages
 [sms]# {{ install }} epel-release

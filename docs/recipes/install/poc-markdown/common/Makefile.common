@@ -90,7 +90,7 @@ recipe: $(OUTPUT)
 	@echo "Recipe script generated: recipe.sh"
 	@if command -v shellcheck >/dev/null 2>&1; then \
 		echo "Running shellcheck on recipe.sh..."; \
-		shellcheck --exclude=SC2154,SC1090 recipe.sh || true; \
+		shellcheck --exclude=SC2154,SC1090,SC2129 recipe.sh || true; \
 	else \
 		echo "Info: shellcheck not installed (optional validation tool)"; \
 	fi

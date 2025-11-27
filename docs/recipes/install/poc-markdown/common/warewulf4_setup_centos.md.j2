@@ -3,10 +3,10 @@
 ```bash
 
 # Edit the warewulf.conf file to use appropriate interface and settings
-[sms]# yq -i '.ipaddr = "'${sms_ip}'"' /etc/warewulf/warewulf.conf
-[sms]# yq -i '.netmask = "'${internal_netmask}'"' /etc/warewulf/warewulf.conf
-[sms]# yq -i '.network = "'${internal_network}'"' /etc/warewulf/warewulf.conf
-[sms]# yq -i '.dhcp["range start"] = "'${internal_network}'"' \
+[sms]# yq -i '.ipaddr = "'"${sms_ip}"'"' /etc/warewulf/warewulf.conf
+[sms]# yq -i '.netmask = "'"${internal_netmask}"'"' /etc/warewulf/warewulf.conf
+[sms]# yq -i '.network = "'"${internal_network}"'"' /etc/warewulf/warewulf.conf
+[sms]# yq -i '.dhcp["range start"] = "'"${internal_network}"'"' \
 	/etc/warewulf/warewulf.conf
 [sms]# yq -i '.dhcp["range end"] = "static"' /etc/warewulf/warewulf.conf
 
@@ -37,10 +37,10 @@
 	--runtime-overlays syncuser
 
 # Set default network configuration
-[sms]# wwctl profile set -y nodes --netname=default --netdev=${eth_provision}
-[sms]# wwctl profile set -y nodes --netname=default --netmask=${internal_netmask}
-[sms]# wwctl profile set -y nodes --netname=default --gateway=${ipv4_gateway}
-[sms]# wwctl profile set -y nodes --netname=default --nettagadd=DNS=${dns_servers}
+[sms]# wwctl profile set -y nodes --netname=default --netdev="${eth_provision}"
+[sms]# wwctl profile set -y nodes --netname=default --netmask="${internal_netmask}"
+[sms]# wwctl profile set -y nodes --netname=default --gateway="${ipv4_gateway}"
+[sms]# wwctl profile set -y nodes --netname=default --nettagadd=DNS="${dns_servers}"
 
 # Configuring Warewulf will restart/enable relevant services to support provisioning
 [sms]# wwctl configure --all

@@ -14,7 +14,7 @@ handled in this way by default.  Here we add directories and files to the
 # Identify master host as local NTP server, configure it with a template with a Tag
 [sms]# wwctl overlay import --parents nodeconfig \
  /opt/ohpc/pub/examples/chrony.conf.ww /etc/chrony.conf.ww
-[sms]# wwctl profile set --yes nodes --tagadd ntpserver=${sms_ip}
+[sms]# wwctl profile set --yes nodes --tagadd ntpserver="${sms_ip}"
 
 # Configure systemd and NetworkManger to wait for the network to be fully up.
 [sms]# wwctl overlay import --parents nodeconfig \
