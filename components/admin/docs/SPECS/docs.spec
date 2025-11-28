@@ -36,6 +36,7 @@ BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
 BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
+BuildRequires:  texlive-xpatch
 
 
 BuildRequires:  texlive-metafont
