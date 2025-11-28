@@ -31,7 +31,7 @@ propagate.
 %\iftoggle{isCentOS_ww_slurm_x86}{\clearpage}
 
 
-\subsection{Interactive execution}
+\section{Interactive execution}
 To use the newly created ``test'' account to compile and execute the
 application {\em interactively} through the resource manager, execute the
 following (note the use of \texttt{prun} for parallel job launch which summarizes
@@ -73,11 +73,11 @@ OpenPBS:
 \input common/rms_equivalence_table
 \end{tcolorbox}
 \end{center}
-\nottoggle{isCentOS}{\clearpage}
+%\nottoggle{isCentOS}{\clearpage}
 
-\iftoggle{isCentOS}{\clearpage}
+%\iftoggle{isCentOS}{\clearpage}
 
-\subsection{Batch execution}
+\section{Batch execution}
 
 For batch execution, \OHPC{} provides a simple job script for reference (also
 housed in the \path{/opt/ohpc/pub/examples} directory. This example script can

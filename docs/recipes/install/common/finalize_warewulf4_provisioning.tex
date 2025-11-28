@@ -1,10 +1,10 @@
-\subsection{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
+\section{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
 
 \Warewulf{} provisions a node with an image then customizes it with overlays.
 This section highlights creation of the node image and overlays, followed by the
 registration of desired compute nodes.
 
-\subsubsection{Two-Stage Provisioning (optional)}
+\subsection{Two-Stage Provisioning (optional)}
 
 \Warewulf{} optionally supports two-stage provisioning to ramfs or disk on the
 compute nodes. The nodes are still stateless, but the image is copied to disk
@@ -61,7 +61,7 @@ provisioning (previous step) must also be enabled.  The compute node will use,
 % ohpc_command fi
 % end_ohpc_run
 
-\subsubsection{Build image image and overlays}
+\subsection{Build image image and overlays}
 
 The bootstrap image includes the runtime kernel and associated modules, as well
 as some simple scripts to complete the provisioning process.  We explicitly rebuild
@@ -77,7 +77,7 @@ It is good practice to rebuild the overlays when after configuration changes.
 \end{lstlisting}
 % end_ohpc_run
 
-\subsubsection{Register nodes for provisioning}
+\subsection{Register nodes for provisioning}
 
 Nodes can be registered for provisioning using the following syntax.
 
