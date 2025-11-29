@@ -171,8 +171,8 @@
 \newcommand{\xCAT}{xCAT}
 \newcommand{\Confluent}{Confluent}
 
-\setcounter{secnumdepth}{5}
-\setcounter{tocdepth}{5}
+\setsecnumdepth{subparagraph}
+\settocdepth{subparagraph}
 
 % Include git variables
 \input{vc.tex}
