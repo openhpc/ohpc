@@ -106,6 +106,8 @@
 \setlength\headheight{59pt}
 \addtolength{\topmargin}{-1\baselineskip}
 \addtolength{\textheight}{-4\baselineskip}
+\lhead{ \small {\color{logodarkgrey}\fontfamily{phv}\selectfont { Install Guide
+  (v\OHPCVersion{})}:  {\baseOS{}/\arch{} + \provheader{} + \rms{}} } \vspace*{0pt} }
 \rhead{\includegraphics[width=0.67in]{ohpc_wordmark_color.pdf}}
 %\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [~Community release~]}
 %\fancyfoot[RE,RO]{\small Last Update: \VCDateISO~(Rev: \VCRevision)}
@@ -185,9 +187,6 @@
   \begin{titlingpage}
     \aliaspagestyle{titlingpage}{empty}
     % Title page and running header definition
-
-    \lhead{ \small {\color{logodarkgrey}\fontfamily{phv}\selectfont { Install Guide
-        (v\OHPCVersion{})}:  {\baseOS{}/\arch{} + \provheader{} + \rms{}} } \vspace*{0pt} }
 
     {\hspace*{4in} \includegraphics[width=1.7in]{ohpc_logo_blue.pdf}}
 
