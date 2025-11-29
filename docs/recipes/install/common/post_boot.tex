@@ -2,7 +2,6 @@
 % ohpc_validation_newline
 % ohpc_validation_comment Optionally, generate nhc config
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-
 # Generate NHC configuration file based on compute node environment
 [sms](*\#*) pdsh -w c1 "/usr/sbin/nhc-genconf -H '*' -c -" | dshbak -c
 
