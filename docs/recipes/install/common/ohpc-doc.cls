@@ -4,7 +4,7 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{memoir}}
 \ProcessOptions
 
-\LoadClass[article,oldfontcommands,oneside]{memoir}
+\LoadClass[article,letterpaper,oldfontcommands,oneside]{memoir}
 
 %\usepackage[margin=1.0in]{geometry}
 \setlrmarginsandblock{1in}{1in}{*}
