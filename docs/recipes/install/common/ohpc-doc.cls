@@ -4,7 +4,7 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{memoir}}
 \ProcessOptions
 
-\LoadClass[article,oldfontcommands]{memoir}
+\LoadClass[article,oldfontcommands,oneside]{memoir}
 
 %\usepackage[margin=1.0in]{geometry}
 \setlrmarginsandblock{1in}{1in}{*}
@@ -180,15 +180,50 @@
 \graphicspath{{common/figures/}}
 
 \AtBeginDocument{%
-  \addtocontents{toc}{\protect\thispagestyle{fancy}}%
-  \thispagestyle{empty}%
+  \frontmatter
   % Title Page
-  \input{common/title}%
+  \begin{titlingpage}
+    \aliaspagestyle{titlingpage}{empty}
+    % Title page and running header definition
+
+    \lhead{ \small {\color{logodarkgrey}\fontfamily{phv}\selectfont { Install Guide
+        (v\OHPCVersion{})}:  {\baseOS{}/\arch{} + \provheader{} + \rms{}} } \vspace*{0pt} }
+
+    {\hspace*{4in} \includegraphics[width=1.7in]{ohpc_logo_blue.pdf}}
+
+    \vspace*{2cm}
+    \noindent {\LARGE \color{logodarkgrey} \fontfamily{phv}\selectfont OpenHPC (v\OHPCVersion{})} \vspace*{0.1cm} \\
+    \noindent {\LARGE \color{logodarkgrey} \fontfamily{phv}\selectfont Cluster Building Recipes} \\
+
+    {\color{logoblue}\noindent\rule{6.15in}{1.2pt}} \\
+
+    \noindent {\Large \color{logodarkgrey} \fontfamily{phv}\selectfont \baseOS{} Base OS} \\
+
+    \noindent{\Large\color{logodarkgrey}\fontfamily{phv}\selectfont{\provisioner{}/\rms{}
+    Edition for Linux*} (\arch{})} \\
+
+    {\color{logoblue}\noindent\rule{6.15in}{1.2pt}} \\ \vspace{0.2cm}
+
+    \iftoggleverb{isxCATstateful}
+    \vspace*{-0.2cm}
+    \noindent{\large\color{logodarkgrey}\fontfamily{phv}\selectfont{Stateful Provisioning}}
+    \fi
+
+    \vspace*{2.5in}
+
+    \noindent \includegraphics[width=0.75in]{4x_icon.pdf}
+
+    %\vspace*{.5in}
+    \noindent{\small \color{black} Document Last Update: \VCDateISO} \vspace*{0.1cm} \\
+    {\small \color{black} Document Revision: \VCRevision} \\ \vspace*{0.1cm}
+  \end{titlingpage}
+  \addtocontents{toc}{\protect\thispagestyle{fancy}}%
   % Disclaimer
   \input{common/legal}%
   \newpage%
   \tableofcontents*
   \newpage%
+  \mainmatter
 }
 
 \addtodef{\appendix}{}{%
