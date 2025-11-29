@@ -16,6 +16,9 @@
 \renewcommand{\chaptitlefont}{\normalfont\LARGE\bfseries}
 %\setsecheadstyle{\normalfont\large\bfseries}
 \setsubsecheadstyle{\normalfont\bfseries}
+% Also, since \paragraph now maps to \subsubsection, adjust the formatting of
+% \subsubsection to look like a \paragraph
+\setaftersubsubsecskip{-1em}
 
 \usepackage{graphicx}
 \usepackage{mdwlist}
