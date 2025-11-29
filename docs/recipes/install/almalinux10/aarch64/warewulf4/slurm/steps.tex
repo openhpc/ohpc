@@ -1,10 +1,4 @@
-\documentclass[letterpaper]{article}
-\usepackage{common/ohpc-doc}
-\setcounter{secnumdepth}{5}
-\setcounter{tocdepth}{5}
-
-% Include git variables
-\input{vc.tex}
+\documentclass{ohpc-doc}
 
 % Define Base OS and other local macros
 \newcommand{\baseOS}{AlmaLinux 10}
@@ -45,24 +39,12 @@
 \toggletrue{isaarch}
 
 \begin{document}
-\graphicspath{{common/figures/}}
-\thispagestyle{empty}
-
-% Title Page
-\input{common/title}
-% Disclaimer
-\input{common/legal}
-
-\newpage
-\tableofcontents
-\newpage
 
 % Introduction  --------------------------------------------------
 
-\section{Introduction} \label{sec:introduction}
+\chapter{Introduction} \label{sec:introduction}
 \input{common/install_header}
-\input{common/intro} \\
-
+\input{common/intro}
 \input{common/base_edition/edition}
 \input{common/audience}
 \input{common/requirements}
@@ -81,10 +63,9 @@
 
 % Base Operating System --------------------------------------------
 
-\section{Install Base Operating System (BOS)}
+\chapter{Install Base Operating System (BOS)}
 \input{common/bos}
 
-%\clearpage
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall
@@ -95,44 +76,40 @@
 
 % ------------------------------------------------------------------
 
-\section{Install \OHPC{} Components} \label{sec:basic_install}
+\chapter{Install \OHPC{} Components} \label{sec:basic_install}
 \input{common/install_ohpc_components_intro.tex}
 
-\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
+\section{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
 \input{common/almalinux_repos}
 \input{common/automation}
 
-
-\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
+\section{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{common/install_provisioning_warewulf4_intro}
 \input{common/enable_pxe}
 \input{common/time}
 
-\vspace*{0.15cm}
-\subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
+\section{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\section{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_centos}
 
-\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\section{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
 \input{common/opasupport_sms_centos}
 
-\vspace*{-0.15cm}
-\subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
+\section{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf4_setup}
 \input{common/warewulf4_setup_centos}
 
-\subsection{Define {\em compute} image for provisioning}
+\section{Define {\em compute} image for provisioning}
 \input{common/warewulf4_mkchroot}
 
-\subsubsection{Add \OHPC{} components} \label{sec:add_components}
+\subsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/warewulf4_add_to_compute_chroot_intro}
 \input{common/warewulf4_add_to_compute_chroot_slurm}
 
-\vspace*{.2cm}
-\subsubsection{Customize system configuration} \label{sec:master_customization}
+\subsection{Customize system configuration} \label{sec:master_customization}
 \input{common/oneapi_mountpoint}
 
 % Additional commands when additional computes are requested
@@ -147,129 +124,103 @@
 % ohpc_command fi
 % end_ohpc_run
 
-%\clearpage
-\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
+\subsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
-%\clearpage
-\paragraph{Enable \InfiniBand{} drivers}
+\subsubsection{Enable \InfiniBand{} drivers}
 \input{common/ibsupport_compute_centos.tex}
 
-\paragraph{Enable \OmniPath{} drivers}
+\subsubsection{Enable \OmniPath{} drivers}
 \input{common/opasupport_compute_centos.tex}
 
-\vspace*{0.28cm}
-\paragraph{Increase locked memory limits}
+\subsubsection{Increase locked memory limits}
 \input{common/memlimits}
 
-\vspace*{-.17cm}
-\paragraph{Enable ssh control via resource manager}
+\subsubsection{Enable ssh control via resource manager}
 \input{common/slurm_pam}
 
-%\vspace*{-.17cm}
-%\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+%\subsubsection{Add \beegfs{}} \label{sec:add_beegfs}
 %\input{common/install_beegfs_client_centos}
 
-%\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%\subsubsection{Add \Lustre{} client} \label{sec:lustre_client}
 %\input{common/lustre-client}
-%\vspace*{0.25cm}
 %\input{common/lustre-client-centos}
 %\input{common/lustre-client-post}
 
-\paragraph{Add GPU driver}
+\subsubsection{Add GPU driver}
 \input{common/install_gpu_driver_nvidia_rhel_warewulf4}
 
-%\vspace*{.45cm}
-\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
+\subsubsection{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
-\paragraph{Add \clustershell{}}
+\subsubsection{Add \clustershell{}}
 \input{common/clustershell}
 
-\paragraph{Add \genders{}}
+\subsubsection{Add \genders{}}
 \input{common/genders}
 
-\paragraph{Add Magpie}
+\subsubsection{Add Magpie}
 \input{common/magpie}
 
-\paragraph{Add \conman{}} \label{sec:add_conman}
+\subsubsection{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\subsubsection{Add \nhc{}} \label{sec:add_nhc}
 \input{common/nhc}
 \input{common/nhc_slurm}
 
-%\clearpage
-\subsubsection{Import files} \label{sec:file_import}
+\subsection{Import files} \label{sec:file_import}
 \input{common/import_ww4_files}
-%\vspace*{0.3cm}
 \input{common/import_ww4_files_slurm}
 \input{common/import_ww4_files_ib_centos}
-%\vspace*{0.3cm}
 \input{common/finalize_warewulf4_provisioning}
-%\vspace*{0.2cm}
 \input{common/add_ww4_hosts_intro}
 \input{common/add_ww4_hosts_finalize}
 \input{common/add_ww4_hosts_slurm}
 
-\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+\subsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/charliecloud_centos_warewulf_post}
 \input{common/warewulf4_kargs_post}
 
-%\vspace*{-0.4cm}
-\subsection{Boot compute nodes} \label{sec:boot_computes}
+\section{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
 
-%\clearpage
-\section{Install \OHPC{} Development Components}
+\chapter{Install \OHPC{} Development Components}
 \input{common/dev_intro.tex}
 
-%\vspace*{-0.15cm}
-\subsection{Development Tools} \label{sec:install_dev_tools}
+\section{Development Tools} \label{sec:install_dev_tools}
 \input{common/dev_tools}
 
-\vspace*{-0.15cm}
-\subsection{Compilers} \label{sec:install_compilers}
+\section{Compilers} \label{sec:install_compilers}
 \input{common/compilers}
 
-%\clearpage
-\subsection{MPI Stacks} \label{sec:mpi}
+\section{MPI Stacks} \label{sec:mpi}
 \input{common/mpi_slurm}
 
-\subsection{Performance Tools} \label{sec:install_perf_tools}
+\section{Performance Tools} \label{sec:install_perf_tools}
 \input{common/perf_tools}
 
-\subsection{Setup default development environment}
+\section{Setup default development environment}
 \input{common/default_dev}
 
-\vspace*{0.3cm}
-\subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
+\section{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
 \input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
-\vspace*{0.1cm}
 \input{common/third_party_mpi_libs_x86}
-\vspace*{0.5cm}
-\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\section{Optional Development Tool Builds} \label{sec:3rdparty_intel}
 \input{common/oneapi_enabled_builds_slurm.tex}
 
-\clearpage
-\section{Resource Manager Startup} \label{sec:rms_startup}
+\chapter{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup}
 
-\section{Post-boot compute node configuration} \label{sec:post_boot}
+\chapter{Post-boot compute node configuration} \label{sec:post_boot}
 \input{common/post_boot}
 
-\section{Run a Test Job} \label{sec:test_job}
+\chapter{Run a Test Job} \label{sec:test_job}
 \input{common/warewulf4_slurm_test_job}
 
-\clearpage
 \appendix
-%\section*{Appendices}
-{\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
-
-\addcontentsline{toc}{section}{Appendices}
-\renewcommand{\thesubsection}{\Alph{subsection}}
 
 \input{common/automation_appendix}
 \input{common/upgrade}
@@ -278,6 +229,4 @@
 \input{manifest}
 \input{common/signature}
 
-
 \end{document}
-
