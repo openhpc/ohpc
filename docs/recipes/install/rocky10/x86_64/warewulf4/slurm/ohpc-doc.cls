@@ -179,4 +179,22 @@
 
 \graphicspath{{common/figures/}}
 
-\AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{fancy}}}
+\AtBeginDocument{%
+  \addtocontents{toc}{\protect\thispagestyle{fancy}}%
+  \thispagestyle{empty}%
+  % Title Page
+  \input{common/title}%
+  % Disclaimer
+  \input{common/legal}%
+  \newpage%
+  \tableofcontents*
+  \newpage%
+}
+
+\addtodef{\appendix}{}{%
+  \clearpage
+  \renewcommand{\chaptitlefont}{\normalfont\LARGE\bfseries\centering}
+  \chapter*{Appendices}
+  \addcontentsline{toc}{chapter}{Appendices}
+  \renewcommand{\thesection}{\Alph{section}}
+}
