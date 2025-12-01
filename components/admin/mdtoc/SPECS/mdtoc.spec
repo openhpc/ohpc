@@ -7,18 +7,12 @@
 Version:                1.4.0
 %global commit          ac8bbee1bddad4318de00c00f44eec8454bf3ff9
 
-%if 0%{?rhel}
-%gometa -L -f
-BuildRequires:  go-vendor-tools
-%endif
-%if 0%{?openEuler}
 %define gosource https://%{goipath}/archive/%{commit}/mdtoc-%{commit}.tar.gz
 %define gourl https://%{goipath}/
 %define archivename mdtoc-%{commit}
 %define gobuilddir _build
 %define gobuild go build -buildmode pie -compiler gc '-tags=rpm_crashtraceback ' -a -v -x
 BuildRequires:  golang
-%endif
 
 Name:           mdtoc%{PROJ_DELIM}
 Release:        %{?dist}.1
@@ -37,19 +31,8 @@ Source2:        go-vendor-tools.toml
 Markdown table-of-contents generator.
 
 %prep
-%if 0%{?rhel}
-%goprep -A
-%setup -q -T -D -a1 %{forgesetupargs}
-%endif
-%if 0%{?openEuler}
 %setup -q -a1 -n %{archivename}
 mkdir -p _build/bin
-%endif
-
-%if 0%{?rhel}
-%generate_buildrequires
-%go_vendor_license_buildrequires -c %{S:2}
-%endif
 
 %build
 %global gomodulesmode GO111MODULE=on
