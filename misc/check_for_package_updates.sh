@@ -3,7 +3,7 @@
 # Exit on any error, undefined variables, and pipe failures
 set -euo pipefail
 
-# Script to check for newer GitHub, GitLab, and PyPI releases of OpenHPC packages
+# Script to check for newer GitHub, GitLab, PyPI, and JSC perftools releases of OpenHPC packages
 SCRIPT_NAME="$(basename "$0")"
 readonly SCRIPT_NAME
 TEMP_DIR="$(mktemp -d)"
@@ -72,11 +72,12 @@ usage() {
 	cat <<EOF
 Usage: ${SCRIPT_NAME} [OPTIONS]
 
-Check for newer GitHub, GitLab, and PyPI releases of OpenHPC packages by analyzing spec files.
+Check for newer GitHub, GitLab, PyPI, and JSC perftools releases of OpenHPC packages
+by analyzing spec files.
 
 OPTIONS:
     -v, --verbose           Enable verbose output
-    -p, --prereleases       Include pre-releases in version checks (GitHub only)
+    -p, --prereleases       Include pre-releases in version checks (GitHub/JSC perftools)
     -o, --output FORMAT     Output format: table, json, markdown (default: table)
     -t, --token TOKEN       GitHub API token (or set GITHUB_TOKEN env var)
     --no-glow               Disable glow formatting for markdown output
@@ -92,12 +93,13 @@ EXAMPLES:
 
 NOTES:
     - Requires rpmspec and rpmdev-vercmp tools
-    - Supports GitHub (github.com), GitLab (any GitLab instance), and PyPI repositories
+    - Supports GitHub (github.com), GitLab (any instance), PyPI, and JSC perftools
     - GitHub API rate limits apply (60 requests/hour without token)
     - Use GITHUB_TOKEN environment variable for higher rate limits (5000 requests/hour)
     - Get a token at: https://github.com/settings/tokens (no special permissions needed)
     - GitLab repositories use public API endpoints (no authentication required)
     - PyPI repositories use public API endpoints (no authentication required)
+    - JSC perftools packages (perftools.pages.jsc.fz-juelich.de) use public pages
 
 EOF
 }
@@ -276,6 +278,24 @@ parse_pypi_package() {
 	return 1
 }
 
+# Parse JSC perftools project name from URL
+parse_jsc_perftools_package() {
+	local url="$1"
+
+	# Match JSC perftools URL patterns
+	# Examples:
+	# https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/scorep-9.0/scorep-9.0.tar.gz
+	# http://perftools.pages.jsc.fz-juelich.de/cicd/opari2/tags/opari2-2.0.8/opari2-2.0.8.tar.gz
+	# https://perftools.pages.jsc.fz-juelich.de/cicd/cubelib/tags/cubelib-4.9/cubelib-4.9.tar.gz
+	if [[ "${url}" =~ https?://perftools\.pages\.jsc\.fz-juelich\.de/cicd/([^/]+)/ ]]; then
+		local project_name="${BASH_REMATCH[1]}"
+		echo "${project_name}"
+		return 0
+	fi
+
+	return 1
+}
+
 # Get GitLab project ID from hostname and path
 get_gitlab_project_id() {
 	local hostname="$1"
@@ -390,6 +410,79 @@ get_latest_pypi_version() {
 
 	if [[ "${latest_version}" == "null" || -z "${latest_version}" ]]; then
 		debug_warn "No version found for PyPI package ${package_name}"
+		return 1
+	fi
+
+	echo "${latest_version}"
+}
+
+# Get latest version from JSC perftools overview page
+get_latest_jsc_perftools_version() {
+	local project_name="$1"
+	local base_url="https://perftools.pages.jsc.fz-juelich.de/cicd/${project_name}/"
+
+	debug_info "Fetching JSC perftools package info from ${base_url}"
+
+	# Fetch the overview page
+	local page_content
+	page_content="$(curl -sL "${base_url}" 2>/dev/null)" || {
+		debug_warn "Failed to fetch JSC perftools page for ${project_name}"
+		return 1
+	}
+
+	# Check if we got valid HTML content
+	if [[ -z "${page_content}" || ! "${page_content}" =~ \<html ]]; then
+		debug_warn "Invalid response from JSC perftools page for ${project_name}"
+		return 1
+	fi
+
+	# Extract the latest version from the Tags section
+	# The first tarball link after "Tags" header contains the latest version
+	# Pattern: href="tags/<project>-<version>/<project>-<version>.tar.gz"
+	# We need to find version, which may include dots and dashes
+	# Skip pre-release versions (containing -rc, -alpha, -beta) unless prereleases enabled
+	local version_pattern latest_version
+
+	if [[ ${CHECK_PRERELEASES} -eq 1 ]]; then
+		# Include all versions including pre-releases
+		version_pattern="tags/${project_name}-([^/]+)/${project_name}-[^\"]+\.tar\.gz"
+	else
+		# Exclude pre-release versions (those with -rc, -alpha, -beta, etc.)
+		# First, get all versions from the tags section
+		version_pattern="tags/${project_name}-([^/]+)/${project_name}-[^\"]+\.tar\.gz"
+	fi
+
+	# Extract all version tags from the page
+	local all_versions
+	all_versions="$(echo "${page_content}" | grep -oE "${version_pattern}" | head -20)"
+
+	if [[ -z "${all_versions}" ]]; then
+		debug_warn "No version tags found for JSC perftools package ${project_name}"
+		return 1
+	fi
+
+	# Parse versions and find the latest stable one
+	while IFS= read -r match; do
+		# Extract version from the match
+		if [[ "${match}" =~ tags/${project_name}-([^/]+)/ ]]; then
+			local version="${BASH_REMATCH[1]}"
+
+			# Skip pre-release versions unless enabled
+			if [[ ${CHECK_PRERELEASES} -eq 0 ]]; then
+				if [[ "${version}" =~ -(rc|alpha|beta|pre|dev)[0-9]*$ ]]; then
+					debug_info "Skipping pre-release version: ${version}"
+					continue
+				fi
+			fi
+
+			# First matching non-prerelease version is the latest
+			latest_version="${version}"
+			break
+		fi
+	done <<<"${all_versions}"
+
+	if [[ -z "${latest_version}" ]]; then
+		debug_warn "No suitable version found for JSC perftools package ${project_name}"
 		return 1
 	fi
 
@@ -854,15 +947,63 @@ process_spec_file() {
 		return 0
 	fi
 
-	# Not a GitHub, GitLab, or PyPI source
-	debug_info "Skipping ${name}: not a GitHub, GitLab, or PyPI source"
+	# Check if source is from JSC perftools
+	local jsc_project jsc_result
+
+	# Temporarily disable exit-on-error for command substitution
+	set +e
+	jsc_project="$(parse_jsc_perftools_package "${source0}")"
+	jsc_result=$?
+	set -e
+
+	if [[ ${jsc_result} -eq 0 ]]; then
+		debug_info "Checking JSC perftools package: ${jsc_project}"
+
+		# Get latest version
+		local latest_version version_result
+		# Temporarily disable exit-on-error for command substitution
+		set +e
+		latest_version="$(get_latest_jsc_perftools_version "${jsc_project}")"
+		version_result=$?
+		set -e
+
+		if [[ ${version_result} -ne 0 ]]; then
+			echo "${name}|${current_version}|ERROR|Failed to fetch JSC version|perftools.pages.jsc.fz-juelich.de/cicd/${jsc_project}" >>"${RESULTS_FILE}"
+			return 0
+		fi
+
+		# Compare versions
+		local comparison
+		# Temporarily disable exit-on-error for command substitution
+		set +e
+		comparison="$(compare_versions "${current_version}" "${latest_version}")"
+		set -e
+
+		# Determine status
+		local status
+		case "${comparison}" in
+		"older") status="UPDATE_AVAILABLE" ;;
+		"same") status="UP_TO_DATE" ;;
+		"newer") status="AHEAD" ;;
+		*) status="UNKNOWN" ;;
+		esac
+
+		# Write result
+		echo "${name}|${current_version}|${latest_version}|${status}|perftools.pages.jsc.fz-juelich.de/cicd/${jsc_project}" >>"${RESULTS_FILE}"
+
+		debug_info "Result: ${name} ${current_version} -> ${latest_version} (${status})"
+		return 0
+	fi
+
+	# Not a GitHub, GitLab, PyPI, or JSC perftools source
+	debug_info "Skipping ${name}: not a GitHub, GitLab, PyPI, or JSC perftools source"
 	return 0
 }
 
 # Format and display results
 display_results() {
 	if [[ ! -s "${RESULTS_FILE}" ]]; then
-		log_info "No GitHub, GitLab, or PyPI sourced packages found"
+		log_info "No GitHub, GitLab, PyPI, or JSC perftools sourced packages found"
 		return 0
 	fi
 
@@ -940,6 +1081,9 @@ display_results() {
 						repo_url="https://ftpmirror.gnu.org/gnu/${project_name}/"
 					elif [[ "${repo}" == pypi.org/project/* ]]; then
 						# PyPI: pypi.org/project/packagename -> https://pypi.org/project/packagename/
+						repo_url="https://${repo}/"
+					elif [[ "${repo}" == perftools.pages.jsc.fz-juelich.de/cicd/* ]]; then
+						# JSC perftools: perftools.pages.jsc.fz-juelich.de/cicd/project -> https://...
 						repo_url="https://${repo}/"
 					elif [[ "${repo}" == */* && "${repo}" != *"/"*"/"* ]]; then
 						# GitHub: owner/repo (contains exactly one slash)
@@ -1071,7 +1215,7 @@ main() {
 	check_dependencies
 	setup_rpm_environment
 
-	log_info "Scanning for OpenHPC packages with GitHub, GitLab, and PyPI sources..."
+	log_info "Scanning for OpenHPC packages with GitHub, GitLab, PyPI, and JSC perftools sources..."
 	debug_info "Using temporary directory: ${TEMP_DIR}"
 
 	# Find and process all spec files
