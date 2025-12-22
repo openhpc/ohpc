@@ -76,9 +76,6 @@ rm -f %buildroot%{install_path}/.last_config
 %ifarch x86_64
 %define arch_dir x86_64
 %endif
-%ifarch ppc64le
-%define arch_dir ibm64linux
-%endif
 
 pushd %buildroot%{install_path}/%{arch_dir}/lib
 ar x libpdb.a
@@ -94,17 +91,17 @@ ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
 %endif
 rm -f edg44-c-roseparse
-%ifnarch aarch64 || ppc64le
+%ifnarch aarch64
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 %endif
 rm -f edg44-cxx-roseparse
-%ifnarch aarch64 || ppc64le
+%ifnarch aarch64
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 %endif
 rm -f edg44-upcparse
-%ifnarch aarch64 || ppc64le
+%ifnarch aarch64
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 %endif

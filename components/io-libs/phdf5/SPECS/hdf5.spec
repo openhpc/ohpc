@@ -52,15 +52,6 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %setup -q -n %{pname}-%{version}
 
 %build
-# override with newer config.guess for aarch64
-%ifarch aarch64 || ppc64le
-%if 0%{?rhel} >= 9
-cp /usr/lib/rpm/redhat/config.guess bin
-%else
-cp /usr/lib/rpm/config.guess bin
-%endif
-%endif
-
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 

@@ -99,17 +99,6 @@ for f in $(grep -Ilr "#! */usr/bin/env" *); do
    sed -i "s,n/env perl,n/perl,g" $f
 done
 
-# override with newer config.guess for aarch64
-%ifarch aarch64 || ppc64le
-%if 0%{?rhel} >= 9
-cp /usr/lib/rpm/redhat/config.guess utils/opari2/build-config/.
-cp /usr/lib/rpm/redhat/config.sub utils/opari2/build-config/.
-%else
-cp /usr/lib/rpm/config.guess utils/opari2/build-config/.
-cp /usr/lib/rpm/config.sub utils/opari2/build-config/.
-%endif
-%endif
-
 # Fix to use the correct compilers
 sed -e "s,/usr/bin/g++,g++,g" -i utils/include/Makefile.skel
 sed -e "s,/usr/bin/gcc,gcc,g" -i utils/include/Makefile.skel

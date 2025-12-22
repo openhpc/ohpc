@@ -54,10 +54,6 @@ their use.
 %setup -q -n autoconf-%{version}
 
 %build
-%ifarch ppc64le
-cp /usr/lib/rpm/config.guess build-aux
-%endif
-
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %install
