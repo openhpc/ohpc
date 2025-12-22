@@ -109,10 +109,6 @@ if COMPILERS_ENABLED
    TESTS += compilers/ohpc-tests/test_compiler_families
 endif
 
-if AUTOTOOLS_ENABLED
-   TESTS += dev-tools/autotools/run
-endif
-
 if CMAKE_ENABLED
    TESTS += dev-tools/cmake/run
 endif

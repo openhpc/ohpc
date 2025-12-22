@@ -449,12 +449,6 @@ AC_ARG_ENABLE([ucx],
    [AX_OPTION_DEFAULT(type=long,enable_ucx,no)])
    AM_CONDITIONAL(UCX_ENABLED,test "x$enable_ucx" = "xyes" )
 #------------------------------------------------------------------------------------------
-# Autotools
-AC_ARG_ENABLE([autotools],
-   [AS_HELP_STRING([--enable-autotools],[Enable autotools tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_autotools,yes)])
-AM_CONDITIONAL(AUTOTOOLS_ENABLED,test "x$enable_autotools" = "xyes" )
-#------------------------------------------------------------------------------------------
 # CMake
 AC_ARG_ENABLE([cmake],
    [AS_HELP_STRING([--enable-cmake],[Enable CMake tests (default=yes)])],[],

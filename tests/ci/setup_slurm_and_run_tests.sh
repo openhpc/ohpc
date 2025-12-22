@@ -25,7 +25,9 @@ fi
 	openssh-clients \
 	which \
 	sudo \
-	ohpc-autotools \
+	autoconf \
+	automake \
+	libtool \
 	prun-ohpc \
 	openmpi5-"${COMPILER_FAMILY}"-ohpc \
 	mpich-"${COMPILER_FAMILY}"-ohpc \
