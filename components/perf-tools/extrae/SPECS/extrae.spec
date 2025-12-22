@@ -27,9 +27,9 @@ Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
 Patch0:		arm.function.definition.patch
 
 
-BuildRequires:	autoconf%{PROJ_DELIM}
-BuildRequires:	automake%{PROJ_DELIM}
-BuildRequires:	libtool%{PROJ_DELIM} make which
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool make which
 BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	papi%{PROJ_DELIM}
@@ -65,7 +65,6 @@ export compiler_vars="CC=${CC} CXX=${CXX} MPIF90=mpiifort $compiler_vars"
 %endif
 %endif
 
-export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
 ./bootstrap
 export LDFLAGS="$LDFLAGS -lz"
 %if 0%{?sle_version}

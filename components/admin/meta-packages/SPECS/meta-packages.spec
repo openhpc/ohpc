@@ -33,9 +33,9 @@ not make sense.
 
 %package -n %{PROJ_NAME}-autotools
 Summary:   OpenHPC autotools
-Requires:  autoconf%{PROJ_DELIM}
-Requires:  automake%{PROJ_DELIM}
-Requires:  libtool%{PROJ_DELIM}
+Requires:  autoconf
+Requires:  automake
+Requires:  libtool
 %description -n %{PROJ_NAME}-autotools
 Collection of GNU autotools packages
 

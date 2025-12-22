@@ -36,7 +36,7 @@ BuildRequires: m4
 BuildRequires: zlib-devel
 BuildRequires: perl(File::Compare)
 BuildRequires: perl(File::Copy)
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: libtool
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -64,7 +64,6 @@ cp /usr/lib/rpm/config.guess bin
 %endif
 %endif
 
-export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
 autoreconf -if
 
 # OpenHPC compiler/mpi designation

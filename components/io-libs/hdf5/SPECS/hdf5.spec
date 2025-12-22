@@ -29,7 +29,7 @@ BuildRequires: perl(File::Compare)
 BuildRequires: perl(File::Copy)
 
 %if "%{compiler_family}" == "intel"
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: libtool
 %endif
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
@@ -65,7 +65,6 @@ cp /usr/lib/rpm/config.guess bin
 %ohpc_setup_compiler
 
 %if "%{compiler_family}" == "intel"
-export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
 autoreconf -if
 sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-flags
 sed -e 's/NO_SYMBOLS_CFLAGS="-Wl,-s"/NO_SYMBOLS_CFLAGS=/g' -i config/intel-cxxflags

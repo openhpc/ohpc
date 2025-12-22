@@ -22,8 +22,8 @@ Source0:   tests-ohpc.tar
 
 BuildRequires:  perl(File::Copy)
 BuildRequires:  perl(File::Compare)
-BuildRequires:  autoconf%{PROJ_DELIM}
-BuildRequires:  automake%{PROJ_DELIM}
+BuildRequires:  autoconf
+BuildRequires:  automake
 
 Requires: which bats
 
@@ -54,7 +54,6 @@ is made available under an '%{testuser}' user account.
 
 %build
 
-export PATH=/opt/ohpc/pub/utils/autotools/bin:$PATH
 cd tests
 ./bootstrap
 
