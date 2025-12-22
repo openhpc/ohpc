@@ -1,0 +1,3 @@
+FROM registry.access.redhat.com/ubi10:latest
+
+RUN dnf -y install yum-utils git rpm-build rpmdevtools dnf-plugins-core curl python3
