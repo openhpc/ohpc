@@ -17,13 +17,9 @@ jobs:
     name: Analyze Package Build Order
     runs-on: ubuntu-latest
     container:
-      image: docker.io/library/almalinux:10
+      image: ghcr.io/openhpc/ohpc-analysis:latest
 
     steps:
-    - name: Setup AlmaLinux Environment
-      run: |
-        dnf install -y epel-release git python3 rpm-build rpmdevtools
-
     - name: Checkout code
       uses: actions/checkout@v4
 

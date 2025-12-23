@@ -44,11 +44,23 @@ jobs:
           delete-only-untagged-versions: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Delete untagged ohpc-analysis images
+        id: cleanup-analysis
+        continue-on-error: true
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ohpc-analysis
+          package-type: container
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Report cleanup results
         run: |
           echo "Cleanup Results:"
           echo "Main container cleanup: ${{ steps.cleanup-main.outcome }}"
           echo "Lint container cleanup: ${{ steps.cleanup-lint.outcome }}"
+          echo "Analysis container cleanup: ${{ steps.cleanup-analysis.outcome }}"
 
           if [[ "${{ steps.cleanup-main.outcome }}" == "failure" ]]; then
             echo "⚠️ Main container cleanup failed - package may not exist yet"
@@ -56,6 +68,10 @@ jobs:
 
           if [[ "${{ steps.cleanup-lint.outcome }}" == "failure" ]]; then
             echo "⚠️ Lint container cleanup failed - package may not exist yet"
+          fi
+
+          if [[ "${{ steps.cleanup-analysis.outcome }}" == "failure" ]]; then
+            echo "⚠️ Analysis container cleanup failed - package may not exist yet"
           fi
 
           echo "✅ Cleanup workflow completed"

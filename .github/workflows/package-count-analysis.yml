@@ -17,13 +17,9 @@ jobs:
     name: Analyze Available Package Counts
     runs-on: ubuntu-latest
     container:
-      image: registry.access.redhat.com/ubi10:latest
+      image: ghcr.io/openhpc/ohpc-analysis:latest
 
     steps:
-    - name: Setup Environment
-      run: |
-        dnf install -y yum-utils git rpm-build rpmdevtools dnf-plugins-core curl
-
     - name: Checkout code
       uses: actions/checkout@v4
       with:
