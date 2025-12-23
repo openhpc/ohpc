@@ -21,12 +21,9 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: docker.io/library/almalinux:10
+      image: ghcr.io/openhpc/ohpc-analysis:latest
 
     steps:
-    - name: Setup
-      run: |
-        dnf install -y epel-release git python3
     - uses: actions/checkout@v4
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
