@@ -38,11 +38,16 @@ jobs:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
         compiler: [gnu15, intel]
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            arch: aarch64
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
     runs-on: ${{ matrix.os }}
-    name: Build on RHEL (${{ matrix.os }}/${{ matrix.compiler}})
+    name: Build on RHEL (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
       image: ghcr.io/openhpc/ohpc-validate-almalinux:latest
       volumes:
@@ -93,11 +98,16 @@ jobs:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
         compiler: [gnu15, intel]
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            arch: aarch64
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
     runs-on: ${{ matrix.os }}
-    name: Test on RHEL (${{ matrix.os }}/${{ matrix.compiler}})
+    name: Test on RHEL (${{ matrix.arch }}/${{ matrix.compiler }})
     env:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
@@ -159,11 +169,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            arch: aarch64
     env:
       JOB_SKIP_CI_SPECS: |
         components/provisioning/warewulf/SPECS/warewulf.spec
     runs-on: ${{ matrix.os }}
-    name: Build on openEuler (${{ matrix.os }})
+    name: Build on openEuler (${{ matrix.arch }})
     container:
       image: ghcr.io/openhpc/ohpc-validate-openeuler:latest
     steps:
@@ -201,6 +216,11 @@ jobs:
       matrix:
         compiler: [gnu15]
         os: [ubuntu-latest, ubuntu-24.04-arm]
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            arch: aarch64
     env:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
@@ -208,7 +228,7 @@ jobs:
         components/provisioning/warewulf/SPECS/warewulf.spec
         components/perf-tools/papi/SPECS/papi.spec
     runs-on: ${{ matrix.os }}
-    name: Test on openEuler (${{ matrix.os }}/${{ matrix.compiler}})
+    name: Test on openEuler (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
       image: ghcr.io/openhpc/ohpc-validate-openeuler:latest
     needs: build_on_openEuler
