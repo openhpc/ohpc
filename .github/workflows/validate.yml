@@ -47,7 +47,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build on RHEL (${{ matrix.os }}/${{ matrix.compiler}})
     container:
-      image: docker.io/library/almalinux:10
+      image: ghcr.io/openhpc/ohpc-validate-almalinux:latest
       volumes:
         - /usr:/host/usr
         - /opt:/host/opt
@@ -56,8 +56,8 @@ jobs:
       # Needed to have enough space to install the Intel compiler
       run: |
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
@@ -106,7 +106,7 @@ jobs:
         components/perf-tools/likwid/SPECS/likwid.spec
         components/perf-tools/papi/SPECS/papi.spec
     container:
-      image: docker.io/library/almalinux:10
+      image: ghcr.io/openhpc/ohpc-validate-almalinux:latest
       options: --privileged
       volumes:
         - /usr:/host/usr
@@ -117,8 +117,8 @@ jobs:
       # Needed to have enough space to install the Intel compiler
       run: |
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
@@ -168,12 +168,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build on openEuler (${{ matrix.os }})
     container:
-      image: docker.io/openeuler/openeuler:24.03-lts-sp2
+      image: ghcr.io/openhpc/ohpc-validate-openeuler:latest
     steps:
-    - name: Switch repo
-      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
@@ -215,13 +213,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Test on openEuler (${{ matrix.os }}/${{ matrix.compiler}})
     container:
-      image: docker.io/openeuler/openeuler:24.03-lts-sp2
+      image: ghcr.io/openhpc/ohpc-validate-openeuler:latest
     needs: build_on_openEuler
     steps:
-    - name: Switch repo
-      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}

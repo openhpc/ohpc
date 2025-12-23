@@ -194,14 +194,14 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	else
 		dnf_rhel
 	fi
-	adduser ohpc
+	adduser ohpc || true
 else
 	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild bats "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
 	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc "${ENABLE_ONEAPI}"
-	useradd -m ohpc
+	useradd -m ohpc || true
 fi
 
 # Source ccache profile if available
