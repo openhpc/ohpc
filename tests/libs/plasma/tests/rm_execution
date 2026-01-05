@@ -1,12 +1,24 @@
 #!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ]; then
-	source ./common/TEST_ENV
+if [ -s ../../../TEST_ENV ]; then
+	source ../../../TEST_ENV
 fi
+
+setup_file() {
+	check_rms
+
+	NODES=1
+	TASKS=$(tasks_count 4)
+	ARGS=0
+	TIMEOUT="00:05:00"
+	TESTNAME="libs/PLASMA"
+
+	export NODES TASKS ARGS TIMEOUT TESTNAME
+}
 
 setup() {
 	if [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] || [ "${LMOD_FAMILY_COMPILER}" == "intel" ]; then
@@ -14,27 +26,22 @@ setup() {
 	fi
 }
 
-check_rms
-export RM=$RESOURCE_MANAGER
-
-export TESTNAME="libs/PLASMA"
-
-ARGS=0
-
-@test "[$TESTNAME/C_test] C_test under resource manager ($RM/$LMOD_FAMILY_COMPILER)" {
-	if [ ! -s C_test ]; then
-		flunk "C_test binary does not exist"
+@test "[${TESTNAME}/C_test] C_test under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	EXE=./C_test
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
 	fi
 
-	run_serial_binary ./C_test $ARGS
+	run_serial_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}"
 	assert_success
 }
 
-@test "[$TESTNAME/F90_test] F90_test under resource manager ($RM/$LMOD_FAMILY_COMPILER)" {
-	if [ ! -s F90_test ]; then
-		flunk "F90_test binary does not exist"
+@test "[${TESTNAME}/F90_test] F90_test under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	EXE=./F90_test
+	if [ ! -s "${EXE}" ]; then
+		flunk "${EXE} binary does not exist"
 	fi
 
-	run_serial_binary ./F90_test "< gebrd_example.d"
+	run_serial_binary -t "${TIMEOUT}" "${EXE} < gebrd_example.d"
 	assert_success
 }
