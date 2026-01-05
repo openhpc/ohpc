@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT(plasma, 2.8.0, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([plasma],[2.8.0],[https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
@@ -13,7 +13,7 @@ AC_MSG_CHECKING([for PLASMA_DIR environment variable])
 if test "x$PLASMA_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([PLASMA_DIR not defined - please load plasma environment.])
+   AC_MSG_ERROR(PLASMA_DIR not defined - please load plasma environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -43,7 +43,7 @@ fi
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
