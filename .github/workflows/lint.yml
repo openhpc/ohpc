@@ -8,6 +8,9 @@ on:
     branches:
       - 4.x
 
+permissions:
+  contents: read
+
 jobs:
   lint_markdown:
     name: Run markdown linter

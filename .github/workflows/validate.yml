@@ -8,6 +8,9 @@ on:
     branches:
       - 4.x
 
+permissions:
+  contents: read
+
 env:
   SKIP_CI_SPECS: |
     components/fs/lustre-client/SPECS/lustre.spec
