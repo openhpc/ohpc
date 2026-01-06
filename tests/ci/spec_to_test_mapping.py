@@ -63,11 +63,6 @@ test_map = {
     "components/parallel-libs/hypre/SPECS/hypre.spec": ["hypre", "", ""],
     "components/parallel-libs/mfem/SPECS/mfem.spec": ["mfem", "", ""],
     "components/parallel-libs/mumps/SPECS/mumps.spec": ["mumps", "", ""],
-    "components/parallel-libs/opencoarrays/SPECS/opencoarrays.spec": [
-        "opencoarrays",
-        "",
-        "",
-    ],
     "components/parallel-libs/petsc/SPECS/petsc.spec": ["petsc", "", ""],
     "components/io-libs/phdf5/SPECS/hdf5.spec": [
         "phdf5",
@@ -90,11 +85,6 @@ test_map = {
     "components/parallel-libs/trilinos/SPECS/trilinos.spec": ["trilinos", "", ""],
     "components/perf-tools/extrae/SPECS/extrae.spec": [
         "extrae",
-        "",
-        "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
-    ],
-    "components/perf-tools/geopm/SPECS/geopm.spec": [
-        "geopm",
         "",
         "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
     ],
