@@ -13,6 +13,10 @@ rm=$RESOURCE_MANAGER
 
 testname="perf-tools/likwid"
 
+setup() {
+    [[ -n "$SIMPLE_CI" ]] && skip "Skipping likwid tests in SIMPLE_CI mode"
+}
+
 NODES=2
 TASKS=`tasks_count 5`
 ARGS=5

@@ -42,6 +42,7 @@ sms_kernel=`uname -r`
 }
 
 @test "[BOS] increased locked memory limits " {
+    [[ -n "$SIMPLE_CI" ]] && skip "Skipping memlock settings in SIMPLE_CI mode"
     [[ "$ARCH" == "aarch64" ]] && skip "Skipping memlock settings for ARCH=$ARCH"
 
     koomie_cf -x "c[0-9]+\b" prlimit -l -o SOFT | grep -v SOFT >& .cmd_output || exit 1
