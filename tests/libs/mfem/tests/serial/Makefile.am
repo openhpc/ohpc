@@ -1,4 +1,4 @@
-AM_LDFLAGS                = -lmfem
+LDADD                     = ${LIBS}
 
 TESTS                     = s_laplace
 check_PROGRAMS            = s_laplace

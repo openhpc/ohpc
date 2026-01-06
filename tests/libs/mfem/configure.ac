@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT([mfem], [3.3.2], [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([mfem],[3.3.2],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -14,7 +14,7 @@ AC_MSG_CHECKING([for MFEM_DIR environment variable])
 if test "x$MFEM_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([MFEM_DIR not defined - please load mfem environment.])
+   AC_MSG_ERROR(MFEM_DIR not defined - please load mfem environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -24,7 +24,7 @@ AC_MSG_CHECKING([for HYPRE_DIR environment variable])
 if test "x$HYPRE_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([HYPRE_DIR not defined - please load hypre environment.])
+   AC_MSG_ERROR(HYPRE_DIR not defined - please load hypre environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -34,7 +34,7 @@ AC_MSG_CHECKING([for METIS_DIR environment variable])
 if test "x$METIS_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([METIS_DIR not defined - please load metis environment.])
+   AC_MSG_ERROR(METIS_DIR not defined - please load metis environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -44,7 +44,7 @@ AC_MSG_CHECKING([for NETCDF_DIR environment variable])
 if test "x$NETCDF_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([NETCDF_DIR not defined - please load netcdf environment.])
+   AC_MSG_ERROR(NETCDF_DIR not defined - please load netcdf environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -54,7 +54,7 @@ AC_MSG_CHECKING([for PETSC_DIR environment variable])
 if test "x$PETSC_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([PETSC_DIR not defined - please load petsc environment.])
+   AC_MSG_ERROR(PETSC_DIR not defined - please load petsc environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -64,7 +64,7 @@ AC_MSG_CHECKING([for SUPERLD_DIST_DIR environment variable])
 if test "x$SUPERLU_DIST_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([SUPERLU_DIST_DIR not defined - please load superlu_dist environment.])
+   AC_MSG_ERROR(SUPERLU_DIST_DIR not defined - please load superlu_dist environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -77,15 +77,14 @@ CXX=mpicxx
 AC_PROG_CXX
 
 CXXFLAGS="-I${HYPRE_INC} -I${MFEM_INC} -I${PETSC_INC} -I${SUPERLU_DIST_INC} ${CXXFLAGS} -std=c++11"
-LDFLAGS="-L${MFEM_LIB}"
-#LDFLAGS="-L${MFEM_LIB} -L${HYPRE_LIB} -L${METIS_LIB} -L${NETCDF_LIB} -L${PETSC_LIB} -L${SUPERLU_DIST_LIB}"
-#LIBS="-lpetsc -lHYPRE -lsuperlu_dist -lnetcdf -lmfem"
+LDFLAGS="-L${MFEM_LIB} ${LDFLAGS}"
+LIBS="-lmfem"
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile tests/serial/Makefile tests/parallel/Makefile )
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
@@ -96,5 +95,7 @@ echo OHPC MPI toolchain.............. : $LMOD_FAMILY_MPI
 echo
 echo CXX compiler.................... : `which $CXX`
 echo CXX compiler flags.............. : $CXXFLAGS
+echo
+echo Libs............................ : $LIBS
 echo
 echo '-------------------------------------------------------------------------------------------------------------'
