@@ -1,0 +1,8 @@
+# Test output files (floating point precision varies)
+*SCAEXSOL.dat
+
+# Job output files
+job.*.out
+
+# Test result directories
+family-*/
