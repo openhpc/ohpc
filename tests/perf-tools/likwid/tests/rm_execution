@@ -1,40 +1,43 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../TEST_ENV ]; then
+	source ../../../TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-testname="perf-tools/likwid"
+	NODES=2
+	TASKS=$(tasks_count 5)
+	ARGS=5
+	TIMEOUT="00:05:00"
+	TESTNAME="perf-tools/likwid"
+
+	export NODES TASKS ARGS TIMEOUT TESTNAME
+}
 
 setup() {
-    [[ -n "$SIMPLE_CI" ]] && skip "Skipping likwid tests in SIMPLE_CI mode"
+	[[ -n "$SIMPLE_CI" ]] && skip "Skipping likwid tests in SIMPLE_CI mode"
 }
 
-NODES=2
-TASKS=`tasks_count 5`
-ARGS=5
+@test "[${TESTNAME}] C marker API under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s C_markerAPI ]; then
+		flunk "C_markerAPI binary does not exist"
+	fi
 
-@test "[$testname] C marker API under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s C_markerAPI ];then
-	flunk "C_markerAPI binary does not exist"
-    fi
-
-    run_serial_binary ./run_c.sh
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./run_c.sh
+	assert_success
 }
 
-@test "[$testname] FORTRAN marker API under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s F_markerAPI ];then
-	flunk "F_markerAPI binary does not exist"
-    fi
+@test "[${TESTNAME}] FORTRAN marker API under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s F_markerAPI ]; then
+		flunk "F_markerAPI binary does not exist"
+	fi
 
-    run_serial_binary ./run_f90.sh
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./run_f90.sh
+	assert_success
 }
