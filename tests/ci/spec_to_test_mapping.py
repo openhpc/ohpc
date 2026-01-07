@@ -8,6 +8,7 @@ import sys
 import csv
 import os
 import argparse
+import subprocess
 
 # This dictionary defines the mapping
 # 'path/to/file.spec': [
@@ -199,11 +200,81 @@ if not args.specs:
     print("TESTS=() ADMIN_TESTS=() PKGS=()")
     sys.exit(0)
 
+# Packages to install when running ALL tests (not built during CI)
+# Add additional packages to this list as needed
+all_test_packages = [
+    "charliecloud-ohpc",
+    "cmake-ohpc",
+    "conman-ohpc",
+    "EasyBuild-ohpc",
+    "losf-ohpc",
+    "papi-ohpc",
+    "spack-ohpc",
+    "valgrind-ohpc",
+    # Compiler-only packages
+    "gsl-COMPILER_FAMILY-ohpc",
+    "hdf5-COMPILER_FAMILY-ohpc",
+    "likwid-COMPILER_FAMILY-ohpc",
+    "metis-COMPILER_FAMILY-ohpc",
+    "netcdf-COMPILER_FAMILY-ohpc",
+    "plasma-COMPILER_FAMILY-ohpc",
+    "R-COMPILER_FAMILY-ohpc",
+    "scotch-COMPILER_FAMILY-ohpc",
+    "superlu-COMPILER_FAMILY-ohpc",
+    # MPI packages (openmpi5 and mpich variants)
+    "adios2-COMPILER_FAMILY-openmpi5-ohpc",
+    "adios2-COMPILER_FAMILY-mpich-ohpc",
+    "boost-COMPILER_FAMILY-openmpi5-ohpc",
+    "boost-COMPILER_FAMILY-mpich-ohpc",
+    "dimemas-COMPILER_FAMILY-openmpi5-ohpc",
+    "dimemas-COMPILER_FAMILY-mpich-ohpc",
+    "extrae-COMPILER_FAMILY-openmpi5-ohpc",
+    "extrae-COMPILER_FAMILY-mpich-ohpc",
+    "fftw-COMPILER_FAMILY-openmpi5-ohpc",
+    "fftw-COMPILER_FAMILY-mpich-ohpc",
+    "hypre-COMPILER_FAMILY-openmpi5-ohpc",
+    "hypre-COMPILER_FAMILY-mpich-ohpc",
+    "imb-COMPILER_FAMILY-openmpi5-ohpc",
+    "imb-COMPILER_FAMILY-mpich-ohpc",
+    "mfem-COMPILER_FAMILY-openmpi5-ohpc",
+    "mfem-COMPILER_FAMILY-mpich-ohpc",
+    "mumps-COMPILER_FAMILY-openmpi5-ohpc",
+    "mumps-COMPILER_FAMILY-mpich-ohpc",
+    "netcdf-COMPILER_FAMILY-openmpi5-ohpc",
+    "netcdf-COMPILER_FAMILY-mpich-ohpc",
+    "omb-COMPILER_FAMILY-openmpi5-ohpc",
+    "omb-COMPILER_FAMILY-mpich-ohpc",
+    "petsc-COMPILER_FAMILY-openmpi5-ohpc",
+    "petsc-COMPILER_FAMILY-mpich-ohpc",
+    "pnetcdf-COMPILER_FAMILY-openmpi5-ohpc",
+    "pnetcdf-COMPILER_FAMILY-mpich-ohpc",
+    "ptscotch-COMPILER_FAMILY-openmpi5-ohpc",
+    "ptscotch-COMPILER_FAMILY-mpich-ohpc",
+    "scalasca-COMPILER_FAMILY-openmpi5-ohpc",
+    "scalasca-COMPILER_FAMILY-mpich-ohpc",
+    "scorep-COMPILER_FAMILY-openmpi5-ohpc",
+    "scorep-COMPILER_FAMILY-mpich-ohpc",
+    "slepc-COMPILER_FAMILY-openmpi5-ohpc",
+    "slepc-COMPILER_FAMILY-mpich-ohpc",
+    "superlu_dist-COMPILER_FAMILY-openmpi5-ohpc",
+    "superlu_dist-COMPILER_FAMILY-mpich-ohpc",
+    "tau-COMPILER_FAMILY-openmpi5-ohpc",
+    "tau-COMPILER_FAMILY-mpich-ohpc",
+    "trilinos-COMPILER_FAMILY-openmpi5-ohpc",
+    "trilinos-COMPILER_FAMILY-mpich-ohpc",
+]
+
+# If "ALL" is specified, use all known specs
+if args.specs == ["ALL"]:
+    specs_to_process = list(test_map.keys())
+else:
+    specs_to_process = args.specs
+
 tests = ""
 admin_tests = ""
 pkgs = ""
 
-for i in args.specs:
+for i in specs_to_process:
     if i in test_map.keys():
         if len(tests) > 0:
             tests += " "
@@ -217,9 +288,35 @@ for i in args.specs:
                 tests += f"--enable-{test} "
         if len(test_map[i][1]) > 0:
             admin_tests += f"--enable-{test_map[i][1]}"
-        pkgs += test_map[i][2]
+        pkg_entry = test_map[i][2]
+        if isinstance(pkg_entry, tuple):
+            pkgs += " ".join(pkg_entry)
+        else:
+            pkgs += pkg_entry
 
-pkgs = pkgs.replace("python3", python_prefix)
+# Add additional packages when running ALL tests
+if args.specs == ["ALL"] and all_test_packages:
+    if pkgs:
+        pkgs += " "
+    pkgs += " ".join(all_test_packages)
+
+# Get OpenHPC version - only replace python3 prefix for versions < 4
+ohpc_major_version = 0
+try:
+    result = subprocess.run(
+        ["rpm", "-q", "--queryformat=%{VERSION}", "ohpc-release"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    version_str = result.stdout.strip()
+    ohpc_major_version = int(version_str.split(".")[0])
+except (subprocess.CalledProcessError, ValueError, IndexError):
+    # If we can't determine the version, assume we need the replacement
+    ohpc_major_version = 0
+
+if ohpc_major_version < 4:
+    pkgs = pkgs.replace("python3", python_prefix)
 
 pkgs = pkgs.replace("COMPILER_FAMILY", args.compiler_family)
 
