@@ -117,7 +117,7 @@ jobs:
         components/perf-tools/papi/SPECS/papi.spec
     container:
       image: ghcr.io/openhpc/ohpc-validate-almalinux:latest
-      options: --privileged
+      options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
       volumes:
         - /usr:/host/usr
         - /opt:/host/opt
@@ -138,6 +138,13 @@ jobs:
       with:
         name: rhel-rpms-${{ matrix.compiler }}-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
+    - name: Check for ALL tests marker
+      id: check_all
+      uses: ./.github/actions/check-tests-all
+    - name: Enable unprivileged user namespaces
+      run: |
+        sysctl -w kernel.unprivileged_userns_clone=1 || true
+        sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
     - name: Run CI Tests
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
@@ -157,7 +164,11 @@ jobs:
         fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
-        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
+        if [ "${{ steps.check_all.outputs.run_all }}" == "true" ] && [ "${{ matrix.compiler }}" != "intel" ]; then
+          tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ALL
+        else
+          tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
+        fi
     - name: Upload Test Results
       # To display test results from forked repositories they need to
       # be uploaded and then analyzed.
@@ -234,6 +245,7 @@ jobs:
     name: Test on openEuler (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
       image: ghcr.io/openhpc/ohpc-validate-openeuler:latest
+      options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
     needs: build_on_openEuler
     steps:
     - name: Update packages
@@ -247,6 +259,13 @@ jobs:
       with:
         name: openEuler-rpms-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
+    - name: Check for ALL tests marker
+      id: check_all
+      uses: ./.github/actions/check-tests-all
+    - name: Enable unprivileged user namespaces
+      run: |
+        sysctl -w kernel.unprivileged_userns_clone=1 || true
+        sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
     - name: Run CI Tests
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
@@ -258,7 +277,11 @@ jobs:
         fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
-        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
+        if [ "${{ steps.check_all.outputs.run_all }}" == "true" ]; then
+          tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ALL
+        else
+          tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
+        fi
 
   event_file:
     name: "Event File"
