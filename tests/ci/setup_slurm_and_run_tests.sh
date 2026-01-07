@@ -25,6 +25,7 @@ fi
 	openssh-clients \
 	which \
 	sudo \
+	psmisc \
 	autoconf \
 	automake \
 	libtool \
@@ -75,6 +76,8 @@ echo "CgroupPlugin=cgroup/v1" >  /etc/slurm/cgroup.conf
 chown root.root /var/log/munge
 
 mkdir -p /run/munge
+
+killall munged slurmctld slurmd || true
 
 /usr/sbin/munged -f
 /usr/sbin/slurmctld
