@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT([papi], [0.10.0], [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([papi],[0.10.0],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -15,7 +15,7 @@ AC_MSG_CHECKING([for PAPI_LIB environment variable])
 if test "x$PAPI_LIB" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([PAPI_LIB not defined - please load papi environment.])
+   AC_MSG_ERROR(PAPI_LIB not defined - please load papi environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -24,7 +24,7 @@ AC_MSG_CHECKING([for PAPI_INC environment variable])
 if test "x$PAPI_INC" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([PAPI_INC not defined - please load papi environment.])
+   AC_MSG_ERROR(PAPI_INC not defined - please load papi environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -53,7 +53,7 @@ AC_PROG_RANLIB
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'

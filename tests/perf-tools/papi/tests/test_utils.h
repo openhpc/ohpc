@@ -12,7 +12,7 @@
 #define CACHE_FLUSH_BUFFER_SIZE_INTS 16*1024*1024
 #define TOLERANCE   .2
 #define OVR_TOLERANCE .75
-#define MPX_TOLERANCE .20
+#define MPX_TOLERANCE .10
 #define TIME_LIMIT_IN_US 60*1000000    /* Run for about 1 minute or 60000000 us */
 
 
