@@ -472,6 +472,51 @@ run_mpi_binary() {
 
 } # end run_mpi_binary()
 
+# Run a command with retry logic for flaky tests
+# Usage: run_with_retry [-n max_attempts] [-d delay_seconds] command [args...]
+# Default: 3 attempts with 2 second delay between retries
+run_with_retry() {
+	local max_attempts=3
+	local delay=2
+
+	local OPTIND=1
+	while getopts "n:d:" OPTION; do
+		case "${OPTION}" in
+		n)
+			max_attempts="${OPTARG}"
+			;;
+		d)
+			delay="${OPTARG}"
+			;;
+		'?')
+			echo "Unknown option given to run_with_retry" >&2
+			return 1
+			;;
+		esac
+	done
+
+	shift "$((OPTIND - 1))"
+
+	local attempt=1
+	local rc=1
+
+	while [ "${attempt}" -le "${max_attempts}" ]; do
+		if "$@"; then
+			return 0
+		fi
+		rc=$?
+
+		if [ "${attempt}" -lt "${max_attempts}" ]; then
+			echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s..." >&2
+			sleep "${delay}"
+		fi
+		((attempt++))
+	done
+
+	echo "All ${max_attempts} attempts failed" >&2
+	return "${rc}"
+}
+
 get_rpm_name() {
 	local family
 	if [[ "${LMOD_FAMILY_COMPILER}" =~ "acfl" ]]; then
