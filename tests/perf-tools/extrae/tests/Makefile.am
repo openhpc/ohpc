@@ -1,6 +1,6 @@
 
 check_PROGRAMS          = heat_mpi
-heat_mpi_LDFLAGS        = $(LDFLAGS) -lm
+heat_mpi_LDADD          = $(LDFLAGS) -lm
 heat_mpi_SOURCES        = heat_mpi.c
 
 CLEANFILES              = pingtmp* heat_mpi.prv
