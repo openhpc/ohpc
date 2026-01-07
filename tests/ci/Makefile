@@ -27,6 +27,8 @@ codespell-lint:
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
+		tests/perf-tools/likwid/tests/rm_execution \
+		tests/perf-tools/likwid/tests/test_module \
 		tests/perf-tools/omb/tests/rm_execution \
 		tests/perf-tools/scalasca/tests/rm_execution \
 		tests/perf-tools/scalasca/tests/test_module \
@@ -99,6 +101,8 @@ whitespace-lint:
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
+		tests/perf-tools/likwid/tests/rm_execution \
+		tests/perf-tools/likwid/tests/test_module \
 		tests/perf-tools/omb/tests/rm_execution \
 		tests/perf-tools/scalasca/tests/rm_execution \
 		tests/perf-tools/scalasca/tests/test_module \
@@ -175,6 +179,8 @@ shellcheck-lint:
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
 		../../tests/perf-tools/extrae/tests/test_module \
+		../../tests/perf-tools/likwid/tests/rm_execution \
+		../../tests/perf-tools/likwid/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
@@ -220,6 +226,8 @@ shfmt-lint:
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
 		../../tests/perf-tools/extrae/tests/test_module \
+		../../tests/perf-tools/likwid/tests/rm_execution \
+		../../tests/perf-tools/likwid/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/rm_execution \
 		../../tests/perf-tools/scalasca/tests/test_module \
