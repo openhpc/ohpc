@@ -1,0 +1,23 @@
+name: 'Check for ALL tests marker'
+description: 'Check if PR description contains [TESTS:ALL] marker'
+
+outputs:
+  run_all:
+    description: 'Whether to run all tests'
+    value: ${{ steps.check.outputs.run_all }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: check
+      shell: bash
+      run: |
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          if echo "${{ github.event.pull_request.body }}" | grep -q '\[TESTS:ALL\]'; then
+            echo "run_all=true" >> $GITHUB_OUTPUT
+          else
+            echo "run_all=false" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "run_all=false" >> $GITHUB_OUTPUT
+        fi
