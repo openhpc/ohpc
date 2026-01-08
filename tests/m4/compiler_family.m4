@@ -84,6 +84,18 @@ else
    AC_MSG_ERROR([Unknown compiler family - please load a compiler toolchain.])
 fi
 
+# Optionally prepend ccache to compiler commands
+if test "x$OHPC_USE_CCACHE" = "xyes"; then
+   AC_CHECK_PROG([CCACHE], [ccache], [ccache])
+   if test "x$CCACHE" != "x"; then
+      CC="ccache $CC"
+      CXX="ccache $CXX"
+      AC_MSG_NOTICE([Using ccache for compilation])
+   else
+      AC_MSG_WARN([OHPC_USE_CCACHE set but ccache not found])
+   fi
+fi
+
 AC_SUBST(OHPC_BLAS)
 
 ])

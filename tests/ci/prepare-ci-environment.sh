@@ -204,8 +204,7 @@ else
 	useradd -m ohpc || true
 fi
 
-# Source ccache profile if available
-if [ -f /etc/profile.d/ccache.sh ]; then
-	# shellcheck disable=SC1091
-	. /etc/profile.d/ccache.sh
-fi
+# Setup ccache
+echo "cache_dir=/var/cache/ccache" >/etc/ccache.conf
+mkdir -p /var/cache/ccache
+chown -R ohpc:ohpc /var/cache/ccache

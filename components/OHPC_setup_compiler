@@ -98,6 +98,17 @@ else
 	exit 1
 fi
 
+# Optionally prepend ccache to compiler commands (C/C++ only, not Fortran)
+if [ "${OHPC_USE_CCACHE}" = "yes" ]; then
+	if command -v ccache >/dev/null 2>&1; then
+		export CC="ccache ${CC}"
+		export CXX="ccache ${CXX}"
+		echo "Using ccache for compilation"
+	else
+		echo "Warning: OHPC_USE_CCACHE=yes but ccache not found"
+	fi
+fi
+
 echo " "
 echo "--"
 echo "OpenHPC compiler/build flags":

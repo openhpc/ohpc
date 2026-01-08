@@ -22,6 +22,11 @@ AC_C_CONST
 
 # Define include path and library linkage from environment variables
 # which should be provided via module loads.
+# Strip ccache prefix if present before prepending scorep
+CC=$(echo $CC | sed 's/^ccache //')
+CXX=$(echo $CXX | sed 's/^ccache //')
+FC=$(echo $FC | sed 's/^ccache //')
+F77=$(echo $F77 | sed 's/^ccache //')
 CC=scorep-${CC}
 CXX=scorep-${CXX}
 FC=scorep-${FC}
