@@ -64,6 +64,13 @@ jobs:
     - name: Update packages
       run: dnf -y update
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}
+        restore-keys: |
+          ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
@@ -95,6 +102,12 @@ jobs:
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-build
 
   test_on_rhel:
     strategy:
@@ -130,6 +143,13 @@ jobs:
     - name: Update packages
       run: dnf -y update
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-build
+        restore-keys: |
+          ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
@@ -178,6 +198,18 @@ jobs:
         name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: tests/**/*.log.xml
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}
+    - name: Upload ccache stats
+      if: always()
+      uses: ./.github/actions/upload-ccache-stats
+      with:
+        job-name: "RHEL (${{ matrix.arch }}/${{ matrix.compiler }})"
+        artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}
 
   build_on_openEuler:
     strategy:
@@ -199,6 +231,13 @@ jobs:
     - name: Update packages
       run: dnf -y update
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}
+        restore-keys: |
+          ccache-openeuler-${{ matrix.arch }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
@@ -224,6 +263,12 @@ jobs:
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-build
 
   test_on_openEuler:
     strategy:
@@ -251,6 +296,13 @@ jobs:
     - name: Update packages
       run: dnf -y update
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-build
+        restore-keys: |
+          ccache-openeuler-${{ matrix.arch }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
@@ -282,6 +334,18 @@ jobs:
         else
           tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
         fi
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}
+    - name: Upload ccache stats
+      if: always()
+      uses: ./.github/actions/upload-ccache-stats
+      with:
+        job-name: "openEuler (${{ matrix.arch }})"
+        artifact-suffix: openeuler-${{ matrix.arch }}
 
   event_file:
     name: "Event File"
