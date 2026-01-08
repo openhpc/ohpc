@@ -37,8 +37,6 @@ jobs:
           esac
         done
 
-        ls -alR
-
     - name: Check for artifacts
       id: artifact_check
       run: |
@@ -51,34 +49,97 @@ jobs:
     - name: Generate combined stats comment
       if: steps.artifact_check.outputs.artifacts_found == 'true'
       run: |
-        echo "## CCache Statistics" > artifacts/comment.md
+        # Function to read a value from data.txt
+        get_value() {
+          local file="$1"
+          local key="$2"
+          if [ -f "$file" ]; then
+            grep "^${key}=" "$file" 2>/dev/null | cut -d= -f2- || echo "N/A"
+          else
+            echo "-"
+          fi
+        }
+
+        # Function to format hit rate with emoji
+        format_hit_rate() {
+          local rate="$1"
+          if [ "$rate" = "N/A" ] || [ "$rate" = "-" ] || [ -z "$rate" ]; then
+            echo "-"
+          else
+            # Extract numeric value
+            local num=$(echo "$rate" | grep -oE '[0-9.]+' | head -1)
+            if [ -n "$num" ]; then
+              # Compare using bc or awk
+              local pct=$(echo "$num" | awk '{printf "%.0f", $1}')
+              if [ "$pct" -ge 50 ]; then
+                echo "🟢 **${rate}**"
+              elif [ "$pct" -ge 20 ]; then
+                echo "🟡 ${rate}"
+              else
+                echo "🔴 ${rate}"
+              fi
+            else
+              echo "${rate}"
+            fi
+          fi
+        }
+
+        # Start building the comment
+        cat > artifacts/comment.md << 'HEADER'
+## 🚀 CCache Statistics
+
+HEADER
+
+        # Build the main table
+        echo "| Configuration | 🐧 RHEL | 🦊 openEuler |" >> artifacts/comment.md
+        echo "|:--------------|:-------:|:------------:|" >> artifacts/comment.md
+
+        # x86_64/gnu15
+        rhel_rate=$(get_value "artifacts/ccache-stats-rhel-x86_64-gnu15/data.txt" "hit_rate")
+        euler_rate=$(get_value "artifacts/ccache-stats-openeuler-x86_64/data.txt" "hit_rate")
+        echo "| 🖥️ x86_64 / gnu15 | $(format_hit_rate "$rhel_rate") | $(format_hit_rate "$euler_rate") |" >> artifacts/comment.md
+
+        # x86_64/intel
+        rhel_intel_rate=$(get_value "artifacts/ccache-stats-rhel-x86_64-intel/data.txt" "hit_rate")
+        echo "| 🖥️ x86_64 / intel | $(format_hit_rate "$rhel_intel_rate") | - |" >> artifacts/comment.md
+
+        # aarch64/gnu15
+        rhel_arm_rate=$(get_value "artifacts/ccache-stats-rhel-aarch64-gnu15/data.txt" "hit_rate")
+        euler_arm_rate=$(get_value "artifacts/ccache-stats-openeuler-aarch64/data.txt" "hit_rate")
+        echo "| 💪 aarch64 / gnu15 | $(format_hit_rate "$rhel_arm_rate") | $(format_hit_rate "$euler_arm_rate") |" >> artifacts/comment.md
+
         echo "" >> artifacts/comment.md
 
-        # Collect all stats in a specific order
-        for job in "build-rhel" "test-rhel" "build-openeuler" "test-openeuler"; do
-          for dir in artifacts/ccache-stats-${job}-*/; do
-            if [ -d "$dir" ] && [ -f "${dir}stats.md" ]; then
-              cat "${dir}stats.md" >> artifacts/comment.md
+        # Add collapsible raw output section
+        echo "<details>" >> artifacts/comment.md
+        echo "<summary>📊 Detailed Statistics</summary>" >> artifacts/comment.md
+        echo "" >> artifacts/comment.md
+
+        for dir in artifacts/ccache-stats-*/; do
+          if [ -d "$dir" ]; then
+            job_name=$(get_value "${dir}data.txt" "job_name")
+            if [ -f "${dir}raw.txt" ]; then
+              echo "### ${job_name}" >> artifacts/comment.md
+              echo '```' >> artifacts/comment.md
+              cat "${dir}raw.txt" >> artifacts/comment.md
+              echo '```' >> artifacts/comment.md
               echo "" >> artifacts/comment.md
             fi
-          done
+          fi
         done
+
+        echo "</details>" >> artifacts/comment.md
+        echo "" >> artifacts/comment.md
 
         # Add metadata footer
         echo "---" >> artifacts/comment.md
-        echo "*CCache statistics from workflow run [\`${{ github.event.workflow_run.id }}\`](${{ github.event.workflow_run.html_url }})*" >> artifacts/comment.md
+        echo "*🤖 Generated from workflow run [\`${{ github.event.workflow_run.id }}\`](${{ github.event.workflow_run.html_url }})*" >> artifacts/comment.md
 
     - name: Get PR number
       if: steps.artifact_check.outputs.artifacts_found == 'true'
       id: pr
       run: |
-        # Find the event.json file
-        event_file=$(find artifacts/event-file -name "*.json" -o -name "event_path" 2>/dev/null | head -1)
-        if [ -z "$event_file" ]; then
-          # The event file might be the github.event_path content directly
-          event_file=$(find artifacts/event-file -type f | head -1)
-        fi
-
+        event_file=$(find artifacts/event-file -type f | head -1)
         if [ -n "$event_file" ]; then
           pr_number=$(jq -r '.pull_request.number // .number // empty' "$event_file" 2>/dev/null || echo "")
           if [ -n "$pr_number" ]; then
@@ -108,12 +169,11 @@ jobs:
           });
 
           const existingComment = comments.data.find(comment =>
-            comment.body.includes('## CCache Statistics') &&
+            comment.body.includes('## 🚀 CCache Statistics') &&
             comment.user.type === 'Bot'
           );
 
           if (existingComment) {
-            // Update existing comment
             await github.rest.issues.updateComment({
               owner,
               repo,
@@ -122,7 +182,6 @@ jobs:
             });
             console.log(`Updated existing comment ${existingComment.id}`);
           } else {
-            // Create new comment
             await github.rest.issues.createComment({
               owner,
               repo,
