@@ -1,0 +1,133 @@
+name: CCache Stats Comment
+
+on:
+  workflow_run:
+    workflows: [Validate]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: read
+
+jobs:
+  comment:
+    name: Post CCache Stats
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request'
+
+    steps:
+    - name: Download artifacts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        mkdir -p artifacts && cd artifacts
+
+        artifacts_url="${{ github.event.workflow_run.artifacts_url }}"
+
+        gh api --paginate "$artifacts_url" -q '.artifacts[] | [.name, .archive_download_url] | @tsv' | while read artifact
+        do
+          IFS=$'\t' read name url <<< "$artifact"
+          case "$name" in
+            ccache-stats-*|event-file)
+              gh api $url > "$name.zip"
+              unzip -d "$name" "$name.zip"
+              ;;
+          esac
+        done
+
+        ls -alR
+
+    - name: Check for artifacts
+      id: artifact_check
+      run: |
+        if [ -d artifacts/event-file ]; then
+          echo "artifacts_found=true" >> $GITHUB_OUTPUT
+        else
+          echo "artifacts_found=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Generate combined stats comment
+      if: steps.artifact_check.outputs.artifacts_found == 'true'
+      run: |
+        echo "## CCache Statistics" > artifacts/comment.md
+        echo "" >> artifacts/comment.md
+
+        # Collect all stats in a specific order
+        for job in "build-rhel" "test-rhel" "build-openeuler" "test-openeuler"; do
+          for dir in artifacts/ccache-stats-${job}-*/; do
+            if [ -d "$dir" ] && [ -f "${dir}stats.md" ]; then
+              cat "${dir}stats.md" >> artifacts/comment.md
+              echo "" >> artifacts/comment.md
+            fi
+          done
+        done
+
+        # Add metadata footer
+        echo "---" >> artifacts/comment.md
+        echo "*CCache statistics from workflow run [\`${{ github.event.workflow_run.id }}\`](${{ github.event.workflow_run.html_url }})*" >> artifacts/comment.md
+
+    - name: Get PR number
+      if: steps.artifact_check.outputs.artifacts_found == 'true'
+      id: pr
+      run: |
+        # Find the event.json file
+        event_file=$(find artifacts/event-file -name "*.json" -o -name "event_path" 2>/dev/null | head -1)
+        if [ -z "$event_file" ]; then
+          # The event file might be the github.event_path content directly
+          event_file=$(find artifacts/event-file -type f | head -1)
+        fi
+
+        if [ -n "$event_file" ]; then
+          pr_number=$(jq -r '.pull_request.number // .number // empty' "$event_file" 2>/dev/null || echo "")
+          if [ -n "$pr_number" ]; then
+            echo "number=$pr_number" >> $GITHUB_OUTPUT
+          fi
+        fi
+
+    - name: Post comment to PR
+      if: steps.artifact_check.outputs.artifacts_found == 'true' && steps.pr.outputs.number != ''
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          const commentBody = fs.readFileSync('artifacts/comment.md', 'utf8');
+          const prNumber = ${{ steps.pr.outputs.number }};
+
+          console.log(`Posting comment to PR #${prNumber}`);
+
+          const { owner, repo } = context.repo;
+
+          // Look for existing ccache stats comment
+          const comments = await github.rest.issues.listComments({
+            owner,
+            repo,
+            issue_number: prNumber,
+          });
+
+          const existingComment = comments.data.find(comment =>
+            comment.body.includes('## CCache Statistics') &&
+            comment.user.type === 'Bot'
+          );
+
+          if (existingComment) {
+            // Update existing comment
+            await github.rest.issues.updateComment({
+              owner,
+              repo,
+              comment_id: existingComment.id,
+              body: commentBody
+            });
+            console.log(`Updated existing comment ${existingComment.id}`);
+          } else {
+            // Create new comment
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body: commentBody
+            });
+            console.log('Created new comment');
+          }
