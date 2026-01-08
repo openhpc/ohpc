@@ -1,0 +1,37 @@
+name: 'OneAPI Package Cache'
+description: 'Restore or save Intel oneAPI dnf package cache'
+inputs:
+  mode:
+    description: 'Operation mode: restore or save'
+    required: true
+  max-size-mb:
+    description: 'Maximum cache size in MB (only used for save mode)'
+    required: false
+    default: '2048'
+runs:
+  using: 'composite'
+  steps:
+    - name: Restore oneAPI package cache
+      if: inputs.mode == 'restore'
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/dnf/oneAPI-*/packages
+        key: dnf-oneapi-rhel-${{ github.sha }}
+        restore-keys: |
+          dnf-oneapi-rhel-
+    - name: Clean oneAPI package cache
+      if: inputs.mode == 'save'
+      shell: bash
+      run: |
+        MAX_SIZE=${{ inputs.max-size-mb }}
+        # Limit cache by removing oldest files
+        while [ $(du -sm /var/cache/dnf/oneAPI-*/packages 2>/dev/null | awk '{sum+=$1} END {print sum+0}') -gt $MAX_SIZE ]; do
+          oldest=$(find /var/cache/dnf/oneAPI-*/packages -type f -printf '%T+ %p\n' 2>/dev/null | sort | head -1 | cut -d' ' -f2-)
+          [ -n "$oldest" ] && rm -f "$oldest" || break
+        done
+    - name: Save oneAPI package cache
+      if: inputs.mode == 'save'
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/dnf/oneAPI-*/packages
+        key: dnf-oneapi-rhel-${{ github.sha }}

@@ -71,6 +71,11 @@ jobs:
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}
         restore-keys: |
           ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-
+    - name: Restore oneAPI package cache
+      if: matrix.compiler == 'intel'
+      uses: ./.github/actions/oneapi-cache
+      with:
+        mode: restore
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
@@ -102,6 +107,11 @@ jobs:
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
+    - name: Save oneAPI package cache
+      if: always() && matrix.compiler == 'intel'
+      uses: ./.github/actions/oneapi-cache
+      with:
+        mode: save
     - name: Save ccache
       if: always()
       uses: actions/cache/save@v4
@@ -150,6 +160,11 @@ jobs:
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-build
         restore-keys: |
           ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-
+    - name: Restore oneAPI package cache
+      if: matrix.compiler == 'intel'
+      uses: ./.github/actions/oneapi-cache
+      with:
+        mode: restore
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
@@ -198,6 +213,11 @@ jobs:
         name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: tests/**/*.log.xml
+    - name: Save oneAPI package cache
+      if: always() && matrix.compiler == 'intel'
+      uses: ./.github/actions/oneapi-cache
+      with:
+        mode: save
     - name: Save ccache
       if: always()
       uses: actions/cache/save@v4

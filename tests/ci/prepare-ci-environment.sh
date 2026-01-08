@@ -166,6 +166,10 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 fi
 
 dnf_rhel() {
+	# Enable keepcache for dnf if OneAPI is enabled to cache large Intel packages
+	if [ -n "${ENABLE_ONEAPI}" ]; then
+		echo "keepcache=1" >>/etc/dnf/dnf.conf
+	fi
 	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} lua epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
 	loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
 	if [ "${FACTORY_VERSION}" != "" ]; then
