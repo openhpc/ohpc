@@ -85,10 +85,8 @@ jobs:
         }
 
         # Start building the comment
-        cat > artifacts/comment.md << 'HEADER'
-## 🚀 CCache Statistics
-
-HEADER
+        echo '## 🚀 CCache Statistics' > artifacts/comment.md
+        echo '' >> artifacts/comment.md
 
         # Build the main table
         echo "| Configuration | 🐧 RHEL | 🦊 openEuler |" >> artifacts/comment.md
