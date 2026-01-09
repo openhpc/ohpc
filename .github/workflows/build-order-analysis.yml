@@ -24,9 +24,11 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Save PR context
+      env:
+        EVENT_JSON: ${{ toJSON(github.event) }}
       run: |
         mkdir -p artifacts
-        echo '${{ toJSON(github.event) }}' > artifacts/event.json
+        printenv EVENT_JSON > artifacts/event.json
 
     - name: Setup RPM build environment
       run: |
