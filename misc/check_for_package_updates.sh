@@ -632,7 +632,6 @@ check_gnu_compilers() {
 # Get latest release from GitHub API
 get_latest_github_release() {
 	local repo="$1"
-	local api_url="https://api.github.com/repos/${repo}/releases"
 	local headers=()
 
 	if [[ -n "${GITHUB_TOKEN}" ]]; then
@@ -642,7 +641,37 @@ get_latest_github_release() {
 		sleep 1
 	fi
 
-	# Get releases
+	# Try /releases/latest endpoint first (unless checking prereleases)
+	# This returns what GitHub considers the "latest" release, which is more
+	# accurate than sorting by creation date (patch releases on older branches
+	# can be created after newer major releases)
+	if [[ ${CHECK_PRERELEASES} -eq 0 ]]; then
+		local latest_url="https://api.github.com/repos/${repo}/releases/latest"
+		local latest_response
+		latest_response="$(curl -s "${headers[@]}" "${latest_url}" 2>/dev/null)"
+
+		# Check for rate limiting
+		if echo "${latest_response}" | jq -e '.message' &>/dev/null; then
+			local message
+			message="$(echo "${latest_response}" | jq -r '.message')"
+			if [[ "${message}" == *"rate limit"* ]]; then
+				log_warn "GitHub API rate limit exceeded. Use GITHUB_TOKEN environment variable for higher limits."
+				return 2 # Special return code for rate limiting
+			fi
+			# Other errors (e.g., no releases) - fall through to releases list
+			debug_info "Latest endpoint failed for ${repo}: ${message}"
+		else
+			local latest_tag
+			latest_tag="$(echo "${latest_response}" | jq -r '.tag_name' 2>/dev/null)"
+			if [[ -n "${latest_tag}" && "${latest_tag}" != "null" ]]; then
+				echo "${latest_tag}"
+				return 0
+			fi
+		fi
+	fi
+
+	# Fall back to releases list (needed for prereleases or if /latest fails)
+	local api_url="https://api.github.com/repos/${repo}/releases"
 	local releases
 	releases="$(curl -s "${headers[@]}" "${api_url}" 2>/dev/null)" || {
 		debug_warn "Failed to fetch releases for ${repo}"
@@ -667,16 +696,9 @@ get_latest_github_release() {
 		return 1
 	fi
 
-	# Find the latest non-prerelease or include prereleases based on flag
-	local jq_filter
-	if [[ ${CHECK_PRERELEASES} -eq 1 ]]; then
-		jq_filter='.[0].tag_name'
-	else
-		jq_filter='[.[] | select(.prerelease == false)][0].tag_name'
-	fi
-
+	# Find the latest prerelease (only used when CHECK_PRERELEASES=1)
 	local latest_tag
-	latest_tag="$(echo "${releases}" | jq -r "${jq_filter}" 2>/dev/null)" || {
+	latest_tag="$(echo "${releases}" | jq -r '.[0].tag_name' 2>/dev/null)" || {
 		debug_warn "Failed to parse releases for ${repo}"
 		return 1
 	}
