@@ -137,7 +137,6 @@ jobs:
     env:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
-        components/perf-tools/papi/SPECS/papi.spec
     container:
       image: ghcr.io/openhpc/ohpc-validate-almalinux:latest
       options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
@@ -305,7 +304,6 @@ jobs:
         components/runtimes/charliecloud/SPECS/charliecloud.spec
         components/perf-tools/likwid/SPECS/likwid.spec
         components/provisioning/warewulf/SPECS/warewulf.spec
-        components/perf-tools/papi/SPECS/papi.spec
     runs-on: ${{ matrix.os }}
     name: Test on openEuler (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
