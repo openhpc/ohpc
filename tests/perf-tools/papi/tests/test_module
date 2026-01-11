@@ -74,8 +74,11 @@ teardown() {
 	run ls -l "${OUTPUT}"
 	assert_success
 
-	run grep "\bYes\b" "${OUTPUT}"
-	assert_success
+	# Skip counter availability check in SIMPLE_CI (no hardware access)
+	if [[ -z "${SIMPLE_CI}" ]]; then
+		run grep "\bYes\b" "${OUTPUT}"
+		assert_success
+	fi
 }
 
 # ----------
