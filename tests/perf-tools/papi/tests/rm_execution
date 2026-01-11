@@ -20,8 +20,16 @@ setup_file() {
 	export NODES TASKS ARGS TIMEOUT TESTNAME
 }
 
-setup() {
-	[[ -n "${SIMPLE_CI}" ]] && skip "Skipping papi tests in SIMPLE_CI mode"
+# Skip tests requiring hardware counters on aarch64 in SIMPLE_CI
+skip_if_aarch64_ci() {
+	[[ -n "${SIMPLE_CI}" && "$(uname -m)" == "aarch64" ]] && skip "Skipping on aarch64 in SIMPLE_CI"
+	return 0
+}
+
+# Skip tests requiring hardware counters in SIMPLE_CI (all arches)
+skip_if_simple_ci() {
+	[[ -n "${SIMPLE_CI}" ]] && skip "Skipping in SIMPLE_CI mode"
+	return 0
 }
 
 @test "[${TESTNAME}] C dynamic memory info under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
@@ -62,6 +70,8 @@ setup() {
 }
 
 @test "[${TESTNAME}] C start, read, stop and again under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	skip_if_simple_ci
+
 	if [ ! -s first ]; then
 		flunk "first binary does not exist"
 	fi
@@ -80,6 +90,8 @@ setup() {
 }
 
 @test "[${TESTNAME}] FORTRAN start/stop and read under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	skip_if_aarch64_ci
+
 	if [ ! -s cost ]; then
 		flunk "cost binary does not exist"
 	fi
@@ -89,6 +101,8 @@ setup() {
 }
 
 @test "[${TESTNAME}] FORTRAN multiplex under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	skip_if_aarch64_ci
+
 	if [ ! -s fmultiplex1 ]; then
 		flunk "fmultiplex1 binary does not exist"
 	fi
@@ -116,6 +130,8 @@ setup() {
 }
 
 @test "[${TESTNAME}] FORTRAN L1 cache miss under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	skip_if_aarch64_ci
+
 	if [ ! -s tenth ]; then
 		flunk "tenth binary does not exist"
 	fi
@@ -125,6 +141,8 @@ setup() {
 }
 
 @test "[${TESTNAME}] FORTRAN start, stop and timer under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	skip_if_aarch64_ci
+
 	if [ ! -s zero ]; then
 		flunk "zero binary does not exist"
 	fi
@@ -134,6 +152,8 @@ setup() {
 }
 
 @test "[${TESTNAME}] C simple smoke test under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	skip_if_simple_ci
+
 	if [ ! -s simple ]; then
 		flunk "simple binary does not exist"
 	fi
@@ -143,6 +163,8 @@ setup() {
 }
 
 @test "[${TESTNAME}] C threaded smoke test under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	skip_if_simple_ci
+
 	if [ ! -s threads ]; then
 		flunk "threads binary does not exist"
 	fi

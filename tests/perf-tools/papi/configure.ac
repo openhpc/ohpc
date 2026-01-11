@@ -45,6 +45,9 @@ LDFLAGS="-L${PAPI_LIB} -lpapi ${LDFLAGS}"
 
 # test compilers
 
+if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
+   F77=${FC}
+fi
 AC_PROG_CC
 AC_PROG_F77
 AC_PROG_RANLIB
