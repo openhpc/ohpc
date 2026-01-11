@@ -1,126 +1,152 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../TEST_ENV ]; then
+	source ../../../TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-testname="perf-tools/papi"
+	NODES=2
+	TASKS=$(tasks_count 5)
+	ARGS=5
+	TIMEOUT="00:05:00"
+	TESTNAME="perf-tools/papi"
 
-NODES=2
-TASKS=`tasks_count 5`
-ARGS=5
-
-@test "[$testname] C dynamic memory info under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s dmem_info ];then
-	flunk "dmem_info binary does not exist"
-    fi
-
-    run_serial_binary ./dmem_info
-    assert_success
+	export NODES TASKS ARGS TIMEOUT TESTNAME
 }
 
-@test "[$testname] C branch accuracy under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s branches ];then
-	flunk "branches binary does not exist"
-    fi
-
-    run_serial_binary ./branches
-    assert_success
+setup() {
+	[[ -n "${SIMPLE_CI}" ]] && skip "Skipping papi tests in SIMPLE_CI mode"
 }
 
-@test "[$testname] C Clock latency and resolution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s clockres_pthreads ];then
-	flunk "clockres_pthreads binary does not exist"
-    fi
+@test "[${TESTNAME}] C dynamic memory info under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s dmem_info ]; then
+		flunk "dmem_info binary does not exist"
+	fi
 
-    run_serial_binary ./clockres_pthreads
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./dmem_info
+	assert_success
 }
 
-@test "[$testname] C cycle ratio under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s cycle_ratio ];then
-	flunk "cycle_ratio binary does not exist"
-    fi
+@test "[${TESTNAME}] C branch accuracy under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s branches ]; then
+		flunk "branches binary does not exist"
+	fi
 
-    run_serial_binary ./cycle_ratio
-    assert_success
+	# branches test is flaky, retry up to 3 times
+	run_with_retry -n 3 -d 2 run_serial_binary -t "${TIMEOUT}" ./branches
+	assert_success
 }
 
-@test "[$testname] C start, read, stop and again under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s first ];then
-	flunk "first binary does not exist"
-    fi
+@test "[${TESTNAME}] C Clock latency and resolution under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s clockres_pthreads ]; then
+		flunk "clockres_pthreads binary does not exist"
+	fi
 
-    run_serial_binary ./first
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./clockres_pthreads
+	assert_success
 }
 
-@test "[$testname] C L1 related events under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s memory ];then
-	flunk "memory binary does not exist"
-    fi
+@test "[${TESTNAME}] C cycle ratio under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s cycle_ratio ]; then
+		flunk "cycle_ratio binary does not exist"
+	fi
 
-    run_serial_binary ./memory
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./cycle_ratio
+	assert_success
 }
 
-@test "[$testname] FORTRAN start/stop and read under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s cost ];then
-	flunk "cost binary does not exist"
-    fi
+@test "[${TESTNAME}] C start, read, stop and again under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s first ]; then
+		flunk "first binary does not exist"
+	fi
 
-    run_serial_binary ./cost
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./first
+	assert_success
 }
 
-@test "[$testname] FORTRAN multiplex under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s fmultiplex1 ];then
-	flunk "fmultiplex1 binary does not exist"
-    fi
+@test "[${TESTNAME}] C L1 related events under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s memory ]; then
+		flunk "memory binary does not exist"
+	fi
 
-    run_serial_binary -t "00:03:00" ./fmultiplex1
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./memory
+	assert_success
 }
 
-@test "[$testname] FORTRAN avail under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s avail ];then
-	flunk "avail binary does not exist"
-    fi
+@test "[${TESTNAME}] FORTRAN start/stop and read under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s cost ]; then
+		flunk "cost binary does not exist"
+	fi
 
-    run_serial_binary ./avail
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./cost
+	assert_success
 }
 
-@test "[$testname] FORTRAN string passing under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s strtest ];then
-	flunk "strtest binary does not exist"
-    fi
+@test "[${TESTNAME}] FORTRAN multiplex under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s fmultiplex1 ]; then
+		flunk "fmultiplex1 binary does not exist"
+	fi
 
-    run_serial_binary ./strtest
-    assert_success
+	run_serial_binary -t "00:03:00" ./fmultiplex1
+	assert_success
 }
 
-@test "[$testname] FORTRAN L1 cache miss under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s tenth ];then
-	flunk "tenth binary does not exist"
-    fi
+@test "[${TESTNAME}] FORTRAN avail under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s avail ]; then
+		flunk "avail binary does not exist"
+	fi
 
-    run_serial_binary ./tenth
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./avail
+	assert_success
 }
 
-@test "[$testname] FORTRAN start, stop and timer under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s zero ];then
-	flunk "zero binary does not exist"
-    fi
+@test "[${TESTNAME}] FORTRAN string passing under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s strtest ]; then
+		flunk "strtest binary does not exist"
+	fi
 
-    run_serial_binary ./zero
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./strtest
+	assert_success
+}
+
+@test "[${TESTNAME}] FORTRAN L1 cache miss under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s tenth ]; then
+		flunk "tenth binary does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" ./tenth
+	assert_success
+}
+
+@test "[${TESTNAME}] FORTRAN start, stop and timer under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s zero ]; then
+		flunk "zero binary does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" ./zero
+	assert_success
+}
+
+@test "[${TESTNAME}] C simple smoke test under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s simple ]; then
+		flunk "simple binary does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" ./simple
+	assert_success
+}
+
+@test "[${TESTNAME}] C threaded smoke test under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s threads ]; then
+		flunk "threads binary does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" ./threads
+	assert_success
 }

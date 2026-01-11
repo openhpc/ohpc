@@ -1,151 +1,167 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 8
 # -*-sh-*-
 
-source ./common/test_helper_functions.bash || exit 1
-source ./common/functions || exit 1
+source ../../../common/test_helper_functions.bash || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
-PKG=PAPI
-module=papi
-testname=libs/PAPI
-library=libpapi
-header=papi.h
-rpm=papi${DELIM}
+setup_file() {
+	PKG=PAPI
+	MODULE=papi
+	TESTNAME="perf-tools/papi"
+	LIBRARY=libpapi
+	HEADER=papi.h
 
-check_rms
-
-@test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
-    module list $module | grep "1) $module" >& .cmd_output || exit 1
-    run grep $module .cmd_output 
-    assert_success
-    
-    # check version against rpm
-    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
-    run cat .cmd_output
-    assert_output "  1) $module/$version"
-
-    rm -f .cmd_output
+	export PKG MODULE TESTNAME LIBRARY HEADER
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
-    DIR=${PKG}_DIR
-    if [ -z ${!DIR} ];then
-        flunk "${PKG}_DIR directory not defined"
-    fi
-    
-    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
-        flunk "directory ${!DIR} does not exist"
-    fi 
+setup() {
+	OUTPUT="$(mktemp)"
+
+	export OUTPUT
 }
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
-    BIN=${PKG}_BIN
-    if [ -z ${!BIN} ];then
-        flunk "${PKG}_BIN directory not defined"
-    fi
-    
-    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
-        flunk "directory ${!BIN} does not exist"
-    fi 
+teardown() {
+	rm -f "${OUTPUT}"
 }
 
-@test "[$testname] Verify availability/execution of papi_avail binary" {
-    run which papi_avail
-    assert_success
+@test "[${TESTNAME}] Verify ${PKG} module is loaded and matches rpm version (${LMOD_FAMILY_COMPILER})" {
+	module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
+	run grep "${MODULE}" "${OUTPUT}"
+	assert_success
 
-    rm -f .avail-instructions
-    papi_avail --avail >& .avail-instructions
-    
-    run ls -l .avail-instructions
-    assert_success
+	# check version against rpm
+	# Note: papi is not compiler-specific, so use hardcoded rpm name
+	local version
+	version="$(rpm -q --queryformat='%{VERSION}\n' "${MODULE}${DELIM}")"
+	run cat "${OUTPUT}"
+	assert_output "  1) ${MODULE}/${version}"
+}
 
-    run grep "\bYes\b" .avail-instructions
-    assert_success
+@test "[${TESTNAME}] Verify module ${PKG}_DIR is defined and exists (${LMOD_FAMILY_COMPILER})" {
+	PKG_DIR="${PKG}_DIR"
+
+	if [ -z "${!PKG_DIR}" ]; then
+		flunk "${PKG}_DIR directory not defined"
+	fi
+
+	if [ ! -d "${!PKG_DIR}" ]; then
+		flunk "directory ${!PKG_DIR} does not exist"
+	fi
+}
+
+@test "[${TESTNAME}] Verify module ${PKG}_BIN is defined and exists (${LMOD_FAMILY_COMPILER})" {
+	BIN="${PKG}_BIN"
+
+	if [ -z "${!BIN}" ]; then
+		flunk "${PKG}_BIN directory not defined"
+	fi
+
+	if [ ! -d "${!BIN}" ]; then
+		flunk "directory ${!BIN} does not exist"
+	fi
+}
+
+@test "[${TESTNAME}] Verify availability/execution of papi_avail binary (${LMOD_FAMILY_COMPILER})" {
+	run which papi_avail
+	assert_success
+
+	papi_avail --avail >&"${OUTPUT}"
+
+	run ls -l "${OUTPUT}"
+	assert_success
+
+	run grep "\bYes\b" "${OUTPUT}"
+	assert_success
 }
 
 # ----------
 # Man pages
 # ----------
 
-@test "[$testname] Verify availability of man page for papi_avail" {
-    DIR=${PKG}_DIR
+@test "[${TESTNAME}] Verify availability of man page for papi_avail (${LMOD_FAMILY_COMPILER})" {
+	PKG_DIR="${PKG}_DIR"
 
-    if [ ! -d ${!DIR}/share/man ];then
-        flunk "Manual directory ${!DIR}/share/man does not exist"
-    fi
-    
-    run man -w papi_avail
-    assert_success
-    assert_output "${!DIR}/share/man/man1/papi_avail.1"
+	if [ -z "${!PKG_DIR}" ]; then
+		flunk "${PKG}_DIR directory not defined"
+	fi
+
+	if [ ! -d "${!PKG_DIR}/share/man" ]; then
+		flunk "Manual directory ${!PKG_DIR}/share/man does not exist"
+	fi
+
+	run man -w papi_avail
+	assert_success
+	assert_output "${!PKG_DIR}/share/man/man1/papi_avail.1"
 }
 
 # ----------
 # Lib Tests
 # ----------
 
-@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER)" {
-    LIB=${PKG}_LIB
+@test "[${TESTNAME}] Verify module ${PKG}_LIB is defined and exists (${LMOD_FAMILY_COMPILER})" {
+	LIB="${PKG}_LIB"
 
-    if [ -z ${!LIB} ];then
-        flunk "${PKG}_LIB directory not defined"
-    fi
- 
-    if [ ! -d ${!LIB} ];then
-        flunk "directory ${!LIB} does not exist"
-    fi 
+	if [ -z "${!LIB}" ]; then
+		flunk "${PKG}_LIB directory not defined"
+	fi
+
+	if [ ! -d "${!LIB}" ]; then
+		flunk "directory ${!LIB} does not exist"
+	fi
 }
 
-@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
-    LIB=${PKG}_LIB
+@test "[${TESTNAME}] Verify dynamic library available in ${PKG}_LIB (${LMOD_FAMILY_COMPILER})" {
+	LIB="${PKG}_LIB"
 
-    if [ -z ${!LIB} ];then
-        flunk "${PKG}_LIB directory not defined"
-    fi
+	if [ -z "${!LIB}" ]; then
+		flunk "${PKG}_LIB directory not defined"
+	fi
 
-    if [ ! -s ${!LIB}/${library}.so ];then
-        flunk "${library}.so does not exist"
-    fi 
+	if [ ! -s "${!LIB}/${LIBRARY}.so" ]; then
+		flunk "${LIBRARY}.so does not exist"
+	fi
 }
 
-@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
-    LIB=${PKG}_LIB
+@test "[${TESTNAME}] Verify static library is not present in ${PKG}_LIB (${LMOD_FAMILY_COMPILER})" {
+	LIB="${PKG}_LIB"
 
-    if [ -z ${!LIB} ];then
-        flunk "${PKG}_LIB directory not defined"
-    fi
+	if [ -z "${!LIB}" ]; then
+		flunk "${PKG}_LIB directory not defined"
+	fi
 
-    if [ -e ${!LIB}/${library}.a ];then
-        flunk "${library}.a exists when not expecting it"
-    fi 
+	if [ -e "${!LIB}/${LIBRARY}.a" ]; then
+		flunk "${LIBRARY}.a exists when not expecting it"
+	fi
 }
 
 # --------------
 # Include Tests
 # --------------
 
-@test "[$testname] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER)" {
-    INC=${PKG}_INC
+@test "[${TESTNAME}] Verify module ${PKG}_INC is defined and exists (${LMOD_FAMILY_COMPILER})" {
+	INC="${PKG}_INC"
 
-    if [ -z ${!INC} ];then
-        flunk "${PKG}_INC directory not defined"
-    fi
-    
-    if [ ! -d ${!INC} ];then
-        flunk "directory ${!INC} does not exist"
-    fi 
+	if [ -z "${!INC}" ]; then
+		flunk "${PKG}_INC directory not defined"
+	fi
+
+	if [ ! -d "${!INC}" ]; then
+		flunk "directory ${!INC} does not exist"
+	fi
 }
 
-@test "[$testname] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER)" {
-    INC=${PKG}_INC
+@test "[${TESTNAME}] Verify header file is present in ${PKG}_INC (${LMOD_FAMILY_COMPILER})" {
+	INC="${PKG}_INC"
 
-    if [ -z ${!INC} ];then
-        flunk "${PKG}_INC directory not defined"
-    fi
-    
-    if [ ! -s ${!INC}/${header} ];then
-        flunk "directory $header file does not exist"
-    fi 
+	if [ -z "${!INC}" ]; then
+		flunk "${PKG}_INC directory not defined"
+	fi
+
+	if [ ! -s "${!INC}/${HEADER}" ]; then
+		flunk "${HEADER} file does not exist"
+	fi
 }

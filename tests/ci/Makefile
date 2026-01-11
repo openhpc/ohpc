@@ -72,6 +72,9 @@ codespell-lint:
 		tests/libs/mfem/tests/test_module \
 		tests/libs/mfem/tests/parallel/rm_execution \
 		tests/libs/mfem/ohpc-tests/test_mpi_families \
+		tests/perf-tools/papi/tests/rm_execution \
+		tests/perf-tools/papi/tests/test_module \
+		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
 		tests/modules/interactive_commands
 
 ruff-check-lint:
@@ -154,6 +157,9 @@ whitespace-lint:
 		tests/libs/mfem/tests/test_module \
 		tests/libs/mfem/tests/parallel/rm_execution \
 		tests/libs/mfem/ohpc-tests/test_mpi_families \
+		tests/perf-tools/papi/tests/rm_execution \
+		tests/perf-tools/papi/tests/test_module \
+		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
 		tests/modules/interactive_commands \
 		containers/* \
 		\*.tex
@@ -238,6 +244,9 @@ shellcheck-lint:
 		../../tests/libs/mfem/tests/test_module \
 		../../tests/libs/mfem/tests/parallel/rm_execution \
 		../../tests/libs/mfem/ohpc-tests/test_mpi_families \
+		../../tests/perf-tools/papi/tests/rm_execution \
+		../../tests/perf-tools/papi/tests/test_module \
+		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
 		../../tests/modules/interactive_commands
 
 shfmt-lint:
@@ -294,6 +303,8 @@ shfmt-lint:
 		../../tests/libs/hypre/tests/test_module \
 		../../tests/libs/mfem/tests/test_module \
 		../../tests/libs/mfem/tests/parallel/rm_execution \
+		../../tests/perf-tools/papi/tests/rm_execution \
+		../../tests/perf-tools/papi/tests/test_module \
 		../../tests/modules/interactive_commands
 	shfmt -w -d \
 		../../tests/ci/integration-test.sh \
@@ -314,7 +325,8 @@ shfmt-lint:
 		../../tests/perf-tools/tau/ohpc-tests/test_mpi_families \
 		../../tests/libs/hypre/ohpc-tests/test_mpi_families \
 		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
-		../../tests/libs/mfem/ohpc-tests/test_mpi_families
+		../../tests/libs/mfem/ohpc-tests/test_mpi_families \
+		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
@@ -340,7 +352,8 @@ clang-format-lint:
 		../../tests/libs/hypre/tests/*.c \
 		../../tests/libs/superlu_dist/tests/*.c \
 		../../tests/libs/mfem/tests/serial/*.cpp \
-		../../tests/libs/mfem/tests/parallel/*.cpp
+		../../tests/libs/mfem/tests/parallel/*.cpp \
+		../../tests/perf-tools/papi/tests/*.c
 
 build-ohpc-ci:
 	podman build  -f Containerfile.ohpc-lint -t  ghcr.io/openhpc/ohpc-lint:latest
