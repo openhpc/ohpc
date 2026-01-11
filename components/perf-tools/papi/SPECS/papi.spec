@@ -12,27 +12,23 @@
 
 # Base package name
 %define pname papi
+%define papi_version 7-2-0
+%define dot_version %(tr "-" "." <<< %{papi_version})
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}
-Version:   7.2.0
+Version:   %{dot_version}
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://icl.cs.utk.edu/papi/
-Source0:   http://icl.cs.utk.edu/projects/papi/downloads/papi-%{version}.tar.gz
+Source0:   https://github.com/icl-utk-edu/papi/releases/download/papi-%{papi_version}-t/papi-%{dot_version}.tar.gz
 Patch1:    papi.ldconfig.patch
 
 BuildRequires: ncurses-devel make
-%if 0%{?suse_version}
-BuildRequires: gcc-fortran
-%else
 BuildRequires: gcc-gfortran
 BuildRequires: chrpath
-%endif
-BuildRequires: kernel-headers >= 2.6.32
-#Right now libpfm does not know anything about s390 and will fail
-ExcludeArch: s390 s390x
+BuildRequires: kernel-headers
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
