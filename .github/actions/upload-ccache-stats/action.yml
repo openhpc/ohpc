@@ -17,7 +17,7 @@ runs:
         RAW_STATS=$(ccache --show-stats 2>&1) || RAW_STATS="ccache stats unavailable"
 
         # Parse key metrics from ccache output (|| true to prevent grep exit code 1 from failing the script)
-        CACHE_HIT_RATE=$(echo "$RAW_STATS" | grep -E "^\s+Hits:" | head -1 | grep -oE '\([0-9.]+%\)' | tr -d '()' || true)
+        CACHE_HIT_RATE=$(echo "$RAW_STATS" | grep -E "^\s+Hits:" | head -1 | grep -oE '\(\s*[0-9.]+%\)' | tr -d '() ' || true)
         CACHE_SIZE=$(echo "$RAW_STATS" | grep "Cache size" | grep -oE '[0-9.]+\s*/\s*[0-9.]+' | head -1 || true)
         DIRECT_HITS=$(echo "$RAW_STATS" | grep "Direct:" | grep -oE '[0-9]+\s*/\s*[0-9]+' | head -1 || true)
         MISSES=$(echo "$RAW_STATS" | grep -E "^\s+Misses:" | head -1 | grep -oE '[0-9]+\s*/\s*[0-9]+' | head -1 || true)
