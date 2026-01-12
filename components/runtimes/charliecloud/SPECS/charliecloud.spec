@@ -19,16 +19,19 @@
 # Specify python version of a given file
 %define versionize_script() (sed -i 's,/env python,/env %1,g' %2)
 
+# Unfortunately this changes with every release
+%define package_file_id 256549905
+
 %{!?build_ldflags:%global build_ldflags %nil}
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.40
+Version:   0.43
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://charliecloud.io/
-Source0:   https://gitlab.com/charliecloud/charliecloud/-/package_files/204172900/download#/charliecloud-%{version}.tar.gz
+Source0:   https://gitlab.com/charliecloud/charliecloud/-/package_files/%{package_file_id}/download#/charliecloud-%{version}.tar.gz
 Source1:   Build
 
 BuildRequires: make
