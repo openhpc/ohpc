@@ -3,7 +3,7 @@
 # Exit on any error, undefined variables, and pipe failures
 set -euo pipefail
 
-# Script to check for newer GitHub, GitLab, PyPI, and JSC perftools releases of OpenHPC packages
+# Script to check for newer GitHub, GitLab, PyPI, JSC perftools, and Open MPI releases of OpenHPC packages
 SCRIPT_NAME="$(basename "$0")"
 readonly SCRIPT_NAME
 TEMP_DIR="$(mktemp -d)"
@@ -72,8 +72,8 @@ usage() {
 	cat <<EOF
 Usage: ${SCRIPT_NAME} [OPTIONS]
 
-Check for newer GitHub, GitLab, PyPI, and JSC perftools releases of OpenHPC packages
-by analyzing spec files.
+Check for newer GitHub, GitLab, PyPI, JSC perftools, and Open MPI releases of OpenHPC
+packages by analyzing spec files.
 
 OPTIONS:
     -v, --verbose           Enable verbose output
@@ -93,7 +93,8 @@ EXAMPLES:
 
 NOTES:
     - Requires rpmspec and rpmdev-vercmp tools
-    - Supports GitHub (github.com), GitLab (any instance), PyPI, and JSC perftools
+    - Supports GitHub (github.com), GitLab (any instance), PyPI, JSC perftools, and Open MPI
+    - Open MPI uses GitHub tags (filtering out rc and amzn tags)
     - GitHub API rate limits apply (60 requests/hour without token)
     - Use GITHUB_TOKEN environment variable for higher rate limits (5000 requests/hour)
     - Get a token at: https://github.com/settings/tokens (no special permissions needed)
@@ -272,6 +273,21 @@ parse_pypi_package() {
 	if [[ "${url}" =~ https://(files\.pythonhosted\.org|pypi\.io)/packages/source/[^/]+/([^/]+)/ ]]; then
 		local package_name="${BASH_REMATCH[2]}"
 		echo "${package_name}"
+		return 0
+	fi
+
+	return 1
+}
+
+# Parse Open MPI source URL
+parse_openmpi_source() {
+	local url="$1"
+
+	# Match Open MPI URL patterns
+	# Examples:
+	# http://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-5.0.8.tar.bz2
+	if [[ "${url}" =~ https?://www\.open-mpi\.org/software/ompi/ ]]; then
+		echo "open-mpi/ompi"
 		return 0
 	fi
 
@@ -711,6 +727,86 @@ get_latest_github_release() {
 	echo "${latest_tag}"
 }
 
+# Get latest tag from GitHub API (for projects that don't use releases)
+# Filters out tags containing specified patterns (e.g., rc, amzn)
+get_latest_github_tag() {
+	local repo="$1"
+	shift
+	local exclude_patterns=("$@") # Additional patterns to exclude
+	local headers=()
+
+	if [[ -n "${GITHUB_TOKEN}" ]]; then
+		headers=(-H "Authorization: token ${GITHUB_TOKEN}")
+	else
+		# Add delay to avoid rate limiting when no token is provided
+		sleep 1
+	fi
+
+	local api_url="https://api.github.com/repos/${repo}/tags?per_page=100"
+	local tags
+
+	tags="$(curl -s "${headers[@]}" "${api_url}" 2>/dev/null)" || {
+		debug_warn "Failed to fetch tags for ${repo}"
+		return 1
+	}
+
+	# Check if we got rate limited or an error
+	if echo "${tags}" | jq -e '.message' &>/dev/null; then
+		local message
+		message="$(echo "${tags}" | jq -r '.message')"
+		if [[ "${message}" == *"rate limit"* ]]; then
+			log_warn "GitHub API rate limit exceeded. Use GITHUB_TOKEN environment variable for higher limits."
+			return 2 # Special return code for rate limiting
+		fi
+		debug_warn "GitHub API error for ${repo}: ${message}"
+		return 1
+	fi
+
+	# Check if tags list is empty
+	if echo "${tags}" | jq -e 'length == 0' &>/dev/null; then
+		debug_info "No tags found for ${repo}"
+		return 1
+	fi
+
+	# Build jq filter to exclude patterns
+	# Default patterns to exclude: rc (release candidates)
+	local jq_filter='.[].name'
+
+	# Get all tag names and filter
+	local all_tags
+	all_tags="$(echo "${tags}" | jq -r "${jq_filter}")" || {
+		debug_warn "Failed to parse tags for ${repo}"
+		return 1
+	}
+
+	# Filter out unwanted patterns
+	local latest_tag=""
+	while IFS= read -r tag; do
+		local skip=0
+
+		# Check against exclude patterns
+		for pattern in "${exclude_patterns[@]}"; do
+			if [[ "${tag}" == *"${pattern}"* ]]; then
+				debug_info "Skipping tag ${tag}: matches exclude pattern '${pattern}'"
+				skip=1
+				break
+			fi
+		done
+
+		if [[ ${skip} -eq 0 ]]; then
+			latest_tag="${tag}"
+			break
+		fi
+	done <<<"${all_tags}"
+
+	if [[ -z "${latest_tag}" ]]; then
+		debug_warn "No suitable tags found for ${repo} after filtering"
+		return 1
+	fi
+
+	echo "${latest_tag}"
+}
+
 # Normalize version strings for comparison
 normalize_version() {
 	local version="$1"
@@ -1017,15 +1113,68 @@ process_spec_file() {
 		return 0
 	fi
 
-	# Not a GitHub, GitLab, PyPI, or JSC perftools source
-	debug_info "Skipping ${name}: not a GitHub, GitLab, PyPI, or JSC perftools source"
+	# Check if source is from Open MPI (uses GitHub tags, not releases)
+	local openmpi_repo openmpi_result
+
+	# Temporarily disable exit-on-error for command substitution
+	set +e
+	openmpi_repo="$(parse_openmpi_source "${source0}")"
+	openmpi_result=$?
+	set -e
+
+	if [[ ${openmpi_result} -eq 0 ]]; then
+		debug_info "Checking Open MPI GitHub tags: ${openmpi_repo}"
+
+		# Get latest tag, excluding rc (release candidates) and amzn (Amazon fork) tags
+		local latest_tag result_code
+		# Temporarily disable exit-on-error for command substitution
+		set +e
+		latest_tag="$(get_latest_github_tag "${openmpi_repo}" "rc" "amzn")"
+		result_code=$?
+		set -e
+
+		if [[ ${result_code} -eq 2 ]]; then
+			# Rate limited - stop processing
+			echo "${name}|${current_version}|RATE_LIMITED|GitHub API rate limit exceeded|${openmpi_repo}" >>"${RESULTS_FILE}"
+			log_warn "Rate limit reached. Stopping further GitHub API requests."
+			return 2 # Signal to stop processing
+		elif [[ ${result_code} -ne 0 ]]; then
+			echo "${name}|${current_version}|ERROR|Failed to fetch tags|${openmpi_repo}" >>"${RESULTS_FILE}"
+			return 0
+		fi
+
+		# Compare versions
+		local comparison
+		# Temporarily disable exit-on-error for command substitution
+		set +e
+		comparison="$(compare_versions "${current_version}" "${latest_tag}")"
+		set -e
+
+		# Determine status
+		local status
+		case "${comparison}" in
+		"older") status="UPDATE_AVAILABLE" ;;
+		"same") status="UP_TO_DATE" ;;
+		"newer") status="AHEAD" ;;
+		*) status="UNKNOWN" ;;
+		esac
+
+		# Write result
+		echo "${name}|${current_version}|${latest_tag}|${status}|${openmpi_repo}" >>"${RESULTS_FILE}"
+
+		debug_info "Result: ${name} ${current_version} -> ${latest_tag} (${status})"
+		return 0
+	fi
+
+	# Not a GitHub, GitLab, PyPI, JSC perftools, or Open MPI source
+	debug_info "Skipping ${name}: not a GitHub, GitLab, PyPI, JSC perftools, or Open MPI source"
 	return 0
 }
 
 # Format and display results
 display_results() {
 	if [[ ! -s "${RESULTS_FILE}" ]]; then
-		log_info "No GitHub, GitLab, PyPI, or JSC perftools sourced packages found"
+		log_info "No supported upstream sources found (GitHub, GitLab, PyPI, JSC perftools, Open MPI)"
 		return 0
 	fi
 
@@ -1237,7 +1386,7 @@ main() {
 	check_dependencies
 	setup_rpm_environment
 
-	log_info "Scanning for OpenHPC packages with GitHub, GitLab, PyPI, and JSC perftools sources..."
+	log_info "Scanning for OpenHPC packages with supported upstream sources..."
 	debug_info "Using temporary directory: ${TEMP_DIR}"
 
 	# Find and process all spec files
