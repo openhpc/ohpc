@@ -20,7 +20,7 @@
 
 Summary: The Adaptable IO System v2 (ADIOS2)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.10.2
+Version: 2.11.0
 Release: 1%{?dist}
 License: Apache License 2.0
 Group:   %{PROJ_NAME}/io-libs
@@ -28,14 +28,9 @@ Url:     https://adios2.readthedocs.io/en/latest/index.html
 Source0: https://github.com/ornladios/ADIOS2/archive/refs/tags/v%{version}.tar.gz
 AutoReq: no
 
-%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  bzip2-devel
 BuildRequires:  yaml-cpp-devel
 Requires: yaml-cpp
-%endif
-%if 0%{?suse_version}
-BuildRequires:  libbz2-devel
-%endif
 
 BuildRequires: libtool cmake make
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
@@ -120,8 +115,7 @@ cmake \
     -DPYTHON_EXECUTABLE=%{__python} \
     -DPython_FIND_STRATEGY=LOCATION \
     ..
-make -j$(nproc)
-# make test
+make %{?_smp_mflags}
 
 
 %install
