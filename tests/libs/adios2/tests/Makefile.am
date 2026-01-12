@@ -2,12 +2,12 @@
 TESTS                   = arrays_write
 check_PROGRAMS          = arrays_write
 arrays_write_SOURCES    = arrays_write.cpp
-arrays_write_LDADD      = -ladios2_cxx11 -ladios2_cxx11_mpi
+arrays_write_LDADD      = -ladios2_cxx -ladios2_cxx_mpi
 
 TESTS                  += arrays_read
 check_PROGRAMS         += arrays_read
 arrays_read_SOURCES     = arrays_read.cpp
-arrays_read_LDADD       = -ladios2_cxx11 -ladios2_cxx11_mpi
+arrays_read_LDADD       = -ladios2_cxx -ladios2_cxx_mpi
 
 TESTS                  += scalars_write
 check_PROGRAMS         += scalars_write

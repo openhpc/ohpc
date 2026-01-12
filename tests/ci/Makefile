@@ -63,7 +63,10 @@ codespell-lint:
 		tests/libs/trilinos/tests/rm_execution \
 		tests/perf-tools/papi/tests/rm_execution \
 		tests/perf-tools/papi/tests/test_module \
-		tests/perf-tools/papi/ohpc-tests/test_compiler_families
+		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		tests/libs/adios2/tests/rm_execution \
+		tests/libs/adios2/tests/test_module \
+		tests/libs/adios2/ohpc-tests/test_mpi_families
 
 ruff-check-lint:
 	@echo "Running 'ruff check' on selected Python files"
@@ -143,6 +146,9 @@ whitespace-lint:
 		tests/perf-tools/papi/tests/rm_execution \
 		tests/perf-tools/papi/tests/test_module \
 		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		tests/libs/adios2/tests/rm_execution \
+		tests/libs/adios2/tests/test_module \
+		tests/libs/adios2/ohpc-tests/test_mpi_families \
 		containers/* \
 		\*.tex
 
@@ -220,7 +226,10 @@ shellcheck-lint:
 		../../tests/perf-tools/scorep/tests/test_module \
 		../../tests/perf-tools/papi/tests/rm_execution \
 		../../tests/perf-tools/papi/tests/test_module \
-		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families
+		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		../../tests/libs/adios2/tests/rm_execution \
+		../../tests/libs/adios2/tests/test_module \
+		../../tests/libs/adios2/ohpc-tests/test_mpi_families
 
 shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
@@ -271,7 +280,9 @@ shfmt-lint:
 		../../tests/libs/fftw/tests/rm_execution \
 		../../tests/libs/trilinos/tests/rm_execution \
 		../../tests/perf-tools/papi/tests/rm_execution \
-		../../tests/perf-tools/papi/tests/test_module
+		../../tests/perf-tools/papi/tests/test_module \
+		../../tests/libs/adios2/tests/rm_execution \
+		../../tests/libs/adios2/tests/test_module
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../misc/build_order.sh \
@@ -287,7 +298,8 @@ shfmt-lint:
 		../../docs/recipes/install/common/listohpc \
 		../../containers/*.sh \
 		../../containers/examples/mpi/*.sh \
-		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families
+		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		../../tests/libs/adios2/ohpc-tests/test_mpi_families
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
