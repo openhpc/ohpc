@@ -8,14 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%if 0%{?rhel} >= 9 || 0%{?openEuler} || 0%{?sle_version} >= 150400
-%define version 3.4
-%else
-%define version 2.7
-%endif
-
 Name: ohpc-filesystem
-Version: %{version}
+Version: 4.1
 Release: %{?dist}.3
 Summary: Common top-level OpenHPC directories
 
