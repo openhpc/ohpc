@@ -8,6 +8,3 @@ endif
 if OPA_FABRIC_ENABLED
 TESTS += opainfo
 endif
-
-
-CLEANFILES=$(wildcard *.xml)
