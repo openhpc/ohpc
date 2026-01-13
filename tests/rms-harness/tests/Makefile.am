@@ -4,5 +4,3 @@ mpi_exit_SOURCES  = mpi_exit.c
 mpi_hang_SOURCES  = mpi_hang.c
 
 TESTS             = test_harness
-
-CLEANFILES        = $(wildcard *.xml)
