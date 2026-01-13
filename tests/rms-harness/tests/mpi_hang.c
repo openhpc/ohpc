@@ -2,29 +2,29 @@
 // verify correct test harness behavior.
 
 #include "mpi.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <assert.h>
 
 int main(int argc, char *argv[])
 {
-  int num_procs, num_local;
-  int desiredRuntime;
+	int num_procs, num_local;
+	int desiredRuntime;
 
-  if(argc > 1)
-    desiredRuntime = atoi(argv[1]);
-  else
-    desiredRuntime = 60;
+	if (argc > 1)
+		desiredRuntime = atoi(argv[1]);
+	else
+		desiredRuntime = 60;
 
-  assert(desiredRuntime > 0);
+	assert(desiredRuntime > 0);
 
-  MPI_Init      (&argc,&argv);
-  MPI_Comm_size (MPI_COMM_WORLD, &num_procs);
-  MPI_Comm_rank (MPI_COMM_WORLD, &num_local);
+	MPI_Init(&argc, &argv);
+	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+	MPI_Comm_rank(MPI_COMM_WORLD, &num_local);
 
-  sleep(desiredRuntime);
+	sleep(desiredRuntime);
 
-  MPI_Finalize();
-  return 0;
+	MPI_Finalize();
+	return 0;
 }

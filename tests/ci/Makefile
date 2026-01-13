@@ -78,6 +78,8 @@ codespell-lint:
 		tests/perf-tools/papi/tests/rm_execution \
 		tests/perf-tools/papi/tests/test_module \
 		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		tests/rms-harness/tests/test_harness \
+		tests/rms-harness/ohpc-tests/test_mpi_families \
 		tests/mpi/tests/rm_execution_single_host \
 		tests/mpi/tests/rm_execution_multi_host \
 		tests/mpi/tests/man_page_check \
@@ -186,6 +188,8 @@ whitespace-lint:
 		tests/perf-tools/papi/tests/rm_execution \
 		tests/perf-tools/papi/tests/test_module \
 		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		tests/rms-harness/tests/test_harness \
+		tests/rms-harness/ohpc-tests/test_mpi_families \
 		tests/mpi/tests/rm_execution_single_host \
 		tests/mpi/tests/rm_execution_multi_host \
 		tests/mpi/tests/man_page_check \
@@ -285,6 +289,8 @@ shellcheck-lint:
 		../../tests/perf-tools/papi/tests/rm_execution \
 		../../tests/perf-tools/papi/tests/test_module \
 		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		../../tests/rms-harness/tests/test_harness \
+		../../tests/rms-harness/ohpc-tests/test_mpi_families \
 		../../tests/mpi/tests/rm_execution_single_host \
 		../../tests/mpi/tests/rm_execution_multi_host \
 		../../tests/mpi/tests/man_page_check \
@@ -353,6 +359,7 @@ shfmt-lint:
 		../../tests/libs/mfem/tests/parallel/rm_execution \
 		../../tests/perf-tools/papi/tests/rm_execution \
 		../../tests/perf-tools/papi/tests/test_module \
+		../../tests/rms-harness/tests/test_harness \
 		../../tests/mpi/tests/rm_execution_single_host \
 		../../tests/mpi/tests/rm_execution_multi_host \
 		../../tests/mpi/tests/man_page_check \
@@ -384,6 +391,7 @@ shfmt-lint:
 		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		../../tests/libs/mfem/ohpc-tests/test_mpi_families \
 		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		../../tests/rms-harness/ohpc-tests/test_mpi_families \
 		../../tests/compilers/ohpc-tests/test_compiler_families
 
 clang-format-lint:
@@ -406,6 +414,7 @@ clang-format-lint:
 		../../tests/libs/superlu/tests/*.c \
 		../../tests/libs/trilinos/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c \
+		../../tests/rms-harness/tests/*.c \
 		../../tests/perf-tools/paraver/tests/*.c \
 		../../tests/perf-tools/tau/tests/*.c \
 		../../tests/perf-tools/tau/tests/*.cpp \

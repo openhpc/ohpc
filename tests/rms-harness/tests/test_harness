@@ -1,71 +1,67 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../common/TEST_ENV ]; then
+	source ../../common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-NODES=2
-TASKS=`tasks_count 2`
-ARGS=2
+	NODES=2
+	TASKS=$(tasks_count 2)
+	ARGS=2
+	TIMEOUT="00:05:00"
+	TESTNAME="rms-harness"
 
-@test "[RMS/harness] Verify zero exit code from MPI job runs OK ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -x mpi_exit ];then
-	flunk "mpi_exit binary does not exist"
-    fi
-    
-    run_mpi_binary ./mpi_exit 0 $NODES $TASKS
-    
-    if [ $? -ne 0 ];then
-	return 1
-    fi
+	export NODES TASKS ARGS TIMEOUT TESTNAME
 }
 
-@test "[RMS/harness] Verify non-zero exit code from MPI job detected as failure ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -x mpi_exit ];then
-	flunk "mpi_exit binary does not exist"
-    fi
-    
-    run run_mpi_binary ./mpi_exit 1 $NODES $TASKS
-    assert_failure
+@test "[${TESTNAME}] Verify zero exit code from MPI job runs OK (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -x mpi_exit ]; then
+		flunk "mpi_exit binary does not exist"
+	fi
+
+	run run_mpi_binary -t "${TIMEOUT}" ./mpi_exit 0 "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[RMS/harness] Verify long-running MPI job terminates with timeout parameter ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    skip "disabled timeout test"
-    if [ ! -x mpi_hang ];then
-	flunk "mpi_hang binary does not exist"
-    fi
-    
-    # The shortest runtime slurm permits is 1 minute. It also waits
-    # killWait seconds prior to issuing sigkill after a job has
-    # exceeded its runlimit. Assuming a killwait value of 30 seconds,
-    # this next job should take approximately 90 seconds to terminate
-    # correctly.  
+@test "[${TESTNAME}] Verify non-zero exit code from MPI job detected as failure (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -x mpi_exit ]; then
+		flunk "mpi_exit binary does not exist"
+	fi
 
-    T1=`date +%s`
-
-    run run_mpi_binary -t 1 ./mpi_hang 200 $NODES $TASKS
-    assert_failure
-
-    T2=`date +%s`
-
-    T3=$((T2-T1))
-
-    # Verify termination time is reasonable
-
-    if [ $T3 -gt 95 ];then
-        flunk "Time to terminate hung job exceeded 95 seconds ($T3 secs)"
-    fi
+	run run_mpi_binary -t "${TIMEOUT}" ./mpi_exit 1 "${NODES}" "${TASKS}"
+	assert_failure
 }
 
+@test "[${TESTNAME}] Verify long-running MPI job terminates with timeout parameter (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	skip "disabled timeout test"
+	if [ ! -x mpi_hang ]; then
+		flunk "mpi_hang binary does not exist"
+	fi
 
+	# The shortest runtime slurm permits is 1 minute. It also waits
+	# killWait seconds prior to issuing sigkill after a job has
+	# exceeded its runlimit. Assuming a killwait value of 30 seconds,
+	# this next job should take approximately 90 seconds to terminate
+	# correctly.
 
+	T1=$(date +%s)
 
+	run run_mpi_binary -t 1 ./mpi_hang 200 "${NODES}" "${TASKS}"
+	assert_failure
 
+	T2=$(date +%s)
 
+	T3=$((T2 - T1))
+
+	# Verify termination time is reasonable
+
+	if [ "${T3}" -gt 95 ]; then
+		flunk "Time to terminate hung job exceeded 95 seconds (${T3} secs)"
+	fi
+}
