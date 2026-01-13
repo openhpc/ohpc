@@ -8,18 +8,18 @@
 
 int main(int argc, char *argv[])
 {
-  int num_procs, num_local;
-  int desiredExitCode;
+	int num_procs, num_local;
+	int desiredExitCode;
 
-  if(argc > 1)
-    desiredExitCode = atoi(argv[1]);
-  else
-    desiredExitCode = 0;
+	if (argc > 1)
+		desiredExitCode = atoi(argv[1]);
+	else
+		desiredExitCode = 0;
 
-  MPI_Init (&argc,&argv);
-  MPI_Comm_size (MPI_COMM_WORLD, &num_procs);
-  MPI_Comm_rank (MPI_COMM_WORLD, &num_local);
+	MPI_Init(&argc, &argv);
+	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+	MPI_Comm_rank(MPI_COMM_WORLD, &num_local);
 
-  MPI_Finalize();
-  return desiredExitCode;
+	MPI_Finalize();
+	return desiredExitCode;
 }
