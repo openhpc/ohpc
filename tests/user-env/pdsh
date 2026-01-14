@@ -1,39 +1,47 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../common/TEST_ENV ]; then
+	source ../common/TEST_ENV
 fi
 
-check_rms
+setup_file() {
+	check_rms
 
-@test "[pdsh] check for RPM" {
-    run check_if_rpm_installed "pdsh${DELIM}"
-    assert_success
+	TESTNAME="pdsh"
+
+	export TESTNAME
 }
 
-@test "[pdsh] run a shell command on c[1-4]" {
-    run pdsh -w c[1-4] 'grep . /proc/sys/kernel/ostype'
-    assert_success
+@test "[${TESTNAME}] check for RPM (${RESOURCE_MANAGER})" {
+	run check_if_rpm_installed "pdsh${DELIM}"
+	assert_success
 }
 
-@test "[pdsh] check for pdsh-mod-slurm RPM" {
-    run check_if_rpm_installed "pdsh-mod-slurm${DELIM}"
-    if [ x$RESOURCE_MANAGER = "xslurm" ];then
-        assert_success
-    else
-        assert_failure
-    fi
+@test "[${TESTNAME}] run a shell command on c[1-2] (${RESOURCE_MANAGER})" {
+	[[ -n "${SIMPLE_CI}" ]] && skip "SSH not available in SIMPLE_CI"
+
+	run pdsh -S -w c[1-2] 'grep . /proc/sys/kernel/ostype'
+	assert_success
 }
 
-@test "[pdsh] run a shell command on -P normal" {
-    run pdsh -P normal 'grep . /proc/sys/kernel/ostype'
-    if [ x$RESOURCE_MANAGER = "xslurm" ];then
-        assert_success
-    else
-        assert_failure
-    fi
+@test "[${TESTNAME}] check for pdsh-mod-slurm RPM (${RESOURCE_MANAGER})" {
+	[[ "${RESOURCE_MANAGER}" != "slurm" ]] && skip "Only applicable for slurm"
+
+	run check_if_rpm_installed "pdsh-mod-slurm${DELIM}"
+	assert_success
+}
+
+@test "[${TESTNAME}] run a shell command on -P normal (${RESOURCE_MANAGER})" {
+	[[ "${RESOURCE_MANAGER}" != "slurm" ]] && skip "Only applicable for slurm"
+
+	if [[ -n "${SIMPLE_CI}" ]]; then
+		run pdsh -P normal -R exec grep . /proc/sys/kernel/ostype
+	else
+		run pdsh -P normal 'grep . /proc/sys/kernel/ostype'
+	fi
+	assert_success
 }
