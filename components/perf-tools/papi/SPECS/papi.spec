@@ -13,7 +13,7 @@
 # Base package name
 %define pname papi
 %define papi_version 7-2-0
-%define dot_version %(tr "-" "." <<< %{papi_version})
+%define dot_version 7.2.0
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}
