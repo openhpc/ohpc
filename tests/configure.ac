@@ -277,8 +277,8 @@ AM_CONDITIONAL(CUDA_ENABLED,test "x$enable_cuda" = "xyes" )
 #------------------------------------------------------------------------------------------
 # GEOPM
 AC_ARG_ENABLE([geopm],
-   [AS_HELP_STRING([--enable-geopm],[Enable geopm tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_geopm,yes)])
+   [AS_HELP_STRING([--enable-geopm],[Enable geopm tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_geopm,no)])
 AM_CONDITIONAL(GEOPM_ENABLED,test "x$enable_geopm" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Extrae
