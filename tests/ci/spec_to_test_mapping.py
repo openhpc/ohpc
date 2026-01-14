@@ -32,7 +32,7 @@ test_map = {
         "",
         "pdsh-mod-slurm-ohpc pdsh-ohpc",
     ],
-    "components/admin/pdsh/SPECS/pdsh.spec": ["munge", "", "magpie-ohpc"],
+    "components/admin/pdsh/SPECS/pdsh.spec": ["munge pdsh", "", "magpie-ohpc"],
     "components/dev-tools/easybuild/SPECS/easybuild.spec": [
         "easybuild",
         "",
@@ -209,6 +209,8 @@ all_test_packages = [
     "EasyBuild-ohpc",
     "losf-ohpc",
     "papi-ohpc",
+    "pdsh-ohpc",
+    "pdsh-mod-slurm-ohpc",
     "spack-ohpc",
     "valgrind-ohpc",
     # Compiler-only packages
