@@ -1,52 +1,63 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
 # -*-sh-*-
 
-load ./common/test_helper_functions
-source ./common/functions || exit 1
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../common/TEST_ENV ]; then
+	source ../common/TEST_ENV
 fi
 
-check_rms
+setup_file() {
+	check_rms
 
-module=magpie
-PKG=MAGPIE
-testname=magpie
+	MODULE=magpie
+	PKG=MAGPIE
+	TESTNAME=magpie
 
-@test "[$testname] check for RPM" {
-    run check_if_rpm_installed "magpie${DELIM}"
-    assert_success
+	export MODULE PKG TESTNAME
 }
 
+setup() {
+	OUTPUT="$(mktemp)"
 
-@test "[$testname] Verify $PKG module is loaded and matches rpm version" {
-    module load $module
-    assert_success
-    module list $module | grep "1) $module" >& .cmd_output || exit 1
-    run grep $module .cmd_output
-    assert_success
-
-    # check version against rpm
-    local version="$(rpm -q --queryformat='%{VERSION}\n' magpie-ohpc)"
-    run cat .cmd_output
-    assert_output "  1) $module/$version"
+	export OUTPUT
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists" {
-    DIR=${PKG}_DIR
-
-    module load $module
-    assert_success
-    
-    if [ -z ${!DIR} ];then
-	flunk "${PKG}_DIR directory not defined"
-    fi
-
-    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
-	flunk "directory ${!DIR} does not exist"
-    fi
+teardown() {
+	rm -f "${OUTPUT}"
 }
 
+@test "[${TESTNAME}] check for RPM" {
+	run check_if_rpm_installed "magpie${DELIM}"
+	assert_success
+}
 
+@test "[${TESTNAME}] Verify ${PKG} module is loaded and matches rpm version" {
+	module load "${MODULE}"
+	assert_success
+	module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
+	run grep "${MODULE}" "${OUTPUT}"
+	assert_success
 
+	# check version against rpm
+	local version
+	version="$(rpm -q --queryformat='%{VERSION}\n' magpie-ohpc)"
+	run cat "${OUTPUT}"
+	assert_output "  1) ${MODULE}/${version}"
+}
+
+@test "[${TESTNAME}] Verify module ${PKG}_DIR is defined and exists" {
+	DIR="${PKG}_DIR"
+
+	module load "${MODULE}"
+	assert_success
+
+	if [ -z "${!DIR}" ]; then
+		flunk "${PKG}_DIR directory not defined"
+	fi
+
+	if [ ! -d "${!DIR}" ]; then
+		flunk "directory ${!DIR} does not exist"
+	fi
+}
