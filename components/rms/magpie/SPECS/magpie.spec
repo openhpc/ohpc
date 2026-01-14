@@ -35,7 +35,7 @@
 
 Summary: Scripts for running Big Data software in HPC environments
 Name: %{pname}%{PROJ_DELIM}
-Version: 3.0
+Version: 3.2
 Release: 1%{?dist}
 License: GPLv2
 URL: https://github.com/LLNL/magpie
