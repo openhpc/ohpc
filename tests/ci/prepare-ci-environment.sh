@@ -61,18 +61,18 @@ fi
 # shellcheck disable=SC1091
 . /etc/os-release
 
+PKG_MANAGER=zypper
+COMMON_PKGS="wget python3 jq man"
+UNAME_M=$(uname -m)
+YES="-n"
+
 # Detect if running on RHEL
 EPEL_RELEASE="epel-release"
 CRB_REPO="crb"
 if [ "${ID}" = "rhel" ]; then
 	EPEL_RELEASE="https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm"
-	CRB_REPO="codeready-builder-for-ubi-10-$(uname -m)-rpms"
+	CRB_REPO="codeready-builder-for-ubi-10-${UNAME_M}-rpms"
 fi
-
-PKG_MANAGER=zypper
-COMMON_PKGS="wget python3 jq man"
-UNAME_M=$(uname -m)
-YES="-n"
 
 OBS_SERVER="http://obs.openhpc.community:82/"
 PROJECT="OpenHPC4:"
