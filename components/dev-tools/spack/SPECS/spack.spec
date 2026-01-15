@@ -11,10 +11,10 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname spack
-%define spack_packages_version 2025.07.0
+%define spack_packages_version 2025.11.0
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	1.0.1
+Version:	1.1.0
 Release:	%{?dist}.1
 Summary:	HPC software package management
 
@@ -90,9 +90,9 @@ rm -rf share/spack/qa
 # This binary has GLIBC_2.2.5 which does not exist on EL9 aarch64
 rm -f spack-packages-%{spack_packages_version}/repos/spack_repo/builtin/packages/patchelf/test/hello
 
-sed -e "s,@@OHPC_APPS@@,%{OHPC_APPS},g" -i etc/spack/defaults/config.yaml
-sed -e "s,@@OHPC_MODULEDEPS@@,%{OHPC_MODULEDEPS},g" -i etc/spack/defaults/modules.yaml
-sed -e "s,@@SPACK_PACKAGES_PATH@@,%{spack_packages_path}/spack_repo/builtin,g" -i etc/spack/defaults/repos.yaml
+sed -e "s,@@OHPC_APPS@@,%{OHPC_APPS},g" -i etc/spack/defaults/base/config.yaml
+sed -e "s,@@OHPC_MODULEDEPS@@,%{OHPC_MODULEDEPS},g" -i etc/spack/defaults/base/modules.yaml
+sed -e "s,@@SPACK_PACKAGES_PATH@@,%{spack_packages_path}/spack_repo/builtin,g" -i etc/spack/defaults/base/repos.yaml
 
 %install
 mkdir -p %{buildroot}%{install_path}

@@ -1,5 +1,5 @@
---- a/etc/spack/defaults/modules.yaml	2024-09-21 10:39:55.000000000 +0000
-+++ b/etc/spack/defaults/modules.yaml	2024-10-01 15:05:36.648000000 +0000
+--- a/etc/spack/defaults/base/modules.yaml	2024-09-21 10:39:55.000000000 +0000
++++ b/etc/spack/defaults/base/modules.yaml	2024-10-01 15:05:36.648000000 +0000
 @@ -38,17 +38,22 @@
    default:
      # Where to install modules
