@@ -73,6 +73,8 @@ Profile for shell source scripts for lua-lmod
 
 %prep
 %setup -q -n Lmod-%{version}
+# Remove unneeded shebangs on scripts just being sourced (like EPEL)
+sed -i -e '/^#!/d' init/*.in
 
 # OpenHPC patches
 %patch -P 1 -p1
@@ -88,7 +90,6 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 %{__mkdir_p} %{buildroot}/%{_sysconfdir}/profile.d
 %{__cat} << 'EOF' > %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
-#!/bin/sh
 # -*- shell-script -*-
 ########################################################################
 #  This is the system wide source file for setting up
@@ -130,7 +131,6 @@ module try-add ohpc
 EOF
 
 %{__cat} << 'EOF' > %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
-#!/bin/csh
 # -*- shell-script -*-
 ########################################################################
 #  This is the system wide source file for setting up
