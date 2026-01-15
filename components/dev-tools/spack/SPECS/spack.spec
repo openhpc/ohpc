@@ -84,6 +84,9 @@ same package.
 # prevent installation on Leap
 grep -rl '#!/bin/env ' . | xargs -i@ sed -i 's|#!/bin/env|#!/usr/bin/env|g' @
 
+# do not distribute qa scripts
+rm -rf share/spack/qa
+
 # This binary has GLIBC_2.2.5 which does not exist on EL9 aarch64
 rm -f spack-packages-%{spack_packages_version}/repos/spack_repo/builtin/packages/patchelf/test/hello
 
