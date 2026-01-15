@@ -39,15 +39,25 @@ jobs:
 
            artifacts_url=${{ github.event.workflow_run.artifacts_url }}
 
+           # Track processed artifact names to skip duplicates (API returns newest first)
+           seen_file=$(mktemp)
+
            gh api --paginate "$artifacts_url" -q '.artifacts[] | [.name, .archive_download_url] | @tsv' | while read artifact
            do
              IFS=$'\t' read name url <<< "$artifact"
              if [ "${name:0:12}" != "test-results" ] && [ "$name" != "event-file" ]; then
                continue
              fi
+             # Skip if we've already processed an artifact with this name
+             if grep -qxF "$name" "$seen_file" 2>/dev/null; then
+               echo "Skipping duplicate artifact: $name"
+               continue
+             fi
+             echo "$name" >> "$seen_file"
              gh api $url > "$name.zip"
              unzip -d "$name" "$name.zip"
            done
+           rm -f "$seen_file"
            ls -alR
 
       - name: Check for event-file
