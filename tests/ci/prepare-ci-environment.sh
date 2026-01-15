@@ -61,6 +61,14 @@ fi
 # shellcheck disable=SC1091
 . /etc/os-release
 
+# Detect if running on RHEL
+EPEL_RELEASE="epel-release"
+CRB_REPO="crb"
+if [ "${ID}" = "rhel" ]; then
+	EPEL_RELEASE="https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm"
+	CRB_REPO="codeready-builder-for-ubi-10-$(uname -m)-rpms"
+fi
+
 PKG_MANAGER=zypper
 COMMON_PKGS="wget python3 jq man"
 UNAME_M=$(uname -m)
@@ -170,8 +178,8 @@ dnf_rhel() {
 	if [ -n "${ENABLE_ONEAPI}" ]; then
 		echo "keepcache=1" >>/etc/dnf/dnf.conf
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} lua epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
-	loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
+	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} lua "${EPEL_RELEASE}" dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" config-manager --set-enabled "${CRB_REPO}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
