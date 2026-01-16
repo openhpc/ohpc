@@ -110,8 +110,8 @@ test_map = {
         "",
         ("lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc man bc"),
     ],
-    "components/mpi-families/openmpi/SPECS/openmpi5.spec": ["slurm", "", ""],
-    "components/mpi-families/mpich/SPECS/mpich.spec": ["slurm", "", ""],
+    "components/mpi-families/openmpi/SPECS/openmpi5.spec": ["mpi", "", ""],
+    "components/mpi-families/mpich/SPECS/mpich.spec": ["mpi", "", ""],
     "components/dev-tools/spack/SPECS/spack.spec": ["", "spack", ""],
     "components/admin/conman/SPECS/conman.spec": ["", "oob", ""],
     "components/dev-tools/autoconf/SPECS/autoconf.spec": [
