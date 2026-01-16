@@ -31,7 +31,7 @@ Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   5.0.8
+Version:   5.0.9
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
