@@ -15,26 +15,19 @@
 %define pname scotch
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:	7.0.7
+Version:	7.0.10
 Release:	1%{?dist}
 Summary:	Graph, mesh and hypergraph partitioning library
 License:	CeCILL-C
 Group:		%{PROJ_NAME}/serial-libs
 URL:		https://gitlab.inria.fr/scotch/scotch
 Source0:	https://gitlab.inria.fr/scotch/scotch/-/archive/v%{version}/scotch-v%{version}.tar.bz2
-Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
-Source2:	%{pname}-rpmlintrc
+Source1:	%{pname}-rpmlintrc
 
-BuildRequires:	flex bison make
-%if 0%{?rhel} || 0%{?openEuler}
+BuildRequires:	flex bison make cmake%{PROJ_DELIM}
 BuildRequires:  bzip2-devel
 Requires:       bzip2-devel
 BuildRequires:  zlib-devel
-%else
-BuildRequires:  libbz2-devel
-Requires:       libbz2-devel
-BuildRequires:  zlib-devel
-%endif
 
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
@@ -48,33 +41,28 @@ sparse matrix ordering.
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "gnu15"
-export CFLAGS="${CFLAGS} -std=gnu17"
-%endif
-sed s:@RPMFLAGS@:"${CFLAGS} -fPIC": < %{SOURCE1} > src/Makefile.inc
+module load cmake
 
-pushd src
-make %{?_smp_mflags}
-popd
+cmake -S . -B build \
+    -DCMAKE_INSTALL_PREFIX=%{install_path} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_C_FLAGS="${CFLAGS} -fPIC" \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_PTSCOTCH=OFF \
+    -DBUILD_LIBSCOTCHMETIS=ON \
+    -DBUILD_LIBESMUMPS=ON \
+    -DTHREADS=ON \
+    -DIDXSIZE=64 \
+    -DSCOTCH_DETERMINISTIC=FIXED_SEED
+
+cmake --build build %{?_smp_mflags}
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+module load cmake
 
-pushd src
-make prefix=%{buildroot}%{install_path} install
-
-# make dynamic, remove static linkings
-pushd %{buildroot}%{install_path}/lib
-for static_lib in *.a; do \
-    lib=`basename $static_lib .a`; \
-    ar x $static_lib; \
-    ${CC} -shared -Wl,-soname=$lib.so -o $lib.so *.o; \
-    rm $static_lib *\.o; \
-done; \
-popd
-install -d %{buildroot}%{install_path}/lib
-popd
+DESTDIR=%{buildroot} cmake --install build
 
 # Convert the license files to utf8
 pushd doc
@@ -108,11 +96,11 @@ set     version			    %{version}
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
+prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
-setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
