@@ -1,14 +1,13 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
+export MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
-cd libs/scotch           || exit 1
+cd libs/scotch || exit 1
 
 export BATS_JUNIT_CLASS=SCOTCH
 
@@ -16,7 +15,7 @@ export BATS_JUNIT_CLASS=SCOTCH
 
 ./bootstrap || exit 1
 
-for compiler in $COMPILER_FAMILIES ; do
+for compiler in $COMPILER_FAMILIES; do
 
 	echo " "
 	echo " "
@@ -24,16 +23,16 @@ for compiler in $COMPILER_FAMILIES ; do
 	echo "Libraries: Scotch tests: $compiler"
 	echo "-------------------------------------------------------"
 
-	module purge          || exit 1
-	module load $compiler || exit 1
-	module load scotch   || exit 1
-	module load prun      || exit 1
+	module purge || exit 1
+	module load "$compiler" || exit 1
+	module load scotch || exit 1
+	module load prun || exit 1
 
-	./configure           || exit 1
-	make clean            || exit 1
-	make -k check         || status=1
+	./configure || exit 1
+	make clean || exit 1
+	make -k check || status=1
 
-	save_logs_compiler_family tests $compiler
+	save_logs_compiler_family tests "$compiler"
 
 	make distclean
 done
