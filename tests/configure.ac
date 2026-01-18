@@ -1,8 +1,8 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.69])
-AC_INIT([test-suite], [2.0.0], [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([test-suite],[2.0.0],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.14 -Wno-portability])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -510,7 +510,7 @@ AC_ARG_ENABLE([prk],
 AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 #------------------------------------------------------------------------------------------
 
-AC_OUTPUT( Makefile 
+AC_CONFIG_FILES([Makefile 
        common/TEST_ENV
        admin/Makefile 
        user-env/Makefile 
@@ -543,7 +543,8 @@ AC_OUTPUT( Makefile
        libs/R/Makefile
        libs/ucx/Makefile
        modules/Makefile
-       time/Makefile )
+       time/Makefile ])
+AC_OUTPUT
 
 echo
 echo '--------------------------------------------- SUMMARY ---------------------------------------------'
