@@ -1,43 +1,49 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-@test "[libs/scotch] graph_map binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s graph_map ];then
-	flunk "grapch_map binary does not exist"
-    fi
-    
-    run_serial_binary ./graph_map "m4x4.grf"
-    assert_success
+	TIMEOUT="00:05:00"
+	TESTNAME="libs/Scotch"
+
+	export TIMEOUT TESTNAME
 }
 
-@test "[libs/scotch] strat_seq binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s strat_seq ];then
-	flunk "strat_seq does not exist"
-    fi
-    
-    run_serial_binary ./strat_seq ""
-    assert_success
+@test "[${TESTNAME}] graph_map binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s graph_map ]; then
+		flunk "graph_map binary does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" ./graph_map "m4x4.grf"
+	assert_success
 }
 
-@test "[libs/scotch] gout binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s $SCOTCH_BIN/gout ];then
-	flunk "gout does not exist"
-    fi
-    
-    run_serial_binary gout "-om -gn -mn m4x4.grf - - m4x4.ps"
-    assert_success
+@test "[${TESTNAME}] strat_seq binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s strat_seq ]; then
+		flunk "strat_seq does not exist"
+	fi
 
-    if [ ! -f m4x4.ps ];then
-    flunk "gout failed to produce output"
-    fi
+	run_serial_binary -t "${TIMEOUT}" ./strat_seq ""
+	assert_success
+}
+
+@test "[${TESTNAME}] gout binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s "${SCOTCH_BIN}/gout" ]; then
+		flunk "gout does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" gout "-om -gn -mn m4x4.grf - - m4x4.ps"
+	assert_success
+
+	if [ ! -f m4x4.ps ]; then
+		flunk "gout failed to produce output"
+	fi
 }
