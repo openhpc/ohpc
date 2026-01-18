@@ -310,7 +310,7 @@ for spec in args.specfiles:
                 mpi_family=family,
                 compiler_family=args.compiler_family,
             ):
-                failed.append(just_spec)
+                failed.append("%s (%s, %s)" % (just_spec, args.compiler_family, family))
             else:
                 rebuild_success.append(
                     "%s (%s, %s)" % (just_spec, args.compiler_family, family)
@@ -327,7 +327,7 @@ for spec in args.specfiles:
                 compiler_family=args.compiler_family,
                 not_mpi_dependent=True,
             ):
-                failed.append(just_spec)
+                failed.append("%s (%s)" % (just_spec, args.compiler_family))
             else:
                 rebuild_success.append("%s (%s)" % (just_spec, args.compiler_family))
 
@@ -336,7 +336,7 @@ for spec in args.specfiles:
             spec,
             compiler_family=args.compiler_family,
         ):
-            failed.append(just_spec)
+            failed.append("%s (%s)" % (just_spec, args.compiler_family))
         else:
             rebuild_success.append("%s (%s)" % (just_spec, args.compiler_family))
 
@@ -351,7 +351,7 @@ if not spec_found:
     logging.info("SKIP. Commit without changes to a SPEC file.")
 
 logging.info("Found %d spec file(s)" % total)
-logging.info("--> %d rebuild successfully" % (total - len(failed) - len(skipped)))
+logging.info("--> %d rebuild successfully" % len(rebuild_success))
 for success in rebuild_success:
     logging.info("----> %s" % success)
 
