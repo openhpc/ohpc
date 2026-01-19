@@ -1,45 +1,47 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ]; then
-	source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
 setup_file() {
-	NODES=2
-	TASKS=$(tasks_count 4)
-
 	check_rms
 
-	export NODES TASKS
+	NODES=2
+	TASKS=$(tasks_count 4)
+	TIMEOUT="00:05:00"
+	TESTNAME="libs/PTScotch"
+
+	export NODES TASKS TIMEOUT TESTNAME
 }
 
-@test "[libs/PTScotch] dgraph_redist binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] dgraph_redist binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s dgraph_redist ]; then
-		flunk "grapch_map binary does not exist"
+		flunk "dgraph_redist binary does not exist"
 	fi
 
-	run_mpi_binary ./dgraph_redist "bump.grf" "${NODES}" "${TASKS}"
+	run_mpi_binary -t "${TIMEOUT}" ./dgraph_redist "bump.grf" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[libs/PTScotch] strat_par binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] strat_par binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s strat_par ]; then
 		flunk "strat_par does not exist"
 	fi
 
-	run_mpi_binary ./strat_par "" "${NODES}" "${TASKS}"
+	run_mpi_binary -t "${TIMEOUT}" ./strat_par "" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[libs/PTScotch] dgord binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] dgord binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s "${PTSCOTCH_BIN}/dgord" ]; then
 		flunk "dgord does not exist"
 	fi
 
-	run_mpi_binary dgord "bump.grf /dev/null -vt" "${NODES}" "${TASKS}"
+	run_mpi_binary -t "${TIMEOUT}" dgord "bump.grf /dev/null -vt" "${NODES}" "${TASKS}"
 	assert_success
 }
