@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT(ptscotch, 7.0.7, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([ptscotch],[7.0.10],[https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
@@ -13,9 +13,9 @@ AC_MSG_CHECKING([for PTSCOTCH_DIR environment variable])
 if test "x$PTSCOTCH_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([PTSCOTCH_DIR not defined - please load ptscotch environment.])
+   AC_MSG_ERROR([PTSCOTCH_DIR not defined - please load ptscotch environment.])
 else
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
 fi
 
 # set compilers to use MPI toolchain
@@ -28,20 +28,20 @@ AC_PROG_CC
 AC_C_CONST
 
 CFLAGS="-I ${PTSCOTCH_INC} ${CFLAGS}"
-LDFLAGS="-L${PTSCOTCH_LIB} -pthread ${LDFLAGS}"
-
+LDFLAGS="-L${PTSCOTCH_LIB} -lptscotch -lscotch -lptscotcherrexit -lscotcherrexit -lz -lbz2 -lm -lrt -pthread ${LDFLAGS}"
 
 # Set subdirectories
-AC_CONFIG_FILES(Makefile tests/Makefile)
+AC_CONFIG_FILES([Makefile tests/Makefile])
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
+echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo

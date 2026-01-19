@@ -1,15 +1,14 @@
 #!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 8
 # -*-sh-*-
 
-source ./common/test_helper_functions.bash || exit 1
-source ./common/functions || exit 1
+source ../../../common/test_helper_functions.bash || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ]; then
-	source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
 setup_file() {
-
 	PKG=PTSCOTCH
 	MODULE=ptscotch
 	FAMILY="${LMOD_FAMILY_COMPILER}-${LMOD_FAMILY_MPI}"
@@ -131,11 +130,12 @@ teardown() {
 
 @test "[${TESTNAME}] Verify module ${PKG}_BIN is defined and exists (${FAMILY})" {
 	BIN="${PKG}_BIN"
+
 	if [ -z "${!BIN}" ]; then
 		flunk "${PKG}_BIN directory not defined"
 	fi
 
-	if [ ! -d "${!BIN}" ] || [ -z "${!BIN}" ]; then
+	if [ ! -d "${!BIN}" ]; then
 		flunk "directory ${!BIN} does not exist"
 	fi
 }
