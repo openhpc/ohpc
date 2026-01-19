@@ -22,3 +22,6 @@ scalars_read_LDADD      = -ladios2_fortran -ladios2_fortran_mpi
 TESTS                  += test_module
 TESTS                  += rm_execution
 
+clean-local:
+	-rm -rf *.bp
+
