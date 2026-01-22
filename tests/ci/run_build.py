@@ -11,59 +11,59 @@ import csv
 import os
 import io
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    'user',
-    help='non root user to run build as',
+    "user",
+    help="non root user to run build as",
     nargs=1,
 )
 parser.add_argument(
-    'specfiles',
-    help='list of specfiles to check',
-    nargs='*',
+    "specfiles",
+    help="list of specfiles to check",
+    nargs="*",
 )
 parser.add_argument(
-    '--compiler-family',
-    help='compiler family name to use for rebuild',
-    default='gnu15',
+    "--compiler-family",
+    help="compiler family name to use for rebuild",
+    default="gnu15",
 )
 parser.add_argument(
-    '--mpi-family',
+    "--mpi-family",
     help=(
-        'mpi family name to use for rebuild ' +
-        '(defaults to openmpi5, mpich, mvapich2)'
+        "mpi family name to use for rebuild "
+        + "(defaults to openmpi5, mpich, mvapich2)"
     ),
 )
 args = parser.parse_args()
 
 spec_found = False
-build_user = ''.join(args.user)
+build_user = "".join(args.user)
 dnf_based = False
 dist = "9999.ci.ohpc"
-version_id = ''
+version_id = ""
 
 # Check which base OS we are using
-reader = csv.DictReader(open('/etc/os-release'), delimiter="=")
+reader = csv.DictReader(open("/etc/os-release"), delimiter="=")
 
 skip_ci_specs = []
-skip_ci_specs_env = os.getenv('SKIP_CI_SPECS')
+skip_ci_specs_env = os.getenv("SKIP_CI_SPECS")
 if skip_ci_specs_env:
     skip_ci_specs = skip_ci_specs_env.rstrip().split()
 
 for row in reader:
-    key = row.pop('NAME')
-    if key in ['ID_LIKE', 'ID']:
+    key = row.pop("NAME")
+    if key in ["ID_LIKE", "ID"]:
         for item in list(row.items())[0]:
-            if 'fedora' in item or 'openEuler' in item:
+            if "fedora" in item or "openEuler" in item:
                 dnf_based = True
-    if key == 'VERSION_ID':
+    if key == "VERSION_ID":
         version_id = list(row.items())[0][1]
 
 
 def run_command(command):
-    logging.info("About to run command %s" % ' '.join(command))
+    logging.info("About to run command %s" % " ".join(command))
     process = subprocess.Popen(
         command,
         bufsize=1,
@@ -123,14 +123,11 @@ def loop_command(command, max_attempts=5):
 
 
 def build_srpm_and_rpm(
-        command,
-        mpi_family=None,
-        compiler_family=None,
-        not_mpi_dependent=False
+    command, mpi_family=None, compiler_family=None, not_mpi_dependent=False
 ):
     # Build SRPM
     command = [
-        'misc/build_srpm.sh',
+        "misc/build_srpm.sh",
         spec,
     ]
     if compiler_family:
@@ -142,14 +139,14 @@ def build_srpm_and_rpm(
             # This is a shortcoming of the build_srpm script.
             # It only has positional parameters.
             # It needs a dummy parameter here.
-            command.append('openmpi5')
-        command.append('0')
+            command.append("openmpi5")
+        command.append("0")
     success, output = run_command(command)
     if not success:
         # First check if the architecture is not supported
         if output is not None:
-            for line in output.split('\n'):
-                if 'No compatible architectures found for build' in line:
+            for line in output.split("\n"):
+                if "No compatible architectures found for build" in line:
                     logging.info("Skipping unsupported architecture RPM")
                     return True
 
@@ -157,8 +154,8 @@ def build_srpm_and_rpm(
         return False
 
     src_rpm = ""
-    for line in output.split('\n'):
-        if line.endswith('.src.rpm'):
+    for line in output.split("\n"):
+        if line.endswith(".src.rpm"):
             src_rpm = line
             break
 
@@ -170,39 +167,39 @@ def build_srpm_and_rpm(
 
     if dnf_based:
         builddep_command = [
-            'dnf',
-            '-y',
-            'builddep',
+            "dnf",
+            "-y",
+            "builddep",
             src_rpm,
         ]
     else:
         builddep_command = [
-            'zypper',
-            '-n',
-            '--no-gpg-checks',
-            'source-install',
+            "zypper",
+            "-n",
+            "--no-gpg-checks",
+            "source-install",
             src_rpm,
         ]
 
     success, _ = loop_command(builddep_command)
     if not success:
-        logging.error("Running '%s' failed" % ' '.join(builddep_command))
+        logging.error("Running '%s' failed" % " ".join(builddep_command))
         return False
 
-    tmp_src_rpm = os.path.join('/tmp', os.path.basename(src_rpm))
+    tmp_src_rpm = os.path.join("/tmp", os.path.basename(src_rpm))
 
     try:
         os.unlink(tmp_src_rpm)
     except FileNotFoundError:
         pass
-    shutil.move(src_rpm, '/tmp/')
+    shutil.move(src_rpm, "/tmp/")
     src_rpm = tmp_src_rpm
 
     rebuild_command = [
-        'su',
+        "su",
         build_user,
-        '-l',
-        '-c',
+        "-l",
+        "-c",
         'rpmbuild --define "dist %s" --rebuild %s' % (dist, src_rpm),
     ]
 
@@ -210,14 +207,10 @@ def build_srpm_and_rpm(
         rebuild_command[-1] += " --define 'mpi_family %s'" % mpi_family
 
     if compiler_family is not None:
-        rebuild_command[-1] += (
-            " --define 'compiler_family %s'" % compiler_family
-        )
+        rebuild_command[-1] += " --define 'compiler_family %s'" % compiler_family
 
     if not_mpi_dependent:
-        rebuild_command[-1] += (
-            " --define 'ohpc_mpi_dependent 0'"
-        )
+        rebuild_command[-1] += " --define 'ohpc_mpi_dependent 0'"
 
     # Disable parallel builds for below packages on aarch64 to avoid OOM
     pkgs = ["boost-", "paraver-"]
@@ -243,17 +236,17 @@ for spec in args.specfiles:
     # if more than one docs related file are modified then
     # build the docs.spec just once
     # START OF LOGIC FOR DOCS
-    if 'components/admin/docs/SPECS/docs.spec' == spec:
+    if "components/admin/docs/SPECS/docs.spec" == spec:
         if docs_spec_executed:
             continue
         docs_spec_executed = True
-    elif not docs_spec_executed and \
-        ('docs/recipes/install/' in spec
-            or 'components/admin/docs/SOURCES/' in spec):
+    elif not docs_spec_executed and (
+        "docs/recipes/install/" in spec or "components/admin/docs/SOURCES/" in spec
+    ):
         docs_spec_executed = True
-        spec = 'components/admin/docs/SPECS/docs.spec'
+        spec = "components/admin/docs/SPECS/docs.spec"
     # END OF LOGIC FOR DOCS
-    elif not spec.endswith('.spec'):
+    elif not spec.endswith(".spec"):
         continue
     just_spec = os.path.basename(spec)
     total += 1
@@ -266,7 +259,7 @@ for spec in args.specfiles:
     logging.info("--> Building RPM from spec file %s" % spec)
 
     command = [
-        'misc/get_source.sh',
+        "misc/get_source.sh",
         just_spec,
     ]
 
@@ -281,57 +274,53 @@ for spec in args.specfiles:
     contents = infile.read()
     infile.close()
 
-    if 'ohpc_mpi_dependent' in contents:
+    if "ohpc_mpi_dependent" in contents:
         families = [
-            'openmpi5',
-            'mpich',
-            'mvapich2',
+            "openmpi5",
+            "mpich",
+            "mvapich2",
         ]
 
         if args.mpi_family:
             families = [args.mpi_family]
 
         for family in families:
-            if family == 'mvapich2' and os.uname().machine == 'aarch64':
+            if family == "mvapich2" and os.uname().machine == "aarch64":
                 continue
             if not build_srpm_and_rpm(
-                    spec,
-                    mpi_family=family,
-                    compiler_family=args.compiler_family,
+                spec,
+                mpi_family=family,
+                compiler_family=args.compiler_family,
             ):
                 failed.append(just_spec)
             else:
                 rebuild_success.append(
-                    "%s (%s, %s)" %
-                    (just_spec, args.compiler_family, family))
+                    "%s (%s, %s)" % (just_spec, args.compiler_family, family)
+                )
 
-        if '!?ohpc_mpi_dependent' in contents:
+        if "!?ohpc_mpi_dependent" in contents:
             # This is a package that can be built with and without MPI support.
             # It should have the following line:
             # '%{!?ohpc_mpi_dependent:%define ohpc_mpi_dependent 1}'
             # If that exists we need to rebuild it once more with
             # ohpc_mpi_dependent set to 0.
             if not build_srpm_and_rpm(
-                    spec,
-                    compiler_family=args.compiler_family,
-                    not_mpi_dependent=True,
+                spec,
+                compiler_family=args.compiler_family,
+                not_mpi_dependent=True,
             ):
                 failed.append(just_spec)
             else:
-                rebuild_success.append(
-                    "%s (%s)" %
-                    (just_spec, args.compiler_family))
+                rebuild_success.append("%s (%s)" % (just_spec, args.compiler_family))
 
-    elif 'ohpc_compiler_dependent' in contents:
+    elif "ohpc_compiler_dependent" in contents:
         if not build_srpm_and_rpm(
-                spec,
-                compiler_family=args.compiler_family,
+            spec,
+            compiler_family=args.compiler_family,
         ):
             failed.append(just_spec)
         else:
-            rebuild_success.append(
-                "%s (%s)" %
-                (just_spec, args.compiler_family))
+            rebuild_success.append("%s (%s)" % (just_spec, args.compiler_family))
 
     else:
         if not build_srpm_and_rpm(spec):
@@ -344,8 +333,7 @@ if not spec_found:
     logging.info("SKIP. Commit without changes to a SPEC file.")
 
 logging.info("Found %d spec file(s)" % total)
-logging.info("--> %d rebuild successfully" %
-             (total - len(failed) - len(skipped)))
+logging.info("--> %d rebuild successfully" % (total - len(failed) - len(skipped)))
 for success in rebuild_success:
     logging.info("----> %s" % success)
 
