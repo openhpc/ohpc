@@ -1,4 +1,4 @@
-lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint shfmt-lint clang-format-lint
+lint: codespell-lint ruff-check-lint ruff-format-lint whitespace-lint shellcheck-lint shfmt-lint clang-format-lint
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
@@ -53,9 +53,17 @@ codespell-lint:
 		tests/libs/plasma/tests/test_module \
 		tests/libs/trilinos/tests/rm_execution
 
-flake8-lint:
-	@echo "Running 'flake8' on selected Python files"
-	flake8 \
+ruff-check-lint:
+	@echo "Running 'ruff check' on selected Python files"
+	ruff check \
+		../../tests/ci/check_spec.py \
+		../../tests/ci/run_build.py \
+		../../misc/build_order.py \
+		../../tests/ci/spec_to_test_mapping.py
+
+ruff-format-lint:
+	@echo "Running 'ruff format' on selected Python files"
+	ruff format \
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
