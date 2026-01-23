@@ -129,7 +129,7 @@ dnf_rhel() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats "${ENABLE_ONEAPI}"
+	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats ccache "${ENABLE_ONEAPI}"
 }
 
 dnf_openeuler() {
@@ -138,7 +138,7 @@ dnf_openeuler() {
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
 	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
-	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats
+	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats ccache
 	# This repository contains golang 1.21 copied from 24.03
 	# shellcheck disable=SC2016
 	echo -e '[go.1.21]\nname=go.1.21\nbaseurl=https://repos.openhpc.community/.staging/golang-1.21-openEuler-24.03-LTS/$basearch/\nenabled=1\ngpgcheck=0' >/etc/yum.repos.d/go.1.21.repo
@@ -156,10 +156,12 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	fi
 	adduser ohpc
 else
-	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild bats "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild bats ccache "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
 	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc "${ENABLE_ONEAPI}"
-	useradd -m ohpc
+	useradd -m ohpc -U
+	mkdir -p /var/cache/ccache
+	chown -R ohpc:ohpc /var/cache/ccache
 fi
