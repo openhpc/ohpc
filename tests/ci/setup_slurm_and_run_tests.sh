@@ -112,6 +112,9 @@ fi
 export SIMPLE_CI=1
 TESTS_FAILED=1
 
+export OHPC_USE_CCACHE=yes
+chown -R ohpc:ohpc /var/cache/ccache
+
 set +e
 
 # AppArmor on the Ubuntu GitHub Actions host might block
@@ -125,6 +128,7 @@ sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -d
 if sudo \
 	--user="${USER}" \
 	--preserve-env=SIMPLE_CI \
+	--preserve-env=OHPC_USE_CCACHE \
 	--login \
 	bash -c "\
 		cd ${PWD}/tests; \

@@ -8,6 +8,7 @@ import shutil
 import time
 import sys
 import csv
+import pwd
 import os
 import io
 
@@ -60,6 +61,23 @@ for row in reader:
                 dnf_based = True
     if key == "VERSION_ID":
         version_id = list(row.items())[0][1]
+
+# Enable ccache for CI builds
+os.makedirs("/etc/rpm", exist_ok=True)
+with open("/etc/rpm/macros.ohpc-ci-conf", "w") as f:
+    f.write("%OHPC_USE_CCACHE yes\n")
+
+# Ensure ccache directory is owned by build user
+ccache_dir = "/var/cache/ccache"
+os.makedirs(ccache_dir, exist_ok=True)
+uid = pwd.getpwnam(build_user).pw_uid
+gid = pwd.getpwnam(build_user).pw_gid
+for root, dirs, files in os.walk(ccache_dir):
+    os.chown(root, uid, gid)
+    for d in dirs:
+        os.chown(os.path.join(root, d), uid, gid)
+    for f in files:
+        os.chown(os.path.join(root, f), uid, gid)
 
 
 def run_command(command):
