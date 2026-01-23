@@ -55,6 +55,13 @@ jobs:
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
+        restore-keys: |
+          ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh ${{ matrix.compiler }}
     - id: files
@@ -87,6 +94,12 @@ jobs:
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}-build
 
   test_on_rhel:
     strategy:
@@ -116,6 +129,13 @@ jobs:
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}-build
+        restore-keys: |
+          ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh ${{ matrix.compiler }}
     - id: files
@@ -154,6 +174,12 @@ jobs:
         name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: tests/**/*.log.xml
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
 
   build_on_openEuler:
     strategy:
@@ -172,6 +198,13 @@ jobs:
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}
+        restore-keys: |
+          ccache-openeuler-${{ matrix.os }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -197,6 +230,12 @@ jobs:
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}-build
 
   test_on_openEuler:
     strategy:
@@ -219,6 +258,13 @@ jobs:
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}-build
+        restore-keys: |
+          ccache-openeuler-${{ matrix.os }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -239,6 +285,12 @@ jobs:
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}
 
   build_on_leap:
     strategy:
@@ -252,6 +304,13 @@ jobs:
     - name: Install git
       run: zypper -n update; zypper -n install git
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-leap-${{ matrix.os }}-${{ github.sha }}
+        restore-keys: |
+          ccache-leap-${{ matrix.os }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -277,6 +336,12 @@ jobs:
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-leap-${{ matrix.os }}-${{ github.sha }}-build
 
   test_on_leap:
     strategy:
@@ -296,6 +361,13 @@ jobs:
     - name: Install git
       run: zypper -n update; zypper -n install git
     - uses: actions/checkout@v4
+    - name: Restore ccache
+      uses: actions/cache/restore@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-leap-${{ matrix.os }}-${{ github.sha }}-build
+        restore-keys: |
+          ccache-leap-${{ matrix.os }}-
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -316,6 +388,12 @@ jobs:
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
         tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
+    - name: Save ccache
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: /var/cache/ccache
+        key: ccache-leap-${{ matrix.os }}-${{ github.sha }}
 
   event_file:
     name: "Event File"
