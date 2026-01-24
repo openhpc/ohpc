@@ -65,3 +65,7 @@ threads_LDADD           = -lpthread
 TESTS                  += native_avail
 TESTS                  += test_module
 TESTS                  += rm_execution
+
+DISTCLEANFILES          = .avail-instructions avail branches clockres_pthreads \
+                          cost cycle_ratio dmem_info first fmultiplex1 \
+                          libtestlib.a memory simple strtest tenth threads zero
