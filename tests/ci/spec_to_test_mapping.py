@@ -54,12 +54,11 @@ test_map = {
         "",
         "zlib-devel automake-ohpc libtool-ohpc autoconf-ohpc",
     ],
-    "components/parallel-libs/ptscotch/SPECS/ptscotch.spec": [
-        "ptscotch",
+    "components/serial-libs/scotch/SPECS/scotch.spec": [
+        "scotch ptscotch",
         "",
         "zlib-devel",
     ],
-    "components/serial-libs/scotch/SPECS/scotch.spec": ["scotch", "", "zlib-devel"],
     "components/parallel-libs/fftw/SPECS/fftw.spec": ["fftw", "", ""],
     "components/parallel-libs/hypre/SPECS/hypre.spec": ["hypre", "", ""],
     "components/parallel-libs/mfem/SPECS/mfem.spec": ["mfem", "", ""],
