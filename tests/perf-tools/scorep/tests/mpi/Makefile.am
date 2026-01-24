@@ -37,4 +37,5 @@ main_hyb_fort_SOURCES  = src/hybrid/Fortran/main.F90
 
 #----------------------------------------#
 
-CLEANFILES = *.input.*
+CLEANFILES       = *.input.*
+DISTCLEANFILES   = compile
