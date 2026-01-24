@@ -48,7 +48,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build on RHEL (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
-      image: docker.io/library/rockylinux:9
+      image: docker.io/library/almalinux:9
       volumes:
         - /usr:/host/usr
         - /opt:/host/opt
@@ -125,7 +125,7 @@ jobs:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
     container:
-      image: docker.io/library/rockylinux:9
+      image: docker.io/library/almalinux:9
       options: --privileged
       volumes:
         - /usr:/host/usr
