@@ -99,22 +99,50 @@ jobs:
         echo '' >> artifacts/comment.md
 
         # Build the main table
-        echo "| Configuration | 🐧 RHEL | 🦊 openEuler |" >> artifacts/comment.md
-        echo "|:--------------|:-------:|:------------:|" >> artifacts/comment.md
+        # Check if LEAP artifacts exist
+        has_leap=false
+        for dir in artifacts/ccache-stats-leap-*/; do
+          if [ -d "$dir" ]; then
+            has_leap=true
+            break
+          fi
+        done
+
+        if [ "$has_leap" = true ]; then
+          echo "| Configuration | 🐧 RHEL | 🦊 openEuler | 🦎 LEAP |" >> artifacts/comment.md
+          echo "|:--------------|:-------:|:------------:|:-------:|" >> artifacts/comment.md
+        else
+          echo "| Configuration | 🐧 RHEL | 🦊 openEuler |" >> artifacts/comment.md
+          echo "|:--------------|:-------:|:------------:|" >> artifacts/comment.md
+        fi
 
         # x86_64/gnu15
         rhel_rate=$(get_value "artifacts/ccache-stats-rhel-x86_64-gnu15/data.txt" "hit_rate")
         euler_rate=$(get_value "artifacts/ccache-stats-openeuler-x86_64/data.txt" "hit_rate")
-        echo "| 🖥️ x86_64 / gnu15 | $(format_hit_rate "$rhel_rate") | $(format_hit_rate "$euler_rate") |" >> artifacts/comment.md
+        leap_rate=$(get_value "artifacts/ccache-stats-leap-x86_64-gnu15/data.txt" "hit_rate")
+        if [ "$has_leap" = true ]; then
+          echo "| 🖥️ x86_64 / gnu15 | $(format_hit_rate "$rhel_rate") | $(format_hit_rate "$euler_rate") | $(format_hit_rate "$leap_rate") |" >> artifacts/comment.md
+        else
+          echo "| 🖥️ x86_64 / gnu15 | $(format_hit_rate "$rhel_rate") | $(format_hit_rate "$euler_rate") |" >> artifacts/comment.md
+        fi
 
         # x86_64/intel
         rhel_intel_rate=$(get_value "artifacts/ccache-stats-rhel-x86_64-intel/data.txt" "hit_rate")
-        echo "| 🖥️ x86_64 / intel | $(format_hit_rate "$rhel_intel_rate") | - |" >> artifacts/comment.md
+        if [ "$has_leap" = true ]; then
+          echo "| 🖥️ x86_64 / intel | $(format_hit_rate "$rhel_intel_rate") | - | - |" >> artifacts/comment.md
+        else
+          echo "| 🖥️ x86_64 / intel | $(format_hit_rate "$rhel_intel_rate") | - |" >> artifacts/comment.md
+        fi
 
         # aarch64/gnu15
         rhel_arm_rate=$(get_value "artifacts/ccache-stats-rhel-aarch64-gnu15/data.txt" "hit_rate")
         euler_arm_rate=$(get_value "artifacts/ccache-stats-openeuler-aarch64/data.txt" "hit_rate")
-        echo "| 💪 aarch64 / gnu15 | $(format_hit_rate "$rhel_arm_rate") | $(format_hit_rate "$euler_arm_rate") |" >> artifacts/comment.md
+        leap_arm_rate=$(get_value "artifacts/ccache-stats-leap-aarch64-gnu15/data.txt" "hit_rate")
+        if [ "$has_leap" = true ]; then
+          echo "| 💪 aarch64 / gnu15 | $(format_hit_rate "$rhel_arm_rate") | $(format_hit_rate "$euler_arm_rate") | $(format_hit_rate "$leap_arm_rate") |" >> artifacts/comment.md
+        else
+          echo "| 💪 aarch64 / gnu15 | $(format_hit_rate "$rhel_arm_rate") | $(format_hit_rate "$euler_arm_rate") |" >> artifacts/comment.md
+        fi
 
         echo "" >> artifacts/comment.md
 
