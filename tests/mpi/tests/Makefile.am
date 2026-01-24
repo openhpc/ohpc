@@ -17,4 +17,6 @@ TESTS            += version_match
 TESTS            += rm_execution_single_host
 TESTS            += rm_execution_multi_host
 
+DISTCLEANFILES    = C_test CXX_test F90_test
+
 

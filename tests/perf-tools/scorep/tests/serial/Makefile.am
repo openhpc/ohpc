@@ -17,4 +17,5 @@ main_omp_fort_LDFLAGS  = $(LDFLAGS)
 main_omp_fort_SOURCES  = src/OpenMP/Fortran/main.F90
 #----------------------------------------#
 
-CLEANFILES = *.input.*
+CLEANFILES       = *.input.*
+DISTCLEANFILES   = compile
