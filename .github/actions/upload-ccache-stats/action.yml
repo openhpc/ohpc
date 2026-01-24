@@ -1,0 +1,39 @@
+name: 'Upload CCache Stats'
+description: 'Collect and upload ccache statistics as an artifact'
+inputs:
+  job-name:
+    description: 'Name of the job for the stats header (e.g., "RHEL (x86_64/gnu15)")'
+    required: true
+  artifact-suffix:
+    description: 'Suffix for the artifact name (e.g., "rhel-x86_64-gnu15")'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Collect ccache stats
+      shell: bash
+      run: |
+        mkdir -p /tmp/ccache-stats
+        RAW_STATS=$(ccache --show-stats 2>&1) || RAW_STATS="ccache stats unavailable"
+
+        # Parse key metrics from ccache output (|| true to prevent grep exit code 1 from failing the script)
+        CACHE_HIT_RATE=$(echo "$RAW_STATS" | grep -E "^\s+Hits:" | head -1 | grep -oE '\(\s*[0-9.]+%\)' | tr -d '() ' || true)
+        CACHE_SIZE=$(echo "$RAW_STATS" | grep "Cache size" | grep -oE '[0-9.]+\s*/\s*[0-9.]+' | head -1 || true)
+        DIRECT_HITS=$(echo "$RAW_STATS" | grep "Direct:" | grep -oE '[0-9]+\s*/\s*[0-9]+' | head -1 || true)
+        MISSES=$(echo "$RAW_STATS" | grep -E "^\s+Misses:" | head -1 | grep -oE '[0-9]+\s*/\s*[0-9]+' | head -1 || true)
+
+        # Output key-value data for table generation
+        echo "job_name=${{ inputs.job-name }}" > /tmp/ccache-stats/data.txt
+        echo "hit_rate=${CACHE_HIT_RATE:-N/A}" >> /tmp/ccache-stats/data.txt
+        echo "cache_size=${CACHE_SIZE:-N/A}" >> /tmp/ccache-stats/data.txt
+        echo "direct_hits=${DIRECT_HITS:-N/A}" >> /tmp/ccache-stats/data.txt
+        echo "misses=${MISSES:-N/A}" >> /tmp/ccache-stats/data.txt
+
+        # Raw output for collapsible section
+        echo "$RAW_STATS" > /tmp/ccache-stats/raw.txt
+    - name: Upload ccache stats
+      uses: actions/upload-artifact@v4
+      with:
+        name: ccache-stats-${{ inputs.artifact-suffix }}
+        retention-days: 1
+        path: /tmp/ccache-stats/

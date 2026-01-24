@@ -190,6 +190,12 @@ jobs:
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
+    - name: Upload ccache stats
+      if: always()
+      uses: ./.github/actions/upload-ccache-stats
+      with:
+        job-name: "RHEL (${{ matrix.arch }}/${{ matrix.compiler }})"
+        artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}
 
   build_on_openEuler:
     strategy:
@@ -311,6 +317,12 @@ jobs:
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}
+    - name: Upload ccache stats
+      if: always()
+      uses: ./.github/actions/upload-ccache-stats
+      with:
+        job-name: "openEuler (${{ matrix.arch }})"
+        artifact-suffix: openeuler-${{ matrix.arch }}
 
   build_on_leap:
     strategy:
@@ -424,6 +436,12 @@ jobs:
       with:
         path: /var/cache/ccache
         key: ccache-leap-${{ matrix.os }}-${{ github.sha }}
+    - name: Upload ccache stats
+      if: always()
+      uses: ./.github/actions/upload-ccache-stats
+      with:
+        job-name: "LEAP (${{ matrix.arch }}/${{ matrix.compiler }})"
+        artifact-suffix: leap-${{ matrix.arch }}-${{ matrix.compiler }}
 
   event_file:
     name: "Event File"
