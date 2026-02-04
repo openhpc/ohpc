@@ -15,12 +15,26 @@
 
 %global debug_package %{nil}
 
-%if 0%{?suse_version}
+# feature macros
+%if 0%{?rhel} >= 10 || 0%{?openEuler}
+%global use_dnsmasq 1
+%else
+%global use_dnsmasq 0
+%endif
+
+%if 0%{?suse_version} || 0%{?sle_version}
+%global is_suse 1
+%else
+%global is_suse 0
+%endif
+
+# Set tftpdir based on distribution
+%if 0%{?is_suse}
 %global tftpdir /srv/tftpboot
 %else
-# Assume Fedora-based OS if not SUSE-based
 %global tftpdir /var/lib/tftpboot
 %endif
+
 %global srvdir %{_sharedstatedir}
 
 %global wwgroup warewulf
@@ -42,7 +56,7 @@
 ## Contains OHPC customizations
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.6.4
+Version: 4.6.5
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
@@ -60,25 +74,21 @@ Conflicts: warewulf-vnfs
 Conflicts: warewulf-provision
 Conflicts: warewulf-ipmi
 
-%if 0%{?suse_version} || 0%{?sle_version}
+%if 0%{?is_suse}
 #BuildRequires: distribution-release ## OHPC Removed
 BuildRequires: systemd-rpm-macros
 BuildRequires: go >= 1.22
 BuildRequires: firewall-macros
 BuildRequires: firewalld
-BuildRequires: tftp
-BuildRequires: yq
-Requires: tftp
 Requires: nfs-kernel-server
 Requires: firewalld
 Requires: ipxe-bootimgs
 %else
-# Assume Red Hat/Fedora build
+# Assume Red Hat/Fedora
 #BuildRequires: system-release ## OHPC Removed
 BuildRequires: systemd
 BuildRequires: golang >= 1.22
 BuildRequires: firewalld-filesystem
-Requires: tftp-server
 Requires: nfs-utils
 %if 0%{?rhel} < 8
 Requires: ipxe-bootimgs
@@ -88,14 +98,21 @@ Requires: ipxe-bootimgs-aarch64
 %endif
 %endif
 
-%if 0%{?rhel} >= 10 || 0%{?suse_version} || 0%{?fedora}
+# dhcp/tftp requirements
+%if 0%{?is_suse}
+BuildRequires: tftp
+Requires: tftp
+%else
+%if 0%{?use_dnsmasq}
 Requires: dnsmasq
 %else
-%if 0%{?rhel} >= 8
+# Assume Red Hat/Fedora
+Requires: tftp-server
+%if 0%{?rhel} >= 8 || 0%{?fedora}
 Requires: dhcp-server
 %else
-# rhel < 8
 Requires: dhcp
+%endif
 %endif
 %endif
 
@@ -114,7 +131,7 @@ system for large clusters of bare metal and/or virtual systems.
 
 ## OHPC customized. Add OHPC patches
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version} -b0
 %patch -P 0 -p1
 
 
@@ -156,14 +173,15 @@ ln -s %{_sharedstatedir}/tftpboot %{buildroot}%{tftpdir}
 %endif
 ## END OHPC
 
-%if 0%{?suse_version} || 0%{?sle_version}
-yq e '
-  .tftp.ipxe."00:00" = "undionly.kpxe" |
-  .tftp.ipxe."00:07" = "ipxe-x86_64.efi" |
-  .tftp.ipxe."00:09" = "ipxe-x86_64.efi" |
-  .tftp.ipxe."00:0B" = "snp-arm64.efi" ' \
-  -i %{buildroot}%{_sysconfdir}/warewulf/warewulf.conf
+%if 0%{?rhel} >= 10 || 0%{?openEuler}
+cp -f etc/warewulf.conf-el10 %{buildroot}%{_sysconfdir}/warewulf/warewulf.conf
 %else
+%if 0%{?is_suse}
+cp -f etc/warewulf.conf-suse %{buildroot}%{_sysconfdir}/warewulf/warewulf.conf
+%endif
+%endif
+
+%if ! 0%{?is_suse}
 make install-sos \
     DESTDIR=%{buildroot}
 %endif
@@ -218,6 +236,7 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %{_overlaydir}/hostname/rootfs/*
 %{_overlaydir}/hosts/rootfs/*
 %{_overlaydir}/ifcfg/rootfs/*
+%{_overlaydir}/ifupdown/rootfs/*
 %{_overlaydir}/ignition/rootfs/*
 %{_overlaydir}/issue/rootfs/*
 %{_overlaydir}/netplan/rootfs/*
@@ -226,9 +245,12 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %{_overlaydir}/ssh.host_keys/rootfs/*
 %{_overlaydir}/syncuser/rootfs/*
 %{_overlaydir}/systemd.netname/rootfs/*
+%{_overlaydir}/systemd.networkd/rootfs/*
 %{_overlaydir}/udev.netname/rootfs/*
 %{_overlaydir}/wicked/rootfs/*
 %{_overlaydir}/wwclient/rootfs/*
+%{_overlaydir}/wwclient.x86_64/rootfs/*
+%{_overlaydir}/wwclient.aarch64/rootfs/*
 %{_overlaydir}/wwinit/rootfs/*
 %{_overlaydir}/localtime/rootfs/*
 %{_overlaydir}/sfdisk/rootfs/*
@@ -257,8 +279,7 @@ Summary: dracut module for loading a Warewulf image
 BuildArch: noarch
 
 Requires: dracut
-%if 0%{?suse_version}
-%else
+%if ! 0%{?is_suse}
 Requires: dracut-network
 %endif
 Requires: curl
@@ -277,8 +298,7 @@ initramfs that can fetch and boot a Warewulf node image from a Warewulf server.
 %{_prefix}/lib/dracut/modules.d/90wwinit
 
 
-%if 0%{?suse_version} || 0%{?sle_version}
-%else
+%if ! 0%{?is_suse}
 %package sos
 Summary: sos plugin for Warewulf
 BuildArch: noarch
