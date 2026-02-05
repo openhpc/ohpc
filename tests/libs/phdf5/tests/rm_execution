@@ -1,35 +1,54 @@
 #!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ]; then
-	source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
-check_rms
-export RM=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-CMD_TIMEOUT="1:20"
-NODES=2
-TASKS=$(tasks_count 8)
-ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
+	NODES=2
+	TASKS=$(tasks_count 8)
+	TIMEOUT="00:10:00"
+	TESTNAME="libs/PHDF5"
 
-@test "[libs/PHDF5] MPI C binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+	# Use LUSTRE_TEST_PATH if it exists, otherwise create temp directory
+	if [ -n "${LUSTRE_TEST_PATH}" ] && [ -d "${LUSTRE_TEST_PATH}" ]; then
+		TEST_DIR="${LUSTRE_TEST_PATH}"
+		CLEANUP_TEST_DIR=false
+	else
+		TEST_DIR="$(mktemp -d "${HOME}/phdf5_test.XXXXXX")"
+		CLEANUP_TEST_DIR=true
+	fi
+	ARGS="${TEST_DIR}/phdf_test.out"
+
+	export NODES TASKS TIMEOUT TESTNAME ARGS TEST_DIR CLEANUP_TEST_DIR
+}
+
+teardown_file() {
+	if [ "${CLEANUP_TEST_DIR}" = "true" ] && [ -d "${TEST_DIR}" ]; then
+		rm -rf "${TEST_DIR}"
+	fi
+}
+
+@test "[${TESTNAME}] MPI C binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s C_mpi_test ]; then
 		flunk "C_mpi_test binary does not exist"
 	fi
 
-	run_mpi_binary -t $CMD_TIMEOUT ./C_mpi_test "$ARGS" $NODES "$TASKS"
+	run_mpi_binary -t "${TIMEOUT}" ./C_mpi_test "${ARGS}" "${NODES}" "${TASKS}"
 	assert_success
 }
 
-@test "[libs/PHDF5] Parallel Fortran binary runs under resource manager ($RM/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Parallel Fortran binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -s F_mpi_test ]; then
 		flunk "F_mpi_test binary does not exist"
 	fi
 
-	run_mpi_binary -t $CMD_TIMEOUT ./F_mpi_test "$ARGS" $NODES "$TASKS"
+	run_mpi_binary -t "${TIMEOUT}" ./F_mpi_test "${ARGS}" "${NODES}" "${TASKS}"
 	assert_success
 }
