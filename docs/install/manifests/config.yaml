@@ -1,0 +1,70 @@
+# Configuration for generate_manifest.py
+
+# OpenHPC repository settings for --generate-all
+repo_base_url: http://repos.openhpc.community/.staging/OpenHPC
+
+# Map manifest directory prefix to repository base OS name
+baseos_map:
+  el10: EL_10
+  el9: EL_9
+  oe2403: openEuler_24.03
+
+# Packages to skip on aarch64 (regex patterns for grep -E)
+aarch64_skip_patterns:
+  - mvapich2
+  - impi-ohpc
+  - lmod-defaults-intel
+
+# Compiler family identifiers used for package grouping
+compiler_families:
+  - gnu
+  - gnu7
+  - gnu8
+  - gnu9
+  - gnu12
+  - gnu13
+  - gnu14
+  - gnu15
+  - intel
+  - arm1
+
+# MPI family identifiers used for package grouping
+mpi_families:
+  - mvapich2
+  - openmpi
+  - openmpi3
+  - openmpi4
+  - openmpi5
+  - impi
+  - mpich
+
+# Packages to exclude from manifest generation
+exclude_packages:
+  - slurm-sjstat-ohpc
+  - slurm-slurmdb-direct-ohpc
+  - slurm-sjobexit-ohpc
+  - slurm-sql-ohpc
+  - slurm-munge-ohpc
+  - slurm-plugins-ohpc
+  - lustre-client-ohpc-kmp-default
+  - R_base-ohpc
+  - lmod-defaults-gnu-impi-ohpc
+  - lmod-defaults-gnu-mpich-ohpc
+  - lmod-defaults-gnu-mvapich2-ohpc
+  - lmod-defaults-gnu-openmpi-ohpc
+
+# Category display order and headings
+# Format: key: heading
+categories:
+  admin: "Administrative Tools"
+  provisioning: "Provisioning"
+  rms: "Resource Management"
+  compiler-families: "Compiler Families"
+  mpi-families: "MPI Families / Communication Libraries"
+  dev-tools: "Development Tools"
+  perf-tools: "Performance Analysis Tools"
+  io-libs: "IO Libraries"
+  distro-packages: "Distro Packages"
+  runtimes: "Runtimes"
+  serial-libs: "Serial/Threaded Libraries"
+  parallel-libs: "Parallel Libraries"

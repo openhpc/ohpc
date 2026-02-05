@@ -1,0 +1,26 @@
+## Install OpenCHAMI
+
+To begin we need to add the OpenCHAMI RPM to the head node, by
+adding it to the list of available packages locally. This requires network
+access from the *head node* to the internet.  We then source 
+`/etc/profile.d/openchami.sh` to update the shell.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Enable OpenCHAMI Repositories and Support -->
+```bash
+{{ pkg_install }} podman buildah ansible-core nfs-utils tcpdump tftp curl yq jq
+rpm --import \
+	https://github.com/OpenCHAMI/release/releases/download/\
+v{{ openchami_version }}/public_gpg_key.asc
+{{ pkg_install }} \
+	https://github.com/OpenCHAMI/release/releases/download/\
+v{{ openchami_version }}/openchami-{{ openchami_version }}.rpm
+```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Source /etc/profile.d/openchami.sh -->
+```bash
+source /etc/profile.d/openchami.sh
+```
+<!-- ohpc_end -->

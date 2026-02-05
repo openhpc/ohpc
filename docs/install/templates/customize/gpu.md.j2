@@ -1,0 +1,33 @@
+## GPU Drivers
+
+To add the optional NVIDIA GPU driver to the compute nodes, an additional
+external {{ pkg_manager }} repository provided by NVIDIA must be configured.
+Once the repository is configured, the GPU driver needs to be installed on the
+compute image and the corresponding toolkit installed on the SMS node.
+
+OpenHPC provides a convenience package to enable the NVIDIA repository locally
+along with compatibility packages that integrate the NVIDIA HPC SDK within the
+standard OpenHPC user environment.
+
+{# FIXME: Test GPU on Warewulf.  The Newer Confluent version was used over the Warewulf version. #}
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_nvidia_gpu_driver -->
+```bash
+# Add NVIDIA GPU driver repository to the head node
+{{ head_install("cuda-repo-ohpc") }} 
+
+# Add NVIDIA GPU driver repository to the compute nodes
+{{ compute_install("cuda-repo-ohpc") }}
+
+# Install the GPU driver on the compute nodes
+{{ compute_install("nvidia-driver:latest-dkms") }}
+
+# Enable DKMS service to automatically rebuild driver
+{{ compute_run("systemctl enable dkms") }}
+
+# Install the toolkit on the head node
+{{ compute_install(["cuda-devel-ohpc", "nvidia-driver-cuda"]) }}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

@@ -1,0 +1,51 @@
+## Deploy OpenHPC Components on Compute Notes
+
+The next step is adding OpenHPC components to the *compute* nodes that at this
+point are running basic OSes. This process will leverage two Confluent-provided
+commands: `nodeshell` to run the package installer on all the nodes in parallel
+and `nodersync` to distribute configuration files from the head node to the
+*compute* nodes.
+
+We first add the OpenHPC repository to the compute nodes:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setup nodes repositories and Install OHPC components -->
+```bash
+# Add OpenHPC repo
+{{ pkg_install_chroot }} \
+	{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/{{ arch }}/\
+ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
+```
+<!-- ohpc_end -->
+
+Additionally, a workaround is needed for OpenHPC documentation files, which are
+installed into a read-only NFS share /opt/ohpc/pub. Any package attempting to
+write to that directory will fail to install. The following prevents that by
+directing `rpm` not to install documentation files on the *compute* nodes:
+
+<!-- ohpc_begin -->
+```bash
+{{ compute_echo("%_excludedocs 1", "$HOME/.rpmmacros")}}
+```
+<!-- ohpc_end -->
+
+Now OpenHPC and other cluster-related software components can be installed on
+the nodes. The first step is to install a base compute package on the compute
+nodes:
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add OpenHPC base components to compute image -->
+```bash
+# Install compute node base meta-package
+{{ pkg_install_chroot }} ohpc-base-compute
+```
+<!-- ohpc_end -->
+
+Next, we can include additional components:
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add OpenHPC components to compute instance -->
+```bash
+
+# Include modules user environment
+{{ pkg_install_chroot }} lmod-ohpc
+```
+<!-- ohpc_end -->

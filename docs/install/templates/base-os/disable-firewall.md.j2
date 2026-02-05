@@ -1,0 +1,16 @@
+## Configure Firewall
+
+Provisioning services rely on DHCP, TFTP, and HTTP network protocols. Depending
+on the local Base OS configuration on the head node, default firewall rules may
+prohibit these services. Consequently, this recipe assumes that the local
+firewall running on the head node is disabled (it is still recommended to have
+additional security boundaries like a firewall to protect the cluster from the
+Internet). If installed, the default firewall service can be disabled as
+follows:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Disable firewall -->
+```bash
+systemctl disable --now firewalld || true
+```
+<!-- ohpc_end -->

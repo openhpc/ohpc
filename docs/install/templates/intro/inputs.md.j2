@@ -1,0 +1,59 @@
+## Inputs
+
+As this recipe details installing a cluster starting from bare-metal, there is a
+requirement to define IP addresses and gather hardware MAC addresses in order to
+support a controlled provisioning process. These values are necessarily unique
+to the hardware being used, and this document uses variable substitution
+(`${variable}`) in the command-line examples that follow to highlight where
+local site inputs are required. A summary of the required and optional variables
+used throughout this recipe are presented below. Note that while the example
+definitions above correspond to a small 4-node compute subsystem, the compute
+parameters are defined in array format to accommodate logical extension to
+larger node counts.
+
+Required variables:
+
+* `${sms_name}` - Hostname for head node
+* `${sms_ip}` - Internal IP address on head node
+* `${sms_eth_internal}` - Internal Ethernet interface on head node
+{% if is_warewulf %}
+* `${eth_provision}` - Provisioning interface for computes
+{% endif %}
+* `${internal_network}` - Subnet network address for internal network
+* `${internal_netmask}` - Subnet netmask for internal network
+{% if is_confluent %}
+* `${internal_prefix_length}` - Subnet prefix length for internal network (e.g. `16`; must be consistent with `${internal_netmask}`)
+{% endif %}
+{% if is_warewulf %}
+* `${ipv4_gateway}` - Default gateway for the internal network
+* `${dns_servers}` - DNS resolver for the internal network
+{% endif %}
+* `${ntp_server}` - Local ntp server for time synchronization
+* `${bmc_username}` - BMC username for use by IPMI
+* `${bmc_password}` - BMC password for use by IPMI
+* `${num_computes}` - Total # of desired compute nodes
+* `${c_ip[0]}`, `${c_ip[1]}`, ... - Desired compute node addresses
+* `${c_bmc[0]}`, `${c_bmc[1]}`, ... - BMC addresses for computes
+* `${c_mac[0]}`, `${c_mac[1]}`, ... - MAC addresses for computes
+* `${c_name[0]}`, `${c_name[1]}`, ... - Host names for computes
+* `${compute_regex}` - Regex matching all compute node names (e.g. `c*`)
+* `${compute_prefix}` - Prefix for compute node names (e.g. `c`)
+{% if is_warewulf %}
+* `${node_disk}` - Device path for disk to be used for provision-to-disk
+{% endif %}
+{% if is_confluent %}
+* `initialize_options` - `usklpta`
+* `deployment_protocols` - `firmware`
+* `${dns_domain}` - DNS domain name for cluster (e.g. `local`)
+* `iso_path` - location of compute node base os dvd iso
+{% endif %}
+
+{% if is_x86_64 %}
+Optional variables:
+
+* `${sysmgmtd_host}` - BeeGFS System Management host name
+* `${mgs_fs_name}` - Lustre MGS mount name
+* `${sms_ipoib}` - IPoIB address for head node
+* `${ipoib_netmask}` - Subnet netmask for internal IPoIB
+* `${c_ipoib[0]}`, `${c_ipoib[1]}`, ... - IPoIB addresses for computes
+{% endif %}

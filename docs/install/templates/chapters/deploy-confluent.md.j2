@@ -1,0 +1,7 @@
+{# Deploy Aggregator #}
+# Deploy Cluster
+
+{% include "provisioner/deploy.md.j2" %}
+
+{% include "scheduler/slurm/startup.md.j2" %}
+{% include "provisioner/confluent/deploy-slurm.md.j2" %}

@@ -1,0 +1,3 @@
+\newpage
+\tableofcontents
+\newpage

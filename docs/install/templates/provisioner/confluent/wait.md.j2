@@ -1,0 +1,21 @@
+<!-- ohpc_begin -->
+<!-- ohpc_comment Check if provisioning is in progress -->
+<!-- ohpc_command while true; do -->
+<!-- ohpc_command    deployment_pending=false -->
+<!-- ohpc_command    while read line; do -->
+<!-- ohpc_command        dp=$(echo $line | cut -d ":" -f 2) -->
+<!-- ohpc_command          if [ "$dp" != " completed" ]; -->
+<!-- ohpc_command          then -->
+<!-- ohpc_command               deployment_pending=true -->
+<!-- ohpc_command          fi -->
+<!-- ohpc_command    done <<< `nodedeploy compute` -->
+<!-- ohpc_command    if $deployment_pending; -->
+<!-- ohpc_command     then -->
+<!-- ohpc_command          echo "deployment still pending" -->
+<!-- ohpc_command          deployment_pending=false -->
+<!-- ohpc_command          sleep 10 -->
+<!-- ohpc_command     else -->
+<!-- ohpc_command          break -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command done -->
+<!-- ohpc_end -->

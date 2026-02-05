@@ -1,0 +1,72 @@
+## Add Slurm on Head Node
+
+The following command adds the Slurm workload manager server components to the
+chosen *head node*. Note that client-side components will be added to the
+corresponding compute image in a subsequent step. Note that Slurm leverages the
+use of the *munge* library to provide authentication services and this daemon
+also needs to be running on all hosts within the resource management pool.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add resource management services on head node -->
+```bash
+# Install slurm server meta-package
+{{ pkg_install }} ohpc-slurm-server
+
+# Use ohpc-provided file for starting SLURM configuration
+cp /etc/slurm/slurm.conf.ohpc /etc/slurm/slurm.conf
+# Setup default cgroups file
+cp /etc/slurm/cgroup.conf.example /etc/slurm/cgroup.conf
+
+# Identify resource manager hostname on head node
+sed -i "s/SlurmctldHost=\S\+/SlurmctldHost=${sms_name}/" \
+	/etc/slurm/slurm.conf
+```
+<!-- ohpc_end -->
+
+There are a wide variety of configuration options and plugins available for {{
+scheduler_name }} and the example config file illustrated above targets a fairly
+basic installation. In particular, job completion data will be stored in a text
+file (`/var/log/slurm_jobcomp.log`) that can be used to log simple accounting
+information. Sites who desire more detailed information, or want to aggregate
+accounting data from multiple clusters, will likely want to enable the database
+accounting back-end. This requires a number of additional local modifications
+(on top of installing `slurm-slurmdbd-ohpc`), and users are advised to consult
+the online [documentation](https://slurm.schedmd.com/accounting.html) for more
+detailed information on setting up a database configuration for {{
+scheduler_name }}.
+
+::: {.tip}
+**Note:** SLURM requires enumeration of the physical hardware characteristics
+for compute nodes under its control. In particular, three configuration
+parameters combine to define consumable compute resources: *Sockets*,
+*CoresPerSocket*, and *ThreadsPerCore*. The default configuration file provided
+via OpenHPC assumes the nodes are named c1-c4 and are dual-socket, 8 cores per
+socket, and two threads per core for this 4-node example. If this does not
+reflect your local hardware, please update the configuration file at
+`/etc/slurm/slurm.conf` accordingly to match your nodes names and particular
+hardware. Be sure to run `scontrol reconfigure` to notify SLURM of the changes.
+Note that the SLURM project provides an easy-to-use online configuration tool
+that can be accessed [here](https://slurm.schedmd.com/configurator.html).
+:::
+
+{# TODO: Slurm validation commands need to be tested. #}
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Update node configuration for slurm.conf -->
+<!-- ohpc_if_set update_slurm_nodeconfig -->
+<!-- ohpc_command sed -i "s/^\(NodeName=\)/#\1/" /etc/slurm/slurm.conf -->
+<!-- ohpc_command sed -i "s/ Nodes=c\S\+ / Nodes=${compute_prefix}[1-${num_computes}] /" /etc/slurm/slurm.conf -->
+<!-- ohpc_command echo -e "${slurm_node_config}" >> /etc/slurm/slurm.conf -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Update basic slurm configuration if additional computes defined -->
+<!-- ohpc_if [ "${num_computes}" -gt 4 ] -->
+<!-- ohpc_command 	sed -i "s/^\(NodeName=\)\S\+/\1${compute_prefix}[1-${num_computes}]/" \ -->
+<!-- ohpc_command 		/etc/slurm/slurm.conf -->
+<!-- ohpc_command 	sed -i "s/^\(PartitionName=\)normal \(Nodes=\)\S\+/\ -->
+<!-- ohpc_command \1normal \2${compute_prefix}[1-${num_computes}]/" \ -->
+<!-- ohpc_command 		/etc/slurm/slurm.conf -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

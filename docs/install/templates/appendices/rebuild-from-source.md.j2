@@ -1,0 +1,49 @@
+## Rebuilding Packages from Source
+
+OpenHPC packages can be rebuilt from source using the source RPMs available from
+the OpenHPC repository. This allows administrators to customize package builds
+for their specific needs. One way to accomplish this is to install the
+appropriate source RPM, modify the spec file as needed, and rebuild to obtain an
+updated binary RPM. OpenHPC spec files contain macros to facilitate local
+customizations of compiler, compilation flags and MPI family. A brief example
+using the FFTW library is highlighted below.  Note that the source RPMs can be
+downloaded from the community repository server at [{{ ohpc_repo_server }}]({{
+ohpc_repo_server }}) via a web browser or directly via dnf as highlighted below.
+In this example we make an explicit change to FFTW's configuration, as well as
+modifying the CFLAGS environment variable. The package is also tagged with an
+additional delimiter to allow easy co-installation and use.
+
+```bash
+# Install rpm-build package and dnf tools from base OS distro
+sudo dnf -y install rpm-build dnf-plugins-core
+
+# Install FFTW's build dependencies
+sudo dnf builddep fftw-gnu15-openmpi5-ohpc
+
+# Download SRPM from OpenHPC repository and install locally
+dnf download --source fftw-gnu15-openmpi5-ohpc
+rpm -i ./fftw-gnu15-openmpi5-ohpc-*.rpm
+
+# Modify spec file as desired
+cd ~/rpmbuild/SPECS
+sed -i "s/enable-static=no/enable-static=yes/" fftw.spec
+
+# Increment RPM release so the package manager will see an update
+sed -i "s/Release:   400.ohpc.3.1/Release:   400.ohpc.3.2/" fftw.spec
+
+# Rebuild binary RPM. Note that additional directives can be specified to modify build
+rpmbuild -bb --define "OHPC_CFLAGS '-O3 -mtune=native'" \
+        --define "OHPC_CUSTOM_DELIM static" fftw.spec
+
+# Install the new package
+sudo dnf -y install \
+        ../RPMS/$(uname -m)/fftw-gnu15-openmpi5-static-ohpc-*.$(uname -m).rpm
+
+```
+
+The new module file now appears along side the default.
+```console
+$ module -t spider fftw
+fftw/3.3.10-static
+fftw/3.3.10
+```

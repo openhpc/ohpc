@@ -1,0 +1,27 @@
+{# Base OS Aggregator #}
+# Install Base Operating System
+
+{% include "base-os/install.md.j2" %}
+
+{% if is_el %}
+{% include "distro/el/repos.md.j2" %}
+{% elif is_openeuler %}
+{% include "distro/openeuler/repos.md.j2" %}
+{% endif %}
+
+{% include "base-os/disable-firewall.md.j2" %}
+
+{% if not is_warewulf %}
+{% include "base-os/hostname.md.j2" %}
+{% endif %}
+
+{% include "base-os/time.md.j2" %}
+
+{% if not is_warewulf %}
+{% include "base-os/nfs.md.j2" %}
+{% endif %}
+
+{% include "network/infiniband/head-node.md.j2" %}
+{% include "network/omnipath/head-node.md.j2" %}
+
+{% include "base-os/enable-pxe.md.j2" %}

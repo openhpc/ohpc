@@ -1,0 +1,40 @@
+| **Group Name** | **Description** |
+|----------------|----------------|
+| ohpc-autotools | Collection of GNU autotools packages. |
+| ohpc-base | Collection of base packages. |
+| ohpc-base-compute | Collection of compute node base packages. |
+| ohpc-gnu15-io-libs | Collection of IO library builds for use with GNU compiler toolchain. |
+| ohpc-gnu15-mpich-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime. |
+| ohpc-gnu15-mpich-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime. |
+| ohpc-gnu15-mpich-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime. |
+| ohpc-gnu15-mvapich2-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu15-mvapich2-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu15-mvapich2-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu15-openmpi5-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime. |
+| ohpc-gnu15-openmpi5-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime. |
+| ohpc-gnu15-openmpi5-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime. |
+| ohpc-gnu15-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain. |
+| ohpc-gnu15-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain. |
+| ohpc-gnu15-python-libs | Collection of python related library builds for use with GNU compiler toolchain. |
+| ohpc-gnu15-python3-libs | Collection of python3 related library builds for use with GNU compiler toolchain. |
+| ohpc-gnu15-runtimes | Collection of runtimes for use with GNU compiler toolchain. |
+| ohpc-gnu15-serial-libs | Collection of serial library builds for use with GNU compiler toolchain. |
+| ohpc-intel-impi-io-libs | Collection of IO library builds for use with Intel(R) oneAPI Toolkit and Intel(R) MPI runtime. |
+| ohpc-intel-impi-parallel-libs | Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the Intel(R) MPI Library. |
+| ohpc-intel-impi-perf-tools | Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the Intel(R) MPI runtime. |
+| ohpc-intel-io-libs | Collection of IO library builds for use with Intel(R) oneAPI Toolkit. |
+| ohpc-intel-mpich-io-libs | Collection of IO library builds for use with Intel(R) oneAPI Toolkit and MPICH runtime. |
+| ohpc-intel-mpich-parallel-libs | Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the MPICH runtime. |
+| ohpc-intel-mpich-perf-tools | Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the MPICH runtime. |
+| ohpc-intel-mvapich2-io-libs | Collection of IO library builds for use with Intel(R) oneAPI Toolkit and MVAPICH2 runtime. |
+| ohpc-intel-mvapich2-parallel-libs | Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the MVAPICH2 runtime. |
+| ohpc-intel-mvapich2-perf-tools | Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-intel-openmpi5-io-libs | Collection of IO library builds for use with Intel(R) oneAPI Toolkit and OpenMPI runtime. |
+| ohpc-intel-openmpi5-parallel-libs | Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the OpenMPI runtime. |
+| ohpc-intel-openmpi5-perf-tools | Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the OpenMPI runtime. |
+| ohpc-intel-perf-tools | Collection of performance tool builds for use with Intel(R) oneAPI Toolkit. |
+| ohpc-intel-python3-libs | Collection of python3 related library builds for use with Intel(R) oneAPI Toolkit. |
+| ohpc-intel-serial-libs | Collection of serial library builds for use with Intel(R) oneAPI Toolkit. |
+| ohpc-slurm-client | Collection of client packages for SLURM. |
+| ohpc-slurm-server | Collection of server packages for SLURM. |
+| ohpc-warewulf | Collection of base packages for Warewulf provisioning. |

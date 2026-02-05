@@ -1,0 +1,15 @@
+## Certificate Creation
+
+With {{ provisioner_name }} a minimal open source certificate authority from
+smallstep is needed. The included automation initializes the CA on first
+startup. We can immediately download a certificate into the system trust bundle
+on the host for trusting all subsequent {{ provisioner_name }} certificates.
+Notably, the certificate authority features ACME for automatic certificate
+rotation.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Creating OpenCHAMI certificates -->
+```bash
+openchami-certificate-update update ${sms_name}
+```
+<!-- ohpc_end -->

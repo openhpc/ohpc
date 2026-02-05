@@ -1,0 +1,31 @@
+## Setup default development environment
+
+System users often find it convenient to have a default development environment
+in place so that compilation can be performed directly for parallel programs
+requiring MPI. This setup can be conveniently enabled via modules and the
+OpenHPC modules environment is pre-configured to load an `ohpc` module on login
+(if present). The following package install provides a default environment that
+enables autotools, the GNU compiler toolchain, and the OpenMPI stack.
+
+```bash
+{{ pkg_install }} lmod-defaults-{{ gnu_version }}-{{ openmpi_version }}-ohpc
+```
+
+::: {.tip}
+{% if is_x86_64 %}
+If you want to change the default environment from the suggestion above, OpenHPC
+also provides the GNU compiler toolchain with the MPICH and MVAPICH2 stacks:
+{% endif %}
+{% if is_aarch64 %}
+If you want to change the default environment from the suggestion above, OpenHPC
+also provides additional default options using the GNU compiler toolchain with
+multiple MPICH variants or MVAPICH2. Relevant lmod-default packages names are as
+follows:
+{% endif %}
+
+* lmod-defaults-{{ gnu_version }}-mpich-ofi-ohpc
+* lmod-defaults-{{ gnu_version }}-mpich-ucx-ohpc
+{% if is_x86_64 %}
+* lmod-defaults-{{ gnu_version }}-mvapich2-ohpc
+{% endif %}
+:::

@@ -10,8 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define recipe_base docs/recipes/install
-%define recipe_base_md docs/recipes/install/poc-markdown
+%define recipe_base docs/install
 %define recipe_dest %{buildroot}/%{OHPC_PUB}/doc/recipes
 
 Name:           docs%{PROJ_DELIM}
@@ -22,46 +21,26 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
+BuildArch:      noarch
 
 BuildRequires:  git
 BuildRequires:  make
 BuildRequires:  python3
-
-# Requirements for markdown-based documentation (pandoc + jinja2)
-%if 0%{?rhel}
-BuildRequires:  pandoc
 BuildRequires:  python3-jinja2
 BuildRequires:  python3-pyyaml
-BuildRequires:  mdtoc%{PROJ_DELIM}
+BuildRequires:  yq
+
+# PDF generation (pandoc + xelatex)
+BuildRequires:  pandoc
 BuildRequires:  texlive-xetex
 BuildRequires:  texlive-adjustbox
 BuildRequires:  texlive-collectbox
 BuildRequires:  texlive-unicode-math
 BuildRequires:  texlive-lm-math
-%endif
-
-# Requirements for LaTeX-based documentation (and shared with markdown/pandoc)
 BuildRequires:  texlive-latex
-BuildRequires:  texlive-caption
-BuildRequires:  texlive-colortbl
 BuildRequires:  texlive-fancyhdr
-BuildRequires:  texlive-mdwtools
-BuildRequires:  texlive-multirow
-#BuildRequires:  texlive-draftwatermark
-BuildRequires:  texlive-tcolorbox
-BuildRequires:  texlive-environ
-BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
-
-
-BuildRequires:  texlive-metafont
-BuildRequires:  texlive-cm
-BuildRequires:  texlive-helvetic
-BuildRequires:  texlive-ec
-BuildRequires:  texlive-cm-super
-BuildRequires:  texlive-dvips
-BuildRequires:  texlive-mfware
-BuildRequires:  latexmk
+BuildRequires:  texlive-mdwtools
 
 %if 0%{?rhel}
 BuildRequires:  texlive-latexconfig
@@ -88,73 +67,11 @@ from the OpenHPC software stack.
 
 %build
 
-%define parser_perl ../../../../parse_doc.pl
-%define parser_python ../../../../parse_doc.py
-
-# Build markdown-based documentation (RHEL only)
-%if 0%{?rhel}
-for recipe_path in \
-	"almalinux10/x86_64/confluent/slurm" \
-	"almalinux10/x86_64/warewulf4/slurm" \
-	"rocky10/x86_64/warewulf4/slurm" \
-; do
-	pushd "%{recipe_base_md}/${recipe_path}"
-
-	# Build markdown, PDF, and recipe.sh
-	make
-	make pdf
-	make recipe
-
-	popd
-done
-%endif
-
-# Build LaTeX-based documentation
-for recipe_path in \
-	"almalinux10/x86_64/openchami/slurm" \
-	"almalinux10/aarch64/warewulf4/slurm" \
-	"openeuler24.03/x86_64/warewulf4/slurm" \
-	"openeuler24.03/aarch64/warewulf4/slurm" \
-	"rocky10/aarch64/warewulf4/slurm" \
-	"rocky10/x86_64/openchami/slurm" \
-; do
-	pushd "%{recipe_base}/${recipe_path}"
-	make
-
-	# Generate output with both parsers
-	echo "Generating recipe.sh for ${recipe_path}..."
-	%{parser_perl} steps.tex > recipe_perl.sh
-	%{parser_python} steps.tex > recipe_python.sh
-
-	# Compare outputs and fail if they differ (ignoring comment-only differences)
-	echo "Comparing Perl and Python parser outputs for ${recipe_path}..."
-	if ! diff -u recipe_perl.sh recipe_python.sh > parser_diff.log 2>&1; then
-		# Filter out differences that are only comment lines (both added and removed)
-		# Keep only non-comment differences for evaluation (excluding diff headers)
-		if grep -E "^[+-]" parser_diff.log | grep -v -E "^[+-][[:space:]]*#" | grep -v -E "^[+-]{3}" | grep -q "^[+-]"; then
-			echo "ERROR: Parser outputs have significant differences for ${recipe_path}!"
-			echo "Differences found (ignoring comment-only lines):"
-			cat parser_diff.log
-			echo "Perl output (first 50 lines):"
-			head -50 recipe_perl.sh
-			echo "Python output (first 50 lines):"
-			head -50 recipe_python.sh
-			exit 1
-		else
-			echo "Note: Only comment line differences detected, parsers functionally equivalent"
-		fi
-	else
-		echo "Parser outputs are identical"
-	fi
-
-	# Use Python parser output as the final result
-	cp recipe_python.sh recipe.sh
-
-	# Clean up temporary files
-	rm -f recipe_perl.sh recipe_python.sh parser_diff.log
-
-	popd
-done
+pushd %{recipe_base}
+make PYTHON=python3                # .md + .sh
+make PYTHON=python3 pdf            # .pdf
+make PYTHON=python3 html           # .html
+popd
 
 %install
 
@@ -163,34 +80,39 @@ done
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 
-# Install markdown-based documentation (RHEL only)
-%if 0%{?rhel}
-for recipe_path in \
-	"almalinux10/x86_64/confluent/slurm" \
-	"almalinux10/x86_64/warewulf4/slurm" \
-	"rocky10/x86_64/warewulf4/slurm" \
+# Install recipes
+for recipe_name in \
+	"rocky10-x86_64-warewulf-slurm" \
+	"rocky10-aarch64-warewulf-slurm" \
+	"almalinux10-x86_64-warewulf-slurm" \
+	"almalinux10-aarch64-warewulf-slurm" \
+	"rocky10-x86_64-confluent-slurm" \
+	"rocky10-aarch64-confluent-slurm" \
+	"almalinux10-x86_64-confluent-slurm" \
+	"almalinux10-aarch64-confluent-slurm" \
+	"rocky10-x86_64-openchami-slurm" \
+	"rocky10-aarch64-openchami-slurm" \
+	"almalinux10-x86_64-openchami-slurm" \
+	"almalinux10-aarch64-openchami-slurm" \
+	"openeuler24.03-x86_64-warewulf-slurm" \
+	"openeuler24.03-aarch64-warewulf-slurm" \
 ; do
-	install -m 0644 -p -D "%{recipe_base_md}/${recipe_path}/steps.pdf" "%{recipe_dest}/${recipe_path}/Install_guide.pdf"
-	install -m 0755 -p -D "%{recipe_base_md}/${recipe_path}/recipe.sh" "%{recipe_dest}/${recipe_path}/recipe.sh"
-done
-%endif
+	# Parse: distro-arch-provisioner-scheduler -> distro/arch/provisioner/scheduler
+	distro=$(echo "${recipe_name}" | cut -d- -f1)
+	arch=$(echo "${recipe_name}" | cut -d- -f2)
+	provisioner=$(echo "${recipe_name}" | cut -d- -f3)
+	scheduler=$(echo "${recipe_name}" | cut -d- -f4)
+	dest="${distro}/${arch}/${provisioner}/${scheduler}"
 
-# Install LaTeX-based documentation
-for recipe_path in \
-	"almalinux10/x86_64/openchami/slurm" \
-	"almalinux10/aarch64/warewulf4/slurm" \
-	"openeuler24.03/x86_64/warewulf4/slurm" \
-	"openeuler24.03/aarch64/warewulf4/slurm" \
-	"rocky10/aarch64/warewulf4/slurm" \
-	"rocky10/x86_64/openchami/slurm" \
-; do
-	install -m 0644 -p -D "%{recipe_base}/${recipe_path}/steps.pdf" "%{recipe_dest}/${recipe_path}/Install_guide.pdf"
-	install -m 0755 -p -D "%{recipe_base}/${recipe_path}/recipe.sh" "%{recipe_dest}/${recipe_path}/recipe.sh"
+	install -m 0644 -p -D "%{recipe_base}/build/${recipe_name}.pdf"  "%{recipe_dest}/${dest}/Install_guide.pdf"
+	install -m 0644 -p -D "%{recipe_base}/build/${recipe_name}.md"   "%{recipe_dest}/${dest}/Install_guide.md"
+	install -m 0644 -p -D "%{recipe_base}/build/${recipe_name}.html" "%{recipe_dest}/${dest}/Install_guide.html"
+	install -m 0755 -p -D "%{recipe_base}/build/${recipe_name}.sh"   "%{recipe_dest}/${dest}/recipe.sh"
 done
 
-# input file templates
+# Install input.local templates
 for distro in "almalinux10" "rocky10" "openeuler24.03"; do
-	install -m 0644 -p "%{recipe_base}/${distro}/input.local.template" "%{recipe_dest}/${distro}/input.local"
+	install -m 0644 -p -D "%{recipe_base}/input.local.template" "%{recipe_dest}/${distro}/input.local"
 done
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}

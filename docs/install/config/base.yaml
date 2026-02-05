@@ -1,0 +1,46 @@
+# Base configuration - universal defaults across all recipes
+
+# OpenHPC version
+ohpc_version: "4.0"
+ohpc_version_tree: "4"
+ohpc_repo_server: "http://repos.openhpc.community"
+
+# Compiler and MPI versions
+gnu_version: "gnu15"
+openmpi_version: "openmpi5"
+
+# Boolean flags - default to false, overridden in specific configs
+
+## Debug and Dev (only edit locally in a development environment)
+is_debug: false
+is_dev: false
+
+## Dist
+is_el: false
+is_almalinux: false
+is_rocky: false
+is_openeuler: false
+
+## Arch
+is_x86_64: false
+is_aarch64: false
+
+## Provisioner
+is_warewulf: false
+is_openchami: false
+is_confluent: false
+
+## Scheduler
+is_slurm: false
+
+## Capabilities
+uses_dnf: false
+
+## Feature flags
+enable_infiniband: false
+enable_omnipath: false
+enable_clustershell: false
+enable_genders: false
+enable_magpie: false
+enable_conman: false
+enable_mpi_defaults: true

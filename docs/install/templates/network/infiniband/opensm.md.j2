@@ -1,0 +1,16 @@
+::: {.tip}
+**Note:** InfiniBand networks require a subnet management service that can
+typically be run on either an administrative node, or on the switch itself. The
+optimal placement and configuration of the subnet manager is beyond the scope of
+this document, but {{ distro_full_name }} provides the `opensm` package should
+you choose to run it on the *head node*.
+:::
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally enable opensm subnet manager -->
+<!-- ohpc_if_set enable_opensm -->
+<!-- ohpc_command {{ pkg_install }} opensm -->
+<!-- ohpc_command systemctl enable opensm -->
+<!-- ohpc_command systemctl start opensm -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

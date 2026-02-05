@@ -1,0 +1,20 @@
+## Rebuild Image
+
+Rebuild the final compute node image with all optional packages.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Build Compute Image -->
+```bash
+podman run \
+	--rm \
+	--device /dev/fuse \
+	--network host \
+	-e S3_ACCESS=admin \
+	-e S3_SECRET=password1234 \
+	-v /opt/ohpc/admin/images/data:/data \
+	-v /opt/ohpc/admin/images/compute-prod.yaml:/home/builder/config.yaml:z \
+	ghcr.io/openchami/image-build:latest \
+		image-build \
+		--config config.yaml
+```
+<!-- ohpc_end -->

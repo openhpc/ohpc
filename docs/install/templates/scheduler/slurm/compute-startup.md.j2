@@ -1,0 +1,12 @@
+## Start Slurm on the Compute Nodes
+
+We now directly (re)start Slurm on the compute nodes.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Resource Manager Startup -->
+```bash
+# Start slurm clients on compute hosts
+pdsh -w "${compute_prefix}[1-${num_computes}]" systemctl restart munge
+pdsh -w "${compute_prefix}[1-${num_computes}]" systemctl restart slurmd
+```
+<!-- ohpc_end -->

@@ -1,0 +1,9 @@
+# OpenCHAMI provisioner configuration
+
+provisioner: "openchami"
+provisioner_name: "OpenCHAMI"
+is_openchami: true
+
+# OpenCHAMI component versions
+openchami_version: "0.1.2"
+ochami_version: "0.6.1"

@@ -1,0 +1,41 @@
+### Add NHC
+
+Resource managers often provide for a periodic "node health check" to be
+performed on each compute node to verify that the node is working properly.
+Nodes which are determined to be "unhealthy" can be marked as down or offline so
+as to prevent jobs from being scheduled or run on them. This helps increase the
+reliability and throughput of a cluster by reducing preventable job failures due
+to misconfiguration, hardware failure, etc. OpenHPC distributes `nhc` to fulfill
+this requirement.
+
+In a typical scenario, the `nhc` driver script is run periodically on each
+compute node by the resource manager client daemon. It loads its configuration
+file to determine which checks are to be run on the current node (based on its
+hostname). Each matching check is run, and if a failure is encountered, `nhc`
+will exit with an error message describing the problem. It can also be
+configured to mark nodes offline so that the scheduler will not assign jobs to
+bad nodes, reducing the risk of system-induced job failures.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally, enable nhc and configure -->
+<!-- ohpc_if_set enable_nhc -->
+```bash
+# Install NHC on head and compute nodes
+{{ pkg_install }} nhc-ohpc
+{{ compute_install("nhc-ohpc") }}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+{% if is_slurm %}
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_nhc -->
+```bash
+# Register as SLURM's health check program
+{{ compute_echo("HealthCheckProgram=/usr/sbin/nhc","/etc/slurm/slurm.conf") }}
+# execute every five minutes
+{{ compute_echo("HealthCheckInterval=300","/etc/slurm/slurm.conf") }}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+{% endif %}

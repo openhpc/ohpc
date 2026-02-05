@@ -1,0 +1,25 @@
+## Add User
+
+We will now add a new user to the cluster.  This will be used later to run a
+test job.
+
+<!-- ohpc_begin -->
+```bash
+useradd -m test
+```
+<!-- ohpc_end -->
+
+Warewulf installs a utility on the compute nodes to automatically synchronize
+overlay files from the provisioning server at one minute intervals. To rebuild
+the overlay, run the following:
+
+<!-- ohpc_begin -->
+```bash
+wwctl overlay build
+```
+<!-- ohpc_comment Wait for wwclient to pull overlays (pulls every 60 seconds) -->
+<!-- ohpc_command sleep 90 -->
+<!-- ohpc_end -->
+
+After re-syncing to notify Warewulf of file modifications made on the *head
+node*, it should take approximately one minute for the changes to propagate.

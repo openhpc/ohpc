@@ -1,0 +1,99 @@
+## s3cmd Setup
+
+In this recipe {{ provisioner_name }} uses *S3* to store and serve images and we
+need to add configuration files that allow us to access and manage the *S3*
+storage layer for *EFI* and boot image storage.
+
+First install a CLI tool we can use to interact with the MinIO service.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Installing s3cmd CLI tool -->
+```bash
+{{ pkg_install }} s3cmd
+```
+<!-- ohpc_end -->
+
+Now we'll create a config file.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setting S3cmd Config file -->
+```bash
+cat > ~/.s3cfg <<EOF
+# Setup endpoint
+host_base = ${sms_name}:9000
+host_bucket = ${sms_name}:9000
+bucket_location = us-east-1
+use_https = False
+
+# Setup access keys
+access_key = admin
+secret_key = password1234
+
+# Enable S3 v4 signature APIs
+signature_v2 = False
+EOF
+```
+<!-- ohpc_end -->
+
+Now we can use the tool to create the buckets we'll need and set ACLs to public.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Creating S3 buckets -->
+```bash
+s3cmd mb s3://efi
+s3cmd setacl s3://efi --acl-public
+s3cmd mb s3://boot-images
+s3cmd setacl s3://boot-images --acl-public
+```
+<!-- ohpc_end -->
+
+The nodes need to be able to read from the S3 bucket without authentication so
+we need to create some read policies.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setting S3 Bucket policies -->
+```bash
+mkdir -p /opt/ohpc/admin/images
+cat > /opt/ohpc/admin/images/public-read-boot.json <<EOF
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Effect":"Allow",
+     "Principal":"*",
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::boot-images/*"]
+    }
+  ]
+}
+EOF
+cat > /opt/ohpc/admin/images/public-read-efi.json <<EOF
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Effect":"Allow",
+      "Principal":"*",
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::efi/*"]
+    }
+  ]
+}
+EOF
+```
+<!-- ohpc_end -->
+
+Lastly we can now apply these policies. Objects stored in the buckets should be
+publicly available.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Applying S3 policies -->
+```bash
+s3cmd setpolicy /opt/ohpc/admin/images/public-read-boot.json \
+	s3://boot-images \
+	--host=${sms_ip}:9000 --host-bucket=${sms_ip}:9000
+s3cmd setpolicy /opt/ohpc/admin/images/public-read-efi.json \
+	s3://efi \
+	--host=${sms_ip}:9000 --host-bucket=${sms_ip}:9000
+```
+<!-- ohpc_end -->

@@ -1,0 +1,21 @@
+## Complete Basic Confluent Setup for the Head Node
+
+At this point, all of the packages necessary to use Confluent on the *head* node
+should be installed.  Confluent requires a network domain name specification for 
+system-wide name
+resolution. This value can be set to match your local DNS schema or given a
+unique identifier such as `local`. A default group called everything is
+automatically added to every node. It provides a method to indicate global
+settings. Attributes may all be specified on the command line, and an example
+set could be:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Define local domainname, deployment protocol and dns -->
+```bash
+nodegroupattrib everything \
+	deployment.useinsecureprotocols=${deployment_protocols:-firmware} \
+	dns.domain=${dns_domain:-local}
+nodegroupattrib everything \
+	dns.servers=${dns_servers} net.ipv4_gateway=${ipv4_gateway}
+```
+<!-- ohpc_end -->

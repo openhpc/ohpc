@@ -1,0 +1,7 @@
+# x86_64 architecture configuration
+
+arch: "x86_64"
+is_x86_64: true
+
+# GitHub release arch
+github_arch: "amd64"

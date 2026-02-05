@@ -1,0 +1,26 @@
+## Setup NFS Server
+
+Here we set up NFS mounting of a `$HOME` file system and the public OpenHPC
+install path (`/opt/ohpc/pub`) that will be hosted by the *head node* in this
+example configuration.
+
+{# Starting the NFS server is required during testing due to a race condition with `exportfs -a`. #}
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setup NFS Server -->
+```bash
+# Start NFS server
+systemctl start nfs-server.service
+
+# Create OpenHPC public packages directory
+mkdir -p /opt/ohpc/pub
+
+# Export /home and OpenHPC public packages from head node
+echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+exportfs -a
+
+# Restart and enable nfs server
+systemctl restart nfs-server
+systemctl enable nfs-server
+```
+<!-- ohpc_end -->

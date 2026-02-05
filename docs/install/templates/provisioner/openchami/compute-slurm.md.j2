@@ -1,0 +1,11 @@
+## Configure Slurm Client
+
+We now configure Slurm `slurmd`
+
+<!-- ohpc_begin -->
+```bash
+# Register Slurm server with computes (using "configless" option)
+echo SLURMD_OPTIONS="--conf-server ${sms_ip}" \
+	> /opt/ohpc/admin/images/data/slurmd
+```
+<!-- ohpc_end -->

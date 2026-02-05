@@ -1,0 +1,18 @@
+# Rocky Linux configuration
+
+distro: "rocky"
+is_rocky: true
+
+distro_name: "Rocky"
+distro_image: "rockylinux"
+
+# Computed values (derived from distro_name + distro_version)
+# Note: distro_version comes from el10.yaml, duplicated here for clarity
+distro_full_name: "Rocky 10"
+baseos: "rocky-10"
+baseosshort: "rocky10"
+distro_container_image: "rockylinux:10"
+
+# URLs
+distro_download_page: "https://rockylinux.org/download"
+distro_base_url: "https://dl.rockylinux.org/pub/rocky/"

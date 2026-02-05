@@ -1,0 +1,23 @@
+{% if is_x86_64 %}
+```bash
+dnf search petsc-{{ gnu_version }} ohpc
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: petsc-{{ gnu_version }}, ohpc ===========================
+petsc-{{ gnu_version }}-impi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-{{ gnu_version }}-mpich-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-{{ gnu_version }}-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Comp...
+petsc-{{ gnu_version }}-{{ openmpi_version }}-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Comp...
+```
+{% endif %}
+
+{% if is_aarch64 %}
+```bash
+dnf search petsc-{{ gnu_version }} ohpc
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: petsc-{{ gnu_version }}, ohpc ===========================
+petsc-{{ gnu_version }}-mpich-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-{{ gnu_version }}-{{ openmpi_version }}-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Comp...
+```
+{% endif %}

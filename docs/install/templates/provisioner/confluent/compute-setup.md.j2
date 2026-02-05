@@ -1,0 +1,59 @@
+## Setup Compute Nodes
+
+We now need to configure the compute nodes. We leverage the Confluent-provided
+`nodeshell` command that runs the command on the `compute` nodes.
+
+We first disable the firewall on the compute nodes.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Disable firewall -->
+```bash
+# Disable firewall for computes
+nodeshell compute systemctl disable --now firewalld
+```
+<!-- ohpc_end -->
+
+We next add the kernel drivers.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add kernel -->
+```bash
+# Add kernel drivers
+{{ pkg_install_chroot }} kernel
+```
+<!-- ohpc_end -->
+
+The *compute* nodes need access to the EPEL repository, a required dependency
+for OpenHPC packages.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure access to EPEL repo -->
+```bash
+# Add EPEL repo
+{{ pkg_install_chroot }} epel-release
+# Enable CRB
+{{ compute_run("/usr/bin/crb enable") }}
+```
+<!-- ohpc_end -->
+
+And add additional packages.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add additional packages to compute image -->
+```bash
+# Add Network Time Protocol (NTP) support
+{{ pkg_install_chroot }} chrony
+
+# Include nfs-utils
+{{ pkg_install_chroot }} nfs-utils
+```
+<!-- ohpc_end -->
+
+### InfiniBand Support (Optional)
+
+Optionally add the InfiniBand support.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally add InfiniBand support services in compute node image -->
+<!-- ohpc_if_set enable_ib -->
+```bash
+# Optionally add IB support and enable
+{{ pkg_group_install_chroot }} "InfiniBand Support"
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

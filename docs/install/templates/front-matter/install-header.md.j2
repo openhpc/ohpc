@@ -1,0 +1,27 @@
+<!-- ohpc_begin -->
+<!-- ohpc_comment ----------------------------------------------------------------------------------------- -->
+<!-- ohpc_comment  Example Installation Script Template -->
+<!-- ohpc_comment -->
+<!-- ohpc_comment  This convenience script encapsulates command-line instructions highlighted in -->
+<!-- ohpc_comment  an OpenHPC Install Guide that can be used as a starting point to perform a local -->
+<!-- ohpc_comment  cluster install beginning with bare-metal. Necessary inputs that describe local -->
+<!-- ohpc_comment  hardware characteristics, desired network settings, and other customizations -->
+<!-- ohpc_comment  are controlled via a companion input file that is used to initialize variables -->
+<!-- ohpc_comment  within this script. -->
+<!-- ohpc_comment -->
+<!-- ohpc_comment  Please see the OpenHPC Install Guide(s) for more information regarding the -->
+<!-- ohpc_comment  procedure. Note that the section numbering included in this script refers to -->
+<!-- ohpc_comment  corresponding sections from the companion install guide. -->
+<!-- ohpc_comment ----------------------------------------------------------------------------------------- -->
+<!-- ohpc_command inputFile="${OHPC_INPUT_LOCAL:-/opt/ohpc/pub/doc/recipes/{{ baseosshort }}/input.local}" -->
+<!-- ohpc_if [ ! -e "${inputFile}" ] -->
+<!-- ohpc_command    echo "Error: Unable to access local input file -> ${inputFile}" -->
+<!-- ohpc_command    exit 1 -->
+<!-- ohpc_else -->
+<!-- ohpc_command    . "${inputFile}" || { echo "Error sourcing ${inputFile}"; exit 1; } -->
+<!-- ohpc_fi -->
+<!-- ohpc_comment ---------------------------- Begin OpenHPC Recipe --------------------------------------- -->
+<!-- ohpc_comment Commands below are extracted from an OpenHPC install guide recipe and are intended for -->
+<!-- ohpc_comment execution on the head node. -->
+<!-- ohpc_comment ----------------------------------------------------------------------------------------- -->
+<!-- ohpc_end -->

@@ -1,0 +1,16 @@
+## Configure NFS Mounts on Compute Nodes
+
+Configure NFS mounts to access the *head node*'s shared filesystems on *compute* nodes.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure NFS mounts on compute nodes -->
+```bash
+# Add NFS mounts for /home and /opt/ohpc/pub
+MOUNT_OPTIONS="nfsvers=3,nodev,nosuid 0 0"
+NFS_PUB="${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs ${MOUNT_OPTIONS}"
+{{ compute_run("echo ${sms_ip}:/home /home nfs ${MOUNT_OPTIONS} >> /etc/fstab") }}
+{{ compute_run("echo ${NFS_PUB} >> /etc/fstab") }}
+# Create mount point and mount filesystems
+{{ compute_run("mkdir -p /opt/ohpc/pub") }}
+{{ compute_run("mount -a") }}
+```
+<!-- ohpc_end -->
