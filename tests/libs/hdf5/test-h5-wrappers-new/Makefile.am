@@ -17,3 +17,5 @@
 ##
 
 SUBDIRS = C FORTRAN
+
+DISTCLEANFILES = compile

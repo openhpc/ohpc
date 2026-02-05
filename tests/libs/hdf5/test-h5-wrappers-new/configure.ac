@@ -14,12 +14,12 @@
 # http://hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have
 # access to either file, you may request a copy from help@hdfgroup.org.
 
-AC_PREREQ(2.69)
-AC_INIT(HDF5-tests-h5-wrappers, 0.20, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([HDF5-tests-h5-wrappers],[0.20],[https://github.com/openhpc/ohpc])
 dnl AM_INIT_AUTOMAKE takes a list of options that should be applied to
 dnl every Makefile.am when automake is run.
 AM_INIT_AUTOMAKE([foreign])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../../test-driver-ohpc'])
 
 # Turn off automake rebuild rules so make doesn't try to run automake
@@ -40,62 +40,36 @@ AC_ARG_ENABLE(shared,
 
 # Checks and sets HDF5 compiler wrappers.
 if test "x$CC" = "x"; then
-  H5C_exists=`h5cc -help > /dev/null 2>&1; echo $?`
-  if test "x1" = "x$H5C_exists"; then
-    H5C_valid=`h5cc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-    if test "x1" = "x$H5C_valid"; then
-      H5C="h5cc"
-    fi
+  AC_CHECK_PROG([H5CC_EXISTS], [h5cc], [yes], [no])
+  if test "x$H5CC_EXISTS" = "xyes"; then
+    H5C="h5cc"
   else
-    H5C_exists=`h5pcc > /dev/null 2>&1; echo $?`
-    if test "x1" = "x$H5C_exists"; then
-      H5C_valid=`h5pcc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-      if test "x1" = "x$H5C_valid"; then
-        H5C="h5pcc"
-      else
-        AC_MSG_ERROR(failed to find h5cc or h5pcc)
-      fi
+    AC_CHECK_PROG([H5PCC_EXISTS], [h5pcc], [yes], [no])
+    if test "x$H5PCC_EXISTS" = "xyes"; then
+      H5C="h5pcc"
     else
-      AC_MSG_ERROR(failed to find h5cc or h5pcc)
+      AC_MSG_ERROR([failed to find h5cc or h5pcc])
     fi
   fi
 else
-  H5C_exists=`$CC -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-  if test "x1" = "x$H5C_exists"; then
-     H5C="$CC"
-  else
-     AC_MSG_ERROR(CC is not set to h5cc or h5pcc)
-  fi
+  H5C="$CC"
 fi
 AC_PROG_CC([$H5C])
 
 if test "x$FC" = "x"; then
-  H5FC_exists=`h5fc -help > /dev/null 2>&1; echo $?`
-  if test "x1" = "x$H5FC_exists"; then
-    H5FC_valid=`h5fc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-    if test "x1" = "x$H5FC_valid"; then
-      H5FC="h5fc"
-    fi
+  AC_CHECK_PROG([H5FC_EXISTS], [h5fc], [yes], [no])
+  if test "x$H5FC_EXISTS" = "xyes"; then
+    H5FC="h5fc"
   else
-    H5FC_exists=`h5pfc > /dev/null 2>&1; echo $?`
-    if test "x1" = "x$H5FC_exists"; then
-      H5FC_valid=`h5pfc -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-      if test "x1" = "x$H5FC_valid"; then
-        H5FC="h5pfc"
-      else
-        AC_MSG_ERROR(failed to find h5fc or h5pfc)
-      fi
+    AC_CHECK_PROG([H5PFC_EXISTS], [h5pfc], [yes], [no])
+    if test "x$H5PFC_EXISTS" = "xyes"; then
+      H5FC="h5pfc"
     else
-      AC_MSG_ERROR(failed to find h5fc or h5pfc)
+      AC_MSG_ERROR([failed to find h5fc or h5pfc])
     fi
   fi
 else
-  H5FC_exists=`$FC -help | sed -E -n '1p' | sed -n "/h5/p" | wc -l | sed 's/ //g'`
-  if test "1" = "$H5FC_exists"; then
-     H5FC="$FC"
-  else
-     AC_MSG_ERROR(FC is not set to h5fc or h5pfc)
-  fi
+  H5FC="$FC"
 fi
 AC_PROG_FC([$H5FC])
 
