@@ -74,4 +74,4 @@ endif
 
 TESTS = test.sh
 
-CLEANFILES = Makefile test.sh maketestref.sh
+CLEANFILES = Makefile test.sh maketestref.sh tmp.diff

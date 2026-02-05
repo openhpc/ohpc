@@ -14,15 +14,15 @@
 # http://hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have
 # access to either file, you may request a copy from help@hdfgroup.org.
 
-AC_PREREQ(2.69)
-AC_INIT(HDF5-tests-env-variables, 0.20, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([HDF5-tests-env-variables],[0.20],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 dnl AM_INIT_AUTOMAKE takes a list of options that should be applied to
 dnl every Makefile.am when automake is run.
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../../test-driver-ohpc'])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 # karl.w.schulz@intel.com (8/28/14)
 # verify we have necessary HDF5 environment variables set
@@ -30,7 +30,7 @@ AC_MSG_CHECKING([for HDF5_LIB environment variable])
 if test "x$HDF5_LIB" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([HDF5_LIB not defined - please load hdf5 environment.])
+   AC_MSG_ERROR(HDF5_LIB not defined - please load hdf5 environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -38,7 +38,7 @@ AC_MSG_CHECKING([for HDF5_INC environment variable])
 if test "x$HDF5_INC" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([HDF5_INC not defined - please load hdf5 environment.])
+   AC_MSG_ERROR(HDF5_INC not defined - please load hdf5 environment.)
 else
    AC_MSG_RESULT([yes])
 fi
