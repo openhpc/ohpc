@@ -84,12 +84,15 @@ cmake -DCMAKE_INSTALL_PREFIX=%{install_path} \
 %endif
 %if 0%{?ohpc_mpi_dependent}
       -DHDF5_ENABLE_PARALLEL=ON              \
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu15"
+      -DCMAKE_Fortran_FLAGS="-I$MPI_DIR/include/mpi/gfortran/11.1.0 -Wno-array-temporaries" \
+%endif
 %else
       -DHDF5_BUILD_CPP_LIB=ON                \
 %endif
       ..
 
-make %{?_smp_mflags}
+make VERBOSE=1 %{?_smp_mflags}
 
 %install
 
