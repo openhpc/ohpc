@@ -11,6 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define recipe_base docs/recipes/install
+%define recipe_base_md docs/recipes/install/poc-markdown
 %define recipe_dest %{buildroot}/%{OHPC_PUB}/doc/recipes
 
 Name:           docs%{PROJ_DELIM}
@@ -25,6 +26,19 @@ Source0:        docs-ohpc.tar
 BuildRequires:  git
 BuildRequires:  make
 BuildRequires:  python3
+
+# Requirements for markdown-based documentation (pandoc + jinja2)
+BuildRequires:  pandoc
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-pyyaml
+BuildRequires:  mdtoc%{PROJ_DELIM}
+BuildRequires:  texlive-xetex
+BuildRequires:  texlive-adjustbox
+BuildRequires:  texlive-collectbox
+BuildRequires:  texlive-unicode-math
+BuildRequires:  texlive-lm-math
+
+# Requirements for LaTeX-based documentation (and shared with markdown/pandoc)
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
@@ -75,14 +89,28 @@ from the OpenHPC software stack.
 %define parser_perl ../../../../parse_doc.pl
 %define parser_python ../../../../parse_doc.py
 
+# Build markdown-based documentation
+for recipe_path in \
+	"almalinux10/x86_64/warewulf4/slurm" \
+	"rocky10/x86_64/warewulf4/slurm" \
+; do
+	pushd "%{recipe_base_md}/${recipe_path}"
+
+	# Build markdown, PDF, and recipe.sh
+	make
+	make pdf
+	make recipe
+
+	popd
+done
+
+# Build LaTeX-based documentation
 for recipe_path in \
 	"almalinux10/x86_64/confluent/slurm" \
 	"almalinux10/x86_64/openchami/slurm" \
-	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"openeuler24.03/x86_64/warewulf4/slurm" \
 	"openeuler24.03/aarch64/warewulf4/slurm" \
-	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/openchami/slurm" \
 ; do
@@ -131,14 +159,22 @@ done
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 
+# Install markdown-based documentation
+for recipe_path in \
+	"almalinux10/x86_64/warewulf4/slurm" \
+	"rocky10/x86_64/warewulf4/slurm" \
+; do
+	install -m 0644 -p -D "%{recipe_base_md}/${recipe_path}/steps.pdf" "%{recipe_dest}/${recipe_path}/Install_guide.pdf"
+	install -m 0755 -p -D "%{recipe_base_md}/${recipe_path}/recipe.sh" "%{recipe_dest}/${recipe_path}/recipe.sh"
+done
+
+# Install LaTeX-based documentation
 for recipe_path in \
 	"almalinux10/x86_64/confluent/slurm" \
 	"almalinux10/x86_64/openchami/slurm" \
-	"almalinux10/x86_64/warewulf4/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"openeuler24.03/x86_64/warewulf4/slurm" \
 	"openeuler24.03/aarch64/warewulf4/slurm" \
-	"rocky10/x86_64/warewulf4/slurm" \
 	"rocky10/aarch64/warewulf4/slurm" \
 	"rocky10/x86_64/openchami/slurm" \
 ; do

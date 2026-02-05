@@ -20,7 +20,7 @@ COMMON_TEMPLATES := ../../../../common
 HEADER_TEX := .header-includes.tex
 
 # jinja2 command with search path for includes
-JINJA2 := jinja2
+JINJA2 := $(COMMON_TEMPLATES)/jinja2-render.py
 JINJA2_FLAGS := --strict --format=yaml
 
 # Build the final markdown document
