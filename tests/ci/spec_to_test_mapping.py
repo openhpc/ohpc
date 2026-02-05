@@ -49,9 +49,9 @@ test_map = {
         ),
     ],
     "components/io-libs/hdf5/SPECS/hdf5.spec": [
-        "hdf5",
+        "hdf5 phdf5",
         "",
-        "zlib-devel automake-ohpc libtool-ohpc autoconf-ohpc",
+        "zlib-devel",
     ],
     "components/parallel-libs/ptscotch/SPECS/ptscotch.spec": [
         "ptscotch",
@@ -69,11 +69,6 @@ test_map = {
         "",
     ],
     "components/parallel-libs/petsc/SPECS/petsc.spec": ["petsc", "", ""],
-    "components/io-libs/phdf5/SPECS/hdf5.spec": [
-        "phdf5",
-        "",
-        "zlib-devel automake-ohpc libtool-ohpc autoconf-ohpc",
-    ],
     "components/io-libs/pnetcdf/SPECS/pnetcdf.spec": ["pnetcdf", "", ""],
     "components/io-libs/netcdf/SPECS/netcdf.spec": ["netcdf", "", ""],
     "components/parallel-libs/scalapack/SPECS/scalapack.spec": ["scalapack", "", ""],
