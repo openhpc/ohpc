@@ -8,18 +8,14 @@
 [sms](*\#*) yq -i '.network = "'${internal_network}'"' /etc/warewulf/warewulf.conf
 [sms](*\#*) yq -i '.dhcp["range start"] = "'${internal_network}'"' /etc/warewulf/warewulf.conf
 [sms](*\#*) yq -i '.dhcp["range end"] = "static"' /etc/warewulf/warewulf.conf
+[sms](*\#*) yq -i '.dhcp.template = "static"' /etc/warewulf/warewulf.conf
 
 # Edit the nodes.conf to mount /opt on boot
 [sms](*\#*) perl -pi -e "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" /etc/warewulf/nodes.conf
 
-# Configure dnsmasq to listen on the internal network interface.
-[sms](*\#*) echo "interface=${sms_eth_internal}" > /etc/dnsmasq.d/ww4-interface.conf
-# Configure dnsmasq to disable DNS functionality
-[sms](*\#*) echo "port=0" >> /etc/dnsmasq.d/ww4-interface.conf
-
 # Turn on debugging messages
 [sms](*\#*) yq -i '.nodeprofiles.default.kernel.args -= ["quiet"]' /etc/warewulf/nodes.conf
-[sms](*\#*) echo "log-debug" >> /etc/dnsmasq.d/ww4-interface.conf
+[sms](*\#*) echo "log-debug" >> /etc/dnsmasq.d/ww4-debug.conf
 
 # Enable and start the warewulfd service before using wwctl.
 [sms](*\#*) systemctl enable --now warewulfd
