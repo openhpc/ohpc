@@ -25,7 +25,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.23.5
+Version:        3.24.4
 Release:        1%{?dist}
 Source0:        https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-%{version}.tar.gz
 Url:            http://www.mcs.anl.gov/petsc/
@@ -78,20 +78,52 @@ module load scalapack openblas
 COPTFLAGS="${CFLAGS}"
 CXXOPTFLAGS="${CXXFLAGS}"
 FOPTFLAGS="${FCFLAGS}"
-unset CFLAGS
-unset CXXFLAGS
-unset FCFLAGS
 
-# icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
+# Unset environment variables that conflict with PETSc configure command-line args
+# PETSc warns when these are set both as env vars and on command line
+unset CFLAGS CXXFLAGS FCFLAGS FFLAGS
+unset CC CXX FC F77 F90
+unset LDFLAGS MPI_DIR
+
+# Set compilers - use Intel MPI wrappers for impi+intel combination
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "intel"
+PETSC_CC=mpiicc
+PETSC_CXX=mpiicpc
+PETSC_FC=mpiifort
+%else
+PETSC_CC=mpicc
+PETSC_CXX=mpicxx
+PETSC_FC=mpif90
+%endif
+
+# Wrap with ccache if enabled
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+PETSC_CC="ccache ${PETSC_CC}"
+PETSC_CXX="ccache ${PETSC_CXX}"
+%endif
+
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
 %{__python3} ./config/configure.py \
         --prefix=%{install_path} \
-        --FFLAGS="${FOPTFLAGS} -fPIC" \
+        --with-cc="${PETSC_CC}" \
+        --with-cxx="${PETSC_CXX}" \
+        --with-fc="${PETSC_FC}" \
+        --with-f77="${PETSC_FC}" \
 %if "%{compiler_family}" == "intel"
+        COPTFLAGS="${COPTFLAGS}" \
+        CXXOPTFLAGS="${CXXOPTFLAGS}" \
+        FOPTFLAGS="${FOPTFLAGS}" \
+        FFLAGS+="-fPIC -fpscomp logicals" \
+        CFLAGS+="-fPIC -DPIC" \
+        CXXFLAGS+="-fPIC -DPIC" \
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
-        --CFLAGS="${COPTFLAGS} -fPIC -DPIC" \
-        --CXXFLAGS="${CXXOPTFLAGS} -fPIC -DPIC" \
+        COPTFLAGS="${COPTFLAGS}" \
+        CXXOPTFLAGS="${CXXOPTFLAGS}" \
+        FOPTFLAGS="${FOPTFLAGS}" \
+        FFLAGS+="-fPIC" \
+        CFLAGS+="-fPIC -DPIC" \
+        CXXFLAGS+="-fPIC -DPIC" \
         --with-scalapack-dir=$SCALAPACK_DIR \
 %if "%{compiler_family}" == "arm1"
         --with-blas-lapack-lib=$ARMPL_LIBRARIES/libarmpl.so \
@@ -99,17 +131,8 @@ unset FCFLAGS
         --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
 %endif
 %endif
-%if "%{mpi_family}" == "impi"
-%if "%{compiler_family}" == "intel"
-        --with-cc=mpiicc    \
-        --with-cxx=mpiicpc  \
-        --with-fc=mpiifort  \
-        --with-f77=mpiifort \
-%else
-%if "%{compiler_family}" == "gnu"
-        --FFLAGS=-I$I_MPI_ROOT/include64/gfortran/4.9.0/ \
-%endif
-%endif
+%if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu"
+        FFLAGS+="-I$I_MPI_ROOT/include64/gfortran/4.9.0/" \
 %endif
 %if 0%{?OHPC_BUILD}
         --with-make-np=3 \
