@@ -1,0 +1,288 @@
+{{ include_with_marker('common/title.md.j2') }}
+
+{{ include_with_marker('common/legal.md.j2') }}
+
+\newpage
+
+# Table of Contents {.unnumbered}
+
+<!-- toc -->
+<!-- /toc -->
+
+\newpage
+
+# Introduction
+
+{{ include_with_marker('common/install_header.md.j2') }}
+{{ include_with_marker('common/intro.md.j2') }}
+
+{{ include_with_marker('common/base_edition/edition.md.j2') }}
+{{ include_with_marker('common/audience.md.j2') }}
+{{ include_with_marker('common/requirements.md.j2') }}
+{{ include_with_marker('common/inputs.md.j2') }}
+
+# Install Base Operating System (BOS)
+
+{{ include_with_marker('common/bos.md.j2') }}
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_validation_newline -->
+<!-- ohpc_validation_comment Disable firewall -->
+```bash
+[sms]# systemctl disable firewalld
+[sms]# systemctl stop firewalld
+```
+<!-- end_ohpc_run -->
+
+# Install {{ confluent }} and Provision Nodes with BOS
+
+{{ include_with_marker('common/confluent_compute_bos_intro.md.j2') }}
+
+## Enable {{ confluent }} repository for local use
+
+{{ include_with_marker('common/enable_confluent_repo.md.j2') }}
+
+## Add provisioning services on *master* node
+
+{{ include_with_marker('common/install_provisioning_confluent_intro.md.j2') }}
+
+## Complete basic {{ confluent }} setup for *master* node
+
+{{ include_with_marker('common/confluent_setup.md.j2') }}
+
+## Define *compute* image for provisioning
+
+{{ include_with_marker('common/confluent_init_os_images_rhel.md.j2') }}
+
+## Add compute nodes into {{ confluent }} database
+
+{{ include_with_marker('common/add_confluent_hosts_intro.md.j2') }}
+
+## Boot compute nodes
+
+{{ include_with_marker('common/reset_computes_confluent.md.j2') }}
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_validation_newline -->
+<!-- ohpc_validation_comment Check if provisioning is in progress -->
+<!-- ohpc_validation_newline -->
+<!-- ohpc_command while true; do -->
+<!-- ohpc_command    deployment_pending=false -->
+<!-- ohpc_command    while read line; do -->
+<!-- ohpc_command        dp=$(echo $line | cut -d ":" -f 2) -->
+<!-- ohpc_command          if [ "$dp" != " completed" ]; -->
+<!-- ohpc_command          then -->
+<!-- ohpc_command               deployment_pending=true -->
+<!-- ohpc_command          fi -->
+<!-- ohpc_command    done <<< `nodedeploy compute` -->
+<!-- ohpc_command    if $deployment_pending; -->
+<!-- ohpc_command     then -->
+<!-- ohpc_command          echo "deployment still pending" -->
+<!-- ohpc_command          deployment_pending=false -->
+<!-- ohpc_command          sleep 60 -->
+<!-- ohpc_command     else -->
+<!-- ohpc_command          break -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command done -->
+<!-- end_ohpc_run -->
+
+# Install {{ ohpc }} Components
+
+{{ include_with_marker('common/install_ohpc_components_intro.md.j2') }}
+
+## Enable {{ ohpc }} repository for local use
+
+{{ include_with_marker('common/enable_local_ohpc_repo_confluent.md.j2') }}
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_validation_newline -->
+<!-- ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding -->
+<!-- ohpc_validation_newline -->
+<!-- ohpc_command dnf repolist | grep -q OpenHPC -->
+<!-- ohpc_command if [ $? -ne 0 ];then -->
+<!-- ohpc_command    echo "Error: OpenHPC repository must be enabled locally" -->
+<!-- ohpc_command    exit 1 -->
+<!-- ohpc_command fi -->
+<!-- end_ohpc_run -->
+
+{{ include_with_marker('common/almalinux_repos.md.j2') }}
+
+<!-- begin_ohpc_run -->
+```bash
+[sms]# {{ install }} epel-release
+
+# Enable crb on sms
+[sms]# /usr/bin/crb enable
+```
+<!-- end_ohpc_run -->
+
+Now {{ ohpc }} packages can be installed. To add the base package on the SMS
+issue the following:
+
+<!-- begin_ohpc_run -->
+```bash
+[sms]# {{ install }} ohpc-base
+```
+<!-- end_ohpc_run -->
+
+{{ include_with_marker('common/automation.md.j2') }}
+
+## Setup time synchronization service on *master* node
+
+{{ include_with_marker('common/time.md.j2') }}
+
+## Add resource management services on *master* node
+
+{{ include_with_marker('common/install_slurm.md.j2') }}
+
+## Optionally add {{ infiniband }} support services on *master* node
+
+{{ include_with_marker('common/ibsupport_sms_centos.md.j2') }}
+
+## Optionally add {{ OmniPath }} support services on *master* node
+
+{{ include_with_marker('common/opasupport_sms_centos.md.j2') }}
+
+### Add {{ ohpc }} components
+
+{{ include_with_marker('common/add_to_compute_confluent_intro.md.j2') }}
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_validation_comment Add OpenHPC components to compute instance -->
+```bash
+# Add Slurm client support meta-package
+[sms]# {{ chrootinstall }} ohpc-slurm-client
+
+# Add Network Time Protocol (NTP) support
+[sms]# {{ chrootinstall }} chrony
+
+# Add kernel drivers
+[sms]# {{ chrootinstall }} kernel
+
+# Enable crb
+[sms]# nodeshell compute /usr/bin/crb enable
+
+# Include nfs-utils
+[sms]# {{ chrootinstall }} nfs-utils
+
+# Include modules user environment
+[sms]# {{ chrootinstall }} lmod-ohpc
+```
+<!-- end_ohpc_run -->
+
+<!-- ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components} -->
+<!-- ohpc_command if [[ ${enable_ib} -eq 1 ]];then -->
+<!-- ohpc_indent 5 -->
+```bash
+# Optionally add IB support and enable
+[sms]# {{ groupchrootinstall }} "InfiniBand Support"
+```
+<!-- ohpc_indent 0 -->
+<!-- ohpc_command fi -->
+<!-- end_ohpc_run -->
+
+### Customize system configuration
+
+{{ include_with_marker('common/confluent_customize.md.j2') }}
+
+<!-- begin_ohpc_run -->
+<!-- ohpc_validation_newline -->
+<!-- ohpc_validation_comment Update basic slurm configuration if additional computes defined -->
+<!-- ohpc_validation_comment This is performed on the SMS, nodes will pick it up config file is copied there later -->
+<!-- ohpc_command if [ ${num_computes} -gt 4 ];then -->
+<!-- ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf -->
+<!-- ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf -->
+<!-- ohpc_command fi -->
+<!-- end_ohpc_run -->
+
+### Additional Customization (*optional*)
+
+{{ include_with_marker('common/compute_customizations_intro.md.j2') }}
+
+#### Increase locked memory limits
+
+{{ include_with_marker('common/memlimits_confluent.md.j2') }}
+
+#### Enable ssh control via resource manager
+
+{{ include_with_marker('common/slurm_pam_confluent.md.j2') }}
+
+#### Add GPU driver
+
+{{ include_with_marker('common/install_gpu_driver_nvidia_rhel_confluent.md.j2') }}
+
+#### Add {{ clustershell }}
+
+{{ include_with_marker('common/clustershell.md.j2') }}
+
+#### Add {{ genders }}
+
+{{ include_with_marker('common/genders.md.j2') }}
+
+#### Add Magpie
+
+{{ include_with_marker('common/magpie.md.j2') }}
+
+#### Add {{ conman }}
+
+{{ include_with_marker('common/conman.md.j2') }}
+
+#### Add {{ nhc }}
+
+{{ include_with_marker('common/nhc.md.j2') }}
+{{ include_with_marker('common/nhc_slurm.md.j2') }}
+
+# Install {{ ohpc }} Development Components
+
+{{ include_with_marker('common/dev_intro.md.j2') }}
+
+## Development Tools
+
+{{ include_with_marker('common/dev_tools.md.j2') }}
+
+## Compilers
+
+{{ include_with_marker('common/compilers.md.j2') }}
+
+## MPI Stacks
+
+{{ include_with_marker('common/mpi_slurm.md.j2') }}
+
+## Performance Tools
+
+{{ include_with_marker('common/perf_tools.md.j2') }}
+
+## Setup default development environment
+
+{{ include_with_marker('common/default_dev.md.j2') }}
+
+## 3rd Party Libraries and Tools {% raw %}{#3rd-party-libraries-and-tools}{% endraw %}
+
+{{ include_with_marker('common/third_party_libs_intro.md.j2') }}
+{{ include_with_marker('common/third_party_libs.md.j2') }}
+{{ include_with_marker('common/third_party_mpi_libs_x86.md.j2') }}
+
+## Optional Development Tool Builds
+
+{{ include_with_marker('common/oneapi_enabled_builds_slurm.md.j2') }}
+
+\newpage
+
+# Resource Manager Startup
+
+{{ include_with_marker('common/slurm_startup_confluent.md.j2') }}
+
+# Run a Test Job
+
+{{ include_with_marker('common/confluent_slurm_test_job.md.j2') }}
+
+\newpage
+
+# Appendices
+
+{{ include_with_marker('common/automation_appendix.md.j2') }}
+{{ include_with_marker('common/upgrade_confluent.md.j2') }}
+{{ include_with_marker('common/test_suite.md.j2') }}
+{{ include_with_marker('common/customization_appendix_centos.md.j2') }}
+{{ include_with_marker('manifest.md.j2') }}
+{{ include_with_marker('common/signature.md.j2') }}
