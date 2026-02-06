@@ -91,6 +91,7 @@ from the OpenHPC software stack.
 
 # Build markdown-based documentation
 for recipe_path in \
+	"almalinux10/x86_64/confluent/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 ; do
@@ -106,7 +107,6 @@ done
 
 # Build LaTeX-based documentation
 for recipe_path in \
-	"almalinux10/x86_64/confluent/slurm" \
 	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"openeuler24.03/x86_64/warewulf4/slurm" \
@@ -161,6 +161,7 @@ install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_N
 
 # Install markdown-based documentation
 for recipe_path in \
+	"almalinux10/x86_64/confluent/slurm" \
 	"almalinux10/x86_64/warewulf4/slurm" \
 	"rocky10/x86_64/warewulf4/slurm" \
 ; do
@@ -170,7 +171,6 @@ done
 
 # Install LaTeX-based documentation
 for recipe_path in \
-	"almalinux10/x86_64/confluent/slurm" \
 	"almalinux10/x86_64/openchami/slurm" \
 	"almalinux10/aarch64/warewulf4/slurm" \
 	"openeuler24.03/x86_64/warewulf4/slurm" \
