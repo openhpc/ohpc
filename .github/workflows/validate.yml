@@ -117,7 +117,7 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: /var/cache/ccache
-        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-build
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-build
 
   test_on_rhel:
     strategy:
@@ -156,7 +156,7 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: /var/cache/ccache
-        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-build
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-build
         restore-keys: |
           ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-
     - name: Restore oneAPI package cache
@@ -222,7 +222,7 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: /var/cache/ccache
-        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}
     - name: Upload ccache stats
       if: always()
       uses: ./.github/actions/upload-ccache-stats
@@ -287,7 +287,7 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: /var/cache/ccache
-        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-build
+        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}-build
 
   test_on_openEuler:
     strategy:
@@ -318,7 +318,7 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: /var/cache/ccache
-        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-build
+        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}-build
         restore-keys: |
           ccache-openeuler-${{ matrix.arch }}-
     - name: Setup
@@ -357,7 +357,7 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: /var/cache/ccache
-        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}
+        key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}
     - name: Upload ccache stats
       if: always()
       uses: ./.github/actions/upload-ccache-stats
