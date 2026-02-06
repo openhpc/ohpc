@@ -1,45 +1,47 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	TESTNAME="libs/PETSc"
+	NODES=2
+	TASKS=$(tasks_count 8)
+	ARGS=8
 
-testname="libs/PETSc"
+	check_rms
 
-NODES=2
-TASKS=`tasks_count 8`
-ARGS=8
-
-@test "[$testname] C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -x C_test ];then
-	flunk "C_test binary does not exist"
-    fi
-
-    run_mpi_binary ./C_test $ARGS $NODES $TASKS
-    assert_success
+	export TESTNAME NODES TASKS ARGS
 }
 
-@test "[$testname] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -x C_mpi_test ];then
-	flunk "C_mpi_test binary does not exist"
-    fi
+@test "[${TESTNAME}] C binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -x C_test ]; then
+		flunk "C_test binary does not exist"
+	fi
 
-    run_mpi_binary ./C_mpi_test $ARGS $NODES $TASKS
-    assert_success
+	run_mpi_binary ./C_test "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] MPI F90 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -x F90_test ];then
-	flunk "F_test binary does not exist"
-    fi
+@test "[${TESTNAME}] MPI C binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -x C_mpi_test ]; then
+		flunk "C_mpi_test binary does not exist"
+	fi
 
-    run_mpi_binary ./F90_test 2 $NODES $TASKS
-    assert_success
+	run_mpi_binary ./C_mpi_test "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
+}
+
+@test "[${TESTNAME}] MPI F90 binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -x F90_test ]; then
+		flunk "F90_test binary does not exist"
+	fi
+
+	run_mpi_binary ./F90_test 2 "${NODES}" "${TASKS}"
+	assert_success
 }

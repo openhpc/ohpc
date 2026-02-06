@@ -80,6 +80,9 @@ codespell-lint:
 		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
 		tests/rms-harness/tests/test_harness \
 		tests/rms-harness/ohpc-tests/test_mpi_families \
+		tests/libs/petsc/tests/rm_execution \
+		tests/libs/petsc/tests/test_module \
+		tests/libs/petsc/ohpc-tests/test_mpi_families \
 		tests/mpi/tests/rm_execution_single_host \
 		tests/mpi/tests/rm_execution_multi_host \
 		tests/mpi/tests/man_page_check \
@@ -190,6 +193,9 @@ whitespace-lint:
 		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
 		tests/rms-harness/tests/test_harness \
 		tests/rms-harness/ohpc-tests/test_mpi_families \
+		tests/libs/petsc/tests/rm_execution \
+		tests/libs/petsc/tests/test_module \
+		tests/libs/petsc/ohpc-tests/test_mpi_families \
 		tests/mpi/tests/rm_execution_single_host \
 		tests/mpi/tests/rm_execution_multi_host \
 		tests/mpi/tests/man_page_check \
@@ -291,6 +297,9 @@ shellcheck-lint:
 		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
 		../../tests/rms-harness/tests/test_harness \
 		../../tests/rms-harness/ohpc-tests/test_mpi_families \
+		../../tests/libs/petsc/tests/rm_execution \
+		../../tests/libs/petsc/tests/test_module \
+		../../tests/libs/petsc/ohpc-tests/test_mpi_families \
 		../../tests/mpi/tests/rm_execution_single_host \
 		../../tests/mpi/tests/rm_execution_multi_host \
 		../../tests/mpi/tests/man_page_check \
@@ -359,6 +368,8 @@ shfmt-lint:
 		../../tests/libs/mfem/tests/parallel/rm_execution \
 		../../tests/perf-tools/papi/tests/rm_execution \
 		../../tests/perf-tools/papi/tests/test_module \
+		../../tests/libs/petsc/tests/rm_execution \
+		../../tests/libs/petsc/tests/test_module \
 		../../tests/rms-harness/tests/test_harness \
 		../../tests/mpi/tests/rm_execution_single_host \
 		../../tests/mpi/tests/rm_execution_multi_host \
@@ -391,6 +402,7 @@ shfmt-lint:
 		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		../../tests/libs/mfem/ohpc-tests/test_mpi_families \
 		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		../../tests/libs/petsc/ohpc-tests/test_mpi_families \
 		../../tests/rms-harness/ohpc-tests/test_mpi_families \
 		../../tests/compilers/ohpc-tests/test_compiler_families
 
@@ -423,6 +435,7 @@ clang-format-lint:
 		../../tests/libs/mfem/tests/serial/*.cpp \
 		../../tests/libs/mfem/tests/parallel/*.cpp \
 		../../tests/perf-tools/papi/tests/*.c \
+		../../tests/libs/petsc/tests/*.c \
 		../../tests/mpi/tests/*.c \
 		../../tests/mpi/tests/*.cpp \
 		../../tests/compilers/tests/*.c \
