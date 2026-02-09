@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT(superlu, 4.3, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([superlu],[4.3],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -15,7 +15,7 @@ AC_MSG_CHECKING([for SUPERLU_DIR environment variable])
 if test "x$SUPERLU_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([SUPERLU_DIR not defined - please load superlu environment.])
+   AC_MSG_ERROR(SUPERLU_DIR not defined - please load superlu environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -49,7 +49,7 @@ LDFLAGS="-L${SUPERLU_LIB} -lsuperlu ${OHPC_BLAS} ${LDFLAGS}"
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
