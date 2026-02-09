@@ -1,117 +1,122 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../TEST_ENV ]; then
+	source ../../../TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-testname="libs/openblas"
+	NODES=1
+	TASKS=$(tasks_count 2)
+	ARGS=0
+	TIMEOUT="00:05:00"
+	TESTNAME="libs/OpenBLAS"
 
-ARGS=0
-export GFORTRAN_UNBUFFERED_PRECONNECTED=1
-export OMP_NUM_THREADS=2
-
-@test "[$testname/dblat1] dblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s dblat1 ];then
-        flunk "dblat1 binary does not exist"
-    fi
-
-    run_serial_binary ./dblat1 $ARGS
-    assert_success
+	export NODES TASKS ARGS TIMEOUT TESTNAME
+	export GFORTRAN_UNBUFFERED_PRECONNECTED=1
+	export OMP_NUM_THREADS=2
 }
 
-@test "[$testname/xccblat1] xccblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xccblat1 ];then
-	flunk "xccblat1 binary does not exist"
-    fi
+@test "[${TESTNAME}/dblat1] dblat1 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s dblat1 ]; then
+		flunk "dblat1 binary does not exist"
+	fi
 
-    run_serial_binary ./xccblat1 $ARGS
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./dblat1 "${ARGS}"
+	assert_success
 }
 
-@test "[$testname/xzcblat1] xzcblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xzcblat1 ];then
-	flunk "xzcblat1 binary does not exist"
-    fi
+@test "[${TESTNAME}/xccblat1] xccblat1 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xccblat1 ]; then
+		flunk "xccblat1 binary does not exist"
+	fi
 
-    run_serial_binary ./xzcblat1 $ARGS
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xccblat1 "${ARGS}"
+	assert_success
 }
 
-@test "[$testname/xscblat2] xscblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xscblat2 ];then
-	flunk "xscblat2 binary does not exist"
-    fi
+@test "[${TESTNAME}/xzcblat1] xzcblat1 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xzcblat1 ]; then
+		flunk "xzcblat1 binary does not exist"
+	fi
 
-    run_serial_binary ./xscblat2 "$ARGS < sin2"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xzcblat1 "${ARGS}"
+	assert_success
 }
 
-@test "[$testname/xdcblat2] xdcblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xdcblat2 ];then
-	flunk "xdcblat2 binary does not exist"
-    fi
+@test "[${TESTNAME}/xscblat2] xscblat2 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xscblat2 ]; then
+		flunk "xscblat2 binary does not exist"
+	fi
 
-    run_serial_binary ./xdcblat2 "$ARGS < din2"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xscblat2 "${ARGS} < sin2"
+	assert_success
 }
 
-@test "[$testname/xccblat2] xccblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xccblat2 ];then
-	flunk "xccblat2 binary does not exist"
-    fi
+@test "[${TESTNAME}/xdcblat2] xdcblat2 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xdcblat2 ]; then
+		flunk "xdcblat2 binary does not exist"
+	fi
 
-    run_serial_binary ./xccblat2 "$ARGS < cin2"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xdcblat2 "${ARGS} < din2"
+	assert_success
 }
 
-@test "[$testname/xzcblat2] xzcblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xzcblat2 ];then
-	flunk "xzcblat2 binary does not exist"
-    fi
+@test "[${TESTNAME}/xccblat2] xccblat2 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xccblat2 ]; then
+		flunk "xccblat2 binary does not exist"
+	fi
 
-    run_serial_binary ./xzcblat2 "$ARGS < zin2"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xccblat2 "${ARGS} < cin2"
+	assert_success
 }
 
-@test "[$testname/xscblat3] xscblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xscblat3 ];then
-	flunk "xscblat3 binary does not exist"
-    fi
+@test "[${TESTNAME}/xzcblat2] xzcblat2 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xzcblat2 ]; then
+		flunk "xzcblat2 binary does not exist"
+	fi
 
-    run_serial_binary ./xscblat3 "$ARGS < sin3"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xzcblat2 "${ARGS} < zin2"
+	assert_success
 }
 
-@test "[$testname/xdcblat3] xdcblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xdcblat3 ];then
-	flunk "xdcblat3 binary does not exist"
-    fi
+@test "[${TESTNAME}/xscblat3] xscblat3 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xscblat3 ]; then
+		flunk "xscblat3 binary does not exist"
+	fi
 
-    run_serial_binary ./xdcblat3 "$ARGS < din3"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xscblat3 "${ARGS} < sin3"
+	assert_success
 }
 
-@test "[$testname/xccblat3] xccblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xccblat3 ];then
-	flunk "xccblat3 binary does not exist"
-    fi
+@test "[${TESTNAME}/xdcblat3] xdcblat3 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xdcblat3 ]; then
+		flunk "xdcblat3 binary does not exist"
+	fi
 
-    run_serial_binary ./xccblat3 "$ARGS < cin3"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xdcblat3 "${ARGS} < din3"
+	assert_success
 }
 
-@test "[$testname/xzcblat3] xzcblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s xzcblat3 ];then
-	flunk "xzcblat3 binary does not exist"
-    fi
+@test "[${TESTNAME}/xccblat3] xccblat3 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xccblat3 ]; then
+		flunk "xccblat3 binary does not exist"
+	fi
 
-    run_serial_binary ./xzcblat3 "$ARGS < zin3"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./xccblat3 "${ARGS} < cin3"
+	assert_success
+}
+
+@test "[${TESTNAME}/xzcblat3] xzcblat3 under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [ ! -s xzcblat3 ]; then
+		flunk "xzcblat3 binary does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" ./xzcblat3 "${ARGS} < zin3"
+	assert_success
 }

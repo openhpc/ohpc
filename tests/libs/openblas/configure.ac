@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT([openblas], 0.2.14,[https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([openblas],[0.2.14],[https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
@@ -14,7 +14,7 @@ AC_MSG_CHECKING([for OPENBLAS_LIB environment variable])
 if test "x$OPENBLAS_LIB" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([OPENBLAS_LIB not defined - please load openblas environment.])
+   AC_MSG_ERROR(OPENBLAS_LIB not defined - please load openblas environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -42,7 +42,7 @@ LDFLAGS="-w -L${OPENBLAS_LIB} -lopenblas"
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
