@@ -19,7 +19,7 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
-Version:        7.0.0
+Version:        7.0.1
 Release:        0%{?dist}
 Source0:        https://github.com/xiaoyeli/%{pname}/archive/refs/tags/v%{version}.tar.gz
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
