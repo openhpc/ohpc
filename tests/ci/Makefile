@@ -71,7 +71,11 @@ codespell-lint:
 		tests/rms-harness/ohpc-tests/test_mpi_families \
 		tests/libs/petsc/tests/rm_execution \
 		tests/libs/petsc/tests/test_module \
-		tests/libs/petsc/ohpc-tests/test_mpi_families
+		tests/libs/petsc/ohpc-tests/test_mpi_families \
+		tests/libs/openblas/tests/rm_execution \
+		tests/libs/openblas/tests/test_module \
+		tests/libs/openblas/tests/test_lapack \
+		tests/libs/openblas/ohpc-tests/test_compiler_families
 
 ruff-check-lint:
 	@echo "Running 'ruff check' on selected Python files"
@@ -159,6 +163,10 @@ whitespace-lint:
 		tests/libs/petsc/tests/rm_execution \
 		tests/libs/petsc/tests/test_module \
 		tests/libs/petsc/ohpc-tests/test_mpi_families \
+		tests/libs/openblas/tests/rm_execution \
+		tests/libs/openblas/tests/test_module \
+		tests/libs/openblas/tests/test_lapack \
+		tests/libs/openblas/ohpc-tests/test_compiler_families \
 		containers/* \
 		\*.tex
 
@@ -244,7 +252,11 @@ shellcheck-lint:
 		../../tests/rms-harness/ohpc-tests/test_mpi_families \
 		../../tests/libs/petsc/tests/rm_execution \
 		../../tests/libs/petsc/tests/test_module \
-		../../tests/libs/petsc/ohpc-tests/test_mpi_families
+		../../tests/libs/petsc/ohpc-tests/test_mpi_families \
+		../../tests/libs/openblas/tests/rm_execution \
+		../../tests/libs/openblas/tests/test_module \
+		../../tests/libs/openblas/tests/test_lapack \
+		../../tests/libs/openblas/ohpc-tests/test_compiler_families
 
 shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
@@ -300,7 +312,10 @@ shfmt-lint:
 		../../tests/libs/adios2/tests/test_module \
 		../../tests/rms-harness/tests/test_harness \
 		../../tests/libs/petsc/tests/rm_execution \
-		../../tests/libs/petsc/tests/test_module
+		../../tests/libs/petsc/tests/test_module \
+		../../tests/libs/openblas/tests/rm_execution \
+		../../tests/libs/openblas/tests/test_module \
+		../../tests/libs/openblas/tests/test_lapack
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../misc/build_order.sh \
@@ -319,7 +334,8 @@ shfmt-lint:
 		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
 		../../tests/libs/adios2/ohpc-tests/test_mpi_families \
 		../../tests/rms-harness/ohpc-tests/test_mpi_families \
-		../../tests/libs/petsc/ohpc-tests/test_mpi_families
+		../../tests/libs/petsc/ohpc-tests/test_mpi_families \
+		../../tests/libs/openblas/ohpc-tests/test_compiler_families
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
@@ -343,7 +359,8 @@ clang-format-lint:
 		../../containers/examples/mpi/mpi.c \
 		../../tests/perf-tools/papi/tests/*.c \
 		../../tests/rms-harness/tests/*.c \
-		../../tests/libs/petsc/tests/*.c
+		../../tests/libs/petsc/tests/*.c \
+		../../tests/libs/openblas/tests/eigen.cpp
 
 build-ohpc-ci:
 	podman build  -f Containerfile.ohpc-lint -t  ghcr.io/openhpc/ohpc-lint:latest
