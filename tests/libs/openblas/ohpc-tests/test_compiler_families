@@ -1,43 +1,44 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
+export MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 cd libs/openblas || exit 1
-export BATS_JUNIT_CLASS=openblas
+
+export BATS_JUNIT_CLASS=OPENBLAS
 
 # bootstrap the local autotools project if necessary
 
 ./bootstrap || exit 1
 
-for compiler in $COMPILER_FAMILIES ; do
+for compiler in ${COMPILER_FAMILIES}; do
 
-        # gnu families only
-        [[ ! $compiler =~ gnu ]] && continue
-    
+	# gnu families only
+	[[ ! ${compiler} =~ gnu ]] && continue
+
 	echo " "
 	echo " "
 	echo "-------------------------------------------------------"
-	echo "Libraries: openblas tests: $compiler"
+	echo "Libraries: OpenBLAS tests: ${compiler}"
 	echo "-------------------------------------------------------"
 
-	module purge          || exit 1
-	module load prun      || exit 1
-	module load $compiler || exit 1
-	module load openblas  || exit 1
+	module purge || exit 1
+	module load prun || exit 1
+	module load "${compiler}" || exit 1
+	module load openblas || exit 1
 
-	./configure           || exit 1
-	make clean            || exit 1
-	make -k check         || status=1
+	./configure || exit 1
+	make clean || exit 1
+	make -k check || status=1
 
-        save_logs_compiler_family tests $compiler
+	save_logs_compiler_family tests "${compiler}"
 
 	make distclean
+	rm -f compile test-driver
 done
 
-exit ${status}
+exit "${status}"
