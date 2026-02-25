@@ -3,7 +3,8 @@
 # Exit on any error, undefined variables, and pipe failures
 set -euo pipefail
 
-# Script to check for newer GitHub, GitLab, PyPI, JSC perftools, and Open MPI releases of OpenHPC packages
+# Script to check for newer releases of OpenHPC packages using GitHub, GitLab,
+# PyPI, JSC perftools, Open MPI, GNU FTP, and release-monitoring.org APIs
 SCRIPT_NAME="$(basename "$0")"
 readonly SCRIPT_NAME
 TEMP_DIR="$(mktemp -d)"
@@ -23,6 +24,20 @@ VERBOSE=0
 CHECK_PRERELEASES=0
 OUTPUT_FORMAT="table"
 NO_GLOW=0
+
+# Map from upstream package names (after stripping -ohpc, -gnu*-ohpc,
+# -gnu*-openmpi*-ohpc suffixes) to release-monitoring.org project names
+# or project IDs. Use "id:<number>" for project IDs to disambiguate
+# packages with duplicate names. Only needed when names differ or are
+# ambiguous; packages with unique matching names need no entry.
+declare -A RELEASE_MONITORING_MAP=(
+	["R"]="id:386062"
+	["omb"]="osu-micro-benchmarks"
+	["valgrind"]="id:13639"
+	["mpich"]="id:8071"
+	["gsl"]="id:1267"
+	["cmake"]="id:306"
+)
 
 # Cleanup function
 # shellcheck disable=SC2329
@@ -72,12 +87,13 @@ usage() {
 	cat <<EOF
 Usage: ${SCRIPT_NAME} [OPTIONS]
 
-Check for newer GitHub, GitLab, PyPI, JSC perftools, and Open MPI releases of OpenHPC
-packages by analyzing spec files.
+Check for newer releases of OpenHPC packages by analyzing spec files.
+Supports GitHub, GitLab, PyPI, JSC perftools, Open MPI, GNU FTP,
+and release-monitoring.org (Anitya) as a fallback.
 
 OPTIONS:
     -v, --verbose           Enable verbose output
-    -p, --prereleases       Include pre-releases in version checks (GitHub/JSC perftools)
+    -p, --prereleases       Include pre-releases in version checks
     -o, --output FORMAT     Output format: table, json, markdown (default: table)
     -t, --token TOKEN       GitHub API token (or set GITHUB_TOKEN env var)
     --no-glow               Disable glow formatting for markdown output
@@ -93,7 +109,8 @@ EXAMPLES:
 
 NOTES:
     - Requires rpmspec and rpmdev-vercmp tools
-    - Supports GitHub (github.com), GitLab (any instance), PyPI, JSC perftools, and Open MPI
+    - Supports GitHub (github.com), GitLab (any instance), PyPI, JSC perftools,
+      Open MPI, GNU FTP, and release-monitoring.org (Anitya) as a fallback
     - Open MPI uses GitHub tags (filtering out rc and amzn tags)
     - GitHub API rate limits apply (60 requests/hour without token)
     - Use GITHUB_TOKEN environment variable for higher rate limits (5000 requests/hour)
@@ -101,6 +118,8 @@ NOTES:
     - GitLab repositories use public API endpoints (no authentication required)
     - PyPI repositories use public API endpoints (no authentication required)
     - JSC perftools packages (perftools.pages.jsc.fz-juelich.de) use public pages
+    - release-monitoring.org is used as a fallback for packages not matched by
+      other methods (no authentication required)
 
 EOF
 }
@@ -505,6 +524,87 @@ get_latest_jsc_perftools_version() {
 	echo "${latest_version}"
 }
 
+# Strip OpenHPC package naming suffixes to get the upstream project name
+# Patterns: name-gnu*-openmpi*-ohpc, name-gnu*-ohpc, name-ohpc
+strip_ohpc_suffixes() {
+	local name="$1"
+	if [[ "${name}" =~ ^(.*)-gnu[0-9]+-openmpi[0-9]+-ohpc$ ]]; then
+		echo "${BASH_REMATCH[1]}"
+	elif [[ "${name}" =~ ^(.*)-gnu[0-9]+-ohpc$ ]]; then
+		echo "${BASH_REMATCH[1]}"
+	elif [[ "${name}" =~ ^(.*)-ohpc$ ]]; then
+		echo "${BASH_REMATCH[1]}"
+	else
+		echo "${name}"
+	fi
+}
+
+# Get latest version from release-monitoring.org (Anitya) API
+# Accepts either a project name or "id:<number>" for direct project ID lookup
+get_latest_release_monitoring_version() {
+	local project_ref="$1"
+	local api_url response
+
+	if [[ "${project_ref}" == id:* ]]; then
+		# Direct project ID lookup using v1 API
+		local project_id="${project_ref#id:}"
+		api_url="https://release-monitoring.org/api/project/${project_id}"
+		debug_info "Checking release-monitoring.org project ID: ${project_id}"
+
+		response="$(curl -s "${api_url}" 2>/dev/null)" || {
+			debug_warn "Failed to fetch release-monitoring.org data for project ID ${project_id}"
+			return 1
+		}
+
+		# Extract version directly from the project object
+		local latest_version
+		if [[ ${CHECK_PRERELEASES} -eq 1 ]]; then
+			latest_version="$(echo "${response}" | jq -r '.versions[0]' 2>/dev/null)"
+		else
+			latest_version="$(echo "${response}" | jq -r '.stable_versions[0] // .version' 2>/dev/null)"
+		fi
+
+		if [[ "${latest_version}" == "null" || -z "${latest_version}" ]]; then
+			debug_warn "No version found on release-monitoring.org for project ID ${project_id}"
+			return 1
+		fi
+
+		echo "${latest_version}"
+	else
+		# Name-based search
+		api_url="https://release-monitoring.org/api/v2/projects/?name=${project_ref}"
+		debug_info "Checking release-monitoring.org for: ${project_ref}"
+
+		response="$(curl -s "${api_url}" 2>/dev/null)" || {
+			debug_warn "Failed to fetch release-monitoring.org data for ${project_ref}"
+			return 1
+		}
+
+		# Check total_items > 0
+		local total_items
+		total_items="$(echo "${response}" | jq -r '.total_items' 2>/dev/null)"
+		if [[ "${total_items}" == "0" || "${total_items}" == "null" || -z "${total_items}" ]]; then
+			debug_info "No project found on release-monitoring.org for: ${project_ref}"
+			return 1
+		fi
+
+		# Get the latest version from first match
+		local latest_version
+		if [[ ${CHECK_PRERELEASES} -eq 1 ]]; then
+			latest_version="$(echo "${response}" | jq -r '.items[0].versions[0]' 2>/dev/null)"
+		else
+			latest_version="$(echo "${response}" | jq -r '.items[0].stable_versions[0] // .items[0].version' 2>/dev/null)"
+		fi
+
+		if [[ "${latest_version}" == "null" || -z "${latest_version}" ]]; then
+			debug_warn "No version found on release-monitoring.org for ${project_ref}"
+			return 1
+		fi
+
+		echo "${latest_version}"
+	fi
+}
+
 # Get latest version from GNU FTP directory listing
 get_latest_gnu_version() {
 	local project="$1" # e.g., "gcc", "gmp", "mpc", "mpfr"
@@ -836,6 +936,9 @@ normalize_version() {
 	# hdf5/phdf5: hdf5_1.14.6 → 1.14.6
 	elif [[ "${version}" =~ hdf5_(.+) ]]; then
 		version="${BASH_REMATCH[1]}"
+	# papi: papi-7-2-0-t → 7.2.0 (strip prefix, -t suffix, dashes to dots)
+	elif [[ "${version}" =~ ^papi-([0-9]+-[0-9]+.*)-t$ ]]; then
+		version="${BASH_REMATCH[1]//-/.}"
 	# Remove common prefixes like 'v', 'release-', etc.
 	else
 		version="${version#v}"
@@ -1166,15 +1269,64 @@ process_spec_file() {
 		return 0
 	fi
 
-	# Not a GitHub, GitLab, PyPI, JSC perftools, or Open MPI source
-	debug_info "Skipping ${name}: not a GitHub, GitLab, PyPI, JSC perftools, or Open MPI source"
+	# Fallback: check release-monitoring.org (Anitya)
+	local base_name
+	base_name="$(strip_ohpc_suffixes "${name}")"
+	local rm_project_name
+	if [[ -n "${RELEASE_MONITORING_MAP[${base_name}]+x}" ]]; then
+		rm_project_name="${RELEASE_MONITORING_MAP[${base_name}]}"
+	else
+		rm_project_name="${base_name}"
+	fi
+
+	debug_info "Trying release-monitoring.org fallback for ${name} (project: ${rm_project_name})"
+
+	local rm_version rm_result
+	# Temporarily disable exit-on-error for command substitution
+	set +e
+	rm_version="$(get_latest_release_monitoring_version "${rm_project_name}")"
+	rm_result=$?
+	set -e
+
+	if [[ ${rm_result} -eq 0 ]]; then
+		# Compare versions
+		local comparison
+		# Temporarily disable exit-on-error for command substitution
+		set +e
+		comparison="$(compare_versions "${current_version}" "${rm_version}")"
+		set -e
+
+		# Determine status
+		local status
+		case "${comparison}" in
+		"older") status="UPDATE_AVAILABLE" ;;
+		"same") status="UP_TO_DATE" ;;
+		"newer") status="AHEAD" ;;
+		*) status="UNKNOWN" ;;
+		esac
+
+		# Write result - use project ID path for id: refs, name for others
+		local rm_repo_id
+		if [[ "${rm_project_name}" == id:* ]]; then
+			rm_repo_id="release-monitoring.org/${rm_project_name#id:}"
+		else
+			rm_repo_id="release-monitoring.org/${rm_project_name}"
+		fi
+		echo "${name}|${current_version}|${rm_version}|${status}|${rm_repo_id}" >>"${RESULTS_FILE}"
+
+		debug_info "Result: ${name} ${current_version} -> ${rm_version} (${status})"
+		return 0
+	fi
+
+	echo "${name}|${current_version}|-|NOT_FOUND|N/A" >>"${RESULTS_FILE}"
+	debug_info "${name}: no supported upstream source found"
 	return 0
 }
 
 # Format and display results
 display_results() {
 	if [[ ! -s "${RESULTS_FILE}" ]]; then
-		log_info "No supported upstream sources found (GitHub, GitLab, PyPI, JSC perftools, Open MPI)"
+		log_info "No supported upstream sources found"
 		return 0
 	fi
 
@@ -1197,6 +1349,7 @@ display_results() {
 				"UP_TO_DATE") printf "${GREEN}%-35s %-15s %-25s %-20s %s${NC}\n" "${name}" "${current}" "${latest}" "${status}" "${repo}" ;;
 				"AHEAD") printf "${BLUE}%-35s %-15s %-25s %-20s %s${NC}\n" "${name}" "${current}" "${latest}" "${status}" "${repo}" ;;
 				"RATE_LIMITED") printf "${YELLOW}%-35s %-15s %-25s %-20s %s${NC}\n" "${name}" "${current}" "${latest}" "${status}" "${repo}" ;;
+				"NOT_FOUND") printf "${YELLOW}%-35s %-15s %-25s %-20s %s${NC}\n" "${name}" "${current}" "${latest}" "${status}" "${repo}" ;;
 				"ERROR") printf "${RED}%-35s %-15s %-25s %-20s %s${NC}\n" "${name}" "${current}" "${latest}" "${status}" "${repo}" ;;
 				*) printf "%-35s %-15s %-25s %-20s %s\n" "${name}" "${current}" "${latest}" "${status}" "${repo}" ;;
 				esac
@@ -1240,6 +1393,7 @@ display_results() {
 					"UP_TO_DATE") status_emoji="✅ ${status}" ;;
 					"AHEAD") status_emoji="🚀 ${status}" ;;
 					"RATE_LIMITED") status_emoji="⏱️ ${status}" ;;
+					"NOT_FOUND") status_emoji="🔶 ${status}" ;;
 					"ERROR") status_emoji="❌ ${status}" ;;
 					*) status_emoji="❓ ${status}" ;;
 					esac
@@ -1256,6 +1410,14 @@ display_results() {
 					elif [[ "${repo}" == perftools.pages.jsc.fz-juelich.de/cicd/* ]]; then
 						# JSC perftools: perftools.pages.jsc.fz-juelich.de/cicd/project -> https://...
 						repo_url="https://${repo}/"
+					elif [[ "${repo}" == release-monitoring.org/* ]]; then
+						# release-monitoring.org: numeric suffix is a project ID, otherwise a name
+						local rm_ref="${repo#release-monitoring.org/}"
+						if [[ "${rm_ref}" =~ ^[0-9]+$ ]]; then
+							repo_url="https://release-monitoring.org/project/${rm_ref}/"
+						else
+							repo_url="https://release-monitoring.org/projects/?pattern=${rm_ref}"
+						fi
 					elif [[ "${repo}" == */* && "${repo}" != *"/"*"/"* ]]; then
 						# GitHub: owner/repo (contains exactly one slash)
 						repo_url="https://github.com/${repo}"
@@ -1288,12 +1450,13 @@ show_summary() {
 		return 0
 	fi
 
-	local total updates up_to_date ahead errors rate_limited
+	local total updates up_to_date ahead errors rate_limited not_found
 	total="$(wc -l <"${RESULTS_FILE}" | tr -d '\n')"
 	updates="$(grep -c "UPDATE_AVAILABLE" "${RESULTS_FILE}" 2>/dev/null || echo 0)"
 	up_to_date="$(grep -c "UP_TO_DATE" "${RESULTS_FILE}" 2>/dev/null || echo 0)"
 	ahead="$(grep -c "AHEAD" "${RESULTS_FILE}" 2>/dev/null || echo 0)"
 	rate_limited="$(grep -c "RATE_LIMITED" "${RESULTS_FILE}" 2>/dev/null || echo 0)"
+	not_found="$(grep -c "NOT_FOUND" "${RESULTS_FILE}" 2>/dev/null || echo 0)"
 	errors="$(grep -c "ERROR" "${RESULTS_FILE}" 2>/dev/null || echo 0)"
 
 	# Ensure all values are clean integers - remove any whitespace and newlines
@@ -1302,6 +1465,7 @@ show_summary() {
 	up_to_date=$(echo "${up_to_date}" | tr -d ' \n\r\t')
 	ahead=$(echo "${ahead}" | tr -d ' \n\r\t')
 	rate_limited=$(echo "${rate_limited}" | tr -d ' \n\r\t')
+	not_found=$(echo "${not_found}" | tr -d ' \n\r\t')
 	errors=$(echo "${errors}" | tr -d ' \n\r\t')
 
 	# Ensure they're valid numbers (default to 0 if empty or invalid)
@@ -1310,6 +1474,7 @@ show_summary() {
 	[[ "${up_to_date}" =~ ^[0-9]+$ ]] || up_to_date=0
 	[[ "${ahead}" =~ ^[0-9]+$ ]] || ahead=0
 	[[ "${rate_limited}" =~ ^[0-9]+$ ]] || rate_limited=0
+	[[ "${not_found}" =~ ^[0-9]+$ ]] || not_found=0
 	[[ "${errors}" =~ ^[0-9]+$ ]] || errors=0
 
 	echo
@@ -1320,6 +1485,9 @@ show_summary() {
 	echo "  Ahead of latest: ${ahead}"
 	if [[ ${rate_limited} -gt 0 ]]; then
 		echo "  Rate limited: ${rate_limited}"
+	fi
+	if [[ ${not_found} -gt 0 ]]; then
+		echo "  Not found: ${not_found}"
 	fi
 	echo "  Errors: ${errors}"
 }
