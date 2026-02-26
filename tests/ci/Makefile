@@ -16,6 +16,7 @@ codespell-lint:
 		tests/ci/integration-test.sh \
 		tests/ci/run_build.py \
 		misc/build_order.py \
+		misc/check_for_package_updates.py \
 		misc/gen_sources_checksum.sh \
 		tests/ci/spec_to_test_mapping.py \
 		components/admin/prun/SOURCES/prun \
@@ -124,6 +125,7 @@ ruff-check-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
+		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
 		../../tests/dev-tools/numpy/tests/MM.py \
 		../../docs/install/mkdoc.py \
@@ -139,6 +141,7 @@ ruff-format-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
+		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
 		../../tests/dev-tools/numpy/tests/MM.py \
 		../../docs/install/mkdoc.py \
@@ -151,6 +154,7 @@ whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		\*.md.j2 \
+		misc/check_for_package_updates.py \
 		misc/gen_sources_checksum.sh \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
