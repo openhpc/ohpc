@@ -71,14 +71,24 @@ class RateLimitError(Exception):
 class Result:
     """Container for a single package-check result."""
 
-    __slots__ = ("name", "current_version", "latest_version", "status", "repo")
+    __slots__ = (
+        "name",
+        "current_version",
+        "latest_version",
+        "status",
+        "repo",
+        "spec_file",
+    )
 
-    def __init__(self, name, current_version, latest_version, status, repo):
+    def __init__(
+        self, name, current_version, latest_version, status, repo, spec_file=None
+    ):
         self.name = name
         self.current_version = current_version
         self.latest_version = latest_version
         self.status = status
         self.repo = repo
+        self.spec_file = spec_file
 
 
 # ---------------------------------------------------------------------------
@@ -109,75 +119,45 @@ def debug_warn(msg, verbose):
 
 
 # ---------------------------------------------------------------------------
-# RPM environment setup
-# ---------------------------------------------------------------------------
-
-
-def setup_rpm_environment(verbose):
-    """Validate components/OHPC_macros exists and copy to rpm sourcedir."""
-    if not os.path.exists("components/OHPC_macros"):
-        log_error("This script must be run from the OpenHPC top-level directory")
-        sys.exit(1)
-
-    sourcedir = (
-        subprocess.check_output(["rpm", "--eval", "%{_sourcedir}"]).decode().strip()
-    )
-
-    dest = os.path.join(sourcedir, "OHPC_macros")
-    if not os.path.exists(dest):
-        log_info(f"Copying OHPC_macros to {sourcedir}")
-        os.makedirs(sourcedir, exist_ok=True)
-        shutil.copy2("components/OHPC_macros", dest)
-    else:
-        import filecmp
-
-        if not filecmp.cmp(dest, "components/OHPC_macros", shallow=False):
-            log_warn(f"OHPC_macros files differ between {sourcedir} and components/")
-
-    debug_info(f"RPM sourcedir: {sourcedir}", verbose)
-
-
-# ---------------------------------------------------------------------------
 # Spec-file extraction
 # ---------------------------------------------------------------------------
+
+
+def _specfile_macros():
+    """Return extra macros for the specfile library.
+
+    On Fedora build hosts the ``fedora`` macro is defined, which causes
+    conditional blocks in OpenHPC spec files to take the wrong branch.
+    Undefine it and set ``rhel 10`` instead.
+    """
+    import rpm as _rpm
+
+    if _rpm.expandMacro("0%{?fedora}") != "0":
+        return [("fedora", None), ("rhel", "10")]
+    return []
 
 
 def extract_package_info(spec_file, verbose):
     """Parse a spec file and return (name, version, source_url) or None.
 
-    Returns ``None`` for files that should be skipped (architecture mismatch
-    or no HTTP source).  Raises ``RuntimeError`` on unexpected parse failures.
+    Returns ``None`` for files that should be skipped (no HTTP source).
+    Raises ``RuntimeError`` on unexpected parse failures.
     """
-    spec_dir = os.path.dirname(spec_file)
-    spec_base = os.path.basename(spec_file)
+    from specfile import Specfile
+    from specfile.exceptions import SpecfileException
 
-    flags = []
-    distro = subprocess.check_output(["rpm", "--eval", "0%{?fedora}"]).decode().strip()
-    if distro != "0":
-        flags = ["--undefine", "fedora", "--define", "rhel 10"]
+    try:
+        spec = Specfile(
+            spec_file,
+            sourcedir="components",
+            macros=_specfile_macros(),
+        )
+    except SpecfileException as exc:
+        debug_warn(f"Failed to parse {spec_file}: {exc}", verbose)
+        raise RuntimeError(f"Failed to parse {spec_file}") from exc
 
-    cmd = (
-        ["rpmspec", "--parse", "--define", "_sourcedir ../../.."] + flags + [spec_base]
-    )
-
-    proc = subprocess.run(cmd, capture_output=True, text=True, cwd=spec_dir)
-
-    if proc.returncode != 0 or not proc.stdout:
-        if "No compatible architectures found for build" in proc.stderr:
-            debug_info(f"Skipping {spec_base}: architecture not compatible", verbose)
-            return None
-        debug_warn(f"Failed to parse {spec_file}: {proc.stderr}", verbose)
-        raise RuntimeError(f"Failed to parse {spec_file}")
-
-    parsed = proc.stdout
-
-    # Extract Name (first occurrence)
-    m = re.search(r"^Name:\s+(\S+)", parsed, re.MULTILINE)
-    name = m.group(1) if m else None
-
-    # Extract Version (first occurrence)
-    m = re.search(r"^Version:\s+(\S+)", parsed, re.MULTILINE)
-    version = m.group(1) if m else None
+    name = spec.expanded_name
+    version = spec.expanded_version
 
     if not name or not version:
         debug_warn(
@@ -188,12 +168,13 @@ def extract_package_info(spec_file, verbose):
         raise RuntimeError(f"Incomplete package info for {spec_file}")
 
     # Extract source URL - only consider URLs starting with http
-    source_urls = re.findall(r"^Source\d*:\s+(\S+)", parsed, re.MULTILINE)
     source0 = None
-    for url in source_urls:
-        if url.startswith("http"):
-            source0 = url
-            break
+    with spec.sources() as sources:
+        for src in sources:
+            loc = src.expanded_location
+            if loc and loc.startswith("http"):
+                source0 = loc
+                break
 
     if not source0:
         debug_info(f"Skipping {name}: no HTTP upstream source defined", verbose)
@@ -826,39 +807,19 @@ def normalize_version(version):
 def compare_versions(current, latest):
     """Compare *current* and *latest* using rpm.labelCompare.
 
-    Falls back to ``rpmdev-vercmp`` subprocess if the ``rpm`` Python module
-    is not available.
-
-    Returns one of ``'older'``, ``'same'``, ``'newer'``, ``'unknown'``.
+    Returns one of ``'older'``, ``'same'``, ``'newer'``.
     """
+    import rpm
+
     current = normalize_version(current)
     latest = normalize_version(latest)
 
-    try:
-        import rpm
-
-        rc = rpm.labelCompare(("0", current, "1"), ("0", latest, "1"))
-        if rc < 0:
-            return "older"
-        if rc == 0:
-            return "same"
-        return "newer"
-    except ImportError:
-        pass
-
-    # Fallback to rpmdev-vercmp
-    proc = subprocess.run(
-        ["rpmdev-vercmp", current, latest],
-        capture_output=True,
-    )
-    code = proc.returncode
-    if code == 0:
-        return "same"
-    if code == 11:
-        return "newer"
-    if code == 12:
+    rc = rpm.labelCompare(("0", current, "1"), ("0", latest, "1"))
+    if rc < 0:
         return "older"
-    return "unknown"
+    if rc == 0:
+        return "same"
+    return "newer"
 
 
 # ---------------------------------------------------------------------------
@@ -1194,6 +1155,7 @@ def check_gnu_compilers(spec_file, config):
                     ERROR,
                     ERROR,
                     f"gnu.org/{gnu_project}",
+                    spec_file=spec_file,
                 )
             )
             continue
@@ -1207,10 +1169,65 @@ def check_gnu_compilers(spec_file, config):
                 latest_version,
                 status,
                 f"gnu.org/{gnu_project}",
+                spec_file=spec_file,
             )
         )
 
     return results
+
+
+# ---------------------------------------------------------------------------
+# Spec file updaters
+# ---------------------------------------------------------------------------
+
+
+def update_spec_version(spec_file, new_version, verbose):
+    """Update the Version tag in a spec file using the specfile library."""
+    from specfile import Specfile
+
+    spec = Specfile(spec_file, sourcedir="components", macros=_specfile_macros())
+    spec.update_version(new_version)
+    spec.save()
+    log_info(f"Updated {spec_file}: Version -> {new_version}")
+
+
+def update_gnu_spec_version(spec_file, result_name, new_version, verbose):
+    """Update a %global macro version in the GNU compilers spec file.
+
+    *result_name* has the form ``gnu<N>-compilers-<component>`` where
+    component is one of gcc, gmp, mpc, mpfr.
+    """
+    # Extract the component suffix (gcc, gmp, mpc, mpfr) and version
+    # number from the result name (e.g. "gnu15-compilers-gcc")
+    m = re.match(r"gnu(\d+)-compilers-(\w+)", result_name)
+    if not m:
+        log_warn(f"Cannot parse GNU component from result name: {result_name}")
+        return
+
+    gnu_ver = m.group(1)
+    component = m.group(2)
+    macro_name = (
+        f"gnu{gnu_ver}_{component}_version"
+        if component != "gcc"
+        else f"gnu{gnu_ver}_version"
+    )
+
+    with open(spec_file) as f:
+        content = f.read()
+
+    pattern = rf"(^%global {re.escape(macro_name)}\s+)\S+"
+    new_content, count = re.subn(
+        pattern, rf"\g<1>{new_version}", content, count=1, flags=re.MULTILINE
+    )
+
+    if count == 0:
+        log_warn(f"Could not find %global {macro_name} in {spec_file}")
+        return
+
+    with open(spec_file, "w") as f:
+        f.write(new_content)
+
+    log_info(f"Updated {spec_file}: %global {macro_name} -> {new_version}")
 
 
 # ---------------------------------------------------------------------------
@@ -1264,10 +1281,13 @@ def process_spec_file(spec_file, config):
             for r in results:
                 if r.status == RATE_LIMITED:
                     raise RateLimitError("Rate limit reached")
+            # Attach spec_file to each result
+            for r in results:
+                r.spec_file = spec_file
             return results
 
     # Should not reach here because try_release_monitoring always returns
-    return [Result(name, current_version, "-", NOT_FOUND, "N/A")]
+    return [Result(name, current_version, "-", NOT_FOUND, "N/A", spec_file=spec_file)]
 
 
 # ---------------------------------------------------------------------------
@@ -1302,16 +1322,18 @@ def display_results_table(results):
 
 def display_results_json(results):
     """Print results as a JSON array to stdout."""
-    data = [
-        {
+    data = []
+    for r in results:
+        entry = {
             "name": r.name,
             "current_version": r.current_version,
             "latest_version": r.latest_version,
             "status": r.status,
             "repository": r.repo,
         }
-        for r in results
-    ]
+        if r.spec_file is not None:
+            entry["spec_file"] = r.spec_file
+        data.append(entry)
     print(json.dumps(data, indent=2))
 
 
@@ -1426,7 +1448,15 @@ def show_summary(results):
 class Config:
     """Configuration parsed from command-line arguments."""
 
-    __slots__ = ("verbose", "prereleases", "output", "token", "no_glow")
+    __slots__ = (
+        "verbose",
+        "prereleases",
+        "output",
+        "token",
+        "no_glow",
+        "package",
+        "update",
+    )
 
     def __init__(self, args):
         self.verbose = args.verbose
@@ -1434,6 +1464,8 @@ class Config:
         self.output = args.output
         self.token = args.token or os.environ.get("GITHUB_TOKEN", "")
         self.no_glow = args.no_glow
+        self.package = args.package
+        self.update = args.update
 
 
 def parse_args(argv=None):
@@ -1472,6 +1504,18 @@ def parse_args(argv=None):
         action="store_true",
         help="Disable glow formatting for markdown output",
     )
+    parser.add_argument(
+        "--update",
+        action="store_true",
+        help="Automatically update spec file(s) with the newer detected version",
+    )
+    parser.add_argument(
+        "package",
+        nargs="?",
+        default=None,
+        help="Check only a specific package (matched against spec file path "
+        "or package name)",
+    )
     return parser.parse_args(argv)
 
 
@@ -1479,11 +1523,29 @@ def main(argv=None):
     args = parse_args(argv)
     config = Config(args)
 
-    setup_rpm_environment(config.verbose)
+    if not os.path.exists("components/OHPC_macros"):
+        log_error("This script must be run from the OpenHPC top-level directory")
+        sys.exit(1)
 
     log_info("Scanning for OpenHPC packages with supported upstream sources...")
 
     spec_files = sorted(glob.glob("components/**/*.spec", recursive=True))
+
+    if config.package:
+        needle = config.package.lower()
+        filtered = [s for s in spec_files if needle in s.lower()]
+        if not filtered:
+            # Try matching against the base name without extension
+            filtered = [
+                s
+                for s in spec_files
+                if needle in os.path.splitext(os.path.basename(s))[0].lower()
+            ]
+        if not filtered:
+            log_error(f"No spec files matched '{config.package}'")
+            sys.exit(1)
+        spec_files = filtered
+
     log_info(f"Found {len(spec_files)} spec files to process")
 
     all_results = []
@@ -1539,6 +1601,37 @@ def main(argv=None):
         log_info("No supported upstream sources found")
 
     show_summary(all_results)
+
+    # Apply updates if requested
+    if config.update:
+        updatable = [r for r in all_results if r.status == UPDATE_AVAILABLE]
+        if not updatable:
+            log_info("No updates to apply")
+        else:
+            for r in updatable:
+                if r.spec_file is None:
+                    log_warn(f"No spec file recorded for {r.name}, skipping")
+                    continue
+                latest = normalize_version(r.latest_version)
+                if (
+                    r.name.endswith("-gcc")
+                    or r.name.endswith("-gmp")
+                    or r.name.endswith("-mpc")
+                    or r.name.endswith("-mpfr")
+                ):
+                    # GNU compiler components use %global macros
+                    update_gnu_spec_version(
+                        r.spec_file,
+                        r.name,
+                        latest,
+                        config.verbose,
+                    )
+                else:
+                    update_spec_version(
+                        r.spec_file,
+                        latest,
+                        config.verbose,
+                    )
 
     # Exit code: 1 if updates available, 0 otherwise
     updates = sum(1 for r in all_results if r.status == UPDATE_AVAILABLE)
