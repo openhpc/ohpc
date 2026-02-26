@@ -1337,31 +1337,48 @@ def display_results_json(results):
     print(json.dumps(data, indent=2))
 
 
+_REPO_URL_MAP = {
+    "gnu.org/": "https://ftpmirror.gnu.org/gnu/",
+    "cs.uoregon.edu/research/tau/": "https://www.cs.uoregon.edu/research/tau/",
+    "ftp.tools.bsc.es/": "https://ftp.tools.bsc.es/",
+    "pypi.org/project/": "https://pypi.org/project/",
+    "perftools.pages.jsc.fz-juelich.de/cicd/": (
+        "https://perftools.pages.jsc.fz-juelich.de/cicd/"
+    ),
+}
+
+
 def _repo_url(repo):
-    """Generate a clickable URL for the repository identifier."""
-    if repo.startswith("gnu.org/"):
-        project = repo.split("/", 1)[1]
-        return f"https://ftpmirror.gnu.org/gnu/{project}/"
+    """Generate a clickable URL for the repository identifier.
+
+    All base URLs are hardcoded; only the path component extracted from
+    *repo* is appended, so the host can never be influenced by the repo
+    identifier string.
+    """
     if repo == "parallel-netcdf.github.io":
         return "https://parallel-netcdf.github.io/wiki/Download.html"
-    if repo.startswith("cs.uoregon.edu/research/tau/"):
-        return f"https://www.{repo}/"
-    if repo.startswith("ftp.tools.bsc.es/"):
-        return f"https://{repo}/"
-    if repo.startswith("pypi.org/project/"):
-        return f"https://{repo}/"
-    if repo.startswith("perftools.pages.jsc.fz-juelich.de/cicd/"):
-        return f"https://{repo}/"
+
+    for prefix, base_url in _REPO_URL_MAP.items():
+        if repo.startswith(prefix):
+            path = repo[len(prefix) :]
+            return f"{base_url}{path}/"
+
     if repo.startswith("release-monitoring.org/"):
-        ref = repo.split("/", 1)[1]
+        ref = repo[len("release-monitoring.org/") :]
         if re.match(r"^\d+$", ref):
             return f"https://release-monitoring.org/project/{ref}/"
-        return f"https://release-monitoring.org/projects/?pattern={ref}"
+        return "https://release-monitoring.org/projects/?pattern=" + ref
+
     if "/" in repo and repo.count("/") == 1:
         # GitHub: owner/repo
-        return f"https://github.com/{repo}"
-    # GitLab or other
-    return f"https://{repo}"
+        owner, name = repo.split("/", 1)
+        return f"https://github.com/{owner}/{name}"
+
+    # GitLab: hostname/owner/repo
+    parts = repo.split("/", 2)
+    if len(parts) == 2:
+        return f"https://{parts[0]}/{parts[1]}"
+    return f"https://{parts[0]}/{parts[1]}/{parts[2]}"
 
 
 def display_results_markdown(results, no_glow):
