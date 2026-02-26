@@ -11,7 +11,7 @@ codespell-lint:
 		tests/ci/run_build.py \
 		misc/build_order.py \
 		misc/build_order.sh \
-		misc/check_for_package_updates.sh \
+		misc/check_for_package_updates.py \
 		misc/dist/count_avail_packages.sh \
 		tests/ci/spec_to_test_mapping.py \
 		tests/ci/test_parse_doc.bats \
@@ -83,6 +83,7 @@ ruff-check-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
+		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
 		../../docs/recipes/install/parse_doc.py
 
@@ -92,6 +93,7 @@ ruff-format-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
+		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
 		../../docs/recipes/install/parse_doc.py
 
@@ -103,7 +105,7 @@ whitespace-lint:
 		docs/recipes/install/common/vc \
 		docs/recipes/install/common/listohpc \
 		misc/build_order.sh \
-		misc/check_for_package_updates.sh \
+		misc/check_for_package_updates.py \
 		misc/dist/count_avail_packages.sh \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
@@ -176,7 +178,6 @@ shellcheck-lint:
 		-o require-variable-braces,quote-safe-variables,deprecate-which,avoid-nullary-conditions \
 		../../misc/build_srpm.sh \
 		../../misc/build_order.sh \
-		../../misc/check_for_package_updates.sh \
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
 		../../misc/dist/count_avail_packages.sh \
@@ -319,7 +320,6 @@ shfmt-lint:
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../misc/build_order.sh \
-		../../misc/check_for_package_updates.sh \
 		../../misc/dist/count_avail_packages.sh \
 		../../tests/common/functions \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \

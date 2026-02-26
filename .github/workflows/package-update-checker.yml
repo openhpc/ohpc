@@ -32,13 +32,10 @@ jobs:
         echo "Setting up RPM environment in container"
         mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
-        # Make script executable
-        chmod +x misc/check_for_package_updates.sh
-
         # Run the script and capture output and exit code
         # Redirect stderr to avoid terminal control characters in GitHub issues
         set +e
-        OUTPUT=$(misc/check_for_package_updates.sh -o markdown --no-glow 2>/dev/null)
+        OUTPUT=$(python3 misc/check_for_package_updates.py -o markdown --no-glow 2>/dev/null)
         EXIT_CODE=$?
         set -e
 
