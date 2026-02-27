@@ -117,6 +117,7 @@ def render_document(env: Environment, config: dict) -> str:
 def check_line_lengths(content: str, max_length: int = 87) -> int:
     """Warn about lines in ```bash and ```console code blocks that exceed max_length."""
     current_section = "<unknown>"
+    section_start_lineno = 1
     in_code_block = False
     warnings = 0
 
@@ -127,6 +128,7 @@ def check_line_lengths(content: str, max_length: int = 87) -> int:
         match = re.match(r'<!-- [+-]section: (.+?) -->', stripped)
         if match:
             current_section = match.group(1)
+            section_start_lineno = lineno
             continue
 
         # Track code blocks
@@ -140,7 +142,7 @@ def check_line_lengths(content: str, max_length: int = 87) -> int:
         if in_code_block and len(stripped) > max_length:
             print(
                 f"WARNING: line too long ({len(stripped)} > {max_length}): "
-                f"{current_section}:{lineno}",
+                f"{current_section}:{lineno - section_start_lineno}",
                 file=sys.stderr,
             )
             print(f"  {stripped}", file=sys.stderr)
