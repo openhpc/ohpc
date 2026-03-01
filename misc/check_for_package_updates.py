@@ -15,6 +15,7 @@ import re
 import shutil
 import subprocess
 import sys
+import textwrap
 import time
 
 import requests
@@ -1230,6 +1231,121 @@ def update_gnu_spec_version(spec_file, result_name, new_version, verbose):
     log_info(f"Updated {spec_file}: %global {macro_name} -> {new_version}")
 
 
+def commit_updates(updated_results):
+    """Stage updated spec files and create a signed git commit.
+
+    The commit message includes the command line used to invoke the
+    script and the upstream backend for each updated package.  All
+    lines are kept within 72 characters.
+    """
+    if not updated_results:
+        return
+
+    # Collect unique spec files (preserving order)
+    spec_files = list(dict.fromkeys(r.spec_file for r in updated_results))
+
+    # Stage the changed spec files
+    try:
+        subprocess.run(
+            ["git", "add"] + spec_files,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        log_warn("git not found; skipping commit")
+        return
+    except subprocess.CalledProcessError as exc:
+        log_warn(f"Failed to stage spec files: {exc.stderr.strip()}")
+        return
+
+    # Check if there are actually staged changes
+    rc = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        capture_output=True,
+    )
+    if rc.returncode == 0:
+        log_info("No changes to commit")
+        return
+
+    # Extract component group (directory under components/)
+    # e.g. "components/serial-libs/gsl/SPECS/gsl.spec" -> "serial-libs"
+    groups = list(dict.fromkeys(
+        r.spec_file.split("/")[1]
+        for r in updated_results
+        if r.spec_file and len(r.spec_file.split("/")) > 1
+    ))
+    prefix = f"{groups[0]}: " if len(groups) == 1 else ""
+
+    # Determine the subject line
+    if len(spec_files) == 1:
+        spec_name = os.path.splitext(os.path.basename(spec_files[0]))[0]
+        if len(updated_results) == 1:
+            r = updated_results[0]
+            latest = normalize_version(r.latest_version)
+            subject = f"{prefix}update {spec_name} to {latest}"
+        else:
+            subject = f"{prefix}update {spec_name}"
+    else:
+        subject = f"{prefix}update packages to latest versions"
+
+    if len(subject) > 72:
+        subject = subject[:69] + "..."
+
+    # Build commit body -- each result gets two lines so that
+    # individual lines stay within 72 characters.
+    body_lines = []
+    for r in updated_results:
+        latest = normalize_version(r.latest_version)
+        name = strip_ohpc_suffixes(r.name)
+        body_lines.append(
+            f"- {name}: {r.current_version} -> {latest}"
+        )
+        body_lines.append(f"  upstream: {r.repo}")
+
+    body_lines.append("")
+    cmd_line = f"Command: `{' '.join(sys.argv)}`"
+    body_lines.append(textwrap.fill(
+        cmd_line, width=72,
+        subsequent_indent="  ",
+        break_on_hyphens=False,
+    ))
+
+    # Build the Signed-off-by line ourselves so we can place a
+    # blank line between the Command trailer and the sign-off.
+    # Using "git commit -s" would merge them into one trailer block.
+    try:
+        sob_name = subprocess.run(
+            ["git", "config", "user.name"],
+            capture_output=True, text=True, check=True,
+        ).stdout.strip()
+        sob_email = subprocess.run(
+            ["git", "config", "user.email"],
+            capture_output=True, text=True, check=True,
+        ).stdout.strip()
+        body_lines.append("")
+        body_lines.append(
+            f"Signed-off-by: {sob_name} <{sob_email}>"
+        )
+    except subprocess.CalledProcessError:
+        log_warn("Could not determine git identity for sign-off")
+
+    message = subject + "\n\n" + "\n".join(body_lines)
+
+    try:
+        subprocess.run(
+            ["git", "commit", "-m", message],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        log_warn(f"Failed to create commit: {exc.stderr.strip()}")
+        return
+
+    log_info(f"Created signed commit: {subject}")
+
+
 # ---------------------------------------------------------------------------
 # Main processing
 # ---------------------------------------------------------------------------
@@ -1625,6 +1741,7 @@ def main(argv=None):
         if not updatable:
             log_info("No updates to apply")
         else:
+            updated = []
             for r in updatable:
                 if r.spec_file is None:
                     log_warn(f"No spec file recorded for {r.name}, skipping")
@@ -1649,6 +1766,8 @@ def main(argv=None):
                         latest,
                         config.verbose,
                     )
+                updated.append(r)
+            commit_updates(updated)
 
     # Exit code: 1 if updates available, 0 otherwise
     updates = sum(1 for r in all_results if r.status == UPDATE_AVAILABLE)
