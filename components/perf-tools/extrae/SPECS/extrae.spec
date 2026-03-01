@@ -18,13 +18,13 @@
 
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	3.8.3
+Version:	5.0.3
 Release:	1%{?dist}
 License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
-Patch0:		arm.function.definition.patch
+Patch0:		https://github.com/bsc-performance-tools/extrae/pull/114.patch
 
 
 BuildRequires:	autoconf
@@ -49,7 +49,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch -P0 -p0
+%patch -P0 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -65,7 +65,6 @@ export compiler_vars="CC=${CC} CXX=${CXX} MPIF90=mpiifort $compiler_vars"
 %endif
 %endif
 
-./bootstrap
 export LDFLAGS="$LDFLAGS -lz"
 %if 0%{?sle_version}
 export LDFLAGS="$LDFLAGS -lsframe"
@@ -98,6 +97,12 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 # fix a path in one of the scripts
 sed -e "s,export EXTRAE_HOME=.*,export EXTRAE_HOME=%{install_path},g" -i $RPM_BUILD_ROOT/%{install_path}/share/tests/overhead/run_overhead_tests.sh
+
+# Remove ccache prefix from compiler variables in extrae-vars.sh.
+# The build system records $CC/$CXX verbatim, producing invalid
+# export statements like: export EXTRAE_CXX=ccache g++
+sed -e 's/=ccache \(.*\)/=\1/' \
+    -i $RPM_BUILD_ROOT/%{install_path}/etc/extrae-vars.sh
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
