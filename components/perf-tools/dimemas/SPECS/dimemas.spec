@@ -18,7 +18,7 @@
 
 Summary:	Dimemas tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	5.4.2
+Version:	5.5.0
 Release:	1
 License:	GNU
 Group:		%{PROJ_NAME}/perf-tools
