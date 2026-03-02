@@ -1270,11 +1270,13 @@ def commit_updates(updated_results):
 
     # Extract component group (directory under components/)
     # e.g. "components/serial-libs/gsl/SPECS/gsl.spec" -> "serial-libs"
-    groups = list(dict.fromkeys(
-        r.spec_file.split("/")[1]
-        for r in updated_results
-        if r.spec_file and len(r.spec_file.split("/")) > 1
-    ))
+    groups = list(
+        dict.fromkeys(
+            r.spec_file.split("/")[1]
+            for r in updated_results
+            if r.spec_file and len(r.spec_file.split("/")) > 1
+        )
+    )
     prefix = f"{groups[0]}: " if len(groups) == 1 else ""
 
     # Determine the subject line
@@ -1298,18 +1300,19 @@ def commit_updates(updated_results):
     for r in updated_results:
         latest = normalize_version(r.latest_version)
         name = strip_ohpc_suffixes(r.name)
-        body_lines.append(
-            f"- {name}: {r.current_version} -> {latest}"
-        )
+        body_lines.append(f"- {name}: {r.current_version} -> {latest}")
         body_lines.append(f"  upstream: {r.repo}")
 
     body_lines.append("")
     cmd_line = f"Command: `{' '.join(sys.argv)}`"
-    body_lines.append(textwrap.fill(
-        cmd_line, width=72,
-        subsequent_indent="  ",
-        break_on_hyphens=False,
-    ))
+    body_lines.append(
+        textwrap.fill(
+            cmd_line,
+            width=72,
+            subsequent_indent="  ",
+            break_on_hyphens=False,
+        )
+    )
 
     # Build the Signed-off-by line ourselves so we can place a
     # blank line between the Command trailer and the sign-off.
@@ -1317,16 +1320,18 @@ def commit_updates(updated_results):
     try:
         sob_name = subprocess.run(
             ["git", "config", "user.name"],
-            capture_output=True, text=True, check=True,
+            capture_output=True,
+            text=True,
+            check=True,
         ).stdout.strip()
         sob_email = subprocess.run(
             ["git", "config", "user.email"],
-            capture_output=True, text=True, check=True,
+            capture_output=True,
+            text=True,
+            check=True,
         ).stdout.strip()
         body_lines.append("")
-        body_lines.append(
-            f"Signed-off-by: {sob_name} <{sob_email}>"
-        )
+        body_lines.append(f"Signed-off-by: {sob_name} <{sob_email}>")
     except subprocess.CalledProcessError:
         log_warn("Could not determine git identity for sign-off")
 
