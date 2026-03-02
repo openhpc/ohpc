@@ -78,6 +78,7 @@ cmake -DCMAKE_INSTALL_PREFIX=%{install_path} \
       -DBUILD_SHARED_LIBS=ON                 \
       -DBUILD_STATIC_LIBS=OFF                \
       -DHDF5_BUILD_FORTRAN=ON                \
+      -DHDF5_ENABLE_Z_LIB_SUPPORT=ON         \
 %if "%{?OHPC_USE_CCACHE}" == "yes"
       -DCMAKE_C_COMPILER_LAUNCHER=ccache     \
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache   \
