@@ -27,6 +27,9 @@ codespell-lint:
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
+		tests/perf-tools/extrae/tests/rm_execution \
+		tests/perf-tools/extrae/tests/tracec.sh \
+		tests/perf-tools/extrae/tests/tracef.sh \
 		tests/perf-tools/likwid/tests/rm_execution \
 		tests/perf-tools/likwid/tests/test_module \
 		tests/perf-tools/omb/tests/rm_execution \
@@ -142,6 +145,9 @@ whitespace-lint:
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
+		tests/perf-tools/extrae/tests/rm_execution \
+		tests/perf-tools/extrae/tests/tracec.sh \
+		tests/perf-tools/extrae/tests/tracef.sh \
 		tests/perf-tools/likwid/tests/rm_execution \
 		tests/perf-tools/likwid/tests/test_module \
 		tests/perf-tools/omb/tests/rm_execution \
@@ -253,6 +259,9 @@ shellcheck-lint:
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
 		../../tests/perf-tools/extrae/tests/test_module \
+		../../tests/perf-tools/extrae/tests/rm_execution \
+		../../tests/perf-tools/extrae/tests/tracec.sh \
+		../../tests/perf-tools/extrae/tests/tracef.sh \
 		../../tests/perf-tools/likwid/tests/rm_execution \
 		../../tests/perf-tools/likwid/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
@@ -335,6 +344,7 @@ shfmt-lint:
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
 		../../tests/perf-tools/extrae/tests/test_module \
+		../../tests/perf-tools/extrae/tests/rm_execution \
 		../../tests/perf-tools/likwid/tests/rm_execution \
 		../../tests/perf-tools/likwid/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
@@ -396,6 +406,8 @@ shfmt-lint:
 		../../tests/compilers/tests/debugger \
 		../../tests/modules/interactive_commands
 	shfmt -w -d \
+		../../tests/perf-tools/extrae/tests/tracec.sh \
+		../../tests/perf-tools/extrae/tests/tracef.sh \
 		../../tests/ci/integration-test.sh \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
@@ -442,6 +454,7 @@ clang-format-lint:
 		../../tests/libs/superlu/tests/*.c \
 		../../tests/libs/trilinos/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c \
+		../../tests/perf-tools/extrae/tests/*.c \
 		../../tests/rms-harness/tests/*.c \
 		../../tests/libs/openblas/tests/eigen.cpp \
 		../../tests/perf-tools/paraver/tests/*.c \
