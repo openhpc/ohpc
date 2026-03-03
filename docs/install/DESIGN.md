@@ -303,6 +303,187 @@ shell conditionals evaluated at install time (controlled by `input.local`
 variables). Jinja2 `{% if ... %}` controls what appears in the document
 at build time (controlled by recipe YAML flags). Use both as appropriate.
 
+### Site Pre-processing Placeholders
+
+Some configuration is too site-specific or environment-specific to be encoded
+in the generic recipe templates. For these, `ohpc_command` markers emit
+**placeholder lines** that a site's pre-processing step expands before running
+the script. Placeholders always appear in the generated `recipe.sh` regardless
+of the install environment — they are valid shell comments when left unexpanded.
+
+The placeholder convention:
+
+```bash
+#<<< ohpc_type:SUBTYPE >>>#
+```
+
+The `#` delimiters make the line a no-op shell comment. The `<<<`/`>>>` delimiters
+are distinct enough to grep reliably without false positives. The `SUBTYPE` field
+allows a pre-processor to distinguish contexts within the same type.
+
+#### Proxy Placeholders
+
+Proxy and mirror configuration is the primary user of this mechanism. Proxy
+setup is site-specific because:
+
+- CA certificate paths and trust store locations differ by OS and site policy
+- Repo file names and whether to use metalink, mirrorlist, or baseurl vary
+- Some environments use different proxies for different resource types
+- A local container registry (e.g., OpenCHAMI's `${sms_name}:5000`) must bypass
+  the proxy via `NO_PROXY`, requiring knowledge of site-specific addresses
+
+Three proxy placeholder types appear in each recipe, each once, in script order:
+
+| Placeholder | Location | Context |
+| --- | --- | --- |
+| `#<<< ohpc_proxy:head >>>#` | Near top, before first `dnf` | Head node setup (CA cert, dnf.conf, profile.d) |
+| `#<<< ohpc_proxy:compute >>>#` | Compute image/node setup | Warewulf chroot or Confluent nodeshell commands |
+| `#<<< ohpc_proxy:image >>>#` | OpenCHAMI image build only | Image-builder config (local registry must bypass proxy) |
+
+**Finding placeholders in a generated script:**
+
+```bash
+grep -n '^#<<< ohpc_proxy:' recipe.sh
+```
+
+**Example Python pre-processor:**
+
+```python
+import re, sys
+
+PROXY_SETUP = {
+    "head": """\
+cp /path/to/proxy-ca-cert.pem /etc/pki/ca-trust/source/anchors/proxy-ca-cert.pem
+update-ca-trust
+echo "proxy=http://proxy.site.example:3128" >> /etc/dnf/dnf.conf
+printf 'export HTTPS_PROXY=http://proxy.site.example:3128\\n' \\
+    > /etc/profile.d/proxy.sh
+printf 'export NO_PROXY=${sms_name},localhost,127.0.0.1\\n' \\
+    >> /etc/profile.d/proxy.sh
+source /etc/profile.d/proxy.sh
+""",
+    "compute": """\
+nodeshell compute "cp /var/lib/confluent/.../proxy-ca-cert.pem ..."
+nodeshell compute "update-ca-trust"
+nodeshell compute "echo proxy=http://proxy.site.example:3128 >> /etc/dnf/dnf.conf"
+""",
+    "image": """\
+export HTTPS_PROXY=http://proxy.site.example:3128
+export NO_PROXY=${sms_name}:5000,localhost
+""",
+}
+
+script = open("recipe.sh").read()
+for subtype, commands in PROXY_SETUP.items():
+    placeholder = f"#<<< ohpc_proxy:{subtype} >>>#"
+    script = script.replace(placeholder, commands.rstrip())
+open("recipe.sh", "w").write(script)
+```
+
+Leave a placeholder line unchanged (or replace it with an empty string) for
+environments that do not require that type of proxy setup. A site with a proxy
+only on the head node would expand `head` and leave `compute` and `image` as
+no-op comments.
+
+**Template source locations for proxy placeholders:**
+
+- `templates/base-os/proxy.md.j2` — `head` placeholder
+- `templates/provisioner/warewulf/compute-create-image.md.j2` — `compute` placeholder
+- `templates/provisioner/confluent/compute-setup.md.j2` — `compute` placeholder
+- `templates/provisioner/openchami/compute-image-build.md.j2` — `image` placeholder
+
+#### Node Reset Placeholders
+
+In environments without IPMI (e.g., VMs on a hypervisor), compute nodes cannot
+be reset via `ipmitool`. The `has_ipmi` flag in `input.local` selects between
+the two paths in `boot-computes.md.j2`:
+
+- `has_ipmi=1` — uses `ipmitool chassis power reset` (real BMC)
+- `has_ipmi=0` — emits `ohpc_reset` placeholder lines to stdout at runtime
+
+Unlike proxy placeholders (which are pre-processed into the script before
+execution), reset placeholders are **runtime-emitted**. The script prints them
+to stdout via `echo`, and an external monitoring process wrapping the script
+intercepts them and triggers a hypervisor-level VM reset:
+
+```bash
+for ((i=0; i<num_computes; i++)) ; do
+  echo "#<<< ohpc_reset:$i,${c_name[$i]},${c_bmc[$i]} >>>#"
+done
+```
+
+Fields are comma-delimited (not `:`) so that IPv6 BMC addresses do not
+conflict with the field separator. Each output line carries three fields:
+index, node name, and BMC address:
+
+```text
+#<<< ohpc_reset:0,c1,192.168.1.101 >>>#
+#<<< ohpc_reset:1,c2,192.168.1.102 >>>#
+```
+
+**Example monitoring wrapper:**
+
+```bash
+#!/bin/bash
+# Run recipe.sh and intercept ohpc_reset lines to trigger VM resets
+bash recipe.sh 2>&1 | while IFS= read -r line; do
+  printf '%s\n' "$line"
+  pat='^#<<<[[:space:]]ohpc_reset:([0-9]+),([^,]+),(.+)[[:space:]]>>>#$'
+  if [[ "$line" =~ $pat ]]; then
+    idx="${BASH_REMATCH[1]}"
+    node_name="${BASH_REMATCH[2]}"
+    bmc_addr="${BASH_REMATCH[3]}"
+    echo ">>> Triggering reset for ${node_name} [${idx}] (${bmc_addr})" >&2
+    # Use node name (e.g. OpenStack server name matches c_name):
+    openstack server reboot --hard "${node_name}"
+    # Or use BMC address (e.g. hypervisor API keyed by IP):
+    # curl -X POST "http://hypervisor/api/vms/${bmc_addr}/reset"
+  fi
+done
+```
+
+All three fields come from `input.local` arrays. The index `$i` (0-based)
+identifies position in the `c_name`/`c_bmc` arrays. `c_name` holds the
+hostname (e.g. `c1`, `c2`); `c_bmc` holds the BMC/management address —
+the same value used by `ipmitool` in the IPMI path. IPv6 BMC addresses
+are safe because fields are comma-separated rather than colon-separated.
+
+**Template source:** `templates/boot/boot-computes.md.j2` (inside the
+`ohpc_else` branch of the `ohpc_if_set has_ipmi` conditional).
+
+#### Adding New Placeholder Types
+
+Two patterns exist, depending on whether expansion happens before or during
+script execution:
+
+**Static (pre-processed before execution)** — like `ohpc_proxy`. The
+placeholder is a fixed comment line in the script; a pre-processor replaces
+it before the script runs. Use this when the expansion produces commands
+that execute as part of the normal script flow.
+
+1. Choose a type prefix (e.g., `ohpc_auth`, `ohpc_storage`).
+2. Add an `ohpc_comment` + `ohpc_command` inside an `ohpc_begin`/`ohpc_end`
+   block. No `ohpc_if` wrapper — the placeholder should always be present:
+
+   ```markdown
+   <!-- ohpc_begin -->
+   <!-- ohpc_comment Configure site authentication (site-specific) -->
+   <!-- ohpc_command #<<< ohpc_auth:head >>># -->
+   <!-- ohpc_end -->
+   ```
+
+**Runtime-emitted (printed to stdout during execution)** — like `ohpc_reset`.
+The script prints placeholder lines via `echo` at runtime; a monitoring
+process wrapping the script intercepts them and acts out-of-band. Use this
+when the action must happen asynchronously from outside the script (e.g.,
+triggering a hypervisor reset while the script waits for the node to come up).
+
+   ```markdown
+   <!-- ohpc_command echo "#<<< ohpc_action:$var >>>#" -->
+   ```
+
+For both patterns, document the new type in this section.
+
 ## Directory Structure
 
 ```text

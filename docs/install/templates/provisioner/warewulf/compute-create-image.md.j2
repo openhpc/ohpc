@@ -23,7 +23,10 @@ wwctl image import docker://ghcr.io/warewulf/warewulf-{{ distro_container_image 
 # Define chroot location
 CHROOT=$(wwctl image show {{ baseos }})
 export CHROOT
-
+```
+<!-- ohpc_comment Configure HTTPS proxy for compute image (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
+```bash
 # Enable OpenHPC inside image and update image.
 #Disable image build on exit, rebuild later.
 wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF

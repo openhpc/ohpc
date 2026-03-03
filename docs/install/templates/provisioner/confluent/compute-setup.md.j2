@@ -5,6 +5,11 @@ We now need to configure the compute nodes. We leverage the Confluent-provided
 
 We first disable the firewall on the compute nodes.
 <!-- ohpc_begin -->
+<!-- ohpc_comment Configure HTTPS proxy for compute nodes (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
 <!-- ohpc_comment Disable firewall -->
 ```bash
 # Disable firewall for computes

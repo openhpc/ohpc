@@ -18,10 +18,10 @@ for ((i=0; i<num_computes; i++)) ; do
 done
 ```
 <!-- ohpc_else -->
-<!-- ohpc_command # In-band communication to reset nodes   -->
-<!-- ohpc_command for ((i=0; i<num_computes; i++)) ; do    -->
-<!-- ohpc_command   echo "<<< ipmi-reset:${c_bmc[$i]} >>>" -->
-<!-- ohpc_command done                                     -->
+<!-- ohpc_command # In-band communication to reset nodes     -->
+<!-- ohpc_command for ((i=0; i<num_computes; i++)) ; do      -->
+<!-- ohpc_command   echo "#<<< ohpc_reset:$i,${c_name[$i]},${c_bmc[$i]} >>>#" -->
+<!-- ohpc_command done                                       -->
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
 

@@ -3,6 +3,8 @@
 
 {% include "base-os/install.md.j2" %}
 
+{% include "base-os/proxy.md.j2" %}
+
 {% if is_el %}
 {% include "distro/el/repos.md.j2" %}
 {% elif is_openeuler %}
