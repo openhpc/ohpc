@@ -12,10 +12,6 @@ source ./common/functions || exit 1
 cd libs/phdf5 || exit 1
 export BATS_JUNIT_CLASS=PHDF5
 
-# bootstrap the local autotools project if necessary
-
-./bootstrap || exit 1
-
 for COMPILER in ${COMPILER_FAMILIES}; do
 	for MPI in ${MPI_FAMILIES}; do
 
@@ -31,6 +27,7 @@ for COMPILER in ${COMPILER_FAMILIES}; do
 		module load "${MPI}" || exit 1
 		module load phdf5 || exit 1
 
+		./bootstrap || exit 1
 		./configure || exit 1
 		make clean || exit 1
 		make -k check || STATUS=1
