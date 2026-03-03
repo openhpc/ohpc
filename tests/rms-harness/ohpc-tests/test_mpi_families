@@ -11,10 +11,6 @@ cd rms-harness || exit 1
 
 export BATS_JUNIT_CLASS=rms-harness
 
-# bootstrap the local autotools project
-
-./bootstrap || exit 1
-
 for compiler in ${COMPILER_FAMILIES}; do
 	for mpi in ${MPI_FAMILIES}; do
 
@@ -29,6 +25,7 @@ for compiler in ${COMPILER_FAMILIES}; do
 		module load "${compiler}" || exit 1
 		module load "${mpi}" || exit 1
 
+		./bootstrap || exit 1
 		./configure || exit 1
 		make -k check || status=1
 
