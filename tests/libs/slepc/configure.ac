@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(slepc, 3.7.4, [https://github.com/openhpc/ohpc])
+AC_INIT(slepc, 3.24.2, [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
