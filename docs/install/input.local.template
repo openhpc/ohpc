@@ -34,7 +34,7 @@ ipv4_gateway="${ipv4_gateway:-172.16.0.2}"
 ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
 
 # System has IPMI (set to 0 for virtual machines)
-has_ipmi="${has_ipmi:-1}
+has_ipmi="${has_ipmi:-1}"
 
 # BMC user credentials for use by IPMI
 bmc_username="${bmc_username:-unknown}"
