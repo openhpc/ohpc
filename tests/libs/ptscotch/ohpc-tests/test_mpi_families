@@ -11,10 +11,6 @@ cd libs/ptscotch || exit 1
 
 export BATS_JUNIT_CLASS=PTScotch
 
-# bootstrap the local autotools project if necessary
-
-./bootstrap || exit 1
-
 for compiler in $COMPILER_FAMILIES; do
 	for mpi in $MPI_FAMILIES; do
 
@@ -30,6 +26,7 @@ for compiler in $COMPILER_FAMILIES; do
 		module load "$mpi" || exit 1
 		module load ptscotch || exit 1
 
+		./bootstrap           || exit 1
 		./configure || exit 1
 		make clean || exit 1
 		make -k check || status=1

@@ -11,10 +11,6 @@ cd libs/scotch || exit 1
 
 export BATS_JUNIT_CLASS=SCOTCH
 
-# bootstrap the local autotools project if necessary
-
-./bootstrap || exit 1
-
 for compiler in $COMPILER_FAMILIES; do
 
 	echo " "
@@ -28,6 +24,7 @@ for compiler in $COMPILER_FAMILIES; do
 	module load scotch || exit 1
 	module load prun || exit 1
 
+	./bootstrap           || exit 1
 	./configure || exit 1
 	make clean || exit 1
 	make -k check || status=1

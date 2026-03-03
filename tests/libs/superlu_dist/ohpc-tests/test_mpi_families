@@ -11,10 +11,6 @@ source ./common/functions || exit 1
 cd libs/superlu_dist || exit 1
 export BATS_JUNIT_CLASS=superLU_dist
 
-# bootstrap the local autotools project if necessary
-
-./bootstrap || exit 1
-
 for compiler in $COMPILER_FAMILIES ; do
     for mpi in $MPI_FAMILIES ; do
 
@@ -37,6 +33,7 @@ for compiler in $COMPILER_FAMILIES ; do
 	
 	module load superlu_dist || exit 1
 
+	./bootstrap           || exit 1
 	./configure              || exit 1
 	make clean               || exit 1
 	make -k check            || status=1

@@ -11,10 +11,6 @@ source ./common/functions || exit 1
 cd compilers || exit 1
 export BATS_JUNIT_CLASS=Compilers
 
-# bootstrap the local autotools project
-
-./bootstrap || exit 1
-
 for compiler in $COMPILER_FAMILIES ; do
 
     echo " "
@@ -26,6 +22,7 @@ for compiler in $COMPILER_FAMILIES ; do
     module purge 
     module load $compiler 
 
+    ./bootstrap           || exit 1
     ./configure         || exit 1
     make clean          || exit 1
     make -j 4 -k check  || status=1

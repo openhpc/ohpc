@@ -12,9 +12,6 @@ cd perf-tools/scorep || exit 1
 export BATS_JUNIT_CLASS=Score-P
 export SCAN_MPI_LAUNCHER=prun
 
-# bootstrap the local autotools project if necessary
-./bootstrap || exit 1
-
 for compiler in $COMPILER_FAMILIES ; do
     if [ "$compiler" == "arm1" ]; then
 	continue
@@ -33,6 +30,7 @@ for compiler in $COMPILER_FAMILIES ; do
 	module load $mpi      || exit 1
 	module load scorep    || exit 1
 
+	./bootstrap           || exit 1
 	./configure           || exit 1
 	make clean            || exit 1
 	make -k check         || status=1
