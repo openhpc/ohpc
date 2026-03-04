@@ -32,9 +32,9 @@ bad nodes, reducing the risk of system-induced job failures.
 <!-- ohpc_if_set enable_nhc -->
 ```bash
 # Register as SLURM's health check program
-{{ compute_echo("HealthCheckProgram=/usr/sbin/nhc","/etc/slurm/slurm.conf") }}
+echo "HealthCheckProgram=/usr/sbin/nhc" >> /etc/slurm/slurm.conf
 # execute every five minutes
-{{ compute_echo("HealthCheckInterval=300","/etc/slurm/slurm.conf") }}
+echo "HealthCheckInterval=300" >> /etc/slurm/slurm.conf
 ```
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
