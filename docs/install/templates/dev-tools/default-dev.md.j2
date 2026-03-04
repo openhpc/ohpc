@@ -7,9 +7,12 @@ OpenHPC modules environment is pre-configured to load an `ohpc` module on login
 (if present). The following package install provides a default environment that
 enables autotools, the GNU compiler toolchain, and the OpenMPI stack.
 
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setup default development environment -->
 ```bash
 {{ pkg_install }} lmod-defaults-{{ gnu_version }}-{{ openmpi_version }}-ohpc
 ```
+<!-- ohpc_end -->
 
 ::: {.tip}
 {% if is_x86_64 %}
