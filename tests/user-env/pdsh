@@ -24,8 +24,30 @@ setup_file() {
 @test "[${TESTNAME}] run a shell command on c[1-2] (${RESOURCE_MANAGER})" {
 	[[ -n "${SIMPLE_CI}" ]] && skip "SSH not available in SIMPLE_CI"
 
-	run pdsh -S -w c[1-2] 'grep . /proc/sys/kernel/ostype'
-	assert_success
+	if [[ "${RESOURCE_MANAGER}" == "slurm" ]]; then
+		local jobid
+		jobid=$(sbatch --parsable -N 2 --time=00:05:00 --wrap="sleep infinity")
+
+		# Wait for the job to start running
+		local i
+		for i in $(seq 1 60); do
+			if [[ "$(squeue -j "${jobid}" -h -o "%T")" == "RUNNING" ]]; then
+				break
+			fi
+			sleep 1
+		done
+
+		# Run pdsh test and capture result
+		run pdsh -S -w c[1-2] 'grep . /proc/sys/kernel/ostype'
+
+		# Clean up the reservation
+		scancel "${jobid}"
+
+		assert_success
+	else
+		run pdsh -S -w c[1-2] 'grep . /proc/sys/kernel/ostype'
+		assert_success
+	fi
 }
 
 @test "[${TESTNAME}] check for pdsh-mod-slurm RPM (${RESOURCE_MANAGER})" {
