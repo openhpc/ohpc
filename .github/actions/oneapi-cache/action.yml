@@ -13,10 +13,11 @@ runs:
   steps:
     - name: Restore oneAPI package cache
       if: inputs.mode == 'restore'
+      id: restore-oneapi
       uses: actions/cache/restore@v4
       with:
         path: /var/cache/dnf/oneAPI-*/packages
-        key: dnf-oneapi-rhel-${{ github.sha }}
+        key: dnf-oneapi-rhel
         restore-keys: |
           dnf-oneapi-rhel-
     - name: Clean oneAPI package cache
@@ -29,9 +30,19 @@ runs:
           oldest=$(find /var/cache/dnf/oneAPI-*/packages -type f -printf '%T+ %p\n' 2>/dev/null | sort | head -1 | cut -d' ' -f2-)
           [ -n "$oldest" ] && rm -f "$oldest" || break
         done
+    - name: Delete previous oneAPI package cache
+      if: inputs.mode == 'save'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        gh cache list --key dnf-oneapi-rhel- --json id,key --jq '.[].id' | while read -r id; do
+          gh cache delete "$id" || true
+        done
     - name: Save oneAPI package cache
       if: inputs.mode == 'save'
       uses: actions/cache/save@v4
       with:
         path: /var/cache/dnf/oneAPI-*/packages
-        key: dnf-oneapi-rhel-${{ github.sha }}
+        key: dnf-oneapi-rhel-${{ github.run_id }}

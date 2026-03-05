@@ -67,8 +67,6 @@ jobs:
           build-args: |
             ARCH=${{ matrix.arch }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Export digest
         id: export

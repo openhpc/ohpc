@@ -49,8 +49,6 @@ jobs:
           platforms: linux/amd64
           provenance: false # Disable provenance to avoid unknown/unknown
           sbom: false       # Disable sbom to avoid unknown/unknown
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Output image details
         run: |

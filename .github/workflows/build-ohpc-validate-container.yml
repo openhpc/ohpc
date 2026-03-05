@@ -62,8 +62,6 @@ jobs:
           provenance: false
           sbom: false
           outputs: type=image,name=${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }},push-by-digest=true,name-canonical=true,push=true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Export digest
         id: export
