@@ -1671,9 +1671,17 @@ def main(argv=None):
 
     if config.package:
         needle = config.package.lower()
-        filtered = [s for s in spec_files if needle in s.lower()]
+        # Try exact match on base name (without extension) first
+        filtered = [
+            s
+            for s in spec_files
+            if needle == os.path.splitext(os.path.basename(s))[0].lower()
+        ]
         if not filtered:
-            # Try matching against the base name without extension
+            # Fall back to substring match on the full path
+            filtered = [s for s in spec_files if needle in s.lower()]
+        if not filtered:
+            # Try substring match against the base name without extension
             filtered = [
                 s
                 for s in spec_files
