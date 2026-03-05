@@ -50,6 +50,8 @@ Please see the steps described in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Register your system
 
+Test
+
 If you are using elements of OpenHPC, please consider registering your system(s)
 using the [System Registration Form][register].
 
