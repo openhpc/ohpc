@@ -9,6 +9,7 @@ on:
       - 3.x
 
 permissions:
+  actions: write
   contents: read
 
 concurrency:
