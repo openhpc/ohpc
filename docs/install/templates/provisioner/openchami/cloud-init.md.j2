@@ -61,7 +61,7 @@ the public key and distribute the munge key file to all compute nodes.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Cloudinit -->
-```bash 
+```bash
 munge_key=$(cat /etc/munge/munge.key | base64 -w 0)
 export munge_key
 cat > /opt/ohpc/admin/cloud-init/compute.yaml <<EOF

@@ -15,7 +15,7 @@ standard OpenHPC user environment.
 <!-- ohpc_if_set enable_nvidia_gpu_driver -->
 ```bash
 # Add NVIDIA GPU driver repository to the head node
-{{ head_install("cuda-repo-ohpc") }} 
+{{ head_install("cuda-repo-ohpc") }}
 
 # Add NVIDIA GPU driver repository to the compute nodes
 {{ compute_install("cuda-repo-ohpc") }}

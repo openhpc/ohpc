@@ -103,6 +103,7 @@ ruff-format-lint:
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
+		\*.md.j2 \
 		tests/ci/test_parse_doc.bats \
 		docs/recipes/install/parse_doc.py \
 		docs/recipes/install/common/vc \
