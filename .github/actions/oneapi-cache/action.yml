@@ -31,7 +31,7 @@ runs:
           [ -n "$oldest" ] && rm -f "$oldest" || break
         done
     - name: Delete previous oneAPI package cache
-      if: inputs.mode == 'save'
+      if: inputs.mode == 'save' && github.event_name != 'pull_request'
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
