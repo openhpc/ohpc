@@ -37,6 +37,11 @@ teardown() {
 		flunk "C_parallel binary not available"
 	fi
 
+	# choose specific pml for openmpi5
+	if [[ "$LMOD_FAMILY_MPI" == "openmpi5" ]]; then
+		export OMPI_MCA_pml=ob1
+	fi
+
 	rm -f tst_parallel.nc
 
 	run_mpi_binary ./C_parallel "atest" 2 4
