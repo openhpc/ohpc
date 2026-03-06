@@ -13,6 +13,15 @@ setup_file() {
 
 	TESTNAME="pdsh"
 
+	# Create SSH key pair if it does not exist and authorize it
+	if [[ ! -f "${HOME}/.ssh/id_ed25519" ]]; then
+		mkdir -p "${HOME}/.ssh"
+		chmod 700 "${HOME}/.ssh"
+		ssh-keygen -t ed25519 -N "" -f "${HOME}/.ssh/id_ed25519"
+		cat "${HOME}/.ssh/id_ed25519.pub" >> "${HOME}/.ssh/authorized_keys"
+		chmod 600 "${HOME}/.ssh/authorized_keys"
+	fi
+
 	export TESTNAME
 }
 
