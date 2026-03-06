@@ -1,0 +1,14 @@
+## Download ISO Image for Compute Node Deployment
+
+The `osdeploy import` command (below) requires a local copy of the
+{{ distro_full_name }} ISO image (`{{ distro_iso_image }}`), available from the
+{{ distro_full_name }} [download]({{ distro_download_page }}) page. If the ISO
+is not already present locally, download it:
+
+<!-- ohpc_begin -->
+```bash
+iso_file="{{ distro_iso_image }}"
+iso_url="${iso_url:={{ distro_base_url }}{{ distro_version }}/isos/{{ arch }}}"
+[[ -f "${iso_file}" ]] || curl -fO "${iso_url}/${iso_file}"
+```
+<!-- ohpc_end -->

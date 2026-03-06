@@ -45,7 +45,8 @@ Required variables:
 * `initialize_options` - `usklpta`
 * `deployment_protocols` - `firmware`
 * `${dns_domain}` - DNS domain name for cluster (e.g. `local`)
-* `iso_path` - location of compute node base os dvd iso
+* `iso_path` - location of compute node base os dvd iso (default: `{{ distro_iso_image }}`)
+* `iso_url` - ISO download base URL (optional; overrides default upstream location)
 {% endif %}
 
 {% if is_x86_64 %}

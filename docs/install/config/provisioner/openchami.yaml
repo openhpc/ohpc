@@ -6,4 +6,4 @@ is_openchami: true
 
 # OpenCHAMI component versions
 openchami_version: "0.1.2"
-ochami_version: "0.6.1"
+ochami_version: "0.7.0"

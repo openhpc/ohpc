@@ -25,7 +25,10 @@ with {{ distro_full_name }} and is typically enabled by default.  In contrast,
 the CRB repository is typically disabled in a standard install, but can be
 enabled from EPEL as follows:
 
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install EPEL and enable CRB-->
 ```bash
 dnf -y install epel-release dnf-plugins-core
 dnf config-manager --set-enabled crb
 ```
+<!-- ohpc_end -->

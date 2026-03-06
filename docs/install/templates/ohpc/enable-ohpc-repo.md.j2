@@ -13,9 +13,11 @@ package signing and enabling the repository. The example which follows
 illustrates installation of the `ohpc-release` package directly from the OpenHPC
 build server.
 
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install OpenHPC ohpc-release -->
 {% if uses_dnf %}
 ```bash
-dnf install {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/{{ arch }}/\
+{{ pkg_install }} {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/{{ arch }}/\
 ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
 ```
 {% else %}
@@ -24,6 +26,7 @@ rpm -ivh {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/{{ 
 ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
 ```
 {% endif %}
+<!-- ohpc_end -->
 
 ::: {.tip}
 **Note:** Many sites may find it useful or necessary to maintain a local copy of

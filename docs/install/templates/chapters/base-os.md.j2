@@ -20,6 +20,10 @@
 {% include "base-os/time.md.j2" %}
 
 {% if not is_warewulf %}
+{% include "base-os/ssh-key.md.j2" %}
+{% endif %}
+
+{% if not is_warewulf %}
 {% include "base-os/nfs.md.j2" %}
 {% endif %}
 

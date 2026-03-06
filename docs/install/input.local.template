@@ -58,6 +58,7 @@ initialize_options="${initialize_options:-usklpta}"
 deployment_protocols="${deployment_protocols:-firmware}"
 dns_domain="${dns_domain:-local}"
 iso_path="${iso_path:-}"
+iso_url="${iso_url:-}"
 
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
