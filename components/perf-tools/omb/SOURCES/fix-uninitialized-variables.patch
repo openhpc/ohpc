@@ -1,0 +1,29 @@
+Fix undefined behavior from uninitialized variables
+
+Fix two bugs in osu_util.c:
+1. In set_message_size(): token was used uninitialized in strsep() when
+   no colon was present in the argument (e.g. "-m 512"). This caused
+   undefined behavior that manifested as segfaults with certain
+   compilers (e.g. Intel).
+2. In strpower_to_int(): strdup(str) was called instead of
+   strdup(val_str), using an uninitialized pointer.
+
+--- a/c/util/osu_util.c
++++ b/c/util/osu_util.c
+@@ -424,7 +424,7 @@
+
+ static size_t strpower_to_int(char *val_str)
+ {
+-    char *token, *str = strdup(str);
++    char *token, *str = strdup(val_str);
+     int base, mant;
+     token = strsep(&str, "^");
+     base = atoi(token);
+@@ -463,6 +463,7 @@
+     /* We just have a single value, so setting max */
+     if (0 == ccount) {
+         /* check if an exponent was provided */
++        token = val_str;
+         subtoken = strsep(&token, "^");
+         if (NULL == token) {
+             retval = set_max_message_size(atoll(subtoken));
