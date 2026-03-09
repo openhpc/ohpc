@@ -81,7 +81,7 @@ C="sed -i '{{ regex }}' {{ file }}" \
 {%- endmacro -%}
 
 {%- macro compute_echo(string, file, append=true) -%}
-C="echo {{ string }} {{ ">>" if append else ">" }} {{ file }}" \
+C="echo '{{ string }}' {{ ">>" if append else ">" }} {{ file }}" \
   yq -i '.cmds += [{"cmd": strenv(C)}]' /opt/ohpc/admin/images/compute-prod.yaml
 {%- endmacro -%}
 
