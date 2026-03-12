@@ -56,6 +56,7 @@ BuildRequires:  numactl
 BuildRequires:  libevent-devel
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
+BuildRequires:  munge-devel
 %endif
 %if 0%{with_ofi}
 BuildRequires:  libfabric-devel
