@@ -60,7 +60,10 @@ codespell-lint:
 		tests/perf-tools/paraver/tests/rm_execution \
 		tests/perf-tools/paraver/tests/trace.sh \
 		tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
-		tests/libs/trilinos/tests/rm_execution
+		tests/libs/trilinos/tests/rm_execution \
+		tests/libs/hypre/tests/rm_execution \
+		tests/libs/hypre/tests/test_module \
+		tests/libs/hypre/ohpc-tests/test_mpi_families
 
 ruff-check-lint:
 	@echo "Running 'ruff check' on selected Python files"
@@ -132,6 +135,9 @@ whitespace-lint:
 		tests/perf-tools/paraver/tests/trace.sh \
 		tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
 		tests/libs/trilinos/tests/rm_execution \
+		tests/libs/hypre/tests/rm_execution \
+		tests/libs/hypre/tests/test_module \
+		tests/libs/hypre/ohpc-tests/test_mpi_families \
 		containers/* \
 		\*.tex
 
@@ -203,9 +209,13 @@ shellcheck-lint:
 		../../tests/perf-tools/paraver/tests/test_module \
 		../../tests/perf-tools/paraver/tests/rm_execution \
 		../../tests/perf-tools/paraver/tests/trace.sh \
-		../../tests/perf-tools/paraver/ohpc-tests/test_mpi_families
+		../../tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
+		../../tests/libs/hypre/tests/rm_execution \
+		../../tests/libs/hypre/tests/test_module \
+		../../tests/libs/hypre/ohpc-tests/test_mpi_families
 
 shfmt-lint:
+
 	@echo "Running 'shfmt' on selected shell scripts"
 	shfmt \
 		-w -d -ln bats \
@@ -251,7 +261,9 @@ shfmt-lint:
 		../../tests/libs/plasma/tests/test_module \
 		../../tests/perf-tools/paraver/tests/test_module \
 		../../tests/perf-tools/paraver/tests/rm_execution \
-		../../tests/libs/trilinos/tests/rm_execution
+		../../tests/libs/trilinos/tests/rm_execution \
+		../../tests/libs/hypre/tests/rm_execution \
+		../../tests/libs/hypre/tests/test_module
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
@@ -266,7 +278,8 @@ shfmt-lint:
 		../../containers/*.sh \
 		../../containers/examples/mpi/*.sh \
 		../../tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
-		../../tests/perf-tools/paraver/tests/trace.sh
+		../../tests/perf-tools/paraver/tests/trace.sh \
+		../../tests/libs/hypre/ohpc-tests/test_mpi_families
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
@@ -286,4 +299,8 @@ clang-format-lint:
 		../../tests/libs/superlu/tests/*.c \
 		../../tests/libs/trilinos/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c \
-		../../tests/perf-tools/paraver/tests/*.c
+		../../tests/perf-tools/paraver/tests/*.c \
+		../../tests/libs/hypre/tests/*.c
+
+build-ohpc-ci:
+	podman build  -f Containerfile.ohpc-lint -t  ghcr.io/openhpc/ohpc-lint:latest
