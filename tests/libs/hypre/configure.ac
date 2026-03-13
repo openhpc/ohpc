@@ -2,8 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT(hypre, 2.10.0b, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([hypre],[2.10.0b],[https://github.com/openhpc/ohpc])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
@@ -13,9 +14,9 @@ AC_MSG_CHECKING([for HYPRE_DIR environment variable])
 if test "x$HYPRE_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([HYPRE_DIR not defined - please load hypre environment.])
+   AC_MSG_ERROR(HYPRE_DIR not defined - please load hypre environment.)
 else
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
 fi
 
 # set compilers to use MPI toolchain
@@ -56,7 +57,7 @@ fi
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
