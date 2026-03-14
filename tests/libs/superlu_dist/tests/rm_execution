@@ -18,7 +18,7 @@ setup_file() {
 
 	check_rms
 
-	if [ -n "$SIMPLE_CI" ]; then
+	if [ -n "${SIMPLE_CI}" ]; then
 		export OMPI_MCA_btl="self,tcp"
 	fi
 
@@ -31,7 +31,7 @@ setup() {
 	fi
 }
 
-@test "[$TESTNAME] PDGSSVX with full (default) options (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] PDGSSVX with full (default) options (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive ]; then
 		flunk "pddrive binary does not exist"
 	fi
@@ -40,7 +40,7 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] pdgssvx_ABglobal with full (default) options (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] pdgssvx_ABglobal with full (default) options (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive_ABglobal ]; then
 		flunk "pddrive_ABglobal binary does not exist"
 	fi
@@ -49,7 +49,7 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] vary RHS (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] vary RHS (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive1 ]; then
 		flunk "pddrive1 binary does not exist"
 	fi
@@ -58,7 +58,7 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] vary RHS ABglobal (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] vary RHS ABglobal (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive1_ABglobal ]; then
 		flunk "pddrive1_ABglobal binary does not exist"
 	fi
@@ -67,7 +67,7 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] reuse permutation vector (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] reuse permutation vector (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive2 ]; then
 		flunk "pddrive2 binary does not exist"
 	fi
@@ -76,7 +76,7 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] reuse permutation vector ABglobal (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] reuse permutation vector ABglobal (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive2_ABglobal ]; then
 		flunk "pddrive2_ABglobal binary does not exist"
 	fi
@@ -85,7 +85,7 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] reuse symbolic factorization (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] reuse symbolic factorization (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive3 ]; then
 		flunk "pddrive3 binary does not exist"
 	fi
@@ -94,7 +94,7 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] reuse symbolic factorization ABglobal (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] reuse symbolic factorization ABglobal (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	if [ ! -s pddrive3_ABglobal ]; then
 		flunk "pddrive3_ABglobal binary does not exist"
 	fi
@@ -103,8 +103,8 @@ setup() {
 	assert_success
 }
 
-@test "[$TESTNAME] multi-grid (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	if [ -n "$SIMPLE_CI" ]; then
+@test "[${TESTNAME}] multi-grid (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ -n "${SIMPLE_CI}" ]; then
 		skip "The multi-grid test is too heavy for SIMPLE_CI environments, like Github Actions and Cirrus CI"
 	fi
 

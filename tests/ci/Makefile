@@ -47,6 +47,7 @@ codespell-lint:
 		tests/libs/superlu/ohpc-tests/test_compiler_families \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
+		tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		tests/libs/netcdf/ohpc-tests/test_mpi_families \
 		tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		tests/libs/netcdf/tests-parallel/test_pnetcdf \
@@ -144,6 +145,7 @@ whitespace-lint:
 		tests/libs/superlu/ohpc-tests/test_compiler_families \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
+		tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		tests/libs/phdf5/ohpc-tests/test_mpi_families \
 		tests/libs/netcdf/ohpc-tests/test_mpi_families \
@@ -246,6 +248,7 @@ shellcheck-lint:
 		../../tests/libs/superlu/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
+		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
 		../../tests/libs/scalapack/tests/test_module \
@@ -361,7 +364,8 @@ shfmt-lint:
 		../../tests/rms-harness/ohpc-tests/test_mpi_families \
 		../../tests/libs/petsc/ohpc-tests/test_mpi_families \
 		../../tests/libs/openblas/ohpc-tests/test_compiler_families \
-		../../tests/libs/hypre/ohpc-tests/test_mpi_families
+		../../tests/libs/hypre/ohpc-tests/test_mpi_families \
+		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
@@ -388,7 +392,8 @@ clang-format-lint:
 		../../tests/rms-harness/tests/*.c \
 		../../tests/libs/petsc/tests/*.c \
 		../../tests/libs/openblas/tests/eigen.cpp \
-		../../tests/libs/hypre/tests/*.c
+		../../tests/libs/hypre/tests/*.c \
+		../../tests/libs/superlu_dist/tests/*.c
 
 build-ohpc-ci:
 	podman build  -f Containerfile.ohpc-lint -t  ghcr.io/openhpc/ohpc-lint:latest
