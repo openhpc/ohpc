@@ -16,23 +16,17 @@
 # Base package name
 %define pname superlu_dist
 
-%define major   5
-%define libname libsuperlu_dist
-
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        6.4.0
+Version:        9.2.1
 Release:        1%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 URL:            https://portal.nersc.gov/project/sparse/superlu/
 Source0:        https://github.com/xiaoyeli/superlu_dist/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
-Source2:        superlu_dist-make.inc
-Source3:        superlu_dist-intel-make.inc
-Source4:        superlu_dist-arm1-make.inc
 Patch1:         superlu_dist-parmetis.patch
-Patch2:         noexamples.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  cmake
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
@@ -74,18 +68,6 @@ solutions.
 %prep
 %setup -q -n superlu_dist-%{version}
 %patch -P 1 -p1
-# disable build of examples which don't get installed (karl@ices.utexas.edu - 3/6/19)
-%patch -P 2 -p0
-
-%if "%{compiler_family}" == "intel"
-cp %SOURCE3 make.inc
-%else
-%if "%{compiler_family}" == "arm1"
-cp %SOURCE4 make.inc
-%else
-cp %SOURCE2 make.inc
-%endif
-%endif
 
 %build
 # OpenHPC compiler/mpi designation
@@ -95,51 +77,50 @@ module load metis ptscotch
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
-%define blas_lib -L$OPENBLAS_LIB -lopenblas
+%define blas_lib "-L${OPENBLAS_LIB} -lopenblas"
+%endif
+
+%if "%{compiler_family}" == "arm1"
+%define blas_lib "-larmpl"
+%endif
+
+%if "%{compiler_family}" == "intel"
+%define blas_lib "-L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl"
+%undefine _hardened_build
 %endif
 
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CFLAGS="${CFLAGS} -Wno-implicit-int"
+export CFLAGS="${CFLAGS} -Wno-unused-but-set-variable"
+export CFLAGS="${CFLAGS} -Wno-unused-variable"
+export CFLAGS="${CFLAGS} -Wno-maybe-uninitialized"
 
-%if "%{compiler_family}" == "arm1"
-%define blas_lib -armpl
-%endif
 
-%if "%{compiler_family}" == "intel"
-%define blas_lib  -L$MKLROOT/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
-%undefine _hardened_build
-%endif
-
-make SuperLUroot=$(pwd)
-
-mkdir tmp
-(cd tmp; ar x ../SRC/libsuperlu_dist.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
-    -o ./%{libname}.so.%{version} tmp/*.o -L$METIS_LIB \
-%if "%{compiler_family}" == "intel"
-    -qopenmp \
-%else
-    -fopenmp \
-%endif
-    -L$PTSCOTCH_LIB \
-    -lptscotch -lptscotcherr -lscotch -lmetis %{blas_lib} \
-    -lbz2 -lz %{?__global_ldflags}
+mkdir build && cd build
+cmake .. \
+	-DCMAKE_INSTALL_PREFIX=%{install_path} \
+	-DCMAKE_C_COMPILER=mpicc \
+	-DCMAKE_CXX_COMPILER=mpicxx \
+	-DCMAKE_Fortran_COMPILER=mpif90 \
+	-DCMAKE_C_FLAGS="${CFLAGS} -fPIC" \
+	-DCMAKE_CXX_FLAGS="${CXXFLAGS} -fPIC" \
+	-DBUILD_SHARED_LIBS=ON \
+	-DBUILD_STATIC_LIBS=OFF \
+	-DTPL_ENABLE_PARMETISLIB=ON \
+	-DTPL_PARMETIS_INCLUDE_DIRS="${PTSCOTCH_INC}" \
+	-DTPL_PARMETIS_LIBRARIES="${PTSCOTCH_LIB}/libptscotchparmetisv3.so;${METIS_LIB}/libmetis.so" \
+	-DTPL_BLAS_LIBRARIES=%{blas_lib} \
+	-DTPL_ENABLE_INTERNAL_BLASLIB=OFF \
+	-DTPL_ENABLE_LAPACKLIB=OFF \
+	-Denable_examples=OFF \
+	-Denable_tests=OFF
+make %{?_smp_mflags}
 
 
 %install
 
-%{__mkdir_p} %{buildroot}%{install_path}/etc
-install -m644 make.inc %{buildroot}%{install_path}/etc
-
-%{__mkdir_p} %{buildroot}%{install_path}/include
-install -m644 SRC/*.h %{buildroot}%{install_path}/include/
-
-%{__mkdir_p} %{buildroot}%{install_path}/lib
-install -m 755 libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
-pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.%{major}
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
-popd
+cd build
+%make_install
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -171,11 +152,11 @@ depends-on ptscotch
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_INC        %{install_path}/include
-setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_LIB        %{install_path}/lib64
 
 EOF
 
