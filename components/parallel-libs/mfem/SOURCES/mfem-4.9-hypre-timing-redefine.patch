@@ -1,0 +1,26 @@
+--- a/general/mem_manager.hpp	2026-03-16 09:46:55.735760233 +0000
++++ b/general/mem_manager.hpp	2026-03-16 09:52:50.584000000 +0000
+@@ -21,7 +21,9 @@
+ 
+ #ifdef MFEM_USE_MPI
+ // Enable internal hypre timing routines
+-#define HYPRE_TIMING
++#ifndef HYPRE_TIMING
++#define HYPRE_TIMING 1
++#endif
+ #include <HYPRE_utilities.h> // for HYPRE_GetMemoryLocation() and others
+ #if (21400 <= MFEM_HYPRE_VERSION) && (MFEM_HYPRE_VERSION < 21900)
+ #include <_hypre_utilities.h> // for HYPRE_MEMORY_HOST and others
+--- a/linalg/hypre.hpp	2026-03-16 09:46:55.737193531 +0000
++++ b/linalg/hypre.hpp	2026-03-16 09:52:50.878000000 +0000
+@@ -22,7 +22,9 @@
+ #include <mpi.h>
+ 
+ // Enable internal hypre timing routines
+-#define HYPRE_TIMING
++#ifndef HYPRE_TIMING
++#define HYPRE_TIMING 1
++#endif
+ 
+ // hypre header files
+ #if MFEM_HYPRE_VERSION < 30000

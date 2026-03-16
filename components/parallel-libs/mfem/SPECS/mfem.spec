@@ -21,10 +21,10 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Lightweight, general, scalable C++ library for finite element methods
 License:        LGPLv2.1
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        4.4
+Version:        4.9
 Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
-Patch0:         https://github.com/mfem/mfem/commit/314a32af2ee80af8c9af7d8ad71babd51851154c.patch
+Patch0:         mfem-4.9-hypre-timing-redefine.patch
 Url:            http://mfem.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -68,7 +68,10 @@ module load superlu_dist
 
 make config \
     PREFIX=%{install_path} \
-    CXXFLAGS="$CXXFLAGS -fPIC -std=c++11" \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+    MPICXX="ccache mpicxx" \
+%endif
+    CXXFLAGS="$CXXFLAGS -fPIC -std=c++17 -Wno-maybe-uninitialized" \
     MFEM_USE_MPI=YES \
     MFEM_USE_LAPACK=NO \
     HYPRE_OPT=-I$HYPRE_INC HYPRE_LIB="-L$HYPRE_LIB -lHYPRE" \
@@ -151,4 +154,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc LICENSE README INSTALL
+%doc LICENSE README.md INSTALL
