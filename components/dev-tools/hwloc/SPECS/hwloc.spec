@@ -12,14 +12,18 @@
 
 %define pname hwloc
 
+%define major 2
+%define minor 13
+%define extra 0
+
 Name:           %{pname}%{PROJ_DELIM}
-Version:        2.12.1
+Version:        %{major}.%{minor}.%{extra}
 Release:        %{?dist}.1
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        https://download.open-mpi.org/release/hwloc/v2.12/%{pname}-%{version}.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v%{major}.%{minor}/%{pname}-%{version}.tar.bz2
 
 BuildRequires:  make
 BuildRequires:  doxygen
