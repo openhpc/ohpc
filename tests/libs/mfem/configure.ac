@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ([2.71])
-AC_INIT([mfem],[3.3.2],[https://github.com/openhpc/ohpc])
+AC_INIT([mfem],[4.9],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -60,7 +60,7 @@ else
 fi
 
 # verify we have necessary environment variables set
-AC_MSG_CHECKING([for SUPERLD_DIST_DIR environment variable])
+AC_MSG_CHECKING([for SUPERLU_DIST_DIR environment variable])
 if test "x$SUPERLU_DIST_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
@@ -76,8 +76,8 @@ CXX=mpicxx
 
 AC_PROG_CXX
 
-CXXFLAGS="-I${HYPRE_INC} -I${MFEM_INC} -I${PETSC_INC} -I${SUPERLU_DIST_INC} ${CXXFLAGS} -std=c++11"
-LDFLAGS="-L${MFEM_LIB} ${LDFLAGS}"
+CXXFLAGS="-I${HYPRE_INC} -I${MFEM_INC} -I${PETSC_INC} -I${SUPERLU_DIST_INC} ${CXXFLAGS} -std=c++17"
+LDFLAGS="-L${MFEM_LIB} -L${PTSCOTCH_LIB} ${LDFLAGS}"
 LIBS="-lmfem"
 
 # Set subdirectories

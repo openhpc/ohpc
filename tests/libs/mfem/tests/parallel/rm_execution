@@ -1,56 +1,56 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 4
 # -*-sh-*-
 
-load ./common/test_helper_functions || exit 1
-source ./common/functions || exit 1
+load ../../../../common/test_helper_functions || exit 1
+source ../../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../../TEST_ENV ]; then
+	source ../../../../TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
-testname="libs/MFEM"
+setup_file() {
+	TESTNAME="libs/MFEM"
+	NODES=2
+	TASKS=$(tasks_count 8)
+	TIMEOUT="00:05:00"
 
-NODES=2
-TASKS=`tasks_count 8`
+	check_rms
 
-@test "[$testname] p_laplace MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    binary=p_laplace
-    if [ ! -x $binary ];then
-	flunk "$binary binary does not exist"
-    fi
-
-    run_mpi_binary ./${binary} "-no-vis" $NODES $TASKS 
-    assert_success
+	export TESTNAME NODES TASKS TIMEOUT
 }
 
-@test "[$testname] p_laplace_perf MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    binary=p_laplace_perf
-    if [ ! -x $binary ];then
-	flunk "$binary binary does not exist"
-    fi
+@test "[${TESTNAME}] p_laplace MPI binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -s p_laplace ]; then
+		flunk "p_laplace binary does not exist"
+	fi
 
-    run_mpi_binary ./${binary} "-no-vis -rs 2" $NODES $TASKS 
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" ./p_laplace "-no-vis" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] p_cantilever MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    binary=p_cantilever
-    if [ ! -x $binary ];then
-	flunk "$binary binary does not exist"
-    fi
+@test "[${TESTNAME}] p_laplace_perf MPI binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -s p_laplace_perf ]; then
+		flunk "p_laplace_perf binary does not exist"
+	fi
 
-    run_mpi_binary ./${binary} "-no-vis" $NODES $TASKS 
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" ./p_laplace_perf "-no-vis -rs 2" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$testname] p_diffusion MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    binary=p_diffusion
-    if [ ! -x $binary ];then
-	flunk "$binary binary does not exist"
-    fi
+@test "[${TESTNAME}] p_cantilever MPI binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -s p_cantilever ]; then
+		flunk "p_cantilever binary does not exist"
+	fi
 
-    run_mpi_binary ./${binary} "-no-vis" $NODES $TASKS 
-    assert_success
+	run_mpi_binary -t "${TIMEOUT}" ./p_cantilever "-no-vis" "${NODES}" "${TASKS}"
+	assert_success
+}
+
+@test "[${TESTNAME}] p_diffusion MPI binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -s p_diffusion ]; then
+		flunk "p_diffusion binary does not exist"
+	fi
+
+	run_mpi_binary -t "${TIMEOUT}" ./p_diffusion "-no-vis" "${NODES}" "${TASKS}"
+	assert_success
 }

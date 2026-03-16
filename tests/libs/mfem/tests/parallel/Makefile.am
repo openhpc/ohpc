@@ -1,4 +1,7 @@
-LDADD                    = ${LIBS}
+AM_CPPFLAGS              = -UPACKAGE_NAME -UPACKAGE_VERSION -UPACKAGE_STRING \
+                            -UPACKAGE_TARNAME -UPACKAGE_BUGREPORT -UPACKAGE_URL
+AM_LDFLAGS               = -Wl,--no-as-needed
+LDADD                    = ${LIBS} -lptscotcherr -lscotcherr
 
 TESTS                    = p_laplace
 check_PROGRAMS           = p_laplace
@@ -18,3 +21,5 @@ p_diffusion_SOURCES      = ex3p.cpp
 
 
 TESTS                   += rm_execution
+
+DISTCLEANFILES = compile test-driver
