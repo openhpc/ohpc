@@ -1,4 +1,0 @@
-addFilter("devel-file-in-non-devel-package")
-addFilter("library-without-ldconfig-postin")
-addFilter("library-without-ldconfig-postun")
-addFilter("non-standard-group")
