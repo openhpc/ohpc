@@ -16,10 +16,13 @@
 
 # Base package name
 %define pname trilinos
-%define ver_exp 16-1-0
+%define major 17
+%define minor 0
+%define extra 0
+%define ver_exp %{major}-%{minor}-%{extra}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        16.1.0
+Version:        %{major}.%{minor}.%{extra}
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 # Trilinos is licensed on a per-package basis. Refer to https://trilinos.github.io/license.html
@@ -107,6 +110,11 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC"                         \
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE                              \
         -DCMAKE_BUILD_TYPE:STRING=RELEASE                               \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+        -DCMAKE_C_COMPILER_LAUNCHER=ccache                              \
+        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                            \
+        -DCMAKE_Fortran_COMPILER_LAUNCHER=ccache                        \
+%endif
         -DBUILD_SHARED_LIBS:BOOL=ON                                     \
         -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON                              \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
@@ -197,8 +205,8 @@ cd ..
 
 # fix unversioned python interpreter
 sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/bin/phalanx_create_evaluator.py
-sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/lib64/tests/exomerge_unit_test.py
-sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/lib64/tests/test_exodus3.py
+# do not ship unit tests
+rm -rf %{buildroot}%{install_path}/lib/tests
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
