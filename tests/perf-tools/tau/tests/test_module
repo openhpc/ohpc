@@ -2,120 +2,133 @@
 # -*-sh-*-
 
 source ./common/test_helper_functions.bash || exit 1
-source ./common/functions                  || exit 1
+source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
-PKG=TAU
-testname="Tuning and Analysis Utilities"
-module=tau
-header=TAU.h
-library=libTAU
-rpm=tau-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
+setup_file() {
+	PKG=TAU
+	MODULE=tau
+	TESTNAME="perf-tools/TAU"
+	HEADER=TAU.h
+	LIBRARY=libTAU
+
+	export PKG MODULE TESTNAME HEADER LIBRARY
+}
 
 setup() {
-    module purge
-    module load ohpc
-    module load $module
+	OUTPUT="$(mktemp)"
+
+	module purge
+	module load ohpc
+	module load "${MODULE}"
+
+	export OUTPUT
 }
 
-@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    module list $module | grep "1) $module" >& .cmd_output || exit 1
-    run grep $module .cmd_output 
-    assert_success
-    
-    # check version against rpm
-    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
-    run cat .cmd_output
-    assert_output "  1) $module/$version"
+teardown() {
+	rm -f "${OUTPUT}"
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    DIR=${PKG}_DIR
-    if [ -z ${!DIR} ];then
-        flunk "${PKG}_DIR directory not defined"
-    fi
-    
-    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
-        flunk "directory ${!DIR} does not exist"
-    fi 
+@test "[${TESTNAME}] Verify ${MODULE} module is loaded and matches rpm version (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
+	run grep "${MODULE}" "${OUTPUT}"
+	assert_success
+
+	# check version against rpm
+	local rpm
+	rpm=$(get_rpm_name "${MODULE}")
+	local version
+	version="$(rpm -q --queryformat='%{VERSION}\n' "${rpm}")"
+	run cat "${OUTPUT}"
+	assert_output "  1) ${MODULE}/${version}"
+}
+
+@test "[${TESTNAME}] Verify module ${PKG}_DIR is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	PKG_DIR="${PKG}_DIR"
+
+	if [ -z "${!PKG_DIR}" ]; then
+		flunk "${PKG}_DIR directory not defined"
+	fi
+
+	if [ ! -d "${!PKG_DIR}" ]; then
+		flunk "directory ${!PKG_DIR} does not exist"
+	fi
 }
 
 # ----------
 # Binaries
 # ----------
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    BIN=${PKG}_BIN
-    if [ -z ${!BIN} ];then
-        flunk "${PKG}_BIN directory not defined"
-    fi
-    
-    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
-        flunk "directory ${!BIN} does not exist"
-    fi 
+@test "[${TESTNAME}] Verify module ${PKG}_BIN is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	BIN="${PKG}_BIN"
+
+	if [ -z "${!BIN}" ]; then
+		flunk "${PKG}_BIN directory not defined"
+	fi
+
+	if [ ! -d "${!BIN}" ]; then
+		flunk "directory ${!BIN} does not exist"
+	fi
 }
 
-@test "[$testname] Verify availability of taucc binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which taucc
-    assert_success
+@test "[${TESTNAME}] Verify availability of taucc binary (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	run which taucc
+	assert_success
 }
 
-@test "[$testname] Verify availability of pprof binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which pprof
-    assert_success
+@test "[${TESTNAME}] Verify availability of pprof binary (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	run which pprof
+	assert_success
 }
 
 # ----------
 # Man pages
 # ----------
 
-@test "[$testname] Verify availability of man page for taucc ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    DIR=${PKG}_DIR
+@test "[${TESTNAME}] Verify availability of man page for taucc (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	DIR="${PKG}_DIR"
 
-    if [ -z ${!DIR} ];then
-        flunk "${PKG}_DIR directory not defined"
-    fi
+	if [ -z "${!DIR}" ]; then
+		flunk "${PKG}_DIR directory not defined"
+	fi
 
-    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
-        flunk "directory ${!DIR} does not exist"
-    fi 
-    
-    run man -w taucc
-    assert_success
-    assert_output "${!DIR}/man/man1/taucc.1"
+	if [ ! -d "${!DIR}" ]; then
+		flunk "directory ${!DIR} does not exist"
+	fi
+
+	run man -w taucc
+	assert_success
+	assert_output "${!DIR}/man/man1/taucc.1"
 }
 
 # ----------
 # Lib Tests
 # ----------
 
-@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    LIB=${PKG}_LIB
+@test "[${TESTNAME}] Verify module ${PKG}_LIB is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	LIB="${PKG}_LIB"
 
-    if [ -z ${!LIB} ];then
-        flunk "${PKG}_LIB directory not defined"
-    fi
- 
-    if [ ! -d ${!LIB} ];then
-        flunk "directory ${!LIB} does not exist"
-    fi 
+	if [ -z "${!LIB}" ]; then
+		flunk "${PKG}_LIB directory not defined"
+	fi
+
+	if [ ! -d "${!LIB}" ]; then
+		flunk "directory ${!LIB} does not exist"
+	fi
 }
 
-@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    skip "no longer checking for specific dynamic lib"
-    LIB=${PKG}_LIB
+@test "[${TESTNAME}] Verify dynamic library available in ${PKG}_LIB (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	skip "no longer checking for specific dynamic lib"
+	LIB="${PKG}_LIB"
 
-    if [ -z ${!LIB} ];then
-        flunk "${PKG}_LIB directory not defined"
-    fi
+	if [ -z "${!LIB}" ]; then
+		flunk "${PKG}_LIB directory not defined"
+	fi
 
-    if [ ! -s ${!LIB}/${library}.so ];then
-        flunk "${library}.so does not exist"
-    fi 
+	if [ ! -s "${!LIB}/${LIBRARY}.so" ]; then
+		flunk "${LIBRARY}.so does not exist"
+	fi
 }
-
-rm -f .cmd_output
-
