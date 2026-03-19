@@ -21,7 +21,7 @@ provisioning service on the *head node*:
 # Install Confluent and required packages
 {{ pkg_install }} lenovo-confluent
 {{ pkg_install }} tftp-server nfs-utils policycoreutils-python-utils yq jq
-{{ pkg_install }} confluent_ipxe-aarch64
+{{ pkg_install }} confluent_ipxe-aarch64 confluent_osdeploy-aarch64
 
 # Enable Confluent and its tools for use in current shell
 systemctl enable --now confluent
