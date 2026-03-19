@@ -32,6 +32,9 @@ codespell-lint:
 		tests/perf-tools/scorep/tests/instrumenter_test \
 		tests/perf-tools/scorep/tests/rm_execution \
 		tests/perf-tools/scorep/tests/test_module \
+		tests/perf-tools/tau/tests/rm_execution \
+		tests/perf-tools/tau/tests/test_module \
+		tests/perf-tools/tau/ohpc-tests/test_mpi_families \
 		tests/perf-tools/omb/tests/rm_execution \
 		tests/perf-tools/omb/tests/test_module \
 		tests/perf-tools/omb/ohpc-tests/test_mpi_families \
@@ -108,6 +111,9 @@ whitespace-lint:
 		tests/perf-tools/scorep/tests/instrumenter_test \
 		tests/perf-tools/scorep/tests/rm_execution \
 		tests/perf-tools/scorep/tests/test_module \
+		tests/perf-tools/tau/tests/rm_execution \
+		tests/perf-tools/tau/tests/test_module \
+		tests/perf-tools/tau/ohpc-tests/test_mpi_families \
 		tests/perf-tools/omb/tests/rm_execution \
 		tests/perf-tools/omb/tests/test_module \
 		tests/perf-tools/omb/ohpc-tests/test_mpi_families \
@@ -215,6 +221,9 @@ shellcheck-lint:
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/test_module \
+		../../tests/perf-tools/tau/tests/rm_execution \
+		../../tests/perf-tools/tau/tests/test_module \
+		../../tests/perf-tools/tau/ohpc-tests/test_mpi_families \
 		../../tests/perf-tools/paraver/tests/test_module \
 		../../tests/perf-tools/paraver/tests/rm_execution \
 		../../tests/perf-tools/paraver/tests/trace.sh \
@@ -246,6 +255,8 @@ shfmt-lint:
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/test_module \
+		../../tests/perf-tools/tau/tests/rm_execution \
+		../../tests/perf-tools/tau/tests/test_module \
 		../../tests/perf-tools/omb/tests/rm_execution \
 		../../tests/perf-tools/omb/tests/test_module \
 		../../tests/perf-tools/omb/ohpc-tests/test_mpi_families \
@@ -293,6 +304,7 @@ shfmt-lint:
 		../../containers/examples/mpi/*.sh \
 		../../tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
 		../../tests/perf-tools/paraver/tests/trace.sh \
+		../../tests/perf-tools/tau/ohpc-tests/test_mpi_families \
 		../../tests/libs/hypre/ohpc-tests/test_mpi_families \
 		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		../../tests/libs/mfem/ohpc-tests/test_mpi_families
@@ -316,6 +328,8 @@ clang-format-lint:
 		../../tests/libs/trilinos/tests/*.cpp \
 		../../containers/examples/mpi/mpi.c \
 		../../tests/perf-tools/paraver/tests/*.c \
+		../../tests/perf-tools/tau/tests/*.c \
+		../../tests/perf-tools/tau/tests/*.cpp \
 		../../tests/libs/hypre/tests/*.c \
 		../../tests/libs/superlu_dist/tests/*.c \
 		../../tests/libs/mfem/tests/serial/*.cpp \
