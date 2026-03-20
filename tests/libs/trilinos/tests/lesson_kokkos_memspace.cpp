@@ -64,7 +64,7 @@ typedef Kokkos::View<double *[3]> view_type;
 // performance penalties then it is its own host_mirror_space. This is
 // the case for HostSpace, CudaUVMSpace and CudaHostPinnedSpace.
 
-typedef view_type::HostMirror host_view_type;
+typedef view_type::host_mirror_type host_view_type;
 
 struct ReduceFunctor {
 	view_type a;
