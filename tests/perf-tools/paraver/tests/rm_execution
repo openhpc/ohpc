@@ -1,0 +1,71 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+source ../../../common/test_helper_functions.bash || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
+fi
+
+setup_file() {
+	TESTNAME="perf-tools/Paraver"
+	NODES=2
+	TASKS=$(tasks_count 4)
+	TIMEOUT="00:10:00"
+
+	check_rms
+
+	export TESTNAME NODES TASKS TIMEOUT
+}
+
+@test "[${TESTNAME}] Trace MPI application with Extrae (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -s ring_mpi ]; then
+		flunk "ring_mpi binary does not exist"
+	fi
+
+	rm -f TRACE.mpits
+	rm -f ring_mpi.prv
+	rm -rf set-0
+	mkdir -p set-0
+
+	# Extrae's LD_PRELOAD interception can cause a spurious MPI_Abort
+	# during finalization with OpenMPI 5.x, making mpirun exit non-zero
+	# even though tracing succeeded.  Tolerate the exit code and validate
+	# the actual trace output below.
+	run_mpi_binary -t "${TIMEOUT}" "./trace.sh ./ring_mpi" "" "${NODES}" "${TASKS}" || true
+
+	# allow for some job output lag
+	for _ in $(seq 1 10); do
+		if [ -s TRACE.mpits ]; then
+			break
+		else
+			sleep 0.2
+		fi
+	done
+
+	run ls TRACE.mpits
+	assert_success
+}
+
+@test "[${TESTNAME}] Merge trace files with mpi2prv (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	run ls TRACE.mpits
+	assert_success
+
+	run mpi2prv -f TRACE.mpits -o ring_mpi.prv
+	assert_success
+
+	run ls ring_mpi.prv
+	assert_success
+}
+
+@test "[${TESTNAME}] Run paramedir analysis on trace (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	run ls ring_mpi.prv
+	assert_success
+
+	run paramedir ring_mpi.prv mpi_stats.cfg
+	assert_success
+
+	rm -rf set-0 profile*
+	rm -f TRACE.* ./*prv ./*row ./*pcf
+}

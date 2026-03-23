@@ -56,6 +56,10 @@ codespell-lint:
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		tests/libs/plasma/tests/rm_execution \
 		tests/libs/plasma/tests/test_module \
+		tests/perf-tools/paraver/tests/test_module \
+		tests/perf-tools/paraver/tests/rm_execution \
+		tests/perf-tools/paraver/tests/trace.sh \
+		tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
 		tests/libs/trilinos/tests/rm_execution
 
 ruff-check-lint:
@@ -123,6 +127,10 @@ whitespace-lint:
 		tests/libs/ptscotch/tests/test_module \
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		tests/libs/plasma/tests/* \
+		tests/perf-tools/paraver/tests/test_module \
+		tests/perf-tools/paraver/tests/rm_execution \
+		tests/perf-tools/paraver/tests/trace.sh \
+		tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
 		tests/libs/trilinos/tests/rm_execution \
 		containers/* \
 		\*.tex
@@ -191,7 +199,11 @@ shellcheck-lint:
 		../../tests/libs/trilinos/tests/rm_execution \
 		../../tests/perf-tools/scorep/tests/instrumenter_test \
 		../../tests/perf-tools/scorep/tests/rm_execution \
-		../../tests/perf-tools/scorep/tests/test_module
+		../../tests/perf-tools/scorep/tests/test_module \
+		../../tests/perf-tools/paraver/tests/test_module \
+		../../tests/perf-tools/paraver/tests/rm_execution \
+		../../tests/perf-tools/paraver/tests/trace.sh \
+		../../tests/perf-tools/paraver/ohpc-tests/test_mpi_families
 
 shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
@@ -237,6 +249,8 @@ shfmt-lint:
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
+		../../tests/perf-tools/paraver/tests/test_module \
+		../../tests/perf-tools/paraver/tests/rm_execution \
 		../../tests/libs/trilinos/tests/rm_execution
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
@@ -250,7 +264,9 @@ shfmt-lint:
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
 		../../containers/*.sh \
-		../../containers/examples/mpi/*.sh
+		../../containers/examples/mpi/*.sh \
+		../../tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
+		../../tests/perf-tools/paraver/tests/trace.sh
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
@@ -269,4 +285,5 @@ clang-format-lint:
 		../../tests/libs/plasma/tests/*.h \
 		../../tests/libs/superlu/tests/*.c \
 		../../tests/libs/trilinos/tests/*.cpp \
-		../../containers/examples/mpi/mpi.c
+		../../containers/examples/mpi/mpi.c \
+		../../tests/perf-tools/paraver/tests/*.c
