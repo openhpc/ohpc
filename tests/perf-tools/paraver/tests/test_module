@@ -1,0 +1,120 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 6
+# -*-sh-*-
+
+source ../../../common/test_helper_functions.bash || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
+fi
+
+setup_file() {
+	PKG=PARAVER
+	MODULE=paraver
+	TESTNAME="perf-tools/Paraver"
+
+	export PKG MODULE TESTNAME
+}
+
+setup() {
+	OUTPUT="$(mktemp)"
+
+	export OUTPUT
+}
+
+teardown() {
+	rm -f "${OUTPUT}"
+}
+
+@test "[${TESTNAME}] Verify ${MODULE} module is loaded and matches rpm version" {
+	module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
+	run grep "${MODULE}" "${OUTPUT}"
+	assert_success
+
+	# check version against rpm
+	# Note: paraver is not compiler-specific, so use hardcoded rpm name
+	local version
+	version="$(rpm -q --queryformat='%{VERSION}\n' "${MODULE}${DELIM}")"
+	run cat "${OUTPUT}"
+	assert_output "  1) ${MODULE}/${version}"
+}
+
+@test "[${TESTNAME}] Verify ${PKG}_DIR is defined and exists" {
+	PKG_DIR="${PKG}_DIR"
+
+	if [ -z "${!PKG_DIR}" ]; then
+		flunk "${PKG}_DIR directory not defined"
+	fi
+
+	if [ ! -d "${!PKG_DIR}" ]; then
+		flunk "directory ${!PKG_DIR} does not exist"
+	fi
+}
+
+# ----------
+# Binaries
+# ----------
+
+@test "[${TESTNAME}] Verify ${PKG}_BIN is defined and exists" {
+	PKG_BIN="${PKG}_BIN"
+
+	if [ -z "${!PKG_BIN}" ]; then
+		flunk "${PKG}_BIN directory not defined"
+	fi
+
+	if [ ! -d "${!PKG_BIN}" ]; then
+		flunk "directory ${!PKG_BIN} does not exist"
+	fi
+}
+
+@test "[${TESTNAME}] Verify availability of paramedir binary" {
+	run command -v paramedir
+	assert_success
+}
+
+@test "[${TESTNAME}] Verify availability of wxparaver binary" {
+	run command -v wxparaver
+	assert_success
+}
+
+@test "[${TESTNAME}] Verify availability of prvstats binary" {
+	run command -v prvstats
+	assert_success
+}
+
+@test "[${TESTNAME}] Verify availability of prvmerger binary" {
+	run command -v prvmerger
+	assert_success
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[${TESTNAME}] Verify ${PKG}_LIB is defined and exists" {
+	LIB="${PKG}_LIB"
+
+	if [ -z "${!LIB}" ]; then
+		flunk "${PKG}_LIB directory not defined"
+	fi
+
+	if [ ! -d "${!LIB}" ]; then
+		flunk "directory ${!LIB} does not exist"
+	fi
+}
+
+# --------------
+# Include Tests
+# --------------
+
+@test "[${TESTNAME}] Verify ${PKG}_INC is defined and exists" {
+	INC="${PKG}_INC"
+
+	if [ -z "${!INC}" ]; then
+		flunk "${PKG}_INC directory not defined"
+	fi
+
+	if [ ! -d "${!INC}" ]; then
+		flunk "directory ${!INC} does not exist"
+	fi
+}
