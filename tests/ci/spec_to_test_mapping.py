@@ -88,6 +88,15 @@ test_map = {
         "",
         "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
     ],
+    "components/perf-tools/paraver/SPECS/paraver.spec": [
+        "paraver",
+        "",
+        (
+            "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc "
+            "extrae-COMPILER_FAMILY-openmpi5-ohpc "
+            "extrae-COMPILER_FAMILY-mpich-ohpc"
+        ),
+    ],
     "components/perf-tools/papi/SPECS/papi.spec": ["papi", "", ""],
     "components/perf-tools/scorep/SPECS/scorep.spec": [
         "scorep",
@@ -203,6 +212,7 @@ all_test_packages = [
     "EasyBuild-ohpc",
     "losf-ohpc",
     "papi-ohpc",
+    "paraver-ohpc",
     "pdsh-ohpc",
     "pdsh-mod-slurm-ohpc",
     "spack-ohpc",

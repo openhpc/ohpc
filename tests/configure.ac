@@ -357,7 +357,13 @@ AM_CONDITIONAL(OPENCOARRAYS_ENABLED,test "x$enable_opencoarrays" = "xyes" )
 AC_ARG_ENABLE([papi],
    [AS_HELP_STRING([--enable-papi],[Enable papi tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=short,enable_papi,yes)])
-AM_CONDITIONAL(PAPI_ENABLED,test "x$enable_papi" = "xyes" ) 
+AM_CONDITIONAL(PAPI_ENABLED,test "x$enable_papi" = "xyes" )
+#------------------------------------------------------------------------------------------
+# Paraver
+AC_ARG_ENABLE([paraver],
+   [AS_HELP_STRING([--enable-paraver],[Enable Paraver tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_paraver,yes)])
+AM_CONDITIONAL(PARAVER_ENABLED,test "x$enable_paraver" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Petsc
 AC_ARG_ENABLE([petsc],
@@ -522,6 +528,7 @@ AC_CONFIG_FILES([Makefile
        perf-tools/scorep/Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
+       perf-tools/paraver/Makefile
        oob/Makefile
        runtimes/charliecloud/Makefile
        runtimes/singularity/Makefile
@@ -925,6 +932,12 @@ echo    Performance Tools:
        echo '    'Papi...................... : enabled
     else
        echo '    'Papi...................... : disabled
+    fi
+
+    if test "x$enable_paraver" = "xyes"; then
+       echo '    'Paraver................... : enabled
+    else
+       echo '    'Paraver................... : disabled
     fi
 
     if test "x$enable_scorep" = "xyes"; then

@@ -278,6 +278,10 @@ if PAPI_ENABLED
    TESTS += perf-tools/papi/ohpc-tests/test_compiler_families
 endif
 
+if PARAVER_ENABLED
+   TESTS += perf-tools/paraver/ohpc-tests/test_mpi_families
+endif
+
 if SCOREP_ENABLED
    TESTS += perf-tools/scorep/ohpc-tests/test_mpi_families
 endif

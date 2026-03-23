@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+
+<trace enabled="yes"
+ home="@sub_PREFIXDIR@"
+ initial-mode="detail"
+ type="paraver"
+>
+
+  <mpi enabled="yes">
+    <counters enabled="yes" />
+  </mpi>
+
+  <counters enabled="no" />
+
+  <storage enabled="no">
+    <trace-prefix enabled="yes">TRACE</trace-prefix>
+  </storage>
+
+  <buffer enabled="yes">
+    <size enabled="yes">500000</size>
+    <circular enabled="no" />
+  </buffer>
+
+  <others enabled="yes">
+    <finalize-on-signal enabled="yes"
+      SIGUSR1="no" SIGUSR2="no" SIGINT="yes"
+      SIGQUIT="yes" SIGTERM="yes" SIGXCPU="yes"
+      SIGFPE="yes" SIGSEGV="yes" SIGABRT="yes"
+    />
+  </others>
+
+</trace>
