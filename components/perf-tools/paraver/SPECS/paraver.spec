@@ -16,7 +16,7 @@
 
 Summary:       Paraver
 Name:          %{pname}%{PROJ_DELIM}
-Version:       4.10.4
+Version:       4.12.0
 Release:       1%{?dist}
 License:       LGPL-2.1
 Group:         %{PROJ_NAME}/perf-tools
@@ -30,7 +30,6 @@ BuildRequires: boost-devel
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: libfabric-devel
 BuildRequires: flex-devel
-BuildRequires: wxGTK3-devel
 BuildRequires: openssl-devel
 %else
 BuildRequires: libfabric1
@@ -40,6 +39,12 @@ BuildRequires: libboost_system-devel
 BuildRequires: libboost_date_time-devel
 BuildRequires: libboost_serialization-devel
 BuildRequires: libopenssl-devel openssl
+%endif
+%if 0%{?rhel}
+BuildRequires: wxGTK-devel
+%endif
+%if 0%{?openEuler}
+BuildRequires: wxGTK3-devel
 %endif
 BuildRequires: autoconf
 BuildRequires: automake
@@ -67,12 +72,7 @@ achieving these targets.
 
 %build
 
-%if 0%{?rhel} || 0%{?openEuler}
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config-3.0 "
-%endif
-%if 0%{?suse_version}
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config "
-%endif
 
 ./configure --prefix=%{install_path} $CONFIGURE_OPTIONS \
     --with-boost-libdir=/usr/lib64 \
