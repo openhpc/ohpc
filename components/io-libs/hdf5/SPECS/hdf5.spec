@@ -27,7 +27,7 @@ Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:   A general purpose library and file format for storing scientific data
 %endif
-Version:   2.0.0
+Version:   2.1.0
 Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
@@ -72,6 +72,11 @@ export CXX=mpicxx
 export FC=mpif90
 %endif
 
+# Disable LTO for Fortran: GCC LTO drops the BIND(C) callback
+# test_append_flush_callback (referenced only via C_FUNLOC) causing
+# an undefined reference at link time.
+export FFLAGS="${FCFLAGS} -fno-lto"
+
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=%{install_path} \
       -DCMAKE_BUILD_TYPE=Release             \
@@ -86,7 +91,7 @@ cmake -DCMAKE_INSTALL_PREFIX=%{install_path} \
 %if 0%{?ohpc_mpi_dependent}
       -DHDF5_ENABLE_PARALLEL=ON              \
 %if "%{mpi_family}" == "impi" && "%{compiler_family}" == "gnu15"
-      -DCMAKE_Fortran_FLAGS="-I$MPI_DIR/include/mpi/gfortran/11.1.0 -Wno-array-temporaries" \
+      -DCMAKE_Fortran_FLAGS="-I$MPI_DIR/include/mpi/gfortran/11.1.0 -Wno-array-temporaries -fno-lto" \
 %endif
 %else
       -DHDF5_BUILD_CPP_LIB=ON                \
