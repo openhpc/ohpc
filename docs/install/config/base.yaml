@@ -34,7 +34,7 @@ is_confluent: false
 is_slurm: false
 
 ## Capabilities
-uses_dnf: false
+uses_dnf: true
 
 ## Feature flags
 enable_infiniband: false

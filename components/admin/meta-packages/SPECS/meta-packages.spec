@@ -71,7 +71,7 @@ Requires:  man-db
 Requires:  NetworkManager
 %endif
 %if 0%{?rhel}
-Requires:  yum-utils
+Requires:  dnf-utils
 %endif
 %if 0%{?suse_version}
 Requires:  glibc-locale

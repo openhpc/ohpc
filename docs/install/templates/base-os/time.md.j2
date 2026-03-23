@@ -8,6 +8,7 @@ to serve as a local time server for the cluster, issue the following:
 <!-- ohpc_begin -->
 <!-- ohpc_comment Enable NTP services on head node -->
 ```bash
+{{ pkg_install }} chrony
 systemctl enable chronyd.service
 echo "local stratum 10" >> /etc/chrony.conf
 echo "server ${ntp_server}" >> /etc/chrony.conf

@@ -4,7 +4,6 @@
 distro_family: "el"
 distro_version: "10"
 is_el: true
-uses_dnf: true
 
 # Computed values (derived from distro_family + distro_version)
 ostree: "EL_10"

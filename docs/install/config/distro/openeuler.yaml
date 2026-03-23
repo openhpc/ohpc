@@ -2,7 +2,6 @@
 
 distro: "openeuler"
 is_openeuler: true
-uses_dnf: true
 
 distro_family: "openeuler"
 distro_version: "24.03"
