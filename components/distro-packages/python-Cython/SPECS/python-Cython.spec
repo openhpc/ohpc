@@ -13,13 +13,13 @@
 %include %{_sourcedir}/OHPC_macros
 
 Name:           %{python_prefix}-Cython%{PROJ_DELIM}
-Version:        0.29.37
+Version:        3.2.4
 Release:        1%{?dist}
 Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
 License:        Apache-2.0
 Group:          %{PROJ_NAME}/distro-packages
-Source0:        https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/c/cython/cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 %if 0%{?rhel} || 0%{?openEuler}
 Requires(post): chkconfig
@@ -43,7 +43,7 @@ functions and declaring C types on variables and class attributes. This
 allows the compiler to generate very efficient C code from Cython code.
 
 %prep
-%setup -q -n Cython-%{version}
+%setup -q -n cython-%{version}
 # Fix non-executable scripts
 sed -i "s|^#!.*||" Cython/Debugger/{libpython,Cygdb}.py cython.py
 
