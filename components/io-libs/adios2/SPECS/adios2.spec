@@ -29,6 +29,7 @@ Source0: https://github.com/ornladios/ADIOS2/archive/refs/tags/v%{version}.tar.g
 AutoReq: no
 
 BuildRequires:  bzip2-devel
+BuildRequires:  zlib-devel
 BuildRequires:  yaml-cpp-devel
 Requires: yaml-cpp
 
