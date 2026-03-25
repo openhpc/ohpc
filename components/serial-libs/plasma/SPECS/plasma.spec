@@ -14,14 +14,13 @@
 %global pname plasma
 
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version: 24.8.7
+Version: 25.5.27
 Release: 1%{?dist}
 Summary: Parallel Linear Algebra Software for Multicore Architectures
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/serial-libs
 URL:     https://github.com/icl-utk-edu/plasma/
-Source0: https://github.com/icl-utk-edu/plasma/releases/download/%{version}/plasma-%{version}.tar.gz
-Patch0:  https://github.com/icl-utk-edu/plasma/pull/48.patch
+Source0: https://github.com/icl-utk-edu/plasma/archive/refs/tags/%{version}.tar.gz
 # Tell cmake to include the Fortran plasma_mod.o in the shared object
 Patch1:  cmake-fortran.patch
 # Exclude functions from plasma_mod.o which do not seem to be implemented.
@@ -55,7 +54,6 @@ least squares problems, eigenvalue problems, and singular value problems.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch -P 0 -p 1
 %patch -P 1 -p 1
 %patch -P 2 -p 1
 
@@ -69,7 +67,7 @@ module load openblas
 module load cmake
 
 # Generate fortran bindings
-python3 tools/codegen.py -p s -p d -p c include/*h
+python3 tools/codegen.py -p s -p d -p c -p ds include/*h
 python3 tools/fortran_gen.py --prefix include/ include/plasma*h
 # Create plasma.mod
 ${FC} -fPIC -c -o include/plasma_mod.o include/plasma_mod.f90
