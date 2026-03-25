@@ -199,12 +199,13 @@ def extract_recipe_script(content: str) -> str:
       <!-- ohpc_if_set VAR -->      if [[ ${VAR} -eq 1 ]];then
       <!-- ohpc_if CONDITION -->    if CONDITION;then
       <!-- ohpc_else -->            else
-      <!-- ohpc_fi -->           fi
+      <!-- ohpc_fi -->              fi
     Blank lines inside ohpc_begin/ohpc_end blocks pass through.
     """
     lines = []
     in_run_block = False
     in_code_block = False
+    current_section = None
 
     for line in content.split("\n"):
         # Pass through section markers
@@ -212,11 +213,15 @@ def extract_recipe_script(content: str) -> str:
         if match:
             where, section = match.groups()
             lines.append(f"# --- {where}section: {section} ---")
+            if where == "+":
+                current_section = section
             continue
 
         # Track run blocks
         if "<!-- ohpc_begin -->" in line:
             in_run_block = True
+            if current_section:
+                lines.append(f"echo '=== section: {current_section} ==='")
             continue
         if "<!-- ohpc_end -->" in line:
             in_run_block = False

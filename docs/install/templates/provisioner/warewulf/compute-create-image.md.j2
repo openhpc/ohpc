@@ -28,7 +28,7 @@ export CHROOT
 <!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
 ```bash
 # Enable OpenHPC inside image and update image.
-#Disable image build on exit, rebuild later.
+# Disable image build on exit, rebuild later.
 wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
   dnf -y install dnf-utils
   dnf -y install {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/\

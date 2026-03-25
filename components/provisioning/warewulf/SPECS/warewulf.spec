@@ -90,7 +90,7 @@ BuildRequires: systemd
 BuildRequires: golang >= 1.22
 BuildRequires: firewalld-filesystem
 Requires: nfs-utils
-%if 0%{?rhel} < 8
+%if 0%{?rhel} < 8 || 0%{?openEuler}
 Requires: ipxe-bootimgs
 %else
 Requires: ipxe-bootimgs-x86

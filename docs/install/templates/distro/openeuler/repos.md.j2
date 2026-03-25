@@ -6,13 +6,16 @@ Everything, and EPOL main repositories are typically enabled by default. To
 enable the EPOL update repository on {{ distro_full_name }}, you can run the
 following command:
 
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install EPOL -->
+
 ```bash
-ohpc_repo="{{ openeuler_ohpc_repo_server }}"
-ohpc_repo+="/{{ openeuler_ohpc_repo_dir }}"
-ohpc_repo+="/{{ openeuler_ohpc_repo_file }}"
-{{ pkg_add_repo }} ${ohpc_repo}
+{{ pkg_add_repo }} {{ openeuler_ohpc_repo_server }}\
+/{{ openeuler_ohpc_repo_dir }}\
+/{{ openeuler_ohpc_repo_file }}
 {{ pkg_install }} openeuler-extra-repos
 ```
+<!-- ohpc_end -->
 
 By default all repositories use
 [http://repo.openeuler.org](http://repo.openeuler.org). For better network speed

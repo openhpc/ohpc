@@ -22,7 +22,7 @@ it is helpful to add `rd.shell` to the kernel arguments.
 ```bash
 ## Add rd.shell to kernel arguments in the "default" profile.
 yq -i '.nodeprofiles.default.kernel.args += ["rd.shell"]' \
-	/etc/warewulf/nodes.conf
+  /etc/warewulf/nodes.conf
 ```
 <!-- ohpc_end -->
 
@@ -32,17 +32,13 @@ yq -i '.nodeprofiles.default.kernel.args += ["rd.shell"]' \
 ```bash
 ## Install Dracut in the image
 wwctl image exec --build=false {{ baseos }} -- /usr/bin/dnf install -y \
-	warewulf-ohpc-dracut ignition gdisk
+  warewulf-ohpc-dracut
 
 ## Configure Dracut. Note the leading and trailing spaces
 # in the quotes in "add_dracutmodules"
 echo 'hostonly="no"' > "$CHROOT"/etc/dracut.conf.d/wwinit.conf
-echo 'add_dracutmodules+=" wwinit ignition "' \
-	>> "$CHROOT"/etc/dracut.conf.d/wwinit.conf
-
-## Build the Dracut initramfs
-wwctl image exec --build=false {{ baseos }} -- /usr/bin/dracut --force \
-	--regenerate-all
+echo 'add_dracutmodules+=" wwinit "' \
+  >> "$CHROOT"/etc/dracut.conf.d/wwinit.conf
 
 ## Enable Dracut boot for compute nodes that use the "nodes" profile
 wwctl profile set --yes nodes --tagadd IPXEMenuEntry=dracut
@@ -58,6 +54,14 @@ provisioning (previous step) must also be enabled.  The compute node will use,
 <!-- ohpc_if [[ ${enable_dracut} -eq 1 && ${enable_todisk} -eq 1 ]] -->
 <!-- ohpc_comment Configure two-stage provision-to-disk -->
 ```bash
+## Install disk tools
+wwctl image exec --build=false {{ baseos }} -- /usr/bin/dnf install -y \
+  ignition gdisk
+
+## Add ignition Dracut module.
+echo 'add_dracutmodules+=" ignition "' \
+  >> "$CHROOT"/etc/dracut.conf.d/wwinit.conf
+
 ## Create the target "rootfs" partition and filesystem
 wwctl profile set --yes nodes \
   --diskname "${node_disk}" --diskwipe \
@@ -74,9 +78,18 @@ wwctl profile set nodes --yes --root=/dev/disk/by-partlabel/rootfs
 
 The bootstrap image includes the runtime kernel and associated modules, as well
 as some simple scripts to complete the provisioning process.  We explicitly
-rebuild the image at the end because rebuilding the image is disabled in earlier
-steps. It is good practice to rebuild the overlays when after configuration
-changes.
+rebuild Dracut and the image at the end because rebuilding the image is disabled
+in earlier steps. It is good practice to rebuild the overlays when after
+configuration changes.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Build Dracut -->
+```bash
+## Build the Dracut initramfs
+wwctl image exec --build=false {{ baseos }} -- /usr/bin/dracut --force \
+  --regenerate-all
+```
+<!-- ohpc_end -->
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Assemble bootstrap image -->
@@ -86,4 +99,3 @@ wwctl image build {{ baseos }}
 wwctl overlay build
 ```
 <!-- ohpc_end -->
-

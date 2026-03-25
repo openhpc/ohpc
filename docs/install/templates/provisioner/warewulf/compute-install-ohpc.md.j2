@@ -21,10 +21,9 @@ wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
 {% if is_el %}
   dnf -y install epel-release
 {% elif is_openeuler %}
-  ohpc_repo="{{ openeuler_ohpc_repo_server }}"
-  ohpc_repo+="/{{ openeuler_ohpc_repo_dir }}"
-  ohpc_repo+="/{{ openeuler_ohpc_repo_file }}"
-  dnf -y config-manager --add-repo ${ohpc_repo}
+  dnf -y config-manager --add-repo {{ openeuler_ohpc_repo_server }}\
+/{{ openeuler_ohpc_repo_dir }}\
+/{{ openeuler_ohpc_repo_file }}
   dnf -y install openeuler-extra-repos
 {% endif %}
   dnf -y install ohpc-base-compute

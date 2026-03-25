@@ -20,10 +20,18 @@ configuring Warewulf `yaml` files.
 
 # Create the tftpboot directory (not created by dnsmasq)
 install -d -m 0755 /var/lib/tftpboot
+```
+<!-- ohpc_end -->
 
+If SELinux is enabled, configure the appropriate file context for the `tftpboot` directory:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [[ "$(getenforce 2>/dev/null)" != "Disabled" ]] -->
+```bash
 # Add public_content_t type to tftpboot directory and contents
 {{ pkg_install }} policycoreutils-python-utils
 semanage fcontext -a -t public_content_t "/var/lib/tftpboot(/.*)?"
 restorecon -R -v /var/lib/tftpboot
 ```
+<!-- ohpc_fi -->
 <!-- ohpc_end -->
