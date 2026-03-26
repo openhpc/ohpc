@@ -1,70 +1,73 @@
 #!/usr/bin/env -S bats --report-formatter junit --formatter tap
 # -*-sh-*-
 
-source ./common/test_helper_functions.bash || exit 1
+source ../../../common/test_helper_functions.bash || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
-declare -A python_module_prefixes=( ["python2"]="py2" ["python3"]="py3")
-if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
-    declare -A python_package_prefixes=( ["python2"]="python" ["python3"]="python34")
-else
-    declare -A python_package_prefixes=( ["python2"]="python" ["python3"]="python3")
-fi
+setup_file() {
+	PKG=NUMPY
+	# shellcheck disable=SC2154
+	MODULE="${python_module_prefix}-numpy"
+	TESTNAME="dev-tools/${MODULE}"
 
-PKG=NUMPY
-testname=Numpy
-
-
-@test "[$testname] Verify $PKG modules can be loaded and match rpm version ($LMOD_FAMILY_COMPILER)" {
-    for python in "${!python_module_prefixes[@]}"; do
-        module=${python_module_prefixes[$python]}-numpy
-        rpm=${python_package_prefixes[$python]}-numpy-$LMOD_FAMILY_COMPILER${DELIM}
-        module list $module | grep "1) $module" >& .cmd_output || exit 1
-        run grep $module .cmd_output 
-        assert_success
-    
-        # check version against rpm
-        local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
-        run cat .cmd_output
-        assert_output "  1) $module/$version"
-
-        rm -f .cmd_output
-    done
+	export PKG MODULE TESTNAME
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
-    DIR=${PKG}_DIR
-    if [ -z ${!DIR} ];then
-        flunk "${PKG}_DIR directory not defined"
-    fi
-    
-    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
-        flunk "directory ${!DIR} does not exist"
-    fi 
+setup() {
+	OUTPUT="$(mktemp)"
+
+	export OUTPUT
 }
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
-    BIN=${PKG}_BIN
-    if [ -z ${!BIN} ];then
-        flunk "${PKG}_BIN directory not defined"
-    fi
-    
-    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
-        flunk "directory ${!BIN} does not exist"
-    fi 
+teardown() {
+	rm -f "${OUTPUT}"
 }
 
+@test "[${TESTNAME}] Verify ${MODULE} module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+	module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
+	run grep "${MODULE}" "${OUTPUT}"
+	assert_success
 
-# --------------
-# Python Path
-# --------------
+	# check version against rpm
+	local rpm
+	# shellcheck disable=SC2154
+	rpm=$(get_rpm_name "${python_package_prefix}-numpy")
+	local version
+	version="$(rpm -q --queryformat='%{VERSION}\n' "${rpm}")"
+	run cat "${OUTPUT}"
+	assert_output "  1) ${MODULE}/${version}"
+}
 
-@test "[$testname] Verify PYTHONPATH is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[${TESTNAME}] Verify ${PKG}_DIR is defined and directory exists ($LMOD_FAMILY_COMPILER)" {
+	PKG_DIR="${PKG}_DIR"
 
-    if [ -z ${PYTHONPATH} ];then
-        flunk "PYTHONPATH directory not defined"
-    fi
+	if [ -z "${!PKG_DIR}" ]; then
+		flunk "env setting ${PKG_DIR} not defined"
+	fi
+
+	if [ ! -d "${!PKG_DIR}" ]; then
+		flunk "directory ${!PKG_DIR} does not exist"
+	fi
+}
+
+@test "[${TESTNAME}] Verify ${PKG}_BIN is defined and directory exists ($LMOD_FAMILY_COMPILER)" {
+	PKG_BIN="${PKG}_BIN"
+
+	if [ -z "${!PKG_BIN}" ]; then
+		flunk "env setting ${PKG_BIN} not defined"
+	fi
+
+	if [ ! -d "${!PKG_BIN}" ]; then
+		flunk "directory ${!PKG_BIN} does not exist"
+	fi
+}
+
+@test "[${TESTNAME}] Verify PYTHONPATH is defined ($LMOD_FAMILY_COMPILER)" {
+	if [ -z "${PYTHONPATH}" ]; then
+		flunk "PYTHONPATH not defined"
+	fi
 }

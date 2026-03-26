@@ -168,6 +168,7 @@ test_map = {
         "",
     ],
     "components/admin/lmod/SPECS/lmod.spec": ["", "lmod", ""],
+    "components/dev-tools/numpy/SPECS/python-numpy.spec": ["numpy", "", ""],
 }
 
 # Check which base OS we are using
@@ -224,6 +225,7 @@ all_test_packages = [
     "metis-COMPILER_FAMILY-ohpc",
     "netcdf-COMPILER_FAMILY-ohpc",
     "plasma-COMPILER_FAMILY-ohpc",
+    "python3-numpy-COMPILER_FAMILY-ohpc",
     "R-COMPILER_FAMILY-ohpc",
     "scotch-COMPILER_FAMILY-ohpc",
     "superlu-COMPILER_FAMILY-ohpc",

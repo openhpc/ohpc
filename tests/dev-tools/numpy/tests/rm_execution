@@ -1,0 +1,24 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+source ../../../common/test_helper_functions.bash || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
+fi
+
+setup_file() {
+	check_rms
+
+	# shellcheck disable=SC2154
+	TESTNAME="dev-tools/${python_module_prefix}-numpy"
+
+	export TESTNAME
+}
+
+@test "[${TESTNAME}] Matrix multiply under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	# shellcheck disable=SC2154
+	run run_serial_binary "${_python}" MM.py
+	assert_success
+}

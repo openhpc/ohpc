@@ -64,6 +64,9 @@ codespell-lint:
 		tests/libs/ptscotch/tests/rm_execution \
 		tests/libs/ptscotch/tests/test_module \
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
+		tests/dev-tools/numpy/tests/rm_execution \
+		tests/dev-tools/numpy/tests/test_module \
+		tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
 		tests/libs/plasma/tests/rm_execution \
 		tests/libs/plasma/tests/test_module \
 		tests/libs/fftw/tests/rm_execution \
@@ -102,7 +105,8 @@ ruff-check-lint:
 		../../misc/build_order.py \
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
-		../../docs/recipes/install/parse_doc.py
+		../../docs/recipes/install/parse_doc.py \
+		../../tests/dev-tools/numpy/tests/MM.py
 
 ruff-format-lint:
 	@echo "Running 'ruff format' on selected Python files"
@@ -112,7 +116,8 @@ ruff-format-lint:
 		../../misc/build_order.py \
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
-		../../docs/recipes/install/parse_doc.py
+		../../docs/recipes/install/parse_doc.py \
+		../../tests/dev-tools/numpy/tests/MM.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
@@ -176,6 +181,9 @@ whitespace-lint:
 		tests/libs/ptscotch/tests/rm_execution \
 		tests/libs/ptscotch/tests/test_module \
 		tests/libs/boost-mpi/tests/mpi/test/rm_execution \
+		tests/dev-tools/numpy/tests/rm_execution \
+		tests/dev-tools/numpy/tests/test_module \
+		tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
 		tests/libs/plasma/tests/* \
 		tests/libs/fftw/tests/rm_execution \
 		tests/libs/trilinos/tests/rm_execution \
@@ -275,6 +283,9 @@ shellcheck-lint:
 		../../tests/libs/ptscotch/tests/rm_execution \
 		../../tests/libs/ptscotch/tests/test_module \
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
+		../../tests/dev-tools/numpy/tests/rm_execution \
+		../../tests/dev-tools/numpy/tests/test_module \
+		../../tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
 		../../tests/libs/fftw/tests/rm_execution \
@@ -359,6 +370,8 @@ shfmt-lint:
 		../../tests/libs/ptscotch/tests/rm_execution \
 		../../tests/libs/ptscotch/tests/test_module \
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
+		../../tests/dev-tools/numpy/tests/rm_execution \
+		../../tests/dev-tools/numpy/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
 		../../tests/libs/fftw/tests/rm_execution \
@@ -386,6 +399,7 @@ shfmt-lint:
 		../../misc/build_order.sh \
 		../../misc/dist/count_avail_packages.sh \
 		../../tests/common/functions \
+		../../tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
