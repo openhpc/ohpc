@@ -267,6 +267,7 @@ Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  paraver%{PROJ_DELIM}
 Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -293,6 +294,7 @@ Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  paraver%{PROJ_DELIM}
 Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -307,6 +309,7 @@ Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  paraver%{PROJ_DELIM}
 Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mvapich2%{PROJ_DELIM}
@@ -321,6 +324,7 @@ Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  paraver%{PROJ_DELIM}
 Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -599,6 +603,7 @@ Requires:  extrae-intel-impi%{PROJ_DELIM}
 Requires:  extrae-intel-mpich%{PROJ_DELIM}
 Requires:  extrae-intel-mvapich2%{PROJ_DELIM}
 Requires:  extrae-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  paraver%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  imb-intel-mpich%{PROJ_DELIM}
@@ -736,6 +741,7 @@ Requires:  dimemas-arm1-mpich%{PROJ_DELIM}
 Requires:  dimemas-arm1-%{mpi_family}%{PROJ_DELIM}
 Requires:  extrae-arm1-mpich%{PROJ_DELIM}
 Requires:  extrae-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  paraver%{PROJ_DELIM}
 Requires:  imb-arm1-mpich%{PROJ_DELIM}
 Requires:  imb-arm1-%{mpi_family}%{PROJ_DELIM}
 ### Requires:  likwid-arm1%{PROJ_DELIM}
