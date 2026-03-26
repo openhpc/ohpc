@@ -22,16 +22,19 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.26.4
+Version:        2.4.3
 Release:        1%{?dist}
 Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
-Patch1:         numpy-icx.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
+BuildRequires:  python3-meson-python
+BuildRequires:  %{python_prefix}-pip
+BuildRequires:  ninja-build
+BuildRequires:  pkg-config
 BuildRequires:  fdupes gcc
 #!BuildIgnore: post-build-checks
 
@@ -52,39 +55,45 @@ basic linear algebra and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch -P1 -p1
+# Convert PEP 639 license string to old-style dict for older meson-python
+sed -i "s|^license = '\(.*\)'|license = {text = '\1'}|" pyproject.toml
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
 %if "%{compiler_family}" == "arm1"
-cat > site.cfg << EOF
-[openblas]
-libraries = armpl
-library_dirs = $ARMPL_LIBRARIES
-include_dirs = $ARMPL_INCLUDES
-EOF
+%__python -m pip wheel --no-build-isolation --wheel-dir=dist \
+	-Csetup-args=-Dallow-noblas=true \
+	.
+%endif
+
+%if "%{compiler_family}" == "intel"
+%__python -m pip wheel --no-build-isolation --wheel-dir=dist \
+	-Csetup-args=-Dblas=mkl \
+	-Csetup-args=-Dlapack=mkl \
+	-Csetup-args=-Dallow-noblas=false \
+	-Csetup-args=-Ddisable-svml=true \
+	.
 %endif
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
-cat > site.cfg << EOF
-[openblas]
-libraries = openblas
-library_dirs = $OPENBLAS_LIB
-include_dirs = $OPENBLAS_INC
-EOF
+PKG_CONFIG_PATH="${OPENBLAS_LIB}/pkgconfig:${PKG_CONFIG_PATH}" \
+%__python -m pip wheel --no-build-isolation --wheel-dir=dist \
+	-Csetup-args=-Dblas=openblas \
+	-Csetup-args=-Dlapack=openblas \
+	-Csetup-args=-Dallow-noblas=false \
+	.
 %endif
-
-CFLAGS="$CFLAGS -fno-strict-aliasing" %__python setup.py build $COMPILER_FLAG %{?_smp_mflags}
 
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%__python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+%__python -m pip install --prefix=%{install_path} --root=%{buildroot} \
+	--no-index --find-links=dist --no-deps numpy
 
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
@@ -94,7 +103,7 @@ CFLAGS="$CFLAGS -fno-strict-aliasing" %__python setup.py build $COMPILER_FLAG %{
 # version than the default. Let's point the default python3 binary
 # to that newer version.
 %{__mkdir_p} %{buildroot}/%{install_path}/bin
-ln -sn %{__python} %{buildroot}/%{install_path}/bin/%{python_family}
+ln -sn "$(realpath -m --relative-to='%{install_path}/bin' '%{__python}')" %{buildroot}/%{install_path}/bin/%{python_family}
 
 # OpenHPC module file
 %{!?compiler_family: %global compiler_family gnu}
