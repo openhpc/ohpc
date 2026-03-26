@@ -4,7 +4,7 @@
 #define meyer_NTRIES    1
 
 static double meyer_x0[meyer_P] = { 0.02, 4000.0, 250.0 };
-static double meyer_epsrel = 1.0e-8;
+static double meyer_epsrel = 1.0e-6;
 
 static double meyer_Y[meyer_N] = {
 34780., 28610., 23650., 19630., 16370., 13720., 11540.,

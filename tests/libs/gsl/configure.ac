@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT([gsl], [2.1], [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([gsl],[2.1],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_HEADERS([config.h])
@@ -16,7 +16,7 @@ AC_MSG_CHECKING([for GSL_LIB environment variable])
 if test "x$GSL_LIB" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([GSL_LIB not defined - please load gsl environment.])
+   AC_MSG_ERROR(GSL_LIB not defined - please load gsl environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -25,7 +25,7 @@ AC_MSG_CHECKING([for GSL_INC environment variable])
 if test "x$GSL_INC" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([GSL_INC not defined - please load gsl environment.])
+   AC_MSG_ERROR(GSL_INC not defined - please load gsl environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -82,7 +82,7 @@ tests/spblas/Makefile tests/splinalg/Makefile tests/spmatrix/Makefile \
 tests/test_gsl_histogram/Makefile )
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
