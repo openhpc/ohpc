@@ -70,6 +70,9 @@ codespell-lint:
 		tests/dev-tools/numpy/tests/rm_execution \
 		tests/dev-tools/numpy/tests/test_module \
 		tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
+		tests/dev-tools/valgrind/tests/rm_execution \
+		tests/dev-tools/valgrind/tests/test_module \
+		tests/dev-tools/valgrind/ohpc-tests/test_compiler_families \
 		tests/libs/plasma/tests/rm_execution \
 		tests/libs/plasma/tests/test_module \
 		tests/libs/fftw/tests/rm_execution \
@@ -202,6 +205,9 @@ whitespace-lint:
 		tests/dev-tools/numpy/tests/rm_execution \
 		tests/dev-tools/numpy/tests/test_module \
 		tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
+		tests/dev-tools/valgrind/tests/rm_execution \
+		tests/dev-tools/valgrind/tests/test_module \
+		tests/dev-tools/valgrind/ohpc-tests/test_compiler_families \
 		tests/libs/plasma/tests/* \
 		tests/libs/fftw/tests/rm_execution \
 		tests/perf-tools/paraver/tests/test_module \
@@ -315,6 +321,9 @@ shellcheck-lint:
 		../../tests/dev-tools/numpy/tests/rm_execution \
 		../../tests/dev-tools/numpy/tests/test_module \
 		../../tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
+		../../tests/dev-tools/valgrind/tests/rm_execution \
+		../../tests/dev-tools/valgrind/tests/test_module \
+		../../tests/dev-tools/valgrind/ohpc-tests/test_compiler_families \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
 		../../tests/libs/fftw/tests/rm_execution \
@@ -411,6 +420,8 @@ shfmt-lint:
 		../../tests/libs/boost-mpi/tests/mpi/test/rm_execution \
 		../../tests/dev-tools/numpy/tests/rm_execution \
 		../../tests/dev-tools/numpy/tests/test_module \
+		../../tests/dev-tools/valgrind/tests/rm_execution \
+		../../tests/dev-tools/valgrind/tests/test_module \
 		../../tests/libs/plasma/tests/rm_execution \
 		../../tests/libs/plasma/tests/test_module \
 		../../tests/libs/fftw/tests/rm_execution \
@@ -452,6 +463,7 @@ shfmt-lint:
 		../../misc/gen_sources_checksum.sh \
 		../../tests/common/functions \
 		../../tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
+		../../tests/dev-tools/valgrind/ohpc-tests/test_compiler_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
@@ -485,6 +497,7 @@ clang-format-lint:
 		../libs/netcdf/tests-parallel/*.h \
 		../libs/phdf5/tests/C_mpi_test.c \
 		../dev-tools/cuda/add.cu \
+		../dev-tools/valgrind/tests/*.c \
 		../../tests/libs/plasma/tests/*.c \
 		../../tests/libs/plasma/tests/*.h \
 		../../tests/libs/fftw/tests/*.c \

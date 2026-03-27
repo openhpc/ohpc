@@ -1,37 +1,35 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
+export MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 cd dev-tools/valgrind || exit 1
 export BATS_JUNIT_CLASS=Valgrind
 
-for compiler in $COMPILER_FAMILIES ; do
+for compiler in ${COMPILER_FAMILIES}; do
 
-    echo " "
-    echo " "
-    echo "-------------------------------------------------------"
-    echo "Dev Tools: Valgrind tests: $compiler"
-    echo "-------------------------------------------------------"
-    
-    module purge          || exit 1
-    module load $compiler || exit 1
-    module load valgrind  || exit 1
-    
-    ./bootstrap           || exit 1
-    ./configure   || exit 1
-    make clean    || exit 1
-    make -k check || status=1
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "Dev Tools: Valgrind tests: ${compiler}"
+	echo "-------------------------------------------------------"
 
-    save_logs_compiler_family tests $compiler
-    
-    make distclean
+	module purge || exit 1
+	module load "${compiler}" || exit 1
+	module load valgrind || exit 1
+
+	./bootstrap || exit 1
+	./configure || exit 1
+	make clean || exit 1
+	make -k check || status=1
+
+	save_logs_compiler_family tests "${compiler}"
+
+	make distclean
 done
 
-exit ${status}
-
+exit "${status}"
