@@ -329,7 +329,7 @@ int ex1_t<dim>::run(Mesh *mesh, int ser_ref_levels, int par_ref_levels,
 		}
 		delete fespace;
 		delete fec;
-		delete mesh;
+		delete pmesh;
 		return 5;
 	}
 
