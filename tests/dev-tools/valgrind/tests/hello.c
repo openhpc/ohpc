@@ -1,9 +1,8 @@
 #include <stdio.h>
 
-int main() 
+int main()
 {
-  const int i=1;
-  printf("hello, i = %i\n",i);
-  return 0;
+	const int i = 1;
+	printf("hello, i = %i\n", i);
+	return 0;
 }
-  

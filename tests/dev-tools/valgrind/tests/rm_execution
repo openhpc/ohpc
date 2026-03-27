@@ -1,56 +1,58 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
-source ./common/test_helper_functions.bash || exit 1
-source ./common/functions                  || exit 1
+source ../../../common/test_helper_functions.bash || exit 1
+source ../../../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../../../common/TEST_ENV ]; then
+	source ../../../common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	check_rms
 
-PKG="Valgrind"
+	TESTNAME="dev-tools/Valgrind"
 
-@test "[$PKG] Callgrind execution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if  [[ "$LMOD_FAMILY_COMPILER" =~ "acfl" ]]; then
-        skip "arm compiler currently breaks valgrind"
-    fi
-    test=simwork
-    if [ ! -x $test ];then
-        flunk "$test does not exist"
-    fi
-
-    rm -f callgrind.out*
-
-    run run_serial_binary valgrind -q --error-exitcode=1 --tool=callgrind ./$test
-    assert_success
-
-    # verify callgrind output was generated
-    run ls -l callgrind.out*
-    assert_success
+	export TESTNAME
 }
 
-@test "[$PKG] Memcheck execution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if  [[ "$LMOD_FAMILY_COMPILER" =~ "acfl" ]]; then
-        skip "arm compiler currently breaks valgrind"
-    fi
+@test "[${TESTNAME}] Callgrind execution under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "acfl" ]]; then
+		skip "arm compiler currently breaks valgrind"
+	fi
+	test=simwork
+	if [ ! -x "${test}" ]; then
+		flunk "${test} does not exist"
+	fi
 
-    # Clean program that should run without incident
-    if [ ! -x ./hello ];then
-        flunk "./hello does not exist"
-    fi
+	rm -f callgrind.out*
 
-    run run_serial_binary valgrind -q --error-exitcode=1 ./hello
-    assert_success
+	run run_serial_binary valgrind -q --error-exitcode=1 --tool=callgrind "./${test}"
+	assert_success
 
-    # Program with memory error that valgrind should detect
-    if [ ! -x ./badfree ];then
-        flunk "./badfree does not exist"
-    fi
-
-    run run_serial_binary valgrind -q --error-exitcode=1 ./badfree
-    assert_failure
+	# verify callgrind output was generated
+	run ls -l callgrind.out*
+	assert_success
 }
 
+@test "[${TESTNAME}] Memcheck execution under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "acfl" ]]; then
+		skip "arm compiler currently breaks valgrind"
+	fi
+
+	# Clean program that should run without incident
+	if [ ! -x ./hello ]; then
+		flunk "./hello does not exist"
+	fi
+
+	run run_serial_binary valgrind -q --error-exitcode=1 ./hello
+	assert_success
+
+	# Program with memory error that valgrind should detect
+	if [ ! -x ./badfree ]; then
+		flunk "./badfree does not exist"
+	fi
+
+	run run_serial_binary valgrind -q --error-exitcode=1 ./badfree
+	assert_failure
+}

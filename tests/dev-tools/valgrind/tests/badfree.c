@@ -2,19 +2,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-static void* return_arg(void* q);
-int main ( void )
+static void *return_arg(void *q);
+int main(void)
 {
-   void* p = (void*)0x87654321;
-   int q[] = { 1, 2, 3 };
-   
-   /* Free a pointer to Never-Never Land */
-   free(p);
+	void *p = (void *)0x87654321;
+	int q[] = { 1, 2, 3 };
 
-   /* Free a pointer to a stack block */
-   free(return_arg(q));
+	/* Free a pointer to Never-Never Land */
+	free(p);
 
-   return 0;
+	/* Free a pointer to a stack block */
+	free(return_arg(q));
+
+	return 0;
 }
 
 /*
@@ -22,8 +22,7 @@ int main ( void )
  * not print the following warning during the compilation of this test program:
  * warning: attempt to free a non-heap object
  */
-static void* return_arg(void* q)
+static void *return_arg(void *q)
 {
-   return q;
+	return q;
 }
-

@@ -1,8 +1,8 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.59)
-AC_INIT([valgrind], [0.10.0], [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([valgrind],[0.10.0],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -13,12 +13,21 @@ AC_MSG_CHECKING([for VALGRIND_DIR environment variable])
 if test "x$VALGRIND_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([VALGRIND_DIR not defined - please load valgrind environment.])
+   AC_MSG_ERROR(VALGRIND_DIR not defined - please load valgrind environment.)
 else
    AC_MSG_RESULT([yes])
 fi
 
 OHPC_COMPILER_FAMILY
+
+AC_MSG_CHECKING([for VALGRIND_INC environment variable])
+if test "x$VALGRIND_INC" = "x"; then
+   VALGRIND_INC="$VALGRIND_DIR/include"
+   AC_MSG_RESULT([no, using $VALGRIND_INC])
+else
+   AC_MSG_RESULT([yes])
+fi
+AC_SUBST([VALGRIND_INC])
 
 # test compilers
 AC_PROG_CC
@@ -27,7 +36,7 @@ AC_PROG_CC
 AC_CONFIG_FILES(Makefile tests/Makefile )
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
