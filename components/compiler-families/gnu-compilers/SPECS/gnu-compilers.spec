@@ -31,7 +31,7 @@
 
 %global gnu15_version 15.2.0
 %global gnu15_gmp_version 6.3.0
-%global gnu15_mpc_version 1.3.1
+%global gnu15_mpc_version 1.4.0
 %global gnu15_mpfr_version 4.2.2
 
 %if "%{compiler_family}" == "gnu12"
@@ -68,7 +68,7 @@ Source11:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu14_mpfr_version}.tar.gz
 
 Source12:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu15_version}/gcc-%{gnu15_version}.tar.xz
 Source13:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu15_gmp_version}.tar.bz2
-Source14:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu15_mpc_version}.tar.gz
+Source14:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu15_mpc_version}.tar.xz
 Source15:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
 
 %global pname %{gnu_major_ver}-compilers
