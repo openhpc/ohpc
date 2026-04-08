@@ -25,7 +25,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.24.4
+Version:        3.25.0
 Release:        1%{?dist}
 Source0:        https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-%{version}.tar.gz
 Url:            http://www.mcs.anl.gov/petsc/
