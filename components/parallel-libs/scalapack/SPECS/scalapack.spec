@@ -25,7 +25,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogeneous computing
 License:        netlib ScaLAPACK License
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        2.2.2
+Version:        2.2.3
 Release:        1%{?dist}
 # This is freely distributable without any restrictions.
 Url:            https://netlib.org/scalapack/
