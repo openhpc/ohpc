@@ -62,7 +62,7 @@ fi
 . /etc/os-release
 
 PKG_MANAGER=zypper
-COMMON_PKGS="wget python3 jq man"
+COMMON_PKGS="wget python3 jq man createrepo_c"
 UNAME_M=$(uname -m)
 YES="-n"
 
