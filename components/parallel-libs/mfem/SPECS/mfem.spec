@@ -25,6 +25,7 @@ Version:        4.9
 Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
 Patch0:         mfem-4.9-hypre-timing-redefine.patch
+Patch1:         mfem-4.9-petsc-3.25-api.patch
 Url:            http://mfem.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -55,6 +56,7 @@ flexible visualization, and tight integration with the hypre library.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 # OpenHPC compiler/mpi designation
