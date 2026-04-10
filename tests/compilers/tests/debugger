@@ -1,40 +1,33 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
 # -*-sh-*-
 
 load ../../common/test_helper_functions || exit 1
 source ../../common/functions || exit 1
 
-family=$LMOD_FAMILY_COMPILER
-
-@test "[Compilers] debugger man page ($family)" {
-    if [ "$family" = "gnu" ];then
-        run man -w gdb
-        assert_success
-    elif [ "$family" = "intel" ];then
-	module load debugger
-        run man -w gdb-oneapi
-        assert_success
-    fi
+@test "[Compilers] debugger man page (${LMOD_FAMILY_COMPILER})" {
+	if [ "${LMOD_FAMILY_COMPILER}" = "gnu" ]; then
+		run man -w gdb
+		assert_success
+	elif [ "${LMOD_FAMILY_COMPILER}" = "intel" ]; then
+		module load debugger
+		run man -w gdb-oneapi
+		assert_success
+	fi
 }
 
-@test "[Compilers] debugger availability ($family)" {
-    if [ "$family" = "gnu" ];then
-        run which gdb
-        assert_success
+@test "[Compilers] debugger availability (${LMOD_FAMILY_COMPILER})" {
+	if [ "${LMOD_FAMILY_COMPILER}" = "gnu" ]; then
+		run which gdb
+		assert_success
 
-        run gdb --version
-        assert_success
-    elif [ "$family" = "intel" ];then
-	module load debugger
-        run which gdb-oneapi
-        assert_success
+		run gdb --version
+		assert_success
+	elif [ "${LMOD_FAMILY_COMPILER}" = "intel" ]; then
+		module load debugger
+		run which gdb-oneapi
+		assert_success
 
-        run gdb-oneapi --version
-        assert_success
-    fi
+		run gdb-oneapi --version
+		assert_success
+	fi
 }
-
-
-
-
-
