@@ -98,7 +98,11 @@ codespell-lint:
 		tests/libs/hypre/ohpc-tests/test_mpi_families \
 		tests/libs/mfem/tests/test_module \
 		tests/libs/mfem/tests/parallel/rm_execution \
-		tests/libs/mfem/ohpc-tests/test_mpi_families
+		tests/libs/mfem/ohpc-tests/test_mpi_families \
+		tests/mpi/tests/rm_execution_single_host \
+		tests/mpi/tests/rm_execution_multi_host \
+		tests/mpi/tests/man_page_check \
+		tests/mpi/tests/version_match
 
 ruff-check-lint:
 	@echo "Running 'ruff check' on selected Python files"
@@ -218,6 +222,10 @@ whitespace-lint:
 		tests/libs/mfem/tests/test_module \
 		tests/libs/mfem/tests/parallel/rm_execution \
 		tests/libs/mfem/ohpc-tests/test_mpi_families \
+		tests/mpi/tests/rm_execution_single_host \
+		tests/mpi/tests/rm_execution_multi_host \
+		tests/mpi/tests/man_page_check \
+		tests/mpi/tests/version_match \
 		containers/* \
 		\*.tex
 
@@ -329,7 +337,11 @@ shellcheck-lint:
 		../../tests/libs/hypre/ohpc-tests/test_mpi_families \
 		../../tests/libs/mfem/tests/test_module \
 		../../tests/libs/mfem/tests/parallel/rm_execution \
-		../../tests/libs/mfem/ohpc-tests/test_mpi_families
+		../../tests/libs/mfem/ohpc-tests/test_mpi_families \
+		../../tests/mpi/tests/rm_execution_single_host \
+		../../tests/mpi/tests/rm_execution_multi_host \
+		../../tests/mpi/tests/man_page_check \
+		../../tests/mpi/tests/version_match
 
 shfmt-lint:
 
@@ -402,7 +414,11 @@ shfmt-lint:
 		../../tests/libs/hypre/tests/rm_execution \
 		../../tests/libs/hypre/tests/test_module \
 		../../tests/libs/mfem/tests/test_module \
-		../../tests/libs/mfem/tests/parallel/rm_execution
+		../../tests/libs/mfem/tests/parallel/rm_execution \
+		../../tests/mpi/tests/rm_execution_single_host \
+		../../tests/mpi/tests/rm_execution_multi_host \
+		../../tests/mpi/tests/man_page_check \
+		../../tests/mpi/tests/version_match
 	shfmt -w -d \
 		../../tests/perf-tools/extrae/tests/tracec.sh \
 		../../tests/perf-tools/extrae/tests/tracef.sh \
@@ -465,7 +481,9 @@ clang-format-lint:
 		../../tests/libs/hypre/tests/*.c \
 		../../tests/libs/superlu_dist/tests/*.c \
 		../../tests/libs/mfem/tests/serial/*.cpp \
-		../../tests/libs/mfem/tests/parallel/*.cpp
+		../../tests/libs/mfem/tests/parallel/*.cpp \
+		../../tests/mpi/tests/*.c \
+		../../tests/mpi/tests/*.cpp
 
 build-ohpc-ci:
 	podman build  -f Containerfile.ohpc-lint -t  ghcr.io/openhpc/ohpc-lint:latest
