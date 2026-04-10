@@ -144,7 +144,7 @@ if sudo \
 			--enable-rms-harness \
 			--enable-compilers \
 			--with-compiler-families='${COMPILER_FAMILY}' \
-			--with-mpi-families='openmpi5 mpich' \
+			--with-mpi-families='openmpi5 mpich mvapich2' \
 			${TESTS[*]}; \
 		make check";
 then
