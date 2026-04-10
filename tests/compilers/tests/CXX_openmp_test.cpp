@@ -32,50 +32,48 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define N 1024
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-  double a[N], b[N], c, sum;
-  int nthreads, n, i;
+	double a[N], b[N], c, sum;
+	int nthreads, n, i;
 
-  nthreads = (argc > 1) ? atoi(argv[1]) : 1;
-  std::cout << "# threads: " << nthreads << std::endl;
+	nthreads = (argc > 1) ? atoi(argv[1]) : 1;
+	std::cout << "# threads: " << nthreads << std::endl;
 
-  omp_set_num_threads(nthreads);
-  #pragma omp parallel
-  {
-    #pragma omp master
-       n = omp_get_num_threads();
-  }
-  if (n != nthreads)
-  {
-    printf("\nERROR: %d thread(s) detected != %d\n", n, nthreads);
-    return -1;
-  }
+	omp_set_num_threads(nthreads);
+#pragma omp parallel
+	{
+#pragma omp master
+		n = omp_get_num_threads();
+	}
+	if (n != nthreads) {
+		printf("\nERROR: %d thread(s) detected != %d\n", n, nthreads);
+		return -1;
+	}
 
-  sum = c = 0.0;
-  for (i = 0; i < N; i ++)
-    sum += i * i * 2.0;
+	sum = c = 0.0;
+	for (i = 0; i < N; i++)
+		sum += i * i * 2.0;
 
-  #pragma omp parallel private(i)
-  {
-    #pragma omp for nowait
-      for (i = 0; i < N; i ++)
-        a[i] = i * 1.0;
+#pragma omp parallel private(i)
+	{
+#pragma omp for nowait
+		for (i = 0; i < N; i++)
+			a[i] = i * 1.0;
 
-    #pragma omp for nowait
-      for (i = 0; i < N; i ++)
-        b[i] = a[i] * 2.0;
+#pragma omp for nowait
+		for (i = 0; i < N; i++)
+			b[i] = a[i] * 2.0;
 
-    #pragma omp for reduction(+:c)
-      for (i = 0; i < N; i ++)
-	c += a[i] * b[i];
-  }
+#pragma omp for reduction(+ : c)
+		for (i = 0; i < N; i++)
+			c += a[i] * b[i];
+	}
 
-  if (c != sum)
-  {
-    printf("\nERROR: computed sum %.2lf != %.2lf\n", c, sum);
-    return -1;
-  }
-  printf("final sum: %.2lf\n", c);
-  return 0;
+	if (c != sum) {
+		printf("\nERROR: computed sum %.2lf != %.2lf\n", c, sum);
+		return -1;
+	}
+	printf("final sum: %.2lf\n", c);
+	return 0;
 }

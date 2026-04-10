@@ -5,31 +5,31 @@ TEST_LOGS=""
 MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 cd compilers || exit 1
 export BATS_JUNIT_CLASS=Compilers
 
-for compiler in $COMPILER_FAMILIES ; do
+for compiler in ${COMPILER_FAMILIES}; do
 
-    echo " "
-    echo " "
-    echo "-------------------------------------------------------"
-    echo "User Environment: Compiler tests: $compiler"
-    echo "-------------------------------------------------------"
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "User Environment: Compiler tests: ${compiler}"
+	echo "-------------------------------------------------------"
 
-    module purge 
-    module load $compiler 
+	module purge
+	module load "${compiler}"
 
-    ./bootstrap           || exit 1
-    ./configure         || exit 1
-    make clean          || exit 1
-    make -j 4 -k check  || status=1
+	./bootstrap || exit 1
+	./configure || exit 1
+	make clean || exit 1
+	make -j 4 -k check || status=1
 
-    save_logs_compiler_family tests $compiler
+	save_logs_compiler_family tests "${compiler}"
 
-    make distclean
+	make distclean
 done
 
-exit ${status}
+exit "${status}"
