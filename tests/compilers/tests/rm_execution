@@ -1,66 +1,69 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 3
 # -*-sh-*-
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
-
-@test "[Compilers] C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s C_test ];then
-	flunk "C_test binary does not exist"
-    fi
-    
-    run_serial_binary ./C_test
-    assert_success
+setup_file() {
+	TIMEOUT="00:05:00"
+	check_rms
+	export TIMEOUT
 }
 
-@test "[Compilers] C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s CXX_test ];then
-	flunk "CXX_test binary does not exist"
-    fi
+@test "[Compilers] C binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s C_test ]; then
+		flunk "C_test binary does not exist"
+	fi
 
-    run_serial_binary ./CXX_test
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./C_test
+	assert_success
 }
 
-@test "[Compilers] Fortran binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s F90_test ];then
-	flunk "F90_test binary does not exist"
-    fi
+@test "[Compilers] C++ binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s CXX_test ]; then
+		flunk "CXX_test binary does not exist"
+	fi
 
-    run_serial_binary ./F90_test
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./CXX_test
+	assert_success
 }
 
-@test "[Compilers] C openmp binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s C_openmp_test ];then
-        flunk "C_openmp_test binary does not exist"
-    fi
+@test "[Compilers] Fortran binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s F90_test ]; then
+		flunk "F90_test binary does not exist"
+	fi
 
-    run_serial_binary ./C_openmp_test 8
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./F90_test
+	assert_success
 }
 
-@test "[Compilers] C++ openmp binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s CXX_openmp_test ];then
-        flunk "CXX_openmp_test binary does not exist"
-    fi
+@test "[Compilers] C openmp binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s C_openmp_test ]; then
+		flunk "C_openmp_test binary does not exist"
+	fi
 
-    run_serial_binary ./CXX_openmp_test 8
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./C_openmp_test 8
+	assert_success
 }
 
-@test "[Compilers] Fortran openmp binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    if [ ! -s F90_openmp_test ];then
-        flunk "F90_openmp_test binary does not exist"
-    fi
+@test "[Compilers] C++ openmp binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s CXX_openmp_test ]; then
+		flunk "CXX_openmp_test binary does not exist"
+	fi
 
-    run_serial_binary ./F90_openmp_test 8
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" ./CXX_openmp_test 8
+	assert_success
+}
+
+@test "[Compilers] Fortran openmp binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
+	if [ ! -s F90_openmp_test ]; then
+		flunk "F90_openmp_test binary does not exist"
+	fi
+
+	run_serial_binary -t "${TIMEOUT}" ./F90_openmp_test 8
+	assert_success
 }

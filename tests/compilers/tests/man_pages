@@ -1,4 +1,4 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 3
 # -*-sh-*-
 
 load ../../common/test_helper_functions || exit 1
@@ -6,44 +6,35 @@ source ../../common/functions || exit 1
 
 check_compiler_family CC CXX FC
 
-family=$LMOD_FAMILY_COMPILER
-
-@test "[Compilers] C compiler man/help page ($family)" {
-
-    if [[ "$family" =~ "llvm" ]];then
-	run $CC -help
-	assert_success
-    else
-	run man -w $CC
-	assert_success
-    fi
+@test "[Compilers] C compiler man/help page (${LMOD_FAMILY_COMPILER})" {
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" ]]; then
+		run "${CC}" -help
+		assert_success
+	else
+		run man -w "${CC}"
+		assert_success
+	fi
 }
 
-@test "[Compilers] C++ compiler man/help page ($family)" {
-
-    if [[ "$family" =~ "llvm" ]];then
-	run $CXX -help
-    elif [[ "$family" =~ "intel" ]];then
-	# intel oneapi now only provides one man page (icx)
-	run man -w $CC
-	assert_success
-    else
-	run man -w $CXX
-	assert_success
-    fi
+@test "[Compilers] C++ compiler man/help page (${LMOD_FAMILY_COMPILER})" {
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" ]]; then
+		run "${CXX}" -help
+	elif [[ "${LMOD_FAMILY_COMPILER}" =~ "intel" ]]; then
+		# intel oneapi now only provides one man page (icx)
+		run man -w "${CC}"
+		assert_success
+	else
+		run man -w "${CXX}"
+		assert_success
+	fi
 }
 
-@test "[Compilers] Fortran compiler man/help page ($family)" {
-
-    if [[ "$family" =~ "llvm" ]];then
-	run $FC -help
-	assert_success
-    else
-	run man -w $FC
-	assert_success
-    fi
+@test "[Compilers] Fortran compiler man/help page (${LMOD_FAMILY_COMPILER})" {
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" ]]; then
+		run "${FC}" -help
+		assert_success
+	else
+		run man -w "${FC}"
+		assert_success
+	fi
 }
-
-
-
-

@@ -3,10 +3,9 @@
 
 int main()
 {
-  int a = -1;
-  a += 43;
-  
-  assert(a == 42);
-  return(0);
-}
+	int a = -1;
+	a += 43;
 
+	assert(a == 42);
+	return (0);
+}

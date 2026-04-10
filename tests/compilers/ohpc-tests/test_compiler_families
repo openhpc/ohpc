@@ -5,34 +5,31 @@ TEST_LOGS=""
 MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 cd compilers || exit 1
 export BATS_JUNIT_CLASS=Compilers
 
-# bootstrap the local autotools project
+for compiler in ${COMPILER_FAMILIES}; do
 
-./bootstrap || exit 1
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "User Environment: Compiler tests: ${compiler}"
+	echo "-------------------------------------------------------"
 
-for compiler in $COMPILER_FAMILIES ; do
+	module purge
+	module load "${compiler}"
 
-    echo " "
-    echo " "
-    echo "-------------------------------------------------------"
-    echo "User Environment: Compiler tests: $compiler"
-    echo "-------------------------------------------------------"
+	./bootstrap || exit 1
+	./configure || exit 1
+	make clean || exit 1
+	make -j 4 -k check || status=1
 
-    module purge 
-    module load $compiler 
+	save_logs_compiler_family tests "${compiler}"
 
-    ./configure         || exit 1
-    make clean          || exit 1
-    make -j 4 -k check  || status=1
-
-    save_logs_compiler_family tests $compiler
-
-    make distclean
+	make distclean
 done
 
-exit ${status}
+exit "${status}"
