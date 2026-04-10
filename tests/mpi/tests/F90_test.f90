@@ -1,6 +1,6 @@
 program hello
     include 'mpif.h'
-    integer rank, size, ierror, tag, status(MPI_STATUS_SIZE)
+    integer rank, size, ierror
     integer :: local = 1
     integer :: global
 
