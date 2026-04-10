@@ -11,7 +11,7 @@ shift
 
 PKG=("dnf" "-y")
 
-if hash zypper > /dev/null 2>&1; then
+if hash zypper >/dev/null 2>&1; then
 	PKG=("zypper" "-n" "--no-gpg-checks")
 fi
 
@@ -47,7 +47,7 @@ fi
 rm -f /etc/pbs.conf
 
 # Setup slurm
-echo "127.0.0.1 node0 node1" >> /etc/hosts
+echo "127.0.0.1 node0 node1" >>/etc/hosts
 
 cp /etc/slurm/slurm.conf.example /etc/slurm/slurm.conf
 
@@ -67,11 +67,11 @@ sed -i -e "
 	echo "NodeName=c0 NodeHostname=node0 Port=17004 CPUs=2"
 	echo "NodeName=c1 NodeHostname=node1 Port=17005 CPUs=2"
 	echo "PartitionName=normal Nodes=c0,c1 Default=YES MaxTime=24:00:00 State=UP"
-} >> /etc/slurm/slurm.conf
+} >>/etc/slurm/slurm.conf
 
 # cgroupv2 support does not yet work in containers.
 # Force cgroupv1 even on hosts with v2.
-echo "CgroupPlugin=cgroup/v1" >  /etc/slurm/cgroup.conf
+echo "CgroupPlugin=cgroup/v1" >/etc/slurm/cgroup.conf
 
 chown root.root /var/log/munge
 
@@ -90,7 +90,7 @@ retry_counter=0
 max_retries=5
 
 while true; do
-	(( retry_counter+=1 ))
+	((retry_counter += 1))
 	if [ "${retry_counter}" -gt "${max_retries}" ]; then
 		exit 1
 	fi
@@ -146,11 +146,9 @@ if sudo \
 			--with-compiler-families='${COMPILER_FAMILY}' \
 			--with-mpi-families='openmpi5 mpich mvapich2' \
 			${TESTS[*]}; \
-		make check";
-then
-    TESTS_FAILED=0
+		make check"; then
+	TESTS_FAILED=0
 fi
-
 
 if [ "${#ADMIN_TESTS[@]}" -gt 0 ]; then
 	# The configure script uses the variable $USER to decide if root or not
@@ -164,6 +162,8 @@ if [ "${#ADMIN_TESTS[@]}" -gt 0 ]; then
 fi
 
 if [ "${TESTS_FAILED}" -eq 0 ]; then
+	cd tests
+	make distclean >/dev/null 2>&1 || true
 	exit 0
 fi
 
@@ -171,10 +171,9 @@ set -e
 
 # If we are here, the tests failed. Print the logs and exit with an error code.
 echo -e "\nThe tests execution failed. Printing the logs.\n"
-find ./ -name "*.log" -print0 | while IFS= read -r -d '' log_file
-do
+find ./ -name "*.log" -print0 | while IFS= read -r -d '' log_file; do
 	echo "================================================"
-	echo "Log file: ${log_file}";
-	cat "${log_file}";
+	echo "Log file: ${log_file}"
+	cat "${log_file}"
 done
 exit 1
