@@ -75,6 +75,10 @@ codespell-lint:
 		tests/perf-tools/papi/tests/rm_execution \
 		tests/perf-tools/papi/tests/test_module \
 		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		tests/mpi/tests/rm_execution_single_host \
+		tests/mpi/tests/rm_execution_multi_host \
+		tests/mpi/tests/man_page_check \
+		tests/mpi/tests/version_match \
 		tests/modules/interactive_commands
 
 ruff-check-lint:
@@ -160,6 +164,10 @@ whitespace-lint:
 		tests/perf-tools/papi/tests/rm_execution \
 		tests/perf-tools/papi/tests/test_module \
 		tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		tests/mpi/tests/rm_execution_single_host \
+		tests/mpi/tests/rm_execution_multi_host \
+		tests/mpi/tests/man_page_check \
+		tests/mpi/tests/version_match \
 		tests/modules/interactive_commands \
 		containers/* \
 		\*.tex
@@ -247,6 +255,10 @@ shellcheck-lint:
 		../../tests/perf-tools/papi/tests/rm_execution \
 		../../tests/perf-tools/papi/tests/test_module \
 		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \
+		../../tests/mpi/tests/rm_execution_single_host \
+		../../tests/mpi/tests/rm_execution_multi_host \
+		../../tests/mpi/tests/man_page_check \
+		../../tests/mpi/tests/version_match \
 		../../tests/modules/interactive_commands
 
 shfmt-lint:
@@ -305,6 +317,10 @@ shfmt-lint:
 		../../tests/libs/mfem/tests/parallel/rm_execution \
 		../../tests/perf-tools/papi/tests/rm_execution \
 		../../tests/perf-tools/papi/tests/test_module \
+		../../tests/mpi/tests/rm_execution_single_host \
+		../../tests/mpi/tests/rm_execution_multi_host \
+		../../tests/mpi/tests/man_page_check \
+		../../tests/mpi/tests/version_match \
 		../../tests/modules/interactive_commands
 	shfmt -w -d \
 		../../tests/ci/integration-test.sh \
@@ -353,7 +369,9 @@ clang-format-lint:
 		../../tests/libs/superlu_dist/tests/*.c \
 		../../tests/libs/mfem/tests/serial/*.cpp \
 		../../tests/libs/mfem/tests/parallel/*.cpp \
-		../../tests/perf-tools/papi/tests/*.c
+		../../tests/perf-tools/papi/tests/*.c \
+		../../tests/mpi/tests/*.c \
+		../../tests/mpi/tests/*.cpp
 
 build-ohpc-ci:
 	podman build  -f Containerfile.ohpc-lint -t  ghcr.io/openhpc/ohpc-lint:latest
