@@ -79,9 +79,7 @@ for root, dirs, files in os.walk(ccache_dir):
     for f in files:
         os.chown(os.path.join(root, f), uid, gid)
 
-rpmbuild_rpms_dir = os.path.join(
-    pwd.getpwnam(build_user).pw_dir, "rpmbuild", "RPMS"
-)
+rpmbuild_rpms_dir = os.path.join(pwd.getpwnam(build_user).pw_dir, "rpmbuild", "RPMS")
 local_repo_configured = False
 
 
@@ -155,9 +153,7 @@ def get_build_order(specfiles):
     sourcedir = subprocess.check_output(
         ["rpm", "--eval", "%{_sourcedir}"], text=True
     ).strip()
-    topdir = subprocess.check_output(
-        ["rpm", "--eval", "%{_topdir}"], text=True
-    ).strip()
+    topdir = subprocess.check_output(["rpm", "--eval", "%{_topdir}"], text=True).strip()
     for subdir in ["BUILD", "BUILDROOT", "RPMS", "SOURCES", "SPECS", "SRPMS"]:
         os.makedirs(os.path.join(topdir, subdir), exist_ok=True)
     macros_dest = os.path.join(sourcedir, "OHPC_macros")
@@ -171,9 +167,7 @@ def get_build_order(specfiles):
 
     success, output = run_command(["misc/build_order.sh"])
     if not success:
-        logging.warning(
-            "misc/build_order.sh failed, using original spec file order"
-        )
+        logging.warning("misc/build_order.sh failed, using original spec file order")
         return specfiles
 
     # build_order.sh prints all spec paths in order on one line
@@ -206,8 +200,7 @@ def get_build_order(specfiles):
 
     sorted_specs = sorted(specfiles, key=sort_key)
     logging.info(
-        "Build order: %s"
-        % " ".join([os.path.basename(s) for s in sorted_specs])
+        "Build order: %s" % " ".join([os.path.basename(s) for s in sorted_specs])
     )
     return sorted_specs
 
@@ -220,9 +213,7 @@ def setup_local_repo():
 
     os.makedirs(rpmbuild_rpms_dir, exist_ok=True)
 
-    logging.info(
-        "Running createrepo_c on %s" % rpmbuild_rpms_dir
-    )
+    logging.info("Running createrepo_c on %s" % rpmbuild_rpms_dir)
     success, _ = run_command(["createrepo_c", rpmbuild_rpms_dir])
     if not success:
         logging.error("createrepo_c failed on %s" % rpmbuild_rpms_dir)
@@ -234,23 +225,21 @@ def setup_local_repo():
             with open(repo_file, "w") as f:
                 f.write("[local-ohpc-ci]\n")
                 f.write("name=Local OpenHPC CI builds\n")
-                f.write(
-                    "baseurl=file://%s\n" % rpmbuild_rpms_dir
-                )
+                f.write("baseurl=file://%s\n" % rpmbuild_rpms_dir)
                 f.write("enabled=1\n")
                 f.write("gpgcheck=0\n")
-            logging.info(
-                "Configured local DNF repository at %s" % repo_file
-            )
+            logging.info("Configured local DNF repository at %s" % repo_file)
         else:
-            success, _ = run_command([
-                "zypper",
-                "ar",
-                "-G",
-                "-f",
-                rpmbuild_rpms_dir,
-                "local-ohpc-ci",
-            ])
+            success, _ = run_command(
+                [
+                    "zypper",
+                    "ar",
+                    "-G",
+                    "-f",
+                    rpmbuild_rpms_dir,
+                    "local-ohpc-ci",
+                ]
+            )
             if not success:
                 logging.error("Failed to add local zypper repository")
                 return False
@@ -374,7 +363,8 @@ docs_spec_executed = False
 # Determine the number of actual spec files to build
 specfiles = args.specfiles
 spec_count = sum(
-    1 for s in specfiles
+    1
+    for s in specfiles
     if s.endswith(".spec")
     or "components/admin/docs/SPECS/docs.spec" == s
     or "docs/recipes/install/" in s
@@ -385,9 +375,7 @@ build_order_used = None
 
 if multiple_specs:
     specfiles = get_build_order(specfiles)
-    build_order_used = [
-        os.path.basename(s) for s in specfiles if s.endswith(".spec")
-    ]
+    build_order_used = [os.path.basename(s) for s in specfiles if s.endswith(".spec")]
 
 for spec in specfiles:
     # if more than one docs related file are modified then

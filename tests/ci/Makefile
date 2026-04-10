@@ -233,6 +233,9 @@ shfmt-lint:
 		../../tests/libs/trilinos/tests/rm_execution
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
+		../../tests/ci/setup_slurm_and_run_tests.sh \
+		../../misc/build_order.sh \
+		../../misc/dist/count_avail_packages.sh \
 		../../tests/common/functions \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
