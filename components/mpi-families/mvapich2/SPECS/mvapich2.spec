@@ -22,21 +22,17 @@
 
 # Base package name/config
 %define pname mvapich2
+%define sname mvapich
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
-Version:   2.3.7
+Version:   4.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu
-Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
-
-# karl.w.schulz@intel.com (04/13/2016)
-Patch0:    mvapich2-get_cycles.patch
-# karl.w.schulz@intel.com (05/21/2017)
-Patch1:    mpidimpl.opt.patch
-
+Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{sname}-%{version}.tar.gz
+Source1:   http://wgropp.cs.illinois.edu/projects/software/sowing/sowing.tar.gz
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -60,17 +56,14 @@ BuildRequires: zlib-devel
 
 %description
 
-MVAPICH2 is a high performance MPI-2 implementation (with initial
-support for MPI-3) for InfiniBand, 10GigE/iWARP and RoCE.  MVAPICH2
-provides underlying support for several interfaces (such as OFA-IB,
-OFA-iWARP, OFA-RoCE, Shared Memory, and TCP) for portability
-across multiple networks.
+MVAPICH is a high-performance MPI implementation based on MPICH's
+ch4 device layer with UCX support. It targets InfiniBand and RoCE
+networks and provides optimized collective operations and
+point-to-point communication for HPC clusters.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
-%patch -P 0 -p 1
-%patch -P 1 -p 1
+%setup -q -n %{sname}-%{version} -a 1
 
 %build
 %ohpc_setup_compiler
@@ -93,26 +86,26 @@ export CFLAGS="${CFLAGS} -std=gnu17"
 export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
 export FFLAGS="-DFLANG"
 %endif
+
+# Build sowing/doctext to generate man pages
+cd sowing-1.1.26
+./configure && make
+export PATH=$(pwd)/src/doctext:${PATH}
+export DOCTEXT_PATH=$(pwd)/share/doctext
+export TEXTFILTER_PATH=$(pwd)/share
+cd ..
+
 ./configure --prefix=%{install_path} \
-            --libdir=%{install_path}/lib \
-%if "%{compiler_family}" == "intel"
-            --disable-wrapper-rpath \
-%endif
 	    --enable-cxx \
 	    --enable-g=dbg \
-            --with-device=ch3:mrail \
-	    --disable-ibv-dlopen \
+            --with-device=ch4:ucx \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
 	    --enable-fast=O3 || { cat config.log && exit 1; }
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
-%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
-%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
-%endif
-
 make %{?_smp_mflags}
+make mandoc
 
 %install
 %ohpc_setup_compiler
