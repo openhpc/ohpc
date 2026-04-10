@@ -48,7 +48,7 @@ family=${LMOD_FAMILY_MPI}
         run which mpichversion
         assert_success
 
-        mpichversion | grep "MVAPICH2 Version" | awk '{print $3}' >& .cmd_output || exit 1
+        mpichversion | grep "MVAPICH Version" | awk '{print $3}' >& .cmd_output || exit 1
         mpi_version=`cat .cmd_output`
     elif [ $family == "mpich" ];then
         run which mpichversion
