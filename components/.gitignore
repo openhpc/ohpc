@@ -57,7 +57,8 @@ io-libs/pnetcdf/SOURCES/pnetcdf-*.tar.gz
 io-libs/sionlib/SOURCES/sionlib-*.tar.gz
 mpi-families/libfabric/SOURCES/libfabric-*.tar.bz2
 mpi-families/mpich/SOURCES/mpich-*.tar.gz
-mpi-families/mvapich2/SOURCES/mvapich2-*.tar.gz
+mpi-families/mvapich2/SOURCES/mvapich*.tar.gz
+mpi-families/mvapich2/SOURCES/sowing*.tar.gz
 mpi-families/openmpi/SOURCES/openmpi-*.tar.bz2
 mpi-families/ucx/SOURCES/ucx-*.tar.gz
 parallel-libs/boost/SOURCES/boost*.tar*

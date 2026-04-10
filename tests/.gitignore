@@ -18,3 +18,4 @@ job*out
 *.log
 report.xml
 *.o
+ci/__pycache__/
