@@ -38,6 +38,7 @@ AHEAD = "AHEAD"
 ERROR = "ERROR"
 RATE_LIMITED = "RATE_LIMITED"
 NOT_FOUND = "NOT_FOUND"
+SKIPPED = "SKIPPED"
 UNKNOWN = "UNKNOWN"
 
 # Map from upstream package names (after stripping -ohpc, -gnu*-ohpc,
@@ -79,10 +80,18 @@ class Result:
         "status",
         "repo",
         "spec_file",
+        "version_pin",
     )
 
     def __init__(
-        self, name, current_version, latest_version, status, repo, spec_file=None
+        self,
+        name,
+        current_version,
+        latest_version,
+        status,
+        repo,
+        spec_file=None,
+        version_pin=None,
     ):
         self.name = name
         self.current_version = current_version
@@ -90,6 +99,7 @@ class Result:
         self.status = status
         self.repo = repo
         self.spec_file = spec_file
+        self.version_pin = version_pin
 
 
 # ---------------------------------------------------------------------------
@@ -117,6 +127,46 @@ def debug_info(msg, verbose):
 def debug_warn(msg, verbose):
     if verbose:
         log_warn(msg)
+
+
+# ---------------------------------------------------------------------------
+# Spec-file tags
+# ---------------------------------------------------------------------------
+
+
+def parse_spec_tags(spec_file):
+    """Scan *spec_file* for ``OpenHPC:check-updates`` comment tags.
+
+    Recognised tags (placed in RPM comment lines)::
+
+        # OpenHPC:check-updates:skip [optional reason]
+        # OpenHPC:check-updates:version-pin <prefix>
+
+    Returns a dict with optional ``skip`` and ``version_pin`` keys.
+    """
+    tags = {}
+    with open(spec_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line.startswith("#"):
+                continue
+            m = re.match(r"^#\s*OpenHPC:check-updates:skip(?:\s+(.*))?$", line)
+            if m:
+                tags["skip"] = (m.group(1) or "").strip() or None
+                continue
+            m = re.match(r"^#\s*OpenHPC:check-updates:version-pin\s+(\S+)", line)
+            if m:
+                tags["version_pin"] = m.group(1)
+    return tags
+
+
+def _matches_version_pin(version, pin):
+    """Return True if *version* matches *pin* at a dot boundary.
+
+    ``pin="25.05"`` matches ``25.05``, ``25.05.6``, ``25.05.6.1``
+    but not ``25.050`` or ``25.1``.
+    """
+    return version == pin or version.startswith(pin + ".")
 
 
 # ---------------------------------------------------------------------------
@@ -299,7 +349,9 @@ def _github_headers(token):
     return headers
 
 
-def get_latest_github_release(repo, token, check_prereleases, verbose):
+def get_latest_github_release(
+    repo, token, check_prereleases, verbose, version_pin=None
+):
     """Return the latest release tag name for *repo*.
 
     Raises ``RateLimitError`` on 403 with a rate-limit message.
@@ -309,8 +361,8 @@ def get_latest_github_release(repo, token, check_prereleases, verbose):
     if not token:
         time.sleep(1)
 
-    # Try /releases/latest first (unless checking prereleases)
-    if not check_prereleases:
+    # Try /releases/latest first (unless checking prereleases or pinned)
+    if not check_prereleases and not version_pin:
         url = f"https://api.github.com/repos/{repo}/releases/latest"
         r = requests.get(url, headers=headers, timeout=30)
         if r.status_code == 403 and "rate limit" in r.text.lower():
@@ -324,7 +376,7 @@ def get_latest_github_release(repo, token, check_prereleases, verbose):
             debug_info(f"Latest endpoint failed for {repo}: {r.status_code}", verbose)
 
     # Fall back to releases list
-    url = f"https://api.github.com/repos/{repo}/releases"
+    url = f"https://api.github.com/repos/{repo}/releases?per_page=100"
     r = requests.get(url, headers=headers, timeout=30)
     if r.status_code == 403 and "rate limit" in r.text.lower():
         raise RateLimitError("GitHub API rate limit exceeded")
@@ -337,6 +389,15 @@ def get_latest_github_release(repo, token, check_prereleases, verbose):
         debug_info(f"No releases found for {repo}", verbose)
         return None
 
+    if version_pin:
+        for rel in releases:
+            tag = rel.get("tag_name", "")
+            normalized = normalize_version(tag)
+            if _matches_version_pin(normalized, version_pin):
+                return tag
+        debug_info(f"No releases matching pin {version_pin} for {repo}", verbose)
+        return None
+
     tag = releases[0].get("tag_name")
     if not tag:
         debug_warn(f"No suitable releases found for {repo}", verbose)
@@ -344,7 +405,7 @@ def get_latest_github_release(repo, token, check_prereleases, verbose):
     return tag
 
 
-def get_latest_github_tag(repo, token, exclude_patterns, verbose):
+def get_latest_github_tag(repo, token, exclude_patterns, verbose, version_pin=None):
     """Return the latest tag for *repo*, filtering out *exclude_patterns*.
 
     Raises ``RateLimitError`` on 403 with a rate-limit message.
@@ -377,14 +438,19 @@ def get_latest_github_tag(repo, token, exclude_patterns, verbose):
                 )
                 skip = True
                 break
-        if not skip:
-            return tag_name
+        if skip:
+            continue
+        if version_pin:
+            normalized = normalize_version(tag_name)
+            if not _matches_version_pin(normalized, version_pin):
+                continue
+        return tag_name
 
     debug_warn(f"No suitable tags found for {repo} after filtering", verbose)
     return None
 
 
-def get_latest_gitlab_release(hostname, project_path, verbose):
+def get_latest_gitlab_release(hostname, project_path, verbose, version_pin=None):
     """Return the latest tag for a GitLab project (public API)."""
     # Find project ID first
     search_name = project_path.split("/")[-1]
@@ -445,6 +511,18 @@ def get_latest_gitlab_release(hostname, project_path, verbose):
         )
         return None
 
+    if version_pin:
+        for tag_obj in tags:
+            name = tag_obj.get("name", "")
+            normalized = normalize_version(name)
+            if _matches_version_pin(normalized, version_pin):
+                return name
+        debug_info(
+            f"No tags matching pin {version_pin} for GitLab project {project_id}",
+            verbose,
+        )
+        return None
+
     tag_name = tags[0].get("name")
     if not tag_name:
         debug_warn(f"No suitable tags found for GitLab project {project_id}", verbose)
@@ -453,7 +531,7 @@ def get_latest_gitlab_release(hostname, project_path, verbose):
     return tag_name
 
 
-def get_latest_pypi_version(package_name, verbose):
+def get_latest_pypi_version(package_name, verbose, version_pin=None):
     """Return the latest version from PyPI for *package_name*."""
     url = f"https://pypi.org/pypi/{package_name}/json"
     debug_info(f"Fetching PyPI package info from {url}", verbose)
@@ -464,6 +542,19 @@ def get_latest_pypi_version(package_name, verbose):
         return None
 
     data = r.json()
+
+    if version_pin:
+        releases = list(data.get("releases", {}).keys())
+        matched = [v for v in releases if _matches_version_pin(v, version_pin)]
+        if not matched:
+            debug_info(
+                f"No PyPI releases matching pin {version_pin} for {package_name}",
+                verbose,
+            )
+            return None
+        matched.sort(key=_version_sort_key)
+        return matched[-1]
+
     version = data.get("info", {}).get("version")
     if not version:
         debug_warn(f"No version found for PyPI package {package_name}", verbose)
@@ -471,7 +562,9 @@ def get_latest_pypi_version(package_name, verbose):
     return version
 
 
-def get_latest_jsc_perftools_version(project_name, check_prereleases, verbose):
+def get_latest_jsc_perftools_version(
+    project_name, check_prereleases, verbose, version_pin=None
+):
     """Return the latest version from JSC perftools overview page."""
     base_url = f"https://perftools.pages.jsc.fz-juelich.de/cicd/{project_name}/"
     debug_info(f"Fetching JSC perftools package info from {base_url}", verbose)
@@ -494,21 +587,28 @@ def get_latest_jsc_perftools_version(project_name, check_prereleases, verbose):
         )
         return None
 
+    versions = []
     for version in matches:
         if not check_prereleases:
             if re.search(r"-(rc|alpha|beta|pre|dev)\d*$", version):
                 debug_info(f"Skipping pre-release version: {version}", verbose)
                 continue
-        return version
+        if version_pin and not _matches_version_pin(version, version_pin):
+            continue
+        versions.append(version)
 
-    debug_warn(
-        f"No suitable version found for JSC perftools package {project_name}",
-        verbose,
-    )
-    return None
+    if not versions:
+        debug_warn(
+            f"No suitable version found for JSC perftools package {project_name}",
+            verbose,
+        )
+        return None
+
+    versions.sort(key=_version_sort_key)
+    return versions[-1]
 
 
-def get_latest_gnu_version(project, verbose):
+def get_latest_gnu_version(project, verbose, version_pin=None):
     """Return the latest version from the GNU FTP mirror."""
     base_url = f"https://ftpmirror.gnu.org/gnu/{project}/"
     debug_info(f"Checking GNU {project} directory listing at {base_url}", verbose)
@@ -536,6 +636,15 @@ def get_latest_gnu_version(project, verbose):
         debug_warn(f"No version found for GNU {project}", verbose)
         return None
 
+    if version_pin:
+        versions = [v for v in versions if _matches_version_pin(v, version_pin)]
+        if not versions:
+            debug_info(
+                f"No GNU {project} versions matching pin {version_pin}",
+                verbose,
+            )
+            return None
+
     # Sort using RPM version comparison and return the highest
     versions.sort(key=_version_sort_key)
     return versions[-1]
@@ -553,7 +662,9 @@ def _version_sort_key(v):
     return result
 
 
-def get_latest_bsc_ftp_version(directory, project, check_prereleases, verbose):
+def get_latest_bsc_ftp_version(
+    directory, project, check_prereleases, verbose, version_pin=None
+):
     """Return the latest version from the BSC tools FTP directory listing.
 
     Parses source tarballs named ``<project>-<version>-src.tar.*`` from the
@@ -590,6 +701,8 @@ def get_latest_bsc_ftp_version(directory, project, check_prereleases, verbose):
             if re.search(r"(rc|alpha|beta|pre|dev)\d*", v, re.IGNORECASE):
                 debug_info(f"Skipping pre-release version: {v}", verbose)
                 continue
+        if version_pin and not _matches_version_pin(v, version_pin):
+            continue
         versions.append(v)
 
     if not versions:
@@ -601,7 +714,9 @@ def get_latest_bsc_ftp_version(directory, project, check_prereleases, verbose):
     return versions[-1]
 
 
-def get_latest_uoregon_tau_version(directory, project, check_prereleases, verbose):
+def get_latest_uoregon_tau_version(
+    directory, project, check_prereleases, verbose, version_pin=None
+):
     """Return the latest version from a UOregon TAU/PDT directory listing.
 
     Parses tarballs named ``<project>-<version>.tar.gz`` from the
@@ -635,6 +750,8 @@ def get_latest_uoregon_tau_version(directory, project, check_prereleases, verbos
         if not re.match(r"\d+(\.\d+)*$", v):
             debug_info(f"Skipping non-numeric version: {v}", verbose)
             continue
+        if version_pin and not _matches_version_pin(v, version_pin):
+            continue
         versions.append(v)
 
     if not versions:
@@ -645,7 +762,7 @@ def get_latest_uoregon_tau_version(directory, project, check_prereleases, verbos
     return versions[-1]
 
 
-def get_latest_pnetcdf_version(check_prereleases, verbose):
+def get_latest_pnetcdf_version(check_prereleases, verbose, version_pin=None):
     """Return the latest PnetCDF version from the download page."""
     url = "https://parallel-netcdf.github.io/wiki/Download.html"
     debug_info(f"Fetching PnetCDF download page at {url}", verbose)
@@ -674,6 +791,8 @@ def get_latest_pnetcdf_version(check_prereleases, verbose):
                 if re.search(r"(alpha|beta|rc|pre|dev)", v, re.IGNORECASE):
                     debug_info(f"Skipping pre-release version: {v}", verbose)
                     continue
+            if version_pin and not _matches_version_pin(v, version_pin):
+                continue
             versions.append(v)
 
     if not versions:
@@ -684,8 +803,23 @@ def get_latest_pnetcdf_version(check_prereleases, verbose):
     return versions[-1]
 
 
-def get_latest_release_monitoring_version(project_ref, check_prereleases, verbose):
+def get_latest_release_monitoring_version(
+    project_ref, check_prereleases, verbose, version_pin=None
+):
     """Return the latest version from release-monitoring.org."""
+
+    def _pick_version(data):
+        if check_prereleases:
+            versions = data.get("versions", [])
+        else:
+            versions = data.get("stable_versions", [])
+            if not versions:
+                v = data.get("version")
+                versions = [v] if v else []
+        if version_pin:
+            versions = [v for v in versions if _matches_version_pin(v, version_pin)]
+        return versions[0] if versions else None
+
     if project_ref.startswith("id:"):
         project_id = project_ref[3:]
         url = f"https://release-monitoring.org/api/project/{project_id}"
@@ -702,14 +836,7 @@ def get_latest_release_monitoring_version(project_ref, check_prereleases, verbos
             )
             return None
 
-        data = r.json()
-        if check_prereleases:
-            versions = data.get("versions", [])
-            return versions[0] if versions else None
-        stable = data.get("stable_versions", [])
-        if stable:
-            return stable[0]
-        return data.get("version")
+        return _pick_version(r.json())
     else:
         url = f"https://release-monitoring.org/api/v2/projects/?name={project_ref}"
         debug_info(f"Checking release-monitoring.org for: {project_ref}", verbose)
@@ -734,14 +861,7 @@ def get_latest_release_monitoring_version(project_ref, check_prereleases, verbos
         if not items:
             return None
 
-        item = items[0]
-        if check_prereleases:
-            versions = item.get("versions", [])
-            return versions[0] if versions else None
-        stable = item.get("stable_versions", [])
-        if stable:
-            return stable[0]
-        return item.get("version")
+        return _pick_version(items[0])
 
 
 # ---------------------------------------------------------------------------
@@ -855,7 +975,7 @@ def _status_from_comparison(comparison):
     }.get(comparison, UNKNOWN)
 
 
-def try_github(source_url, name, current_version, config):
+def try_github(source_url, name, current_version, config, version_pin=None):
     """Check GitHub for a newer release.  Returns list[Result] or None."""
     repo = parse_github_repo(source_url)
     if repo is None:
@@ -865,7 +985,11 @@ def try_github(source_url, name, current_version, config):
 
     try:
         latest_tag = get_latest_github_release(
-            repo, config.token, config.prereleases, config.verbose
+            repo,
+            config.token,
+            config.prereleases,
+            config.verbose,
+            version_pin=version_pin,
         )
     except RateLimitError:
         log_warn(
@@ -886,7 +1010,7 @@ def try_github(source_url, name, current_version, config):
     return [Result(name, current_version, latest_tag, status, repo)]
 
 
-def try_gitlab(source_url, name, current_version, config):
+def try_gitlab(source_url, name, current_version, config, version_pin=None):
     """Check GitLab for a newer release.  Returns list[Result] or None."""
     parsed = parse_gitlab_repo(source_url)
     if parsed is None:
@@ -898,7 +1022,9 @@ def try_gitlab(source_url, name, current_version, config):
         config.verbose,
     )
 
-    latest_tag = get_latest_gitlab_release(hostname, project_path, config.verbose)
+    latest_tag = get_latest_gitlab_release(
+        hostname, project_path, config.verbose, version_pin=version_pin
+    )
     repo_id = f"{hostname}/{project_path}"
 
     if latest_tag is None:
@@ -913,14 +1039,16 @@ def try_gitlab(source_url, name, current_version, config):
     return [Result(name, current_version, latest_tag, status, repo_id)]
 
 
-def try_pypi(source_url, name, current_version, config):
+def try_pypi(source_url, name, current_version, config, version_pin=None):
     """Check PyPI for a newer version.  Returns list[Result] or None."""
     pkg = parse_pypi_package(source_url)
     if pkg is None:
         return None
 
     debug_info(f"Checking PyPI package: {pkg}", config.verbose)
-    latest_version = get_latest_pypi_version(pkg, config.verbose)
+    latest_version = get_latest_pypi_version(
+        pkg, config.verbose, version_pin=version_pin
+    )
     repo_id = f"pypi.org/project/{pkg}"
 
     if latest_version is None:
@@ -935,7 +1063,7 @@ def try_pypi(source_url, name, current_version, config):
     return [Result(name, current_version, latest_version, status, repo_id)]
 
 
-def try_jsc_perftools(source_url, name, current_version, config):
+def try_jsc_perftools(source_url, name, current_version, config, version_pin=None):
     """Check JSC perftools for a newer version.  Returns list[Result] or None."""
     project = parse_jsc_perftools_package(source_url)
     if project is None:
@@ -943,7 +1071,10 @@ def try_jsc_perftools(source_url, name, current_version, config):
 
     debug_info(f"Checking JSC perftools package: {project}", config.verbose)
     latest_version = get_latest_jsc_perftools_version(
-        project, config.prereleases, config.verbose
+        project,
+        config.prereleases,
+        config.verbose,
+        version_pin=version_pin,
     )
     repo_id = f"perftools.pages.jsc.fz-juelich.de/cicd/{project}"
 
@@ -959,7 +1090,7 @@ def try_jsc_perftools(source_url, name, current_version, config):
     return [Result(name, current_version, latest_version, status, repo_id)]
 
 
-def try_openmpi(source_url, name, current_version, config):
+def try_openmpi(source_url, name, current_version, config, version_pin=None):
     """Check Open MPI GitHub tags.  Returns list[Result] or None."""
     repo = parse_openmpi_source(source_url)
     if repo is None:
@@ -969,7 +1100,11 @@ def try_openmpi(source_url, name, current_version, config):
 
     try:
         latest_tag = get_latest_github_tag(
-            repo, config.token, ["rc", "amzn"], config.verbose
+            repo,
+            config.token,
+            ["rc", "amzn"],
+            config.verbose,
+            version_pin=version_pin,
         )
     except RateLimitError:
         log_warn(
@@ -990,7 +1125,7 @@ def try_openmpi(source_url, name, current_version, config):
     return [Result(name, current_version, latest_tag, status, repo)]
 
 
-def try_uoregon_tau(source_url, name, current_version, config):
+def try_uoregon_tau(source_url, name, current_version, config, version_pin=None):
     """Check UOregon TAU/PDT directory for a newer version.
 
     Returns list[Result] or None.
@@ -1002,7 +1137,11 @@ def try_uoregon_tau(source_url, name, current_version, config):
     directory, project = parsed
     debug_info(f"Checking UOregon TAU package: {project}", config.verbose)
     latest_version = get_latest_uoregon_tau_version(
-        directory, project, config.prereleases, config.verbose
+        directory,
+        project,
+        config.prereleases,
+        config.verbose,
+        version_pin=version_pin,
     )
     repo_id = f"cs.uoregon.edu/research/tau/{directory}"
 
@@ -1018,7 +1157,7 @@ def try_uoregon_tau(source_url, name, current_version, config):
     return [Result(name, current_version, latest_version, status, repo_id)]
 
 
-def try_bsc_ftp(source_url, name, current_version, config):
+def try_bsc_ftp(source_url, name, current_version, config, version_pin=None):
     """Check BSC tools FTP for a newer version.  Returns list[Result] or None."""
     parsed = parse_bsc_ftp_package(source_url)
     if parsed is None:
@@ -1027,7 +1166,11 @@ def try_bsc_ftp(source_url, name, current_version, config):
     directory, project = parsed
     debug_info(f"Checking BSC FTP package: {project}", config.verbose)
     latest_version = get_latest_bsc_ftp_version(
-        directory, project, config.prereleases, config.verbose
+        directory,
+        project,
+        config.prereleases,
+        config.verbose,
+        version_pin=version_pin,
     )
     repo_id = f"ftp.tools.bsc.es/{directory}"
 
@@ -1043,13 +1186,15 @@ def try_bsc_ftp(source_url, name, current_version, config):
     return [Result(name, current_version, latest_version, status, repo_id)]
 
 
-def try_pnetcdf(source_url, name, current_version, config):
+def try_pnetcdf(source_url, name, current_version, config, version_pin=None):
     """Check PnetCDF download page for a newer version."""
     if parse_pnetcdf_source(source_url) is None:
         return None
 
     debug_info("Checking PnetCDF download page", config.verbose)
-    latest_version = get_latest_pnetcdf_version(config.prereleases, config.verbose)
+    latest_version = get_latest_pnetcdf_version(
+        config.prereleases, config.verbose, version_pin=version_pin
+    )
     repo_id = "parallel-netcdf.github.io"
 
     if latest_version is None:
@@ -1064,7 +1209,7 @@ def try_pnetcdf(source_url, name, current_version, config):
     return [Result(name, current_version, latest_version, status, repo_id)]
 
 
-def try_release_monitoring(source_url, name, current_version, config):
+def try_release_monitoring(source_url, name, current_version, config, version_pin=None):
     """Fallback: check release-monitoring.org.  Always returns list[Result]."""
     base_name = strip_ohpc_suffixes(name)
     rm_project = RELEASE_MONITORING_MAP.get(base_name, base_name)
@@ -1075,7 +1220,10 @@ def try_release_monitoring(source_url, name, current_version, config):
     )
 
     rm_version = get_latest_release_monitoring_version(
-        rm_project, config.prereleases, config.verbose
+        rm_project,
+        config.prereleases,
+        config.verbose,
+        version_pin=version_pin,
     )
 
     if rm_version is None:
@@ -1377,6 +1525,28 @@ def process_spec_file(spec_file, config):
     """
     debug_info(f"Processing {os.path.basename(spec_file)}", config.verbose)
 
+    # Check for spec-file tags (skip, version-pin)
+    tags = parse_spec_tags(spec_file)
+    if "skip" in tags:
+        reason = tags["skip"] or ""
+        debug_info(
+            f"Skipping {os.path.basename(spec_file)}: skip tag"
+            + (f" ({reason})" if reason else ""),
+            config.verbose,
+        )
+        return [
+            Result(
+                os.path.splitext(os.path.basename(spec_file))[0],
+                "-",
+                "-",
+                SKIPPED,
+                reason or "skipped via spec tag",
+                spec_file=spec_file,
+            )
+        ]
+
+    version_pin = tags.get("version_pin")
+
     # Special handling for GNU compilers
     if spec_file.endswith("gnu-compilers/SPECS/gnu-compilers.spec"):
         debug_info(
@@ -1395,16 +1565,29 @@ def process_spec_file(spec_file, config):
 
     name, current_version, source_url = info
 
+    if version_pin:
+        debug_info(
+            f"Version pin {version_pin} active for {name}",
+            config.verbose,
+        )
+
     for checker in CHECKERS:
-        results = checker(source_url, name, current_version, config)
+        results = checker(
+            source_url,
+            name,
+            current_version,
+            config,
+            version_pin=version_pin,
+        )
         if results is not None:
             # Check if we hit a rate limit
             for r in results:
                 if r.status == RATE_LIMITED:
                     raise RateLimitError("Rate limit reached")
-            # Attach spec_file to each result
+            # Attach spec_file and version_pin to each result
             for r in results:
                 r.spec_file = spec_file
+                r.version_pin = version_pin
             return results
 
     # Should not reach here because try_release_monitoring always returns
@@ -1426,6 +1609,7 @@ def display_results_table(results):
         UPDATE_AVAILABLE: YELLOW,
         UP_TO_DATE: GREEN,
         AHEAD: BLUE,
+        SKIPPED: BLUE,
         RATE_LIMITED: YELLOW,
         NOT_FOUND: YELLOW,
         ERROR: RED,
@@ -1434,9 +1618,12 @@ def display_results_table(results):
     for r in results:
         color = color_map.get(r.status, "")
         reset = NC if color else ""
+        status = r.status
+        if r.version_pin:
+            status = f"{status} (pin:{r.version_pin})"
         print(
             f"{color}"
-            + fmt % (r.name, r.current_version, r.latest_version, r.status, r.repo)
+            + fmt % (r.name, r.current_version, r.latest_version, status, r.repo)
             + f"{reset}"
         )
 
@@ -1454,6 +1641,8 @@ def display_results_json(results):
         }
         if r.spec_file is not None:
             entry["spec_file"] = r.spec_file
+        if r.version_pin:
+            entry["version_pin"] = r.version_pin
         data.append(entry)
     print(json.dumps(data, indent=2))
 
@@ -1508,6 +1697,7 @@ def display_results_markdown(results, no_glow):
         UPDATE_AVAILABLE: "\U0001f504",  # arrows
         UP_TO_DATE: "\u2705",  # check
         AHEAD: "\U0001f680",  # rocket
+        SKIPPED: "\u23ed\ufe0f",  # skip
         RATE_LIMITED: "\u23f1\ufe0f",  # stopwatch
         NOT_FOUND: "\U0001f536",  # diamond
         ERROR: "\u274c",  # cross
@@ -1522,13 +1712,20 @@ def display_results_markdown(results, no_glow):
 
     for r in results:
         emoji = status_emoji.get(r.status, "\u2753")
-        url = _repo_url(r.repo)
+        status = r.status
+        if r.version_pin:
+            status = f"{status} (pin:{r.version_pin})"
+        if r.status == SKIPPED:
+            repo_cell = r.repo
+        else:
+            url = _repo_url(r.repo)
+            repo_cell = f"[{r.repo}]({url})"
         lines.append(
             f"| {r.name:<30s} "
             f"| {r.current_version:<15s} "
             f"| {r.latest_version:<20s} "
-            f"| {emoji} {r.status:<25s} "
-            f"| [{r.repo}]({url}) |"
+            f"| {emoji} {status:<25s} "
+            f"| {repo_cell} |"
         )
 
     md_text = "\n".join(lines) + "\n"
@@ -1560,6 +1757,8 @@ def show_summary(results):
     for r in results:
         counts[r.status] = counts.get(r.status, 0) + 1
 
+    pinned = sum(1 for r in results if r.version_pin)
+
     print(file=sys.stderr)
     log_info("Summary:")
     print(f"  Total packages checked: {total}", file=sys.stderr)
@@ -1569,6 +1768,11 @@ def show_summary(results):
     )
     print(f"  Up to date: {counts.get(UP_TO_DATE, 0)}", file=sys.stderr)
     print(f"  Ahead of latest: {counts.get(AHEAD, 0)}", file=sys.stderr)
+    sk = counts.get(SKIPPED, 0)
+    if sk:
+        print(f"  Skipped: {sk}", file=sys.stderr)
+    if pinned:
+        print(f"  Version-pinned: {pinned}", file=sys.stderr)
     rl = counts.get(RATE_LIMITED, 0)
     if rl:
         print(f"  Rate limited: {rl}", file=sys.stderr)
