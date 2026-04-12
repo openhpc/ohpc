@@ -19,24 +19,31 @@ fi
 "${PKG[@]}" remove lmod-defaults-*-ohpc || true
 
 # Then install slurm and needed packages
-"${PKG[@]}" install \
-	hostname \
-	make \
-	openssh-clients \
-	which \
-	sudo \
-	psmisc \
-	autoconf \
-	automake \
-	libtool \
-	prun-ohpc \
-	openmpi5-"${COMPILER_FAMILY}"-ohpc \
-	mpich-"${COMPILER_FAMILY}"-ohpc \
-	lmod-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc \
-	slurm-slurmd-ohpc \
-	slurm-slurmctld-ohpc \
-	slurm-example-configs-ohpc \
+INSTALL_PKGS=(
+	hostname
+	make
+	openssh-clients
+	which
+	sudo
+	psmisc
+	autoconf
+	automake
+	libtool
+	prun-ohpc
+	openmpi5-"${COMPILER_FAMILY}"-ohpc
+	mpich-"${COMPILER_FAMILY}"-ohpc
+	lmod-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc
+	slurm-slurmd-ohpc
+	slurm-slurmctld-ohpc
+	slurm-example-configs-ohpc
 	slurm-ohpc
+)
+
+if [ "$(uname -m)" != "aarch64" ]; then
+	INSTALL_PKGS+=(mvapich2-"${COMPILER_FAMILY}"-ohpc)
+fi
+
+"${PKG[@]}" install "${INSTALL_PKGS[@]}"
 
 # Install rebuilt packages (if any)
 # shellcheck disable=SC2046 # (we want the words to be split)
