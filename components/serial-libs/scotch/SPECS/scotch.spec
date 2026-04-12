@@ -28,7 +28,7 @@ Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:	Graph, mesh and hypergraph partitioning library
 Group:		%{PROJ_NAME}/serial-libs
 %endif
-Version:	7.0.10
+Version:	7.0.11
 Release:	1%{?dist}
 License:	CeCILL-C
 URL:		https://gitlab.inria.fr/scotch/scotch
