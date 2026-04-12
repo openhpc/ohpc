@@ -1,4 +1,8 @@
-lint: codespell-lint ruff-check-lint ruff-format-lint whitespace-lint shellcheck-lint shfmt-lint clang-format-lint
+lint: codespell-lint gitignore-lint ruff-check-lint ruff-format-lint whitespace-lint shellcheck-lint shfmt-lint clang-format-lint
+
+gitignore-lint:
+	@echo "Checking .gitignore entries are in alphabetical order"
+	python3 check_gitignore_order.py
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
@@ -7,6 +11,7 @@ codespell-lint:
 		README.md \
 		CONTRIBUTING.md \
 		containers \
+		tests/ci/check_gitignore_order.py \
 		tests/ci/check_spec.py \
 		tests/ci/run_build.py \
 		misc/build_order.py \
@@ -112,6 +117,7 @@ codespell-lint:
 ruff-check-lint:
 	@echo "Running 'ruff check' on selected Python files"
 	ruff check \
+		../../tests/ci/check_gitignore_order.py \
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
@@ -123,6 +129,7 @@ ruff-check-lint:
 ruff-format-lint:
 	@echo "Running 'ruff format' on selected Python files"
 	ruff format \
+		../../tests/ci/check_gitignore_order.py \
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \

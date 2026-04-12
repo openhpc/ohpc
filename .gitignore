@@ -1,2 +1,378 @@
+# ==========================================================
+# Top-level .gitignore for OpenHPC
+# ==========================================================
+
+# ---- Global patterns ----
+*~
+.ruff_cache/
+.vscode/
+__pycache__/
+
+# ---- Root-level ----
 /.claude/
-misc/__pycache__/
+
+# ---- Components: RPM build artifacts ----
+components/*/*/BUILD
+components/*/*/BUILDROOT
+components/*/*/RPMS
+components/*/*/SOURCES/OHPC_macros
+components/*/*/SRPMS
+
+# ---- Components: source tarballs (admin) ----
+components/admin/clustershell/SOURCES/v*.tar.gz
+components/admin/conman/SOURCES/conman-*.tar.gz
+components/admin/conman/SOURCES/conman-*.tar.xz
+components/admin/docs/SOURCES/docs-ohpc.tar
+components/admin/genders/SOURCES/genders-*.tar.gz
+components/admin/hpc-workspace/SOURCES/*.tar.gz
+components/admin/lmod/SOURCES/lmod-*.tar.gz
+components/admin/losf/SOURCES/losf-*.tar.gz
+components/admin/mdtoc/SOURCES/mdtoc-*bz2
+components/admin/mdtoc/SOURCES/mdtoc-*gz
+components/admin/mrsh/SOURCES/mrsh-*.tar.gz
+components/admin/nhc/SOURCES/nhc-*.tar.gz
+components/admin/ohpc-release-rcs/RC*/SOURCES/
+components/admin/pdsh/SOURCES/pdsh-*.tar.gz
+components/admin/powerman/SOURCES/powerman-*.tar.gz
+components/admin/test-suite/SOURCES/tests-ohpc.tar
+
+# ---- Components: source tarballs (compiler-families) ----
+components/compiler-families/gnu-compilers/SOURCES/gcc-*.tar.xz
+components/compiler-families/gnu-compilers/SOURCES/gmp-*.tar.bz2
+components/compiler-families/gnu-compilers/SOURCES/mpc-*.tar.gz
+components/compiler-families/gnu-compilers/SOURCES/mpfr-*.tar.gz
+components/compiler-families/llvm-compilers/SOURCES/llvm-project-*.tar.xz
+
+# ---- Components: source tarballs (dev-tools) ----
+components/dev-tools/annobin/SOURCES/annobin-*.tar.xz
+components/dev-tools/autoconf/SOURCES/autoconf-*.tar.gz
+components/dev-tools/automake/SOURCES/automake-*.tar.gz
+components/dev-tools/cmake/SOURCES/cmake-*.tar.gz
+components/dev-tools/cuda-devel/SOURCES/cuda*repo
+components/dev-tools/easybuild/SOURCES/easybuild*.tar.gz
+components/dev-tools/hwloc/SOURCES/hwloc-*.tar.bz2
+components/dev-tools/libtool/SOURCES/libtool-*.tar.gz
+components/dev-tools/mpi4py/SOURCES/mpi4py-*.tar.gz
+components/dev-tools/numpy/SOURCES/numpy-*.tar.gz
+components/dev-tools/python/SOURCES/Python-*.tar.xz
+components/dev-tools/python/SOURCES/Python-*.tar.xz.asc
+components/dev-tools/scipy/SOURCES/scipy-*.tar.gz
+components/dev-tools/spack/SOURCES/v*.tar.gz
+components/dev-tools/valgrind/SOURCES/valgrind-*.tar.bz2
+
+# ---- Components: source tarballs (distro-packages) ----
+components/distro-packages/confuse/SOURCES/confuse-*.tar.gz
+components/distro-packages/flex/SOURCES/flex-*.tar.gz
+components/distro-packages/ipmiutil/SOURCES/ipmiutil-*.tar.gz
+components/distro-packages/python-Cython/SOURCES/?ython-*.tar.gz
+components/distro-packages/python-setuptools/SOURCES/setuptools-*.tar.gz
+components/distro-packages/sigar/SOURCES/sigar-*.tar.gz
+
+# ---- Components: source tarballs (fs) ----
+components/fs/lustre-client/SOURCES/lustre-*.tar.gz
+components/fs/shine/SOURCES/v*.tar.gz
+
+# ---- Components: source tarballs (io-libs) ----
+components/io-libs/*hdf5/SOURCES/hdf5*.tar.*
+components/io-libs/adios2/SOURCES/*.tar.gz
+components/io-libs/netcdf-cxx/SOURCES/v*.tar.gz
+components/io-libs/netcdf-fortran/SOURCES/v*.tar.gz
+components/io-libs/netcdf/SOURCES/v*.tar.gz
+components/io-libs/pnetcdf/SOURCES/pnetcdf-*.tar.gz
+components/io-libs/sionlib/SOURCES/sionlib-*.tar.gz
+
+# ---- Components: source tarballs (mpi-families) ----
+components/mpi-families/libfabric/SOURCES/libfabric-*.tar.bz2
+components/mpi-families/mpich/SOURCES/mpich-*.tar.gz
+components/mpi-families/mvapich2/SOURCES/mvapich*.tar.gz
+components/mpi-families/mvapich2/SOURCES/sowing*.tar.gz
+components/mpi-families/openmpi/SOURCES/openmpi-*.tar.bz2
+components/mpi-families/ucx/SOURCES/ucx-*.tar.gz
+
+# ---- Components: source tarballs (parallel-libs) ----
+components/parallel-libs/boost/SOURCES/boost*.tar*
+components/parallel-libs/fftw/SOURCES/fftw-*.tar.gz
+components/parallel-libs/hypre/SOURCES/hypre-*.tar.gz
+components/parallel-libs/mfem/SOURCES/mfem-*.tar
+components/parallel-libs/mumps/SOURCES/MUMPS*.tar.gz
+components/parallel-libs/opencoarrays/SOURCES/*.tar.gz
+components/parallel-libs/petsc/SOURCES/petsc-*.tar.gz
+components/parallel-libs/ptscotch/SOURCES/scotch*.bz2
+components/parallel-libs/ptscotch/SOURCES/scotch*.tar.gz
+components/parallel-libs/scalapack/SOURCES/scalapack-*.tgz
+components/parallel-libs/scalapack/SOURCES/v*.tar.gz
+components/parallel-libs/slepc/SOURCES/slepc-*.tar.gz
+components/parallel-libs/superlu_dist/SOURCES/superlu_dist-*.tar
+components/parallel-libs/trilinos/SOURCES/trilinos-release-*.tar.gz
+
+# ---- Components: source tarballs (perf-tools) ----
+components/perf-tools/dimemas/SOURCES/dimemas-*src.tar.bz2
+components/perf-tools/extrae/SOURCES/extrae-*src.tar.bz2
+components/perf-tools/geopm/SOURCES/*.tar.gz
+components/perf-tools/imb/SOURCES/IMB-v*.tar.gz
+components/perf-tools/likwid/SOURCES/v*.tar.gz
+components/perf-tools/msr-safe/SOURCES/msr-safe-*.tar.gz
+components/perf-tools/omb/SOURCES/osu-micro-benchmarks-*.tar.gz
+components/perf-tools/omb/SOURCES/osu-micro-benchmarks-*.tgz
+components/perf-tools/papi/SOURCES/papi-*.tar.gz
+components/perf-tools/paraver/SOURCES/wxparaver-*-src.tar.bz2
+components/perf-tools/pdtoolkit/SOURCES/pdtoolkit-*.tar.gz
+components/perf-tools/scalasca/SOURCES/scalasca-*.tar.gz
+components/perf-tools/scalasca/SPECS/wget-log
+components/perf-tools/scorep/SOURCES/scorep-*.tar.gz
+components/perf-tools/tau/SOURCES/tau-*.tar.gz
+
+# ---- Components: source tarballs (provisioning) ----
+components/provisioning/warewulf-cluster/SOURCES/*.tar.gz
+components/provisioning/warewulf-common/SOURCES/*.tar.gz
+components/provisioning/warewulf-ipmi/SOURCES/*.tar.gz
+components/provisioning/warewulf-provision/SOURCES/*.tar.gz
+components/provisioning/warewulf-vnfs/SOURCES/*.tar.gz
+components/provisioning/warewulf/SOURCES/warewulf-*.tar.gz
+
+# ---- Components: source tarballs (rms) ----
+components/rms/magpie/SOURCES/*.tar.gz
+components/rms/munge/SOURCES/munge-*.tar.gz
+components/rms/openpbs/SOURCES/v*.tar.gz
+components/rms/pmix/SOURCES/pmix-*.tar.bz2
+components/rms/slurm/SOURCES/slurm-*.tar.bz2
+
+# ---- Components: source tarballs (runtimes) ----
+components/runtimes/charliecloud/SOURCES/charliecloud-*.tar.gz
+
+# ---- Components: source tarballs (serial-libs) ----
+components/serial-libs/cubelib/SOURCES/cubelib*tar.gz
+components/serial-libs/gotcha/SOURCES/gotcha-*.tar.gz
+components/serial-libs/gsl/SOURCES/gsl-*.tar.gz
+components/serial-libs/metis/SOURCES/*.tar.gz
+components/serial-libs/openblas/SOURCES/*.tar.?z
+components/serial-libs/plasma/SOURCES/*.tar.gz
+components/serial-libs/plasma/SOURCES/plasma*.tar.gz
+components/serial-libs/R/SOURCES/R-*.tar.gz
+components/serial-libs/scotch/SOURCES/scotch*.bz2
+components/serial-libs/scotch/SOURCES/scotch*.tar.gz
+components/serial-libs/superlu/SOURCES/*.tar.gz
+
+# ==========================================================
+# Tests: common build/autotools artifacts
+# ==========================================================
+tests/**/*.log
+tests/**/*.log.xml
+tests/**/*.o
+tests/**/*.trs
+tests/**/.deps/
+tests/**/aclocal.m4
+tests/**/autom4te.cache/
+tests/**/compile
+tests/**/config.guess
+tests/**/config.status
+tests/**/config.sub
+tests/**/configure
+tests/**/depcomp
+tests/**/family-*/
+tests/**/install-sh
+tests/**/job*out
+tests/**/Makefile
+tests/**/Makefile.in
+tests/**/missing
+tests/**/report.xml
+tests/**/test-driver
+tests/**/test-suite.log.orig
+tests/ci/__pycache__/
+
+# ---- Tests: apps/hpcg ----
+tests/apps/hpcg/**/*.yaml
+tests/apps/hpcg/**/hpcg_log_*.txt
+tests/apps/hpcg/**/log.HPCG
+tests/apps/hpcg/**/xhpcg
+tests/apps/hpcg/**/xhpcg.*
+
+# ---- Tests: apps/miniDFT ----
+tests/apps/miniDFT/**/log.miniDFT
+tests/apps/miniDFT/tests/benchmark/*.err
+tests/apps/miniDFT/tests/benchmark/*.out
+tests/apps/miniDFT/tests/src/*.mod
+tests/apps/miniDFT/tests/src/mini_dft
+tests/apps/miniDFT/tests/src/mini_dft.*
+tests/apps/miniDFT/tests/test/*.out
+
+# ---- Tests: apps/miniFE ----
+tests/apps/miniFE/**/*.yaml
+tests/apps/miniFE/**/log.miniFE
+tests/apps/miniFE/tests/src/*.a
+tests/apps/miniFE/tests/src/*.linkinfo
+tests/apps/miniFE/tests/src/*.mtx*
+tests/apps/miniFE/tests/src/*.TVD.*
+tests/apps/miniFE/tests/src/*.vec*
+tests/apps/miniFE/tests/src/*.x
+tests/apps/miniFE/tests/src/gmon.out
+tests/apps/miniFE/tests/src/gprof.*
+tests/apps/miniFE/tests/src/miniFE.x.*
+tests/apps/miniFE/tests/src/minife_debug*
+tests/apps/miniFE/tests/src/miniFE_info.hpp
+
+# ---- Tests: apps/prk ----
+tests/apps/prk/tests/branch
+tests/apps/prk/tests/dgemm
+tests/apps/prk/tests/func.c
+tests/apps/prk/tests/global
+tests/apps/prk/tests/nstream
+tests/apps/prk/tests/p2p
+tests/apps/prk/tests/private
+tests/apps/prk/tests/random
+tests/apps/prk/tests/reduce
+tests/apps/prk/tests/shared
+tests/apps/prk/tests/sparse
+tests/apps/prk/tests/stencil
+tests/apps/prk/tests/transpose
+
+# ---- Tests: compilers ----
+tests/compilers/tests/C*_test
+tests/compilers/tests/CXX*_test
+tests/compilers/tests/F90*_test
+
+# ---- Tests: dev-tools ----
+tests/dev-tools/**/*.tap
+tests/dev-tools/hwloc/test/config.h
+tests/dev-tools/hwloc/test/config.h.in
+tests/dev-tools/hwloc/test/src/helloworld
+tests/dev-tools/hwloc/test/stamp-h1
+
+# ---- Tests: libs/adios2 ----
+tests/libs/adios2/adios_config
+tests/libs/adios2/adios_config.flags
+tests/libs/adios2/config.h
+tests/libs/adios2/config.h.in
+tests/libs/adios2/config/libtool.m4
+tests/libs/adios2/config/ltmain.sh
+tests/libs/adios2/config/ltoptions.m4
+tests/libs/adios2/config/ltsugar.m4
+tests/libs/adios2/config/ltversion.m4
+tests/libs/adios2/config/lt~obsolete.m4
+tests/libs/adios2/COPYING
+tests/libs/adios2/INSTALL
+tests/libs/adios2/libtool
+tests/libs/adios2/stamp-h1
+tests/libs/adios2/tests/arrays.bp
+tests/libs/adios2/tests/arrays_read
+tests/libs/adios2/tests/arrays_write
+tests/libs/adios2/tests/genarray/copyarray2d_comm.mod
+tests/libs/adios2/tests/genarray/copyarray_comm.mod
+tests/libs/adios2/tests/scalars.bp
+
+# ---- Tests: libs/boost ----
+tests/libs/boost/tests/*.tap
+
+# ---- Tests: libs/gsl ----
+tests/libs/gsl/**/config.h*
+tests/libs/gsl/**/stamp-h1
+tests/libs/gsl/tests/test
+tests/libs/gsl/tests/test*.dat
+tests/libs/gsl/tests/test*.txt
+tests/libs/gsl/tests/test_static
+
+# ---- Tests: libs/hdf5 ----
+tests/libs/hdf5/**/*.mod
+tests/libs/hdf5/**/makefile
+tests/libs/hdf5/**/makefile.in
+
+# ---- Tests: libs/hypre ----
+tests/libs/hypre/tests/ex1
+tests/libs/hypre/tests/ex11
+tests/libs/hypre/tests/ex12f
+tests/libs/hypre/tests/ex2
+tests/libs/hypre/tests/ex3
+tests/libs/hypre/tests/ex4
+tests/libs/hypre/tests/ex5f
+tests/libs/hypre/tests/ex6
+tests/libs/hypre/tests/ex7
+tests/libs/hypre/tests/ex8
+tests/libs/hypre/tests/ex9
+
+# ---- Tests: libs/scalapack ----
+tests/libs/scalapack/tests/*SCAEXSOL.dat
+
+# ---- Tests: libs/trilinos ----
+tests/libs/trilinos/tests/*.exe
+
+# ---- Tests: mpi ----
+tests/mpi/.test.hello.*
+tests/mpi/.test.job
+tests/mpi/a.out
+tests/mpi/hello.impi
+tests/mpi/hello.openmpi
+tests/mpi/hello_longer.*
+tests/mpi/test.*.out
+
+# ---- Tests: modules ----
+tests/modules/.cmd_output
+
+# ---- Tests: perf-tools/geopm ----
+tests/perf-tools/geopm/tests/tutorial_0
+
+# ---- Tests: perf-tools/imb ----
+tests/perf-tools/imb/tests/IMB_out*
+tests/perf-tools/imb/tests/log.imb-*
+
+# ---- Tests: perf-tools/likwid ----
+tests/perf-tools/likwid/tests/test
+tests/perf-tools/likwid/tests/test*.dat
+tests/perf-tools/likwid/tests/test*.txt
+tests/perf-tools/likwid/tests/test_static
+
+# ---- Tests: perf-tools/papi ----
+tests/perf-tools/papi/tests/test
+tests/perf-tools/papi/tests/test*.dat
+tests/perf-tools/papi/tests/test*.txt
+tests/perf-tools/papi/tests/test_static
+
+# ---- Tests: rms-harness ----
+tests/rms-harness/tests/mpi_exit
+
+# ==========================================================
+# Containers
+# ==========================================================
+containers/examples/mpi/mpi
+
+# ==========================================================
+# Docs
+# ==========================================================
+
+# ---- Docs: install ----
+docs/install/build/
+
+# ---- Docs: papers ----
+docs/papers/HPCSYSPROS/hpcsyspros.aux
+docs/papers/HPCSYSPROS/hpcsyspros.bbl
+docs/papers/HPCSYSPROS/hpcsyspros.blg
+docs/papers/HPCSYSPROS/hpcsyspros.fdb_latexmk
+docs/papers/HPCSYSPROS/hpcsyspros.fls
+docs/papers/HPCSYSPROS/hpcsyspros.log
+docs/papers/HPCSYSPROS/hpcsyspros.out
+docs/papers/HPCSYSPROS/hpcsyspros.pdf
+
+# ---- Docs: recipes/install (LaTeX artifacts) ----
+docs/recipes/install/pkg-ohpc.chglog*
+docs/recipes/install/steps.aux
+docs/recipes/install/steps.fdb_latexmk
+docs/recipes/install/steps.fls
+docs/recipes/install/steps.log
+docs/recipes/install/steps.out
+docs/recipes/install/steps.pdf
+docs/recipes/install/steps.synctex.gz
+docs/recipes/install/steps.toc
+docs/recipes/install/vc.tex
+
+# ---- Docs: recipes/install generated recipe scripts ----
+docs/recipes/install/**/recipe.sh
+
+# ---- Docs: recipes/install/poc-markdown ----
+!docs/recipes/install/poc-markdown/common/figures/*.pdf
+docs/recipes/install/poc-markdown/*.html
+docs/recipes/install/poc-markdown/*.pdf
+docs/recipes/install/poc-markdown/*/common
+docs/recipes/install/poc-markdown/.config.merged.yaml
+docs/recipes/install/poc-markdown/.header-includes.tex
+docs/recipes/install/poc-markdown/.steps.md.j2.tmp
+docs/recipes/install/poc-markdown/steps.md
+docs/recipes/install/poc-markdown/vc.yaml
