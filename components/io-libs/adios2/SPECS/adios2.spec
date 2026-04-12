@@ -37,6 +37,7 @@ BuildRequires: libtool cmake make
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires: ucx%{PROJ_DELIM}
 
 BuildRequires: %{python_prefix}-devel %{python_prefix}-setuptools
 BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
@@ -68,6 +69,7 @@ cd adios2-build
 %ohpc_setup_compiler
 
 module load phdf5
+module load ucx
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
