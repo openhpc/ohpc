@@ -27,7 +27,7 @@ Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:   A general purpose library and file format for storing scientific data
 %endif
-Version:   2.1.0
+Version:   2.1.1
 Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
