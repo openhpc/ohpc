@@ -130,6 +130,10 @@ sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -d
 
 # Always running at least with '--enable-modules'. No need to check for
 # an empty TESTS array.
+MPI_FAMILIES="openmpi5 mpich"
+if [ "$(uname -m)" != "aarch64" ]; then
+	MPI_FAMILIES="${MPI_FAMILIES} mvapich2"
+fi
 if sudo \
 	--user="${USER}" \
 	--preserve-env=SIMPLE_CI \
@@ -144,7 +148,7 @@ if sudo \
 			--enable-rms-harness \
 			--enable-compilers \
 			--with-compiler-families='${COMPILER_FAMILY}' \
-			--with-mpi-families='openmpi5 mpich mvapich2' \
+			--with-mpi-families='${MPI_FAMILIES}' \
 			${TESTS[*]}; \
 		make check"; then
 	TESTS_FAILED=0
