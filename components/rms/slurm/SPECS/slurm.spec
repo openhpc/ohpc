@@ -7,6 +7,7 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+# OpenHPC:check-updates:version-pin 25.05
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
