@@ -365,14 +365,3 @@ docs/recipes/install/vc.tex
 
 # ---- Docs: recipes/install generated recipe scripts ----
 docs/recipes/install/**/recipe.sh
-
-# ---- Docs: recipes/install/poc-markdown ----
-!docs/recipes/install/poc-markdown/common/figures/*.pdf
-docs/recipes/install/poc-markdown/*.html
-docs/recipes/install/poc-markdown/*.pdf
-docs/recipes/install/poc-markdown/*/common
-docs/recipes/install/poc-markdown/.config.merged.yaml
-docs/recipes/install/poc-markdown/.header-includes.tex
-docs/recipes/install/poc-markdown/.steps.md.j2.tmp
-docs/recipes/install/poc-markdown/steps.md
-docs/recipes/install/poc-markdown/vc.yaml

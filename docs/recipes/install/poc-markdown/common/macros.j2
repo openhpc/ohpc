@@ -1,8 +1,0 @@
-{# Jinja2 macros for markdown generation #}
-
-{# Macro to include a file with source markers for debugging #}
-{% macro include_with_marker(filename) %}
-<!-- SOURCE_FILE: {{ filename }} -->
-{% include filename with context %}
-<!-- END_SOURCE_FILE: {{ filename }} -->
-{% endmacro %}
