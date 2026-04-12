@@ -7,6 +7,7 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+# OpenHPC:check-updates:version-pin 4.2
 
 %include %{_sourcedir}/OHPC_macros
 %global pname pmix
