@@ -20,13 +20,13 @@
 %define versionize_script() (sed -i 's,/env python,/env %1,g' %2)
 
 # Unfortunately this changes with every release
-%define package_file_id 256549905
+%define package_file_id 290882913
 
 %{!?build_ldflags:%global build_ldflags %nil}
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.43
+Version:   0.44
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
