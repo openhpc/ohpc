@@ -8,6 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# OpenHPC:check-updates:skip missing dependencies
 # scipy build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
