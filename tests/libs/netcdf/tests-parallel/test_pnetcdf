@@ -71,8 +71,8 @@ teardown() {
 	if [ "$ALL_ENABLED" == "no" ]; then
 		skip "Skipping Fortran tests as requested"
 	fi
-	if [[ "$LMOD_FAMILY_MPI" == "mpich" ]]; then
-		skip "Skipping fortran test bindings with mpich"
+	if [[ "$LMOD_FAMILY_MPI" == "mpich" || "$LMOD_FAMILY_MPI" == "mvapich2" ]]; then
+		skip "Skipping fortran test bindings with ${LMOD_FAMILY_MPI}"
 	fi
 	if [ ! -x F90_parallel ]; then
 		flunk "F90_parallel binary not available"
