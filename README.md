@@ -41,8 +41,11 @@ Subscribe to the [users email list][userlist] or see the
 
 ### Additional Software Requests?
 
-Please see the component [submission page][submission] for more information
-regarding new software inclusion requests.
+If you would like to see new software included in OpenHPC, please
+[open an issue](https://github.com/openhpc/ohpc/issues) with as much
+detail as possible. Even better, consider opening a pull request directly.
+A PR for a new component should typically include tests and documentation,
+but we are happy to guide contributors through the process.
 
 ### Contributing to OpenHPC
 
@@ -57,5 +60,4 @@ using the [System Registration Form][register].
 [3xbranch]: https://github.com/openhpc/ohpc/wiki/3.x
 [4xbranch]: https://github.com/openhpc/ohpc/wiki/4.x
 [register]: https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI
-[submission]: https://github.com/openhpc/submissions
 [userlist]: https://groups.io/g/openhpc-users
