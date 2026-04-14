@@ -8,6 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# OpenHPC:check-updates:skip not used
 # msr-safe.spec
 
 %include %{_sourcedir}/OHPC_macros
