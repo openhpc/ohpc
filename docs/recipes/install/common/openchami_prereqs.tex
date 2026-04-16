@@ -1,8 +1,0 @@
-Add SMS name to /etc/hosts so we can make API calls by hostname
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) echo "${sms_ip} ${sms_name}" >> /etc/hosts
-\end{lstlisting}
-% end_ohpc_run

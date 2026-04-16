@@ -7,7 +7,7 @@ gitignore-lint:
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
 	cd ../..; codespell $$(find components -name "*.spec") \
-		$$(find docs/recipes) \
+		$$(find docs/install) \
 		README.md \
 		CONTRIBUTING.md \
 		containers \
@@ -19,10 +19,6 @@ codespell-lint:
 		misc/check_for_package_updates.py \
 		misc/dist/count_avail_packages.sh \
 		tests/ci/spec_to_test_mapping.py \
-		tests/ci/test_parse_doc.bats \
-		docs/recipes/install/parse_doc.py \
-		docs/recipes/install/common/vc \
-		docs/recipes/install/common/listohpc \
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
@@ -123,7 +119,6 @@ ruff-check-lint:
 		../../misc/build_order.py \
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
-		../../docs/recipes/install/parse_doc.py \
 		../../tests/dev-tools/numpy/tests/MM.py
 
 ruff-format-lint:
@@ -135,17 +130,12 @@ ruff-format-lint:
 		../../misc/build_order.py \
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
-		../../docs/recipes/install/parse_doc.py \
 		../../tests/dev-tools/numpy/tests/MM.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
 		\*.md.j2 \
-		tests/ci/test_parse_doc.bats \
-		docs/recipes/install/parse_doc.py \
-		docs/recipes/install/common/vc \
-		docs/recipes/install/common/listohpc \
 		misc/build_order.sh \
 		misc/check_for_package_updates.py \
 		misc/dist/count_avail_packages.sh \
@@ -257,7 +247,6 @@ shellcheck-lint:
 		../../misc/dist/count_avail_packages.sh \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
-		../../tests/ci/test_parse_doc.bats \
 		../../tests/common/functions \
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
@@ -267,8 +256,6 @@ shellcheck-lint:
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
-		../../docs/recipes/install/common/vc \
-		../../docs/recipes/install/common/listohpc \
 		../../tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
@@ -369,7 +356,6 @@ shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
 	shfmt \
 		-w -d -ln bats \
-		../../tests/ci/test_parse_doc.bats \
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/run \
@@ -459,8 +445,6 @@ shfmt-lint:
 		../../components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		../../components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
 		../../components/rms/slurm/SOURCES/slurm.epilog.clean \
-		../../docs/recipes/install/common/vc \
-		../../docs/recipes/install/common/listohpc \
 		../../containers/*.sh \
 		../../containers/examples/mpi/*.sh \
 		../../tests/perf-tools/papi/ohpc-tests/test_compiler_families \

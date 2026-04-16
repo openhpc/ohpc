@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if git describe >/dev/null 2>&1; then
-	git --no-pager log -1 HEAD --pretty=format:"\gdef\VCRevision{%H}%%%n\gdef\VCDateISO{%as}%%%n" >vc.tex
-else
-	echo "\gdef\VCRevision{non-git-checkout}%" >vc.tex
-	echo -n "\gdef\VCDateISO{" >>vc.tex
-	date '+%Y-%m-%d}' >>vc.tex
-fi
