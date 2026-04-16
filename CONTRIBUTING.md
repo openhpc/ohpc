@@ -28,11 +28,13 @@ specifically for opening issues and pull requests against OpenHPC.
 
 ## **Do you have a component suggestion for inclusion in the OpenHPC distribution?**
 
-* [Open an issue][open] in the submissions repository.
+* [Open an issue][new] with details about the component you would like to see
+  included. Even better, consider opening a pull request directly. A PR for a
+  new component should typically include tests and documentation, but we are
+  happy to guide contributors through the process.
 
 [community]: https://openhpc.community/about/participate
 [contribute]: https://github.com/openhpc/ohpc/wiki/Contributions
 [issues]: https://github.com/openhpc/ohpc/issues
 [new]: https://github.com/openhpc/ohpc/issues/new
-[open]: https://github.com/openhpc/submissions/issues/new
 [userlist]: https://groups.io/g/OpenHPC-users/topics
