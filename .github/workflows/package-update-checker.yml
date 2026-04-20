@@ -33,9 +33,9 @@ jobs:
         mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
         # Run the script and capture output and exit code
-        # Redirect stderr to avoid terminal control characters in GitHub issues
+        # Redirect stderr to a file for debugging (avoid terminal control chars in issues)
         set +e
-        OUTPUT=$(python3 misc/check_for_package_updates.py -o markdown --no-glow 2>/dev/null)
+        OUTPUT=$(python3 misc/check_for_package_updates.py -o markdown --no-glow 2>package_updates_stderr.log)
         EXIT_CODE=$?
         set -e
 
@@ -46,6 +46,13 @@ jobs:
 
         echo "Script completed with exit code: $EXIT_CODE"
         echo "Output length: $(echo "$OUTPUT" | wc -l) lines"
+
+        # Show stderr if the script failed, for debugging
+        if [ $EXIT_CODE -ne 0 ] && [ -s package_updates_stderr.log ]; then
+          echo "--- stderr output ---"
+          cat package_updates_stderr.log
+          echo "--- end stderr ---"
+        fi
 
     - name: Get current date
       id: date
@@ -77,6 +84,13 @@ jobs:
           if (exitCode !== 0 && exitCode !== 1) {
             console.log(`Unexpected exit code ${exitCode}, treating as error condition`);
             markdownOutput = `⚠️ Package update checker encountered an error (exit code: ${exitCode})\n\n${markdownOutput}`;
+          }
+
+          // If the script exited non-zero but produced no output, it likely
+          // crashed rather than finding updates. Do not create an empty issue.
+          if (exitCode !== 0 && markdownOutput.trim().length === 0) {
+            core.setFailed(`Script exited with code ${exitCode} but produced no output (likely a crash). Not creating an issue.`);
+            return;
           }
 
           // Search for existing open issues with package upgrade title pattern
