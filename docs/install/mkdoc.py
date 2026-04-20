@@ -21,7 +21,14 @@ import traceback
 from pathlib import Path
 
 import yaml
-from jinja2 import Environment, FileSystemLoader, StrictUndefined, TemplateSyntaxError, TemplateRuntimeError, UndefinedError
+from jinja2 import (
+    Environment,
+    FileSystemLoader,
+    StrictUndefined,
+    TemplateSyntaxError,
+    TemplateRuntimeError,
+    UndefinedError,
+)
 from jinja2.ext import Extension
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -30,6 +37,7 @@ BASE_DIR = Path(__file__).resolve().parent
 # ---------------------------------------------------------------------------
 # Configuration Loading
 # ---------------------------------------------------------------------------
+
 
 def load_yaml(path: Path) -> dict:
     """Load a YAML file."""
@@ -43,6 +51,7 @@ def load_yaml(path: Path) -> dict:
 # ---------------------------------------------------------------------------
 # Template Rendering
 # ---------------------------------------------------------------------------
+
 
 class SectionCommentExtension(Extension):
     """Inject <!-- +section: path --> ... <!-- -section --> comments around every {% include %}."""
@@ -98,7 +107,7 @@ def render_template(
         if tb:
             # Find the first frame in a template file (not in mkdoc.py)
             for frame in reversed(tb):
-                if frame.filename.endswith('.j2') or 'template' in frame.filename:
+                if frame.filename.endswith(".j2") or "template" in frame.filename:
                     print(f"Error in {frame.filename}", file=sys.stderr)
                     print(f"  Line {frame.lineno}: {str(e)}", file=sys.stderr)
                     break
@@ -125,7 +134,7 @@ def check_line_lengths(content: str, max_length: int = 87) -> int:
         stripped = line.rstrip()
 
         # Track current section from comment markers
-        match = re.match(r'<!-- [+-]section: (.+?) -->', stripped)
+        match = re.match(r"<!-- [+-]section: (.+?) -->", stripped)
         if match:
             current_section = match.group(1)
             section_start_lineno = lineno
@@ -209,7 +218,7 @@ def extract_recipe_script(content: str) -> str:
 
     for line in content.split("\n"):
         # Pass through section markers
-        match = re.search(r'<!-- ([+-])section: (.+) -->', line)
+        match = re.search(r"<!-- ([+-])section: (.+) -->", line)
         if match:
             where, section = match.groups()
             lines.append(f"# --- {where}section: {section} ---")
@@ -242,17 +251,20 @@ def extract_recipe_script(content: str) -> str:
         else:
             # Warn if an ohpc_ directive is missing its closing -->
             if line.startswith("<!-- ohpc_") and line[-3:] != "-->":
-                print(f"Error: ohpc directive missing closing -->: {line}", file=sys.stderr)
+                print(
+                    f"Error: ohpc directive missing closing -->: {line}",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
             # ohpc_if_set: shorthand for enable_* boolean flags (check before ohpc_if)
-            match = re.search(r'<!-- ohpc_if_set (\S+) -->', line)
+            match = re.search(r"<!-- ohpc_if_set (\S+) -->", line)
             if match:
                 lines.append(f'if [[ "${{{match.group(1)}}}" -eq 1 ]];then')
                 continue
             # ohpc_if: general condition
-            match = re.search(r'<!-- ohpc_if (.+) -->', line)
+            match = re.search(r"<!-- ohpc_if (.+) -->", line)
             if match:
-                lines.append(f'if {match.group(1)};then')
+                lines.append(f"if {match.group(1)};then")
                 continue
             if "<!-- ohpc_else -->" in line:
                 lines.append("else")
@@ -261,12 +273,12 @@ def extract_recipe_script(content: str) -> str:
                 lines.append("fi")
                 continue
             # ohpc_command: raw shell line
-            match = re.search(r'<!-- ohpc_command (.+) -->', line)
+            match = re.search(r"<!-- ohpc_command (.+) -->", line)
             if match:
                 lines.append(match.group(1).rstrip())
                 continue
             # ohpc_comment: shell comment line
-            match = re.search(r'<!-- ohpc_comment (.+) -->', line)
+            match = re.search(r"<!-- ohpc_comment (.+) -->", line)
             if match:
                 comment = match.group(1).replace("'", "'\\''")
                 lines.append(f"echo '--- {comment}'")
@@ -289,7 +301,10 @@ def extract_recipe_script(content: str) -> str:
 # Main Build Function
 # ---------------------------------------------------------------------------
 
-def resolve_output(flag, suffix: str, config_path: Path, build_dir: Path) -> Path | None:
+
+def resolve_output(
+    flag, suffix: str, config_path: Path, build_dir: Path
+) -> Path | None:
     """Resolve an output flag: True -> default path, Path -> as-is, None -> skip."""
     if flag is True:
         build_dir.mkdir(exist_ok=True)
@@ -381,8 +396,10 @@ def parse_output_flag(args, with_name: str, path_name: str) -> Path | bool | Non
     with_flag = getattr(args, with_name)
     path_flag = getattr(args, path_name)
     if with_flag and path_flag:
-        print(f"Error: --{with_name.replace('_', '-')} and --{path_name} are mutually exclusive",
-              file=sys.stderr)
+        print(
+            f"Error: --{with_name.replace('_', '-')} and --{path_name} are mutually exclusive",
+            file=sys.stderr,
+        )
         sys.exit(1)
     if with_flag:
         return True  # sentinel: use default path in build/
@@ -438,7 +455,7 @@ Examples:
     config_path = Path(args.config).resolve()
     markdown_output = Path(args.markdown) if args.markdown else None
 
-    print(f'=== mkdoc.py {args.config} ===')
+    print(f"=== mkdoc.py {args.config} ===")
     build(
         config_path=config_path,
         markdown_output=markdown_output,

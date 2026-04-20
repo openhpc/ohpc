@@ -37,25 +37,27 @@ from pathlib import Path
 # Configuration Loading
 # ---------------------------------------------------------------------------
 
+
 def load_config() -> dict:
     """Load configuration from manifests/config.yaml."""
     config_path = Path(__file__).parent / "manifests" / "config.yaml"
-    with open(config_path, 'r', encoding='utf-8') as f:
+    with open(config_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
 _CONFIG = load_config()
 
 # Load configuration into module-level constants
-COMPILER_FAMILIES = _CONFIG['compiler_families']
-MPI_FAMILIES = _CONFIG['mpi_families']
-EXCLUDE_PACKAGES = set(_CONFIG['exclude_packages'])
-CATEGORY_ORDER = list(_CONFIG['categories'].items())
+COMPILER_FAMILIES = _CONFIG["compiler_families"]
+MPI_FAMILIES = _CONFIG["mpi_families"]
+EXCLUDE_PACKAGES = set(_CONFIG["exclude_packages"])
+CATEGORY_ORDER = list(_CONFIG["categories"].items())
 
 
 # ---------------------------------------------------------------------------
 # Data Structures
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class Package:
@@ -78,6 +80,7 @@ class PackageGroup:
 # Parsing
 # ---------------------------------------------------------------------------
 
+
 def parse_pkg_ohpc(filepath: Path) -> list[Package]:
     """Parse pkg-ohpc.all into a list of Package objects.
 
@@ -90,9 +93,7 @@ def parse_pkg_ohpc(filepath: Path) -> list[Package]:
             line = line.strip()
             if not line:
                 continue
-            match = re.match(
-                r"^(\S+)\s+(\S+)\s+(\S+)\s+(ohpc/\S+)\s+(.+)$", line
-            )
+            match = re.match(r"^(\S+)\s+(\S+)\s+(\S+)\s+(ohpc/\S+)\s+(.+)$", line)
             if not match:
                 continue
             name, version, url, category_full, summary = match.groups()
@@ -121,6 +122,7 @@ def parse_meta_ohpc(filepath: Path) -> list[tuple[str, str]]:
 # ---------------------------------------------------------------------------
 # Package Family Classification and Grouping
 # ---------------------------------------------------------------------------
+
 
 def classify_package(name: str) -> tuple[str, bool]:
     """Determine if a package is a compiler/MPI family variant.
@@ -166,9 +168,14 @@ def group_packages(packages: list[Package]) -> list[PackageGroup]:
         base, is_family = classify_package(pkg.name)
 
         if not is_family:
-            groups.append(PackageGroup(
-                [pkg.name], pkg.version, pkg.url, pkg.summary,
-            ))
+            groups.append(
+                PackageGroup(
+                    [pkg.name],
+                    pkg.version,
+                    pkg.url,
+                    pkg.summary,
+                )
+            )
             i += 1
             continue
 
@@ -188,12 +195,16 @@ def group_packages(packages: list[Package]) -> list[PackageGroup]:
                 break
 
         variant_names = [
-            p.name for p in packages[i:end]
-            if p.name not in EXCLUDE_PACKAGES
+            p.name for p in packages[i:end] if p.name not in EXCLUDE_PACKAGES
         ]
-        groups.append(PackageGroup(
-            variant_names, pkg.version, pkg.url, pkg.summary,
-        ))
+        groups.append(
+            PackageGroup(
+                variant_names,
+                pkg.version,
+                pkg.url,
+                pkg.summary,
+            )
+        )
         i = end
 
     return groups
@@ -202,6 +213,7 @@ def group_packages(packages: list[Package]) -> list[PackageGroup]:
 # ---------------------------------------------------------------------------
 # Table Formatting
 # ---------------------------------------------------------------------------
+
 
 def format_summary(summary: str) -> str:
     """Ensure summary ends with a period."""
@@ -260,6 +272,7 @@ def generate_meta_table(patterns: list[tuple[str, str]]) -> str:
 # Document Assembly
 # ---------------------------------------------------------------------------
 
+
 def generate_meta_md(meta_path: Path) -> str:
     """Generate meta-package table markdown from meta-ohpc.all."""
     meta_patterns = parse_meta_ohpc(meta_path)
@@ -309,6 +322,7 @@ def generate_pkg_md(pkg_path: Path) -> str:
 # .all File Generation (queries system package manager)
 # ---------------------------------------------------------------------------
 
+
 def parse_manifest_dir(manifest_dir: Path) -> tuple[str, str]:
     """Extract distro prefix and architecture from manifest directory name.
 
@@ -319,7 +333,10 @@ def parse_manifest_dir(manifest_dir: Path) -> tuple[str, str]:
         if name.endswith(f"-{arch}"):
             prefix = name[: -len(f"-{arch}")]
             return prefix, arch
-    print(f"Error: Cannot detect architecture from directory name: {name}", file=sys.stderr)
+    print(
+        f"Error: Cannot detect architecture from directory name: {name}",
+        file=sys.stderr,
+    )
     print("Expected format: <distro>-<arch> (e.g., el10-x86_64)", file=sys.stderr)
     sys.exit(1)
 
@@ -344,7 +361,8 @@ def build_repo_args(version: str, baseos: str) -> list[str]:
     if minor > 0:
         update_url = f"{repo_base_url}/{major}/update.{version}/{baseos}"
         args += [
-            "--latest-limit", "1",
+            "--latest-limit",
+            "1",
             f"--repofrompath=ohpc-update,{update_url}",
             "--repoid=ohpc-update",
         ]
@@ -352,33 +370,46 @@ def build_repo_args(version: str, baseos: str) -> list[str]:
     return args
 
 
-def dnf_repoquery(query_format: str, pattern: str, version: str,
-                   baseos: str, arch: str) -> str:
+def dnf_repoquery(
+    query_format: str, pattern: str, version: str, baseos: str, arch: str
+) -> str:
     """Run dnf repoquery with proper repo pinning and arch filtering.
 
     Raises SystemExit on failure.
     """
     arch_query = f"{arch},noarch"
     cmd = [
-        "dnf", "repoquery",
+        "dnf",
+        "repoquery",
         f"--arch={arch_query}",
         *build_repo_args(version, baseos),
         f"--queryformat={query_format}",
         pattern,
     ]
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True,
-                                env={**__import__('os').environ, "LC_COLLATE": "C"})
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            check=True,
+            env={**__import__("os").environ, "LC_COLLATE": "C"},
+        )
         return result.stdout
     except subprocess.CalledProcessError as e:
-        print(f"Error: dnf repoquery failed", file=sys.stderr)
+        print("Error: dnf repoquery failed", file=sys.stderr)
         print(f"Command: {' '.join(cmd)}", file=sys.stderr)
         if e.stderr:
             print(f"Error output: {e.stderr}", file=sys.stderr)
         sys.exit(1)
     except FileNotFoundError:
-        print("Error: dnf not found. Must run on a system with dnf installed.", file=sys.stderr)
-        print("For macOS with Lima: lima python3 generate_manifest.py ... --generate-all", file=sys.stderr)
+        print(
+            "Error: dnf not found. Must run on a system with dnf installed.",
+            file=sys.stderr,
+        )
+        print(
+            "For macOS with Lima: lima python3 generate_manifest.py ... --generate-all",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
 
@@ -408,15 +439,22 @@ def generate_all_files(manifest_dir: Path, version: str) -> None:
 
     # Build aarch64 skip pattern
     skip_patterns = _CONFIG.get("aarch64_skip_patterns", [])
-    skip_re = re.compile("|".join(skip_patterns)) if arch == "aarch64" and skip_patterns else None
+    skip_re = (
+        re.compile("|".join(skip_patterns))
+        if arch == "aarch64" and skip_patterns
+        else None
+    )
     if skip_re:
         print(f"  Excluding aarch64-incompatible packages: {', '.join(skip_patterns)}")
 
     # --- Generate pkg-ohpc.all ---
     print("Querying packages...")
     raw = dnf_repoquery(
-        "%{Name} %{Version} %{URL} %{Group} %{Summary}\\n", "*",
-        version, baseos, arch,
+        "%{Name} %{Version} %{URL} %{Group} %{Summary}\\n",
+        "*",
+        version,
+        baseos,
+        arch,
     )
 
     # Filter: only *-ohpc packages, apply skip patterns, sort
@@ -431,8 +469,11 @@ def generate_all_files(manifest_dir: Path, version: str) -> None:
 
     # Also include ohpc-release
     release_raw = dnf_repoquery(
-        "%{Name} %{Version} %{URL} %{Group} %{Summary}\\n", "ohpc-release",
-        version, baseos, arch,
+        "%{Name} %{Version} %{URL} %{Group} %{Summary}\\n",
+        "ohpc-release",
+        version,
+        baseos,
+        arch,
     )
     for line in release_raw.splitlines():
         line = line.strip()
@@ -449,8 +490,11 @@ def generate_all_files(manifest_dir: Path, version: str) -> None:
     # --- Generate meta-ohpc.all ---
     print("Querying meta-packages...")
     raw = dnf_repoquery(
-        "%{Name} %{Group} %{Description}\\n", "ohpc*",
-        version, baseos, arch,
+        "%{Name} %{Group} %{Description}\\n",
+        "ohpc*",
+        version,
+        baseos,
+        arch,
     )
 
     # Filter: ohpc/meta-package group, extract name + description
@@ -474,6 +518,7 @@ def generate_all_files(manifest_dir: Path, version: str) -> None:
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+
 
 def main():
     parser = argparse.ArgumentParser(

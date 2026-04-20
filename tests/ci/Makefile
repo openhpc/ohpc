@@ -119,7 +119,10 @@ ruff-check-lint:
 		../../misc/build_order.py \
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
-		../../tests/dev-tools/numpy/tests/MM.py
+		../../tests/dev-tools/numpy/tests/MM.py \
+		../../docs/install/generate_manifest.py \
+		../../docs/install/mkdoc.py \
+		../../docs/install/wraptext.py
 
 ruff-format-lint:
 	@echo "Running 'ruff format' on selected Python files"
@@ -130,7 +133,10 @@ ruff-format-lint:
 		../../misc/build_order.py \
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
-		../../tests/dev-tools/numpy/tests/MM.py
+		../../tests/dev-tools/numpy/tests/MM.py \
+		../../docs/install/generate_manifest.py \
+		../../docs/install/mkdoc.py \
+		../../docs/install/wraptext.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
