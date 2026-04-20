@@ -1,5 +1,5 @@
 | **Group Name** | **Description** |
-|----------------|----------------|
+|-------|-------------|
 | ohpc-autotools | Collection of GNU autotools packages. |
 | ohpc-base | Collection of base packages. |
 | ohpc-base-compute | Collection of compute node base packages. |

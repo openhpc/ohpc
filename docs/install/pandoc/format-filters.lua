@@ -7,6 +7,16 @@
 --   - Vertical fill (vfill for LaTeX)
 --   - Unnumbered sections (via .unnumbered class)
 --   - Unicode checkmarks (convert to \checkmark for LaTeX)
+--   - HTML <br> tags in table cells (convert to line breaks for PDF)
+--   - Package manifest tables (dashed row separators for PDF)
+
+function RawInline(elem)
+  -- Convert HTML <br> tags to proper line breaks so they render in PDF
+  if elem.format == 'html' and elem.text:match '^<br%s*/?>' then
+    return pandoc.LineBreak()
+  end
+  return elem
+end
 
 function Str(elem)
   -- Replace Unicode checkmark (✓) with LaTeX \checkmark command
@@ -325,4 +335,86 @@ function Div(elem)
     end
   end
   return elem
+end
+
+function Table(elem)
+  -- Add thin gray row separators to manifest tables in PDF output
+  if not FORMAT:match 'latex' then
+    return elem
+  end
+
+  -- Only process manifest tables: package tables ("RPM Package Name")
+  -- and meta-package tables ("Group Name")
+  local head = elem.head
+  if not head.rows or #head.rows == 0 then return elem end
+  local hrow = head.rows[1]
+  if not hrow.cells or #hrow.cells < 2 then return elem end
+  local txt = pandoc.utils.stringify(hrow.cells[1].contents)
+  if txt ~= 'RPM Package Name' and txt ~= 'Group Name' then return elem end
+
+  -- Helper: convert cell content blocks to LaTeX
+  local function cell_to_latex(cell)
+    if not cell.contents or #cell.contents == 0 then return '' end
+    local s = pandoc.write(pandoc.Pandoc(cell.contents), 'latex')
+    s = s:gsub('%s+$', '')
+    return s
+  end
+
+  -- Build column spec from colspecs
+  local ncols = #elem.colspecs
+  local cols = {}
+  for _, spec in ipairs(elem.colspecs) do
+    local w = spec[2]
+    if w and w > 0 then
+      table.insert(cols, string.format(
+        '>{\\raggedright\\arraybackslash}p{(\\linewidth - %d\\tabcolsep) * \\real{%.4f}}',
+        2 * ncols, w))
+    else
+      table.insert(cols, 'l')
+    end
+  end
+
+  -- Header cells
+  local hcells = {}
+  for _, c in ipairs(hrow.cells) do
+    table.insert(hcells, cell_to_latex(c))
+  end
+
+  -- Collect all body rows
+  local all_rows = {}
+  for _, tbody in ipairs(elem.bodies) do
+    for _, row in ipairs(tbody.body) do
+      table.insert(all_rows, row)
+    end
+  end
+
+  -- Build LaTeX
+  local latex = {}
+  table.insert(latex, '\\begin{longtable}[]{@{}')
+  for i, col in ipairs(cols) do
+    table.insert(latex, '  ' .. col)
+  end
+  table.insert(latex, '@{}}')
+  table.insert(latex, '\\toprule\\noalign{}')
+  table.insert(latex, table.concat(hcells, ' & ') .. ' \\\\')
+  table.insert(latex, '\\midrule\\noalign{}')
+  table.insert(latex, '\\endhead')
+  table.insert(latex, '\\bottomrule\\noalign{}')
+  table.insert(latex, '\\endlastfoot')
+
+  -- Body rows with dashed separators
+  for i, row in ipairs(all_rows) do
+    local rcells = {}
+    for _, c in ipairs(row.cells) do
+      table.insert(rcells, cell_to_latex(c))
+    end
+    table.insert(latex, table.concat(rcells, ' & ') .. ' \\\\')
+    if i < #all_rows then
+      table.insert(latex, '\\arrayrulecolor{black!20}\\specialrule{0.3pt}{1pt}{1pt}\\arrayrulecolor{black}')
+    end
+  end
+
+  table.insert(latex, '\\end{longtable}')
+
+  return pandoc.RawBlock('latex', table.concat(latex, '\n'))
 end

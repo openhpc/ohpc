@@ -50,6 +50,7 @@ _CONFIG = load_config()
 # Load configuration into module-level constants
 COMPILER_FAMILIES = _CONFIG["compiler_families"]
 MPI_FAMILIES = _CONFIG["mpi_families"]
+BUILD_VARIANTS = _CONFIG.get("build_variants", [])
 EXCLUDE_PACKAGES = set(_CONFIG["exclude_packages"])
 CATEGORY_ORDER = list(_CONFIG["categories"].items())
 
@@ -71,6 +72,7 @@ class Package:
 @dataclass
 class PackageGroup:
     names: list[str]
+    base_name: str
     version: str
     url: str
     summary: str
@@ -171,6 +173,7 @@ def group_packages(packages: list[Package]) -> list[PackageGroup]:
             groups.append(
                 PackageGroup(
                     [pkg.name],
+                    pkg.name,
                     pkg.version,
                     pkg.url,
                     pkg.summary,
@@ -200,6 +203,7 @@ def group_packages(packages: list[Package]) -> list[PackageGroup]:
         groups.append(
             PackageGroup(
                 variant_names,
+                base,
                 pkg.version,
                 pkg.url,
                 pkg.summary,
@@ -231,22 +235,61 @@ def format_url(url: str) -> str:
     return f"[{url}]({url})"
 
 
+def strip_ohpc_suffix(name: str) -> str:
+    """Remove the -ohpc suffix from a package name, if present."""
+    if name.endswith("-ohpc"):
+        return name[: -len("-ohpc")]
+    return name
+
+
+def display_name(group: PackageGroup) -> str:
+    """Compute the display name for a package group.
+
+    For family groups (multiple variants), strips the -ohpc suffix and
+    any build variant infixes (ofi, ucx, pmix) from the base name.
+    For single packages, just strips the -ohpc suffix.
+    """
+    name = strip_ohpc_suffix(group.base_name)
+    for variant in BUILD_VARIANTS:
+        suffix = f"-{variant}"
+        if name.endswith(suffix):
+            name = name[: -len(suffix)]
+    return name
+
+
+def merge_groups(groups: list[PackageGroup]) -> list[PackageGroup]:
+    """Merge consecutive groups that share the same display name and version."""
+    if not groups:
+        return []
+    merged: list[PackageGroup] = [groups[0]]
+    for group in groups[1:]:
+        prev = merged[-1]
+        if display_name(group) == display_name(prev) and group.version == prev.version:
+            # Merge into previous group, keeping its metadata
+            prev.names.extend(group.names)
+        else:
+            merged.append(group)
+    return merged
+
+
 def generate_package_table(groups: list[PackageGroup]) -> str:
     """Generate a markdown table from PackageGroups."""
     if not groups:
         return ""
 
+    groups = merge_groups(groups)
+
     lines = [
         "| **RPM Package Name** | **Version** | **Info/URL** |",
-        "|----------------------|-------------|--------------|",
+        "|------|--|------------|",
     ]
 
     for group in groups:
-        names_cell = "<br>".join(group.names)
+        name = display_name(group)
         summary = format_summary(group.summary)
         url = format_url(group.url)
         info = f"{summary} {url}".rstrip()
-        lines.append(f"| {names_cell} | {group.version} | {info} |")
+        lines.append(f"| {name} | {group.version} | {info} |")
 
     return "\n".join(lines)
 
@@ -258,7 +301,7 @@ def generate_meta_table(patterns: list[tuple[str, str]]) -> str:
 
     lines = [
         "| **Group Name** | **Description** |",
-        "|----------------|----------------|",
+        "|-------|-------------|",
     ]
 
     for name, description in patterns:

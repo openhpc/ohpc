@@ -1,5 +1,5 @@
 | **Group Name** | **Description** |
-|----------------|----------------|
+|-------|-------------|
 | ohpc-autotools | Collection of GNU autotools packages. |
 | ohpc-base | Collection of base packages. |
 | ohpc-base-compute | Collection of compute node base packages. |
@@ -7,6 +7,9 @@
 | ohpc-gnu15-mpich-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime. |
 | ohpc-gnu15-mpich-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime. |
 | ohpc-gnu15-mpich-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime. |
+| ohpc-gnu15-mvapich2-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu15-mvapich2-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu15-mvapich2-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
 | ohpc-gnu15-openmpi5-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime. |
 | ohpc-gnu15-openmpi5-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime. |
 | ohpc-gnu15-openmpi5-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime. |

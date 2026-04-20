@@ -1,5 +1,5 @@
 | **Group Name** | **Description** |
-|----------------|----------------|
+|-------|-------------|
 | ohpc-arm1-io-libs | Collection of IO library builds for use with the Arm Compiler for Linux toolchain. |
 | ohpc-arm1-mpich-parallel-libs | Collection of parallel library builds for use with the Arm Compiler for Linux and the MPICH runtime. |
 | ohpc-arm1-openmpi5-parallel-libs | Collection of parallel library builds for use with the Arm Compiler for Linux and the openmpi5 runtime. |

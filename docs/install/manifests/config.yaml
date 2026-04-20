@@ -38,6 +38,12 @@ mpi_families:
   - impi
   - mpich
 
+# Build variant infixes stripped from display names (e.g. mpich-ofi -> mpich)
+build_variants:
+  - ofi
+  - ucx
+  - pmix
+
 # Packages to exclude from manifest generation
 exclude_packages:
   - slurm-sjstat-ohpc
