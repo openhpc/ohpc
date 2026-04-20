@@ -128,7 +128,9 @@ ruff-check-lint:
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
 		../../tests/dev-tools/numpy/tests/MM.py \
+		../../docs/install/generate_manifest.py \
 		../../docs/install/mkdoc.py \
+		../../docs/install/wraptext.py \
 		../../docs/install/explorer/mksite.py \
 		../../docs/install/explorer/test/e2e.py \
 		../../docs/install/tests/test_markers.py \
@@ -144,7 +146,9 @@ ruff-format-lint:
 		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py \
 		../../tests/dev-tools/numpy/tests/MM.py \
+		../../docs/install/generate_manifest.py \
 		../../docs/install/mkdoc.py \
+		../../docs/install/wraptext.py \
 		../../docs/install/explorer/mksite.py \
 		../../docs/install/explorer/test/e2e.py \
 		../../docs/install/tests/test_markers.py \
