@@ -726,7 +726,14 @@ def get_latest_uoregon_tau_version(
     base_url = f"https://www.cs.uoregon.edu/research/tau/{directory}/"
     debug_info(f"Checking UOregon TAU directory listing at {base_url}", verbose)
 
-    r = requests.get(base_url, timeout=30)
+    try:
+        r = requests.get(base_url, timeout=30)
+    except requests.exceptions.SSLError:
+        debug_warn(
+            f"SSL certificate error fetching {base_url}",
+            verbose,
+        )
+        return None
     if not r.ok:
         debug_warn(
             f"Failed to fetch UOregon TAU directory listing for {directory}",
