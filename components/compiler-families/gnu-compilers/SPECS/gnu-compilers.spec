@@ -31,7 +31,7 @@
 
 %global gnu15_version 15.2.0
 %global gnu15_gmp_version 6.3.0
-%global gnu15_mpc_version 1.4.0
+%global gnu15_mpc_version 1.4.1
 %global gnu15_mpfr_version 4.2.2
 
 %if "%{compiler_family}" == "gnu12"
