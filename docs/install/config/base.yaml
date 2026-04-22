@@ -1,7 +1,7 @@
 # Base configuration - universal defaults across all recipes
 
 # OpenHPC version
-ohpc_version: "4.0"
+ohpc_version: "4.1"
 ohpc_version_tree: "4"
 ohpc_repo_server: "http://repos.openhpc.community"
 
