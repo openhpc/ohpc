@@ -11,29 +11,12 @@ access from the *head node* to the internet.  We then source
 {{ pkg_install }} podman buildah ansible-core nfs-utils tcpdump tftp curl yq jq
 rpm --import \
 	https://github.com/OpenCHAMI/release/releases/download/\
-v{{ openchami_version }}/public_gpg_key.asc
+v{{ openchami_version }}/repo_public.asc
 {{ pkg_install }} \
 	https://github.com/OpenCHAMI/release/releases/download/\
 v{{ openchami_version }}/openchami-{{ openchami_version }}.rpm
 ```
 <!-- ohpc_end -->
-
-{% if is_aarch64 %}
-<!-- ohpc_begin -->
-```bash
-# FIXME: Patch to use versions that support aarch64 and fix step-ca regression
-sed -i 's|ghcr.io/openchami/opaal:v0.3.10|ghcr.io/openchami/opaal:v0.3.12|g' \
-	/etc/containers/systemd/opaal.container \
-	/etc/containers/systemd/opaal-idp.container
-sed -i 's|ghcr.io/openchami/local-ca:v0.2.2|ghcr.io/openchami/local-ca:v0.2.3|g' \
-	/etc/containers/systemd/step-ca.container
-sed -i '\|^Image=ghcr.io/openchami/local-ca|a '\
-'Exec=/usr/bin/step-ca --password-file /home/step/secrets/password '\
-'/home/step/config/ca.json' \
-	/etc/containers/systemd/step-ca.container
-```
-<!-- ohpc_end -->
-{% endif %}
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Source /etc/profile.d/openchami.sh -->
