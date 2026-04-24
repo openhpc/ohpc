@@ -121,6 +121,7 @@ ruff-check-lint:
 		../../tests/ci/spec_to_test_mapping.py \
 		../../tests/dev-tools/numpy/tests/MM.py \
 		../../docs/install/generate_manifest.py \
+		../../docs/install/generate_changelog.py \
 		../../docs/install/mkdoc.py \
 		../../docs/install/wraptext.py
 
@@ -135,6 +136,7 @@ ruff-format-lint:
 		../../tests/ci/spec_to_test_mapping.py \
 		../../tests/dev-tools/numpy/tests/MM.py \
 		../../docs/install/generate_manifest.py \
+		../../docs/install/generate_changelog.py \
 		../../docs/install/mkdoc.py \
 		../../docs/install/wraptext.py
 

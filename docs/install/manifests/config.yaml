@@ -74,3 +74,11 @@ categories:
   runtimes: "Runtimes"
   serial-libs: "Serial/Threaded Libraries"
   parallel-libs: "Parallel Libraries"
+
+# Mapping from new manifest directory names to old-style paths at a
+# previous git release tag (used by generate_changelog.py)
+old_manifest_paths:
+  el10-x86_64: docs/recipes/install/almalinux10/x86_64/warewulf4/slurm/manifest
+  el10-aarch64: docs/recipes/install/almalinux10/aarch64/warewulf4/slurm/manifest
+  oe2403-x86_64: docs/recipes/install/openeuler24.03/x86_64/warewulf4/slurm/manifest
+  oe2403-aarch64: docs/recipes/install/openeuler24.03/aarch64/warewulf4/slurm/manifest
