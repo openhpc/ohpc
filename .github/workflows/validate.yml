@@ -215,7 +215,9 @@ jobs:
       image: docker.io/openeuler/openeuler:22.03-lts-sp3
     steps:
     - name: Switch repo
-      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
+      run: |
+        sed -i "s@repo.openeuler.org@mirrors.ocf.berkeley.edu/openeuler@g" /etc/yum.repos.d/openEuler.repo
+        sed -i "s@^\(metalink=\)@#\1@g" /etc/yum.repos.d/openEuler.repo
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v4
@@ -280,7 +282,9 @@ jobs:
     needs: build_on_openEuler
     steps:
     - name: Switch repo
-      run: sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
+      run: |
+        sed -i "s@repo.openeuler.org@mirrors.ocf.berkeley.edu/openeuler@g" /etc/yum.repos.d/openEuler.repo
+        sed -i "s@^\(metalink=\)@#\1@g" /etc/yum.repos.d/openEuler.repo
     - name: Install git
       run: dnf -y install git
     - uses: actions/checkout@v4
