@@ -72,7 +72,7 @@ enable_arm1_packages="${enable_arm1_packages:-0}"
 
 nagios_web_password="${nagios_web_password:-unknown}"
 update_slurm_nodeconfig="${update_slurm_nodeconfig:-0}"
-slurm_node_config="${slurm_node_config:-c[1-4] Sockets=2 CoresPerSocket=12 ThreadsPerCore=2}"
+slurm_node_config="${slurm_node_config:-NodeName=c[1-4] Sockets=2 CoresPerSocket=12 ThreadsPerCore=2}"
 
 # -------------------------
 # compute node settings
