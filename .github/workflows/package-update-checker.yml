@@ -4,21 +4,55 @@ on:
   schedule:
     # Run every Monday at 6:00 AM UTC
     - cron: '0 6 * * 1'
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: >
+          Branch to check for package updates. Leave empty to check
+          all configured branches.
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: read
   issues: write
 
 jobs:
+  # Determine which branches to check
+  setup-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.set-branches.outputs.branches }}
+    steps:
+    - name: Set branch matrix
+      id: set-branches
+      run: |
+        # Add branches to check here as the project evolves
+        ALL_BRANCHES='["3.x", "4.x"]'
+        INPUT_BRANCH="${{ inputs.branch }}"
+
+        if [ -n "$INPUT_BRANCH" ]; then
+          echo "branches=[\"${INPUT_BRANCH}\"]" >> $GITHUB_OUTPUT
+        else
+          echo "branches=${ALL_BRANCHES}" >> $GITHUB_OUTPUT
+        fi
+
   check-updates:
+    needs: setup-matrix
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/openhpc/ohpc-analysis:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ${{ fromJson(needs.setup-matrix.outputs.branches) }}
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: ${{ matrix.branch }}
 
     - name: Run package update checker
       id: check_updates
@@ -66,9 +100,11 @@ jobs:
           const fs = require('fs');
           const exitCode = ${{ steps.check_updates.outputs.exit_code }};
           const currentDate = '${{ steps.date.outputs.date }}';
-          const issueTitle = `📦 Package Upgrades Necessary - ${currentDate}`;
+          const branch = '${{ matrix.branch }}';
+          const issueTitle = `📦 Package Upgrades Necessary [${branch}] - ${currentDate}`;
+          const titlePrefix = `📦 Package Upgrades Necessary [${branch}]`;
 
-          console.log(`Processing package updates with exit code: ${exitCode}`);
+          console.log(`Processing package updates for branch ${branch} with exit code: ${exitCode}`);
 
           // Read the markdown output
           let markdownOutput;
@@ -94,6 +130,7 @@ jobs:
           }
 
           // Search for existing open issues with package upgrade title pattern
+          // for this specific branch
           const { data: issues } = await github.rest.issues.listForRepo({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -101,17 +138,18 @@ jobs:
             labels: ['package-updates']
           });
 
-          // Find the most recent package upgrade issue (if any)
+          // Find the most recent package upgrade issue for this branch
           const existingIssue = issues
-            .filter(issue => issue.title.includes('📦 Package Upgrades Necessary'))
+            .filter(issue => issue.title.includes(titlePrefix))
             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
 
           // Prepare issue body
           const issueBody = [
-            `# Package Update Status - ${currentDate}`,
+            `# Package Update Status [${branch}] - ${currentDate}`,
             '',
-            'This issue tracks available package updates from GitHub releases.',
+            `This issue tracks available package updates for the \`${branch}\` branch.`,
             '',
+            `**Branch:** \`${branch}\``,
             `**Last checked:** ${new Date().toISOString()}`,
             `**Status:** ${exitCode === 0 ? '✅ All packages up to date' : '🔄 Updates available'}`,
             '',
@@ -127,7 +165,7 @@ jobs:
           if (exitCode === 0) {
             // No updates available
             if (existingIssue) {
-              console.log(`Closing issue #${existingIssue.number} - no updates available`);
+              console.log(`Closing issue #${existingIssue.number} - no updates available for ${branch}`);
               await github.rest.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -140,15 +178,15 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: existingIssue.number,
-                body: '✅ All packages are now up to date. Closing this issue.'
+                body: `✅ All packages on \`${branch}\` are now up to date. Closing this issue.`
               });
             } else {
-              console.log('No updates available and no open issue exists - nothing to do');
+              console.log(`No updates available for ${branch} and no open issue exists - nothing to do`);
             }
           } else {
             // Updates are available (exit code 1)
             if (existingIssue) {
-              console.log(`Updating existing issue #${existingIssue.number} with latest package updates`);
+              console.log(`Updating existing issue #${existingIssue.number} with latest package updates for ${branch}`);
               await github.rest.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -157,7 +195,7 @@ jobs:
                 body: issueBody
               });
             } else {
-              console.log('Creating new issue for package updates');
+              console.log(`Creating new issue for package updates on ${branch}`);
               const { data: newIssue } = await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
