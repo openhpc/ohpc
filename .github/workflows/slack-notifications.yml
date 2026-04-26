@@ -1,7 +1,7 @@
 name: "Slack Notifications: PRs and Issues"
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, closed, reopened]
   issues:
     types: [opened, closed, reopened]
@@ -19,10 +19,10 @@ jobs:
           # This converts the GitHub data into the "text" field Slack was missing
           payload: |
             {
-              "text": "*${{ github.event_name == 'pull_request' && 'Pull Request' || 'Issue' }} Update* in ${{ github.repository }}",
+              "text": "*${{ github.event_name == 'pull_request_target' && 'Pull Request' || 'Issue' }} Update* in ${{ github.repository }}",
               "attachments": [
                 {
-                  "color": "${{ github.event.action == 'closed' ? '#FF0000' : '#36a64f' }}",
+                  "color": "${{ github.event.action == 'closed' && '#FF0000' || '#36a64f' }}",
                   "blocks": [
                     {
                       "type": "section",
