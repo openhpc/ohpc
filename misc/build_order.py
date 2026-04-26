@@ -44,6 +44,7 @@ def topological_sort(source):
 
 
 spec_dict = {}
+spec_path_dict = {}  # Maps spec filename to full path
 dependency = {}
 
 if len(sys.argv) != 2:
@@ -56,6 +57,9 @@ for line in open(sys.argv[1]):
     # The spec_dict is later used to translate
     # package names into spec files
     spec_dict[line[1]] = line[0]
+    # Store full path mapping if available (field 4)
+    if len(line) >= 4:
+        spec_path_dict[line[0]] = line[3]
     # Ignore the meta_packages
     if line[1] == "meta-packages":
         continue
@@ -113,4 +117,8 @@ dep_list = [(k, set(v)) for (k, v) in dependency.items()]
 
 # Sort and print
 for i in topological_sort(dep_list):
-    print("%s" % i, end=" ")
+    # Use full path if available, otherwise fall back to spec filename
+    output_path = spec_path_dict.get(i, i)
+    print("%s" % output_path, end=" ")
+
+print("")
