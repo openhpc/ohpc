@@ -1,0 +1,50 @@
+name: "Slack Notifications: PRs and Issues"
+
+on:
+  pull_request:
+    types: [opened, closed, reopened]
+  issues:
+    types: [opened, closed, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  slack_notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send custom JSON to Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          # This converts the GitHub data into the "text" field Slack was missing
+          payload: |
+            {
+              "text": "*${{ github.event_name == 'pull_request' && 'Pull Request' || 'Issue' }} Update* in ${{ github.repository }}",
+              "attachments": [
+                {
+                  "color": "${{ github.event.action == 'closed' ? '#FF0000' : '#36a64f' }}",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Title:* ${{ github.event.pull_request.title || github.event.issue.title }}\n*Action:* ${{ github.event.action }}\n*Author:* ${{ github.actor }}"
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": { "type": "plain_text", "text": "View on GitHub" },
+                          "url": "${{ github.event.pull_request.html_url || github.event.issue.html_url }}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
