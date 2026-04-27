@@ -32,7 +32,7 @@ runs:
         # Raw output for collapsible section
         echo "$RAW_STATS" > /tmp/ccache-stats/raw.txt
     - name: Upload ccache stats
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ccache-stats-${{ inputs.artifact-suffix }}
         retention-days: 1

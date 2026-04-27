@@ -49,7 +49,7 @@ jobs:
 
     - name: Post comment to PR
       if: steps.artifact_check.outputs.artifacts_found == 'true'
-      uses: actions/github-script@v7
+      uses: actions/github-script@v9
       with:
         script: |
           const fs = require('fs');

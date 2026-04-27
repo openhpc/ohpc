@@ -28,7 +28,7 @@ jobs:
       image: ghcr.io/openhpc/ohpc-analysis:latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Changes
@@ -64,9 +64,9 @@ jobs:
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}
@@ -99,7 +99,7 @@ jobs:
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler }}
         touch /tmp/empty
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: rhel-rpms-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
@@ -115,7 +115,7 @@ jobs:
         mode: save
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -152,9 +152,9 @@ jobs:
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -169,7 +169,7 @@ jobs:
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         name: rhel-rpms-${{ matrix.compiler }}-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
@@ -208,7 +208,7 @@ jobs:
       # To display test results from forked repositories they need to
       # be uploaded and then analyzed.
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
@@ -220,7 +220,7 @@ jobs:
         mode: save
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}
@@ -251,9 +251,9 @@ jobs:
     steps:
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}
@@ -275,7 +275,7 @@ jobs:
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: openEuler-rpms-${{ matrix.os }}
         retention-days: 1
@@ -286,7 +286,7 @@ jobs:
           /tmp/empty
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -316,9 +316,9 @@ jobs:
     steps:
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -328,7 +328,7 @@ jobs:
       run: tests/ci/prepare-ci-environment.sh  ${{ matrix.compiler }}
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         name: openEuler-rpms-${{ matrix.os }}
         path: /home/ohpc/rpmbuild/RPMS
@@ -357,7 +357,7 @@ jobs:
         fi
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}
@@ -374,7 +374,7 @@ jobs:
     steps:
     - name: Upload
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: event-file
         retention-days: 1
