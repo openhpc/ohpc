@@ -7,6 +7,7 @@ repo_base_url: http://repos.openhpc.community/.staging/OpenHPC
 baseos_map:
   el9: EL_9
   oe2203: openEuler_22.03
+  leap15: Leap_15
 
 # Packages to skip on aarch64 (regex patterns for grep -E)
 aarch64_skip_patterns:
