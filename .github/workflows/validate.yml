@@ -48,7 +48,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build on RHEL (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
-      image: docker.io/library/almalinux:9
+      image: ghcr.io/openhpc/ohpc-validate-almalinux:3.x
       volumes:
         - /usr:/host/usr
         - /opt:/host/opt
@@ -57,8 +57,8 @@ jobs:
       # Needed to have enough space to install the Intel compiler
       run: |
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
-    - name: Install git
-      run: dnf -y install git createrepo_c
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -125,7 +125,7 @@ jobs:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
     container:
-      image: docker.io/library/almalinux:9
+      image: ghcr.io/openhpc/ohpc-validate-almalinux:3.x
       options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
       volumes:
         - /usr:/host/usr
@@ -136,8 +136,8 @@ jobs:
       # Needed to have enough space to install the Intel compiler
       run: |
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -223,14 +223,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build on openEuler (${{ matrix.arch }})
     container:
-      image: docker.io/openeuler/openeuler:22.03-lts-sp3
+      image: ghcr.io/openhpc/ohpc-validate-openeuler:3.x
     steps:
-    - name: Switch repo
-      run: |
-        sed -i "s@repo.openeuler.org@mirrors.ocf.berkeley.edu/openeuler@g" /etc/yum.repos.d/openEuler.repo
-        sed -i "s@^\(metalink=\)@#\1@g" /etc/yum.repos.d/openEuler.repo
-    - name: Install git
-      run: dnf -y install git createrepo_c
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -289,16 +285,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Test on openEuler (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
-      image: docker.io/openeuler/openeuler:22.03-lts-sp3
+      image: ghcr.io/openhpc/ohpc-validate-openeuler:3.x
       options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
     needs: build_on_openEuler
     steps:
-    - name: Switch repo
-      run: |
-        sed -i "s@repo.openeuler.org@mirrors.ocf.berkeley.edu/openeuler@g" /etc/yum.repos.d/openEuler.repo
-        sed -i "s@^\(metalink=\)@#\1@g" /etc/yum.repos.d/openEuler.repo
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -363,10 +355,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build on LEAP (${{ matrix.arch }})
     container:
-      image: registry.opensuse.org/opensuse/leap:15.5
+      image: ghcr.io/openhpc/ohpc-validate-leap:3.x
     steps:
-    - name: Install git
-      run: zypper -n update; zypper -n install git createrepo_c python311
+    - name: Update packages
+      run: zypper -n update
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -424,12 +416,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Test on LEAP (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
-      image: registry.opensuse.org/opensuse/leap:15.5
+      image: ghcr.io/openhpc/ohpc-validate-leap:3.x
       options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
     needs: build_on_leap
     steps:
-    - name: Install git
-      run: zypper -n update; zypper -n install git
+    - name: Update packages
+      run: zypper -n update
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
