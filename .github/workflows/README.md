@@ -14,7 +14,8 @@ available on GitHub and manages GitHub issues to track update status.
 1. **Schedule**: Manual triggering only (hourly schedule disabled for now)
 2. **Container**: Uses Red Hat UBI 10 container
    (`registry.access.redhat.com/ubi10:latest`)
-3. **Dependencies**: Installs required tools (rpm-build, rpmdevtools, curl, jq, git)
+3. **Dependencies**: Installs required tools
+   (rpm-build, rpmdevtools, curl, jq, git)
 4. **RPM Environment**: Sets up RPM build directories for proper spec file parsing
 5. **Package Check**: Executes `misc/check_for_package_updates.sh` with
    markdown output

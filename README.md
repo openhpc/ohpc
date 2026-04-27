@@ -8,8 +8,8 @@
 
 This stack provides a variety of common, pre-built ingredients required to
 deploy and manage an HPC Linux cluster including provisioning tools, resource
-management, I/O clients, runtimes, development tools, containers, and a variety of
-scientific libraries.
+management, I/O clients, runtimes, development tools, containers,
+and a variety of scientific libraries.
 
 There are currently three release series: the [2.x][2xbranch], the
 [3.x][3xbranch] and the [4.x][4xbranch] which target different major Linux OS
