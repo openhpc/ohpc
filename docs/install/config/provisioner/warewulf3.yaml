@@ -1,0 +1,7 @@
+# Warewulf v3 provisioner configuration
+# Uses wwsh/wwmkchroot/wwbootstrap/wwvnfs (not wwctl)
+
+provisioner: "warewulf3"
+provisioner_name: "Warewulf"
+is_warewulf: false
+is_warewulf3: true

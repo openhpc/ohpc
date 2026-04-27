@@ -1,0 +1,28 @@
+## Customize System Configuration
+
+Prior to assembling the image, it is advantageous to perform additional
+customization within the chroot environment. The following steps add a local
+*ssh* key created by Warewulf to support remote access, and enable NFS mounting
+of the `$HOME` file system and the public OpenHPC install path
+(`/opt/ohpc/pub`) hosted by the *head node*.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Customize system configuration -->
+```bash
+# Initialize warewulf database and ssh_keys
+wwinit database
+wwinit ssh_keys
+
+# Add NFS client mounts of /home and /opt/ohpc/pub to base image
+echo "${sms_ip}:/home /home nfs nfsvers=4,nodev,nosuid 0 0" \
+    >> $CHROOT/etc/fstab
+echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=4,nodev 0 0" \
+    >> $CHROOT/etc/fstab
+
+# Export /home and OpenHPC public packages from head node
+echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+
+systemctl restart nfs-server
+```
+<!-- ohpc_end -->

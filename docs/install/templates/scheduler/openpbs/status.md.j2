@@ -1,0 +1,13 @@
+## Check Cluster Status
+
+After this, check status of the nodes within OpenPBS by using the `pbsnodes`
+command. All compute nodes should be in a *free* state. If a node is not
+responding, the following may help diagnose the issue:
+
+```bash
+pbsnodes -a
+```
+
+In case of additional OpenPBS issues, ensure that the `pbs` service is running
+on both the head node and compute nodes, and that the `PBS_SERVER` value in
+`/etc/pbs.conf` on the compute nodes matches the head node hostname.

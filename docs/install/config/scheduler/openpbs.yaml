@@ -1,0 +1,6 @@
+# OpenPBS scheduler configuration
+
+scheduler: "openpbs"
+scheduler_name: "OpenPBS"
+is_slurm: false
+is_openpbs: true

@@ -1,0 +1,40 @@
+<!-- ohpc_begin -->
+{% if is_slurm %}
+<!-- ohpc_comment Add Slurm and other components to compute instance -->
+```bash
+# Copy credential files to ensure consistent uid/gids for slurm/munge
+cp /etc/passwd /etc/group $CHROOT/etc
+
+# Add Slurm client support meta-package and enable munge and slurmd
+{{ pkg_install_chroot }} ohpc-slurm-client
+chroot $CHROOT systemctl enable munge
+chroot $CHROOT systemctl enable slurmd
+
+# Register Slurm server with computes (using "configless" option)
+echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
+{% elif is_openpbs %}
+<!-- ohpc_comment Add OpenPBS and other components to compute instance -->
+```bash
+# Add OpenPBS client support
+{{ pkg_install_chroot }} openpbs-execution-ohpc
+perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
+echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
+chroot $CHROOT opt/pbs/libexec/pbs_habitat
+perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_name}/" \
+    $CHROOT/var/spool/pbs/mom_priv/config
+echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
+chroot $CHROOT systemctl enable pbs
+{% endif %}
+
+# Add Network Time Protocol (NTP) support
+{{ pkg_install_chroot }} chrony
+# Identify head node as local NTP server
+echo "server ${sms_ip} iburst" >> $CHROOT/etc/chrony.conf
+
+# Add kernel drivers (matching kernel version on head node)
+{{ pkg_install_chroot }} kernel-$(uname -r)
+
+# Include modules user environment
+{{ pkg_install_chroot }} lmod-ohpc
+```
+<!-- ohpc_end -->

@@ -1,0 +1,16 @@
+## Install Warewulf on *Head Node*
+
+To add support for provisioning services, we install the Warewulf provisioning
+system packages. Then the main Warewulf configuration files are edited to
+reflect the environment.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add baseline OpenHPC -->
+```bash
+# Make sure required variables are set
+: "${sms_eth_internal:?ERROR: sms_eth_internal not set}"
+
+# Install Warewulf
+{{ pkg_install }} warewulf-ohpc
+```
+<!-- ohpc_end -->

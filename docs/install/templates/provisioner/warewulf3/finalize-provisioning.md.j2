@@ -1,0 +1,34 @@
+## Finalize Provisioning Configuration
+
+Warewulf employs a two-stage boot process: a bootstrap image initializes the
+process, and a Virtual Node File System (VNFS) capsule contains the full system
+image.
+
+### Assemble Bootstrap Image
+
+The bootstrap image includes the runtime kernel and associated modules, as well
+as some simple scripts to complete the provisioning process.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Assemble bootstrap image -->
+```bash
+# Optionally include drivers from kernel updates
+export WW_CONF=/etc/warewulf/bootstrap.conf
+echo "drivers += updates/kernel/" >> $WW_CONF
+
+# Build bootstrap image
+wwbootstrap $(uname -r)
+```
+<!-- ohpc_end -->
+
+### Assemble VNFS Image
+
+With the local site customizations in place, the following step assembles a
+VNFS capsule from the chroot environment defined for the *compute* instance.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Assemble VNFS -->
+```bash
+wwvnfs --chroot $CHROOT
+```
+<!-- ohpc_end -->

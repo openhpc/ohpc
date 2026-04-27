@@ -1,0 +1,35 @@
+## Add User
+
+We will now add a new user to the cluster. This will be used later to run a
+test job.
+
+<!-- ohpc_begin -->
+```bash
+useradd -m test
+```
+<!-- ohpc_end -->
+
+Warewulf installs a utility on the compute nodes to automatically synchronize
+known files from the provisioning server at five minute intervals. With the
+addition of the new "test" user, we need to update the Warewulf database to
+incorporate the additions:
+
+<!-- ohpc_begin -->
+```bash
+wwsh file resync passwd shadow group
+```
+<!-- ohpc_comment Wait for wwgetfiles to pull updates (runs every 5 minutes) -->
+<!-- ohpc_command sleep 2 -->
+<!-- ohpc_end -->
+
+After re-syncing to notify Warewulf of file modifications made on the *head
+node*, it should take approximately 5 minutes for the changes to propagate.
+However, you can also manually pull the changes from compute nodes via:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_warewulf_getfiles -->
+```bash
+pdsh -w "${compute_prefix}[1-${num_computes}]" /warewulf/bin/wwgetfiles
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

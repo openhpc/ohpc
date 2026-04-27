@@ -1,0 +1,17 @@
+## Add OpenPBS on Head Node
+
+OpenHPC provides multiple options for distributed resource management. The
+following command adds the {{ scheduler_name }} workload manager server
+components to the chosen *head node*. Note that client-side components will be
+added to the corresponding compute image in a subsequent step.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add resource management services on head node -->
+```bash
+# Install OpenPBS server meta-package
+{{ pkg_install }} openpbs-server-ohpc
+```
+<!-- ohpc_end -->
+
+Other versions of this guide are available that describe installation of other
+resource management systems, and they can be found in the `docs-ohpc` package.

@@ -48,6 +48,26 @@ wwctl image exec --build=false {{ baseos }} -- /bin/sh -c \
 
 {% endif %}
 
+{# Warewulf v3 Macros #}
+{% if is_warewulf3 %}
+
+{%- macro compute_sed(regex, file) -%}
+sed -i '{{ regex }}' \
+	"$CHROOT{{ file }}"
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+echo '{{ string }}' {{ ">>" if append else ">" }} \
+	"$CHROOT{{ file }}"
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+chroot $CHROOT /bin/sh -c \
+  "{{ cmd }}"
+{%- endmacro -%}
+
+{% endif %}
+
 {# Confluent Macros #}
 {% if is_confluent %}
 

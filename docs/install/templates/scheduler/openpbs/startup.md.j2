@@ -1,0 +1,35 @@
+## Start OpenPBS
+
+In an earlier section, the {{ scheduler_name }} resource manager was installed
+and configured for use on both the *head node* and *compute* node instances.
+With the cluster nodes up and functional, we can now startup the resource
+manager services in preparation for running user jobs.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Resource Manager Startup -->
+```bash
+# Start PBS daemons on head node
+systemctl enable --now pbs
+```
+<!-- ohpc_end -->
+
+In the default configuration, the *compute* hosts have not been added to the
+resource manager. To add the *compute* hosts, execute the following to register
+each host and apply several key global configuration options.
+
+<!-- ohpc_begin -->
+```bash
+# Initialize PBS path
+. /etc/profile.d/pbs.sh
+# Enable user environment propagation (needed for modules support)
+qmgr -c "set server default_qsub_arguments= -V"
+# Enable uniform multi-node MPI task distribution
+qmgr -c "set server resources_default.place=scatter"
+# Enable support for job accounting
+qmgr -c "set server job_history_enable=True"
+# Register compute hosts with PBS
+for host in "${c_name[@]}"; do
+    qmgr -c "create node $host"
+done
+```
+<!-- ohpc_end -->

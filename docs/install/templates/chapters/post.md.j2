@@ -1,6 +1,10 @@
 {# Post Aggregator #}
 # Post Provisioning
 
+{% if is_slurm %}
 {% include "scheduler/slurm/sinfo.md.j2" %}
+{% elif is_openpbs %}
+{% include "scheduler/openpbs/status.md.j2" %}
+{% endif %}
 {% include "provisioner/" ~ provisioner ~ "/post-add-user.md.j2" %}
 {% include "post/nhc.md.j2" %}

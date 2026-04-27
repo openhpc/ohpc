@@ -1,0 +1,31 @@
+## Configure Warewulf
+
+With Warewulf installed, the next step is to update the configuration to allow
+Warewulf to work with {{ distro_full_name }} and to support local provisioning
+using a second private interface.
+
+::: {.tip}
+By default, Warewulf is configured to provision over the `eth1` interface. The
+steps below update this setting to use the interface specified by
+`${sms_eth_internal}`.
+:::
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Complete basic Warewulf setup for head node -->
+```bash
+# Configure Warewulf provisioning to use desired internal interface
+perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" \
+    /etc/warewulf/provision.conf
+
+# Enable internal interface for provisioning
+ip link set dev ${sms_eth_internal} up
+ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
+
+# Restart/enable relevant services to support provisioning
+systemctl enable httpd.service
+systemctl restart httpd
+systemctl enable dhcpd.service
+systemctl enable tftp.socket
+systemctl start tftp.socket
+```
+<!-- ohpc_end -->
