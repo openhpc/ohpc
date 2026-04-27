@@ -5,9 +5,8 @@ repo_base_url: http://repos.openhpc.community/.staging/OpenHPC
 
 # Map manifest directory prefix to repository base OS name
 baseos_map:
-  el10: EL_10
   el9: EL_9
-  oe2403: openEuler_24.03
+  oe2203: openEuler_22.03
 
 # Packages to skip on aarch64 (regex patterns for grep -E)
 aarch64_skip_patterns:
@@ -78,7 +77,7 @@ categories:
 # Mapping from new manifest directory names to old-style paths at a
 # previous git release tag (used by generate_changelog.py)
 old_manifest_paths:
-  el10-x86_64: docs/recipes/install/almalinux10/x86_64/warewulf4/slurm/manifest
-  el10-aarch64: docs/recipes/install/almalinux10/aarch64/warewulf4/slurm/manifest
-  oe2403-x86_64: docs/recipes/install/openeuler24.03/x86_64/warewulf4/slurm/manifest
-  oe2403-aarch64: docs/recipes/install/openeuler24.03/aarch64/warewulf4/slurm/manifest
+  el9-x86_64: docs/recipes/install/almalinux9/x86_64/warewulf4/slurm/manifest
+  el9-aarch64: docs/recipes/install/almalinux9/aarch64/warewulf4/slurm/manifest
+  oe2203-x86_64: docs/recipes/install/openeuler22.03/x86_64/warewulf/slurm/manifest
+  oe2203-aarch64: docs/recipes/install/openeuler22.03/aarch64/warewulf/slurm/manifest
