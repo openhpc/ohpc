@@ -1,5 +1,9 @@
 FROM docker.io/openeuler/openeuler:22.03-lts-sp3
 
+# Switch to Berkeley mirror
+RUN sed -i "s@repo.openeuler.org@mirrors.ocf.berkeley.edu/openeuler@g" /etc/yum.repos.d/openEuler.repo && \
+    sed -i "s@^\(metalink=\)@#\1@g" /etc/yum.repos.d/openEuler.repo
+
 # Install git first (required for cloning/checkout)
 RUN dnf -y install git
 
