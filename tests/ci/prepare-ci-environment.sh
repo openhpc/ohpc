@@ -154,14 +154,17 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	else
 		dnf_rhel
 	fi
-	adduser ohpc
+	adduser ohpc || true
 else
 	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild bats ccache "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
 	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc "${ENABLE_ONEAPI}"
-	useradd -m ohpc -U
-	mkdir -p /var/cache/ccache
-	chown -R ohpc:ohpc /var/cache/ccache
+	useradd -m ohpc -U || true
 fi
+
+# Setup ccache
+echo "cache_dir=/var/cache/ccache" >/etc/ccache.conf
+mkdir -p /var/cache/ccache
+chown -R ohpc:ohpc /var/cache/ccache
