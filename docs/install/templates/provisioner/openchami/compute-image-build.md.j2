@@ -1,0 +1,256 @@
+## Building the Base OS Image
+
+The [Image Builder](https://github.com/OpenCHAMI/image-builder) is designed to
+use layered building of system images, as shown below to enable the use of
+different layers which can be modified and added to build out different
+capabilities into image layers so a change of one layer does not require a
+change and rebuild of all other layers.
+
+::: {.tip}
+The image-build is an optional piece of the {{ provisioner_name }} software
+stack. If you have an existing image build process that creates the necessary
+boot artifacts you can use that instead.
+:::
+
+First let's define the lowest layer of the image which disables the installation
+of documentation files to reduce the size of the image:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Define nodocs image layer -->
+```bash
+echo -e "%_excludedocs 1" >> /opt/ohpc/admin/images/data/rpmmacros
+cat > /opt/ohpc/admin/images/nodocs.yaml <<EOF
+options:
+  layer_type: 'base'
+  name: '{{ baseosshort }}-nodocs'
+  publish_tags: '{{ distro_version }}'
+  pkg_manager: 'dnf'
+  parent: 'scratch'
+  publish_registry: '${sms_name}:5000/${compute_prefix}'
+  registry_opts_push:
+    - '--tls-verify=false'
+repos:
+  - alias: '{{ baseosshort }}_BaseOS'
+    url: '{{ distro_base_url }}{{ distro_version }}/BaseOS/{{ arch }}/os/'
+    gpg: '{{ distro_base_url }}RPM-GPG-KEY-{{ distro_name }}-{{ distro_version }}'
+  - alias: '{{ baseosshort }}_AppStream'
+    url: '{{ distro_base_url }}{{ distro_version }}/AppStream/{{ arch }}/os/'
+    gpg: '{{ distro_base_url }}RPM-GPG-KEY-{{ distro_name }}-{{ distro_version }}'
+packages:
+  - bash
+  - dnf
+  - dnf-plugins-core
+copyfiles:
+  - src: '/data/rpmmacros'
+    dest: '/root/.rpmmacros'
+EOF
+```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure HTTPS proxy for image build (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:image >>># -->
+<!-- ohpc_end -->
+
+Build this first layer:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Build nodocs layer -->
+```bash
+podman run \
+	--rm \
+	--device /dev/fuse \
+	--network host \
+	-v /opt/ohpc/admin/images/data:/data \
+	-v /opt/ohpc/admin/images/nodocs.yaml:/home/builder/config.yaml \
+	ghcr.io/openchami/image-build:latest image-build \
+		--config config.yaml \
+		--log-level INFO
+```
+<!-- ohpc_end -->
+
+Now let's define a base layer we can use to build on. This base layer will
+install common packages and also create our initramfs. In this recipe it's
+created to build an initramfs that supports liveOS so the image will boot into
+memory.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Define base image layer -->
+```bash
+cat > /opt/ohpc/admin/images/base.yaml <<EOF
+options:
+  layer_type: 'base'
+  name: '{{ baseosshort }}-base'
+  publish_tags: '{{ distro_version }}'
+  pkg_manager: 'dnf'
+  parent: '${sms_name}:5000/${compute_prefix}/{{ baseosshort }}-nodocs:{{ distro_version }}'
+  publish_registry: '${sms_name}:5000/${compute_prefix}'
+  registry_opts_pull:
+    - '--tls-verify=false'
+  registry_opts_push:
+    - '--tls-verify=false'
+repos:
+  - alias: '{{ baseosshort }}_BaseOS'
+    url: '{{ distro_base_url }}{{ distro_version }}/BaseOS/{{ arch }}/os/'
+    gpg: '{{ distro_base_url }}RPM-GPG-KEY-{{ distro_name }}-{{ distro_version }}'
+  - alias: '{{ baseosshort }}_AppStream'
+    url: '{{ distro_base_url }}{{ distro_version }}/AppStream/{{ arch }}/os/'
+    gpg: '{{ distro_base_url }}RPM-GPG-KEY-{{ distro_name }}-{{ distro_version }}'
+package_groups:
+  - 'Minimal Install'
+  - 'Development Tools'
+packages:
+  - kernel
+  - wget
+  - dracut-live
+  - cloud-init
+  - chrony
+  - rsyslog
+  - sudo
+cmds:
+  - cmd: >
+      DRACUT_NO_XATTR=1 dracut --add "dmsquash-live livenet network-manager"
+      --kver "\$(basename /lib/modules/*)"
+      -N -f --logfile /tmp/dracut.log 2>/dev/null
+    loglevel: INFO
+  - cmd: 'echo DRACUT LOG:; cat /tmp/dracut.log'
+    loglevel: INFO
+EOF
+```
+<!-- ohpc_end -->
+
+Now let's build this base layer. This will take about 5 minutes but we should
+not have to rebuild it very often.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Build base layer -->
+```bash
+podman run \
+	--rm \
+	--device /dev/fuse \
+	--network host \
+	-v /opt/ohpc/admin/images/base.yaml:/home/builder/config.yaml \
+	ghcr.io/openchami/image-build:latest image-build \
+		--config config.yaml \
+		--log-level DEBUG
+```
+<!-- ohpc_end -->
+
+Now we can build on top of the base layer by setting it to be the parent of the
+compute-base layer.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Define the next layer -->
+```bash
+cat > /opt/ohpc/admin/images/compute-base.yaml << EOF
+options:
+  layer_type: 'base'
+  name: 'compute-base'
+  publish_tags:
+    - '{{ distro_version }}'
+  pkg_manager: 'dnf'
+  parent: '${sms_name}:5000/${compute_prefix}/{{ baseosshort }}-base:{{ distro_version }}'
+  publish_registry: '${sms_name}:5000/${compute_prefix}'
+  registry_opts_pull:
+    - '--tls-verify=false'
+  registry_opts_push:
+    - '--tls-verify=false'
+repos:
+  - alias: '{{ baseosshort }}_CRB'
+    url: '{{ distro_base_url }}{{ distro_version }}/CRB/{{ arch }}/os/'
+    gpg: '{{ distro_base_url }}RPM-GPG-KEY-{{ distro_name }}-{{ distro_version }}'
+  - alias: 'Epel{{ distro_version }}'
+    url: 'https://dl.fedoraproject.org/pub/epel/{{ distro_version }}z/Everything/{{ arch }}/'
+    gpg: 'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ distro_version }}'
+package_groups:
+  - 'InfiniBand Support'
+packages:
+  - vim
+  - nfs-utils
+  - tcpdump
+  - traceroute
+  - git
+  - {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/{{ arch }}/\
+ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
+EOF
+```
+<!-- ohpc_end -->
+
+Then we can build it. Any modifications to the above configuration will only
+require a rebuild of this layer.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Build the next layer -->
+```bash
+podman run \
+	--rm \
+	--device /dev/fuse \
+	--network host \
+	-v /opt/ohpc/admin/images/compute-base.yaml:/home/builder/config.yaml \
+	ghcr.io/openchami/image-build:latest image-build \
+		--config config.yaml \
+		--log-level DEBUG
+```
+<!-- ohpc_end -->
+
+You can keep adding layers as you see fit, and branch off if so desired. We will
+use the next layer to add additional packages later on so no need to build it
+just yet.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Define a production compute layer -->
+```bash
+cp /etc/hosts /opt/ohpc/admin/images/data
+cat > /opt/ohpc/admin/images/compute-prod.yaml << EOF
+options:
+  layer_type: 'base'
+  name: 'compute-prod'
+  publish_tags:
+    - '{{ distro_version }}'
+  pkg_manager: 'dnf'
+  parent: '${sms_name}:5000/${compute_prefix}/compute-base:{{ distro_version }}'
+  publish_registry: '${sms_name}:5000/${compute_prefix}'
+  registry_opts_pull:
+    - '--tls-verify=false'
+  registry_opts_push:
+    - '--tls-verify=false'
+  # Publish SquashFS image to local S3
+  publish_s3: 'http://${sms_name}:9000'
+  s3_prefix: 'compute/base/'
+  s3_bucket: 'boot-images'
+repos:
+  - alias: 'OpenHPC'
+    url: '{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}'
+    gpg: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-{{ ohpc_version_tree }}'
+copyfiles:
+  - src: '/data/hosts'
+    dest: '/etc/hosts'
+  - src: '/data/slurmd'
+    dest: '/etc/sysconfig/slurmd'
+packages:
+  - ohpc-base-compute
+  - ohpc-slurm-client
+  - pdsh-ohpc
+  - lmod-ohpc
+cmds:
+  - cmd: systemctl disable firewalld
+    loglevel: INFO
+  - cmd: >-
+      echo '${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid 0 0'
+      >> /etc/fstab
+    loglevel: INFO
+  - cmd: >-
+      echo '${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev,nosuid 0 0'
+      >> /etc/fstab
+    loglevel: INFO
+  - cmd: mkdir -p /opt/ohpc/pub
+    loglevel: INFO
+  - cmd: echo "account required pam_slurm.so" >> /etc/pam.d/sshd
+    loglevel: INFO
+  - cmd: systemctl enable munge slurmd
+    loglevel: INFO
+  - cmd: ln -sf ../usr/share/zoneinfo/UTC /etc/localtime
+    loglevel: INFO
+EOF
+```
+<!-- ohpc_end -->

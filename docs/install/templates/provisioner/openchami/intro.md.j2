@@ -1,0 +1,12 @@
+Installation is completed in a few parts. First we build the images that the
+*compute* nodes will boot off of. Then we configure the cloud-init steps to add
+a local account, mount remote file systems, and inject the munge key into the
+OS. OpenHPC components will be added to both the head node and compute nodes.
+The head node will get the components during install, and compute nodes will get
+them during image builds.
+
+OpenCHAMI uses an Infrastructure as Code tool called image-builder
+to translate YAML files to system images in layers to build out reusable file
+system layers like container images. This enables the rapid rebuild of images in
+smaller more usable and readable layers. OpenCHAMI uses SquashFS
+images over S3 to serve to nodes, and Container images through OCI.

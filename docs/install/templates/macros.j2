@@ -1,0 +1,94 @@
+{# Global Jinja2 Macros for OpenHPC Documentation #}
+{# These macros are loaded globally by mkdoc.py and available in all templates #}
+
+<!-- 
+Compute node, image, and definition based macros.  
+
+Provisioner image configuration methods:
+* Chroot based (Warewulf): alter image directly on the filesystem
+* Image based (Warewulf): execute in a live local container image.
+* Remote based (Confluent): act upon a live compute node directly
+* Definition based (OpenCHAMI): update a definition file (Containerfile, cloud-init, etc.)
+
+Notes on strings
+* compute_ functions use quotes for strings, regex, filenames. etc., be sure to escape any quotes in the strings.
+
+Functions:
+* compute_sed(regex, file): run `sed -i` with regex on file.
+* compute_echo(string, file, append=true): append string to file, if append=false overwrite.
+* pkg_install_image(packages): install packages, use array for multiple packages ["pkg1", "pkg2"]
+-->
+
+{# Default Macros - last defined wins #}
+{%- macro head_install(packages) -%}
+{{ pkg_install }} {{ packages if packages is string else packages | join(' ') }}
+{%- endmacro -%}
+
+{%- macro compute_install(packages) -%}
+{{ pkg_install_chroot }} {{ packages if packages is string else packages | join(' ') }}
+{%- endmacro -%}
+
+{# Warewulf Macros #}
+{% if is_warewulf %}
+
+{%- macro compute_sed(regex, file) -%}
+sed -i '{{ regex }}' \
+	"$CHROOT{{ file }}"
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+echo '{{ string }}' {{ ">>" if append else ">" }} \
+	"$CHROOT{{ file }}"
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+wwctl image exec --build=false {{ baseos }} -- /bin/sh -c \
+  "{{ cmd }}"
+{%- endmacro -%}
+
+{% endif %}
+
+{# Confluent Macros #}
+{% if is_confluent %}
+
+{%- macro compute_sed(regex, file) -%}
+nodeshell compute sed -i '{{ regex }}' \
+  "{{ file }}"
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+nodeshell compute 'echo "{{ string }}" {{ ">>" if append else ">" }} \
+  "{{ file }}"'
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+nodeshell compute "{{ cmd }}"
+{%- endmacro -%}
+
+{% endif %}
+
+{# OpenCHAMI Macros #}
+{% if is_openchami %}
+
+{%- macro compute_install(packages) -%}
+yq -i '.packages += {{ ([packages] if packages is string else packages) | tojson }}' \
+	/opt/ohpc/admin/images/compute-prod.yaml
+{%- endmacro -%}
+
+{%- macro compute_sed(regex, file) -%}
+C="sed -i '{{ regex }}' {{ file }}" \
+  yq -i '.cmds += [{"cmd": strenv(C)}]' /opt/ohpc/admin/images/compute-prod.yaml
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+C="echo '{{ string }}' {{ ">>" if append else ">" }} {{ file }}" \
+  yq -i '.cmds += [{"cmd": strenv(C)}]' /opt/ohpc/admin/images/compute-prod.yaml
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+C="{{ cmd }}" \
+  yq -i '.cmds += [{"cmd": strenv(C)}]' /opt/ohpc/admin/images/compute-prod.yaml
+{%- endmacro -%}
+
+{% endif %}
+

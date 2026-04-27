@@ -1,0 +1,25 @@
+## Install Slurm
+
+In the previous section, the Slurm resource manager was installed and configured
+on the *head node*.
+
+We now install the Slurm clients and configure them. The Slurm and `munge`
+configuration files need to be copied to the nodes. This can be accomplished as
+follows:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add Slurm compute instance -->
+```bash
+# Add Slurm client support meta-package
+{{ pkg_install_chroot }} ohpc-slurm-client
+```
+<!-- ohpc_end -->
+
+Copy the `slurm.conf` and munge keys to the compute nodes.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Resource Manager Startup -->
+```bash
+nodersync /etc/slurm/slurm.conf compute:/etc/slurm/slurm.conf
+nodersync /etc/munge/munge.key compute:/etc/munge/munge.key
+```
+<!-- ohpc_end -->

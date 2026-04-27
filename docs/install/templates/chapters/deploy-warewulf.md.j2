@@ -1,0 +1,11 @@
+{# Deploy Aggregator #}
+# Deploy Cluster
+
+{% include "provisioner/deploy.md.j2"%}
+{% include "provisioner/warewulf/deploy-add-nodes.md.j2" %}
+
+{# Slurm needs to start after nodes have been added #}
+{% include "scheduler/slurm/startup.md.j2" %}
+
+{% include "boot/boot-computes.md.j2" %}
+{% include "boot/wait.md.j2" %}

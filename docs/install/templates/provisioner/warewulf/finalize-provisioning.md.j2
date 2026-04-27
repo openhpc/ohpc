@@ -1,0 +1,101 @@
+## Finalizing Provisioning Configuration
+
+Warewulf provisions a node with an image then customizes it with overlays. This
+section highlights creation of the node image and overlays, followed by the
+registration of desired compute nodes.
+
+### Two-Stage Provisioning (optional)
+
+Warewulf optionally supports two-stage provisioning to ramfs or disk on the
+compute nodes. The nodes are still stateless, but the image is copied to disk
+during the provisioning process and is reprovisioned on every boot.  This can be
+useful for cases when the compute node images are large, for example GPU
+drivers, or the compute nodes have limited memory.
+
+To configure two-stage provisioning, install Dracut and ignition (ignition can
+also be used to provision swap and local storage (see Warewulf documentation for
+details) on the compute node.  The example below provisions to ramfs, which is
+the default.  To provision to disk, see the next section.  To aid in debugging,
+it is helpful to add `rd.shell` to the kernel arguments.
+
+<!-- ohpc_begin -->
+```bash
+## Add rd.shell to kernel arguments in the "default" profile.
+yq -i '.nodeprofiles.default.kernel.args += ["rd.shell"]' \
+  /etc/warewulf/nodes.conf
+```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [[ ${enable_dracut} -eq 1 ]] -->
+<!-- ohpc_comment Two-Stage provision to ramfs -->
+```bash
+## Install Dracut in the image
+wwctl image exec --build=false {{ baseos }} -- /usr/bin/dnf install -y \
+  warewulf-ohpc-dracut
+
+## Configure Dracut. Note the leading and trailing spaces
+# in the quotes in "add_dracutmodules"
+echo 'hostonly="no"' > "$CHROOT"/etc/dracut.conf.d/wwinit.conf
+echo 'add_dracutmodules+=" wwinit "' \
+  >> "$CHROOT"/etc/dracut.conf.d/wwinit.conf
+
+## Enable Dracut boot for compute nodes that use the "nodes" profile
+wwctl profile set --yes nodes --tagadd IPXEMenuEntry=dracut
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+Optionally, configure the compute node to provision to disk.  Two stage
+provisioning (previous step) must also be enabled.  The compute node will use,
+**and erase**, the disk specified by `node_disk`.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [[ ${enable_dracut} -eq 1 && ${enable_todisk} -eq 1 ]] -->
+<!-- ohpc_comment Configure two-stage provision-to-disk -->
+```bash
+## Install disk tools
+wwctl image exec --build=false {{ baseos }} -- /usr/bin/dnf install -y \
+  ignition gdisk
+
+## Add ignition Dracut module.
+echo 'add_dracutmodules+=" ignition "' \
+  >> "$CHROOT"/etc/dracut.conf.d/wwinit.conf
+
+## Create the target "rootfs" partition and filesystem
+wwctl profile set --yes nodes \
+  --diskname "${node_disk}" --diskwipe \
+  --partname rootfs --partcreate --partnumber 1 \
+  --fsname rootfs --fswipe --fsformat ext4 --fspath /
+
+## Enable provision-to-disk for compute nodes that use the "nodes" profile
+wwctl profile set nodes --yes --root=/dev/disk/by-partlabel/rootfs
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+### Build Image and Overlays
+
+The bootstrap image includes the runtime kernel and associated modules, as well
+as some simple scripts to complete the provisioning process.  We explicitly
+rebuild Dracut and the image at the end because rebuilding the image is disabled
+in earlier steps. It is good practice to rebuild the overlays when after
+configuration changes.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Build Dracut -->
+```bash
+## Build the Dracut initramfs
+wwctl image exec --build=false {{ baseos }} -- /usr/bin/dracut --force \
+  --regenerate-all
+```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Assemble bootstrap image -->
+```bash
+# Build image
+wwctl image build {{ baseos }}
+wwctl overlay build
+```
+<!-- ohpc_end -->

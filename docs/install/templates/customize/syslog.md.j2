@@ -1,0 +1,29 @@
+## Enable System Log Forwarding
+
+It is often desirable to consolidate system logging information for the cluster
+in a central location, both to provide easy access to the data, and to reduce
+the impact of storing data inside the compute node's memory footprint if it is
+stateless. The following commands highlight the steps necessary to configure
+compute nodes to forward their logs to the head node, and to allow the head node
+to accept these log requests.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure rsyslog on head node and computes -->
+```bash
+# Configure head node to receive messages and reload rsyslog configuration
+echo 'module(load="imudp")' >> /etc/rsyslog.d/ohpc.conf
+echo 'input(type="imudp" port="514")' >> /etc/rsyslog.d/ohpc.conf
+systemctl restart rsyslog
+
+# Define compute node forwarding destination
+{{ compute_run("echo '*.* @${sms_ip}:514' > /etc/rsyslog.d/ohpc-forward.conf") }}
+
+# Disable most local logging on computes.
+# Emergency and boot logs will remain on the compute nodes
+{{ compute_sed("s/^\*\.info/#\*\.info/","/etc/rsyslog.conf") }}
+{{ compute_sed("s/^authpriv/#authpriv/","/etc/rsyslog.conf") }}
+{{ compute_sed("s/^mail/#mail/","/etc/rsyslog.conf") }}
+{{ compute_sed("s/^cron/#cron/","/etc/rsyslog.conf") }}
+{{ compute_sed("s/^uucp/#uucp/","/etc/rsyslog.conf") }}
+```
+<!-- ohpc_end -->

@@ -1,0 +1,10 @@
+## Add Hostname
+
+Add the head node name to `/etc/hosts` so we can make API calls by hostname.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment -->
+```bash
+echo "${sms_ip} ${sms_name}" >> /etc/hosts
+```
+<!-- ohpc_end -->

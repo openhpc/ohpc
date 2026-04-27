@@ -1,0 +1,59 @@
+## Lustre
+<!-- ohpc_begin -->
+<!-- ohpc_comment Enable Optional packages -->
+<!-- ohpc_if_set enable_lustre_client -->
+<!-- ohpc_comment Install Lustre client on head node -->
+```bash
+# Add Lustre client software to head node
+{{ pkg_install }} lustre-client-ohpc
+```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Enable lustre in compute image -->
+```bash
+# Include Lustre client software in compute image
+yq -i '.packages += ["lustre-client-ohpc"]' \
+	/opt/ohpc/admin/images/compute-prod.yaml
+```
+<!-- ohpc_end -->
+
+::: {.tip}
+The suggested mount options shown for Lustre leverage the `localflock` option.
+This is a
+[Lustre-specific](http://wiki.lustre.org/Mounting_a_Lustre_File_System_on_Client_Nodes)
+setting that enables client-local flock support. It is much faster than
+cluster-wide flock, but if you have an application requiring cluster-wide,
+coherent file locks, use the standard `flock` attribute instead.
+:::
+
+The default underlying network type used by Lustre is *tcp*. If your external
+Lustre file system is to be mounted using a network type other than *tcp*,
+additional configuration files are necessary to identify the desired network
+type. The example below illustrates creation of modprobe configuration files
+instructing Lustre to use an InfiniBand network with the **o2ib** LNET driver
+attached to `ib0`. Note that these modifications are made to both the *head
+node* and *compute* image.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Enable o2ib for Lustre -->
+```bash
+echo "options lnet networks=o2ib(ib0)" \
+	>> /etc/modprobe.d/lustre.conf
+yq -i '.cmds += [{"cmd":"echo \"options lnet networks=o2ib(ib0)\" \
+	>> /etc/modprobe.d/lustre.conf"}]' \
+	/opt/ohpc/admin/images/compute-prod.yaml
+```
+<!-- ohpc_end -->
+
+With the Lustre configuration complete, the client can be mounted on the *head
+node* as follows:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment mount Lustre client on head node -->
+```bash
+mkdir /mnt/lustre
+mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

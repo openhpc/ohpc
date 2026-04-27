@@ -1,0 +1,31 @@
+{# Customization Aggregator #}
+# Additional Customization
+
+{% include "customize/introduction.md.j2" %}
+
+{# Core #}
+{% include "network/infiniband/compute-node.md.j2" %}
+{% include "network/omnipath/compute-node.md.j2" %}
+
+{% include "customize/memlimits.md.j2" %}
+
+{% if is_slurm %}
+{% include "scheduler/slurm/pam.md.j2" %}
+{% endif %}
+
+{% include "customize/gpu.md.j2" %}
+{% include "customize/syslog.md.j2" %}
+
+{% if is_el %}
+{% include "customize/oneapi-mountpoint.md.j2" %}
+{% endif %}
+
+## Cluster Admin Tools
+{% include "customize/clustershell.md.j2" %}
+{% include "customize/genders.md.j2" %}
+{% include "customize/conman.md.j2" %}
+{% include "customize/nhc.md.j2" %}
+
+{# Other #}
+{% include "customize/magpie.md.j2" %}
+{% include "customize/charliecloud.md.j2" %}

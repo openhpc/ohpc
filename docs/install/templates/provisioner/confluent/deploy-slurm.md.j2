@@ -1,0 +1,31 @@
+## Start Slurm on Compute Nodes
+
+With Slurm configured, we can now startup the resource manager services in
+preparation for running user jobs. Generally, this is a two-step process that
+requires starting up the controller daemons on the *head node* and the client
+daemons on each of the *compute* nodes. Note that Slurm leverages the use of the
+*munge* library to provide authentication services and this daemon also needs to
+be running on all hosts within the resource management pool.
+
+We now start the Slurm daemon on the compute nodes.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Client Resource Manager Startup -->
+```bash
+# Start munge and slurm controller on head node
+{{ compute_run("systemctl enable --now munge") }}
+{{ compute_run("systemctl enable --now slurmd") }}
+```
+<!-- ohpc_end -->
+
+After this, check status of the nodes within Slurm by using the `sinfo` command.
+All compute nodes should be in an *idle* state (without asterisk). If the state
+is reported as *unknown*, the following might help:
+
+```bash
+scontrol update partition=normal state=idle
+```
+
+In case of additional Slurm issues, ensure that the configuration file fits your
+hardware and that it is identical across the nodes. Also, verify that Slurm user
+id is the same on the *head node* and *compute* nodes. You may also consult [Slurm
+Troubleshooting Guide](https://slurm.schedmd.com/troubleshoot.html).

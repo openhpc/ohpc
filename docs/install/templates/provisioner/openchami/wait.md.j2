@@ -1,0 +1,15 @@
+## Wait for Compute Nodes
+
+Wait for all compute nodes to become accessible via SSH. Cloud-init must
+complete and restart munge and slurmd before the nodes are ready.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait for compute nodes to be accessible -->
+```bash
+until pdsh -w "${compute_prefix}[1-${num_computes}]" true \
+	>/dev/null 2>&1; do
+	echo "Waiting for compute nodes..."
+	sleep 10
+done
+```
+<!-- ohpc_end -->

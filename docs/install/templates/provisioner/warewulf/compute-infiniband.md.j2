@@ -1,0 +1,16 @@
+Finally, to add *optional* support for controlling IPoIB interfaces (see
+[Optionally add InfiniBand support services on *head
+node*](#optionally-add-infiniband-support-services-on-head-node)), OpenHPC
+includes a template file for Warewulf that can optionally be imported and used
+later to provision `ib0` network settings.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+# Import the template file for the ib interface
+wwctl overlay import --parents nodeconfig \
+	/opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww \
+	/etc/sysconfig/network-scripts/ifcfg-ib0.ww
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

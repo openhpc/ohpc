@@ -1,0 +1,37 @@
+## Install Warewulf on *Head Node*
+
+To add support for provisioning services, we install the Warewulf provisioning
+system packages. Then the main Warewulf configuration files are edited to
+reflect the environment. The `yq` package is also installed to aid in
+configuring Warewulf `yaml` files.
+
+<!-- FIXME: remove semanage when fixed in Warewulf -->
+<!-- FIXME: remove /var/lib/tftpboot when fixed in Warewulf -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add baseline OpenHPC -->
+```bash
+# Make sure required variables are set
+: "${sms_eth_internal:?ERROR: sms_eth_internal not set}"
+: "${internal_network:?ERROR: internal_network not set}"
+
+# Install Warewulf
+{{ pkg_install }} warewulf-ohpc yq
+
+# Create the tftpboot directory (not created by dnsmasq)
+install -d -m 0755 /var/lib/tftpboot
+```
+<!-- ohpc_end -->
+
+If SELinux is enabled, configure the appropriate file context for the `tftpboot` directory:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [[ "$(getenforce 2>/dev/null)" != "Disabled" ]] -->
+```bash
+# Add public_content_t type to tftpboot directory and contents
+{{ pkg_install }} policycoreutils-python-utils
+semanage fcontext -a -t public_content_t "/var/lib/tftpboot(/.*)?"
+restorecon -R -v /var/lib/tftpboot
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

@@ -1,0 +1,16 @@
+## Update NHC
+
+Generate NHC configuration file based on compute node environment
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally, generate nhc config -->
+<!-- ohpc_if_set enable_nhc -->
+```bash
+{% if is_confluent -%}
+nodeshell c1 "/usr/sbin/nhc-genconf -H '*' -c -" | dshbak -c
+{% else -%}
+pdsh -w c1 "/usr/sbin/nhc-genconf -H '*' -c -" | dshbak -c
+{% endif -%}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

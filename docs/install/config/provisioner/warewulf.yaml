@@ -1,0 +1,6 @@
+# Warewulf provisioner configuration
+# Warewulf v4+ (v3 is not supported)
+
+provisioner: "warewulf"
+provisioner_name: "Warewulf"
+is_warewulf: true

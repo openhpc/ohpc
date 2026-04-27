@@ -1,0 +1,25 @@
+# Enterprise Linux 10 family configuration
+# Shared by Rocky 10, AlmaLinux 10
+
+distro_family: "el"
+distro_version: "10"
+is_el: true
+
+# Computed values (derived from distro_family + distro_version)
+ostree: "EL_10"
+distro_tag: "el10"
+
+# Package manager commands (dnf)
+pkg_manager: "dnf"
+pkg_install: "dnf -y install"
+pkg_install_chroot: 'dnf -y --installroot="$CHROOT" install'
+pkg_group_install: "dnf -y groupinstall"
+pkg_group_install_chroot: 'dnf -y --installroot="$CHROOT" groupinstall'
+pkg_add_repo: "dnf -y config-manager --add-repo"
+pkg_add_repo_chroot: 'dnf --installroot="$CHROOT" config-manager --add-repo'
+pkg_clean: "dnf clean expire-cache"
+pkg_clean_chroot: 'dnf --installroot="$CHROOT" clean expire-cache'
+pkg_remove: "dnf -y remove"
+pkg_upgrade: "dnf -y upgrade"
+pkg_upgrade_chroot: 'dnf -y --installroot="$CHROOT" upgrade'
+pkg_tftp: "syslinux-tftpboot"

@@ -1,0 +1,5 @@
+# Slurm scheduler configuration
+
+scheduler: "slurm"
+scheduler_name: "Slurm"
+is_slurm: true

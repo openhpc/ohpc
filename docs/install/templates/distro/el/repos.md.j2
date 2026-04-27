@@ -1,0 +1,34 @@
+## Enable EL Package Repositories
+
+In addition to the OpenHPC package repository, the *head node* also requires
+access to the standard base OS distro repositories in order to resolve necessary
+dependencies. For {{ distro_full_name }}, the requirements are to have access to
+the BaseOS, Appstream, Extras, CRB, and EPEL repositories for which mirrors are
+freely available online:
+
+{% if is_almalinux %}
+* AlmaLinux-10 (e.g.
+  [https://repo.almalinux.org/almalinux/10/](https://repo.almalinux.org/almalinux/10/))
+* EPEL 10 (e.g.
+  [http://download.fedoraproject.org/pub/epel/10/](http://download.fedoraproject.org/pub/epel/10/))
+{% elif is_rocky %}
+* Rocky-10 (e.g.
+  [http://download.rockylinux.org/pub/rocky/10/](http://download.rockylinux.org/pub/rocky/10/))
+* EPEL 10 (e.g.
+  [http://download.fedoraproject.org/pub/epel/10/](http://download.fedoraproject.org/pub/epel/10/))
+{% endif %}
+
+Although the public EPEL repository would be enabled automatically upon
+installation of the `ohpc-release` package, we install it now. Note that this
+does depend on the {{ distro_full_name }} Extras repository, which is shipped
+with {{ distro_full_name }} and is typically enabled by default.  In contrast,
+the CRB repository is typically disabled in a standard install, but can be
+enabled from EPEL as follows:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install EPEL and enable CRB-->
+```bash
+dnf -y install epel-release dnf-plugins-core
+dnf config-manager --set-enabled crb
+```
+<!-- ohpc_end -->

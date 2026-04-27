@@ -1,0 +1,18 @@
+{# Development Tools Aggregator #}
+# Install OpenHPC Development Components
+
+{% include "dev-tools/intro.md.j2" %}
+{% include "dev-tools/dev-tools.md.j2" %}
+{% include "dev-tools/compilers.md.j2" %}
+{% include "scheduler/slurm/mpi.md.j2" %}
+{% include "dev-tools/perf-tools.md.j2" %}
+{% include "dev-tools/default-dev.md.j2" %}
+{% include "dev-tools/third-party-libs-intro.md.j2" %}
+{% include "dev-tools/third-party-libs-petsc.md.j2" %}
+{% include "dev-tools/third-party-libs.md.j2" %}
+{% if is_x86_64 %}
+{% include "dev-tools/third-party-mpi-libs-x86.md.j2" %}
+{% endif %}
+{% if is_el %}
+{% include "dev-tools/oneapi-enabled-builds.md.j2" %}
+{% endif %}

@@ -1,0 +1,5 @@
+# Python dependencies for OpenHPC documentation build tools
+# Install with: pip install -r requirements.txt
+
+pyyaml>=6.0
+jinja2>=3.0

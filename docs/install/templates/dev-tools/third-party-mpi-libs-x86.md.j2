@@ -1,0 +1,15 @@
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_mpi_defaults -->
+```bash
+# Install parallel lib meta-packages for all available MPI toolchains
+{{ pkg_install }} ohpc-{{ gnu_version }}-mpich-parallel-libs
+{{ pkg_install }} ohpc-{{ gnu_version }}-{{ openmpi_version }}-parallel-libs
+```
+<!-- ohpc_fi -->
+<!-- ohpc_if_set enable_ib -->
+<!-- ohpc_command {{ pkg_install }} ohpc-{{ gnu_version }}-mvapich2-parallel-libs -->
+<!-- ohpc_fi -->
+<!-- ohpc_if_set enable_opa -->
+<!-- ohpc_command {{ pkg_install }} ohpc-{{ gnu_version }}-mvapich2-parallel-libs -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

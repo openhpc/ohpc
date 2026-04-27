@@ -1,0 +1,23 @@
+## Increase locked memory limits
+
+In order to utilize InfiniBand or Omni-Path as the underlying high speed
+interconnect, it is generally necessary to increase the locked memory settings
+for system users. This can be accomplished by adding the
+`/etc/security/limits.d/40-ohpc-limits.conf` file and this should be performed
+on all job submission hosts. In this recipe, jobs are submitted from the *head
+node*, and the following commands can be used to update the maximum locked
+memory settings on both the *head node* and compute nodes:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Update memlock settings -->
+```bash
+# Update memlock settings on head node
+echo '* soft memlock unlimited' >> \
+  /etc/security/limits.d/40-ohpc-limits.conf
+echo '* hard memlock unlimited' >> \
+  /etc/security/limits.d/40-ohpc-limits.conf
+# Update memlock settings on compute
+{{ compute_echo("* soft memlock unlimited", "/etc/security/limits.d/40-ohpc-limits.conf") }}
+{{ compute_echo("* hard memlock unlimited", "/etc/security/limits.d/40-ohpc-limits.conf") }}
+```
+<!-- ohpc_end -->

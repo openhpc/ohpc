@@ -1,0 +1,26 @@
+## Setup DHCP
+
+{{ provisioner_name }} uses CoreDHCP as the DHCP service to provide IP addresses
+to nodes. There is a default configuration in place that we need to overwrite.
+
+If your router address is different than the internal network address .254 you
+will need to change this file on your own. CoreDHCP has been configured to only
+provide addresses to nodes it knows. There are some extra [configuration
+changes](https://github.com/OpenCHAMI/deployment-recipes/blob/main/quickstart/DHCP.md)
+you can make to change that.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure DHCP -->
+```bash
+cat > /etc/openchami/configs/coredhcp.yaml <<EOF
+server4:
+ plugins:
+    - server_id: ${sms_ip}
+    - router: ${ipv4_gateway}
+    - dns: ${dns_servers}
+    - netmask: ${internal_netmask}
+    - coresmd: https://${sms_name}:8443 http://${sms_ip}:8081 \
+/root_ca/root_ca.crt 30s 1h false
+EOF
+```
+<!-- ohpc_end -->

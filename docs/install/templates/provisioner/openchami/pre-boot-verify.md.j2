@@ -1,0 +1,44 @@
+## Verify Configuration Before Boot
+
+Before booting compute nodes, verify that BSS and cloud-init are configured
+correctly. These checks catch the most common failures before a wasted boot
+cycle.
+
+First, confirm that BSS has the correct kernel parameters stored:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Verify BSS boot params are uploaded -->
+```bash
+ochami -k bss boot params get \
+	| grep -q "ds=nocloud-net" \
+	&& echo "BSS: OK" \
+	|| { echo "BSS: FAILED - check boot params"; exit 1; }
+```
+<!-- ohpc_end -->
+
+Next, confirm that the cloud-init default configuration was uploaded
+successfully:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Verify cloud-init defaults are uploaded -->
+```bash
+ochami -k cloud-init defaults get \
+	| grep -q "base-url" \
+	&& echo "cloud-init defaults: OK" \
+	|| { echo "cloud-init defaults: FAILED"; exit 1; }
+```
+<!-- ohpc_end -->
+
+Finally, confirm that the compute group cloud-init configuration is present.
+This is what delivers the SSH keys and munge key to the node at boot:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Verify cloud-init compute group is uploaded -->
+```bash
+ochami -k cloud-init group get raw compute \
+	| grep -q "compute" \
+	&& echo "cloud-init group: OK" \
+	|| { echo "cloud-init group: FAILED"; exit 1; }
+```
+<!-- ohpc_end -->
+

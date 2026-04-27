@@ -1,0 +1,46 @@
+# Package Manifest
+
+This appendix provides a summary of available meta-package groupings and all of
+the individual RPM packages that are available as part of this OpenHPC release.
+The meta-packages provide a mechanism to group related collections of RPMs by
+functionality and provide a convenience mechanism for installation. A list of
+the available meta-packages and a brief description is presented in the table
+below.
+
+## Available OpenHPC Meta-packages
+
+{% include distro_tag ~ '-' ~ arch ~ '/meta-ohpc.md' %}
+
+## RPM Packages
+
+What follows next in this Appendix is a series of tables that summarize the
+underlying RPM packages available in this OpenHPC release. These packages are
+organized by groupings based on their general functionality and each table
+provides information for the specific RPM name, version, brief summary, and the
+web URL where additional information can be obtained for the component. Note
+that many of the 3rd party community libraries that are pre-packaged with
+OpenHPC are built using multiple compiler and MPI families. In these cases, the
+RPM package name includes delimiters identifying the development environment for
+which each package build is targeted. Additional information on the OpenHPC
+package naming scheme is presented in Section 3rd Party Packages. The relevant
+package groupings and associated references are as follows:
+
+* Administrative Tools
+{% if provisioner == "warewulf" %}
+* Provisioning
+{% endif %}
+* Resource Management
+* Compiler Families
+* MPI Families / Communication Libraries
+* Development Tools
+* Performance Analysis Tools
+* IO Libraries
+* Distro Packages
+* Runtimes
+* Serial/Threaded Libraries
+* Parallel Libraries
+
+{% if provisioner != "warewulf" %}
+{% set pkg_provisioning = false %}
+{% endif %}
+{% include distro_tag ~ '-' ~ arch ~ '/pkg-ohpc.md.j2' %}

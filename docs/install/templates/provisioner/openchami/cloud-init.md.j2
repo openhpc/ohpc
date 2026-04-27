@@ -1,0 +1,104 @@
+## Building cloud-init Image
+
+{{ provisioner_name }} uses cloud-init for post-boot node configuration. We will
+establish some basic cloud-init configurations here.
+
+### Create Default Configuration
+
+Let's create a directory to hold our default cloud-init configuration and create
+an SSH key pair that we can use for SSH access later.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create SSH keys -->
+```bash
+mkdir -p /opt/ohpc/admin/cloud-init
+ssh-keygen -t ed25519 -q -f "$HOME/.ssh/id_openchami" -N ""
+cat >> "$HOME/.ssh/config" <<EOF
+
+Host ${compute_prefix}*
+    IdentityFile ~/.ssh/id_openchami
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+EOF
+```
+<!-- ohpc_end -->
+
+Now we can define the payload to update the defaults.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create cloud-init payload -->
+```bash
+cat > /opt/ohpc/admin/cloud-init/defaults.yaml <<EOF
+base-url: "http://${sms_ip}:8081/cloud-init"
+cluster-name: "CLUSTER"
+nid-length: 1
+public-keys: []
+short-name: "${compute_prefix}"
+EOF
+for i in /root/.ssh/id*pub; do
+	key=$(cat "$i") yq '.public-keys += [strenv(key)]' \
+		-i /opt/ohpc/admin/cloud-init/defaults.yaml
+done
+```
+<!-- ohpc_end -->
+
+And then finally upload our payload.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Upload the cloud-init defaults -->
+```bash
+ochami -k cloud-init defaults set \
+	-f yaml -d @/opt/ohpc/admin/cloud-init/defaults.yaml
+```
+<!-- ohpc_end -->
+
+### Configure Munge
+
+OpenCHAMI provides a cloud-init server that can be used, in conjunction with the
+cloud-init client, to provide post-boot configurations. The configuration below
+is a minimal configuration that should at least let the root user login using
+the public key and distribute the munge key file to all compute nodes.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Cloudinit -->
+```bash
+munge_key=$(cat /etc/munge/munge.key | base64 -w 0)
+export munge_key
+cat > /opt/ohpc/admin/cloud-init/compute.yaml <<EOF
+- name: compute
+  description: "compute template"
+  file:
+    encoding: plain
+    content: |
+      ## template: jinja
+      #cloud-config
+      merge_how:
+      - name: list
+        settings: [append]
+      - name: dict
+        settings: [no_replace, recurse_list]
+      users:
+        - name: root
+          ssh_authorized_keys: {%raw%}{{ ds.meta_data.instance_data.v1.public_keys }}{%endraw%}
+      write_files:
+        - content: ${munge_key}
+          path: /etc/munge/munge.key
+          permissions: '0400'
+          owner: munge:munge
+          encoding: base64
+      runcmd:
+        - systemctl restart munge
+        - systemctl restart slurmd
+EOF
+```
+<!-- ohpc_end -->
+
+Once you are done updating cloud-init you can post the file to the cloud-init
+server.
+
+<!-- ohpc_begin -->
+```bash
+ochami -k cloud-init group set \
+	-f yaml -d @/opt/ohpc/admin/cloud-init/compute.yaml
+```
+<!-- ohpc_end -->

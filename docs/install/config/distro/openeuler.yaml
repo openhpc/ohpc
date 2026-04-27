@@ -1,0 +1,40 @@
+# openEuler configuration
+
+distro: "openeuler"
+is_openeuler: true
+
+distro_family: "openeuler"
+distro_version: "24.03"
+distro_name: "openEuler"
+distro_image: "openeuler"
+
+# Computed values
+distro_full_name: "openEuler 24.03 SP2"
+ostree: "openEuler_24.03"
+distro_tag: "oe2403"
+baseos: "openeuler-24.03"
+baseosshort: "openeuler24.03"
+distro_container_image: "openeuler:24.03"
+
+# Package manager commands (dnf, same as EL)
+pkg_manager: "dnf"
+pkg_install: "dnf -y install"
+pkg_install_chroot: 'dnf -y --installroot="$CHROOT" install'
+pkg_group_install: "dnf -y groupinstall"
+pkg_group_install_chroot: 'dnf -y --installroot="$CHROOT" groupinstall'
+pkg_add_repo: "dnf -y config-manager --add-repo"
+pkg_add_repo_chroot: 'dnf --installroot="$CHROOT" config-manager --add-repo'
+pkg_clean: "dnf clean expire-cache"
+pkg_clean_chroot: 'dnf --installroot="$CHROOT" clean expire-cache'
+pkg_remove: "dnf -y remove"
+pkg_upgrade: "dnf -y upgrade"
+pkg_upgrade_chroot: 'dnf -y --installroot="$CHROOT" upgrade'
+pkg_tftp: "syslinux-tftpboot"
+
+# External repository URLs
+beegfs_repo: "https://www.beegfs.io/release/beegfs_7.4.5/dists/beegfs-rhel9.repo"
+
+# openEuler-specific OHPC repo (COPR for compute image)
+openeuler_ohpc_repo_server: "https://eur.openeuler.openatom.cn"
+openeuler_ohpc_repo_dir: "coprs/openhpc/OpenHPC/repo/openeuler-24.03_LTS_SP2"
+openeuler_ohpc_repo_file: "openhpc-OpenHPC-openeuler-24.03_LTS_SP2.repo"

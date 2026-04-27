@@ -1,0 +1,12 @@
+# Confluent provisioner configuration
+
+provisioner: "confluent"
+provisioner_name: "Confluent"
+is_confluent: true
+
+# Override chroot commands with nodeshell equivalents
+# This allows shared sections (infiniband, omnipath, nhc) to work unchanged
+pkg_install_chroot: "nodeshell compute dnf -y install"
+pkg_group_install_chroot: "nodeshell compute dnf -y groupinstall"
+pkg_upgrade_chroot: "nodeshell compute dnf -y upgrade"
+pkg_clean_chroot: "nodeshell compute dnf clean expire-cache"

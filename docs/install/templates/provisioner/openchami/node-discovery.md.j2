@@ -1,0 +1,66 @@
+## Node Discovery
+
+{{ provisioner_name }} can do dynamic discovery, but here we will do node
+discovery by YAML file. The YAML file can be imported by the discover command
+creating a way for adding nodes that do not have redfish capabilities, or when
+you just want to provide a list of nodes.
+
+Create the `nodes.yaml` file the static discovery will use to populate SMD.
+Also add the compute node names to `/etc/hosts` for SSH access.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Discovering Nodes -->
+```bash
+mkdir -p /opt/ohpc/admin/nodes
+nf=/opt/ohpc/admin/nodes/nodes.yaml
+
+## Add BMCs
+echo "bmcs:" > $nf
+for((i=0; i < $num_computes; i++)); do
+	nid=$((i+1))
+	printf -v mac '%02x:%02x' "$(((nid >> 8) & 0xff))" "$((nid & 0xff))"
+	cat >> $nf << EOF
+- xname: x1000c0s0b${nid}
+  ip: ${c_bmc[$i]}
+  mac: 02:00:00:00:${mac}
+EOF
+done
+
+## Add nodes
+echo "nodes:" >> $nf
+for((i=0; i < $num_computes; i++)); do
+	nid=$((i+1))
+	cat >> $nf << EOF
+- name: ${c_name[$i]}
+  nid: ${nid}
+  xname: x1000c0s0b${nid}n0
+  bmc: x1000c0s0b${nid}
+  groups:
+  - compute
+  interfaces:
+  - mac_addr: ${c_mac[$i]}
+    ip_addrs:
+    - name: internal
+      ip_addr: ${c_ip[$i]}
+EOF
+done
+
+## Add nodes to /etc/hosts
+for((i=0; i < $num_computes; i++)); do
+	echo "${c_ip[$i]} ${c_name[$i]}" >> /etc/hosts
+done
+```
+<!-- ohpc_end -->
+
+Now use the generated file to populate the SMD database.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Passing ochami the nodes -->
+```bash
+ochami discover static \
+	-f yaml -d @/opt/ohpc/admin/nodes/nodes.yaml
+```
+<!-- ohpc_end -->
+
+`ochami discover static` populates SMD components, EthernetInterfaces (under the correct
+node xname), and group membership from the `nodes.yaml` file in a single step.

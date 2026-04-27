@@ -1,0 +1,14 @@
+## Check Cluster Status
+
+After this, check status of the nodes within Slurm by using the `sinfo` command.
+All compute nodes should be in an *idle* state (without asterisk). If the state
+is reported as *unknown*, the following might help:
+
+```bash
+scontrol update partition=normal state=idle
+```
+
+In case of additional Slurm issues, ensure that the configuration file fits your
+hardware and that it is identical across the nodes. Also, verify that the Slurm
+user id is the same on the head node and *compute* nodes. You may also consult
+[Slurm Troubleshooting Guide](https://slurm.schedmd.com/troubleshoot.html).

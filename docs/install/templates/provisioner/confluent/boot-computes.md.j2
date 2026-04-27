@@ -1,0 +1,46 @@
+## Boot Compute Nodes
+
+Prior to booting the *compute* hosts, we configure them to use PXE as their next
+boot mode. After the initial PXE, ensuing boots will return to using the default
+boot device specified in the BIOS.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Set nodes to netboot -->
+<!-- ohpc_if_set has_ipmi -->
+```bash
+nodesetboot compute network
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+At this point, the *head node* should be able to boot the newly defined compute
+nodes. This is done by using the `nodepower` Confluent command leveraging IPMI
+protocol set up during the *compute* node definition in the previous section.
+The following power cycles each of the desired hosts.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Boot compute nodes -->
+<!-- ohpc_if_set has_ipmi -->
+```bash
+nodepower compute boot
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+Once kicked off, the boot process should take about 5-10 minutes (depending on
+BIOS post times). You can monitor the provisioning by using the `nodeconsole`
+command, which displays serial console for a selected node. Note that the escape
+sequence is `CTRL-e c .` typed sequentially.
+
+Successful provisioning can be verified by a parallel command on the compute
+nodes. The Confluent-provided `nodeshell` command uses Confluent node names and
+groups. For example, to run a command on the newly imaged compute hosts using
+`nodeshell`, execute the following:
+
+```bash
+nodeshell compute uptime
+c1:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+c2:  12:56:50 up 13 min,  0 users,  load average: 0.00, 0.02, 0.05
+c3:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.02, 0.05
+c4:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+```

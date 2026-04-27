@@ -1,0 +1,58 @@
+## Build Initial Compute Base OS image
+
+With the provisioning services enabled, the next step is to define a system
+image that can subsequently be used to provision one or more *compute* nodes. To
+begin, you will first need to have a local copy of the ISO image available for
+the underlying OS. In this recipe, the relevant ISO image is `{{
+distro_iso_image }}` (available from the {{ distro_full_name }} [download]({{
+distro_download_page }}) page). We initialize the image creation process using
+the `osdeploy` command assuming that the necessary ISO image is available
+locally in `${iso_path}` as follows:
+
+The `osdeploy initialize` command is used to prepare a Confluent server to
+deploy operating systems. For first time setup, run osdeploy initialize
+interactively to be walked through the various options using: `osdeploy
+initialize -i`
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Initialize OS images for use with Confluent -->
+```bash
+osdeploy initialize -${initialize_options:-usklpta}
+osdeploy import ${iso_path:-{{ distro_iso_image }}}
+restorecon -Rv /var/lib/confluent/
+```
+<!-- ohpc_end -->
+
+Once completed, the OS image should be available for use within Confluent. These
+can be queried via:
+
+```bash
+# Query available images
+osdeploy list
+```
+
+We now update the kernel arguments to remove the `quiet` option and add serial console.
+You could also add `debug` here as well to increase debug messages.
+
+<!-- ohpc_begin -->
+```bash
+# Update kernel arguments
+yq -i '.kernelargs = "console=ttyS0,115200 console=tty0 rd.shell"' \
+  /var/lib/confluent/public/os/{{ distro_id }}/profile.yaml
+osdeploy updateboot {{ distro_id }}
+```
+<!-- ohpc_end -->
+
+If needing to copy files from the head node to the compute nodes during
+deployment, this can be done by modifying the syncfiles file that is created
+when `osdeploy import` command is run. For an environment that has no DNS server
+and needs to have /etc/hosts file synced amongst all the nodes, the following
+command should be run.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Sync the hosts file in cluster -->
+```bash
+echo "/etc/hosts -> /etc/hosts" >> \
+	/var/lib/confluent/public/os/{{ distro_id }}/syncfiles
+```
+<!-- ohpc_end -->
