@@ -32,7 +32,7 @@ high-speed fabrics.
 <!-- ohpc_comment Install MPI Stacks -->
 <!-- ohpc_if_set enable_mpi_defaults -->
 ```bash
-{{ pkg_install }} {{ openmpi_version }}-pmix-{{ gnu_version }}-ohpc mpich-ofi-{{ gnu_version }}-ohpc
+{{ pkg_install }} {{ openmpi_version }}-{% if is_slurm %}pmix-{% endif %}{{ gnu_version }}-ohpc mpich-ofi-{{ gnu_version }}-ohpc
 ```
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
