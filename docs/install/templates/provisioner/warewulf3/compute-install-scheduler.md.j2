@@ -28,13 +28,29 @@ chroot $CHROOT systemctl enable pbs
 
 # Add Network Time Protocol (NTP) support
 {{ pkg_install_chroot }} chrony
+{% if is_sles %}
+chroot $CHROOT systemctl enable chronyd
+{% endif %}
 # Identify head node as local NTP server
 echo "server ${sms_ip} iburst" >> $CHROOT/etc/chrony.conf
 
-# Add kernel drivers (matching kernel version on head node)
+# Add kernel drivers
+{% if is_sles %}
+{{ pkg_install_chroot }} kernel-default
+{% else %}
 {{ pkg_install_chroot }} kernel-$(uname -r)
-
+{% endif %}
 # Include modules user environment
 {{ pkg_install_chroot }} lmod-ohpc
+{% if is_sles %}
+# Enable ssh access
+chroot $CHROOT systemctl enable sshd.service
+
+# Remove default hostname to allow WW to provision network names
+mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
+
+# Provide udev rules to enable /dev/ipath access for InfiniPath devices
+cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
+{% endif %}
 ```
 <!-- ohpc_end -->

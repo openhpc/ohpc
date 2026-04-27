@@ -23,11 +23,25 @@ location prior to running `wwmkchroot`.
 <!-- ohpc_begin -->
 <!-- ohpc_comment Create compute image for Warewulf -->
 ```bash
-# Override default OS repository (optional) - set BOS_MIRROR to desired repo
-# export YUM_MIRROR=${BOS_MIRROR}
-
 # Define chroot location
 export CHROOT=/opt/ohpc/admin/images/{{ baseosshort }}
+{% if is_sles %}
+# Create chroot directory structure
+mkdir -p -m 755 $CHROOT
+mkdir -m 755 $CHROOT/dev
+mknod -m 666 $CHROOT/dev/zero c 1 5
+
+# Build initial chroot image
+wwmkchroot -v {{ baseos }} $CHROOT
+
+# Enable OpenHPC repo in chroot
+cp -p /etc/zypp/repos.d/OpenHPC*.repo $CHROOT/etc/zypp/repos.d
+
+# Import GPG keys for chroot repository usage
+zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
+{% else %}
+# Override default OS repository (optional) - set BOS_MIRROR to desired repo
+# export YUM_MIRROR=${BOS_MIRROR}
 
 # Build initial chroot image
 wwmkchroot -v {{ baseos }} $CHROOT
@@ -35,5 +49,6 @@ wwmkchroot -v {{ baseos }} $CHROOT
 # Enable OpenHPC and EPEL repos inside chroot
 {{ pkg_install_chroot }} epel-release
 cp -p /etc/yum.repos.d/OpenHPC*.repo $CHROOT/etc/yum.repos.d
+{% endif %}
 ```
 <!-- ohpc_end -->

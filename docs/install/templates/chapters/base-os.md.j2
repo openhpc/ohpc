@@ -9,6 +9,8 @@
 {% include "distro/el/repos.md.j2" %}
 {% elif is_openeuler %}
 {% include "distro/openeuler/repos.md.j2" %}
+{% elif is_sles %}
+{% include "distro/sles/repos.md.j2" %}
 {% endif %}
 
 {% include "base-os/disable-firewall.md.j2" %}

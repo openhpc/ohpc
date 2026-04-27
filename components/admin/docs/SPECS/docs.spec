@@ -10,8 +10,8 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define recipe_base docs/recipes/install
-%define recipe_dest %{buildroot}/%{OHPC_PUB}/doc/recipes
+%define recipe_source docs/install
+%define recipe_dest   %{buildroot}/%{OHPC_PUB}/doc/recipes
 
 Name:           docs%{PROJ_DELIM}
 Version:        3.4.0
@@ -24,49 +24,10 @@ Source0:        docs-ohpc.tar
 
 BuildRequires:  git
 BuildRequires:  make
-BuildRequires:  texlive-latex
-BuildRequires:  texlive-caption
-BuildRequires:  texlive-colortbl
-BuildRequires:  texlive-fancyhdr
-BuildRequires:  texlive-mdwtools
-BuildRequires:  texlive-multirow
-#BuildRequires:  texlive-draftwatermark
-BuildRequires:  texlive-tcolorbox
-BuildRequires:  texlive-environ
-BuildRequires:  texlive-trimspaces
-BuildRequires:  texlive-amsmath
-
-%if 0%{?suse_version}
-BuildRequires:  libstdc++6
-BuildRequires:  texlive-latexmk
-BuildRequires:  texlive-epstopdf-pkg
-BuildRequires:  texlive-listings
-BuildRequires:  texlive-geometry
-%endif
-
-%if 0%{?rhel} || 0%{?openEuler}
-BuildRequires:  texlive-texconfig
-BuildRequires:  texlive-metafont
-BuildRequires:  texlive-cm
-BuildRequires:  texlive-helvetic
-BuildRequires:  texlive-ec
-BuildRequires:  texlive-cm-super
-BuildRequires:  texlive-dvips
-BuildRequires:  texlive-mfware
-BuildRequires:  latexmk
-%endif
-
-%if 0%{?rhel}
-BuildRequires:  texlive-pdftex-def
-BuildRequires:  texlive-epstopdf-pkg
-BuildRequires:  tex
-%endif
-
-%if 0%{?openEuler}
-BuildRequires:  texlive-pdftex
-BuildRequires:  texlive-epstopdf
-BuildRequires:  texlive-collection-basic
-%endif
+BuildRequires:  python3
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-PyYAML
+BuildRequires:  yq
 
 %description
 
@@ -78,36 +39,8 @@ from the OpenHPC software stack.
 
 %build
 
-%define parser ../../../../parse_doc.pl
-
-for recipe_path in \
-	"rocky9/x86_64/warewulf4/slurm" \
-	"almalinux9/x86_64/warewulf4/slurm" \
-	"rocky9/x86_64/warewulf/slurm" \
-	"rocky9/x86_64/warewulf/openpbs" \
-	"rocky9/x86_64/confluent/slurm" \
-	"rocky9/x86_64/openchami/slurm" \
-	"almalinux9/x86_64/warewulf/slurm" \
-	"almalinux9/x86_64/warewulf/openpbs" \
-	"almalinux9/x86_64/confluent/slurm" \
-	"leap15/x86_64/warewulf/slurm" \
-	"leap15/x86_64/warewulf/openpbs" \
-	"openeuler22.03/x86_64/warewulf/slurm" \
-	"openeuler22.03/x86_64/warewulf/openpbs" \
-	"rocky9/aarch64/warewulf4/slurm" \
-	"almalinux9/aarch64/warewulf4/slurm" \
-	"rocky9/aarch64/warewulf/slurm" \
-	"rocky9/aarch64/warewulf/openpbs" \
-	"almalinux9/aarch64/warewulf/slurm" \
-	"almalinux9/aarch64/warewulf/openpbs" \
-	"leap15/aarch64/warewulf/slurm" \
-	"leap15/aarch64/warewulf/openpbs" \
-	"openeuler22.03/aarch64/warewulf/slurm" \
-	"openeuler22.03/aarch64/warewulf/openpbs" \
-; do
-	pushd "%{recipe_base}/${recipe_path}"
-	make ; %{parser} steps.tex > recipe.sh ; popd
-done
+cd %{recipe_source}
+make PYTHON=python3
 
 %install
 
@@ -116,38 +49,45 @@ done
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 
-for recipe_path in \
-	"rocky9/x86_64/warewulf4/slurm" \
-	"almalinux9/x86_64/warewulf4/slurm" \
+for recipe in \
 	"rocky9/x86_64/warewulf/slurm" \
-	"rocky9/x86_64/warewulf/openpbs" \
+	"rocky9/x86_64/warewulf3/slurm" \
+	"rocky9/x86_64/warewulf3/openpbs" \
 	"rocky9/x86_64/confluent/slurm" \
 	"rocky9/x86_64/openchami/slurm" \
 	"almalinux9/x86_64/warewulf/slurm" \
-	"almalinux9/x86_64/warewulf/openpbs" \
+	"almalinux9/x86_64/warewulf3/slurm" \
+	"almalinux9/x86_64/warewulf3/openpbs" \
 	"almalinux9/x86_64/confluent/slurm" \
-	"leap15/x86_64/warewulf/slurm" \
-	"leap15/x86_64/warewulf/openpbs" \
+	"almalinux9/x86_64/openchami/slurm" \
 	"openeuler22.03/x86_64/warewulf/slurm" \
-	"openeuler22.03/x86_64/warewulf/openpbs" \
-	"rocky9/aarch64/warewulf4/slurm" \
-	"almalinux9/aarch64/warewulf4/slurm" \
+	"leap15/x86_64/warewulf3/slurm" \
+	"leap15/x86_64/warewulf3/openpbs" \
 	"rocky9/aarch64/warewulf/slurm" \
-	"rocky9/aarch64/warewulf/openpbs" \
+	"rocky9/aarch64/warewulf3/slurm" \
+	"rocky9/aarch64/warewulf3/openpbs" \
+	"rocky9/aarch64/confluent/slurm" \
+	"rocky9/aarch64/openchami/slurm" \
 	"almalinux9/aarch64/warewulf/slurm" \
-	"almalinux9/aarch64/warewulf/openpbs" \
-	"leap15/aarch64/warewulf/slurm" \
-	"leap15/aarch64/warewulf/openpbs" \
+	"almalinux9/aarch64/warewulf3/slurm" \
+	"almalinux9/aarch64/warewulf3/openpbs" \
+	"almalinux9/aarch64/confluent/slurm" \
+	"almalinux9/aarch64/openchami/slurm" \
 	"openeuler22.03/aarch64/warewulf/slurm" \
-	"openeuler22.03/aarch64/warewulf/openpbs" \
+	"leap15/aarch64/warewulf3/slurm" \
+	"leap15/aarch64/warewulf3/openpbs" \
 ; do
-	install -m 0644 -p -D "%{recipe_base}/${recipe_path}/steps.pdf" "%{recipe_dest}/${recipe_path}/Install_guide.pdf"
-	install -m 0755 -p -D "%{recipe_base}/${recipe_path}/recipe.sh" "%{recipe_dest}/${recipe_path}/recipe.sh"
+	name=$(echo "$recipe" | tr '/' '-')
+	install -m 0644 -p -D "%{recipe_source}/build/${name}.md" \
+		"%{recipe_dest}/${recipe}/Install_guide.md"
+	install -m 0755 -p -D "%{recipe_source}/build/${name}.sh" \
+		"%{recipe_dest}/${recipe}/recipe.sh"
 done
 
-# input file templates
+# input.local template (one per distro, shared across arch/provisioner/scheduler)
 for distro in "rocky9" "almalinux9" "leap15" "openeuler22.03"; do
-	install -m 0644 -p "%{recipe_base}/${distro}/input.local.template" "%{recipe_dest}/${distro}/input.local"
+	install -m 0644 -p "%{recipe_source}/input.local.template" \
+		"%{recipe_dest}/${distro}/input.local"
 done
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
