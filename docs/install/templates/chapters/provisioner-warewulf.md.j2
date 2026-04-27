@@ -8,11 +8,18 @@
 
 {% include "provisioner/warewulf/compute-create-image.md.j2" %}
 {% include "provisioner/warewulf/compute-install-ohpc.md.j2" %}
+{% if is_slurm %}
 {% include "provisioner/warewulf/compute-install-slurm.md.j2" %}
+{% elif is_openpbs %}
+{% include "provisioner/warewulf/compute-install-openpbs.md.j2" %}
+{% endif %}
 
 {% include "provisioner/warewulf/compute-import-files.md.j2" %}
+{% if is_slurm %}
 {% include "provisioner/warewulf/compute-slurm.md.j2" %}
+{% elif is_openpbs %}
+{% include "provisioner/warewulf/compute-openpbs.md.j2" %}
+{% endif %}
 {% include "provisioner/warewulf/compute-infiniband.md.j2" %}
 
 {% include "provisioner/warewulf/finalize-provisioning.md.j2" %}
-

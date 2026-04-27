@@ -4,8 +4,12 @@
 {% include "provisioner/deploy.md.j2"%}
 {% include "provisioner/warewulf/deploy-add-nodes.md.j2" %}
 
-{# Slurm needs to start after nodes have been added #}
+{# Scheduler must start after nodes have been added #}
+{% if is_slurm %}
 {% include "scheduler/slurm/startup.md.j2" %}
+{% elif is_openpbs %}
+{% include "scheduler/openpbs/startup.md.j2" %}
+{% endif %}
 
 {% include "boot/boot-computes.md.j2" %}
 {% include "boot/wait.md.j2" %}

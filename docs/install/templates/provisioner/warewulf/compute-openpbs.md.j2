@@ -1,0 +1,9 @@
+## Configure OpenPBS
+
+Add the leaf server name to the head node PBS configuration:
+
+<!-- ohpc_begin -->
+```bash
+echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
+```
+<!-- ohpc_end -->
