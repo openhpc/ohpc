@@ -1,13 +1,13 @@
-# Enterprise Linux 10 family configuration
-# Shared by Rocky 10, AlmaLinux 10
+# Enterprise Linux 9 family configuration
+# Shared by Rocky 9, AlmaLinux 9
 
 distro_family: "el"
-distro_version: "10"
+distro_version: "9"
 is_el: true
 
 # Computed values (derived from distro_family + distro_version)
-ostree: "EL_10"
-distro_tag: "el10"
+ostree: "EL_9"
+distro_tag: "el9"
 
 # Package manager commands (dnf)
 pkg_manager: "dnf"

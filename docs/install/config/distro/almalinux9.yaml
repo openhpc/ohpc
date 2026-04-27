@@ -1,4 +1,4 @@
-# AlmaLinux configuration
+# AlmaLinux 9 configuration
 
 distro: "almalinux"
 is_almalinux: true
@@ -7,11 +7,11 @@ distro_name: "AlmaLinux"
 distro_image: "almalinux"
 
 # Computed values (derived from distro_name + distro_version)
-# Note: distro_version comes from el10.yaml, duplicated here for clarity
-distro_full_name: "AlmaLinux 10"
-baseos: "almalinux-10"
-baseosshort: "almalinux10"
-distro_container_image: "almalinux:10"
+# Note: distro_version comes from el9.yaml, duplicated here for clarity
+distro_full_name: "AlmaLinux 9"
+baseos: "almalinux-9"
+baseosshort: "almalinux9"
+distro_container_image: "almalinux:9"
 
 # URLs
 distro_download_page: "https://almalinux.org/get-almalinux/"
