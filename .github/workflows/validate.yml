@@ -58,7 +58,7 @@ jobs:
       run: |
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
     - name: Install git
-      run: dnf -y install git
+      run: dnf -y install git createrepo_c
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -219,7 +219,7 @@ jobs:
         sed -i "s@repo.openeuler.org@mirrors.ocf.berkeley.edu/openeuler@g" /etc/yum.repos.d/openEuler.repo
         sed -i "s@^\(metalink=\)@#\1@g" /etc/yum.repos.d/openEuler.repo
     - name: Install git
-      run: dnf -y install git
+      run: dnf -y install git createrepo_c
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -343,7 +343,7 @@ jobs:
       image: registry.opensuse.org/opensuse/leap:15.5
     steps:
     - name: Install git
-      run: zypper -n update; zypper -n install git
+      run: zypper -n update; zypper -n install git createrepo_c python311
     - uses: actions/checkout@v4
     - name: Restore ccache
       uses: actions/cache/restore@v4
@@ -366,7 +366,7 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
         . /etc/profile.d/lmod.sh
-        tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
+        python3.11 tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v4
       with:
