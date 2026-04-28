@@ -221,6 +221,7 @@ jobs:
     env:
       JOB_SKIP_CI_SPECS: |
         components/provisioning/warewulf/SPECS/warewulf.spec
+        components/admin/docs/SPECS/docs.spec
     runs-on: ${{ matrix.os }}
     name: Build on openEuler (${{ matrix.arch }})
     container:
@@ -354,6 +355,9 @@ jobs:
             arch: x86_64
           - os: ubuntu-24.04-arm
             arch: aarch64
+    env:
+      JOB_SKIP_CI_SPECS: |
+        components/admin/docs/SPECS/docs.spec
     runs-on: ${{ matrix.os }}
     name: Build on LEAP (${{ matrix.arch }})
     container:

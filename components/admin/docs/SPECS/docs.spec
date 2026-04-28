@@ -21,12 +21,13 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
+BuildArch:      noarch
 
 BuildRequires:  git
 BuildRequires:  make
 BuildRequires:  python3
 BuildRequires:  python3-jinja2
-BuildRequires:  python3-PyYAML
+BuildRequires:  python3-pyyaml
 BuildRequires:  yq
 
 %description
