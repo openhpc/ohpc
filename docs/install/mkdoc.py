@@ -19,6 +19,7 @@ import re
 import sys
 import traceback
 from pathlib import Path
+from typing import Optional, Union
 
 import yaml
 from jinja2 import (
@@ -304,7 +305,7 @@ def extract_recipe_script(content: str) -> str:
 
 def resolve_output(
     flag, suffix: str, config_path: Path, build_dir: Path
-) -> Path | None:
+) -> Optional[Path]:
     """Resolve an output flag: True -> default path, Path -> as-is, None -> skip."""
     if flag is True:
         build_dir.mkdir(exist_ok=True)
@@ -314,7 +315,7 @@ def resolve_output(
 
 def build(
     config_path: Path,
-    markdown_output: Path | None = None,
+    markdown_output: Optional[Path] = None,
     script_output=None,
     list_vars: bool = False,
     ignore_warnings: bool = False,
@@ -391,7 +392,7 @@ def build(
         print(f"Generated: {script_output}")
 
 
-def parse_output_flag(args, with_name: str, path_name: str) -> Path | bool | None:
+def parse_output_flag(args, with_name: str, path_name: str) -> Union[Path, bool, None]:
     """Parse a --with-X / --X PATH flag pair into True, Path, or None."""
     with_flag = getattr(args, with_name)
     path_flag = getattr(args, path_name)

@@ -644,6 +644,7 @@ generate_manifest.py manifests/el10-x86_64
 
 # Query dnf to regenerate .all files first (requires target system)
 generate_manifest.py manifests/el10-x86_64 --generate-all --version 4.0
+# On macOS, use lima (EL9 VM) for aarch64:
 lima python3 generate_manifest.py manifests/el10-aarch64 --generate-all --version 4.0
 ```
 
@@ -705,13 +706,23 @@ via `make PYTHON=python3` and installs them to:
 
 Plus `input.local` per distro (from `docs/install/input.local.template`).
 
-Build with:
+Build with (on macOS, using [lima](https://lima-vm.io/) for an EL9 VM):
 ```bash
-cd components/admin/docs/SOURCES && bash get_source.sh
-rpmbuild -ba ../SPECS/docs.spec
-# or via CI:
-python3 tests/ci/run_build.py $USER components/admin/docs/SPECS/docs.spec
+# Set up CI environment (installs ohpc-buildroot and other build deps):
+lima sudo ./tests/ci/prepare-ci-environment.sh
+# Build RPM:
+lima sudo ./tests/ci/run_build.py $USER ./components/admin/docs/SPECS/docs.spec
 ```
+
+### Python Version Compatibility
+
+`mkdoc.py` must run on **Python 3.9** (EL9 system Python). Avoid syntax
+introduced in later versions:
+
+- **No `X | Y` union type hints** (requires 3.10+) — use `Optional[X]` and
+  `Union[X, Y]` from `typing` instead.
+- **No `match` statements** (requires 3.10+).
+- **No `tomllib`** (stdlib only in 3.11+).
 
 ## Reference
 
