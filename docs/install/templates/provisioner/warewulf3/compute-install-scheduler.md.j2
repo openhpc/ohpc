@@ -17,10 +17,10 @@ echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 ```bash
 # Add OpenPBS client support
 {{ pkg_install_chroot }} openpbs-execution-ohpc
-perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
+sed -i "s/PBS_SERVER=\S\+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
 echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
 chroot $CHROOT opt/pbs/libexec/pbs_habitat
-perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_name}/" \
+sed -i "s/\\\$clienthost \S\+/\\\$clienthost ${sms_name}/" \
     $CHROOT/var/spool/pbs/mom_priv/config
 echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
 chroot $CHROOT systemctl enable pbs

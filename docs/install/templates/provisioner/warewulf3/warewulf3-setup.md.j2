@@ -14,29 +14,26 @@ steps below update this setting to use the interface specified by
 <!-- ohpc_comment Complete basic Warewulf setup for head node -->
 ```bash
 # Configure Warewulf provisioning to use desired internal interface
-perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" \
+sed -i "s/device = eth1/device = ${sms_eth_internal}/" \
     /etc/warewulf/provision.conf
 {% if is_sles %}
 # Configure DHCP server to use desired internal interface
-perl -pi -e "s/^DHCPD_INTERFACE=\S+/DHCPD_INTERFACE=${sms_eth_internal}/" \
+sed -i "s/^DHCPD_INTERFACE=\S\+/DHCPD_INTERFACE=${sms_eth_internal}/" \
     /etc/sysconfig/dhcpd
 
 # Configure Warewulf to use the SLES tftp location
-perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" \
+sed -i "s/#tftpdir = \/var\/lib\//tftpdir = \/srv\//" \
     /etc/warewulf/provision.conf
 
 # Configure Warewulf to use the correct certificate bundle
-perl -pi -e "s,cacert =.*,cacert = /etc/ssl/ca-bundle.pem," \
+sed -i "s/cacert =.*/cacert = \/etc\/ssl\/ca-bundle.pem/" \
     /etc/warewulf/provision.conf
 
 # Update Warewulf http configuration to use SLES Apache module paths
 export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
-perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
-perl -pi -e "s#modules/mod_version.so\$#/usr/lib64/apache2/mod_version.so#" $MODFILE
+sed -i "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
+sed -i "s#modules/mod_version.so\$#/usr/lib64/apache2/mod_version.so#" $MODFILE
 {% endif %}
-# Enable internal interface for provisioning
-ip link set dev ${sms_eth_internal} up
-ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
 {% if is_sles %}
 # Enable Apache mod_rewrite module (needed for warewulf)
 a2enmod mod_rewrite
@@ -46,6 +43,12 @@ systemctl restart mysql
 systemctl enable apache2.service
 systemctl restart apache2
 {% else %}
+# Configure MariaDB to handle large VNFS images
+sed -i "/\[mysqld\]/a max_allowed_packet=32M" /etc/my.cnf.d/mariadb-server.cnf
+sed -i "s/^# database chunk size.*/database chunk size = 16777216/" \
+    /etc/warewulf/database.conf
+systemctl enable mariadb
+systemctl restart mariadb
 systemctl enable httpd.service
 systemctl restart httpd
 {% endif %}

@@ -6,9 +6,9 @@ wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
   dnf -y install openpbs-execution-ohpc
 
   # Configure PBS server and initialize mom directory structure
-  perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" /etc/pbs.conf
+  sed -i "s/PBS_SERVER=\S\+/PBS_SERVER=${sms_name}/" /etc/pbs.conf
   /opt/pbs/libexec/pbs_habitat
-  perl -pi -e "s/\\\$clienthost \S+/\\\$clienthost ${sms_name}/" \
+  sed -i "s/\\\$clienthost \S\+/\\\$clienthost ${sms_name}/" \
       /var/spool/pbs/mom_priv/config
   echo "\\\$usecp *:/home /home" >> /var/spool/pbs/mom_priv/config
 
