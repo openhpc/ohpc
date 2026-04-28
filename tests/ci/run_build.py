@@ -212,6 +212,12 @@ def setup_local_repo():
     global local_repo_configured
 
     os.makedirs(rpmbuild_rpms_dir, exist_ok=True)
+    # Ensure all directories in the path are owned by the build user
+    for d in [
+        os.path.dirname(rpmbuild_rpms_dir),
+        rpmbuild_rpms_dir,
+    ]:
+        os.chown(d, uid, gid)
 
     logging.info("Running createrepo_c on %s" % rpmbuild_rpms_dir)
     success, _ = run_command(["createrepo_c", rpmbuild_rpms_dir])
