@@ -12,10 +12,9 @@ second private interface (refer to Figure 1).
 yq -i '.ipaddr = "'"${sms_ip}"'"' /etc/warewulf/warewulf.conf
 yq -i '.netmask = "'"${internal_netmask}"'"' /etc/warewulf/warewulf.conf
 yq -i '.network = "'"${internal_network}"'"' /etc/warewulf/warewulf.conf
-yq -i '.dhcp["range start"] = "'"${internal_network}"'"' \
-	/etc/warewulf/warewulf.conf
-yq -i '.dhcp["range end"] = "static"' /etc/warewulf/warewulf.conf
 yq -i '.dhcp.template = "static"' /etc/warewulf/warewulf.conf
+yq -i 'del(.dhcp["range start"]) | del(.dhcp["range end"])' \
+	/etc/warewulf/warewulf.conf
 
 # Edit the nodes.conf to mount /opt on boot
 sed -i "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" \
@@ -24,7 +23,6 @@ sed -i "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" \
 # Turn on debugging messages
 yq -i '.nodeprofiles.default.kernel.args -= ["quiet"]' \
 	/etc/warewulf/nodes.conf
-echo "log-debug" >> /etc/dnsmasq.d/ww4-debug.conf
 
 # Enable and start the warewulfd service before using wwctl.
 systemctl enable --now warewulfd
