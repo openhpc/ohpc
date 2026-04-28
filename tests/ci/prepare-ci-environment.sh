@@ -166,5 +166,4 @@ fi
 
 # Setup ccache
 echo "cache_dir=/var/cache/ccache" >/etc/ccache.conf
-mkdir -p /var/cache/ccache
-chown -R ohpc:ohpc /var/cache/ccache
+install -d -o ohpc -g ohpc /var/cache/ccache
