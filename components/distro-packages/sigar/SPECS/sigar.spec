@@ -7,6 +7,7 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+# OpenHPC:check-updates:skip no upstream releases
 
 %include %{_sourcedir}/OHPC_macros
 

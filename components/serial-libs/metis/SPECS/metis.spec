@@ -7,6 +7,7 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+# OpenHPC:check-updates:skip no upstream releases
 
 # Serial metis build dependent on compiler toolchain
 %global ohpc_compiler_dependent 1
