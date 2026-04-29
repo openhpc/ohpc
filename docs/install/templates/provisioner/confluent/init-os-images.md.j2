@@ -18,7 +18,10 @@ initialize -i`
 <!-- ohpc_comment Initialize OS images for use with Confluent -->
 ```bash
 osdeploy initialize -${initialize_options:-usklpta}
-osdeploy import ${iso_path:-{{ distro_iso_image }}}
+: "${iso_path:={{ distro_iso_image }}}"
+distro_id=$(osdeploy importcheck "${iso_path}" 2>&1 \
+	| sed -En 's/Detected distribution name: (.*)/\1-default/p')
+osdeploy import "${iso_path}"
 restorecon -Rv /var/lib/confluent/
 ```
 <!-- ohpc_end -->
@@ -36,10 +39,12 @@ You could also add `debug` here as well to increase debug messages.
 
 <!-- ohpc_begin -->
 ```bash
-# Update kernel arguments
-yq -i '.kernelargs = "console=ttyS0,115200 console=tty0 rd.shell"' \
-  /var/lib/confluent/public/os/{{ distro_id }}/profile.yaml
-osdeploy updateboot {{ distro_id }}
+# Update kernel arguments: drop quiet, add serial console
+yq -i '.kernelargs |= sub("quiet ?", "")' \
+  /var/lib/confluent/public/os/${distro_id}/profile.yaml
+yq -i ".kernelargs += \" console=tty0 console={% if is_aarch64 %}ttyAMA0{% else %}ttyS0{% endif %},115200 rd.shell\"" \
+  /var/lib/confluent/public/os/${distro_id}/profile.yaml
+osdeploy updateboot ${distro_id}
 ```
 <!-- ohpc_end -->
 
@@ -53,6 +58,6 @@ command should be run.
 <!-- ohpc_comment Sync the hosts file in cluster -->
 ```bash
 echo "/etc/hosts -> /etc/hosts" >> \
-	/var/lib/confluent/public/os/{{ distro_id }}/syncfiles
+	/var/lib/confluent/public/os/${distro_id}/syncfiles
 ```
 <!-- ohpc_end -->

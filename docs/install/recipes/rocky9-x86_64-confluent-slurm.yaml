@@ -1,2 +1,1 @@
-distro_id: "rocky-9.5-x86_64-default"
-distro_iso_image: "Rocky-9.5-x86_64-dvd1.iso"
+distro_iso_image: "Rocky-9-latest-x86_64-dvd.iso"
