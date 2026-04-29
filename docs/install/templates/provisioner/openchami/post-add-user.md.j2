@@ -1,0 +1,13 @@
+## Add User
+
+We will now add a new user to the cluster.  This will be used later to run a
+test job.
+
+<!-- ohpc_begin -->
+```bash
+useradd -m test
+```
+<!-- ohpc_end -->
+
+Since {{ provisioner_name }} uses NFS-mounted `/home`, the new user's home
+directory will be immediately available on all compute nodes.

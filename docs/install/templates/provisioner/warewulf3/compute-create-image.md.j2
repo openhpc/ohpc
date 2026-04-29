@@ -1,0 +1,54 @@
+## Define *Compute* Image for Provisioning
+
+With the provisioning services enabled, the next step is to define and
+customize a system image that can subsequently be used to provision one or more
+*compute* nodes.
+
+### Build Initial Base OS Image
+
+The OpenHPC build of Warewulf includes specific enhancements enabling support
+for {{ distro_full_name }}. The following steps illustrate the process to build
+a minimal, default image for use with Warewulf. We begin by defining a
+directory structure on the *head node* that will represent the root filesystem
+of the compute node. The default location for this example is
+`/opt/ohpc/admin/images/{{ baseosshort }}`.
+
+::: {.tip}
+Warewulf is configured by default to access an external repository during the
+`wwmkchroot` process. If the head node cannot reach the public {{ distro_full_name }}
+mirrors, set the `${BOS_MIRROR}` environment variable to your desired repo
+location prior to running `wwmkchroot`.
+:::
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create compute image for Warewulf -->
+```bash
+# Define chroot location
+export CHROOT=/opt/ohpc/admin/images/{{ baseosshort }}
+{% if is_sles %}
+# Create chroot directory structure
+mkdir -p -m 755 $CHROOT
+mkdir -m 755 $CHROOT/dev
+mknod -m 666 $CHROOT/dev/zero c 1 5
+
+# Build initial chroot image
+wwmkchroot -v {{ baseos }} $CHROOT
+
+# Enable OpenHPC repo in chroot
+cp -p /etc/zypp/repos.d/OpenHPC*.repo $CHROOT/etc/zypp/repos.d
+
+# Import GPG keys for chroot repository usage
+zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
+{% else %}
+# Override default OS repository (optional) - set BOS_MIRROR to desired repo
+# export YUM_MIRROR=${BOS_MIRROR}
+
+# Build initial chroot image
+wwmkchroot -v {{ baseos }} $CHROOT
+
+# Enable OpenHPC and EPEL repos inside chroot
+{{ pkg_install_chroot }} epel-release
+cp -p /etc/yum.repos.d/OpenHPC*.repo $CHROOT/etc/yum.repos.d
+{% endif %}
+```
+<!-- ohpc_end -->

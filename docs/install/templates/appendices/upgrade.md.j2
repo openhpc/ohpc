@@ -1,0 +1,117 @@
+# Upgrading OpenHPC Packages
+
+As newer OpenHPC releases are made available, users are encouraged to upgrade
+their locally installed packages against the latest repository versions to
+obtain access to bug fixes and newer component versions. This can be
+accomplished with the underlying package manager as OpenHPC packaging maintains
+versioning state across releases. Also, package builds available from the
+OpenHPC repositories have "`-ohpc`" appended to their names so that wild cards
+can be used as a simple way to obtain updates. The following general procedure
+highlights a method for upgrading existing installations. When upgrading from a
+minor release older than v{{ ohpc_version_tree }}, you will first need to update
+your local OpenHPC repository configuration to point against the v{{
+ohpc_version_tree }} release (or update your locally hosted mirror). Refer to an
+earlier section for more details on enabling the latest repository. In contrast,
+when upgrading between micro releases on the same branch (e.g. from v{{
+ohpc_version_tree }} to {{ ohpc_version_tree }}.2), there is no need to adjust
+local package manager configurations when using the public repository as rolling
+updates are pre-configured.
+
+{% if is_openchami %}
+1. (Optional) Ensure repo metadata is current on the head node. Package managers
+   will naturally do this on their own over time, but if you are wanting to
+   access updates immediately after a new release, the following can be used to
+   sync to the latest.
+
+```bash
+{{ pkg_clean }}
+```
+{% elif is_confluent %}
+1. (Optional) Ensure repo metadata is current (on head node and compute nodes).
+   Package managers will naturally do this on their own over time, but if you
+   are wanting to access updates immediately after a new release, the following
+   can be used to sync to the latest.
+
+```bash
+{{ pkg_clean }}
+{{ pkg_clean_chroot }}
+```
+{% else %}
+1. (Optional) Ensure repo metadata is current (on head node and in chroot
+   location(s)). Package managers will naturally do this on their own over time,
+   but if you are wanting to access updates immediately after a new release, the
+   following can be used to sync to the latest.
+
+```bash
+{{ pkg_clean }}
+{{ pkg_clean_chroot }}
+```
+{% endif %}
+
+2. Upgrade head node
+
+```bash
+{{ pkg_upgrade }} "*-ohpc"
+
+# Any new Base OS provided dependencies can be installed by
+# updating the ohpc-base metapackage
+{{ pkg_upgrade }} "ohpc-base"
+```
+
+{% if is_openchami %}
+3. Rebuild compute image layers
+
+Update the image layer YAML configurations as needed, then rebuild the
+production compute image and reboot compute nodes to apply the changes.
+
+```bash
+podman run \
+	--rm \
+	--device /dev/fuse \
+	--network host \
+	-e S3_ACCESS=admin \
+	-e S3_SECRET=password1234 \
+	-v /opt/ohpc/admin/images/data:/data \
+	-v /opt/ohpc/admin/images/compute-prod.yaml:/home/builder/config.yaml \
+	ghcr.io/openchami/image-build:latest \
+		image-build \
+		--config config.yaml
+```
+
+After the image is rebuilt and published to S3, reboot the compute nodes to
+apply the changes.
+{% elif is_confluent %}
+3. Upgrade packages on compute nodes
+
+```bash
+{{ pkg_upgrade_chroot }} "*-ohpc"
+
+# Any new compute-node Base OS provided dependencies can be installed by
+# updating the ohpc-base-compute metapackage
+{{ pkg_upgrade_chroot }} "ohpc-base-compute"
+```
+
+Note that to update running services such as a resource manager, a service
+restart is required on the compute nodes.
+{% else %}
+3. Upgrade packages in compute image
+
+```bash
+{{ pkg_upgrade_chroot }} "*-ohpc"
+
+# Any new compute-node Base OS provided dependencies can be installed by
+# updating the ohpc-base-compute metapackage
+{{ pkg_upgrade_chroot }} "ohpc-base-compute"
+```
+
+4. Rebuild image(s)
+
+{% if is_warewulf %}
+```bash
+wwvnfs --chroot $CHROOT
+```
+{% endif %}
+
+In the case where packages were upgraded within the chroot compute image, you
+will need to reboot the compute nodes when convenient to enable the changes.
+{% endif %}

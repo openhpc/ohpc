@@ -1,0 +1,28 @@
+# openSUSE Leap 15 / SLES configuration
+
+distro_family: "sles"
+distro: "leap"
+distro_version: "15"
+is_sles: true
+is_el: false
+
+distro_tag: "leap15"
+ostree: "Leap_15"
+distro_full_name: "openSUSE Leap 15.5"
+baseos: "opensuse-15.5"
+baseosshort: "leap15"
+
+# Package manager commands (zypper)
+uses_dnf: false
+pkg_manager: "zypper"
+pkg_install: "zypper -n install"
+pkg_install_chroot: 'zypper -n --root $CHROOT install'
+pkg_group_install: "zypper -n install -t pattern"
+pkg_group_install_chroot: 'zypper -n --root $CHROOT install -t pattern'
+pkg_add_repo: "zypper ar"
+pkg_clean: "zypper clean -a"
+pkg_clean_chroot: 'zypper --root $CHROOT clean'
+pkg_remove: "zypper -n remove"
+pkg_upgrade: "zypper -n up"
+pkg_upgrade_chroot: 'zypper -n --root $CHROOT up'
+pkg_tftp: "syslinux"

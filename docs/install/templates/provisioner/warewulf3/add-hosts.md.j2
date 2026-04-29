@@ -1,0 +1,44 @@
+## Register Compute Nodes for Provisioning
+
+In preparation for provisioning, we define the desired network settings for the
+example compute nodes and restart the `dhcp` service. Note the use of variable
+names for the desired compute hostnames, node IPs, and MAC addresses which
+should be modified to accommodate local settings and hardware.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add hosts to cluster -->
+```bash
+# Set provisioning interface as the default networking device
+echo "GATEWAYDEV=${eth_provision}" > /tmp/network.$$
+wwsh -y file import /tmp/network.$$ --name network
+wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
+
+# Add nodes to Warewulf data store
+for ((i=0; i<num_computes; i++)) ; do
+    wwsh -y node new "${c_name[$i]}" \
+        --ipaddr="${c_ip[$i]}" --hwaddr="${c_mac[$i]}" -D "${eth_provision}"
+done
+```
+<!-- ohpc_end -->
+
+```bash
+# Additional step required if desiring to use predictable network interface
+# naming schemes (e.g. en4s0f0). Skip if using eth# style names.
+export kargs="${kargs} net.ifnames=1,biosdevname=1"
+wwsh provision set --postnetdown=1 "${compute_regex}"
+```
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add hosts to cluster (Cont.) -->
+```bash
+# Define provisioning image for hosts
+wwsh -y provision set "${compute_regex}" \
+    --vnfs={{ baseosshort }} \
+    --bootstrap=$(uname -r) \
+    --files=dynamic_hosts,passwd,group,shadow,{% if is_slurm %}munge.key,{% endif %}network
+
+# Restart dhcp / update PXE
+systemctl restart dhcpd
+wwsh pxe update
+```
+<!-- ohpc_end -->

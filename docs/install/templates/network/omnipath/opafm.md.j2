@@ -1,0 +1,16 @@
+::: {.tip}
+**Note:** OmniPath networks require a subnet management service that can
+typically be run on either an administrative node, or on the switch itself. The
+optimal placement and configuration of the subnet manager is beyond the scope of
+this document, but {{ distro_full_name }} provides the `opa-fm` package should
+you choose to run it on the *head node*.
+:::
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally enable OPA fabric manager -->
+<!-- ohpc_if_set enable_opafm -->
+<!-- ohpc_command {{ pkg_install }} opa-fm -->
+<!-- ohpc_command systemctl enable opafm -->
+<!-- ohpc_command systemctl start opafm -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

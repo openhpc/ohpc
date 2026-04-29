@@ -1,0 +1,13 @@
+{# Warewulf v3 Deploy Aggregator #}
+# Deploy Cluster
+
+{% include "provisioner/warewulf3/add-hosts.md.j2" %}
+
+{% if is_slurm %}
+{% include "scheduler/slurm/startup.md.j2" %}
+{% elif is_openpbs %}
+{% include "scheduler/openpbs/startup.md.j2" %}
+{% endif %}
+
+{% include "boot/boot-computes.md.j2" %}
+{% include "boot/wait.md.j2" %}

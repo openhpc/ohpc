@@ -1,0 +1,15 @@
+## Optionally add Omni-Path support services on *head node*
+
+The following command adds Omni-Path support using base distro-provided drivers
+to the chosen *head node*.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally add Omni-Path support services on head node -->
+<!-- ohpc_if_set enable_opa -->
+```bash
+{{ pkg_install }} opa-basic-tools
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+{% include 'network/omnipath/opafm.md.j2' %}

@@ -1,0 +1,34 @@
+### Add ConMan
+
+conman is a serial console management program designed to support a large number
+of console devices and simultaneous users. It supports logging console device
+output and connecting to compute node consoles via IPMI serial-over-lan.
+Installation and example configuration is outlined below.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_ipmisol -->
+```bash
+# Install conman to provide a front-end to compute consoles and log output
+{{ pkg_install }} conman-ohpc
+
+# Configure conman for computes
+# (note your IPMI password is required for console access)
+for ((i=0; i<num_computes; i++)) ; do
+	echo -n 'CONSOLE name="'"${c_name[$i]}"'" dev="ipmi:'"${c_bmc[$i]}"'" '
+	echo -n 'ipmiopts="'U:"${bmc_username}",P:
+	echo "${IPMI_PASSWORD:-undefined}",W:solpayloadsize'"'
+    done >> /etc/conman.conf
+
+# Enable and start conman
+systemctl enable conman
+systemctl start conman
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+{% if provisioner == "warewulf" %}
+Note that an additional kernel boot option is typically necessary to enable
+serial console output. This option is highlighted in the "Optional kernel
+arguments" section after compute nodes have been registered with the
+provisioning system.
+{% endif %}

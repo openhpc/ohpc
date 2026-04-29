@@ -1,0 +1,39 @@
+## Create Compute Node Image
+
+First, we create a minimal compute node image.  Warewulf supports using
+container images as the base file system for provisioning, and it can import
+these directly from an OCI registry like Docker Hub. Container images must be
+created especially for use with Warewulf since they need to include things like
+a kernel and an init system. In this example we will import our base image from
+a set maintained by the Warewulf community on the GitHub container registry.
+
+The `wwctl image exec` command runs the commands below it, these commands also
+be run interactively one a time with the command `wwctl image shell {{ baseos
+}}`. You can add `/bin/false` as the last command to prevent the image from
+rebuilding (it will show an error) and rebuild later with the `wwctl image
+build` command.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create compute image for Warewulf -->
+```bash
+# Import the base image from Warewulf
+wwctl image import docker://ghcr.io/warewulf/warewulf-{{ distro_container_image }} \
+	{{ baseos }} --syncuser
+
+# Define chroot location
+CHROOT=$(wwctl image show {{ baseos }})
+export CHROOT
+```
+<!-- ohpc_comment Configure HTTPS proxy for compute image (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
+```bash
+# Enable OpenHPC inside image and update image.
+# Disable image build on exit, rebuild later.
+wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
+  dnf -y install dnf-utils
+  dnf -y install {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/\
+{{ arch }}/ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
+  dnf -y update
+EOF
+```
+<!-- ohpc_end -->

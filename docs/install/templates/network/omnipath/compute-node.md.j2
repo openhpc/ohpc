@@ -1,0 +1,15 @@
+## Enable Omni-Path drivers
+
+If your compute resources support Omni-Path, the following commands add OPA
+support using base distro-provided drivers to the compute image.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add Omni-Path drivers to compute image -->
+<!-- ohpc_if_set enable_opa -->
+```bash
+# Add OPA support and enable
+{{ pkg_install_chroot }} opa-basic-tools
+{{ pkg_install_chroot }} libpsm2
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

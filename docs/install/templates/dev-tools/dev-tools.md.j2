@@ -1,0 +1,17 @@
+## Development Tools
+
+To aid in general development efforts, OpenHPC provides recent versions of the
+GNU autotools collection, the Valgrind memory debugger, EasyBuild, and Spack.
+These can be installed as follows:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install Development Tools -->
+```bash
+# Install autotools meta-package
+{{ pkg_install }} ohpc-autotools
+{{ pkg_install }} EasyBuild-ohpc
+{{ pkg_install }} hwloc-ohpc
+{{ pkg_install }} spack-ohpc
+{{ pkg_install }} valgrind-ohpc
+```
+<!-- ohpc_end -->

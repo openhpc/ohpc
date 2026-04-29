@@ -1,0 +1,16 @@
+## Starting {{ provisioner_name }}
+
+Starting {{ provisioner_name }} can take a while especially when the node images
+are being downloaded for the first time. The status of all {{ provisioner_name
+}} services can be checked with:
+
+```bash
+systemctl list-dependencies openchami.target
+```
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Starting OpenCHAMI -->
+```bash
+systemctl start openchami.target
+```
+<!-- ohpc_end -->

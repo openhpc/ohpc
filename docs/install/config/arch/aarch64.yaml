@@ -1,0 +1,7 @@
+# aarch64 architecture configuration
+
+arch: "aarch64"
+is_aarch64: true
+
+# GitHub release arch
+github_arch: "arm64"

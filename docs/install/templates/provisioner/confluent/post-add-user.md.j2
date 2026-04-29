@@ -1,0 +1,27 @@
+## Add User
+
+We will now add a new user to the cluster.  This will be used later to run a
+test job.
+
+<!-- ohpc_begin -->
+```bash
+useradd -m test
+```
+<!-- ohpc_end -->
+
+Next, the user's credentials need to be distributed across the cluster.
+Confluent's `nodeapply` has a merge functionality that adds new entries into
+credential files on *compute* nodes:
+
+<!-- ohpc_begin -->
+```bash
+# Create a sync file for pushing user credentials to the nodes
+echo "/etc/passwd -> /etc/passwd" >> \
+	/var/lib/confluent/public/os/{{ distro_id }}/syncfiles
+echo "/etc/group -> /etc/group" >> \
+	/var/lib/confluent/public/os/{{ distro_id }}/syncfiles
+
+# Use Confluent to distribute credentials to nodes
+nodeapply -F compute
+```
+<!-- ohpc_end -->

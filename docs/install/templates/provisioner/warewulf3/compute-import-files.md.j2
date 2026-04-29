@@ -1,0 +1,19 @@
+## Import Files
+
+The Warewulf system includes functionality to import arbitrary files from the
+provisioning server for distribution to managed hosts. This is one way to
+distribute user credentials to *compute* nodes. To import local file-based
+credentials, issue the following:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Import files -->
+```bash
+wwsh file import /etc/passwd
+wwsh file import /etc/group
+wwsh file import /etc/shadow
+{% if is_slurm %}
+# Import munge key required by Slurm authentication
+wwsh file import /etc/munge/munge.key
+{% endif %}
+```
+<!-- ohpc_end -->

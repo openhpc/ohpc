@@ -1,0 +1,24 @@
+### Add genders
+
+genders is a static cluster configuration database or node typing database used
+for cluster configuration management. Other tools and users can access the
+genders database in order to make decisions about where an action, or even what
+action, is appropriate based on associated types or "genders". Values may also
+be assigned to and retrieved from a *gender* to provide further granularity. The
+following example highlights installation and configuration of two genders:
+*compute* and *bmc*.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_genders -->
+```bash
+# Install genders
+{{ pkg_install }} genders-ohpc
+
+# Generate a sample genders file
+echo -e "${sms_name}\tsms" > /etc/genders
+for ((i=0; i<num_computes; i++)) ; do
+          echo -e "${c_name[$i]}\tcompute,bmc=${c_bmc[$i]}"
+    done >> /etc/genders
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

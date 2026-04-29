@@ -1,0 +1,42 @@
+## Register Compute Notes for Provisioning
+
+Nodes can be registered for provisioning using the following:
+<!-- ohpc_begin -->
+```bash
+for ((i=0; i<num_computes; i++)) ; do
+    wwctl node add --image={{ baseos }} --profile=nodes --netname=default \
+        --ipaddr="${c_ip[$i]}" --hwaddr="${c_mac[$i]}" "${c_name[i]}"
+done
+```
+<!-- ohpc_end -->
+
+Optionally define IPoIB network settings (required if planning to mount
+Lustre/BeeGFS over IB)
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+for ((i=0; i<num_computes; i++)) ; do
+	wwctl node set --yes "${c_name[$i]}" --netname=ib --netdev=ib0 \
+		--ipaddr="${c_ipoib[$i]}" --netmask="${ipoib_netmask}"
+done
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+Finally, rebuild the image to incorporate any optional packages installed into
+the chroot during customization, then rebuild the overlays and update the
+Warewulf configuration.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Rebuild image and overlays after customization -->
+```bash
+# Rebuild image to include any customization chroot changes
+wwctl image build {{ baseos }}
+
+# build the overlays for all the nodes
+wwctl overlay build
+
+# Update Warewulf configure
+wwctl configure --all
+```
+<!-- ohpc_end -->

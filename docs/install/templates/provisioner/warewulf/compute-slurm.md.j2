@@ -1,0 +1,24 @@
+## Configure Slurm
+
+Similarly, we can configure Slurm and import the cryptographic key that is
+required by the *munge* authentication library to be available on every host in
+the resource management pool, issue the following:
+
+<!-- ohpc_begin -->
+```bash
+# Configure Slurm server in the overlay (using "configless" option)
+# using a tag in a template file (slurmd.ww)
+wwctl overlay import --parents nodeconfig \
+ /opt/ohpc/pub/examples/slurm/slurmd.ww /etc/sysconfig/slurmd.ww
+
+# Set the value of the slurmctld tag to the $sms_ip for the nodes profile.
+wwctl profile set --yes nodes --tagadd slurmctld="${sms_ip}"
+
+# Configure munge
+wwctl overlay import --parents nodeconfig /etc/munge/munge.key
+wwctl overlay chown nodeconfig /etc/munge/munge.key \
+	"$(id -u munge)" "$(id -g munge)"
+wwctl overlay chown nodeconfig /etc/munge "$(id -u munge)" "$(id -g munge)"
+wwctl overlay chmod nodeconfig /etc/munge 0700
+```
+<!-- ohpc_end -->

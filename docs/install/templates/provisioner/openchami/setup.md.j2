@@ -1,0 +1,117 @@
+## Complete basic {{ provisioner_name }} setup for *head node*
+
+At this point, all of the packages necessary to use {{ provisioner_name }} on
+the *head node* should be installed. Next, we create and enable the Container
+Registry and S3 Object store. These are optional if you have an existing S3 or
+Container Registry available for use at your local site.
+
+::: {.tip}
+The S3 and registry containers are configured as [Podman
+Quadlets](https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html),
+which interface with systemd allowing you to perform normal systemd operations
+on them like:
+
+```bash
+systemctl status registry
+systemctl restart minio-server
+journalctl -u registry
+```
+:::
+
+First create local directories for container storage.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create directories for registry and S3 containers -->
+```bash
+mkdir -p /opt/ohpc/admin/data/oci
+mkdir -p /opt/ohpc/admin/data/s3
+```
+<!-- ohpc_end -->
+
+Now create the container registry quadlet definition.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create container registry quadlet -->
+```bash
+cat > /etc/containers/systemd/registry.container <<EOF
+# registry.container
+[Unit]
+Description=Image OCI Registry
+After=network-online.target
+Requires=network-online.target
+
+[Container]
+ContainerName=registry
+HostName=registry
+Image=docker.io/library/registry:latest
+Volume=/opt/ohpc/admin/data/oci:/var/lib/registry:Z
+PublishPort=5000:5000
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+<!-- ohpc_end -->
+
+Then create the local S3 object store quadlet definition.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create Minio S3 object storage quadlet -->
+```bash
+cat > /etc/containers/systemd/minio.container <<EOF
+[Unit]
+Description=Minio S3
+After=local-fs.target network-online.target
+Wants=local-fs.target network-online.target
+
+[Container]
+ContainerName=minio-server
+Image=docker.io/minio/minio:latest
+# Volumes
+Volume=/opt/ohpc/admin/data/s3:/data:Z
+
+# Ports
+PublishPort=9000:9000
+PublishPort=9091:9001
+
+# Environment Variables
+Environment=MINIO_ROOT_USER=admin
+Environment=MINIO_ROOT_PASSWORD=password1234
+
+# Command to run in container
+Exec=server /data --console-address :9001
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+<!-- ohpc_end -->
+
+We need to reload the system daemon, and to allow the MinIO, and OCI Registry
+containers to start.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Reload Systemd daemon and start the s3 (minio) and container registry -->
+```bash
+systemctl daemon-reload
+systemctl start minio.service
+systemctl start registry.service
+```
+<!-- ohpc_end -->
+
+Configure ssh
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure ssh -->
+```bash
+# Handle SSH to compute nodes
+echo -e "Host ${compute_prefix}*\n\tStrictHostKeyChecking=no" \
+	>> /etc/ssh/ssh_config.d/40-ohpc.conf
+```
+<!-- ohpc_end -->

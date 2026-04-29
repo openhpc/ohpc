@@ -1,0 +1,25 @@
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add OpenPBS and other components to compute instance -->
+```bash
+wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
+  # Add OpenPBS client support meta-package
+  dnf -y install openpbs-execution-ohpc
+
+  # Configure PBS server and initialize mom directory structure
+  sed -i "s/PBS_SERVER=\S\+/PBS_SERVER=${sms_name}/" /etc/pbs.conf
+  /opt/pbs/libexec/pbs_habitat
+  sed -i "s/\\\$clienthost \S\+/\\\$clienthost ${sms_name}/" \
+      /var/spool/pbs/mom_priv/config
+  echo "\\\$usecp *:/home /home" >> /var/spool/pbs/mom_priv/config
+
+  # Enable pbs service on boot
+  systemctl enable pbs
+
+  # Add Network Time Protocol (NTP) support
+  dnf -y install chrony
+
+  # Include modules user environment
+  dnf -y install lmod-ohpc
+EOF
+```
+<!-- ohpc_end -->

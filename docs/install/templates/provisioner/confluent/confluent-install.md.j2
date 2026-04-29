@@ -1,0 +1,36 @@
+## Add provisioning services on *head node*
+
+To begin, enable use of the public Confluent repository by adding it to the
+local list of available package repositories. This also requires network access
+from your *head node* to the internet, or alternatively, that the repository be
+mirrored locally. In this case, we use the network.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Enable Confluent repositories -->
+```bash
+{{ pkg_install }} \
+https://hpc.lenovo.com/yum/latest/{{ distro_tag }}/{{ arch }}/lenovo-hpc-yum-1-1.{{ arch }}.rpm
+```
+<!-- ohpc_end -->
+
+With the Confluent repository enabled, issue the following to install the
+provisioning service on the *head node*:
+
+<!-- ohpc_begin -->
+```bash
+# Install Confluent and required packages
+{{ pkg_install }} lenovo-confluent
+{{ pkg_install }} tftp-server nfs-utils policycoreutils-python-utils yq jq
+{{ pkg_install }} confluent_ipxe-aarch64 confluent_osdeploy-aarch64
+
+# Enable Confluent and its tools for use in current shell
+systemctl enable --now confluent
+systemctl enable --now httpd
+setsebool -P httpd_can_network_connect on
+semanage fcontext -a -t httpd_sys_content_t '/var/lib/confluent(/.*)?'
+systemctl enable --now tftp.socket
+
+# Source the confluent profile to setup env
+source /etc/profile.d/confluent_env.sh
+```
+<!-- ohpc_end -->

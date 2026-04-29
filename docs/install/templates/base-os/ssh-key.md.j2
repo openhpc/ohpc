@@ -1,0 +1,20 @@
+## Generate SSH Key Pair
+
+An SSH key pair on the *head node* enables passwordless access to compute nodes
+and is useful for automating cluster configuration tasks.
+{% if is_confluent %}
+It is also required by the Confluent provisioner for node deployment.
+{% endif %}
+If an ed25519 key does not already exist, generate one:
+
+<!-- ohpc_begin -->
+```bash
+[[ -f ~/.ssh/id_ed25519 ]] || ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ''
+```
+<!-- ohpc_end -->
+
+::: {.tip}
+**Note:** The key is generated without a passphrase (`-N ''`) to allow
+unattended use in scripts and automated workflows. Ensure that access to the
+head node is appropriately restricted.
+:::

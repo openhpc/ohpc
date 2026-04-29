@@ -1,0 +1,23 @@
+In addition to the OpenHPC package repository, the *head node* also requires
+access to the standard base OS distro repositories in order to resolve necessary
+dependencies. For {{ distro_full_name }}, the requirements are to have access to
+the OS, Everything, EPOL main, and EPOL update repositories. Note that the OS,
+Everything, and EPOL main repositories are typically enabled by default. To
+enable the EPOL update repository on {{ distro_full_name }}, you can run the
+following command:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install EPOL -->
+
+```bash
+{{ pkg_add_repo }} {{ openeuler_ohpc_repo_server }}\
+/{{ openeuler_ohpc_repo_dir }}\
+/{{ openeuler_ohpc_repo_file }}
+{{ pkg_install }} openeuler-extra-repos
+```
+<!-- ohpc_end -->
+
+By default all repositories use
+[http://repo.openeuler.org](http://repo.openeuler.org). For better network speed
+it could be replaced with any of the mirrors listed
+[here](https://www.openeuler.org/en/mirror/list/).

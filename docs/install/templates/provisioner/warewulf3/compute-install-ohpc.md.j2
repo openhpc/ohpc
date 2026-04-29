@@ -1,0 +1,30 @@
+## Add OpenHPC Components
+
+Next, we add additional components to include resource management client
+services, NTP support, and other additional packages to support the default
+OpenHPC environment. This process augments the chroot-based install performed
+by `wwmkchroot` and will access the Base OS and OpenHPC repositories to resolve
+package install requests.
+
+We begin by installing a few common base packages:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add OpenHPC base components to compute image -->
+```bash
+# Copy DNS configuration from head node
+cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+{% if is_sles %}
+# Import GPG keys for chroot repository usage
+zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
+
+# Copy credential files to ensure consistent uid/gids for package installs
+cp /etc/passwd /etc/group $CHROOT/etc
+{% endif %}
+# Install compute node base meta-package
+{{ pkg_install_chroot }} ohpc-base-compute
+```
+<!-- ohpc_end -->
+
+Now, we can include additional required components to the compute instance
+including resource manager client, NTP, and development environment modules
+support.

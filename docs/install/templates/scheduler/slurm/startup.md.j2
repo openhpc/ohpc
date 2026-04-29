@@ -1,0 +1,17 @@
+## Start Slurm
+
+In an earlier section, the Slurm resource manager was installed and configured
+for use on both the *head node* and *compute* node instances. With the cluster
+nodes up and functional, we can now startup the resource manager services in
+preparation for running user jobs.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Resource Manager Startup -->
+```bash
+# Start munge and slurm controller on head node
+systemctl enable --now munge
+systemctl enable --now slurmctld
+```
+<!-- ohpc_end -->
+
+Running systems may need to restart `slurmctld` to pickup any changes.

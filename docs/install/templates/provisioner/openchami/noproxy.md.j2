@@ -1,0 +1,23 @@
+## Setting no proxy
+
+{{ provisioner_name }} runs its own internal proxy for services which may not
+interact well if you run another httpd server. Here we set the no proxy variable
+to prevent lookups.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment OpenCHAMI No Proxy Settings -->
+```bash
+export additonal_no_proxy="${sms_name},opaal,opaal-idp,smd,smd-init,\
+hydra,cloud-init,acme-deploy,bss,haproxy,postgres,step-ca,configurator"
+if [ -z "$no_proxy" ]; then
+    export no_proxy="$additonal_no_proxy"
+else
+    export no_proxy="$no_proxy,$additonal_no_proxy"
+fi
+if [ -z "$NO_PROXY" ]; then
+    export NO_PROXY="$additonal_no_proxy"
+else
+    export NO_PROXY="$NO_PROXY,$additonal_no_proxy"
+fi
+```
+<!-- ohpc_end -->
