@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT([adios2], [2.8.3], [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([adios2],[2.8.3],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -14,7 +14,7 @@ AC_MSG_CHECKING([for ADIOS2_DIR environment variable])
 if test "x$ADIOS2_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([ADIOS2_DIR not defined - please load adios2 environment.])
+   AC_MSG_ERROR(ADIOS2_DIR not defined - please load adios2 environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -24,7 +24,7 @@ AC_MSG_CHECKING([for HDF5_DIR environment variable])
 if test "x$HDF5_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([HDF5_DIR not defined - please load phdf5 environment.])
+   AC_MSG_ERROR(HDF5_DIR not defined - please load phdf5 environment.)
 else
    AC_MSG_RESULT([yes])
 fi
@@ -47,7 +47,7 @@ LIBS="-lm -lhdf5"
 AC_CONFIG_FILES(Makefile tests/Makefile )
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'

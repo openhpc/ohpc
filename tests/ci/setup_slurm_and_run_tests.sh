@@ -25,6 +25,9 @@ fi
 	openssh-clients \
 	which \
 	sudo \
+	autoconf \
+	automake \
+	libtool \
 	ohpc-autotools \
 	prun-ohpc \
 	openmpi5-"${COMPILER_FAMILY}"-ohpc \
@@ -131,6 +134,7 @@ if sudo \
 	--preserve-env=OHPC_USE_CCACHE \
 	--login \
 	bash -c "\
+		export PATH=/opt/ohpc/pub/utils/autotools/bin:\${PATH}; \
 		cd ${PWD}/tests; \
 		./bootstrap; \
 		./configure \
@@ -148,6 +152,7 @@ fi
 if [ "${#ADMIN_TESTS[@]}" -gt 0 ]; then
 	# The configure script uses the variable $USER to decide if root or not
 	export USER=root
+	export PATH=/opt/ohpc/pub/utils/autotools/bin:${PATH}
 	cd tests
 	./bootstrap
 	./configure --disable-all --disable-bos --disable-oob --disable-spack "${ADMIN_TESTS[*]}"
