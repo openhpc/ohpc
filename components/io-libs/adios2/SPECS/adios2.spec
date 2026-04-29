@@ -20,14 +20,12 @@
 
 Summary: The Adaptable IO System v2 (ADIOS2)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.10.2
+Version: 2.12.1
 Release: 1%{?dist}
 License: Apache License 2.0
 Group:   %{PROJ_NAME}/io-libs
 Url:     https://adios2.readthedocs.io/en/latest/index.html
 Source0: https://github.com/ornladios/ADIOS2/archive/refs/tags/v%{version}.tar.gz
-# Taken from https://github.com/ornladios/ADIOS2/pull/4578
-Patch0:  cstdint.patch
 AutoReq: no
 
 %if 0%{?rhel} || 0%{?openEuler}
@@ -41,6 +39,7 @@ BuildRequires: libtool cmake make
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires: ucx%{PROJ_DELIM}
 
 BuildRequires: %{python_prefix}-devel %{python_prefix}-setuptools
 BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
@@ -63,7 +62,6 @@ how they process the data.
 
 %prep
 %setup -q -n %{PNAME}-%{version}
-%patch -P 0 -p 1
 
 %build
 mkdir adios2-build
@@ -73,6 +71,7 @@ cd adios2-build
 %ohpc_setup_compiler
 
 module load phdf5
+module load ucx
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
@@ -120,7 +119,7 @@ cmake \
     -DPYTHON_EXECUTABLE=%{__python} \
     -DPython_FIND_STRATEGY=LOCATION \
     ..
-make -j$(nproc)
+make %{?_smp_mflags}
 # make test
 
 
