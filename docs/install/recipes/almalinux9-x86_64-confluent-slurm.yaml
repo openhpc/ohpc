@@ -1,2 +1,1 @@
-distro_id: "alma-9.5-x86_64-default"
-distro_iso_image: "AlmaLinux-9.5-x86_64-dvd.iso"
+distro_iso_image: "AlmaLinux-9-latest-x86_64-dvd.iso"
