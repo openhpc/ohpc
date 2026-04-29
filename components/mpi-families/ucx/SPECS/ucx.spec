@@ -39,7 +39,7 @@ Source0: https://github.com/openucx/%{pname}/releases/download/v%{version}/%{pna
 ExclusiveArch: aarch64 ppc64le x86_64
 
 BuildRequires: automake autoconf libtool gcc-c++ make
-%if "%{_vendor}" == "suse"
+%if 0%{?sle_version}
 BuildRequires: libnuma-devel
 %else
 BuildRequires: numactl-devel
@@ -79,10 +79,6 @@ either main memory (RAM) or GPU memory (through CUDA and ROCm libraries).
 In addition, UCX provides efficient intra-node communication, by leveraging the
 following shared memory mechanisms: posix, sysv, cma, knem, and xpmem.
 This package was built from '' branch, commit c30b7da.
-
-%if "%{_vendor}" == "suse"
-%debug_package
-%endif
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{name}/%version
