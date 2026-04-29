@@ -1,9 +1,0 @@
-log.imb-*
-IMB_out*
-test_imb_mpi*.log
-test_imb_mpi*.trs
-test_module.log
-test_module.trs
-test-suite.log
-test-suite.log.orig
-family-*
