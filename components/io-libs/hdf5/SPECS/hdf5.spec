@@ -35,7 +35,7 @@ URL:       http://www.hdfgroup.org/HDF5
 
 Source0:   https://github.com/HDFGroup/%{base_pname}/releases/download/%{version}/%{base_pname}-%{version}.tar.gz
 
-BuildRequires: zlib-devel make cmake
+BuildRequires: zlib-devel make cmake%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -61,6 +61,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+module load cmake
 
 # Clean ccache prefix from compiler variables if present
 export CC=$(echo $CC | sed 's/^ccache //')
