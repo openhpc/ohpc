@@ -17,9 +17,9 @@ credential files on *compute* nodes:
 ```bash
 # Create a sync file for pushing user credentials to the nodes
 echo "/etc/passwd -> /etc/passwd" >> \
-	/var/lib/confluent/public/os/{{ distro_id }}/syncfiles
+	/var/lib/confluent/public/os/${distro_id}/syncfiles
 echo "/etc/group -> /etc/group" >> \
-	/var/lib/confluent/public/os/{{ distro_id }}/syncfiles
+	/var/lib/confluent/public/os/${distro_id}/syncfiles
 
 # Use Confluent to distribute credentials to nodes
 nodeapply -F compute
