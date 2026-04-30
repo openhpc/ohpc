@@ -8,41 +8,48 @@ if [ -s ./common/TEST_ENV ]; then
 	source ./common/TEST_ENV
 fi
 
-PKG=EXTRAE
-export testname="Extrae"
-module=extrae
-library=libmpitrace
+setup_file() {
+	PKG=EXTRAE
+	MODULE=extrae
+	TESTNAME="perf-tools/Extrae"
+	LIBRARY=libmpitrace
+
+	export PKG MODULE TESTNAME LIBRARY
+}
 
 setup() {
-	OUTPUT=$(mktemp)
+	OUTPUT="$(mktemp)"
+
+	export OUTPUT
 }
 
 teardown() {
 	rm -f "${OUTPUT}"
 }
 
-@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	module list $module | grep "1) $module" >&"${OUTPUT}" || exit 1
-	run grep $module "${OUTPUT}"
+@test "[${TESTNAME}] Verify ${MODULE} module is loaded and matches rpm version (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
+	run grep "${MODULE}" "${OUTPUT}"
 	assert_success
 
 	# check version against rpm
 	local rpm
-	rpm=$(get_rpm_name ${module})
+	rpm=$(get_rpm_name "${MODULE}")
 	local version
-	version="$(rpm -q --queryformat='%{VERSION}\n' "$rpm")"
+	version="$(rpm -q --queryformat='%{VERSION}\n' "${rpm}")"
 	run cat "${OUTPUT}"
-	assert_output "  1) $module/$version"
+	assert_output "  1) ${MODULE}/${version}"
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	DIR=${PKG}_DIR
-	if [ -z ${!DIR} ]; then
+@test "[${TESTNAME}] Verify ${PKG}_DIR is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	PKG_DIR="${PKG}_DIR"
+
+	if [ -z "${!PKG_DIR}" ]; then
 		flunk "${PKG}_DIR directory not defined"
 	fi
 
-	if [ ! -d ${!DIR} ] || [ -z "${!DIR}" ]; then
-		flunk "directory ${!DIR} does not exist"
+	if [ ! -d "${!PKG_DIR}" ]; then
+		flunk "directory ${!PKG_DIR} does not exist"
 	fi
 }
 
@@ -50,24 +57,25 @@ teardown() {
 # Binaries
 # ----------
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	BIN=${PKG}_BIN
-	if [ -z ${!BIN} ]; then
+@test "[${TESTNAME}] Verify ${PKG}_BIN is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	PKG_BIN="${PKG}_BIN"
+
+	if [ -z "${!PKG_BIN}" ]; then
 		flunk "${PKG}_BIN directory not defined"
 	fi
 
-	if [ ! -d ${!BIN} ] || [ -z "${!BIN}" ]; then
-		flunk "directory ${!BIN} does not exist"
+	if [ ! -d "${!PKG_BIN}" ]; then
+		flunk "directory ${!PKG_BIN} does not exist"
 	fi
 }
 
-@test "[$testname] Verify availability of mpi2prv binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	run which mpi2prv
+@test "[${TESTNAME}] Verify availability of mpi2prv binary (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	run command -v mpi2prv
 	assert_success
 }
 
-@test "[$testname] Verify availability of extrae-cmd binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	run which extrae-cmd
+@test "[${TESTNAME}] Verify availability of extrae-cmd binary (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	run command -v extrae-cmd
 	assert_success
 }
 
@@ -75,26 +83,26 @@ teardown() {
 # Lib Tests
 # ----------
 
-@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	LIB=${PKG}_LIB
+@test "[${TESTNAME}] Verify ${PKG}_LIB is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	LIB="${PKG}_LIB"
 
-	if [ -z ${!LIB} ]; then
+	if [ -z "${!LIB}" ]; then
 		flunk "${PKG}_LIB directory not defined"
 	fi
 
-	if [ ! -d ${!LIB} ]; then
+	if [ ! -d "${!LIB}" ]; then
 		flunk "directory ${!LIB} does not exist"
 	fi
 }
 
-@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	LIB=${PKG}_LIB
+@test "[${TESTNAME}] Verify dynamic library available in ${PKG}_LIB (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	LIB="${PKG}_LIB"
 
-	if [ -z ${!LIB} ]; then
+	if [ -z "${!LIB}" ]; then
 		flunk "${PKG}_LIB directory not defined"
 	fi
 
-	if [ ! -s ${!LIB}/${library}.so ]; then
-		flunk "${library}.so does not exist"
+	if [ ! -s "${!LIB}/${LIBRARY}.so" ]; then
+		flunk "${LIBRARY}.so does not exist"
 	fi
 }

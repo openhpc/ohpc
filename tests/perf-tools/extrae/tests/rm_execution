@@ -4,91 +4,90 @@
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	TESTNAME="perf-tools/Extrae"
+	NODES=2
+	TASKS=$(tasks_count 8)
+	ARGS=8
+	TIMEOUT="00:10:00"
 
-NODES=2
-TASKS=`tasks_count 8`
-ARGS=8
+	check_rms
+	unset OMP_NUM_THREADS
 
-unset OMP_NUM_THREADS
+	mkdir -p .tmp.extrae
+	MPI2PRV_TMP_DIR=.tmp.extrae
 
-
-@test "[Extrae] MPI C trace under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
-    if [ ! -s heat_mpi ];then
-	flunk "heat_mpi binary does not exist"
-    fi
-
-    rm -f TRACE.mpits
-    rm -f heat_mpi.prv
-    rm -rf set-0
-    mkdir set-0
-
-    mkdir -p .tmp.extrae
-    export MPI2PRV_TMP_DIR=.tmp.extrae
-
-    # Extrae's LD_PRELOAD interception can cause a spurious MPI_Abort
-    # during finalization with OpenMPI 5.x, making mpirun exit non-zero
-    # even though tracing succeeded.  Tolerate the exit code and validate
-    # the actual trace output below.
-    run_mpi_binary "./tracec.sh ./heat_mpi" "" $NODES $TASKS || true
-
-    # allow for some job output lag from pbs
-    for i in `seq 1 10`; do
-	if [ -s TRACE.mpits ];then
-	    break
-	else
-	    sleep 0.2
-	fi
-    done
-
-    run mpi2prv -f TRACE.mpits
-
-    run ls heat_mpi.prv
-    assert_success
-
+	export TESTNAME NODES TASKS ARGS TIMEOUT MPI2PRV_TMP_DIR
 }
 
-@test "[Extrae] Parallel trace merge runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] MPI C trace under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	[ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
 
-    [ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
-    run ls TRACE.mpits
-    assert_success
-
-    rm -f job.out
-
-    mkdir -p .tmp.extrae
-    export MPI2PRV_TMP_DIR=.tmp.extrae
-
-    run_mpi_binary -o "job.out" "mpimpi2prv -syn -f TRACE.mpits -o trace.prv" "" $NODES $TASKS
-    assert_success
-
-    run ls trace.prv
-    assert_success
-
-    # allow for some job output lag from pbs
-    for i in `seq 1 10`; do
-	if [ -s job.out ];then
-	    break
-	else
-	    sleep 0.2
+	if [ ! -s heat_mpi ]; then
+		flunk "heat_mpi binary does not exist"
 	fi
-    done
 
-    run ls job.out
-    assert_success
+	rm -f TRACE.mpits
+	rm -f heat_mpi.prv
+	rm -rf set-0
+	mkdir set-0
 
-    run tail -1 job.out
-    assert_output "mpi2prv: Congratulations! trace.prv has been generated."
+	# Extrae's LD_PRELOAD interception can cause a spurious MPI_Abort
+	# during finalization with OpenMPI 5.x, making mpirun exit non-zero
+	# even though tracing succeeded.  Tolerate the exit code and validate
+	# the actual trace output below.
+	run_mpi_binary -t "${TIMEOUT}" "./tracec.sh ./heat_mpi" "" "${NODES}" "${TASKS}" || true
 
-    rm -rf profile*
-    rm -f pingtmp?
-    rm -rf *prv *row *pcf TRACE.*
-    rm -rf $MPI2PRV_TMP_DIR
-#    rm -rf set-0
+	# allow for some job output lag from pbs
+	for _ in $(seq 1 10); do
+		if [ -s TRACE.mpits ]; then
+			break
+		else
+			sleep 0.2
+		fi
+	done
+
+	run mpi2prv -f TRACE.mpits
+
+	run ls heat_mpi.prv
+	assert_success
+}
+
+@test "[${TESTNAME}] Parallel trace merge runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	[ "${LMOD_FAMILY_COMPILER}" == "acfl" ] && skip "Test segfaults with acfl compiler"
+
+	run ls TRACE.mpits
+	assert_success
+
+	rm -f job.out
+
+	run_mpi_binary -t "${TIMEOUT}" -o "job.out" "mpimpi2prv -syn -f TRACE.mpits -o trace.prv" "" "${NODES}" "${TASKS}"
+	assert_success
+
+	run ls trace.prv
+	assert_success
+
+	# allow for some job output lag from pbs
+	for _ in $(seq 1 10); do
+		if [ -s job.out ]; then
+			break
+		else
+			sleep 0.2
+		fi
+	done
+
+	run ls job.out
+	assert_success
+
+	run tail -1 job.out
+	assert_output "mpi2prv: Congratulations! trace.prv has been generated."
+
+	rm -rf profile*
+	rm -f pingtmp?
+	rm -rf ./*prv ./*row ./*pcf TRACE.*
+	rm -rf "${MPI2PRV_TMP_DIR}"
 }
