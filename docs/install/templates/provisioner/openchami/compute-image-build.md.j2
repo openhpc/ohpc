@@ -222,6 +222,9 @@ repos:
   - alias: 'OpenHPC'
     url: '{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}'
     gpg: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-{{ ohpc_version_tree }}'
+  - alias: 'OpenHPC-updates'
+    url: '{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/updates/{{ ostree }}'
+    gpg: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-{{ ohpc_version_tree }}'
 copyfiles:
   - src: '/data/hosts'
     dest: '/etc/hosts'
