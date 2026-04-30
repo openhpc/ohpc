@@ -160,7 +160,7 @@ repos:
     url: '{{ distro_base_url }}{{ distro_version }}/CRB/{{ arch }}/os/'
     gpg: '{{ distro_base_url }}RPM-GPG-KEY-{{ distro_name }}-{{ distro_version }}'
   - alias: 'Epel{{ distro_version }}'
-    url: 'https://dl.fedoraproject.org/pub/epel/{{ distro_version }}z/Everything/{{ arch }}/'
+    url: 'https://dl.fedoraproject.org/pub/epel/{{ distro_version }}/Everything/{{ arch }}/'
     gpg: 'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ distro_version }}'
 package_groups:
   - 'InfiniBand Support'
@@ -221,6 +221,9 @@ options:
 repos:
   - alias: 'OpenHPC'
     url: '{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}'
+    gpg: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-{{ ohpc_version_tree }}'
+  - alias: 'OpenHPC-updates'
+    url: '{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/updates/{{ ostree }}'
     gpg: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-{{ ohpc_version_tree }}'
 copyfiles:
   - src: '/data/hosts'
