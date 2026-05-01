@@ -26,6 +26,7 @@ License: Apache License 2.0
 Group:   %{PROJ_NAME}/io-libs
 Url:     https://adios2.readthedocs.io/en/latest/index.html
 Source0: https://github.com/ornladios/ADIOS2/archive/refs/tags/v%{version}.tar.gz
+Patch0:  adios2-intel-filesystem.patch
 AutoReq: no
 
 %if 0%{?rhel} || 0%{?openEuler}
@@ -63,6 +64,7 @@ how they process the data.
 
 %prep
 %setup -q -n %{PNAME}-%{version}
+%patch -P 0 -p1
 
 %build
 mkdir adios2-build
