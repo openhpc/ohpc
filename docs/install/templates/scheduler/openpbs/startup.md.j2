@@ -28,8 +28,8 @@ qmgr -c "set server resources_default.place=scatter"
 # Enable support for job accounting
 qmgr -c "set server job_history_enable=True"
 # Register compute hosts with PBS
-for host in "${c_name[@]}"; do
-    qmgr -c "create node $host"
+for ((i=0; i<num_computes; i++)); do
+    qmgr -c "create node ${c_name[$i]}"
 done
 ```
 <!-- ohpc_end -->
