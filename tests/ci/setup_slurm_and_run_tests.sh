@@ -39,8 +39,12 @@ fi
 	slurm-ohpc
 
 # Install rebuilt packages (if any)
+FIND_EXCLUDE=(! -name "*arm1*")
+if [ "${COMPILER_FAMILY}" != "intel" ]; then
+	FIND_EXCLUDE+=(! -name "*-intel-*")
+fi
 # shellcheck disable=SC2046 # (we want the words to be split)
-"${PKG[@]}" install $(find /home/"${USER}"/rpmbuild/RPMS/ -name "*rpm") || true
+"${PKG[@]}" install $(find /home/"${USER}"/rpmbuild/RPMS/ -name "*rpm" "${FIND_EXCLUDE[@]}") || true
 
 # Remove OpenPBS, if it is installed as a dependency. The tests use Slurm Resource Manager
 "${PKG[@]}" remove openpbs-*-ohpc || true
