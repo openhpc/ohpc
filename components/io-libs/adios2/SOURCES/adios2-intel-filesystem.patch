@@ -1,13 +1,17 @@
---- a/source/adios2/toolkit/transport/file/FileFStream.cpp.orig
+--- a/source/adios2/toolkit/transport/file/FileFStream.cpp
 +++ b/source/adios2/toolkit/transport/file/FileFStream.cpp
-@@ -15,8 +15,8 @@
- #if __cplusplus >= 201703L
- #define ADIOS2_USE_STD_FILESYSTEM
+@@ -15,13 +15,7 @@
+ /// \endcond
 
+-#if __cplusplus >= 201703L
++#if __cplusplus >= 201703L && __has_include(<filesystem>)
+ #define ADIOS2_USE_STD_FILESYSTEM
+-
 -#if defined(__GNUC__) && (__GNUC__ < 8) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
 -// GCC version 7 does not support std::filesystem from C++17 even though it
-+#if defined(__GNUC__) && (__GNUC__ < 8) && !defined(__llvm__)
-+// GCC version 7 (and compilers using its libstdc++) does not support std::filesystem from C++17 even though it
- // reports to support C++17.
- #undef ADIOS2_USE_STD_FILESYSTEM
+-// reports to support C++17.
+-#undef ADIOS2_USE_STD_FILESYSTEM
+-#endif
  #endif
+
+ #ifdef ADIOS2_USE_STD_FILESYSTEM
