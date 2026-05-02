@@ -18,7 +18,7 @@
 
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	5.0.4
+Version:	5.0.6
 Release:	1%{?dist}
 License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
@@ -66,6 +66,12 @@ export compiler_vars="CC=${CC} CXX=${CXX} MPIF90=mpiifort $compiler_vars"
 %endif
 
 ./bootstrap
+# Intel oneAPI ifx -v includes -loopopt=1 which autoconf's Fortran library
+# detection misinterprets as a library (-l oopopt=1), causing the
+# "linking to Fortran libraries from C fails" error. Add a case to skip it.
+%if "%{compiler_family}" == "intel"
+sed -i '/-\[lLR\]\*)/i\        -loopopt*) ;;' configure
+%endif
 export LDFLAGS="$LDFLAGS -lz"
 %if 0%{?sle_version}
 export LDFLAGS="$LDFLAGS -lsframe"
