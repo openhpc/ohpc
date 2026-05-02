@@ -729,11 +729,17 @@ def get_latest_uoregon_tau_version(
     try:
         r = requests.get(base_url, timeout=30)
     except requests.exceptions.SSLError:
+        # upstream https certificate is broken, fall back to http
         debug_warn(
-            f"SSL certificate error fetching {base_url}",
+            f"SSL certificate error fetching {base_url}, falling back to HTTP",
             verbose,
         )
-        return None
+        base_url = f"http://www.cs.uoregon.edu/research/tau/{directory}/"
+        try:
+            r = requests.get(base_url, timeout=30)
+        except requests.RequestException as e:
+            debug_warn(f"HTTP fallback also failed: {e}", verbose)
+            return None
     if not r.ok:
         debug_warn(
             f"Failed to fetch UOregon TAU directory listing for {directory}",
