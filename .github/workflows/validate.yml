@@ -111,6 +111,7 @@ jobs:
     - name: Validate Build
       run: |
         . /etc/profile.d/lmod.sh
+        zypper --no-gpg-checks refresh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v7
@@ -153,6 +154,7 @@ jobs:
         sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
     - name: Run CI Tests
       run: |
+        zypper --no-gpg-checks refresh
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
