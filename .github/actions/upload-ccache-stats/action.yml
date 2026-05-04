@@ -17,10 +17,20 @@ runs:
         RAW_STATS=$(ccache --show-stats 2>&1) || RAW_STATS="ccache stats unavailable"
 
         # Parse key metrics from ccache output (|| true to prevent grep exit code 1 from failing the script)
-        CACHE_HIT_RATE=$(echo "$RAW_STATS" | grep -E "^\s+Hits:" | head -1 | grep -oE '\(\s*[0-9.]+%\)' | tr -d '() ' || true)
-        CACHE_SIZE=$(echo "$RAW_STATS" | grep "Cache size" | grep -oE '[0-9.]+\s*/\s*[0-9.]+' | head -1 || true)
-        DIRECT_HITS=$(echo "$RAW_STATS" | grep "Direct:" | grep -oE '[0-9]+\s*/\s*[0-9]+' | head -1 || true)
-        MISSES=$(echo "$RAW_STATS" | grep -E "^\s+Misses:" | head -1 | grep -oE '[0-9]+\s*/\s*[0-9]+' | head -1 || true)
+        # Detect ccache output format: new (4.x+) has "Hits:" line, old (3.x) has "cache hit rate"
+        if echo "$RAW_STATS" | grep -qE '^\s+Hits:'; then
+          # New format (ccache 4.x+): "  Hits:  1706 /  6719 (25.39 %)"
+          CACHE_HIT_RATE=$(echo "$RAW_STATS" | grep -E "^\s+Hits:" | head -1 | grep -oE '\(\s*[0-9.]+\s*%\)' | tr -d '() ' || true)
+          CACHE_SIZE=$(echo "$RAW_STATS" | grep "Cache size" | grep -oE '[0-9.]+\s*/\s*[0-9.]+' | head -1 || true)
+          DIRECT_HITS=$(echo "$RAW_STATS" | grep "Direct:" | grep -oE '[0-9]+\s*/\s*[0-9]+' | head -1 || true)
+          MISSES=$(echo "$RAW_STATS" | grep -E "^\s+Misses:" | head -1 | grep -oE '[0-9]+$' | head -1 || true)
+        else
+          # Old format (ccache 3.x): "cache hit rate  7.61 %"
+          CACHE_HIT_RATE=$(echo "$RAW_STATS" | grep "cache hit rate" | grep -oE '[0-9.]+ %' | tr -d ' ' || true)
+          CACHE_SIZE=$(echo "$RAW_STATS" | grep "cache size" | head -1 | grep -oE '[0-9.]+ [KMGT]B' || true)
+          DIRECT_HITS=$(echo "$RAW_STATS" | grep "cache hit (direct)" | grep -oE '[0-9]+$' || true)
+          MISSES=$(echo "$RAW_STATS" | grep "cache miss" | grep -oE '[0-9]+$' || true)
+        fi
 
         # Output key-value data for table generation
         echo "job_name=${{ inputs.job-name }}" > /tmp/ccache-stats/data.txt
