@@ -8,6 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# OpenHPC:check-updates:skip not following upstream
+
 %include %{_sourcedir}/OHPC_macros
 
 %define pname autoconf
