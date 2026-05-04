@@ -387,6 +387,7 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
         . /etc/profile.d/lmod.sh
+        zypper --no-gpg-checks refresh
         python3.11 tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v4
@@ -453,6 +454,7 @@ jobs:
         sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
     - name: Run CI Tests
       run: |
+        zypper --no-gpg-checks refresh
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
