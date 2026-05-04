@@ -20,15 +20,12 @@
 
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.14.0
+Version:   1.14.1
 Release:   1%{?dist}
 License:   NetCDF
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://cucis.ece.northwestern.edu/projects/PnetCDF
 Source0:   https://parallel-netcdf.github.io/Release/pnetcdf-%{version}.tar.gz
-# https://github.com/Parallel-NetCDF/PnetCDF/pull/178.patch
-Patch0:    0001-Fix-errors-when-building-an-RPM.patch
-Patch1:    0001-Handle-GCC-15-errors.patch
 
 BuildRequires: grep
 BuildRequires: make
@@ -36,7 +33,7 @@ BuildRequires: m4
 BuildRequires: zlib-devel
 BuildRequires: perl(File::Compare)
 BuildRequires: perl(File::Copy)
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: libtool
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -50,22 +47,8 @@ attributes, and variables (> 2B array elements).
 %prep
 
 %setup -q -n pnetcdf-%{version}
-%patch -P 0 -p 1
-%patch -P 1 -p 1
 
 %build
-
-# override with newer config.guess for aarch64
-%ifarch aarch64 || ppc64le
-%if 0%{?rhel} >= 9
-cp /usr/lib/rpm/redhat/config.guess bin
-%else
-cp /usr/lib/rpm/config.guess bin
-%endif
-%endif
-
-export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
-autoreconf -if
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
