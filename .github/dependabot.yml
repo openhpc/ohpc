@@ -4,3 +4,8 @@ updates:
     directory: /
     schedule:
       interval: daily
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: 3.x
+    schedule:
+      interval: daily
