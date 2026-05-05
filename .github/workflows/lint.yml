@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Lint markdown
-      uses: DavidAnson/markdownlint-cli2-action@v15
+      uses: DavidAnson/markdownlint-cli2-action@v23
       with:
         globs: |
           README.md
