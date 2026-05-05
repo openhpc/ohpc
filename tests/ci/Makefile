@@ -13,6 +13,7 @@ codespell-lint:
 		containers \
 		tests/ci/check_gitignore_order.py \
 		tests/ci/check_spec.py \
+		tests/ci/integration-test.sh \
 		tests/ci/run_build.py \
 		misc/build_order.py \
 		tests/ci/spec_to_test_mapping.py \
@@ -165,6 +166,7 @@ shellcheck-lint:
 		../../misc/build_order.sh \
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
+		../../tests/ci/integration-test.sh \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../tests/ci/test_parse_doc.bats \
@@ -294,6 +296,7 @@ shfmt-lint:
 		../../tests/libs/mfem/tests/parallel/rm_execution \
 		../../tests/modules/interactive_commands
 	shfmt -w -d \
+		../../tests/ci/integration-test.sh \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../misc/build_order.sh \
