@@ -61,7 +61,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
@@ -101,7 +101,7 @@ jobs:
           /tmp/empty
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}-build
@@ -141,7 +141,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}-build
@@ -198,7 +198,7 @@ jobs:
         path: tests/**/*.log.xml
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
@@ -231,7 +231,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}
@@ -264,7 +264,7 @@ jobs:
           /tmp/empty
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}-build
@@ -296,7 +296,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v4
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}-build
@@ -335,7 +335,7 @@ jobs:
         fi
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.os }}-${{ github.sha }}
@@ -367,7 +367,7 @@ jobs:
       run: zypper -n update
     - uses: actions/checkout@v4
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-leap-${{ matrix.os }}-${{ github.sha }}
@@ -401,7 +401,7 @@ jobs:
           /tmp/empty
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-leap-${{ matrix.os }}-${{ github.sha }}-build
@@ -431,7 +431,7 @@ jobs:
       run: zypper -n update
     - uses: actions/checkout@v4
     - name: Restore ccache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/ccache
         key: ccache-leap-${{ matrix.os }}-${{ github.sha }}-build
@@ -471,7 +471,7 @@ jobs:
         fi
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/ccache
         key: ccache-leap-${{ matrix.os }}-${{ github.sha }}
