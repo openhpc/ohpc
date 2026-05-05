@@ -1,6 +1,0 @@
-Requires:       %{requires_kmod_name} = %{requires_kmod_version}
-Requires:       ldiskfsprogs >= 1.44.3.wc1
-Requires:       lustre-osd-ldiskfs-mount = %{version}
-Provides:       lustre-osd = %{version}
-Obsoletes:      lustre-ldiskfs < %{version}
-Obsoletes:      lustre-osd-ldiskfs < %{version}
