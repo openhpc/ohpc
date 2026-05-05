@@ -13,6 +13,7 @@ codespell-lint:
 		containers \
 		tests/ci/check_gitignore_order.py \
 		tests/ci/check_spec.py \
+		tests/ci/integration-test.sh \
 		tests/ci/run_build.py \
 		misc/build_order.py \
 		misc/build_order.sh \
@@ -255,6 +256,7 @@ shellcheck-lint:
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
 		../../misc/dist/count_avail_packages.sh \
+		../../tests/ci/integration-test.sh \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../tests/common/functions \
@@ -445,6 +447,7 @@ shfmt-lint:
 	shfmt -w -d \
 		../../tests/perf-tools/extrae/tests/tracec.sh \
 		../../tests/perf-tools/extrae/tests/tracef.sh \
+		../../tests/ci/integration-test.sh \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../misc/build_order.sh \
