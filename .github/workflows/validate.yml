@@ -90,7 +90,7 @@ jobs:
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler }}
         touch /tmp/empty
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: rhel-rpms-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
@@ -191,7 +191,7 @@ jobs:
       # To display test results from forked repositories they need to
       # be uploaded and then analyzed.
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
@@ -253,7 +253,7 @@ jobs:
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: openEuler-rpms-${{ matrix.os }}
         retention-days: 1
@@ -390,7 +390,7 @@ jobs:
         zypper --no-gpg-checks refresh
         python3.11 tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: leap-rpms-${{ matrix.os }}
         retention-days: 1
@@ -488,7 +488,7 @@ jobs:
     steps:
     - name: Upload
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: event-file
         retention-days: 1
