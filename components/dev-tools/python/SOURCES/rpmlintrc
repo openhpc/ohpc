@@ -1,3 +1,0 @@
-addFilter("wrong-script-interpreter")
-addFilter("devel-file-in-non-devel-package")
-addFilter("library-without-ldconfig-postin")
