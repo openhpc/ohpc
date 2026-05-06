@@ -17,7 +17,7 @@
 
 Summary:   Performance tools for the Linux console
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   5.5.0
+Version:   5.5.1
 Release:   1%{?dist}
 License:   GPL-3.0+
 Group:     %{PROJ_NAME}/perf-tools
