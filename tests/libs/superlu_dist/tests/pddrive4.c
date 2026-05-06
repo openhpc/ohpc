@@ -9,7 +9,6 @@ The source code is distributed under BSD license, see the file License.txt
 at the top-level directory.
 */
 
-
 /*! @file 
  * \brief This example illustrates how to divide up the processes into subgroups
  *
@@ -49,116 +48,123 @@ at the top-level directory.
 
 int main(int argc, char *argv[])
 {
-    superlu_dist_options_t options;
-    SuperLUStat_t stat;
-    SuperMatrix A;
-    dScalePermstruct_t ScalePermstruct;
-    dLUstruct_t LUstruct;
-    dSOLVEstruct_t SOLVEstruct;
-    gridinfo_t grid1, grid2;
-    double   *berr;
-    double   *a, *b, *xtrue;
-    int_t    *asub, *xa;
-    int_t    i, j, m, n;
-    int      nprow, npcol, ldumap, p;
-    int_t    usermap[6];
-    int      iam, info, ldb, ldx, nprocs;
-    int      nrhs = 1;   /* Number of right-hand side. */
-    int ii, omp_mpi_level;
-    char     **cpp, c, *postfix;
-    FILE *fp;
-    int cpp_defs();
-
-
-    /* ------------------------------------------------------------
-       INITIALIZE MPI ENVIRONMENT. 
-       ------------------------------------------------------------*/
-    MPI_Init_thread( &argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level); 
-
-    MPI_Comm_size( MPI_COMM_WORLD, &nprocs );
-    if ( nprocs < 10 ) {
-	fprintf(stderr, "Requires at least 10 processes\n");
-	exit(-1);
-    }
-
-    /* Parse command line argv[]. */
-    for (cpp = argv+1; *cpp; ++cpp) {
-	if ( **cpp == '-' ) {
-	    c = *(*cpp+1);
-	    ++cpp;
-	    switch (c) {
-	      case 'h':
-		  printf("Options:\n");
-		  printf("\t-r <int>: process rows    (default %d)\n", nprow);
-		  printf("\t-c <int>: process columns (default %d)\n", npcol);
-		  exit(0);
-		  break;
-	      case 'r': nprow = atoi(*cpp);
-		        break;
-	      case 'c': npcol = atoi(*cpp);
-		        break;
-	    }
-	} else { /* Last arg is considered a filename */
-	    if ( !(fp = fopen(*cpp, "r")) ) {
-                ABORT("File does not exist");
-            }
-	    break;
-	}
-    }
-
-    /* ------------------------------------------------------------
-       INITIALIZE THE SUPERLU PROCESS GRID 1. 
-       ------------------------------------------------------------*/
-    nprow = 2;
-    npcol = 3;
-    ldumap = 2;
-    p = 0;    /* Grid 1 starts from process 0. */
-    for (i = 0; i < nprow; ++i)
-	for (j = 0; j < npcol; ++j) usermap[i+j*ldumap] = p++;
-    superlu_gridmap(MPI_COMM_WORLD, nprow, npcol, usermap, ldumap, &grid1);
-
-    /* ------------------------------------------------------------
-       INITIALIZE THE SUPERLU PROCESS GRID 2. 
-       ------------------------------------------------------------*/
-    nprow = 2;
-    npcol = 2;
-    ldumap = 2;
-    p = 6;   /* Grid 2 starts from process 6. */
-    for (i = 0; i < nprow; ++i)
-	for (j = 0; j < npcol; ++j) usermap[i+j*ldumap] = p++;
-    superlu_gridmap(MPI_COMM_WORLD, nprow, npcol, usermap, ldumap, &grid2);
-
-    /* Bail out if I do not belong in any of the 2 grids. */
-    MPI_Comm_rank( MPI_COMM_WORLD, &iam );
-    if ( iam >= 10 ) goto out;
-    
-#if ( DEBUGlevel>=1 )
-    CHECK_MALLOC(iam, "Enter main()");
-#endif
-
-    for(ii = 0;ii<strlen(*cpp);ii++){
-	if((*cpp)[ii]=='.'){
-	    postfix = &((*cpp)[ii+1]);
-	}
-    }
-    // printf("%s\n", postfix);
-
-    if ( iam >= 0 && iam < 6 ) { /* I am in grid 1. */
-	iam = grid1.iam;  /* Get the logical number in the new grid. */
-
-        /* ------------------------------------------------------------
-           GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
-           ------------------------------------------------------------*/
-        dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid1);
-	
-	if ( !(berr = doubleMalloc_dist(nrhs)) )
-	    ABORT("Malloc fails for berr[].");
+	superlu_dist_options_t options;
+	SuperLUStat_t stat;
+	SuperMatrix A;
+	dScalePermstruct_t ScalePermstruct;
+	dLUstruct_t LUstruct;
+	dSOLVEstruct_t SOLVEstruct;
+	gridinfo_t grid1, grid2;
+	double *berr;
+	double *a, *b, *xtrue;
+	int_t *asub, *xa;
+	int_t i, j, m, n;
+	int nprow, npcol, ldumap, p;
+	int_t usermap[6];
+	int iam, info, ldb, ldx, nprocs;
+	int nrhs = 1; /* Number of right-hand side. */
+	int ii, omp_mpi_level;
+	char **cpp, c, *postfix;
+	FILE *fp;
+	int cpp_defs();
 
 	/* ------------------------------------------------------------
+       INITIALIZE MPI ENVIRONMENT. 
+       ------------------------------------------------------------*/
+	MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level);
+
+	MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+	if (nprocs < 10) {
+		fprintf(stderr, "Requires at least 10 processes\n");
+		exit(-1);
+	}
+
+	/* Parse command line argv[]. */
+	for (cpp = argv + 1; *cpp; ++cpp) {
+		if (**cpp == '-') {
+			c = *(*cpp + 1);
+			++cpp;
+			switch (c) {
+			case 'h':
+				printf("Options:\n");
+				printf("\t-r <int>: process rows    (default %d)\n",
+				       nprow);
+				printf("\t-c <int>: process columns (default %d)\n",
+				       npcol);
+				exit(0);
+				break;
+			case 'r':
+				nprow = atoi(*cpp);
+				break;
+			case 'c':
+				npcol = atoi(*cpp);
+				break;
+			}
+		} else { /* Last arg is considered a filename */
+			if (!(fp = fopen(*cpp, "r"))) {
+				ABORT("File does not exist");
+			}
+			break;
+		}
+	}
+
+	/* ------------------------------------------------------------
+       INITIALIZE THE SUPERLU PROCESS GRID 1. 
+       ------------------------------------------------------------*/
+	nprow = 2;
+	npcol = 3;
+	ldumap = 2;
+	p = 0; /* Grid 1 starts from process 0. */
+	for (i = 0; i < nprow; ++i)
+		for (j = 0; j < npcol; ++j)
+			usermap[i + j * ldumap] = p++;
+	superlu_gridmap(MPI_COMM_WORLD, nprow, npcol, usermap, ldumap, &grid1);
+
+	/* ------------------------------------------------------------
+       INITIALIZE THE SUPERLU PROCESS GRID 2. 
+       ------------------------------------------------------------*/
+	nprow = 2;
+	npcol = 2;
+	ldumap = 2;
+	p = 6; /* Grid 2 starts from process 6. */
+	for (i = 0; i < nprow; ++i)
+		for (j = 0; j < npcol; ++j)
+			usermap[i + j * ldumap] = p++;
+	superlu_gridmap(MPI_COMM_WORLD, nprow, npcol, usermap, ldumap, &grid2);
+
+	/* Bail out if I do not belong in any of the 2 grids. */
+	MPI_Comm_rank(MPI_COMM_WORLD, &iam);
+	if (iam >= 10)
+		goto out;
+
+#if (DEBUGlevel >= 1)
+	CHECK_MALLOC(iam, "Enter main()");
+#endif
+
+	for (ii = 0; ii < strlen(*cpp); ii++) {
+		if ((*cpp)[ii] == '.') {
+			postfix = &((*cpp)[ii + 1]);
+		}
+	}
+	// printf("%s\n", postfix);
+
+	if (iam >= 0 && iam < 6) { /* I am in grid 1. */
+		iam = grid1.iam; /* Get the logical number in the new grid. */
+
+		/* ------------------------------------------------------------
+           GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
+           ------------------------------------------------------------*/
+		dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp,
+				       postfix, &grid1);
+
+		if (!(berr = doubleMalloc_dist(nrhs)))
+			ABORT("Malloc fails for berr[].");
+
+		/* ------------------------------------------------------------
 	   NOW WE SOLVE THE LINEAR SYSTEM.
 	   ------------------------------------------------------------*/
-	
-        /* Set the default input options:
+
+		/* Set the default input options:
             options.Fact = DOFACT;
             options.Equil = YES;
             options.ColPerm = METIS_AT_PLUS_A;
@@ -170,65 +176,66 @@ int main(int argc, char *argv[])
             options.RefineInitialized = NO;
             options.PrintStat = YES;
          */
-	set_default_options_dist(&options);
+		set_default_options_dist(&options);
 
-        if (!iam) {
-	    print_sp_ienv_dist(&options);
-    	    print_options_dist(&options);
-        }
+		if (!iam) {
+			print_sp_ienv_dist(&options);
+			print_options_dist(&options);
+		}
 
-        m = A.nrow;
-        n = A.ncol;
+		m = A.nrow;
+		n = A.ncol;
 
-	/* Initialize ScalePermstruct and LUstruct. */
-	dScalePermstructInit(m, n, &ScalePermstruct);
-	dLUstructInit(n, &LUstruct);
+		/* Initialize ScalePermstruct and LUstruct. */
+		dScalePermstructInit(m, n, &ScalePermstruct);
+		dLUstructInit(n, &LUstruct);
 
-	/* Initialize the statistics variables. */
-	PStatInit(&stat);
-	
-	/* Call the linear equation solver. */
-	pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid1,
-                &LUstruct, &SOLVEstruct, berr, &stat, &info);
+		/* Initialize the statistics variables. */
+		PStatInit(&stat);
 
-        /* Check the accuracy of the solution. */
-        pdinf_norm_error(iam, ((NRformat_loc *)A.Store)->m_loc,
-                         nrhs, b, ldb, xtrue, ldx, &grid1);
-    
-	/* Print the statistics. */
-	PStatPrint(&options, &stat, &grid1);
+		/* Call the linear equation solver. */
+		pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid1,
+			&LUstruct, &SOLVEstruct, berr, &stat, &info);
 
-	/* ------------------------------------------------------------
+		/* Check the accuracy of the solution. */
+		pdinf_norm_error(iam, ((NRformat_loc *)A.Store)->m_loc, nrhs, b,
+				 ldb, xtrue, ldx, grid1.comm);
+
+		/* Print the statistics. */
+		PStatPrint(&options, &stat, &grid1);
+
+		/* ------------------------------------------------------------
 	   DEALLOCATE STORAGE.
 	   ------------------------------------------------------------*/
-	PStatFree(&stat);
-        Destroy_CompRowLoc_Matrix_dist(&A);
-        dScalePermstructFree(&ScalePermstruct);
-	dDestroy_LU(n, &grid1, &LUstruct);
-	dLUstructFree(&LUstruct);
-        if ( options.SolveInitialized ) {
-            dSolveFinalize(&options, &SOLVEstruct);
-        }
-	SUPERLU_FREE(b);
-	SUPERLU_FREE(xtrue);
-	SUPERLU_FREE(berr);
+		PStatFree(&stat);
+		Destroy_CompRowLoc_Matrix_dist(&A);
+		dScalePermstructFree(&ScalePermstruct);
+		dDestroy_LU(n, &grid1, &LUstruct);
+		dLUstructFree(&LUstruct);
+		if (options.SolveInitialized) {
+			dSolveFinalize(&options, &SOLVEstruct);
+		}
+		SUPERLU_FREE(b);
+		SUPERLU_FREE(xtrue);
+		SUPERLU_FREE(berr);
 
-    } else { /* I am in grid 2. */
-	iam = grid2.iam;  /* Get the logical number in the new grid. */
+	} else { /* I am in grid 2. */
+		iam = grid2.iam; /* Get the logical number in the new grid. */
 
-        /* ------------------------------------------------------------
+		/* ------------------------------------------------------------
            GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
            ------------------------------------------------------------*/
-        dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid2);
+		dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp,
+				       postfix, &grid2);
 
-	if ( !(berr = doubleMalloc_dist(nrhs)) )
-	    ABORT("Malloc fails for berr[].");
+		if (!(berr = doubleMalloc_dist(nrhs)))
+			ABORT("Malloc fails for berr[].");
 
-	/* ------------------------------------------------------------
+		/* ------------------------------------------------------------
 	   NOW WE SOLVE THE LINEAR SYSTEM.
 	   ------------------------------------------------------------*/
-	
-        /* Set the default input options:
+
+		/* Set the default input options:
             options.Fact = DOFACT;
             options.Equil = YES;
             options.ColPerm = MMD_AT_PLUS_A;
@@ -240,62 +247,60 @@ int main(int argc, char *argv[])
             options.RefineInitialized = NO;
             options.PrintStat = YES;
          */
-	set_default_options_dist(&options);
-	
-        m = A.nrow;
-        n = A.ncol;
+		set_default_options_dist(&options);
 
-	/* Initialize ScalePermstruct and LUstruct. */
-	dScalePermstructInit(m, n, &ScalePermstruct);
-	dLUstructInit(n, &LUstruct);
+		m = A.nrow;
+		n = A.ncol;
 
-	/* Initialize the statistics variables. */
-	PStatInit(&stat);
-	
-	/* Call the linear equation solver. */
-	pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid2,
-                &LUstruct, &SOLVEstruct, berr, &stat, &info);
+		/* Initialize ScalePermstruct and LUstruct. */
+		dScalePermstructInit(m, n, &ScalePermstruct);
+		dLUstructInit(n, &LUstruct);
 
-        /* Check the accuracy of the solution. */
-        pdinf_norm_error(iam, ((NRformat_loc *)A.Store)->m_loc,
-                         nrhs, b, ldb, xtrue, ldx, &grid2);
-    
-	/* Print the statistics. */
-	PStatPrint(&options, &stat, &grid2);
+		/* Initialize the statistics variables. */
+		PStatInit(&stat);
 
-	/* ------------------------------------------------------------
+		/* Call the linear equation solver. */
+		pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid2,
+			&LUstruct, &SOLVEstruct, berr, &stat, &info);
+
+		/* Check the accuracy of the solution. */
+		pdinf_norm_error(iam, ((NRformat_loc *)A.Store)->m_loc, nrhs, b,
+				 ldb, xtrue, ldx, grid2.comm);
+
+		/* Print the statistics. */
+		PStatPrint(&options, &stat, &grid2);
+
+		/* ------------------------------------------------------------
 	   DEALLOCATE STORAGE.
 	   ------------------------------------------------------------*/
-	PStatFree(&stat);
-        Destroy_CompRowLoc_Matrix_dist(&A);
-        dScalePermstructFree(&ScalePermstruct);
-	dDestroy_LU(n, &grid2, &LUstruct);
-	dLUstructFree(&LUstruct);
-        if ( options.SolveInitialized ) {
-            dSolveFinalize(&options, &SOLVEstruct);
-        }
-	SUPERLU_FREE(b);
-	SUPERLU_FREE(xtrue);
-	SUPERLU_FREE(berr);
-    }
+		PStatFree(&stat);
+		Destroy_CompRowLoc_Matrix_dist(&A);
+		dScalePermstructFree(&ScalePermstruct);
+		dDestroy_LU(n, &grid2, &LUstruct);
+		dLUstructFree(&LUstruct);
+		if (options.SolveInitialized) {
+			dSolveFinalize(&options, &SOLVEstruct);
+		}
+		SUPERLU_FREE(b);
+		SUPERLU_FREE(xtrue);
+		SUPERLU_FREE(berr);
+	}
 
-    fclose(fp);
+	fclose(fp);
 
-
-    /* ------------------------------------------------------------
+	/* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRIDS.
        ------------------------------------------------------------*/
-    superlu_gridexit(&grid1);
-    superlu_gridexit(&grid2);
+	superlu_gridexit(&grid1);
+	superlu_gridexit(&grid2);
 
 out:
-    /* ------------------------------------------------------------
+	/* ------------------------------------------------------------
        TERMINATES THE MPI EXECUTION ENVIRONMENT.
        ------------------------------------------------------------*/
-    MPI_Finalize();
+	MPI_Finalize();
 
-#if ( DEBUGlevel>=1 )
-    CHECK_MALLOC(iam, "Exit main()");
+#if (DEBUGlevel >= 1)
+	CHECK_MALLOC(iam, "Exit main()");
 #endif
-
 }

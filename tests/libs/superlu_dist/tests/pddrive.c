@@ -9,7 +9,6 @@ The source code is distributed under BSD license, see the file License.txt
 at the top-level directory.
 */
 
-
 /*! @file 
  * \brief Driver program for PDGSSVX example
  *
@@ -50,140 +49,148 @@ at the top-level directory.
 
 int main(int argc, char *argv[])
 {
-    superlu_dist_options_t options;
-    SuperLUStat_t stat;
-    SuperMatrix A;
-    dScalePermstruct_t ScalePermstruct;
-    dLUstruct_t LUstruct;
-    dSOLVEstruct_t SOLVEstruct;
-    gridinfo_t grid;
-    double   *berr;
-    double   *b, *xtrue;
-    int    m, n;
-    int      nprow, npcol;
-    int      iam, info, ldb, ldx, nrhs;
-    char     **cpp, c, *postfix;;
-    FILE *fp;
-    int cpp_defs();
-    int ii, omp_mpi_level;
+	superlu_dist_options_t options;
+	SuperLUStat_t stat;
+	SuperMatrix A;
+	dScalePermstruct_t ScalePermstruct;
+	dLUstruct_t LUstruct;
+	dSOLVEstruct_t SOLVEstruct;
+	gridinfo_t grid;
+	double *berr;
+	double *b, *xtrue;
+	int m, n;
+	int nprow, npcol;
+	int iam, info, ldb, ldx, nrhs;
+	char **cpp, c, *postfix;
+	;
+	FILE *fp;
+	int cpp_defs();
+	int ii, omp_mpi_level;
 
-    nprow = 1;  /* Default process rows.      */
-    npcol = 1;  /* Default process columns.   */
-    nrhs = 1;   /* Number of right-hand side. */
+	nprow = 1; /* Default process rows.      */
+	npcol = 1; /* Default process columns.   */
+	nrhs = 1; /* Number of right-hand side. */
 
-    /* ------------------------------------------------------------
+	/* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 
        ------------------------------------------------------------*/
-    //MPI_Init( &argc, &argv );
-    MPI_Init_thread( &argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level); 
-	
+	//MPI_Init( &argc, &argv );
+	MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &omp_mpi_level);
 
-#if ( VAMPIR>=1 )
-    VT_traceoff(); 
+#if (VAMPIR >= 1)
+	VT_traceoff();
 #endif
 
-#if ( VTUNE>=1 )
+#if (VTUNE >= 1)
 	__itt_pause();
 #endif
-	
-    /* Parse command line argv[]. */
-    for (cpp = argv+1; *cpp; ++cpp) {
-	if ( **cpp == '-' ) {
-	    c = *(*cpp+1);
-	    ++cpp;
-	    switch (c) {
-	      case 'h':
-		  printf("Options:\n");
-		  printf("\t-r <int>: process rows    (default %4d)\n", nprow);
-		  printf("\t-c <int>: process columns (default %4d)\n", npcol);
-		  exit(0);
-		  break;
-	      case 'r': nprow = atoi(*cpp);
-		        break;
-	      case 'c': npcol = atoi(*cpp);
-		        break;
-	    }
-	} else { /* Last arg is considered a filename */
-	    if ( !(fp = fopen(*cpp, "r")) ) {
-                ABORT("File does not exist");
-            }
-	    break;
-	}
-    }
 
-    /* ------------------------------------------------------------
+	/* Parse command line argv[]. */
+	for (cpp = argv + 1; *cpp; ++cpp) {
+		if (**cpp == '-') {
+			c = *(*cpp + 1);
+			++cpp;
+			switch (c) {
+			case 'h':
+				printf("Options:\n");
+				printf("\t-r <int>: process rows    (default %4d)\n",
+				       nprow);
+				printf("\t-c <int>: process columns (default %4d)\n",
+				       npcol);
+				exit(0);
+				break;
+			case 'r':
+				nprow = atoi(*cpp);
+				break;
+			case 'c':
+				npcol = atoi(*cpp);
+				break;
+			}
+		} else { /* Last arg is considered a filename */
+			if (!(fp = fopen(*cpp, "r"))) {
+				ABORT("File does not exist");
+			}
+			break;
+		}
+	}
+
+	/* ------------------------------------------------------------
        INITIALIZE THE SUPERLU PROCESS GRID. 
        ------------------------------------------------------------*/
-    superlu_gridinit(MPI_COMM_WORLD, nprow, npcol, &grid);
-	
-    if(grid.iam==0){
-	MPI_Query_thread(&omp_mpi_level);
-    switch (omp_mpi_level) {
-      case MPI_THREAD_SINGLE:
-		printf("MPI_Query_thread with MPI_THREAD_SINGLE\n");
-		fflush(stdout);
-	break;
-      case MPI_THREAD_FUNNELED:
-		printf("MPI_Query_thread with MPI_THREAD_FUNNELED\n");
-		fflush(stdout);
-	break;
-      case MPI_THREAD_SERIALIZED:
-		printf("MPI_Query_thread with MPI_THREAD_SERIALIZED\n");
-		fflush(stdout);
-	break;
-      case MPI_THREAD_MULTIPLE:
-		printf("MPI_Query_thread with MPI_THREAD_MULTIPLE\n");
-		fflush(stdout);
-	break;
-    }
+	superlu_gridinit(MPI_COMM_WORLD, nprow, npcol, &grid);
+
+	if (grid.iam == 0) {
+		MPI_Query_thread(&omp_mpi_level);
+		switch (omp_mpi_level) {
+		case MPI_THREAD_SINGLE:
+			printf("MPI_Query_thread with MPI_THREAD_SINGLE\n");
+			fflush(stdout);
+			break;
+		case MPI_THREAD_FUNNELED:
+			printf("MPI_Query_thread with MPI_THREAD_FUNNELED\n");
+			fflush(stdout);
+			break;
+		case MPI_THREAD_SERIALIZED:
+			printf("MPI_Query_thread with MPI_THREAD_SERIALIZED\n");
+			fflush(stdout);
+			break;
+		case MPI_THREAD_MULTIPLE:
+			printf("MPI_Query_thread with MPI_THREAD_MULTIPLE\n");
+			fflush(stdout);
+			break;
+		}
 	}
-	
-    /* Bail out if I do not belong in the grid. */
-    iam = grid.iam;
-    if ( iam >= nprow * npcol )	goto out;
-    if ( !iam ) {
-	int v_major, v_minor, v_bugfix;
+
+	/* Bail out if I do not belong in the grid. */
+	iam = grid.iam;
+	if (iam >= nprow * npcol)
+		goto out;
+	if (!iam) {
+		int v_major, v_minor, v_bugfix;
 #ifdef __INTEL_COMPILER
-	printf("__INTEL_COMPILER is defined\n");
+		printf("__INTEL_COMPILER is defined\n");
 #endif
-	printf("__STDC_VERSION__ %ld\n", __STDC_VERSION__);
+		printf("__STDC_VERSION__ %ld\n", __STDC_VERSION__);
 
-	superlu_dist_GetVersionNumber(&v_major, &v_minor, &v_bugfix);
-	printf("Library version:\t%d.%d.%d\n", v_major, v_minor, v_bugfix);
+		superlu_dist_GetVersionNumber(&v_major, &v_minor, &v_bugfix);
+		printf("Library version:\t%d.%d.%d\n", v_major, v_minor,
+		       v_bugfix);
 
-	printf("Input matrix file:\t%s\n", *cpp);
-        printf("Process grid:\t\t%d X %d\n", (int)grid.nprow, (int)grid.npcol);
-	fflush(stdout);
-    }
-
-#if ( VAMPIR>=1 )
-    VT_traceoff();
-#endif
-
-#if ( DEBUGlevel>=1 )
-    CHECK_MALLOC(iam, "Enter main()");
-#endif
-
-    for(ii = 0;ii<strlen(*cpp);ii++){
-	if((*cpp)[ii]=='.'){
-		postfix = &((*cpp)[ii+1]);
+		printf("Input matrix file:\t%s\n", *cpp);
+		printf("Process grid:\t\t%d X %d\n", (int)grid.nprow,
+		       (int)grid.npcol);
+		fflush(stdout);
 	}
-    }
-    // printf("%s\n", postfix);
-	
-    /* ------------------------------------------------------------
+
+#if (VAMPIR >= 1)
+	VT_traceoff();
+#endif
+
+#if (DEBUGlevel >= 1)
+	CHECK_MALLOC(iam, "Enter main()");
+#endif
+
+	for (ii = 0; ii < strlen(*cpp); ii++) {
+		if ((*cpp)[ii] == '.') {
+			postfix = &((*cpp)[ii + 1]);
+		}
+	}
+	// printf("%s\n", postfix);
+
+	/* ------------------------------------------------------------
        GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
        ------------------------------------------------------------*/
-    dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix, &grid);
+	dcreate_matrix_postfix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, postfix,
+			       &grid);
 
-    if ( !(berr = doubleMalloc_dist(nrhs)) )
-	ABORT("Malloc fails for berr[].");
+	if (!(berr = doubleMalloc_dist(nrhs)))
+		ABORT("Malloc fails for berr[].");
 
-    /* ------------------------------------------------------------
+	/* ------------------------------------------------------------
        NOW WE SOLVE THE LINEAR SYSTEM.
        ------------------------------------------------------------*/
 
-    /* Set the default input options:
+	/* Set the default input options:
         options.Fact              = DOFACT;
         options.Equil             = YES;
         options.ParSymbFact       = NO;
@@ -197,10 +204,10 @@ int main(int argc, char *argv[])
         options.PrintStat         = YES;
 	options.DiagInv           = NO;
      */
-    set_default_options_dist(&options);
+	set_default_options_dist(&options);
 
-    options.ReplaceTinyPivot = YES;
-    options.IterRefine = NOREFINE;
+	options.ReplaceTinyPivot = YES;
+	options.IterRefine = NOREFINE;
 
 #if 0
     options.RowPerm = LargeDiag_HWPM;
@@ -210,83 +217,80 @@ int main(int argc, char *argv[])
     options.ReplaceTinyPivot = YES;
 #endif
 
-    if (!iam) {
-	print_sp_ienv_dist(&options);
-	print_options_dist(&options);
-	fflush(stdout);
-    }
+	if (!iam) {
+		print_sp_ienv_dist(&options);
+		print_options_dist(&options);
+		fflush(stdout);
+	}
 
-    m = A.nrow;
-    n = A.ncol;
+	m = A.nrow;
+	n = A.ncol;
 
-    /* Initialize ScalePermstruct and LUstruct. */
-    dScalePermstructInit(m, n, &ScalePermstruct);
-    dLUstructInit(n, &LUstruct);
+	/* Initialize ScalePermstruct and LUstruct. */
+	dScalePermstructInit(m, n, &ScalePermstruct);
+	dLUstructInit(n, &LUstruct);
 
-    /* Initialize the statistics variables. */
-    PStatInit(&stat);
+	/* Initialize the statistics variables. */
+	PStatInit(&stat);
 
-    /* Call the linear equation solver. */
-    pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid,
-	    &LUstruct, &SOLVEstruct, berr, &stat, &info);
+	/* Call the linear equation solver. */
+	pdgssvx(&options, &A, &ScalePermstruct, b, ldb, nrhs, &grid, &LUstruct,
+		&SOLVEstruct, berr, &stat, &info);
 
+	/* Check the accuracy of the solution. */
+	pdinf_norm_error(iam, ((NRformat_loc *)A.Store)->m_loc, nrhs, b, ldb,
+			 xtrue, ldx, grid.comm);
 
-    /* Check the accuracy of the solution. */
-    pdinf_norm_error(iam, ((NRformat_loc *)A.Store)->m_loc,
-		     nrhs, b, ldb, xtrue, ldx, &grid);
+	PStatPrint(&options, &stat, &grid); /* Print the statistics. */
 
-    PStatPrint(&options, &stat, &grid);        /* Print the statistics. */
-
-    /* ------------------------------------------------------------
+	/* ------------------------------------------------------------
        DEALLOCATE STORAGE.
        ------------------------------------------------------------*/
 
-    PStatFree(&stat);
-    Destroy_CompRowLoc_Matrix_dist(&A);
-    dScalePermstructFree(&ScalePermstruct);
-    dDestroy_LU(n, &grid, &LUstruct);
-    dLUstructFree(&LUstruct);
-    if ( options.SolveInitialized ) {
-        dSolveFinalize(&options, &SOLVEstruct);
-    }
-    SUPERLU_FREE(b);
-    SUPERLU_FREE(xtrue);
-    SUPERLU_FREE(berr);
-    fclose(fp);
+	PStatFree(&stat);
+	Destroy_CompRowLoc_Matrix_dist(&A);
+	dScalePermstructFree(&ScalePermstruct);
+	dDestroy_LU(n, &grid, &LUstruct);
+	dLUstructFree(&LUstruct);
+	if (options.SolveInitialized) {
+		dSolveFinalize(&options, &SOLVEstruct);
+	}
+	SUPERLU_FREE(b);
+	SUPERLU_FREE(xtrue);
+	SUPERLU_FREE(berr);
+	fclose(fp);
 
-    /* ------------------------------------------------------------
+	/* ------------------------------------------------------------
        RELEASE THE SUPERLU PROCESS GRID.
        ------------------------------------------------------------*/
 out:
-    superlu_gridexit(&grid);
+	superlu_gridexit(&grid);
 
-    /* ------------------------------------------------------------
+	/* ------------------------------------------------------------
        TERMINATES THE MPI EXECUTION ENVIRONMENT.
        ------------------------------------------------------------*/
-    MPI_Finalize();
+	MPI_Finalize();
 
-#if ( DEBUGlevel>=1 )
-    CHECK_MALLOC(iam, "Exit main()");
+#if (DEBUGlevel >= 1)
+	CHECK_MALLOC(iam, "Exit main()");
 #endif
-
 }
-
 
 int cpp_defs()
 {
-    printf(".. CPP definitions:\n");
-#if ( PRNTlevel>=1 )
-    printf("\tPRNTlevel = %d\n", PRNTlevel);
+	printf(".. CPP definitions:\n");
+#if (PRNTlevel >= 1)
+	printf("\tPRNTlevel = %d\n", PRNTlevel);
 #endif
-#if ( DEBUGlevel>=1 )
-    printf("\tDEBUGlevel = %d\n", DEBUGlevel);
+#if (DEBUGlevel >= 1)
+	printf("\tDEBUGlevel = %d\n", DEBUGlevel);
 #endif
-#if ( PROFlevel>=1 )
-    printf("\tPROFlevel = %d\n", PROFlevel);
+#if (PROFlevel >= 1)
+	printf("\tPROFlevel = %d\n", PROFlevel);
 #endif
-#if ( StaticPivot>=1 )
-    printf("\tStaticPivot = %d\n", StaticPivot);
+#if (StaticPivot >= 1)
+	printf("\tStaticPivot = %d\n", StaticPivot);
 #endif
-    printf("....\n");
-    return 0;
+	printf("....\n");
+	return 0;
 }

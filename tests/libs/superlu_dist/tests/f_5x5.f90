@@ -1,11 +1,11 @@
 
-! -- Distributed SuperLU routine (version 2.0) --
+! -- Distributed SuperLU routine (version 9.0) --
 ! Lawrence Berkeley National Lab, Univ. of California Berkeley.
 ! July 20, 2004
 !
 !
       program f_5x5
-! 
+!
 ! Purpose
 ! =======
 !
@@ -53,7 +53,7 @@
       integer(superlu_ptr) :: A
       integer(superlu_ptr) :: stat
 
-! Initialize MPI environment 
+! Initialize MPI environment
       call mpi_init(ierr)
 
 ! Check malloc
@@ -62,9 +62,9 @@
 ! Create Fortran handles for the C structures used in SuperLU_DIST
       call f_create_gridinfo_handle(grid)
       call f_create_options_handle(options)
-      call f_create_ScalePerm_handle(ScalePermstruct)
-      call f_create_LUstruct_handle(LUstruct)
-      call f_create_SOLVEstruct_handle(SOLVEstruct)
+      call f_dcreate_ScalePerm_handle(ScalePermstruct)
+      call f_dcreate_LUstruct_handle(LUstruct)
+      call f_dcreate_SOLVEstruct_handle(SOLVEstruct)
       call f_create_SuperMatrix_handle(A)
       call f_create_SuperLUStat_handle(stat)
 
@@ -73,14 +73,14 @@
       npcol = 2
       call f_superlu_gridinit(MPI_COMM_WORLD, nprow, npcol, grid)
 
-! Bail out if I do not belong in the grid. 
+! Bail out if I do not belong in the grid.
       call get_GridInfo(grid, iam=iam)
-      if ( iam >= nprow * npcol ) then 
+      if ( iam >= nprow * npcol ) then
          go to 100
       endif
-      if ( iam == 0 ) then 
+      if ( iam == 0 ) then
          write(*,*) ' Process grid ', nprow, ' X ', npcol
-         write(*,*) ' default integer size ', kind(0) 
+         write(*,*) ' default integer size ', kind(0)
       endif
 !
 !*************************************************************************
@@ -107,7 +107,7 @@
       e = 5.0
       r = 18.0
       l = 12.0
-!      
+!
       if ( iam == 0 ) then
 ! Processor 0 owns the first 2 rows of the matrix
 ! NOTE: 0-based indexing must be used for the C routines.
@@ -152,7 +152,7 @@
          rowptr(4) = 7
       endif
 
-      if ( iam == 0 ) then 
+      if ( iam == 0 ) then
          write(*,*) ' Matrix A was set up'
       endif
 
@@ -177,8 +177,8 @@
 
 ! Initialize ScalePermstruct and LUstruct
       call get_SuperMatrix(A,nrow=m,ncol=n)
-      call f_ScalePermstructInit(m, n, ScalePermstruct)
-      call f_LUstructInit(m, n, LUstruct)
+      call f_dScalePermstructInit(m, n, ScalePermstruct)
+      call f_dLUstructInit(m, n, LUstruct)
 
 ! Initialize the statistics variables
       call f_PStatInit(stat)
@@ -196,13 +196,8 @@
 ! Deallocate the storage allocated by SuperLU_DIST
       call f_PStatFree(stat)
       call f_Destroy_SuperMat_Store_dist(A)
-      call f_ScalePermstructFree(ScalePermstruct)
-      call f_Destroy_LU(n, grid, LUstruct)
-      call f_LUstructFree(LUstruct)
-      call get_superlu_options(options, SolveInitialized=init)
-      if (init == YES) then
-         call f_dSolveFinalize(options, SOLVEstruct)
-      endif
+      call f_dScalePermstructFree(ScalePermstruct)
+      call f_dDestroy_LU_SOLVE_struct(options, n, grid, LUstruct, SOLVEstruct)
 
 ! Release the SuperLU process grid
 100   call f_superlu_gridexit(grid)

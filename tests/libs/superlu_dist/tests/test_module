@@ -28,7 +28,7 @@ teardown() {
 	rm -f "${OUTPUT}"
 }
 
-@test "[${TESTNAME}] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Verify ${PKG} module is loaded and matches rpm version (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
 	run grep "${MODULE}" "${OUTPUT}"
 	assert_success
@@ -39,10 +39,10 @@ teardown() {
 	local version
 	version="$(rpm -q --queryformat='%{VERSION}\n' "${rpm}")"
 	run cat "${OUTPUT}"
-	assert_output "  1) ${MODULE}/$version"
+	assert_output "  1) ${MODULE}/${version}"
 }
 
-@test "[${TESTNAME}] Verify ${PKG}_DIR is defined and directory exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Verify ${PKG}_DIR is defined and directory exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	PKG_DIR="${PKG}_DIR"
 
 	if [ -z "${!PKG_DIR}" ]; then
@@ -58,7 +58,7 @@ teardown() {
 # Lib Tests
 # ----------
 
-@test "[${TESTNAME}] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Verify module ${PKG}_LIB is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	LIB="${PKG}_LIB"
 
 	if [ -z "${!LIB}" ]; then
@@ -70,7 +70,7 @@ teardown() {
 	fi
 }
 
-@test "[${TESTNAME}] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Verify dynamic library available in ${PKG}_LIB (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	LIB="${PKG}_LIB"
 
 	if [ -z "${!LIB}" ]; then
@@ -82,7 +82,7 @@ teardown() {
 	fi
 }
 
-@test "[${TESTNAME}] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Verify static library is not present in ${PKG}_LIB (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	LIB="${PKG}_LIB"
 
 	if [ -z "${!LIB}" ]; then
@@ -98,7 +98,7 @@ teardown() {
 # Include Tests
 # --------------
 
-@test "[${TESTNAME}] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Verify module ${PKG}_INC is defined and exists (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	INC="${PKG}_INC"
 
 	if [ -z "${!INC}" ]; then
@@ -110,7 +110,7 @@ teardown() {
 	fi
 }
 
-@test "[${TESTNAME}] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[${TESTNAME}] Verify header file is present in ${PKG}_INC (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	INC="${PKG}_INC"
 
 	if [ -z "${!INC}" ]; then

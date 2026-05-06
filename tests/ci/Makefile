@@ -41,6 +41,7 @@ codespell-lint:
 		tests/libs/superlu/ohpc-tests/test_compiler_families \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
+		tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		tests/libs/netcdf/ohpc-tests/test_mpi_families \
 		tests/libs/netcdf/ohpc-tests/netcdf_all_test_mpi_families \
 		tests/libs/netcdf/tests-parallel/test_pnetcdf \
@@ -115,6 +116,7 @@ whitespace-lint:
 		tests/libs/superlu/ohpc-tests/test_compiler_families \
 		tests/libs/superlu_dist/tests/rm_execution \
 		tests/libs/superlu_dist/tests/test_module \
+		tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		tests/libs/phdf5/ohpc-tests/test_mpi_families \
 		tests/libs/netcdf/ohpc-tests/test_mpi_families \
@@ -200,6 +202,7 @@ shellcheck-lint:
 		../../tests/libs/superlu/ohpc-tests/test_compiler_families \
 		../../tests/libs/superlu_dist/tests/rm_execution \
 		../../tests/libs/superlu_dist/tests/test_module \
+		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/ohpc-tests/test_mpi_families \
 		../../tests/libs/scalapack/tests/rm_execution \
 		../../tests/libs/scalapack/tests/test_module \
@@ -291,6 +294,7 @@ shfmt-lint:
 		../../tests/perf-tools/paraver/ohpc-tests/test_mpi_families \
 		../../tests/perf-tools/paraver/tests/trace.sh \
 		../../tests/libs/hypre/ohpc-tests/test_mpi_families \
+		../../tests/libs/superlu_dist/ohpc-tests/test_mpi_families \
 		../../tests/libs/mfem/ohpc-tests/test_mpi_families
 
 clang-format-lint:
@@ -313,6 +317,7 @@ clang-format-lint:
 		../../containers/examples/mpi/mpi.c \
 		../../tests/perf-tools/paraver/tests/*.c \
 		../../tests/libs/hypre/tests/*.c \
+		../../tests/libs/superlu_dist/tests/*.c \
 		../../tests/libs/mfem/tests/serial/*.cpp \
 		../../tests/libs/mfem/tests/parallel/*.cpp
 
