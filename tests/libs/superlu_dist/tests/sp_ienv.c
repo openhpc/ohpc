@@ -62,60 +62,57 @@ at the top-level directory.
 </pre>
 */
 
-
 #include <stdlib.h>
 #include <stdio.h>
 
-
-int_t
-sp_ienv_dist(int_t ispec)
+int_t sp_ienv_dist(int_t ispec, superlu_dist_options_t *options)
 {
-    // printf(" this function called\n");
-    int i;
+	// printf(" this function called\n");
+	int i;
 
-    char* ttemp;
+	char *ttemp;
 
-    switch (ispec) {
-#if ( MACH==CRAY_T3E )
-	case 2: return (6);
-	case 3: return (30);
+	switch (ispec) {
+#if (MACH == CRAY_T3E)
+	case 2:
+		return (6);
+	case 3:
+		return (30);
 
-#elif ( MACH==IBM )
-	case 2: return (20);
-	case 3: return (100);
+#elif (MACH == IBM)
+	case 2:
+		return (20);
+	case 3:
+		return (100);
 #else
-	case 2: 
-            ttemp = getenv("NREL");
-            if(ttemp)
-            {
-                return(atoi(ttemp));
-            }
-            else
-            return 1;
-            
-	case 3: 
-            ttemp = getenv("NSUP");
-            if(ttemp)
-            {
-                return(atoi(ttemp));
-            }
-            else
-            return 128;
+	case 2:
+		ttemp = getenv("NREL");
+		if (ttemp) {
+			return (atoi(ttemp));
+		} else
+			return 1;
+
+	case 3:
+		ttemp = getenv("NSUP");
+		if (ttemp) {
+			return (atoi(ttemp));
+		} else
+			return 128;
 
 #endif
-        case 6: return (5);
-        case 7:
-	    ttemp = getenv ("N_GEMM");
-	    if (ttemp) return atoi (ttemp);
-	    else return 10000;
+	case 6:
+		return (5);
+	case 7:
+		ttemp = getenv("N_GEMM");
+		if (ttemp)
+			return atoi(ttemp);
+		else
+			return 10000;
+	}
 
-    }
-
-    /* Invalid value for ISPEC */
-    i = 1;
-    xerr_dist("sp_ienv", &i);
-    return 0;
-
+	/* Invalid value for ISPEC */
+	i = 1;
+	xerr_dist("sp_ienv", &i);
+	return 0;
 
 } /* sp_ienv_dist */
-

@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT(superlu_dist, 4.0, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.71])
+AC_INIT([superlu_dist],[4.0],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -14,7 +14,7 @@ AC_MSG_CHECKING([for SUPERLU_DIST_DIR environment variable])
 if test "x$SUPERLU_DIST_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([SUPERLU_DIST_DIR not defined - please load superlu_dist environment.])
+   AC_MSG_ERROR(SUPERLU_DIST_DIR not defined - please load superlu_dist environment.)
 else
    AC_MSG_RESULT([no])
 fi
@@ -35,13 +35,13 @@ AC_C_CONST
 
 CFLAGS="-I${SUPERLU_DIST_INC} ${CFLAGS}"
 FFLAGS="-I${SUPERLU_DIST_INC} ${FFLAGS}"
-LDFLAGS="-L${SUPERLU_DIST_LIB} ${LDFLAGS}"
+LDFLAGS="-L${SUPERLU_DIST_LIB} -L${PTSCOTCH_LIB} ${LDFLAGS}"
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
