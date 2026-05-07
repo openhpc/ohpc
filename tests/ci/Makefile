@@ -108,7 +108,8 @@ codespell-lint:
 		tests/compilers/tests/version_match \
 		tests/compilers/tests/man_pages \
 		tests/compilers/tests/debugger \
-		tests/compilers/ohpc-tests/test_compiler_families
+		tests/compilers/ohpc-tests/test_compiler_families \
+		tests/modules/interactive_commands
 
 ruff-check-lint:
 	@echo "Running 'ruff check' on selected Python files"
@@ -241,6 +242,7 @@ whitespace-lint:
 		tests/compilers/tests/man_pages \
 		tests/compilers/tests/debugger \
 		tests/compilers/ohpc-tests/test_compiler_families \
+		tests/modules/interactive_commands \
 		containers/* \
 		\*.tex
 
@@ -357,7 +359,8 @@ shellcheck-lint:
 		../../tests/compilers/tests/rm_execution \
 		../../tests/compilers/tests/version_match \
 		../../tests/compilers/tests/man_pages \
-		../../tests/compilers/tests/debugger
+		../../tests/compilers/tests/debugger \
+		../../tests/modules/interactive_commands
 
 shfmt-lint:
 
@@ -437,7 +440,8 @@ shfmt-lint:
 		../../tests/compilers/tests/rm_execution \
 		../../tests/compilers/tests/version_match \
 		../../tests/compilers/tests/man_pages \
-		../../tests/compilers/tests/debugger
+		../../tests/compilers/tests/debugger \
+		../../tests/modules/interactive_commands
 	shfmt -w -d \
 		../../tests/perf-tools/extrae/tests/tracec.sh \
 		../../tests/perf-tools/extrae/tests/tracef.sh \
