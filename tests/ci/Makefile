@@ -70,7 +70,8 @@ codespell-lint:
 		tests/libs/hypre/ohpc-tests/test_mpi_families \
 		tests/libs/mfem/tests/test_module \
 		tests/libs/mfem/tests/parallel/rm_execution \
-		tests/libs/mfem/ohpc-tests/test_mpi_families
+		tests/libs/mfem/ohpc-tests/test_mpi_families \
+		tests/modules/interactive_commands
 
 ruff-check-lint:
 	@echo "Running 'ruff check' on selected Python files"
@@ -152,6 +153,7 @@ whitespace-lint:
 		tests/libs/mfem/tests/test_module \
 		tests/libs/mfem/tests/parallel/rm_execution \
 		tests/libs/mfem/ohpc-tests/test_mpi_families \
+		tests/modules/interactive_commands \
 		containers/* \
 		\*.tex
 
@@ -233,7 +235,8 @@ shellcheck-lint:
 		../../tests/libs/hypre/ohpc-tests/test_mpi_families \
 		../../tests/libs/mfem/tests/test_module \
 		../../tests/libs/mfem/tests/parallel/rm_execution \
-		../../tests/libs/mfem/ohpc-tests/test_mpi_families
+		../../tests/libs/mfem/ohpc-tests/test_mpi_families \
+		../../tests/modules/interactive_commands
 
 shfmt-lint:
 
@@ -288,7 +291,8 @@ shfmt-lint:
 		../../tests/libs/hypre/tests/rm_execution \
 		../../tests/libs/hypre/tests/test_module \
 		../../tests/libs/mfem/tests/test_module \
-		../../tests/libs/mfem/tests/parallel/rm_execution
+		../../tests/libs/mfem/tests/parallel/rm_execution \
+		../../tests/modules/interactive_commands
 	shfmt -w -d \
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
