@@ -52,15 +52,12 @@ Requires: libfabric%{PROJ_DELIM}
 
 Summary:   MPICH MPI implementation
 Name:      %{pname}%{RMS_DELIM}%{FABRIC_DELIM}-%{compiler_family}%{PROJ_DELIM}
-Version:   3.4.3
+Version:   4.3.2
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
-Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
-Patch0:    config.pmix.patch
-# 08/14/19 karl@ices.utexas.edu - upping patch fuzz factor for node.name patch
-%global _default_patch_fuzz 2
+Source0:   https://github.com/pmodels/mpich/releases/download/v%{version}/mpich-%{version}.tar.gz
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 BuildRequires: perl
@@ -94,7 +91,6 @@ Message Passing Interface (MPI) standard.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p0
 
 %build
 # OpenHPC compiler designation
@@ -110,15 +106,6 @@ module load ucx
 module load libfabric
 %endif
 
-%if "%{compiler_family}" == "gnu12" || "%{compiler_family}" == "gnu13" || "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
-# configure fails with:
-#   The Fortran compiler gfortran does not accept programs that
-#   call the same routine with arguments of different types without
-#   the option -fallow-argument-mismatch.
-#   Rerun configure with FFLAGS=-fallow-argument-mismatch
-# This seems to fix the build.
-export FFLAGS=-fallow-argument-mismatch
-%endif
 ./configure --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
 %if "%{compiler_family}" == "intel"
@@ -137,11 +124,6 @@ export FFLAGS=-fallow-argument-mismatch
             --with-device=ch4:ofi --with-libfabric=$LIBFABRIC_DIR \
 %endif
     || { cat config.log && exit 1; }
-
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
-%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
-%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
-%endif
 
 make V=1 %{?_smp_mflags}
 
@@ -209,4 +191,3 @@ EOF
 %doc COPYRIGHT
 %doc CHANGES
 %doc README
-%doc RELEASE_NOTES
