@@ -114,7 +114,17 @@ hostnamectl hostname sms
 # ---------------------------------------------------------------------------
 # Generate input.local
 # ---------------------------------------------------------------------------
-RECIPE_DIR="/opt/ohpc/pub/doc/recipes/almalinux10"
+# Detect base OS version from PLATFORM_ID
+# shellcheck disable=SC1091
+source /etc/os-release
+case "${PLATFORM_ID}" in
+"platform:el10") RECIPE_DIR="/opt/ohpc/pub/doc/recipes/almalinux10" ;;
+"platform:el9") RECIPE_DIR="/opt/ohpc/pub/doc/recipes/almalinux9" ;;
+*)
+	echo "ERROR: unsupported PLATFORM_ID=${PLATFORM_ID}" >&2
+	exit 1
+	;;
+esac
 INPUT_LOCAL="${RECIPE_DIR}/input.local"
 
 cat >"${INPUT_LOCAL}" <<'INPUTEOF'
@@ -294,7 +304,7 @@ fi
 /usr/libexec/qemu-kvm \
 	"${ARCH_FLAGS[@]}" \
 	-pidfile "/tmp/vm-${idx}.pid" \
-	-m 4096 -smp "${num_cpus}" \
+	-m 5120 -smp "${num_cpus}" \
 	-accel kvm -cpu host \
 	-boot n \
 	-netdev "${NETDEV_OPTS}" \
