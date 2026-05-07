@@ -60,6 +60,7 @@ URL:       http://www.mpich.org
 Source0:   https://github.com/pmodels/mpich/releases/download/v%{version}/mpich-%{version}.tar.gz
 
 Requires: prun%{PROJ_DELIM} >= 1.2
+BuildRequires: python3
 BuildRequires: perl
 Requires: perl
 BuildRequires: zlib-devel make
