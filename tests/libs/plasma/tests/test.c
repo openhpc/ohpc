@@ -214,7 +214,7 @@ void print_main_usage(const char *program_name)
 	       "\t%s routine [parameter1, parameter2, ...]\n"
 	       "\n"
 	       "Available routines:",
-	       program_name, program_name, program_name);
+	       program_name, program_name, program_name, program_name);
 	for (int i = 0; routines[i].name != NULL; ++i) {
 		if (i % 4 == 0) {
 			printf("\n\t");
