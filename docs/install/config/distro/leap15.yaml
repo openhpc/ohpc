@@ -16,6 +16,7 @@ baseosshort: "leap15"
 uses_dnf: false
 pkg_manager: "zypper"
 pkg_install: "zypper -n install"
+pkg_install_keys: "zypper -n --gpg-auto-import-keys install"
 pkg_install_chroot: 'zypper -n --root $CHROOT install'
 pkg_group_install: "zypper -n install -t pattern"
 pkg_group_install_chroot: 'zypper -n --root $CHROOT install -t pattern'
@@ -26,3 +27,5 @@ pkg_remove: "zypper -n remove"
 pkg_upgrade: "zypper -n up"
 pkg_upgrade_chroot: 'zypper -n --root $CHROOT up'
 pkg_tftp: "syslinux"
+mariadb_cnf: "/etc/my.cnf"
+mariadb_service: "mariadb"
