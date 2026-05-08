@@ -30,11 +30,11 @@ pkg_remove: "dnf -y remove"
 pkg_upgrade: "dnf -y upgrade"
 pkg_upgrade_chroot: 'dnf -y --installroot="$CHROOT" upgrade'
 pkg_tftp: "syslinux-tftpboot"
-
-# External repository URLs
-beegfs_repo: "https://www.beegfs.io/release/beegfs_7.4.5/dists/beegfs-rhel9.repo"
+mariadb_cnf: "/etc/my.cnf.d/mysql-server.cnf"
+mariadb_service: "mysqld"
+extra_repos_pkg: "openEuler-release"
 
 # openEuler-specific OHPC repo (COPR for compute image)
 openeuler_ohpc_repo_server: "https://eur.openeuler.openatom.cn"
-openeuler_ohpc_repo_dir: "coprs/openhpc/OpenHPC/repo/openeuler-22.03_LTS_SP4"
-openeuler_ohpc_repo_file: "openhpc-OpenHPC-openeuler-22.03_LTS_SP4.repo"
+openeuler_ohpc_repo_dir: "coprs/openhpc/OpenHPC/repo/openeuler-24.03_LTS_SP2"
+openeuler_ohpc_repo_file: "openhpc-OpenHPC-openeuler-24.03_LTS_SP2.repo"

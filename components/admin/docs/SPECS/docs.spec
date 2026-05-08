@@ -61,8 +61,8 @@ for recipe in \
 	"almalinux9/x86_64/warewulf3/openpbs" \
 	"almalinux9/x86_64/confluent/slurm" \
 	"almalinux9/x86_64/openchami/slurm" \
-	"openeuler22.03/x86_64/warewulf/slurm" \
-	"openeuler22.03/x86_64/warewulf/openpbs" \
+	"openeuler22.03/x86_64/warewulf3/slurm" \
+	"openeuler22.03/x86_64/warewulf3/openpbs" \
 	"leap15/x86_64/warewulf3/slurm" \
 	"leap15/x86_64/warewulf3/openpbs" \
 	"rocky9/aarch64/warewulf/slurm" \
@@ -75,8 +75,8 @@ for recipe in \
 	"almalinux9/aarch64/warewulf3/openpbs" \
 	"almalinux9/aarch64/confluent/slurm" \
 	"almalinux9/aarch64/openchami/slurm" \
-	"openeuler22.03/aarch64/warewulf/slurm" \
-	"openeuler22.03/aarch64/warewulf/openpbs" \
+	"openeuler22.03/aarch64/warewulf3/slurm" \
+	"openeuler22.03/aarch64/warewulf3/openpbs" \
 	"leap15/aarch64/warewulf3/slurm" \
 	"leap15/aarch64/warewulf3/openpbs" \
 ; do

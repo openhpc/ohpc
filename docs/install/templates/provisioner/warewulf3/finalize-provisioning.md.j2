@@ -12,10 +12,10 @@ as some simple scripts to complete the provisioning process.
 <!-- ohpc_begin -->
 <!-- ohpc_comment Assemble bootstrap image -->
 ```bash
-# Optionally include drivers from kernel updates; add virtio_net for VM support
+# Optionally include drivers from kernel updates; add virtio drivers for VM support
 export WW_CONF=/etc/warewulf/bootstrap.conf
 echo "drivers += updates/kernel/" >> $WW_CONF
-echo "modprobe += virtio_net" >> $WW_CONF
+echo "modprobe += virtio_pci, virtio_net" >> $WW_CONF
 
 # Build bootstrap image
 wwbootstrap $(uname -r)

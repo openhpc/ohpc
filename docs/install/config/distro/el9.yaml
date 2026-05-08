@@ -23,3 +23,6 @@ pkg_remove: "dnf -y remove"
 pkg_upgrade: "dnf -y upgrade"
 pkg_upgrade_chroot: 'dnf -y --installroot="$CHROOT" upgrade'
 pkg_tftp: "syslinux-tftpboot"
+mariadb_cnf: "/etc/my.cnf.d/mariadb-server.cnf"
+mariadb_service: "mariadb"
+extra_repos_pkg: "epel-release"

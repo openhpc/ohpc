@@ -44,11 +44,11 @@ systemctl enable apache2.service
 systemctl restart apache2
 {% else %}
 # Configure MariaDB to handle large VNFS images
-sed -i "/\[mysqld\]/a max_allowed_packet=32M" /etc/my.cnf.d/mariadb-server.cnf
+sed -i "/\[mysqld\]/a max_allowed_packet=32M" {{ mariadb_cnf }}
 sed -i "s/^# database chunk size.*/database chunk size = 16777216/" \
     /etc/warewulf/database.conf
-systemctl enable mariadb
-systemctl restart mariadb
+systemctl enable {{ mariadb_service }}
+systemctl restart {{ mariadb_service }}
 systemctl enable httpd.service
 systemctl restart httpd
 {% endif %}
