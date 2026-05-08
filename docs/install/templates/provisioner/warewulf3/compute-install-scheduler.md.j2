@@ -19,6 +19,9 @@ echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 {{ pkg_install_chroot }} openpbs-execution-ohpc
 sed -i "s/PBS_SERVER=\S\+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
 echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
+{% if is_sles %}
+echo "${sms_ip} ${sms_name}" >> $CHROOT/etc/hosts
+{% endif %}
 chroot $CHROOT opt/pbs/libexec/pbs_habitat
 sed -i "s/\\\$clienthost \S\+/\\\$clienthost ${sms_name}/" \
     $CHROOT/var/spool/pbs/mom_priv/config

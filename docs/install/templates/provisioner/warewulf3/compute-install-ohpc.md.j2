@@ -12,7 +12,7 @@ We begin by installing a few common base packages:
 <!-- ohpc_comment Add OpenHPC base components to compute image -->
 ```bash
 # Copy DNS configuration from head node
-cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+cp -L --remove-destination /etc/resolv.conf $CHROOT/etc/resolv.conf
 {% if is_sles %}
 # Import GPG keys for chroot repository usage
 zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh

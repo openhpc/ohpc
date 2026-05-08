@@ -34,24 +34,24 @@ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
 sed -i "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 sed -i "s#modules/mod_version.so\$#/usr/lib64/apache2/mod_version.so#" $MODFILE
 {% endif %}
-{% if is_sles %}
-# Enable Apache mod_rewrite module (needed for warewulf)
-a2enmod mod_rewrite
-# Restart/enable relevant services to support provisioning
-systemctl enable mysql.service
-systemctl restart mysql
-systemctl enable apache2.service
-systemctl restart apache2
-{% else %}
+
 # Configure MariaDB to handle large VNFS images
 sed -i "/\[mysqld\]/a max_allowed_packet=32M" {{ mariadb_cnf }}
 sed -i "s/^# database chunk size.*/database chunk size = 16777216/" \
     /etc/warewulf/database.conf
 systemctl enable {{ mariadb_service }}
 systemctl restart {{ mariadb_service }}
+
+{% if is_sles %}
+# Enable Apache mod_rewrite module (needed for warewulf)
+a2enmod mod_rewrite
+systemctl enable apache2.service
+systemctl restart apache2
+{% else %}
 systemctl enable httpd.service
 systemctl restart httpd
 {% endif %}
+
 systemctl enable dhcpd.service
 systemctl enable tftp.socket
 systemctl start tftp.socket

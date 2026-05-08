@@ -12,6 +12,7 @@ distro_tag: "el9"
 # Package manager commands (dnf)
 pkg_manager: "dnf"
 pkg_install: "dnf -y install"
+pkg_install_keys: "dnf -y install"
 pkg_install_chroot: 'dnf -y --installroot="$CHROOT" install'
 pkg_group_install: "dnf -y groupinstall"
 pkg_group_install_chroot: 'dnf -y --installroot="$CHROOT" groupinstall'

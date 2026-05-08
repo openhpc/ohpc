@@ -19,6 +19,7 @@ distro_container_image: "openeuler:22.03"
 # Package manager commands (dnf, same as EL)
 pkg_manager: "dnf"
 pkg_install: "dnf -y install"
+pkg_install_keys: "dnf -y install"
 pkg_install_chroot: 'dnf -y --installroot="$CHROOT" install'
 pkg_group_install: "dnf -y groupinstall"
 pkg_group_install_chroot: 'dnf -y --installroot="$CHROOT" groupinstall'

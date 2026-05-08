@@ -12,8 +12,8 @@ follows:
 <!-- ohpc_comment Disable firewall -->
 ```bash
 {% if is_sles %}
-systemctl disable SuSEfirewall2
-systemctl stop SuSEfirewall2
+systemctl disable SuSEfirewall2 || true
+systemctl stop SuSEfirewall2 || true
 {% else %}
 systemctl disable --now firewalld || true
 {% endif %}
