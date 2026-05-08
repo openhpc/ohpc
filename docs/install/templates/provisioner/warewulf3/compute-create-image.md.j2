@@ -16,8 +16,8 @@ of the compute node. The default location for this example is
 ::: {.tip}
 Warewulf is configured by default to access an external repository during the
 `wwmkchroot` process. If the head node cannot reach the public {{ distro_full_name }}
-mirrors, set the `${BOS_MIRROR}` environment variable to your desired repo
-location prior to running `wwmkchroot`.
+mirrors, set the `YUM_MIRROR_BASE` environment variable to your desired mirror
+base URL prior to running `wwmkchroot`.
 :::
 
 <!-- ohpc_begin -->
@@ -40,14 +40,11 @@ cp -p /etc/zypp/repos.d/OpenHPC*.repo $CHROOT/etc/zypp/repos.d
 # Import GPG keys for chroot repository usage
 zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 {% else %}
-# Override default OS repository (optional) - set BOS_MIRROR to desired repo
-# export YUM_MIRROR=${BOS_MIRROR}
-
 # Build initial chroot image
 wwmkchroot -v {{ baseos }} $CHROOT
 
-# Enable OpenHPC and EPEL repos inside chroot
-{{ pkg_install_chroot }} epel-release
+# Enable OpenHPC and distro repos inside chroot
+{{ pkg_install_chroot }} {{ extra_repos_pkg }}
 cp -p /etc/yum.repos.d/OpenHPC*.repo $CHROOT/etc/yum.repos.d
 {% endif %}
 ```
