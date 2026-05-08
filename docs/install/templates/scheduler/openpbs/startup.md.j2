@@ -9,7 +9,8 @@ manager services in preparation for running user jobs.
 <!-- ohpc_comment Resource Manager Startup -->
 ```bash
 # Start PBS daemons on head node
-systemctl enable --now pbs
+systemctl enable pbs
+systemctl start pbs
 ```
 <!-- ohpc_end -->
 
