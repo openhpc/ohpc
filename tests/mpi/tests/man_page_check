@@ -9,6 +9,6 @@ if [ -s ../../common/TEST_ENV ]; then
 fi
 
 @test "[MPI] mpicc man page available (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
-	run man mpicc
+	run man -w mpicc
 	assert_success
 }
