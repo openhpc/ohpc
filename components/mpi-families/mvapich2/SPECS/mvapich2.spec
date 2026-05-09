@@ -50,6 +50,7 @@ Buildrequires: rdma-core-devel libibmad-devel
 Requires: prun%{PROJ_DELIM}
 BuildRequires: bison make m4
 BuildRequires: zlib-devel
+BuildRequires: python3
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
