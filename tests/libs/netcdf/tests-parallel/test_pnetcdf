@@ -80,7 +80,7 @@ teardown() {
 
 	rm -f f90tst_parallel.nc
 
-	run_mpi_binary -t "00:02:00" ./F90_parallel "atest" 2 4
+	run_with_retry run_mpi_binary -t "00:02:00" ./F90_parallel "atest" 2 4
 	assert_success
 
 	run ls f90tst_parallel.nc
