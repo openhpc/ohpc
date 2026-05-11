@@ -43,6 +43,9 @@ BuildRequires:  glibc-langpack-en
 %else
 BuildRequires:  openssh
 %endif
+%if "%{compiler_family}" != "intel"
+Requires:       scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
 
 #!BuildIgnore: post-build-checks
 
