@@ -30,7 +30,7 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	24.11.7
+Version:	25.11.4
 %global rel	1
 Release:	%{?dist}.1
 Summary:	Slurm Workload Manager
@@ -665,7 +665,7 @@ fi
 %endif
 
 %{OHPC_PUB}
-%doc AUTHORS CONTRIBUTING.md COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
+%doc AUTHORS CONTRIBUTING.md COPYING DISCLAIMER INSTALL LICENSE.OpenSSL README.md RELEASE_NOTES.md SECURITY.md
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
