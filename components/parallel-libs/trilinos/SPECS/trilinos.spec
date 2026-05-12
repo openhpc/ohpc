@@ -36,7 +36,7 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python3
 
 BuildRequires:  make
-BuildRequires:  cmake
+BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
@@ -82,6 +82,7 @@ For a summary of included packages see https://trilinos.github.io/packages.html
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+module load cmake
 module load boost
 module load netcdf
 module load pnetcdf
