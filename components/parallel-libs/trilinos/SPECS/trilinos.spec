@@ -56,6 +56,11 @@ BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
+%if "%{compiler_family}" == "intel" && 0%{?suse_version}
+BuildRequires:  gcc14-c++
+BuildRequires:  libstdc++6-devel-gcc14
+%endif
+
 #!BuildIgnore: post-build-checks
 #!BuildIgnore: brp-check-suse
 
