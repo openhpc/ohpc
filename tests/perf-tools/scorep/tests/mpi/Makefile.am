@@ -1,4 +1,3 @@
-TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 AUTOMAKE_OPTIONS  = no-dependencies
 
 # Pure MPI tests
