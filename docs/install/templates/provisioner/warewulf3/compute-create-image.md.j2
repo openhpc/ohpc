@@ -25,10 +25,6 @@ base URL prior to running `wwmkchroot`.
 ```bash
 # Define chroot location
 export CHROOT=/opt/ohpc/admin/images/{{ baseosshort }}
-```
-<!-- ohpc_comment Configure HTTPS proxy for compute image (site-specific) -->
-<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
-```bash
 {% if is_sles %}
 # Create chroot directory structure
 mkdir -p -m 755 $CHROOT
@@ -40,13 +36,19 @@ wwmkchroot -v {{ baseos }} $CHROOT
 
 # Enable OpenHPC repo in chroot
 cp -p /etc/zypp/repos.d/OpenHPC*.repo $CHROOT/etc/zypp/repos.d
-
+```
+<!-- ohpc_comment Configure HTTPS proxy for compute image (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
+```bash
 # Import GPG keys for chroot repository usage
 zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 {% else %}
 # Build initial chroot image
 wwmkchroot -v {{ baseos }} $CHROOT
-
+```
+<!-- ohpc_comment Configure HTTPS proxy for compute image (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
+```bash
 # Enable OpenHPC and distro repos inside chroot
 {{ pkg_install_chroot }} {{ extra_repos_pkg }}
 cp -p /etc/yum.repos.d/OpenHPC*.repo $CHROOT/etc/yum.repos.d
