@@ -15,7 +15,7 @@
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.36
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   GPL
 Url:       https://github.com/chaos/pdsh
 Group:     %{PROJ_NAME}/admin
