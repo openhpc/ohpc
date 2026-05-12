@@ -25,6 +25,10 @@ base URL prior to running `wwmkchroot`.
 ```bash
 # Define chroot location
 export CHROOT=/opt/ohpc/admin/images/{{ baseosshort }}
+```
+<!-- ohpc_comment Configure HTTPS proxy for compute image (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
+```bash
 {% if is_sles %}
 # Create chroot directory structure
 mkdir -p -m 755 $CHROOT
