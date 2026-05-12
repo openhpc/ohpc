@@ -66,6 +66,7 @@ for row in reader:
 os.makedirs("/etc/rpm", exist_ok=True)
 with open("/etc/rpm/macros.ohpc-ci-conf", "w") as f:
     f.write("%OHPC_USE_CCACHE yes\n")
+    f.write("%OHPC_BUILD 1\n")
 
 # Ensure ccache directory is owned by build user
 ccache_dir = "/var/cache/ccache"
