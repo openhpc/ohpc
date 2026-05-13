@@ -337,6 +337,7 @@ export OHPC_INPUT_LOCAL="${INPUT_LOCAL}"
 sed -i \
 	-e 's/\(\["rd.shell"\]\)/\1 + ["console=hvc0", "loglevel=5"]/' \
 	-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
+	-e '/Add OpenHPC base components to compute image/i /usr/bin/cp -vf /etc/yum.repos.d/obs.repo $CHROOT/etc/yum.repos.d' \
 	-e 's|#<<< ohpc_proxy:compute >>>#|echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf|' \
 	"${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"
 if ! bash -x "${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"; then
