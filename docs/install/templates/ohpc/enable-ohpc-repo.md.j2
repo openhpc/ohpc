@@ -15,17 +15,10 @@ build server.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Install OpenHPC ohpc-release -->
-{% if uses_dnf %}
 ```bash
 {{ pkg_install }} {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/{{ arch }}/\
 ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
 ```
-{% else %}
-```bash
-rpm -ivh {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/{{ arch }}/\
-ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
-```
-{% endif %}
 <!-- ohpc_end -->
 
 ::: {.tip}
