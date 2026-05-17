@@ -12,10 +12,6 @@ source ./common/functions || exit 1
 
 cd libs/netcdf || exit 1
 export BATS_JUNIT_CLASS=NetCDF
-
-# bootstrap the local autotools project if necessary
-./bootstrap || exit 1
-
 if [ -n "${SIMPLE_CI}" ]; then
 	export OMPI_MCA_btl="self,tcp"
 fi
@@ -36,6 +32,7 @@ for compiler in ${COMPILER_FAMILIES}; do
 		module load "${mpi}" || exit 1
 		module load netcdf || exit 1
 
+		./bootstrap || exit 1
 		./configure || exit 1
 		make clean || exit 1
 		make -k check || status=1
@@ -61,6 +58,7 @@ for compiler in ${COMPILER_FAMILIES}; do
 	module load "${compiler}" || exit 1
 	module load netcdf || exit 1
 
+	./bootstrap || exit 1
 	./configure --disable-parallel || exit 1
 	make clean || exit 1
 	make -k check || status=1
