@@ -1,0 +1,14 @@
+FROM docker.io/library/almalinux:8
+
+# Install git first (required for cloning/checkout)
+RUN dnf -y install git
+
+# Update all packages
+RUN dnf -y update
+
+# Copy the prepare script
+COPY tests/ci/prepare-ci-environment.sh /tmp/prepare-ci-environment.sh
+RUN chmod +x /tmp/prepare-ci-environment.sh
+
+# Run prepare-ci-environment.sh
+RUN /tmp/prepare-ci-environment.sh
