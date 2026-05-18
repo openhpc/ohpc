@@ -193,3 +193,95 @@ jobs:
         run: |
           echo "Container built and pushed successfully!"
           echo "Image: ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}:3.x"
+
+  build-2x:
+    runs-on: ${{ matrix.runs-on }}
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        distro: [ almalinux, leap ]
+        arch: [ x86_64, aarch64 ]
+        include:
+          - arch: x86_64
+            runs-on: ubuntu-24.04
+          - arch: aarch64
+            runs-on: ubuntu-24.04-arm
+    outputs:
+      almalinux-digest-x86_64: ${{ steps.export.outputs.almalinux-digest-x86_64 }}
+      almalinux-digest-aarch64: ${{ steps.export.outputs.almalinux-digest-aarch64 }}
+      leap-digest-x86_64: ${{ steps.export.outputs.leap-digest-x86_64 }}
+      leap-digest-aarch64: ${{ steps.export.outputs.leap-digest-aarch64 }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: 2.x
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}
+          tags: |
+            type=raw,value=2.x
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./tests/ci/Containerfile.ohpc-validate-${{ matrix.distro }}
+          platforms: linux/${{ matrix.arch }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
+          sbom: false
+          outputs: type=image,name=${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        id: export
+        run: |
+          echo "${{ matrix.distro }}-digest-${{ matrix.arch }}=${{ steps.build.outputs.digest }}" >> $GITHUB_OUTPUT
+
+  publish-2x:
+    runs-on: ubuntu-24.04
+    needs: build-2x
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        distro: [ almalinux, leap ]
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and push manifest
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}:2.x \
+            ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}@${{ needs.build-2x.outputs[format('{0}-digest-x86_64', matrix.distro)] }} \
+            ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}@${{ needs.build-2x.outputs[format('{0}-digest-aarch64', matrix.distro)] }}
+
+      - name: Output image details
+        run: |
+          echo "Container built and pushed successfully!"
+          echo "Image: ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}:2.x"
