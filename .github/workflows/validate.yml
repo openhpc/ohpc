@@ -21,12 +21,9 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: docker.io/library/rockylinux:8
+      image: ghcr.io/openhpc/ohpc-analysis:latest
 
     steps:
-    - name: Setup
-      run: |
-        dnf install -y epel-release git python3
     - uses: actions/checkout@v6
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
@@ -66,10 +63,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on RHEL
     container:
-      image: docker.io/library/rockylinux:8
+      image: ghcr.io/openhpc/ohpc-validate-almalinux:2.x
     steps:
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v6
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
@@ -90,18 +87,21 @@ jobs:
           /tmp/empty
 
   test_on_rhel:
+    strategy:
+      matrix:
+        compiler: [gnu12]
     runs-on: ubuntu-latest
     name: Test on RHEL
     env:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
     container:
-      image: docker.io/library/rockylinux:8
-      options: --privileged
+      image: ghcr.io/openhpc/ohpc-validate-almalinux:2.x
+      options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
     needs: build_on_rhel
     steps:
-    - name: Install git
-      run: dnf -y install git
+    - name: Update packages
+      run: dnf -y update
     - uses: actions/checkout@v6
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
@@ -111,21 +111,25 @@ jobs:
       with:
         name: rhel-rpms
         path: /home/ohpc/rpmbuild/RPMS
+    - name: Enable unprivileged user namespaces
+      run: |
+        sysctl -w kernel.unprivileged_userns_clone=1 || true
+        sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
     - name: Run CI Tests
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
-        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ steps.files.outputs.added_modified }}
+        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
 
   build_on_leap:
     runs-on: ubuntu-latest
     name: Build on LEAP
     container:
-      image: registry.opensuse.org/opensuse/leap:15.3
+      image: ghcr.io/openhpc/ohpc-validate-leap:2.x
     steps:
-    - name: Install git
-      run: zypper -n install git
+    - name: Update packages
+      run: zypper -n update
     - uses: actions/checkout@v6
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
@@ -135,3 +139,48 @@ jobs:
       run: |
         . /etc/profile.d/lmod.sh
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
+        touch /tmp/empty
+    - uses: actions/upload-artifact@v7
+      with:
+        name: leap-rpms
+        retention-days: 1
+        path: |
+          /home/ohpc/rpmbuild/RPMS/noarch/*rpm
+          /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
+          /tmp/empty
+
+  test_on_leap:
+    strategy:
+      matrix:
+        compiler: [gnu12]
+    runs-on: ubuntu-latest
+    name: Test on LEAP
+    env:
+      JOB_SKIP_CI_SPECS: |
+        components/perf-tools/likwid/SPECS/likwid.spec
+    container:
+      image: ghcr.io/openhpc/ohpc-validate-leap:2.x
+      options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
+    needs: build_on_leap
+    steps:
+    - name: Update packages
+      run: zypper -n update
+    - uses: actions/checkout@v6
+    - name: Setup
+      run: tests/ci/prepare-ci-environment.sh
+    - id: files
+      uses: Ana06/get-changed-files@v2.3.0
+    - uses: actions/download-artifact@v8
+      with:
+        name: leap-rpms
+        path: /home/ohpc/rpmbuild/RPMS
+    - name: Enable unprivileged user namespaces
+      run: |
+        sysctl -w kernel.unprivileged_userns_clone=1 || true
+        sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
+    - name: Run CI Tests
+      run: |
+        export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}${{ env.JOB_SKIP_CI_SPECS }}"
+        . /etc/profile.d/lmod.sh
+        chown ohpc -R tests
+        tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}

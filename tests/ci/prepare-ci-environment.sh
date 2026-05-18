@@ -83,7 +83,7 @@ dnf_rhel() {
 	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
 	if [ -z "${NINE}" ]; then
 		loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
-		if "${PKG_MANAGER}" repolist --all | grep -q devel; then
+		if "${PKG_MANAGER}" repolist --all | grep -q "^devel"; then
 			loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
 		fi
 	else
@@ -92,12 +92,12 @@ dnf_rhel() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" -y install lmod-ohpc
+	loop_command "${PKG_MANAGER}" -y install lmod-ohpc ccache
 }
 
 dnf_openeuler() {
 	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk
-	loop_command "${PKG_MANAGER}" -y install ohpc-filesystem lmod-ohpc hostname
+	loop_command "${PKG_MANAGER}" -y install ohpc-filesystem lmod-ohpc hostname ccache
 }
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then
@@ -106,13 +106,18 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	else
 		dnf_rhel
 	fi
-	adduser ohpc
+	adduser ohpc || true
 else
-	loop_command "${PKG_MANAGER}" -n install ${COMMON_PKGS} awk rpmbuild
+	loop_command "${PKG_MANAGER}" -n install ${COMMON_PKGS} awk rpmbuild ccache man
 	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
 	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install lmod-ohpc
-	useradd -m ohpc
+	groupadd ohpc || true
+	useradd -m ohpc -g ohpc || true
 fi
+
+# Setup ccache
+echo "cache_dir=/var/cache/ccache" >/etc/ccache.conf
+install -d -o ohpc -g ohpc /var/cache/ccache
