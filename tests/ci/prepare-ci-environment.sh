@@ -5,7 +5,7 @@
 set -x
 set -e
 
-FACTORY_VERSION=2.7
+FACTORY_VERSION=2.10
 
 if [ ! -e /etc/os-release ]; then
 	echo "Cannot detect OS without /etc/os-release"
@@ -83,7 +83,9 @@ dnf_rhel() {
 	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
 	if [ -z "${NINE}" ]; then
 		loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
-		loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
+		if "${PKG_MANAGER}" repolist --all | grep -q devel; then
+			loop_command "${PKG_MANAGER}" config-manager --set-enabled devel
+		fi
 	else
 		loop_command "${PKG_MANAGER}" config-manager --set-enabled crb
 	fi

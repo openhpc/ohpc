@@ -1,0 +1,14 @@
+FROM registry.opensuse.org/opensuse/leap:15.3
+
+# Install git first (required for cloning/checkout)
+RUN zypper -n install git
+
+# Update all packages
+RUN zypper -n update
+
+# Copy the prepare script
+COPY tests/ci/prepare-ci-environment.sh /tmp/prepare-ci-environment.sh
+RUN chmod +x /tmp/prepare-ci-environment.sh
+
+# Run prepare-ci-environment.sh
+RUN /tmp/prepare-ci-environment.sh
