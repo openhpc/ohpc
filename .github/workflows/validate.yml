@@ -107,7 +107,7 @@ jobs:
       run: tests/ci/prepare-ci-environment.sh
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         name: rhel-rpms
         path: /home/ohpc/rpmbuild/RPMS
