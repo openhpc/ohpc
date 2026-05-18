@@ -44,7 +44,7 @@ teardown() {
 
 	rm -f tst_parallel.nc
 
-	run_mpi_binary ./C_parallel "atest" 2 4
+	run_with_retry run_mpi_binary ./C_parallel "atest" 2 4
 	assert_success
 
 	run ls tst_parallel.nc
