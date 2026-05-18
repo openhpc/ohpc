@@ -27,7 +27,7 @@ jobs:
     - name: Setup
       run: |
         dnf install -y epel-release git python3
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Changes
@@ -39,7 +39,7 @@ jobs:
     name: Run markdown linter
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Lint markdown
       uses: DavidAnson/markdownlint-cli2-action@v15
       with:
@@ -58,7 +58,7 @@ jobs:
     steps:
     - name: Setup
       run: dnf -y install codespell make python3-flake8 ShellCheck
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Run ${{ matrix.step }}
       run: make -C tests/ci/ ${{ matrix.step }}-lint
 
@@ -70,7 +70,7 @@ jobs:
     steps:
     - name: Install git
       run: dnf -y install git
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -102,7 +102,7 @@ jobs:
     steps:
     - name: Install git
       run: dnf -y install git
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
@@ -126,7 +126,7 @@ jobs:
     steps:
     - name: Install git
       run: zypper -n install git
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup
       run: tests/ci/prepare-ci-environment.sh
     - id: files
