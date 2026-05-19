@@ -16,7 +16,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.7.53
+Version:   9.2.2
 Release:   %{?dist}.1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
@@ -75,8 +75,8 @@ Supports a Software Hierarchy
 %setup -q -n Lmod-%{version}
 
 # OpenHPC patches
-%patch1 -p1
-%patch2 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
 
 %build
 unset MODULEPATH
