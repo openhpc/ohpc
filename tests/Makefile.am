@@ -1,8 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS  = -I m4
 AM_MAKEFLAGS     = --no-print-directory
-SUBDIRS          = 
+SUBDIRS          =
 TESTS            =
+DISTCLEANFILES   = compile test-driver
 
 # Tests are broken up into those which require elevated credentials
 # versus those that run in normal userspace
