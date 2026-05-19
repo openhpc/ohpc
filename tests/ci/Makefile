@@ -1,4 +1,4 @@
-lint: codespell-lint flake8-lint whitespace-lint shellcheck-lint
+lint: codespell-lint ruff-check-lint ruff-format-lint whitespace-lint shellcheck-lint
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
@@ -11,13 +11,23 @@ codespell-lint:
 		../../misc/obs/obs_config.py \
 		../../tests/ci/spec_to_test_mapping.py
 
-flake8-lint:
-	@echo "Running 'flake8' on selected Python files"
-	flake8 \
+
+ruff-check-lint:
+	@echo "Running 'ruff check' on selected Python files"
+	ruff check \
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
-		../../misc/obs/obs_config.py \
+		../../misc/check_for_package_updates.py \
+		../../tests/ci/spec_to_test_mapping.py
+
+ruff-format-lint:
+	@echo "Running 'ruff format' on selected Python files"
+	ruff format \
+		../../tests/ci/check_spec.py \
+		../../tests/ci/run_build.py \
+		../../misc/build_order.py \
+		../../misc/check_for_package_updates.py \
 		../../tests/ci/spec_to_test_mapping.py
 
 whitespace-lint:

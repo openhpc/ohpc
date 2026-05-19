@@ -47,7 +47,7 @@ jobs:
   lint:
     strategy:
       matrix:
-        step: [codespell, flake8, shellcheck, whitespace]
+        step: [codespell, ruff-check, ruff-format, shellcheck, whitespace]
     name: Run ${{ matrix.step }} linter
     runs-on: ubuntu-latest
     container:
