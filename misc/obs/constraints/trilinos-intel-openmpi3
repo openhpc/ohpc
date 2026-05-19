@@ -1,7 +1,0 @@
-<constraints>
-  <hardware>
-    <memory>
-      <size unit="M">6000</size>
-    </memory>
-  </hardware>
-</constraints>
