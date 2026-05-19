@@ -389,6 +389,7 @@ jobs:
     env:
       JOB_SKIP_CI_SPECS: |
         components/admin/docs/SPECS/docs.spec
+        components/provisioning/warewulf/SPECS/warewulf.spec
     runs-on: ${{ matrix.os }}
     name: Build on LEAP (${{ matrix.arch }})
     container:
@@ -451,6 +452,7 @@ jobs:
       JOB_SKIP_CI_SPECS: |
         components/runtimes/charliecloud/SPECS/charliecloud.spec
         components/perf-tools/likwid/SPECS/likwid.spec
+        components/provisioning/warewulf/SPECS/warewulf.spec
     runs-on: ${{ matrix.os }}
     name: Test on LEAP (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
