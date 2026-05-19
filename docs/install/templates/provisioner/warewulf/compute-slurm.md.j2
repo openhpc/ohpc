@@ -16,9 +16,8 @@ wwctl profile set --yes nodes --tagadd slurmctld="${sms_ip}"
 
 # Configure munge
 wwctl overlay import --parents nodeconfig /etc/munge/munge.key
-wwctl overlay chown nodeconfig /etc/munge/munge.key \
-	"$(id -u munge)" "$(id -g munge)"
-wwctl overlay chown nodeconfig /etc/munge "$(id -u munge)" "$(id -g munge)"
+wwctl overlay chown nodeconfig /etc/munge/munge.key "$(id -u munge):$(id -g munge)"
+wwctl overlay chown nodeconfig /etc/munge "$(id -u munge):$(id -g munge)"
 wwctl overlay chmod nodeconfig /etc/munge 0700
 ```
 <!-- ohpc_end -->

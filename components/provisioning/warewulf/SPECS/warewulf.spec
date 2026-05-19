@@ -8,10 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
-## Inserted by OHPC
+## OHPC macros
 %include %{_sourcedir}/OHPC_macros
 %global pname warewulf
-## End OHPC
+## End OHPC macros
 
 %global debug_package %{nil}
 
@@ -28,14 +28,11 @@
 %global is_suse 0
 %endif
 
-# Set tftpdir based on distribution
-%if 0%{?is_suse}
+## OHPC: override paths to /srv to match WW3 layout convention (upstream default is /var/lib)
 %global tftpdir /srv/tftpboot
-%else
-%global tftpdir /var/lib/tftpboot
-%endif
-
-%global srvdir %{_sharedstatedir}
+%global srvdir /srv
+%global statedir /srv
+## End OHPC
 
 %global wwgroup warewulf
 
@@ -46,23 +43,17 @@
 %define _overlaydir %{_datadir}/warewulf/overlays
 %global __brp_mangle_shebangs_exclude_from ^%{_overlaydir}/.*$
 
-## Inserted by OHPC
-# Service directories (change /var/lib/* default to match WW3 build)
-%global tftpdir /srv/tftpboot
-%global srvdir /srv
-%global statedir /srv
-## End OHPC
 
-## Contains OHPC customizations
+## OHPC: Name uses pname+delimiter; Group added
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.6.5
+Version: 4.7.0
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
 URL:     https://github.com/warewulf/warewulf
 Source0: https://github.com/warewulf/warewulf/releases/download/v%{version}/warewulf-%{version}.tar.gz
-# OpenHPC modifications to the warewulf template files
+# OpenHPC modification: add .localdomain suffix to hosts.ww template
 Patch0:  hosts.ww.patch
 
 ExclusiveOS: linux
@@ -75,7 +66,7 @@ Conflicts: warewulf-provision
 Conflicts: warewulf-ipmi
 
 %if 0%{?is_suse}
-#BuildRequires: distribution-release ## OHPC Removed
+#BuildRequires: distribution-release ## OHPC: removed; not available in OHPC build infra
 BuildRequires: systemd-rpm-macros
 BuildRequires: go >= 1.22
 BuildRequires: firewall-macros
@@ -85,12 +76,13 @@ Requires: firewalld
 Requires: ipxe-bootimgs
 %else
 # Assume Red Hat/Fedora
-#BuildRequires: system-release ## OHPC Removed
+#BuildRequires: system-release ## OHPC: removed; not available in OHPC build infra
 BuildRequires: systemd
 BuildRequires: golang >= 1.22
 BuildRequires: firewalld-filesystem
 Requires: nfs-utils
-%if 0%{?rhel} < 8
+## OHPC: openEuler ships a single ipxe-bootimgs package like pre-RHEL8
+%if 0%{?rhel} < 8 || 0%{?openEuler}
 Requires: ipxe-bootimgs
 %else
 Requires: ipxe-bootimgs-x86
@@ -129,14 +121,16 @@ Recommends: ipmitool
 Warewulf is a stateless and diskless provisioning
 system for large clusters of bare metal and/or virtual systems.
 
-## OHPC customized. Add OHPC patches
+
 %prep
+## OHPC: pname used in setup because %%{name} expands to warewulf-ohpc
 %setup -q -n %{pname}-%{version} -b0
 %patch -P 0 -p1
 
 
 %build
 export OFFLINE_BUILD=1
+## OHPC: statedir is /srv rather than upstream %%{_sharedstatedir} (/var/lib)
 make defaults \
     PREFIX=%{_prefix} \
     BINDIR=%{_bindir} \
@@ -166,12 +160,11 @@ export NO_BRP_STALE_LINK_ERROR=yes
 make install \
     DESTDIR=%{buildroot}
 
-## Inserted by OHPC
-# For RH, tftpboot directory is hardcoded
+## OHPC: tftpdir is /srv/tftpboot but tftp-server on RHEL serves /var/lib/tftpboot;
+## symlink bridges the two. Not needed on SUSE where /srv/tftpboot is the tftp root.
 %if 0%{?rhel}
 ln -s %{_sharedstatedir}/tftpboot %{buildroot}%{tftpdir}
 %endif
-## END OHPC
 
 %if 0%{?rhel} >= 10 || 0%{?openEuler}
 cp -f etc/warewulf.conf-el10 %{buildroot}%{_sysconfdir}/warewulf/warewulf.conf
@@ -188,7 +181,6 @@ make install-sos \
 
 %pre
 getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
-# use ipxe images from the distribution
 
 
 %post
@@ -218,7 +210,7 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %{_sysconfdir}/bash_completion.d
 %config(noreplace) %{_sysconfdir}/logrotate.d
 
-## OHPC Modified
+## OHPC: statedir is /srv rather than upstream %%{_sharedstatedir} (/var/lib)
 %dir %{statedir}/warewulf
 %dir %{statedir}/warewulf/chroots
 %dir %{statedir}/warewulf/overlays
@@ -229,6 +221,7 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %dir %{_overlaydir}/*
 %dir %{_overlaydir}/*/rootfs
 %{_overlaydir}/NetworkManager/rootfs/*
+%{_overlaydir}/chrony/rootfs/*
 %{_overlaydir}/debian.interfaces/rootfs/*
 %{_overlaydir}/debug/rootfs/*
 %{_overlaydir}/fstab/rootfs/*
@@ -258,6 +251,7 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %{_overlaydir}/mkswap/rootfs/*
 %{_overlaydir}/systemd.mount/rootfs/*
 %{_overlaydir}/systemd.swap/rootfs/*
+%{_overlaydir}/mig/rootfs/*
 
 %{_bindir}/wwctl
 %{_prefix}/lib/firewalld/services/warewulf.xml
@@ -268,11 +262,11 @@ getent group %{wwgroup} >/dev/null || groupadd -r %{wwgroup}
 %dir %{_docdir}/warewulf
 %license %{_docdir}/warewulf/LICENSE.md
 
-## Inserted by OHPC
+## OHPC: tftpdir symlink is owned by the package on RHEL
 %if 0%{?rhel}
 %{tftpdir}
 %endif
-## End OHPC
+
 
 %package dracut
 Summary: dracut module for loading a Warewulf image
@@ -291,7 +285,7 @@ Warewulf is a stateless and diskless provisioning system for large clusters of
 bare metal and/or virtual systems.
 
 This subpackage contains a dracut module that can be used to generate an
-initramfs that can fetch and boot a Warewulf node image from a Warewulf server.
+initramfs that can fetch and boot a Warewulf OS image from a Warewulf server.
 
 %files dracut
 %defattr(-, root, root)
@@ -315,3 +309,5 @@ about Warewulf in an sos report.
 %{python3_sitelib}/sos/report/plugins/warewulf.py
 %{python3_sitelib}/sos/report/plugins/__pycache__/warewulf.*.pyc
 %endif
+
+## OHPC: upstream %%changelog removed
