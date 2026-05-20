@@ -1,43 +1,39 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
+export MAKEFLAGS=""
 status=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 cd rms-harness || exit 1
+
 export BATS_JUNIT_CLASS=rms-harness
 
-# bootstrap the local autotools project
+for compiler in ${COMPILER_FAMILIES}; do
+	for mpi in ${MPI_FAMILIES}; do
 
-./bootstrap || exit 1
+		echo " "
+		echo " "
+		echo "-------------------------------------------------------"
+		echo "User Environment: RMS Harness tests: ${compiler}-${mpi}"
+		echo "-------------------------------------------------------"
 
-for compiler in ${GCC_DEFAULT} ; do
-    for mpi in $MPI_FAMILIES ; do
+		module purge || exit 1
+		module load prun || exit 1
+		module load "${compiler}" || exit 1
+		module load "${mpi}" || exit 1
 
-	echo " "
-	echo " "
-	echo "-------------------------------------------------------"
-	echo "User Environment: RMS Harness tests: $compiler-$mpi"
-	echo "-------------------------------------------------------"
+		./bootstrap || exit 1
+		./configure || exit 1
+		make -k check || status=1
 
-	module purge          || exit 1
-        module load prun      || exit 1
-	module load $compiler || exit 1
-	module load $mpi      || exit 1
+		save_logs_mpi_family tests "${compiler}" "${mpi}"
 
-	make distclean
-	./configure           || exit 1
-	make -k check         || status=1
+		make distclean
 
-        save_logs_mpi_family tests $compiler $mpi
-
-	make distclean 
-    done
+	done
 done
 
 exit ${status}
-
