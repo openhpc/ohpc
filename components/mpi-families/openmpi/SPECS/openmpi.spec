@@ -14,7 +14,7 @@
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 # Base package name/config
-%define pname openmpi4
+%define pname openmpi5
 %define with_openib 0
 
 %ifarch aarch64 || ppc64le
@@ -44,14 +44,14 @@ Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   4.1.6
+Version:   5.0.10
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v4.1/downloads/openmpi-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-%{version}.tar.bz2
 Source3:   pbs-config
-Patch0:    openmpi-4.0-pbs-config.patch
+Patch0:    openmpi-5.x-pbs-config.patch
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -66,9 +66,10 @@ BuildRequires:  postfix
 BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
+BuildRequires:  libevent-devel
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
-BuildRequires:  libevent-devel
+BuildRequires:  munge-devel
 %endif
 %if 0%{with_ofi}
 BuildRequires:  libfabric%{PROJ_DELIM}
@@ -155,16 +156,15 @@ communication techniques.
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
+BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --with-libevent=external"
 
 # build against ohpc-variant of hwloc
 BASEFLAGS="$BASEFLAGS --with-hwloc=%{OHPC_LIBS}/hwloc"
 
-# build against external pmix and libevent
+# build against external pmix
 %if 0%{with_pmix}
 module load pmix
 BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
-BASEFLAGS="$BASEFLAGS --with-libevent=external"
 %endif
 
 %if 0%{with_ofi}
@@ -174,7 +174,7 @@ BASEFLAGS="$BASEFLAGS --with-libfabric=${LIBFABRIC_DIR}"
 
 %if 0%{with_ucx}
 module load ucx
-BASEFLAGS="$BASEFLAGS --with-ucx=${UCX_DIR} --without-verbs"
+BASEFLAGS="$BASEFLAGS --with-ucx=${UCX_DIR}"
 %endif
 
 %if %{with_psm}
@@ -184,7 +184,7 @@ BASEFLAGS="$BASEFLAGS --with-ucx=${UCX_DIR} --without-verbs"
   BASEFLAGS="$BASEFLAGS --with-psm2"
 %endif
 %if %{with_tm}
-  BASEFLAGS="$BASEFLAGS --with-tm=/opt/pbs/"
+  BASEFLAGS="$BASEFLAGS --with-tm"
 %endif
 %if %{with_openib}
   BASEFLAGS="$BASEFLAGS --with-verbs"
@@ -198,7 +198,10 @@ export BASEFLAGS
 %if %{with_tm}
 %{__cp} %{SOURCE3} .
 %{__chmod} 700 pbs-config
-export PATH="./:$PATH"
+export PATH="$PWD:$PATH"
+# The ordering of the static lib and the dependencies is wrong.
+# To build with openpbs support it needs a -lz after libpbs.a
+sed -e 's,\(${LIBS} ${ess_tm_LIBS} ${ess_tm_LDFLAGS}\),\1 -lz,g' -i 3rd-party/prrte/configure
 %endif
 
 ./configure ${BASEFLAGS} || { cat config.log && exit 1; }
@@ -217,6 +220,12 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove any .la files that might exist
 %{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/*.la
+%{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/openmpi/*.la
+%{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/pmix/*.la
+%{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/prte/*.la
+
+# rename to avoid name collision with OpenHPC's prun
+mv $RPM_BUILD_ROOT/%{install_path}/bin/prun $RPM_BUILD_ROOT/%{install_path}/bin/prrte-prun
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -272,8 +281,6 @@ EOF
 %files
 %{install_path}
 %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%doc NEWS
-%doc README
+%doc README.md
 %doc LICENSE
 %doc AUTHORS
-%doc README.JAVA.txt
