@@ -12,14 +12,18 @@
 
 %define pname hwloc
 
+%define major 2
+%define minor 13
+%define extra 0
+
 Name:           %{pname}%{PROJ_DELIM}
-Version:        2.7.2
+Version:        %{major}.%{minor}.%{extra}
 Release:        %{?dist}.1
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        https://download.open-mpi.org/release/hwloc/v2.7/%{pname}-%{version}.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v%{major}.%{minor}/%{pname}-%{version}.tar.bz2
 
 BuildRequires:  make
 BuildRequires:  doxygen
@@ -29,8 +33,6 @@ BuildRequires:  libtool
 BuildRequires:  cairo-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  ncurses-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  transfig
 %if 0%{?sle_version}
 BuildRequires:  libnuma-devel
 %else
@@ -38,6 +40,8 @@ BuildRequires:  numactl-devel
 %endif
 #!BuildIgnore: post-build-checks rpmlint-Factory
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
+
+Requires: libxml2-devel
 
 # Default library install path
 # note that this install path is purposefully not including a version
