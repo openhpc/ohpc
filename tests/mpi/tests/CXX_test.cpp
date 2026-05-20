@@ -1,33 +1,32 @@
-#include "mpi.h"
+#include <mpi.h>
 #include <cassert>
 #include <cstdlib>
 
 int main(int argc, char *argv[])
 {
-  int num_procs, num_local;
+	int num_procs, num_local;
 
-  MPI::Init (argc,argv);
-  num_procs = MPI::COMM_WORLD.Get_size();
-  num_local = MPI::COMM_WORLD.Get_rank();
+	MPI_Init(&argc, &argv);
+	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+	MPI_Comm_rank(MPI_COMM_WORLD, &num_local);
 
-  /* compare avail MPI tasks to requested. If not requested via argv,
+	/* compare avail MPI tasks to requested. If not requested via argv,
      convention is to assume 1 task */
 
-  if(argc > 1)
-    assert(num_procs == atoi(argv[1]));
-  else
-    assert(num_procs == 1);
+	if (argc > 1)
+		assert(num_procs == atoi(argv[1]));
+	else
+		assert(num_procs == 1);
 
-  /* Verify a quick collective */
+	/* Verify a quick collective */
 
-  int local=1;
-  int global;
+	int local = 1;
+	int global;
 
-  MPI::COMM_WORLD.Allreduce(&local,&global,1,MPI::INT,MPI::SUM);
+	MPI_Allreduce(&local, &global, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
-  assert(global == num_procs);
+	assert(global == num_procs);
 
-  MPI::Finalize();
-  return 0;
-
+	MPI_Finalize();
+	return 0;
 }
