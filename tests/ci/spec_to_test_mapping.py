@@ -85,8 +85,8 @@ test_map = {
         "lmod-defaults-gnu12-openmpi4-ohpc",
     ],
     "components/perf-tools/tau/SPECS/tau.spec": ["tau", "", ""],
-    "components/mpi-families/openmpi/SPECS/openmpi.spec": ["slurm", "", ""],
-    "components/mpi-families/mpich/SPECS/mpich.spec": ["slurm", "", ""],
+    "components/mpi-families/openmpi/SPECS/openmpi.spec": ["slurm mpi", "", ""],
+    "components/mpi-families/mpich/SPECS/mpich.spec": ["slurm mpi", "", ""],
     "components/dev-tools/spack/SPECS/spack.spec": ["", "spack", ""],
     "components/admin/conman/SPECS/conman.spec": ["", "oob", ""],
     "components/dev-tools/autoconf/SPECS/autoconf.spec": [
@@ -137,7 +137,8 @@ for i in sys.argv[1:]:
             pkgs += " "
 
         if len(test_map[i][0]) > 0:
-            tests += f"--enable-{test_map[i][0]}"
+            for test in test_map[i][0].split():
+                tests += f"--enable-{test} "
         if len(test_map[i][1]) > 0:
             admin_tests += f"--enable-{test_map[i][1]}"
         pkgs += test_map[i][2]

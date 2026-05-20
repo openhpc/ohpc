@@ -31,8 +31,8 @@ TIMEOUT="00:05:00"
 	flunk "C_mpi_test binary does not exist"
     fi
 
-    # choose specific pml for openmpi4
-    if [[ "$LMOD_FAMILY_MPI" == "openmpi4" ]];then
+    # choose specific pml for openmpi5
+    if [[ "$LMOD_FAMILY_MPI" == "openmpi5" ]];then
 	export OMPI_MCA_pml=ob1
     fi
 

@@ -30,7 +30,7 @@ INSTALL_PKGS=(
 	libtool
 	ohpc-autotools
 	prun-ohpc
-	openmpi4-"${COMPILER_FAMILY}"-ohpc
+	openmpi5-"${COMPILER_FAMILY}"-ohpc
 	mpich-"${COMPILER_FAMILY}"-ohpc
 	lmod-defaults-"${COMPILER_FAMILY}"-openmpi4-ohpc
 	slurm-slurmd-ohpc
@@ -139,7 +139,7 @@ sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -d
 
 # Always running at least with '--enable-modules'. No need to check for
 # an empty TESTS array.
-MPI_FAMILIES="openmpi4 mpich"
+MPI_FAMILIES="openmpi5 mpich"
 #if [ "$(uname -m)" != "aarch64" ]; then
 #	MPI_FAMILIES="${MPI_FAMILIES} mvapich2"
 #fi
