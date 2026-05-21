@@ -27,11 +27,28 @@ Source0:   https://pypi.io/packages/source/e/easybuild/easybuild-%{version}.tar.
 Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild_easyblocks-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild_easyconfigs-%{version}.tar.gz
 Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild_framework-%{version}.tar.gz
-BuildRequires: python3-devel python3-pip
-BuildRequires: python3-setuptools
-BuildRequires: python3-wheel
-Requires:  python3
+%if 0%{?suse_version}
+%define python_prefix python39
+%define python_bin python3.9
+%define python_ver 3.9
+%else
+%define python_prefix python3.12
+%define python_bin python3.12
+%define python_ver 3.12
+%endif
+
+BuildRequires: %{python_prefix}-devel %{python_prefix}-pip
+BuildRequires: %{python_prefix}-setuptools
+%if !0%{?suse_version}
+BuildRequires: %{python_prefix}-wheel
+%endif
+Requires:  %{python_prefix}
 Requires:  patch
+%if 0%{?suse_version}
+Requires:  libopenssl-devel
+%else
+Requires:  openssl-devel
+%endif
 #!BuildIgnore: post-build-checks
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
@@ -56,7 +73,7 @@ systems in an efficient way.
 %install
 for eb in framework easyblocks easyconfigs; do
 	cd %{pname}_${eb}-%{version}
-	pip3 install --prefix=%{install_path} --root=%{buildroot} .
+	pip%{python_ver} install --prefix=%{install_path} --root=%{buildroot} .
 	cd ..
 done
 
@@ -87,9 +104,9 @@ module          use                     \$home/.local/easybuild/modules/all
 
 setenv          EBROOTEASYBUILD         %{install_path}
 setenv          EBVERSIONEASYBUILD      %{version}
-setenv          EB_PYTHON               python3
+setenv          EB_PYTHON               %{python_bin}
 
-prepend-path	PYTHONPATH	    %{install_path}/lib/python%{python3_version}/site-packages
+prepend-path	PYTHONPATH	    %{install_path}/lib/python%{python_ver}/site-packages
 
 EOF
 
@@ -109,9 +126,9 @@ for file in \
 	easybuild/scripts/findPythonDeps.py \
 	easybuild/scripts/fix_docs.py \
 	easybuild/scripts/mk_tmpl_easyblock_for.py \
-	lib/python%{python3_version}/site-packages/easybuild/easyblocks/p/pytorch.py \
+	lib/python%{python_ver}/site-packages/easybuild/easyblocks/p/pytorch.py \
 	easybuild/scripts/rpath_args.py; do
-	sed -e "s,^#\!\s*/usr/bin/env python,#\!/usr/bin/env python3,g" \
+	sed -e "s,^#\!\s*/usr/bin/env python,#\!/usr/bin/env %{python_bin},g" \
 		-i %{buildroot}/%{install_path}/${file}
 done
 
