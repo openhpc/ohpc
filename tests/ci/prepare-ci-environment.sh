@@ -15,7 +15,7 @@ usage() {
 	echo " intel           Enable Intel OneAPI toolkit"
 }
 
-FACTORY_VERSION=4.1
+FACTORY_VERSION=4.2
 ENABLE_ONEAPI=""
 PRE_RELEASE=""
 
