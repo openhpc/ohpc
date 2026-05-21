@@ -231,6 +231,7 @@ failed = []
 rebuild_success = []
 total = 0
 docs_spec_executed = False
+tests_spec_executed = False
 
 for spec in args.specfiles:
     # if more than one docs related file are modified then
@@ -246,6 +247,17 @@ for spec in args.specfiles:
         docs_spec_executed = True
         spec = 'components/admin/docs/SPECS/docs.spec'
     # END OF LOGIC FOR DOCS
+    # START OF LOGIC FOR TESTS
+    elif "components/admin/test-suite/SPECS/tests.spec" == spec:
+        if tests_spec_executed:
+            continue
+        tests_spec_executed = True
+    elif not tests_spec_executed and (
+        "tests/" in spec or "components/admin/test-suite/SOURCES/" in spec
+    ):
+        tests_spec_executed = True
+        spec = "components/admin/test-suite/SPECS/tests.spec"
+    # END OF LOGIC FOR TESTS
     elif not spec.endswith(".spec"):
         continue
     just_spec = os.path.basename(spec)
