@@ -229,8 +229,12 @@ jobs:
         artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}
 
   integration_test:
+    strategy:
+      fail-fast: false
+      matrix:
+        provisioner: [warewulf, openchami]
     runs-on: ubuntu-latest
-    name: AlmaLinux 9 Warewulf Slurm Integration
+    name: AlmaLinux 9 ${{ matrix.provisioner }} Slurm Integration
     needs: build_on_rhel
     # The job provisions VMs and can wait on them, so without a limit it
     # inherits the six hour default and a hung boot has to be cancelled by
@@ -271,7 +275,7 @@ jobs:
     - name: Run integration test
       run: >-
         sudo podman exec -it -l
-        bash -c "cd /home/ohpc; bash tests/ci/integration-test.sh"
+        bash -c "cd /home/ohpc; bash tests/ci/integration-test.sh -p ${{ matrix.provisioner }}"
 
   build_on_openEuler:
     strategy:
