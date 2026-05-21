@@ -243,6 +243,7 @@ jobs:
         path: rpms
     - name: Start AlmaLinux 10 container
       run: >-
+        sudo mkdir -p /mnt/nested-container;
         sudo podman run
         -w /home/ohpc
         --privileged
@@ -250,6 +251,7 @@ jobs:
         --security-opt apparmor=unconfined
         -v /home:/home
         -v /opt:/opt
+        -v /mnt/nested-container:/var/lib/containers
         -v ${{ github.workspace }}:/home/ohpc
         -v ${{ github.workspace }}/rpms:/tmp/RPMS
         -d

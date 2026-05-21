@@ -1,5 +1,5 @@
 #!/bin/bash
-# Integration test for OpenHPC Warewulf/Slurm recipe on EL-based distros.
+# Integration test for OpenHPC recipe on EL-based distros.
 #
 # Runs the full recipe inside a VM (or container with KVM access),
 # provisioning QEMU-based compute nodes via PXE and verifying they boot.
@@ -9,7 +9,7 @@
 #   - ~8 GB RAM, 4+ CPUs recommended
 #
 # Usage:
-#   sudo bash tests/ci/integration-test-el.sh
+#   sudo bash tests/ci/integration-test.sh [-k] [-p warewulf|openchami]
 
 # shellcheck disable=SC2034,SC2154
 
@@ -17,16 +17,26 @@ set -ex
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SHUTDOWN_VMS="${SHUTDOWN_VMS:-1}"
+PROVISIONER="${PROVISIONER:-warewulf}"
 
-while getopts "k" opt; do
+while getopts "kp:" opt; do
 	case "${opt}" in
 	k) SHUTDOWN_VMS=0 ;;
+	p) PROVISIONER="${OPTARG}" ;;
 	*)
-		echo "Usage: $0 [-k]" >&2
+		echo "Usage: $0 [-k] [-p warewulf|openchami]" >&2
 		exit 1
 		;;
 	esac
 done
+
+if [[ "${PROVISIONER}" != "warewulf" && "${PROVISIONER}" != "openchami" ]]; then
+	echo "ERROR: invalid provisioner '${PROVISIONER}'" >&2
+	echo "Must be 'warewulf' or 'openchami'" >&2
+	exit 1
+fi
+
+echo "Provisioner: ${PROVISIONER}"
 
 # ---------------------------------------------------------------------------
 # System info
@@ -75,7 +85,7 @@ dnf -y install docs-ohpc
 # ---------------------------------------------------------------------------
 # Install VM and networking dependencies
 # ---------------------------------------------------------------------------
-dnf -y install qemu-kvm ipxe-roms-qemu iproute initscripts-service
+dnf -y install qemu-kvm ipxe-roms-qemu iproute initscripts-service fuse-overlayfs
 
 # ---------------------------------------------------------------------------
 # Compute node definitions
@@ -106,6 +116,7 @@ for ((i = 0; i < num_computes; i++)); do
 	ip tuntap add "tap${i}" mode tap
 	ip link set "tap${i}" up
 	ip link set "tap${i}" master br0
+	echo "${c_ip[${i}]} ${c_name[${i}]}" >>/etc/hosts
 done
 
 echo "192.168.100.1 sms" >>/etc/hosts
@@ -125,6 +136,8 @@ case "${PLATFORM_ID}" in
 	exit 1
 	;;
 esac
+ARCH="$(uname -m)"
+RECIPE="${RECIPE_DIR}/${ARCH}/${PROVISIONER}/slurm/recipe.sh"
 INPUT_LOCAL="${RECIPE_DIR}/input.local"
 
 cat >"${INPUT_LOCAL}" <<'INPUTEOF'
@@ -329,17 +342,45 @@ sed -i "s/\${num_cpus}/${num_cpus}/" /usr/local/bin/ipmitool
 chmod +x /usr/local/bin/ipmitool
 
 # ---------------------------------------------------------------------------
+# Fix /opt permissions (GitHub Actions runner sets 777)
+# ---------------------------------------------------------------------------
+chmod 755 /opt
+
+# ---------------------------------------------------------------------------
 # Run the recipe
 # ---------------------------------------------------------------------------
 export PATH=/usr/local/bin:${PATH}
 export OHPC_INPUT_LOCAL="${INPUT_LOCAL}"
 # shellcheck disable=SC2016
-sed -i \
-	-e 's/\(\["rd.shell"\]\)/\1 + ["console=hvc0", "loglevel=5"]/' \
-	-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
-	-e 's|#<<< ohpc_proxy:compute >>>#|echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf|' \
-	"${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"
-if ! bash -x "${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"; then
+if [[ "${PROVISIONER}" == "warewulf" ]]; then
+	sed -i \
+		-e 's/\(\["rd.shell"\]\)/\1 + ["console=hvc0", "loglevel=5"]/' \
+		-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
+		-e 's|#<<< ohpc_proxy:compute >>>#|echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf|' \
+		"${RECIPE}"
+elif [[ "${PROVISIONER}" == "openchami" ]]; then
+	mkdir -p /etc/containers
+	cat >/etc/containers/containers.conf <<-'CONTEOF'
+		[containers]
+		pids_limit = 0
+		[network]
+		default_subnet = "10.99.0.0/16"
+	CONTEOF
+	cat >/etc/containers/storage.conf <<-'STOREOF'
+		[storage]
+		driver = "vfs"
+	STOREOF
+	mkdir -p /home/builder
+	chmod 777 /home/builder
+	rm -rf /opt/ohpc/admin/data/
+	sed -i \
+		-e 's/console=ttyS0,115200/console=hvc0 loglevel=5/' \
+		-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
+		-e 's|--network host \\|--network host \\\n        -v /etc/containers/storage.conf:/etc/containers/storage.conf:ro \\\n        -v /home/builder:/home/builder/.local \\|' \
+		-e 's|dracut --add "dmsquash-live livenet network-manager"|dracut --add "dmsquash-live livenet network-manager" --install "/usr/lib/systemd/systemd-sysroot-fstab-check"|' \
+		"${RECIPE}"
+fi
+if ! bash -x "${RECIPE}" 2> >(grep -v -e 'Unrecognised xattr prefix' -e '/dev/kmsg: Read-only file system' -e '^$' >&2); then
 	echo "Recipe failed – dumping journal since boot:"
 	journalctl -b --no-pager
 	exit 1
