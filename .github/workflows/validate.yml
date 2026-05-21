@@ -252,6 +252,7 @@ jobs:
         sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
     - name: Start AlmaLinux 9 container
       run: >-
+        sudo mkdir -p /mnt/nested-container;
         sudo podman run
         -w /home/ohpc
         --privileged
@@ -259,6 +260,7 @@ jobs:
         --security-opt apparmor=unconfined
         -v /home:/home
         -v /opt:/opt
+        -v /mnt/nested-container:/var/lib/containers
         -v ${{ github.workspace }}:/home/ohpc
         -v ${{ github.workspace }}/rpms:/tmp/RPMS
         -d
