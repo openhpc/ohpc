@@ -33,7 +33,7 @@ test_map = {
     "components/dev-tools/easybuild/SPECS/easybuild.spec": [
         "easybuild",
         "",
-        "gcc-c++",
+        "gcc-c++ ncurses-devel",
     ],
     "components/io-libs/adios/SPECS/adios.spec": ["adios", "", ""],
     "components/io-libs/hdf5/SPECS/hdf5.spec": ["hdf5", "", "zlib-devel"],
