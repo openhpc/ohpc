@@ -232,8 +232,12 @@ jobs:
         artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}
 
   integration_test:
+    strategy:
+      fail-fast: false
+      matrix:
+        provisioner: [warewulf, openchami]
     runs-on: ubuntu-latest
-    name: AlmaLinux 10 Warewulf Slurm Integration
+    name: AlmaLinux 10 ${{ matrix.provisioner }} Slurm Integration
     needs: build_on_rhel
     steps:
     - uses: actions/checkout@v6
@@ -262,7 +266,12 @@ jobs:
     - name: Run integration test
       run: >-
         sudo podman exec -it -l
-        bash -c "cd /home/ohpc; bash tests/ci/integration-test.sh"
+        bash -c "cd /home/ohpc; bash tests/ci/integration-test.sh -p ${{ matrix.provisioner }}"
+    - name: Debug via SSH
+      if: failure()
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
 
   build_on_openEuler:
     strategy:
