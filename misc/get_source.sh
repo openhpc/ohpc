@@ -27,6 +27,12 @@ do
 
 	DIR=$(dirname "${file}")
 	pushd "${DIR}" > /dev/null || exit 1
+
+	# .../SOURCES/get_source.sh is an optional "plugin" that could build/fetch component's sources on the fly
+	if [ -f ../SOURCES/get_source.sh ]; then
+		bash ../SOURCES/get_source.sh
+	fi
+
 	BASE=$(basename "${file}")
 
 	SOURCES=$(rpmspec --parse --define '_sourcedir ../../..' "${FLAGS[@]}" "${BASE}" | grep Source)
