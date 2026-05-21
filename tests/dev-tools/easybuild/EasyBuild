@@ -32,7 +32,7 @@ setup() {
 	eb tmux-3.2a.eb --robot
 	assert_success
 	module use "${EASYBUILD_PREFIX}"/modules/all
-	module load tmux/3.4
+	module load tmux/3.2a
 	assert_success
 	test -f "${EBROOTTMUX}"/bin/tmux
 	assert_success
