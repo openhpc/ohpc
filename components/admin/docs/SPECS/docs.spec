@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 Name:           docs%{PROJ_DELIM}
-Version:        2.9.0
+Version:        2.10.0
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
@@ -20,6 +20,7 @@ URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
 
 BuildRequires:  git
+BuildRequires:  make
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
