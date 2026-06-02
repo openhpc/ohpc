@@ -1,1 +1,2 @@
 server {{.Tags.ntpserver}} iburst
+makestep 1.0 3
