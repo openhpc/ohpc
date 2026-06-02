@@ -33,9 +33,10 @@ systemctl enable --now warewulfd
 wwctl profile add nodes --profile default --comment "Nodes profile"
 
 # Create a new "nodeconfig" overlay to store node
-# configuration files and use the syncuser overlay.
+# configuration files, inherit the timezone settings
+# from the SMS, and use the syncuser overlay.
 wwctl overlay create nodeconfig
-wwctl profile set --yes nodes --system-overlays nodeconfig \
+wwctl profile set --yes nodes --system-overlays nodeconfig,localtime \
 	--runtime-overlays syncuser
 
 # Set default network configuration
