@@ -245,6 +245,10 @@ jobs:
       with:
         name: rhel-rpms-gnu15-ubuntu-latest
         path: rpms
+    - name: Disable AppArmor
+      run: |
+        sudo aa-teardown || true
+        sudo systemctl disable apparmor
     - name: Start AlmaLinux 10 container
       run: >-
         sudo mkdir -p /mnt/nested-container;
