@@ -148,6 +148,21 @@ def classify_package(name: str) -> tuple[str, bool]:
     return name, False
 
 
+def _version_key(version: str) -> list[int]:
+    """Convert a version string to a list of integers for comparison.
+
+    Non-numeric segments are treated as 0 so that purely numeric
+    versions sort correctly (e.g. "17.0.0" > "13.4.0").
+    """
+    parts = []
+    for part in re.split(r"[.\-]", version):
+        try:
+            parts.append(int(part))
+        except ValueError:
+            parts.append(0)
+    return parts
+
+
 def group_packages(packages: list[Package]) -> list[PackageGroup]:
     """Group consecutive compiler/MPI family variants.
 
@@ -197,16 +212,17 @@ def group_packages(packages: list[Package]) -> list[PackageGroup]:
             else:
                 break
 
-        variant_names = [
-            p.name for p in packages[i:end] if p.name not in EXCLUDE_PACKAGES
-        ]
+        variants = [p for p in packages[i:end] if p.name not in EXCLUDE_PACKAGES]
+        variant_names = [p.name for p in variants]
+        # Use the newest version among all variants in the group
+        newest = max(variants, key=lambda p: _version_key(p.version))
         groups.append(
             PackageGroup(
                 variant_names,
                 base,
-                pkg.version,
-                pkg.url,
-                pkg.summary,
+                newest.version,
+                newest.url,
+                newest.summary,
             )
         )
         i = end
@@ -258,15 +274,22 @@ def display_name(group: PackageGroup) -> str:
 
 
 def merge_groups(groups: list[PackageGroup]) -> list[PackageGroup]:
-    """Merge consecutive groups that share the same display name and version."""
+    """Merge consecutive groups that share the same display name.
+
+    When versions differ, the newest version is kept.
+    """
     if not groups:
         return []
     merged: list[PackageGroup] = [groups[0]]
     for group in groups[1:]:
         prev = merged[-1]
-        if display_name(group) == display_name(prev) and group.version == prev.version:
-            # Merge into previous group, keeping its metadata
+        if display_name(group) == display_name(prev):
+            # Merge into previous group, keeping the newest version
             prev.names.extend(group.names)
+            if _version_key(group.version) > _version_key(prev.version):
+                prev.version = group.version
+                prev.url = group.url
+                prev.summary = group.summary
         else:
             merged.append(group)
     return merged
