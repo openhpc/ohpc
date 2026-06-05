@@ -222,6 +222,10 @@ jobs:
       with:
         name: rhel-rpms-gnu16-ubuntu-latest
         path: rpms
+    - name: Disable AppArmor
+      run: |
+        sudo aa-teardown || true
+        sudo systemctl disable apparmor
     - name: Start AlmaLinux 9 container
       run: >-
         sudo podman run
