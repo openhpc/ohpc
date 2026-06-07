@@ -34,7 +34,7 @@
 
 LPORDDIR = $(topdir)/PORD/lib/
 IPORD    = -I$(topdir)/PORD/include/
-LPORD    = -L$(LPORDDIR) -lpord
+LPORD    = -L$(LPORDDIR) -lpord$(PLAT)
 
 #LMETISDIR = /local/metis/
 #IMETIS    = # should be provided if you use parmetis, to access parmetis.h
@@ -50,6 +50,8 @@ LPORD    = -L$(LPORDDIR) -lpord
 
 # The following variables will be used in the compilation process.
 # Please note that -Dptscotch and -Dparmetis imply -Dscotch and -Dmetis respectively.
+# If you want to use Metis 4.X or an older version, you should use -Dmetis4 instead of -Dmetis
+# or in addition with -Dparmetis (if you are using parmetis 3.X or older).
 #ORDERINGSF = -Dscotch -Dmetis -Dpord -Dptscotch -Dparmetis
 ORDERINGSF  = -Dpord
 ORDERINGSC  = $(ORDERINGSF)
@@ -60,28 +62,48 @@ IORDERINGSC = $(IMETIS) $(IPORD) $(ISCOTCH)
 
 #End orderings
 ########################################################################
-################################################################################
 
-PLAT    =
+########################################################################
+# DEFINE HERE SOME COMMON COMMANDS, THE COMPILER NAMES, ETC...
+
+# PLAT : use it to add a default suffix to the generated libraries
+PLAT    = 
+# Suffix for libraries, -soname and -fPIC options, C and Fortran "-o" option
+# may be adapted
+LIBEXT_SHARED  = .so
+SONAME = -soname
+SHARED_OPT = -shared
+FPIC_OPT = -fPIC
+# Adapt/uncomment RPATH_OPT to avoid modifying
+# LD_LIBRARY_PATH in case of shared libraries
+# RPATH_OPT = -Wl,-rpath,/path/to/MUMPS_x.y.z/lib/
 LIBEXT  = .a
 OUTC    = -o 
 OUTF    = -o 
-RM = /bin/rm -f
+# RM : remove files
+RM      = /bin/rm -f
+# CC : C compiler
 CC = mpicc
+# CC : C compiler
 FC = mpif77
+# FL : Fortran linker
 FL = mpif77
-AR = ar vr 
-#RANLIB = ranlib
+# AR : Archive object in a library
+#      keep a space at the end if options have to be separated from lib name
+AR      = ar vr 
+# RANLIB : generate index of an archive file
+#   (optionnal use "RANLIB = echo" in case of problem)
+#RANLIB  = ranlib
 RANLIB  = echo
-SCALAP  = -L$(SCALAPACK_LIB) -L$(OPENBLAS_LIB) -lscalapack -lopenblas
+SCALAP  = -L$(SCALAPACK_LIB) -lscalapack
 INCPAR = -I$(MPI_DIR)/include
 # LIBPAR = $(SCALAP)  -L/usr/local/lib/ -llamf77mpi -lmpi -llam
 LIBPAR = $(SCALAP)  -L$(MPI_DIR)/lib -lmpi 
 #LIBPAR = -lmpi++ -lmpi -ltstdio -ltrillium -largs -lt
 INCSEQ = -I$(topdir)/libseq
 LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
-LIBBLAS = -lopenblas
-LIBOTHERS = -lpthread -lgomp
+LIBBLAS = -L$(ARMPL_LIBRARIES) -larmpl
+LIBOTHERS = -lpthread
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
 CDEFS   = -DAdd_
 
