@@ -25,6 +25,7 @@ INSTALL_PKGS=(
 	openssh-clients
 	which
 	sudo
+	psmisc
 	autoconf
 	automake
 	libtool
@@ -32,7 +33,7 @@ INSTALL_PKGS=(
 	prun-ohpc
 	openmpi5-"${COMPILER_FAMILY}"-ohpc
 	mpich-"${COMPILER_FAMILY}"-ohpc
-	lmod-defaults-"${COMPILER_FAMILY}"-openmpi4-ohpc
+	lmod-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc
 	slurm-slurmd-ohpc
 	slurm-slurmctld-ohpc
 	slurm-example-configs-ohpc
