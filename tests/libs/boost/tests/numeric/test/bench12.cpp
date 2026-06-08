@@ -22,7 +22,7 @@ struct bench_c_outer_prod {
             static typename c_vector_traits<T, N>::type v1, v2;
             initialize_c_vector<T, N> () (v1);
             initialize_c_vector<T, N> () (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 for (int j = 0; j < N; ++ j) {
                     for (int k = 0; k < N; ++ k) {
@@ -33,7 +33,7 @@ struct bench_c_outer_prod {
             }
             BOOST_UBLAS_NOT_USED(m);
 
-            footer<value_type> () (N * N, N * N, runs, t.elapsed ());
+            footer<value_type> () (N * N, N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -50,12 +50,12 @@ struct bench_my_outer_prod {
             static V v1 (N), v2 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 m = - ublas::outer_prod (v1, v2);
 //                sink_matrix (m);
             }
-            footer<value_type> () (N * N, N * N, runs, t.elapsed ());
+            footer<value_type> () (N * N, N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -67,12 +67,12 @@ struct bench_my_outer_prod {
             static V v1 (N), v2 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 m.assign (- ublas::outer_prod (v1, v2));
 //                sink_matrix (m);
             }
-            footer<value_type> () (N * N, N * N, runs, t.elapsed ());
+            footer<value_type> () (N * N, N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -89,7 +89,7 @@ struct bench_cpp_outer_prod {
             static V v1 (N), v2 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 for (int j = 0; j < N; ++ j) {
                     for (int k = 0; k < N; ++ k) {
@@ -98,7 +98,7 @@ struct bench_cpp_outer_prod {
                 }
 //                sink_vector (m);
             }
-            footer<value_type> () (N * N, N * N, runs, t.elapsed ());
+            footer<value_type> () (N * N, N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -116,7 +116,7 @@ struct bench_c_matrix_vector_prod {
             static typename c_vector_traits<T, N>::type v1, v2;
             initialize_c_matrix<T, N, N> () (m);
             initialize_c_vector<T, N> () (v1);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 for (int j = 0; j < N; ++ j) {
                     v2 [j] = 0;
@@ -126,7 +126,7 @@ struct bench_c_matrix_vector_prod {
                 }
 //                sink_c_vector<T, N> () (v2);
             }
-            footer<value_type> () (N * N, N * (N - 1), runs, t.elapsed ());
+            footer<value_type> () (N * N, N * (N - 1), runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -143,12 +143,12 @@ struct bench_my_matrix_vector_prod {
             static V v1 (N), v2 (N);
             initialize_matrix (m);
             initialize_vector (v1);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 v2 = ublas::prod (m, v1);
 //                sink_vector (v2);
             }
-            footer<value_type> () (N * N, N * (N - 1), runs, t.elapsed ());
+            footer<value_type> () (N * N, N * (N - 1), runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -160,12 +160,12 @@ struct bench_my_matrix_vector_prod {
             static V v1 (N), v2 (N);
             initialize_matrix (m);
             initialize_vector (v1);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 v2.assign (ublas::prod (m, v1));
 //                sink_vector (v2);
             }
-            footer<value_type> () (N * N, N * (N - 1), runs, t.elapsed ());
+            footer<value_type> () (N * N, N * (N - 1), runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -182,7 +182,7 @@ struct bench_cpp_matrix_vector_prod {
             static V v1 (N), v2 (N);
             initialize_vector (m);
             initialize_vector (v1);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 for (int j = 0; j < N; ++ j) {
                     std::valarray<value_type> row (m [std::slice (N * j, N, 1)]);
@@ -190,7 +190,7 @@ struct bench_cpp_matrix_vector_prod {
                 }
 //                sink_vector (v2);
             }
-            footer<value_type> () (N * N, N * (N - 1), runs, t.elapsed ());
+            footer<value_type> () (N * N, N * (N - 1), runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -207,7 +207,7 @@ struct bench_c_matrix_add {
             static typename c_matrix_traits<T, N, N>::type m1, m2, m3;
             initialize_c_matrix<T, N, N> () (m1);
             initialize_c_matrix<T, N, N> () (m2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 for (int j = 0; j < N; ++ j) {
                     for (int k = 0; k < N; ++ k) {
@@ -218,7 +218,7 @@ struct bench_c_matrix_add {
             }
             BOOST_UBLAS_NOT_USED(m3);
 
-            footer<value_type> () (0, 2 * N * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -234,12 +234,12 @@ struct bench_my_matrix_add {
             static M m1 (N, N), m2 (N, N), m3 (N, N);
             initialize_matrix (m1);
             initialize_matrix (m2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 m3 = - (m1 + m2);
 //                sink_matrix (m3);
             }
-            footer<value_type> () (0, 2 * N * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -250,12 +250,12 @@ struct bench_my_matrix_add {
             static M m1 (N, N), m2 (N, N), m3 (N, N);
             initialize_matrix (m1);
             initialize_matrix (m2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 m3.assign (- (m1 + m2));
 //                sink_matrix (m3);
             }
-            footer<value_type> () (0, 2 * N * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -271,12 +271,12 @@ struct bench_cpp_matrix_add {
             static M m1 (N * N), m2 (N * N), m3 (N * N);
             initialize_vector (m1);
             initialize_vector (m2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 m3 = - (m1 + m2);
 //                sink_vector (m3);
             }
-            footer<value_type> () (0, 2 * N * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;

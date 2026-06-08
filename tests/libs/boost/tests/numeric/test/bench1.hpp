@@ -20,7 +20,7 @@
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 
-#include <boost/timer.hpp>
+#include <boost/timer/timer.hpp>
 
 
 #define BOOST_UBLAS_NOT_USED(x) (void)(x)
@@ -32,11 +32,12 @@ void header (std::string text);
 
 template<class T>
 struct footer {
-    void operator () (int multiplies, int plus, int runs, double elapsed) {
-        std::cout << "elapsed: " << elapsed << " s, "
+    void operator () (int multiplies, int plus, int runs,  boost::timer::cpu_timer t) {
+	    boost::timer::nanosecond_type elapsed_wall = t.elapsed().wall;
+        std::cout << "elapsed: " << elapsed_wall / 1e9 << " s, "
                   << (multiplies * ublas::type_traits<T>::multiplies_complexity +
                       plus * ublas::type_traits<T>::plus_complexity) * runs /
-                     (1024 * 1024 * elapsed) << " Mflops" << std::endl;
+                     (elapsed_wall / 1e9) << " Mflops" << std::endl;
     }
 };
 

@@ -23,12 +23,12 @@ struct peak_c_plus {
     void operator () (int runs) const {
         try {
             static T s (0);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 s += T (0);
 //                sink_scalar (s);
             }
-            footer<value_type> () (0, 1, runs, t.elapsed ());
+            footer<value_type> () (0, 1, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -42,12 +42,12 @@ struct peak_c_multiplies {
     void operator () (int runs) const {
         try {
             static T s (1);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 s *= T (1);
 //                sink_scalar (s);
             }
-            footer<value_type> () (0, 1, runs, t.elapsed ());
+            footer<value_type> () (0, 1, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;

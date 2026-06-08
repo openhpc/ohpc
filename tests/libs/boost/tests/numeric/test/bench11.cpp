@@ -21,7 +21,7 @@ struct bench_c_inner_prod {
             static typename c_vector_traits<T, N>::type v1, v2;
             initialize_c_vector<T, N> () (v1);
             initialize_c_vector<T, N> () (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 static value_type s (0);
                 for (int j = 0; j < N; ++ j) {
@@ -29,7 +29,7 @@ struct bench_c_inner_prod {
                 }
 //                sink_scalar (s);
             }
-            footer<value_type> () (N, N - 1, runs, t.elapsed ());
+            footer<value_type> () (N, N - 1, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -45,14 +45,14 @@ struct bench_my_inner_prod {
             static V v1 (N), v2 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 static value_type s (0);
                 s = ublas::inner_prod (v1, v2);
 //                sink_scalar (s);
                 BOOST_UBLAS_NOT_USED(s);
             }
-            footer<value_type> () (N, N - 1, runs, t.elapsed ());
+            footer<value_type> () (N, N - 1, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -68,13 +68,13 @@ struct bench_cpp_inner_prod {
             static V v1 (N), v2 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 static value_type s (0);
                 s = (v1 * v2).sum ();
 //                sink_scalar (s);
             }
-            footer<value_type> () (N, N - 1, runs, t.elapsed ());
+            footer<value_type> () (N, N - 1, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -91,7 +91,7 @@ struct bench_c_vector_add {
             static typename c_vector_traits<T, N>::type v1, v2, v3;
             initialize_c_vector<T, N> () (v1);
             initialize_c_vector<T, N> () (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 for (int j = 0; j < N; ++ j) {
                     v3 [j] = - (v1 [j] + v2 [j]);
@@ -99,7 +99,7 @@ struct bench_c_vector_add {
 //                sink_c_vector<T, N> () (v3);
                 BOOST_UBLAS_NOT_USED(v3);
             }
-            footer<value_type> () (0, 2 * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -115,12 +115,12 @@ struct bench_my_vector_add {
             static V v1 (N), v2 (N), v3 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 v3 = - (v1 + v2);
 //                sink_vector (v3);
             }
-            footer<value_type> () (0, 2 * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -131,12 +131,12 @@ struct bench_my_vector_add {
             static V v1 (N), v2 (N), v3 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 v3.assign (- (v1 + v2));
 //                sink_vector (v3);
             }
-            footer<value_type> () (0, 2 * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -152,12 +152,12 @@ struct bench_cpp_vector_add {
             static V v1 (N), v2 (N), v3 (N);
             initialize_vector (v1);
             initialize_vector (v2);
-            boost::timer t;
+            boost::timer::cpu_timer t;
             for (int i = 0; i < runs; ++ i) {
                 v3 = - (v1 + v2);
 //                sink_vector (v3);
             }
-            footer<value_type> () (0, 2 * N, runs, t.elapsed ());
+            footer<value_type> () (0, 2 * N, runs, t);
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
