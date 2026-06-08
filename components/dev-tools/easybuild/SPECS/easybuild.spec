@@ -8,6 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -27,22 +28,11 @@ Source0:   https://pypi.io/packages/source/e/easybuild/easybuild-%{version}.tar.
 Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild_easyblocks-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild_easyconfigs-%{version}.tar.gz
 Source3:   https://pypi.io/packages/source/e/easybuild-framework/easybuild_framework-%{version}.tar.gz
-%if 0%{?suse_version}
-%define python_prefix python39
-%define python_bin python3.9
-%define python_ver 3.9
-%else
-%define python_prefix python3.12
-%define python_bin python3.12
-%define python_ver 3.12
-%endif
 
-BuildRequires: %{python_prefix}-devel %{python_prefix}-pip
-BuildRequires: %{python_prefix}-setuptools
+BuildRequires: %{python_prefix}-pip
 %if !0%{?suse_version}
 BuildRequires: %{python_prefix}-wheel
 %endif
-Requires:  %{python_prefix}
 Requires:  patch
 %if 0%{?suse_version}
 Requires:  libopenssl-devel
