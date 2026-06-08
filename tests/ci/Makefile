@@ -5,12 +5,13 @@ codespell-lint:
 	cd ../..; codespell $$(find components -name "*.spec") \
 		README.md \
 		CONTRIBUTING.md \
-		../../tests/ci/check_spec.py \
-		../../tests/ci/run_build.py \
-		../../misc/build_order.py \
-		../../misc/obs/obs_config.py \
-		../../tests/ci/spec_to_test_mapping.py \
-		../../components/admin/prun/SOURCES/prun
+		tests/ci/check_spec.py \
+		tests/ci/run_build.py \
+		misc/build_order.py \
+		misc/build_order.sh \
+		misc/obs/obs_config.py \
+		tests/ci/spec_to_test_mapping.py \
+		components/admin/prun/SOURCES/prun
 
 
 ruff-check-lint:
