@@ -23,7 +23,7 @@
 %define pname mpi4py
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.1.3
+Version:        4.1.1
 Release:        1%{?dist}
 Summary:        Python bindings for the Message Passing Interface (MPI) standard.
 License:        BSD-3-Clause
@@ -31,6 +31,7 @@ Group:          %{PROJ_NAME}/dev-tools
 Url:            https://github.com/mpi4py/mpi4py
 Source0:        https://github.com/mpi4py/mpi4py/releases/download/%{version}/mpi4py-%{version}.tar.gz
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -44,7 +45,6 @@ exposes an API which grounds on the standard MPI-2 C++ bindings.
 
 %prep
 %setup -q -n %{pname}-%{version}
-find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
 %build
 
@@ -58,6 +58,12 @@ find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 %ohpc_setup_compiler
 
 %__python setup.py install --prefix=%{install_path} --root=%{buildroot}
+
+# The default python3 binary is too old. This package uses a newer
+# version than the default. Let's point the default python3 binary
+# to that newer version.
+%{__mkdir_p} %{buildroot}/%{install_path}/bin
+ln -sn %{__python} %{buildroot}/%{install_path}/bin/%{python_family}
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}
@@ -81,6 +87,7 @@ module-whatis "URL %{url}"
 family                      mpi4py
 set     version             %{version}
 
+prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
