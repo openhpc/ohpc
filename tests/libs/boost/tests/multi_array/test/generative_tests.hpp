@@ -1,5 +1,5 @@
-#ifndef GENERATIVE_TESTS_RG072001_HPP
-#define GENERATIVE_TESTS_RG072001_HPP
+#ifndef BOOST_MULTI_ARRAY_GENERATIVE_TESTS_HPP
+#define BOOST_MULTI_ARRAY_GENERATIVE_TESTS_HPP
 
 // Copyright 2002 The Trustees of Indiana University.
 
@@ -279,4 +279,4 @@ int run_generative_tests() {
   return boost::report_errors();
 }
 
-#endif // GENERATIVE_TESTS_RG072001_HPP
+#endif
