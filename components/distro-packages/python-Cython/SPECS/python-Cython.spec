@@ -12,28 +12,25 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-Name:           python3-Cython%{PROJ_DELIM}
-Version:        0.29.33
+Name:           %{python_prefix}-Cython%{PROJ_DELIM}
+Version:        3.2.4
 Release:        1%{?dist}
 Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
 License:        Apache-2.0
 Group:          %{PROJ_NAME}/distro-packages
-Source0:        https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/c/cython/cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 %if 0%{?rhel} || 0%{?openEuler}
-BuildRequires: python3-libxml2
-Requires: python3-libxml2
 Requires(post): chkconfig
 Requires(postun): chkconfig
 %else
-BuildRequires: python3-xml
 BuildRequires: fdupes
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
 %endif
 BuildRequires: gcc-c++
-Requires: python3-devel
+Requires: %{python_prefix}-devel
 
 %description
 The Cython language allows for writing C extensions for the Python
@@ -46,38 +43,41 @@ functions and declaring C types on variables and class attributes. This
 allows the compiler to generate very efficient C code from Cython code.
 
 %prep
-%setup -q -n Cython-%{version}
+%setup -q -n cython-%{version}
 # Fix non-executable scripts
 sed -i "s|^#!.*||" Cython/Debugger/{libpython,Cygdb}.py cython.py
 
 %build
-CFLAGS="%{optflags}" python3 setup.py build
+CFLAGS="%{optflags}" %{__python} setup.py build
 
 %install
-python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
+%{__python} setup.py install --prefix=%{_prefix} --root=%{buildroot}
 
 # Prepare for update-alternatives usage
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
 for p in cython cythonize cygdb ; do
-    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{python3_version}
+    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{python_ver}
     ln -s -f %{_sysconfdir}/alternatives/$p %{buildroot}%{_bindir}/$p
     # create a dummy target for /etc/alternatives/$p
     touch %{buildroot}%{_sysconfdir}/alternatives/$p
 done
 
 %if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}%{python3_sitearch} %{buildroot}%{_docdir}
+%fdupes %{buildroot}%{_libdir}/%{python_lib_dir}/site-packages %{buildroot}%{_docdir}
 %endif
 
 %post
 "%_sbindir/update-alternatives" \
-   --install %{_bindir}/cython cython %{_bindir}/cython-%{python3_version} 30 \
-   --slave %{_bindir}/cythonize cythonize %{_bindir}/cythonize-%{python3_version} \
-   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{python3_version}
+   --install %{_bindir}/cython cython %{_bindir}/cython-%{python_ver} 30 \
+   --slave %{_bindir}/cythonize cythonize %{_bindir}/cythonize-%{python_ver} \
+   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{python_ver} \
+   >/dev/null 2>&1 || :
 
 %postun
-if [ $1 -eq 0 ] ; then
-    "%_sbindir/update-alternatives" --remove cython %{_bindir}/cython-%{python3_version}
+if [ $1 -ge 1 ]; then
+    if [ "$(readlink /etc/alternatives/cython)" == "%{_bindir}/cython-%{python_ver}" ]; then
+        /usr/sbin/update-alternatives --set cython %{_bindir}/cython-%{python_ver} >/dev/null 2>&1 || :
+    fi
 fi
 
 %files
@@ -86,14 +86,14 @@ fi
 %{_bindir}/cygdb
 %{_bindir}/cython
 %{_bindir}/cythonize
-%{_bindir}/cygdb-%{python3_version}
-%{_bindir}/cython-%{python3_version}
-%{_bindir}/cythonize-%{python3_version}
+%{_bindir}/cygdb-%{python_ver}
+%{_bindir}/cython-%{python_ver}
+%{_bindir}/cythonize-%{python_ver}
 %ghost %{_sysconfdir}/alternatives/cygdb
 %ghost %{_sysconfdir}/alternatives/cython
 %ghost %{_sysconfdir}/alternatives/cythonize
-%{python3_sitearch}/Cython/
-%{python3_sitearch}/Cython-%{version}-py*.egg-info
-%{python3_sitearch}/cython.py*
-%{python3_sitearch}/__pycache__/*
-%{python3_sitearch}/pyximport/
+%{_libdir}/%{python_lib_dir}/site-packages/Cython/
+%{_libdir}/%{python_lib_dir}/site-packages/Cython-%{version}-py*.egg-info
+%{_libdir}/%{python_lib_dir}/site-packages/cython.py*
+%{_libdir}/%{python_lib_dir}/site-packages/__pycache__/*
+%{_libdir}/%{python_lib_dir}/site-packages/pyximport/
