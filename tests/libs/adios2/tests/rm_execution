@@ -1,39 +1,37 @@
-#!/usr/bin/env -S bats --report-formatter junit --formatter tap -j 2
+#!./common/bats/bin/bats
 # -*-sh-*-
 
-load ../../../common/test_helper_functions || exit 1
-source ../../../common/functions || exit 1
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
 
-if [ -s ../../../TEST_ENV ]; then
-	source ../../../TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
-setup_file() {
-	check_rms
+check_rms
+rm=$RESOURCE_MANAGER
 
-	NODES=2
-	TASKS=$(tasks_count 8)
-	ARGS=""
-	TIMEOUT="00:05:00"
-	TESTNAME="libs/adios2"
-
-	export NODES TASKS ARGS TIMEOUT TESTNAME
+setup() {
+    NODES=2
+    TASKS=`tasks_count 8`
+    ARGS=""
+    export NODES TASKS ARGS
 }
 
-@test "[${TESTNAME}] MPI C binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
-	if [ ! -x arrays_write ]; then
-		flunk "arrays_write binary does not exist"
-	fi
+@test "[libs/adios2] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -x arrays_write ];then
+        flunk "arrays_write binary does not exist"
+    fi
 
-	run_mpi_binary -t "${TIMEOUT}" ./arrays_write "${ARGS}" "${NODES}" "${TASKS}"
-	assert_success
+    run_mpi_binary ./arrays_write "$ARGS" $NODES $TASKS
+    assert_success
 }
 
-@test "[${TESTNAME}] MPI F90 binary runs under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
-	if [ ! -x scalars_write ]; then
-		flunk "scalars_write binary does not exist"
-	fi
+@test "[libs/adios2] MPI F90 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -x scalars_write ];then
+        flunk "scalars_write binary does not exist"
+    fi
 
-	run_mpi_binary -t "${TIMEOUT}" ./scalars_write "${ARGS}" "${NODES}" "${TASKS}"
-	assert_success
+    run_mpi_binary ./scalars_write "$ARGS" $NODES $TASKS
+    assert_success
 }

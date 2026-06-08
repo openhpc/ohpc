@@ -1,6 +1,8 @@
 #!/bin/bash
 # -*-sh-*-
 
+# shellcheck disable=SC1091
+
 export MAKEFLAGS=""
 status=0
 
@@ -38,4 +40,4 @@ for compiler in ${COMPILER_FAMILIES}; do
 	done
 done
 
-exit ${status}
+exit "${status}"
