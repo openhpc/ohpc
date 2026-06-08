@@ -30,6 +30,22 @@ BuildRequires:  python3-jinja2
 BuildRequires:  python3-pyyaml
 BuildRequires:  yq
 
+# PDF generation (pandoc + xelatex)
+BuildRequires:  pandoc
+BuildRequires:  tex
+BuildRequires:  texlive-xetex
+BuildRequires:  texlive-adjustbox
+BuildRequires:  texlive-amsmath
+BuildRequires:  texlive-collectbox
+BuildRequires:  texlive-epstopdf-pkg
+BuildRequires:  texlive-fancyhdr
+BuildRequires:  texlive-latex
+BuildRequires:  texlive-latexconfig
+BuildRequires:  texlive-lm-math
+BuildRequires:  texlive-mdwtools
+BuildRequires:  texlive-pdftex-def
+BuildRequires:  texlive-unicode-math
+
 %description
 
 This guide presents a simple cluster installation procedure using components
@@ -42,6 +58,7 @@ from the OpenHPC software stack.
 
 cd %{recipe_source}
 make PYTHON=python3
+make PYTHON=python3 pdf
 
 %install
 
@@ -81,6 +98,8 @@ for recipe in \
 	"leap15/aarch64/warewulf3/openpbs" \
 ; do
 	name=$(echo "$recipe" | tr '/' '-')
+	install -m 0644 -p -D "%{recipe_source}/build/${name}.pdf" \
+		"%{recipe_dest}/${recipe}/Install_guide.pdf"
 	install -m 0644 -p -D "%{recipe_source}/build/${name}.md" \
 		"%{recipe_dest}/${recipe}/Install_guide.md"
 	install -m 0755 -p -D "%{recipe_source}/build/${name}.sh" \
