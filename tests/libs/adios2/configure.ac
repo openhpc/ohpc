@@ -2,12 +2,11 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ([2.71])
+AC_PREREQ([2.69])
 AC_INIT([adios2],[2.8.3],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/../../test-driver-ohpc'])
 
 # verify we have necessary environment variables set
 AC_MSG_CHECKING([for ADIOS2_DIR environment variable])
