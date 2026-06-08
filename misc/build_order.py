@@ -44,6 +44,7 @@ def topological_sort(source):
 
 
 spec_dict = {}
+spec_path_dict = {}  # Maps spec filename to full path
 dependency = {}
 
 if len(sys.argv) != 2:
@@ -56,6 +57,9 @@ for line in open(sys.argv[1]):
     # The spec_dict is later used to translate
     # package names into spec files
     spec_dict[line[1]] = line[0]
+    # Store full path mapping if available (field 4)
+    if len(line) >= 4:
+        spec_path_dict[line[0]] = line[3]
     # Ignore the meta_packages
     if line[1] == "meta-packages":
         continue
@@ -68,8 +72,11 @@ for line in open(sys.argv[1]):
     # Ignore the nagios_plugins
     if line[2].startswith("nagios"):
         continue
-    # This tries to filter out versions with a "." or _isa with a "("
-    if "." in line[2] or "(" in line[2]:
+    # Filter out version strings (e.g. "1.2.3") and _isa markers (e.g. "(x86-64)").
+    # But keep package names that contain dots (e.g. "python3.12-foo-ohpc").
+    if "(" in line[2]:
+        continue
+    if "." in line[2] and "ohpc" not in line[2]:
         continue
     if line[0] in dependency:
         if line[2] not in dependency[line[0]]:
@@ -85,7 +92,7 @@ for v in dependency.values():
         try:
             if spec_dict[value] not in dependency.keys():
                 additional[spec_dict[value]] = []
-        except KeyError as err:
+        except KeyError:
             # Handle python_prefix rpm macro
             if "-numpy-" in value:
                 spec_dict[value] = "python-numpy.spec"
@@ -96,16 +103,20 @@ for v in dependency.values():
             elif "-mpi4py-" in value:
                 spec_dict[value] = "python-mpi4py.spec"
             else:
-                print(err)
+                pass
 
 dependency.update(additional)
 
 # Translate everything to spec file-names
 for k, v in dependency.items():
-    for i in range(len(v)):
-        v[i] = spec_dict[v[i]]
+    translated = []
+    for dep in v:
+        try:
+            translated.append(spec_dict[dep])
+        except KeyError:
+            pass
     # remove cyclic dependencies
-    dependency[k] = [x for x in v if x != k]
+    dependency[k] = [x for x in translated if x != k]
 
 
 # make a list of the dict
@@ -113,4 +124,8 @@ dep_list = [(k, set(v)) for (k, v) in dependency.items()]
 
 # Sort and print
 for i in topological_sort(dep_list):
-    print("%s" % i, end=" ")
+    # Use full path if available, otherwise fall back to spec filename
+    output_path = spec_path_dict.get(i, i)
+    print("%s" % output_path, end=" ")
+
+print("")
