@@ -163,14 +163,22 @@ Requires:      openmpi5-%{compiler_family}%{PROJ_DELIM}
 
 # Python dependencies and macros
 %if 0%{?ohpc_python_dependent} == 1
-%global __python %__python3
 %global python_module_prefix py3-
-%global python_site_dir %{python3_sitearch}
-%global python_prefix python3
-%global python_lib_dir python%{python3_version}
+%if 0%{?suse_version}
+%global python_prefix python39
+%global __python python3.9
+%global python_bin python3.9
+%global python_ver 3.9
+%global python_lib_dir python3.9
+%else
+%global python_prefix python3.12
+%global __python python3.12
+%global python_bin python3.12
+%global python_ver 3.12
+%global python_lib_dir python3.12
+%endif
 BuildRequires: %{python_prefix}-devel
 BuildRequires: %{python_prefix}-setuptools
-BuildRequires: %{python_prefix}-rpm-macros
 Requires:      %{python_prefix}
 %endif
 
