@@ -1,0 +1,675 @@
+diff --git a/thirdparty/dill/dill/CMakeLists.txt b/thirdparty/dill/dill/CMakeLists.txt
+index c6a3f5f309..c43e0508c3 100644
+--- a/thirdparty/dill/dill/CMakeLists.txt
++++ b/thirdparty/dill/dill/CMakeLists.txt
+@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14)
+ # The directory label is used for CDash to treat DILL as a subproject of GTKorvo
+ set(CMAKE_DIRECTORY_LABELS DILL)
+ 
+-project(DILL VERSION 3.4.0 LANGUAGES C CXX)
++project(DILL VERSION 3.4.1 LANGUAGES C CXX)
+ 
+ # Some boilerplate to setup nice output directories
+ include(GNUInstallDirs)
+diff --git a/thirdparty/dill/dill/arm64.c b/thirdparty/dill/dill/arm64.c
+index 0e237964b4..9436a30789 100644
+--- a/thirdparty/dill/dill/arm64.c
++++ b/thirdparty/dill/dill/arm64.c
+@@ -505,7 +505,11 @@ arm64_proc_start(dill_stream s, char *subr_name, int arg_count,
+ 	    } else {
+ 		args[i].is_register = 0;
+ 		args[i].offset = cur_arg_offset;
+-		cur_arg_offset += 4;  /* 32-bit float takes 4 bytes on stack */
++#ifdef __APPLE__
++		cur_arg_offset += 4;
++#else
++		cur_arg_offset += 8;  /* AAPCS64: 8-byte stack slots */
++#endif
+ 	    }
+ 	    break;
+ 	case DILL_D:
+@@ -538,7 +542,11 @@ arm64_proc_start(dill_stream s, char *subr_name, int arg_count,
+ 	    } else {
+ 		args[i].is_register = 0;
+ 		args[i].offset = cur_arg_offset;
+-		cur_arg_offset += 4;  /* 32-bit int takes 4 bytes on stack */
++#ifdef __APPLE__
++		cur_arg_offset += 4;
++#else
++		cur_arg_offset += 8;  /* AAPCS64: 8-byte stack slots */
++#endif
+ 	    }
+ 	    break;
+ 	default:
+@@ -1185,6 +1193,26 @@ arm64_mov(dill_stream s, int type, int junk, int dest, int src)
+ 	insn = 0x1E604000 | (src << 5) | dest;
+ 	INSN_OUT(s, insn);
+ 	break;
++    case DILL_C:
++	/* SXTB Wd, Wn = 0x13001C00 */
++	insn = 0x13001C00 | (src << 5) | dest;
++	INSN_OUT(s, insn);
++	break;
++    case DILL_UC:
++	/* UXTB Wd, Wn = 0x53001C00 */
++	insn = 0x53001C00 | (src << 5) | dest;
++	INSN_OUT(s, insn);
++	break;
++    case DILL_S:
++	/* SXTH Wd, Wn = 0x13003C00 */
++	insn = 0x13003C00 | (src << 5) | dest;
++	INSN_OUT(s, insn);
++	break;
++    case DILL_US:
++	/* UXTH Wd, Wn = 0x53003C00 */
++	insn = 0x53003C00 | (src << 5) | dest;
++	INSN_OUT(s, insn);
++	break;
+     default:
+ 	/* MOV Xd, Xm using ORR Xd, XZR, Xm = 0xAA0003E0 */
+ 	insn = 0xAA0003E0 | (src << 16) | dest;
+@@ -1396,15 +1424,389 @@ arm64_save_restore_op(dill_stream s, int save_restore, int type, int reg)
+ int
+ arm64_init_disassembly_info(dill_stream s, void *ptr)
+ {
+-    /* No disassembler yet */
+-    return 0;
++    return 1;  /* We handle disassembly ourselves in print_insn */
++}
++
++static const char *xreg(int r, char *buf) {
++    if (r == 31) return "sp";
++    if (r == 29) return "fp";
++    if (r == 30) return "lr";
++    sprintf(buf, "x%d", r);
++    return buf;
++}
++
++static const char *xreg_or_zr(int r, char *buf) {
++    if (r == 31) return "xzr";
++    if (r == 29) return "fp";
++    if (r == 30) return "lr";
++    sprintf(buf, "x%d", r);
++    return buf;
++}
++
++static const char *wreg(int r, char *buf) {
++    if (r == 31) return "wzr";
++    sprintf(buf, "w%d", r);
++    return buf;
+ }
+ 
+ int
+ arm64_print_insn(dill_stream s, void *info_ptr, void *insn)
+ {
+-    unsigned int *ip = (unsigned int *)insn;
+-    printf("%08x", *ip);
++    unsigned int raw = *(unsigned int *)insn;
++    unsigned int rd = raw & 0x1f;
++    unsigned int rn = (raw >> 5) & 0x1f;
++    unsigned int rm = (raw >> 16) & 0x1f;
++    unsigned int imm, hw;
++    int imm_s;
++    int sf;
++    char rd_buf[8], rn_buf[8], rm_buf[8], ra_buf[8];
++
++    /* NOP / system */
++    if (raw == 0xd503201f) { printf("nop"); return 4; }
++    /* RET */
++    if (raw == 0xd65f03c0) { printf("ret"); return 4; }
++
++    /* MOVZ (64-bit) */
++    if ((raw & 0xff800000) == 0xd2800000) {
++	imm = (raw >> 5) & 0xffff; hw = (raw >> 21) & 3;
++	printf("movz\t%s, #0x%x, lsl #%d", xreg(rd, rd_buf), imm, hw * 16);
++	return 4;
++    }
++    /* MOVK (64-bit) */
++    if ((raw & 0xff800000) == 0xf2800000) {
++	imm = (raw >> 5) & 0xffff; hw = (raw >> 21) & 3;
++	printf("movk\t%s, #0x%x, lsl #%d", xreg(rd, rd_buf), imm, hw * 16);
++	return 4;
++    }
++    /* MOVN (64-bit) */
++    if ((raw & 0xff800000) == 0x92800000) {
++	imm = (raw >> 5) & 0xffff; hw = (raw >> 21) & 3;
++	printf("movn\t%s, #0x%x, lsl #%d", xreg(rd, rd_buf), imm, hw * 16);
++	return 4;
++    }
++    /* MOVZ (32-bit) */
++    if ((raw & 0xff800000) == 0x52800000) {
++	imm = (raw >> 5) & 0xffff; hw = (raw >> 21) & 3;
++	printf("movz\tw%d, #0x%x, lsl #%d", rd, imm, hw * 16);
++	return 4;
++    }
++    /* BLR */
++    if ((raw & 0xfffffc1f) == 0xd63f0000) {
++	printf("blr\t%s", xreg(rn, rn_buf)); return 4;
++    }
++    /* BR */
++    if ((raw & 0xfffffc1f) == 0xd61f0000) {
++	printf("br\t%s", xreg(rn, rn_buf)); return 4;
++    }
++    /* BL */
++    if ((raw & 0xfc000000) == 0x94000000) {
++	imm_s = (raw & 0x03ffffff);
++	if (imm_s & 0x02000000) imm_s |= (int)0xfc000000;
++	printf("bl\t#%+d", imm_s * 4); return 4;
++    }
++    /* B */
++    if ((raw & 0xfc000000) == 0x14000000) {
++	imm_s = (raw & 0x03ffffff);
++	if (imm_s & 0x02000000) imm_s |= (int)0xfc000000;
++	printf("b\t#%+d", imm_s * 4); return 4;
++    }
++    /* B.cond */
++    if ((raw & 0xff000010) == 0x54000000) {
++	imm_s = ((raw >> 5) & 0x7ffff);
++	if (imm_s & 0x40000) imm_s |= (int)0xfff80000;
++	int cond = raw & 0xf;
++	const char *conds[] = {"eq","ne","cs","cc","mi","pl","vs","vc",
++			       "hi","ls","ge","lt","gt","le","al","nv"};
++	printf("b.%s\t#%+d", conds[cond], imm_s * 4); return 4;
++    }
++    /* ADD/SUB imm: sf, op, S, 100010, sh, imm12, Rn, Rd */
++    if ((raw & 0x1f000000) == 0x11000000) {
++	sf = (raw >> 31) & 1;
++	int op = (raw >> 30) & 1;
++	int S = (raw >> 29) & 1;
++	int sh = (raw >> 22) & 1;
++	imm = (raw >> 10) & 0xfff;
++	/* CMP/CMN = SUBS/ADDS with Rd=sp/xzr */
++	if (S && rd == 31) {
++	    const char *name = op ? "cmp" : "cmn";
++	    if (sf) printf("%s\t%s, #0x%x%s", name, xreg(rn, rn_buf), imm, sh ? ", lsl #12" : "");
++	    else printf("%s\t%s, #0x%x%s", name, wreg(rn, rn_buf), imm, sh ? ", lsl #12" : "");
++	} else {
++	    /* MOV to/from sp = ADD with #0 */
++	    if (!op && !S && imm == 0 && !sh && (rd == 31 || rn == 31)) {
++		if (sf) printf("mov\t%s, %s", xreg(rd, rd_buf), xreg(rn, rn_buf));
++		else printf("mov\t%s, %s", wreg(rd, rd_buf), wreg(rn, rn_buf));
++	    } else {
++		const char *name = op ? (S ? "subs" : "sub") : (S ? "adds" : "add");
++		if (sf) printf("%s\t%s, %s, #0x%x%s", name, xreg(rd, rd_buf), xreg(rn, rn_buf), imm, sh ? ", lsl #12" : "");
++		else printf("%s\t%s, %s, #0x%x%s", name, wreg(rd, rd_buf), wreg(rn, rn_buf), imm, sh ? ", lsl #12" : "");
++	    }
++	}
++	return 4;
++    }
++    /* MOV (register) = ORR Rd, XZR, Rm */
++    if ((raw & 0x7f200000) == 0x2a000000 && rn == 31) {
++	sf = (raw >> 31) & 1;
++	if (sf)
++	    printf("mov\t%s, %s", xreg(rd, rd_buf), xreg(rm, rm_buf));
++	else
++	    printf("mov\t%s, %s", wreg(rd, rd_buf), wreg(rm, rm_buf));
++	return 4;
++    }
++    /* ADD/SUB register: sf,op,S,01011,shift,0,Rm,imm6,Rn,Rd */
++    if ((raw & 0x1f200000) == 0x0b000000) {
++	sf = (raw >> 31) & 1;
++	int op = (raw >> 30) & 1;
++	int S = (raw >> 29) & 1;
++	const char *name;
++	/* CMP = SUBS with Rd=xzr */
++	if (S && rd == 31) {
++	    name = op ? "cmp" : "cmn";
++	    if (sf) printf("%s\t%s, %s", name, xreg(rn, rn_buf), xreg(rm, rm_buf));
++	    else printf("%s\t%s, %s", name, wreg(rn, rn_buf), wreg(rm, rm_buf));
++	} else {
++	    name = op ? (S ? "subs" : "sub") : (S ? "adds" : "add");
++	    if (sf) printf("%s\t%s, %s, %s", name, xreg(rd, rd_buf), xreg(rn, rn_buf), xreg(rm, rm_buf));
++	    else printf("%s\t%s, %s, %s", name, wreg(rd, rd_buf), wreg(rn, rn_buf), wreg(rm, rm_buf));
++	}
++	return 4;
++    }
++    /* AND/ORR/EOR register: sf,opc,01010,shift,0,Rm,imm6,Rn,Rd */
++    if ((raw & 0x1f200000) == 0x0a000000) {
++	sf = (raw >> 31) & 1;
++	int opc = (raw >> 29) & 3;
++	const char *names[] = {"and","orr","eor","ands"};
++	/* TST = ANDS with Rd=xzr */
++	if (opc == 3 && rd == 31) {
++	    if (sf) printf("tst\t%s, %s", xreg(rn, rn_buf), xreg(rm, rm_buf));
++	    else printf("tst\t%s, %s", wreg(rn, rn_buf), wreg(rm, rm_buf));
++	} else {
++	    if (sf) printf("%s\t%s, %s, %s", names[opc], xreg(rd, rd_buf), xreg(rn, rn_buf), xreg(rm, rm_buf));
++	    else printf("%s\t%s, %s, %s", names[opc], wreg(rd, rd_buf), wreg(rn, rn_buf), wreg(rm, rm_buf));
++	}
++	return 4;
++    }
++    /* STP/LDP pair: various addressing modes
++     * Signed offset: opc 0 101 0 V L imm7 Rt2 Rn Rt
++     * Post-index:    opc 0 100 1 V L imm7 Rt2 Rn Rt
++     * Pre-index:     opc 0 110 1 V L imm7 Rt2 Rn Rt
++     * Common: bit 30 is part of opc, bits [29:27] vary, bit 26=V
++     */
++    if ((raw & 0x1a000000) == 0x08000000) {
++	int opc = (raw >> 30) & 3;
++	int V = (raw >> 26) & 1;
++	int L = (raw >> 22) & 1;
++	int mode = (raw >> 23) & 3;
++	int rt2 = (raw >> 10) & 0x1f;
++	int imm7 = (raw >> 15) & 0x7f;
++	if (imm7 & 0x40) imm7 |= ~0x7f;
++	const char *name = L ? "ldp" : "stp";
++	int scale = V ? (opc == 0 ? 4 : opc == 1 ? 8 : 16) : (opc == 2 ? 8 : 4);
++	if (V) {
++	    const char *rtype = (opc == 0) ? "s" : (opc == 1) ? "d" : "q";
++	    if (mode == 3)
++		printf("%s\t%s%d, %s%d, [%s, #%d]!", name, rtype, rd, rtype, rt2, xreg(rn, rn_buf), imm7 * scale);
++	    else if (mode == 1)
++		printf("%s\t%s%d, %s%d, [%s], #%d", name, rtype, rd, rtype, rt2, xreg(rn, rn_buf), imm7 * scale);
++	    else
++		printf("%s\t%s%d, %s%d, [%s, #%d]", name, rtype, rd, rtype, rt2, xreg(rn, rn_buf), imm7 * scale);
++	} else {
++	    if (mode == 3)
++		printf("%s\t%s, %s, [%s, #%d]!", name, xreg(rd, rd_buf), xreg(rt2, rn_buf), xreg(rn, rm_buf), imm7 * scale);
++	    else if (mode == 1)
++		printf("%s\t%s, %s, [%s], #%d", name, xreg(rd, rd_buf), xreg(rt2, rn_buf), xreg(rn, rm_buf), imm7 * scale);
++	    else
++		printf("%s\t%s, %s, [%s, #%d]", name, xreg(rd, rd_buf), xreg(rt2, rn_buf), xreg(rn, rm_buf), imm7 * scale);
++	}
++	return 4;
++    }
++    /* LDR/STR unsigned imm (64-bit): 11 111 0 01 opc imm12 Rn Rt */
++    if ((raw & 0xffc00000) == 0xf9400000) {
++	imm = ((raw >> 10) & 0xfff) * 8;
++	printf("ldr\t%s, [%s, #%d]", xreg(rd, rd_buf), xreg(rn, rn_buf), imm); return 4;
++    }
++    if ((raw & 0xffc00000) == 0xf9000000) {
++	imm = ((raw >> 10) & 0xfff) * 8;
++	printf("str\t%s, [%s, #%d]", xreg(rd, rd_buf), xreg(rn, rn_buf), imm); return 4;
++    }
++    /* LDR/STR unsigned imm (32-bit): 10 111 0 01 opc imm12 Rn Rt */
++    if ((raw & 0xffc00000) == 0xb9400000) {
++	imm = ((raw >> 10) & 0xfff) * 4;
++	printf("ldr\tw%d, [%s, #%d]", rd, xreg(rn, rn_buf), imm); return 4;
++    }
++    if ((raw & 0xffc00000) == 0xb9000000) {
++	imm = ((raw >> 10) & 0xfff) * 4;
++	printf("str\tw%d, [%s, #%d]", rd, xreg(rn, rn_buf), imm); return 4;
++    }
++    /* LDR/STR register offset (64-bit): 11 111 0 00 xx 1 Rm opt S 10 Rn Rt */
++    if ((raw & 0xffe00c00) == 0xf8200800 || (raw & 0xffe00c00) == 0xf8600800) {
++	int L = (raw >> 22) & 1;
++	printf("%s\t%s, [%s, %s]", L ? "ldr" : "str",
++	       xreg(rd, rd_buf), xreg(rn, rn_buf), xreg(rm, rm_buf));
++	return 4;
++    }
++    /* LDR/STR register offset (32-bit): 10 111 0 00 xx 1 Rm opt S 10 Rn Rt */
++    if ((raw & 0xffe00c00) == 0xb8200800 || (raw & 0xffe00c00) == 0xb8600800) {
++	int L = (raw >> 22) & 1;
++	printf("%s\t%s, [%s, %s]", L ? "ldr" : "str",
++	       wreg(rd, rd_buf), xreg(rn, rn_buf), xreg(rm, rm_buf));
++	return 4;
++    }
++    /* LDRSW unsigned imm: 10 111 0 01 10 imm12 Rn Rt */
++    if ((raw & 0xffc00000) == 0xb9800000) {
++	imm = ((raw >> 10) & 0xfff) * 4;
++	printf("ldrsw\t%s, [%s, #%d]", xreg(rd, rd_buf), xreg(rn, rn_buf), imm);
++	return 4;
++    }
++    /* LDRSW register offset: 10 111 0 00 10 1 Rm opt S 10 Rn Rt */
++    if ((raw & 0xffe00c00) == 0xb8a00800) {
++	printf("ldrsw\t%s, [%s, %s]", xreg(rd, rd_buf), xreg(rn, rn_buf), xreg(rm, rm_buf));
++	return 4;
++    }
++    /* LDR/STR pre/post index (64-bit): 11 111 0 00 0x 0 imm9 idx Rn Rt */
++    if ((raw & 0xffe00000) == 0xf8000000 || (raw & 0xffe00000) == 0xf8400000) {
++	int L = (raw >> 22) & 1;
++	int idx = (raw >> 10) & 3;
++	int imm9 = (raw >> 12) & 0x1ff;
++	if (imm9 & 0x100) imm9 |= ~0x1ff;
++	const char *name = L ? "ldr" : "str";
++	if (idx == 3) printf("%s\t%s, [%s, #%d]!", name, xreg(rd, rd_buf), xreg(rn, rn_buf), imm9);
++	else if (idx == 1) printf("%s\t%s, [%s], #%d", name, xreg(rd, rd_buf), xreg(rn, rn_buf), imm9);
++	else printf("%s\t%s, [%s, #%d]", name, xreg(rd, rd_buf), xreg(rn, rn_buf), imm9);
++	return 4;
++    }
++    /* MADD/MUL: sf 00 11011 000 Rm 0 Ra Rn Rd */
++    if ((raw & 0x7fe00000) == 0x1b000000) {
++	sf = (raw >> 31) & 1;
++	int ra = (raw >> 10) & 0x1f;
++	if (ra == 31) {
++	    if (sf) printf("mul\t%s, %s, %s", xreg(rd, rd_buf), xreg(rn, rn_buf), xreg(rm, rm_buf));
++	    else printf("mul\t%s, %s, %s", wreg(rd, rd_buf), wreg(rn, rn_buf), wreg(rm, rm_buf));
++	} else {
++	    if (sf) printf("madd\t%s, %s, %s, %s", xreg(rd, rd_buf), xreg(rn, rn_buf), xreg(rm, rm_buf), xreg(ra, ra_buf));
++	    else printf("madd\t%s, %s, %s, %s", wreg(rd, rd_buf), wreg(rn, rn_buf), wreg(rm, rm_buf), wreg(ra, ra_buf));
++	}
++	return 4;
++    }
++    /* STR/LDR SIMD unsigned: 11 111 1 01 opc imm12 Rn Rt */
++    if ((raw & 0xffc00000) == 0xfd000000) {
++	imm = ((raw >> 10) & 0xfff) * 8;
++	printf("str\td%d, [%s, #%d]", rd, xreg(rn, rn_buf), imm); return 4;
++    }
++    if ((raw & 0xffc00000) == 0xfd400000) {
++	imm = ((raw >> 10) & 0xfff) * 8;
++	printf("ldr\td%d, [%s, #%d]", rd, xreg(rn, rn_buf), imm); return 4;
++    }
++    /* CSEL/CSINC/CSINV/CSNEG: sf 0 0/1 11010100 Rm cond 0 o2 Rn Rd */
++    if ((raw & 0x1fe00000) == 0x1a800000) {
++	sf = (raw >> 31) & 1;
++	int op = (raw >> 30) & 1;
++	int o2 = (raw >> 10) & 1;
++	int cond = (raw >> 12) & 0xf;
++	const char *conds[] = {"eq","ne","cs","cc","mi","pl","vs","vc",
++			       "hi","ls","ge","lt","gt","le","al","nv"};
++	const char *names[4] = {"csel","csinc","csinv","csneg"};
++	int idx = (op << 1) | o2;
++	if (sf)
++	    printf("%s\t%s, %s, %s, %s", names[idx], xreg_or_zr(rd, rd_buf),
++		   xreg_or_zr(rn, rn_buf), xreg_or_zr(rm, rm_buf), conds[cond]);
++	else
++	    printf("%s\t%s, %s, %s, %s", names[idx], wreg(rd, rd_buf),
++		   wreg(rn, rn_buf), wreg(rm, rm_buf), conds[cond]);
++	return 4;
++    }
++    /* UBFM/SBFM (includes LSL, LSR, ASR, UXTB, UXTH, SXTB, SXTH, SXTW) */
++    if ((raw & 0x1f800000) == 0x13000000) {
++	sf = (raw >> 31) & 1;
++	int opc = (raw >> 29) & 3;
++	int immr = (raw >> 16) & 0x3f;
++	int imms = (raw >> 10) & 0x3f;
++	const char *name = (opc == 0) ? "sbfm" : (opc == 2) ? "ubfm" : "bfm";
++	/* Common aliases */
++	if (opc == 2 && imms == (sf ? 63 : 31)) {
++	    if (sf) printf("lsr\t%s, %s, #%d", xreg(rd, rd_buf), xreg(rn, rn_buf), immr);
++	    else printf("lsr\t%s, %s, #%d", wreg(rd, rd_buf), wreg(rn, rn_buf), immr);
++	} else if (opc == 2 && imms + 1 == immr) {
++	    int shift = (sf ? 64 : 32) - immr;
++	    if (sf) printf("lsl\t%s, %s, #%d", xreg(rd, rd_buf), xreg(rn, rn_buf), shift);
++	    else printf("lsl\t%s, %s, #%d", wreg(rd, rd_buf), wreg(rn, rn_buf), shift);
++	} else if (opc == 0 && immr == 0 && imms == 31 && sf) {
++	    printf("sxtw\t%s, %s", xreg(rd, rd_buf), wreg(rn, rn_buf));
++	} else if (opc == 0 && immr == 0 && imms == 7) {
++	    if (sf) printf("sxtb\t%s, %s", xreg(rd, rd_buf), wreg(rn, rn_buf));
++	    else printf("sxtb\t%s, %s", wreg(rd, rd_buf), wreg(rn, rn_buf));
++	} else if (opc == 0 && immr == 0 && imms == 15) {
++	    if (sf) printf("sxth\t%s, %s", xreg(rd, rd_buf), wreg(rn, rn_buf));
++	    else printf("sxth\t%s, %s", wreg(rd, rd_buf), wreg(rn, rn_buf));
++	} else if (opc == 2 && immr == 0 && imms == 7) {
++	    if (sf) printf("uxtb\t%s, %s", xreg(rd, rd_buf), wreg(rn, rn_buf));
++	    else printf("uxtb\t%s, %s", wreg(rd, rd_buf), wreg(rn, rn_buf));
++	} else if (opc == 2 && immr == 0 && imms == 15) {
++	    if (sf) printf("uxth\t%s, %s", xreg(rd, rd_buf), wreg(rn, rn_buf));
++	    else printf("uxth\t%s, %s", wreg(rd, rd_buf), wreg(rn, rn_buf));
++	} else {
++	    if (sf) printf("%s\t%s, %s, #%d, #%d", name, xreg(rd, rd_buf), xreg(rn, rn_buf), immr, imms);
++	    else printf("%s\t%s, %s, #%d, #%d", name, wreg(rd, rd_buf), wreg(rn, rn_buf), immr, imms);
++	}
++	return 4;
++    }
++    /* STUR/LDUR (unscaled immediate, integer): size 11 1 0 00 0x 0 imm9 00 Rn Rt */
++    if ((raw & 0xffe00c00) == 0xb8000000 || (raw & 0xffe00c00) == 0xb8400000) {
++	int L = (raw >> 22) & 1;
++	int imm9 = (raw >> 12) & 0x1ff;
++	if (imm9 & 0x100) imm9 |= ~0x1ff;
++	printf("%s\tw%d, [%s, #%d]", L ? "ldur" : "stur", rd, xreg(rn, rn_buf), imm9);
++	return 4;
++    }
++    if ((raw & 0xffe00c00) == 0xf8000000 || (raw & 0xffe00c00) == 0xf8400000) {
++	int L = (raw >> 22) & 1;
++	int imm9 = (raw >> 12) & 0x1ff;
++	if (imm9 & 0x100) imm9 |= ~0x1ff;
++	printf("%s\t%s, [%s, #%d]", L ? "ldur" : "stur", xreg(rd, rd_buf), xreg(rn, rn_buf), imm9);
++	return 4;
++    }
++    /* STUR/LDUR (float 32-bit): 10 111 1 00 0x 0 imm9 00 Rn Rt */
++    if ((raw & 0xffe00c00) == 0xbc000000 || (raw & 0xffe00c00) == 0xbc400000) {
++	int L = (raw >> 22) & 1;
++	int imm9 = (raw >> 12) & 0x1ff;
++	if (imm9 & 0x100) imm9 |= ~0x1ff;
++	printf("%s\ts%d, [%s, #%d]", L ? "ldur" : "stur", rd, xreg(rn, rn_buf), imm9);
++	return 4;
++    }
++    /* STUR/LDUR (float 64-bit): 11 111 1 00 0x 0 imm9 00 Rn Rt */
++    if ((raw & 0xffe00c00) == 0xfc000000 || (raw & 0xffe00c00) == 0xfc400000) {
++	int L = (raw >> 22) & 1;
++	int imm9 = (raw >> 12) & 0x1ff;
++	if (imm9 & 0x100) imm9 |= ~0x1ff;
++	printf("%s\td%d, [%s, #%d]", L ? "ldur" : "stur", rd, xreg(rn, rn_buf), imm9);
++	return 4;
++    }
++    /* FMOV/FCVT/FCMP (float): 0001 1110 ... */
++    if ((raw & 0xff200000) == 0x1e200000) {
++	/* Just print the hex with a hint */
++	printf("f-op\t0x%08x", raw);
++	return 4;
++    }
++    /* SCVTF/UCVTF/FMOV int<->float: 1001 1110 ... */
++    if ((raw & 0xff200000) == 0x9e200000) {
++	printf("f-cvt\t0x%08x", raw);
++	return 4;
++    }
++    /* CBZ/CBNZ: sf 011 010 op imm19 Rt */
++    if ((raw & 0x7e000000) == 0x34000000) {
++	sf = (raw >> 31) & 1;
++	int op = (raw >> 24) & 1;
++	imm_s = (raw >> 5) & 0x7ffff;
++	if (imm_s & 0x40000) imm_s |= (int)0xfff80000;
++	if (sf)
++	    printf("%s\t%s, #%+d", op ? "cbnz" : "cbz", xreg(rd, rd_buf), imm_s * 4);
++	else
++	    printf("%s\t%s, #%+d", op ? "cbnz" : "cbz", wreg(rd, rd_buf), imm_s * 4);
++	return 4;
++    }
++
++    /* Fallback: hex dump */
++    printf(".inst\t0x%08x", raw);
+     return 4;
+ }
+ 
+@@ -2014,17 +2416,7 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+             arg.is_register = 0;
+         } else
+ #endif
+-        /* For variadic anonymous args on non-Apple, float/double go in integer registers */
+-        if (is_variadic_anon) {
+-            if (ami->next_core_register <= _x7) {
+-                arg.is_register = 1;
+-                arg.in_reg = ami->next_core_register;
+-                arg.out_reg = ami->next_core_register;
+-                ami->next_core_register++;
+-            } else {
+-                arg.is_register = 0;
+-            }
+-        } else if (ami->next_float_register <= _v7) {
++        if (ami->next_float_register <= _v7) {
+             arg.is_register = 1;
+             arg.in_reg = ami->next_float_register;
+             arg.out_reg = ami->next_float_register;
+@@ -2048,11 +2440,15 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+     switch (type) {
+     case DILL_C: case DILL_UC: case DILL_S: case DILL_US:
+     case DILL_I: case DILL_U: case DILL_F:
+-        slot_size = 4;  /* 32-bit types use 4-byte slots */
++#ifdef __APPLE__
++        slot_size = 4;
++#else
++        slot_size = 8;  /* AAPCS64: 8-byte stack slots */
++#endif
+         break;
+     case DILL_L: case DILL_UL: case DILL_P: case DILL_D:
+     default:
+-        slot_size = 8;  /* 64-bit types use 8-byte slots */
++        slot_size = 8;
+         break;
+     }
+ 
+@@ -2093,7 +2489,7 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+                 } else
+ #endif
+                 {
+-                    /* 32-bit integer immediate - store as 32-bit */
++#ifdef __APPLE__
+                     /* STUR Wn, [sp, #offset] = 0xB8000000 */
+                     if (stack_offset >= 0 && stack_offset < 256) {
+                         unsigned int insn = 0xB8000000 | ((stack_offset & 0x1FF) << 12) |
+@@ -2102,9 +2498,21 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+                     } else {
+                         arm64_set64(s, _x17, stack_offset);
+                         INSN_OUT(s, 0x8B110000 | (_sp << 5) | _x17 | (_x17 << 16));
+-                        /* STR Wn, [x17] = 0xB9000000 */
+                         INSN_OUT(s, 0xB9000000 | (_x17 << 5) | _x16);
+                     }
++#else
++                    /* AAPCS64: store as 64-bit into 8-byte slot */
++                    /* STUR Xn, [sp, #offset] = 0xF8000000 */
++                    if (stack_offset >= 0 && stack_offset < 256) {
++                        unsigned int insn = 0xF8000000 | ((stack_offset & 0x1FF) << 12) |
++                                           (_sp << 5) | _x16;
++                        INSN_OUT(s, insn);
++                    } else {
++                        arm64_set64(s, _x17, stack_offset);
++                        INSN_OUT(s, 0x8B110000 | (_sp << 5) | _x17 | (_x17 << 16));
++                        INSN_OUT(s, 0xF9000000 | (_x17 << 5) | _x16);
++                    }
++#endif
+                 }
+                 break;
+             case DILL_L:
+@@ -2162,7 +2570,7 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+                 } else
+ #endif
+                 {
+-                    /* 32-bit integer register - store as 32-bit */
++#ifdef __APPLE__
+                     /* STUR Wn, [sp, #offset] = 0xB8000000 */
+                     if (stack_offset >= 0 && stack_offset < 256) {
+                         unsigned int insn = 0xB8000000 | ((stack_offset & 0x1FF) << 12) |
+@@ -2173,6 +2581,18 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+                         INSN_OUT(s, 0x8B110000 | (_sp << 5) | _x17 | (_x17 << 16));
+                         INSN_OUT(s, 0xB9000000 | (_x17 << 5) | reg);
+                     }
++#else
++                    /* AAPCS64: store as 64-bit into 8-byte slot */
++                    if (stack_offset >= 0 && stack_offset < 256) {
++                        unsigned int insn = 0xF8000000 | ((stack_offset & 0x1FF) << 12) |
++                                           (_sp << 5) | reg;
++                        INSN_OUT(s, insn);
++                    } else {
++                        arm64_set64(s, _x17, stack_offset);
++                        INSN_OUT(s, 0x8B110000 | (_sp << 5) | _x17 | (_x17 << 16));
++                        INSN_OUT(s, 0xF9000000 | (_x17 << 5) | reg);
++                    }
++#endif
+                 }
+                 break;
+             case DILL_L:
+@@ -2227,13 +2647,14 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+                 break;
+             case DILL_F:
+             case DILL_D:
++#ifdef __APPLE__
+                 if (is_variadic_anon) {
+-                    /* Variadic anonymous float/double: load into FP temp, then FMOV to integer reg */
+-                    /* Float is promoted to double in variadic calls */
+                     arm64_setf(s, DILL_D, 0, _v16, *(double*)value_ptr);
+-                    /* FMOV Xd, Dn = 0x9E660000 | (Rn << 5) | Rd */
++                    /* FMOV Xd, Dn = 0x9E660000 */
+                     INSN_OUT(s, 0x9E660000 | (_v16 << 5) | target_reg);
+-                } else {
++                } else
++#endif
++                {
+                     arm64_setf(s, arg.type, 0, target_reg, *(double*)value_ptr);
+                 }
+                 break;
+@@ -2252,22 +2673,25 @@ static void internal_push(dill_stream s, int type, int immediate, void *value_pt
+                 }
+                 break;
+             case DILL_F:
++#ifdef __APPLE__
+                 if (is_variadic_anon) {
+-                    /* Variadic anonymous float: convert to double, then FMOV to integer reg */
+-                    /* FCVT Dd, Sn = 0x1E22C000 | (Rn << 5) | Rd */
++                    /* FCVT Dd, Sn then FMOV Xd, Dn */
+                     INSN_OUT(s, 0x1E22C000 | (src_reg << 5) | _v16);
+-                    /* FMOV Xd, Dn = 0x9E660000 | (Rn << 5) | Rd */
+                     INSN_OUT(s, 0x9E660000 | (_v16 << 5) | target_reg);
+-                } else if (src_reg != target_reg) {
++                } else
++#endif
++                if (src_reg != target_reg) {
+                     arm64_mov(s, DILL_F, 0, target_reg, src_reg);
+                 }
+                 break;
+             case DILL_D:
++#ifdef __APPLE__
+                 if (is_variadic_anon) {
+-                    /* Variadic anonymous double: FMOV to integer reg */
+-                    /* FMOV Xd, Dn = 0x9E660000 | (Rn << 5) | Rd */
++                    /* FMOV Xd, Dn */
+                     INSN_OUT(s, 0x9E660000 | (src_reg << 5) | target_reg);
+-                } else if (src_reg != target_reg) {
++                } else
++#endif
++                if (src_reg != target_reg) {
+                     arm64_mov(s, DILL_D, 0, target_reg, src_reg);
+                 }
+                 break;
+diff --git a/thirdparty/dill/dill/dill_util.c b/thirdparty/dill/dill/dill_util.c
+index 30e819322e..5a46cf15a9 100644
+--- a/thirdparty/dill/dill/dill_util.c
++++ b/thirdparty/dill/dill/dill_util.c
+@@ -249,6 +249,7 @@ set_mach_reset(dill_stream s, char* arch)
+ extern void
+ dill_free_stream(dill_stream s)
+ {
++    JIT_PROTECT(1);  /* ensure execute mode is restored on stream cleanup */
+     if (s->p->branch_table.label_locs)
+         free(s->p->branch_table.label_locs);
+     if (s->p->branch_table.label_name) {
+@@ -527,8 +528,12 @@ dill_finalize(dill_stream s)
+ #if defined(HOST_ARM8) || defined(HOST_ARM64)
+     /* Check for NULL - virtual mode already flushed in its inner dill_finalize */
+     if (s->p->code_base != NULL) {
++#if defined(__APPLE__)
+         sys_icache_invalidate(s->p->code_base,
+             (size_t)((char*)s->p->cur_ip - (char*)s->p->code_base));
++#else
++        __clear_cache(s->p->code_base, (char*)s->p->cur_ip);
++#endif
+     }
+ #endif
+     return handle;
+@@ -550,8 +555,12 @@ dill_get_handle(dill_stream s)
+     }
+     JIT_PROTECT(1);  /* enable execute */
+ #if defined(HOST_ARM8) || defined(HOST_ARM64)
++#if defined(__APPLE__)
+     sys_icache_invalidate(native_base,
+         (size_t)((char*)s->p->cur_ip - (char*)native_base));
++#else
++    __clear_cache(native_base, (char*)s->p->cur_ip);
++#endif
+ #endif
+     handle->fp = (void (*)())s->p->fp;
+     handle->ref_count = 1;
+@@ -642,6 +651,7 @@ dill_finalize_package(dill_stream s, int* pkg_len)
+     s->p->save_param_count = s->p->c_param_count;
+     s->p->c_param_count = 0;
+     char* p = dill_build_package(s, pkg_len);
++    JIT_PROTECT(1);  /* restore execute — match dill_finalize behavior */
+     return p;
+ }
+ 
+@@ -1754,6 +1764,7 @@ dill_dump(dill_stream s)
+         int insn_count = 0;
+         if ((s->j != s->p->virtual.mach_jump) && (s->p->fp != NULL))
+             base = s->p->fp;
++        JIT_PROTECT(0);  /* enable read access for code dump */
+         for (p = base; (char*)p < s->p->cur_ip;) {
+             int i;
+             struct branch_table* t = &s->p->branch_table;
+@@ -1773,6 +1784,7 @@ dill_dump(dill_stream s)
+             p = (char*)p + l;
+             insn_count++;
+         }
++        JIT_PROTECT(1);  /* restore execute-only */
+         printf("\nDumped %d instructions\n\n", insn_count);
+     }
+ }

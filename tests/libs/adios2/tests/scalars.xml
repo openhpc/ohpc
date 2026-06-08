@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<adios-config host-language="Fortran">
+
+    <adios-group name="scalars">
+        <!-- name    defines the variable name in the output file
+             gwrite  defines the variable name in the code to write out
+             gread   defines the variable name in the code to read the value into
+             gwrite and gread are optional
+        -->
+        <var name="var_byte"            gwrite="v1"  gread="v1"  type="byte"/>
+        <var name="var_short"           gwrite="v2"  gread="v2"  type="short"/>
+        <var name="var_int"             gwrite="v3"  gread="v3"  type="integer"/>
+        <var name="var_long"            gwrite="v4"  gread="v4"  type="long"/>
+        <var name="var_ubyte"           gwrite="v5"  gread="v5"  type="unsigned byte"/>
+        <var name="var_ushort"          gwrite="v6"  gread="v6"  type="unsigned short"/>
+        <var name="var_uint"            gwrite="v7"  gread="v7"  type="unsigned integer"/>
+        <var name="var_ulong"           gwrite="v8"  gread="v8"  type="unsigned long"/>
+        <var name="var_real"            gwrite="v9"  gread="v9"  type="real"/>
+        <var name="var_double"          gwrite="v10" gread="v10" type="double"/>
+        <var name="var_string"          gwrite="v11" gread="v11" type="string"/>
+        <var name="var_complex"         gwrite="v12" gread="v12" type="complex"/>
+        <var name="var_double_complex"  gwrite="v13" gread="v13" type="double complex"/>
+    </adios-group>
+
+    <method group="scalars" method="MPI"/>
+
+    <buffer max-size-MB="20"/>
+
+</adios-config>
+
