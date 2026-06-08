@@ -16,7 +16,7 @@ fi
 . /etc/os-release
 
 PKG_MANAGER=zypper
-COMMON_PKGS="wget python3 jq"
+COMMON_PKGS="wget python3 jq man createrepo_c"
 UNAME_M=$(uname -m)
 
 retry_counter=0
@@ -108,11 +108,12 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	fi
 	adduser ohpc || true
 else
-	loop_command "${PKG_MANAGER}" -n install ${COMMON_PKGS} awk rpmbuild ccache man
+	loop_command "${PKG_MANAGER}" -n install ${COMMON_PKGS} awk rpmbuild ccache
 	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
+	loop_command "${PKG_MANAGER}" -n --no-gpg-checks refresh
 	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install lmod-ohpc
 	groupadd ohpc || true
 	useradd -m ohpc -g ohpc || true
