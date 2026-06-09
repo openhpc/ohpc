@@ -44,4 +44,3 @@ eigen_SOURCES           = eigen.cpp
 TESTS                  += test_module
 TESTS                  += test_lapack
 TESTS                  += rm_execution
-
