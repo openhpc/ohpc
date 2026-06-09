@@ -16,13 +16,13 @@
 %define pname openblas
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.3.21
+Version:        0.3.32
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
-Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
+Source0:        https://github.com/OpenMathLib/OpenBLAS/releases/download/v%{version}/OpenBLAS-%{version}.tar.gz
 # PATCH-FIX-UPSTREAM openblas-noexecstack.patch
 Patch2:         openblas-noexecstack.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
@@ -42,8 +42,8 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %prep
 %setup -q -n OpenBLAS-%{version}
 
-%patch2 -p1
-%patch3 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -57,6 +57,9 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %ifarch aarch64
 %define openblas_target TARGET=ARMV8 NUM_THREADS=256
 %define nbjobs_option MAKE_NB_JOBS=4
+%endif
+%if "%{compiler_family}" == "gnu15"
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration -Wno-incompatible-pointer-types"
 %endif
 
 make %{?openblas_target} USE_THREAD=1 USE_OPENMP=1 %{?nbjobs_option} \
@@ -103,6 +106,7 @@ set     version             %{version}
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
