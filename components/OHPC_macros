@@ -26,6 +26,7 @@
 %global OHPC_MODULEDEPS %{OHPC_PUB}/moduledeps
 %global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
 %global OHPC_UTILS      %{OHPC_PUB}/utils
+%global OHPC_BIN        %{OHPC_PUB}/bin
 %global debug_package   %{nil}
 
 %if 0%{?rhel} >= 9 || 0%{?openEuler}
