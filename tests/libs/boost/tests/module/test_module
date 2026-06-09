@@ -135,7 +135,7 @@ rpm=boost-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 ##    assert_success
 ##    run ./f_test
 ##    assert_failure
-
+	rm -f ./f_test
 }
 
 
