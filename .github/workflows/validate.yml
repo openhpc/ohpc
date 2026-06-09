@@ -62,7 +62,7 @@ jobs:
   test_on_rhel:
     strategy:
       matrix:
-        compiler: [gnu12]
+        compiler: [gnu15]
     runs-on: ubuntu-latest
     name: Test on RHEL
     env:
@@ -126,7 +126,7 @@ jobs:
   test_on_leap:
     strategy:
       matrix:
-        compiler: [gnu12]
+        compiler: [gnu15]
     runs-on: ubuntu-latest
     name: Test on LEAP
     env:
