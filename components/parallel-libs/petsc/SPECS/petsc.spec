@@ -88,7 +88,7 @@ unset FCFLAGS
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
 %{__python3} ./config/configure.py \
         --prefix=%{install_path} \
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu15"
         --FFLAGS="-fPIC -ffree-line-length-512" \
 %else
         --FFLAGS="-fPIC" \

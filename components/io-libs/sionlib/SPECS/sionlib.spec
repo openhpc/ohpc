@@ -64,7 +64,7 @@ CONFIGURE_OPTIONS="--compiler=arm "
 %if "%{compiler_family}" == "llvm"
 CONFIGURE_OPTIONS="--compiler=llvm "
 %endif
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu15"
 CONFIGURE_OPTIONS="--compiler=gnu "
 %endif
 
@@ -99,7 +99,7 @@ sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
 sed -i 's|-g|-g -fpic|g' build-*/Makefile.defs
 %endif
 
-%if "%{compiler_family}" == "gnu12"
+%if "%{compiler_family}" == "gnu15"
 sed -i 's/FFLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
 sed -i 's/F90FLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
 sed -i 's/F90 .*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
