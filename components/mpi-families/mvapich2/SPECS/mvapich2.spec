@@ -17,44 +17,26 @@
 
 %{!?with_slurm: %global with_slurm 0}
 %{!?with_pbs: %global with_pbs 0}
-%{!?with_psm: %global with_psm 0}
-%{!?with_psm2: %global with_psm2 0}
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 %{!?COMM_DELIM: %global COMM_DELIM %{nil}}
 
 # Base package name/config
 %define pname mvapich2
+%define sname mvapich
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
-Version:   2.3.7
+Version:   4.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu
-Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
-
-# karl.w.schulz@intel.com (04/13/2016)
-Patch0:    mvapich2-get_cycles.patch
-# karl.w.schulz@intel.com (05/21/2017)
-Patch1:    mpidimpl.opt.patch
-
+Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{sname}-%{version}.tar.gz
+Source1:   http://wgropp.cs.illinois.edu/projects/software/sowing/sowing.tar.gz
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-%endif
-
-%if 0%{with_psm}
-BuildRequires:  infinipath-psm infinipath-psm-devel
-Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
-%endif
-
-%if 0%{with_psm2}
-BuildRequires:  libpsm2-devel >= 10.2.0
-Requires:       libpsm2 >= 10.2.0
-Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -68,27 +50,25 @@ Buildrequires: rdma-core-devel libibmad-devel
 Requires: prun%{PROJ_DELIM}
 BuildRequires: bison make m4
 BuildRequires: zlib-devel
+BuildRequires: python3
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description
 
-MVAPICH2 is a high performance MPI-2 implementation (with initial
-support for MPI-3) for InfiniBand, 10GigE/iWARP and RoCE.  MVAPICH2
-provides underlying support for several interfaces (such as OFA-IB,
-OFA-iWARP, OFA-RoCE, PSM, Shared Memory, and TCP) for portability
-across multiple networks.
+MVAPICH is a high-performance MPI implementation based on MPICH's
+ch4 device layer with UCX support. It targets InfiniBand and RoCE
+networks and provides optimized collective operations and
+point-to-point communication for HPC clusters.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p1
+%setup -q -n %{sname}-%{version} -a 1
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu12" || "%{compiler_family}" == "gnu13" || "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
 # configure fails with:
 #   The Fortran compiler gfortran does not accept programs that
 #   call the same routine with arguments of different types without
@@ -96,27 +76,37 @@ across multiple networks.
 #   Rerun configure with FFLAGS=-fallow-argument-mismatch
 # This seems to fix the build.
 export FFLAGS=-fallow-argument-mismatch
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
+export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
 %endif
+%if "%{compiler_family}" == "gnu15"
+export CFLAGS="${CFLAGS} -std=gnu17"
+%endif
+%endif
+%if "%{compiler_family}" == "intel"
+export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
+export FFLAGS="-DFLANG"
+%endif
+
+# Build sowing/doctext to generate man pages
+cd sowing-1.1.26
+./configure && make
+export PATH=$(pwd)/src/doctext:${PATH}
+export DOCTEXT_PATH=$(pwd)/share/doctext
+export TEXTFILTER_PATH=$(pwd)/share
+cd ..
+
 ./configure --prefix=%{install_path} \
-            --libdir=%{install_path}/lib \
 	    --enable-cxx \
 	    --enable-g=dbg \
-            --with-device=ch3:mrail \
-	    --disable-ibv-dlopen \
-%if 0%{?with_pwm} || 0%{?with_psm2}
-            --with-device=ch3:psm \
-%endif
+            --with-device=ch4:ucx \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
 	    --enable-fast=O3 || { cat config.log && exit 1; }
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
-%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
-%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
-%endif
-
 make %{?_smp_mflags}
+make mandoc
 
 %install
 %ohpc_setup_compiler
