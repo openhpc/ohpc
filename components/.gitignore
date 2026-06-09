@@ -28,9 +28,9 @@ dev-tools/automake/SOURCES/automake-*.tar.gz
 dev-tools/annobin/SOURCES/annobin-*.tar.xz
 dev-tools/cmake/SOURCES/cmake-*.tar.gz
 dev-tools/easybuild/SOURCES/easybuild-*.tar.gz
-dev-tools/easybuild/SOURCES/easybuild-easyblocks-*.tar.gz
-dev-tools/easybuild/SOURCES/easybuild-easyconfigs-*.tar.gz
-dev-tools/easybuild/SOURCES/easybuild-framework-*.tar.gz
+dev-tools/easybuild/SOURCES/easybuild?easyblocks-*.tar.gz
+dev-tools/easybuild/SOURCES/easybuild?easyconfigs-*.tar.gz
+dev-tools/easybuild/SOURCES/easybuild?framework-*.tar.gz
 dev-tools/hwloc/SOURCES/hwloc-*.tar.bz2
 dev-tools/libtool/SOURCES/libtool-*.tar.gz
 dev-tools/mpi4py/SOURCES/mpi4py-*.tar.gz
@@ -50,7 +50,7 @@ dev-tools/valgrind/SOURCES/valgrind-*.tar.bz2
 distro-packages/confuse/SOURCES/confuse-*.tar.gz
 distro-packages/flex/SOURCES/flex-*.tar.gz
 distro-packages/ipmiutil/SOURCES/ipmiutil-*.tar.gz
-distro-packages/python-Cython/SOURCES/Cython-*.tar.gz
+distro-packages/python-Cython/SOURCES/?ython-*.tar.gz
 distro-packages/python-setuptools/SOURCES/setuptools-*.tar.gz
 distro-packages/sigar/SOURCES/sigar-*.tar.gz
 fs/shine/SOURCES/v*.tar.gz
@@ -68,7 +68,7 @@ mpi-families/mpich/SOURCES/mpich-*.tar.gz
 mpi-families/mvapich2/SOURCES/mvapich2-*.tar.gz
 mpi-families/openmpi/SOURCES/openmpi-*.tar.bz2
 mpi-families/ucx/SOURCES/ucx-*.tar.gz
-parallel-libs/boost/SOURCES/boost*.tar.gz
+parallel-libs/boost/SOURCES/boost*.tar.*
 parallel-libs/fftw/SOURCES/fftw-*.tar.gz
 parallel-libs/hypre/SOURCES/hypre-*.tar.gz
 parallel-libs/mfem/SOURCES/mfem-*.tar
