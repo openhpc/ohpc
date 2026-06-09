@@ -142,9 +142,9 @@ check_compiler_family()
     local myFC=""
     
     if [ $LMOD_FAMILY_COMPILER == "intel" ];then
-	myCC=icc
-	myCXX=icpc
-	myFC=ifort
+	myCC=icx
+	myCXX=icpx
+	myFC=ifx
   elif [[ $LMOD_FAMILY_COMPILER =~ "arm" ]];then
         myCC=armclang
         myCXX=armclang++
