@@ -18,18 +18,18 @@
 
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	3.8.3
+Version:	5.0.6
 Release:	1%{?dist}
 License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
-Patch0:		arm.function.definition.patch
+Patch0:		https://github.com/bsc-performance-tools/extrae/pull/114.patch
 
 
-BuildRequires:	autoconf%{PROJ_DELIM}
-BuildRequires:	automake%{PROJ_DELIM}
-BuildRequires:	libtool%{PROJ_DELIM} make which
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool make which
 BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	papi%{PROJ_DELIM}
@@ -49,9 +49,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%if "%{compiler_family}" == "arm1"
-%patch0 -p0
-%endif
+%patch -P0 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -67,23 +65,32 @@ export compiler_vars="CC=${CC} CXX=${CXX} MPIF90=mpiifort $compiler_vars"
 %endif
 %endif
 
-export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
 ./bootstrap
+# Intel oneAPI ifx -v includes -loopopt=1 which autoconf's Fortran library
+# detection misinterprets as a library (-l oopopt=1), causing the
+# "linking to Fortran libraries from C fails" error. Add a case to skip it.
+%if "%{compiler_family}" == "intel"
+sed -i '/-\[lLR\]\*)/i\        -loopopt*) ;;' configure
+%endif
 export LDFLAGS="$LDFLAGS -lz"
+%if 0%{?sle_version}
+export LDFLAGS="$LDFLAGS -lsframe"
+%endif
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath -fPIC"
+export CXXFLAGS="${CXXFLAGS} -fsimdmath -fPIC"
+export FCFLAGS="${FCFLAGS} -fsimdmath -fPIC"
+%endif
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
     --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR \
 %if "%{mpi_family}" == "impi"
     --with-mpi-libs=$MPI_DIR/lib/release \
 %endif
-%if "%{compiler_family}" == "arm1"
-    CFLAGS="-O3 -fsimdmath -fPIC" CXXFLAGS="-O3 -fsimdmath -fPIC" FCFLAGS="-O3 -fsimdmath -fPIC" \
-%endif
-%if "%{compiler_family}" == "intel"
-    CFLAGS="${CFLAGS} -Wno-implicit-function-declaration" \
-%endif
     || { cat config.log && exit 1; }
 
-make %{?_smp_mflags}
+make %{?_smp_mflags} V=1
 
 %install
 export NO_BRP_CHECK_RPATH=true
@@ -97,6 +104,12 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 # fix a path in one of the scripts
 sed -e "s,export EXTRAE_HOME=.*,export EXTRAE_HOME=%{install_path},g" -i $RPM_BUILD_ROOT/%{install_path}/share/tests/overhead/run_overhead_tests.sh
+
+# Remove ccache prefix from compiler variables in extrae-vars.sh.
+# The build system records $CC/$CXX verbatim, producing invalid
+# export statements like: export EXTRAE_CXX=ccache g++
+sed -e 's/=ccache \(.*\)/=\1/' \
+    -i $RPM_BUILD_ROOT/%{install_path}/etc/extrae-vars.sh
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
