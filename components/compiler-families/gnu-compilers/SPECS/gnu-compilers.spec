@@ -10,14 +10,68 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_version 12.4.0
-%global gnu_major_ver gnu12
-%global pname %{gnu_major_ver}-compilers
+# Following flags need to be unset to build gcc on RHEL 10
+%undefine _package_note_flags
+%undefine _auto_set_build_flags
 
-# Define subcomponent versions required for build
-%global gmp_version 6.3.0
-%global mpc_version 1.3.1
-%global mpfr_version 4.2.1
+%global gnu12_version 12.2.0
+%global gnu12_gmp_version 6.2.1
+%global gnu12_mpc_version 1.2.1
+%global gnu12_mpfr_version 4.1.0
+
+%global gnu13_version 13.2.0
+%global gnu13_gmp_version 6.3.0
+%global gnu13_mpc_version 1.3.1
+%global gnu13_mpfr_version 4.2.1
+
+%global gnu14_version 14.3.0
+%global gnu14_gmp_version 6.3.0
+%global gnu14_mpc_version 1.3.1
+%global gnu14_mpfr_version 4.2.1
+
+%global gnu15_version 15.2.0
+%global gnu15_gmp_version 6.3.0
+%global gnu15_mpc_version 1.4.1
+%global gnu15_mpfr_version 4.2.2
+
+%if "%{compiler_family}" == "gnu12"
+%global gnu_major_ver gnu12
+%global gnu_version %{gnu12_version}
+%endif
+%if "%{compiler_family}" == "gnu13"
+%global gnu_major_ver gnu13
+%global gnu_version %{gnu13_version}
+%endif
+%if "%{compiler_family}" == "gnu14"
+%global gnu_major_ver gnu14
+%global gnu_version %{gnu14_version}
+%endif
+%if "%{compiler_family}" == "gnu15"
+%global gnu_major_ver gnu15
+%global gnu_version %{gnu15_version}
+%endif
+
+Source0:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu12_version}/gcc-%{gnu12_version}.tar.xz
+Source1:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu12_gmp_version}.tar.bz2
+Source2:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu12_mpc_version}.tar.gz
+Source3:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu12_mpfr_version}.tar.gz
+
+Source4:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu13_version}/gcc-%{gnu13_version}.tar.xz
+Source5:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu13_gmp_version}.tar.bz2
+Source6:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu13_mpc_version}.tar.gz
+Source7:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu13_mpfr_version}.tar.gz
+
+Source8:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu14_version}/gcc-%{gnu14_version}.tar.xz
+Source9:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu14_gmp_version}.tar.bz2
+Source10:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu14_mpc_version}.tar.gz
+Source11:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu14_mpfr_version}.tar.gz
+
+Source12:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu15_version}/gcc-%{gnu15_version}.tar.xz
+Source13:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu15_gmp_version}.tar.bz2
+Source14:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu15_mpc_version}.tar.xz
+Source15:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
+
+%global pname %{gnu_major_ver}-compilers
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
@@ -26,12 +80,9 @@ Release:   1%{?dist}
 License:   GPLv3 and GPLv3+ with exceptions and LGPLv3 and GPLv2 and LGPLv2+
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
-Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
-Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
-Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
-Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
 
 # Requirements from https://gcc.gnu.org/install/prerequisites.htmlzypper
+
 BuildRequires:  gcc-c++
 BuildRequires:  binutils >= 2.30
 BuildRequires:  make >= 3.80
@@ -56,14 +107,40 @@ frontend.
 
 
 %prep
-%setup -q -n gcc-%{version} -a1 -a2 -a3
+%if "%{compiler_family}" == "gnu12"
+%setup -T -q -n gcc-%{version} -b0 -a1 -a2 -a3
 
-ln -s gmp-%{gmp_version} gmp
-ln -s mpc-%{mpc_version} mpc
-ln -s mpfr-%{mpfr_version} mpfr
+ln -s gmp-%{gnu12_gmp_version} gmp
+ln -s mpc-%{gnu12_mpc_version} mpc
+ln -s mpfr-%{gnu12_mpfr_version} mpfr
+%endif
 
+%if "%{compiler_family}" == "gnu13"
+%setup -T -q -n gcc-%{version} -b4 -a5 -a6 -a7
+
+ln -s gmp-%{gnu13_gmp_version} gmp
+ln -s mpc-%{gnu13_mpc_version} mpc
+ln -s mpfr-%{gnu13_mpfr_version} mpfr
+%endif
+
+%if "%{compiler_family}" == "gnu14"
+%setup -T -q -n gcc-%{version} -b8 -a9 -a10 -a11
+
+ln -s gmp-%{gnu14_gmp_version} gmp
+ln -s mpc-%{gnu14_mpc_version} mpc
+ln -s mpfr-%{gnu14_mpfr_version} mpfr
+%endif
+
+%if "%{compiler_family}" == "gnu15"
+%setup -T -q -n gcc-%{version} -b12 -a13 -a14 -a15
+
+ln -s gmp-%{gnu15_gmp_version} gmp
+ln -s mpc-%{gnu15_mpc_version} mpc
+ln -s mpfr-%{gnu15_mpfr_version} mpfr
+%endif
 
 %build
+
 mkdir obj
 cd obj
 ../configure --disable-multilib \
@@ -78,7 +155,7 @@ make %{?_smp_mflags}
 cd obj
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
-%if 0%{?sle_version} || 0%{?suse_version}
+%if 0%{?sle_version}
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/include
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/lib
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/install-tools
@@ -147,8 +224,9 @@ prepend_path("MODULEPATH",      "%{OHPC_MODULEDEPS}/%{gnu_major_ver}")
 family("compiler")
 EOF
 
+%if "%{compiler_family}" == "gnu12"
 ln -s %{version}.lua %{buildroot}%{module_path}/default
-
+%endif
 
 %files
 %{module_path}
