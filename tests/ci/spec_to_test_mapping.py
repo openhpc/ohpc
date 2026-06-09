@@ -59,12 +59,12 @@ test_map = {
     "components/io-libs/netcdf-cxx/SPECS/netcdf-cxx4.spec": [
         "netcdf-all",
         "",
-        "netcdf-fortran-gnu12-mpich-ohpc netcdf-fortran-gnu12-openmpi4-ohpc",
+        "netcdf-fortran-gnu15-mpich-ohpc netcdf-fortran-gnu15-openmpi5-ohpc",
     ],
     "components/io-libs/netcdf-fortran/SPECS/netcdf-fortran.spec": [
         "netcdf-all",
         "",
-        "netcdf-cxx-gnu12-mpich-ohpc netcdf-cxx-gnu12-openmpi4-ohpc",
+        "netcdf-cxx-gnu15-mpich-ohpc netcdf-cxx-gnu15-openmpi5-ohpc",
     ],
     "components/parallel-libs/scalapack/SPECS/scalapack.spec": ["scalapack", "", ""],
     "components/parallel-libs/slepc/SPECS/slepc.spec": ["slepc", "", ""],
@@ -72,7 +72,7 @@ test_map = {
     "components/parallel-libs/superlu_dist/SPECS/superlu_dist.spec": [
         "superlu_dist",
         "",
-        "scalapack-gnu12-openmpi4-ohpc scalapack-gnu12-mpich-ohpc",
+        "scalapack-gnu15-openmpi5-ohpc scalapack-gnu15-mpich-ohpc",
     ],
     "components/parallel-libs/trilinos/SPECS/trilinos.spec": ["trilinos", "", ""],
     "components/perf-tools/extrae/SPECS/extrae.spec": ["extrae", "", ""],
@@ -82,7 +82,7 @@ test_map = {
     "components/perf-tools/scalasca/SPECS/scalasca.spec": [
         "scalasca",
         "",
-        "lmod-defaults-gnu12-openmpi4-ohpc",
+        "lmod-defaults-gnu15-openmpi5-ohpc",
     ],
     "components/perf-tools/tau/SPECS/tau.spec": ["tau", "", ""],
     "components/mpi-families/openmpi/SPECS/openmpi.spec": ["slurm mpi", "", ""],
@@ -101,7 +101,7 @@ test_map = {
     "components/perf-tools/dimemas/SPECS/dimemas.spec": [
         "dimemas",
         "",
-        "lmod-defaults-gnu12-openmpi4-ohpc",
+        "lmod-defaults-gnu15-openmpi5-ohpc",
     ],
     "components/runtimes/charliecloud/SPECS/charliecloud.spec": [
         "charliecloud",
