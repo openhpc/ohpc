@@ -18,7 +18,7 @@
 #-----------------------------------------------------------------------
 
 if [ "$#" = "1" ]; then
-	OHPC_MPI_FAMILY=$1
+	OHPC_MPI_FAMILY="${1}"
 fi
 
 if [ -z "${OHPC_MPI_FAMILY}" ]; then
