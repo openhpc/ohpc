@@ -119,7 +119,7 @@ rpm=boost-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
     fi
 
     if [ $LMOD_FAMILY_COMPILER == "intel" ];then
-        CXX=icpc
+        CXX=icpx
     elif [[ $LMOD_FAMILY_COMPILER =~ "gnu" ]];then
         CXX=g++
     else

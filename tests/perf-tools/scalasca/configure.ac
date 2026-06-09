@@ -46,8 +46,13 @@ CXX='scorep mpicxx'
 FC='scorep mpif90'
 F77='scorep mpif90'
 
-CFLAGS="${CFLAGS} -fopenmp"
-CXXFLAGS="${CXXFLAGS} -fopenmp"
+if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
+  CFLAGS="${CFLAGS} -qopenmp"
+  CXXFLAGS="${CXXFLAGS} -qopenmp"
+else
+  CFLAGS="${CFLAGS} -fopenmp"
+  CXXFLAGS="${CXXFLAGS} -fopenmp"
+fi
 FCFLAGS="${FCLAGS}"
 FFLAGS="${FCLAGS}"
 LDFLAGS="${LDFLAGS}"
