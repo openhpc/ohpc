@@ -31,9 +31,8 @@ Release:        1%{?dist}
 Url:            https://netlib.org/scalapack/
 Source0:        https://github.com/Reference-ScaLAPACK/scalapack/archive/refs/tags/v%{version}.tar.gz
 Source1:        baselibs.conf
-Patch0:         scalapack-2.0.2-shared-lib.patch
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  make
+BuildRequires:  cmake%{PROJ_DELIM}
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset
@@ -66,42 +65,70 @@ routines resemble their LAPACK equivalents as much as possible.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p2
-cp SLmake.inc.example SLmake.inc
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel"
-%if "%{compiler_family}" == "arm1"
-%{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
-%{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
-%{__cat} SLmake.inc
-%else
+export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
+export CFLAGS="${CFLAGS} -Wno-implicit-int"
+export CFLAGS="${CFLAGS} -Wno-maybe-uninitialized"
+export CFLAGS="${CFLAGS} -Wno-uninitialized"
+export CFLAGS="${CFLAGS} -Wno-unused-variable"
+export CFLAGS="${CFLAGS} -Wno-strict-aliasing"
+export CFLAGS="${CFLAGS} -Wno-unused-but-set-variable"
+export FFLAGS="${FCFLAGS}"
+export FFLAGS="${FFLAGS} -Wno-maybe-uninitialized"
+export FFLAGS="${FFLAGS} -Wno-unused-label"
+export FFLAGS="${FFLAGS} -Wno-unused-dummy-argument"
+export FFLAGS="${FFLAGS} -Wno-unused-variable"
+export FFLAGS="${FFLAGS} -Wno-tabs"
+
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
+%define blas_lib "-L${OPENBLAS_LIB} -lopenblas"
 %endif
+
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath"
+%define blas_lib "-L${ARMPL_LIBRARIES} -larmpl"
+%endif
+
+%if "%{compiler_family}" == "intel"
+%define blas_lib "-L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl"
+%endif
+
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
+export FFLAGS="${FFLAGS} -fallow-argument-mismatch"
 %endif
 %if "%{compiler_family}" == "gnu15"
-# configure fails with:
-#   The Fortran compiler gfortran does not accept programs that
-#   call the same routine with arguments of different types without
-#   the option -fallow-argument-mismatch.
-#   Rerun configure with FFLAGS=-fallow-argument-mismatch
-# This seems to fix the build.
-export GNU12FCFLAGS=-fallow-argument-mismatch
+export CFLAGS="${CFLAGS} -std=gnu89"
 %endif
-make lib
+
+module load cmake
+
+mkdir build && cd build
+cmake .. \
+	-DCMAKE_INSTALL_PREFIX=%{install_path} \
+	-DCMAKE_INSTALL_LIBDIR=lib \
+	-DCMAKE_C_COMPILER=mpicc \
+	-DCMAKE_Fortran_COMPILER=mpif90 \
+	-DCMAKE_C_FLAGS="${CFLAGS} -fPIC" \
+	-DCMAKE_Fortran_FLAGS="${FFLAGS} -fPIC" \
+	-DBUILD_SHARED_LIBS=ON \
+	-DBUILD_STATIC_LIBS=OFF \
+	-DSCALAPACK_BUILD_TESTS=OFF \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+	-DCMAKE_C_COMPILER_LAUNCHER=ccache \
+	-DCMAKE_Fortran_COMPILER_LAUNCHER=ccache \
+%endif
+	-DLAPACK_LIBRARIES=%{blas_lib} \
+	-DBLAS_LIBRARIES=%{blas_lib}
+make %{?_smp_mflags}
 
 %install
 %{__mkdir} -p %{buildroot}/%{_docdir}
-%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/etc
-%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/lib
-install -m 644 SLmake.inc ${RPM_BUILD_ROOT}%{install_path}/etc
-install -m 755 *so* ${RPM_BUILD_ROOT}%{install_path}/lib
 
-pushd ${RPM_BUILD_ROOT}%{install_path}/lib
-ln -fs libscalapack.so.2.0.2 libscalapack.so.2
-ln -s libscalapack.so.2.0.2 libscalapack.so
-popd
+cd build
+%make_install
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
