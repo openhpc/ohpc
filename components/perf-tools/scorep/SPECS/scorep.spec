@@ -117,9 +117,23 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi3 "
 
 # Work around static binutils in OpenSUSE Leap 15
 %if 0%{?suse_version}
-export LIBBFD_EXTRA_LIBS="-liberty -lz -ldl -lsframe"
-CONFIGURE_OPTIONS="${CONFIGURE_OPTIONS}"
+export LIBBFD_EXTRA_LIBS="-liberty -lz -ldl"
 %endif
+
+# Strip ccache prefix from compiler variables; Score-P's configure passes
+# CC/CXX to MPI wrappers via -cc= which cannot handle "ccache gcc".
+# Instead, use PATH masquerade so the actual compiler invocations still
+# go through ccache during the build.
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+if command -v ccache >/dev/null 2>&1; then
+    CCACHE_WRAP_DIR=$(mktemp -d /tmp/ccache-wrap.XXXXXX)
+    ln -s "$(command -v ccache)" "${CCACHE_WRAP_DIR}/$(echo $CC | sed 's/^ccache //')"
+    ln -s "$(command -v ccache)" "${CCACHE_WRAP_DIR}/$(echo $CXX | sed 's/^ccache //')"
+    export PATH="${CCACHE_WRAP_DIR}:${PATH}"
+fi
+%endif
+export CC=$(echo $CC | sed 's/^ccache //')
+export CXX=$(echo $CXX | sed 's/^ccache //')
 
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="$CFLAGS"
