@@ -64,6 +64,9 @@ CONFIGURE_OPTIONS="--compiler=arm "
 %if "%{compiler_family}" == "llvm"
 CONFIGURE_OPTIONS="--compiler=llvm "
 %endif
+%if "%{compiler_family}" == "gnu14"
+CONFIGURE_OPTIONS="--compiler=gnu "
+%endif
 %if "%{compiler_family}" == "gnu15"
 CONFIGURE_OPTIONS="--compiler=gnu "
 %endif
@@ -88,6 +91,10 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
+%if "%{mpi_family}" == "openmpi5"
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
+%endif
+
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
 
 # remove ARM incompatible cflag
@@ -104,7 +111,7 @@ sed -i "s/-mieee-fp//g;s/-wd161//g;" build-*/Makefile.defs
 sed -i 's/$(CPP)/ifx/g' src/fortraninterface/Makefile
 %endif
 
-%if "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
 sed -i 's/FFLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
 sed -i 's/F90FLAGS.*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
 sed -i 's/F90 .*/& -fallow-argument-mismatch/g' build-*/Makefile.defs
