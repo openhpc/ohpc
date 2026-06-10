@@ -31,6 +31,10 @@ Group:          %{PROJ_NAME}/parallel-libs
 Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-13_0_0-destdir_fix.patch
+# Workaround for icpx 2026.0 ICE (segfault in LICM optimization pass)
+# when compiling Kokkos Kernels gauss_seidel_apply ETI with OpenMP.
+# Reduces optimization to -O1 for the affected file.
+Patch1:         trilinos-17_0_0-icpx-ice-workaround.patch
 
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python3
@@ -60,6 +64,10 @@ Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  gcc12-c++
 BuildRequires:  libstdc++6-devel-gcc12
 %endif
+%if "%{compiler_family}" == "intel" && 0%{?rhel}
+BuildRequires:  gcc-toolset-12-gcc-c++
+BuildRequires:  gcc-toolset-12-libstdc++-devel
+%endif
 
 #!BuildIgnore: post-build-checks
 #!BuildIgnore: brp-check-suse
@@ -81,7 +89,8 @@ For a summary of included packages see https://trilinos.github.io/packages.html
 
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
-%patch -P0 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -106,6 +115,10 @@ export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
 %if "%{compiler_family}" == "intel"
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CXXFLAGS="${CXXFLAGS} -Wno-implicit-function-declaration"
+%if 0%{?rhel}
+export CXXFLAGS="${CXXFLAGS} --gcc-toolchain=/opt/rh/gcc-toolset-12/root/usr"
+export CFLAGS="${CFLAGS} --gcc-toolchain=/opt/rh/gcc-toolset-12/root/usr"
+%endif
 %endif
 export CFLAGS="${CFLAGS} -Wno-deprecated-declarations"
 export CXXFLAGS="${CXXFLAGS} -Wno-deprecated-declarations"

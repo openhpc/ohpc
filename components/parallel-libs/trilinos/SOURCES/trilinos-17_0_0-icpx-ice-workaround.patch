@@ -1,0 +1,19 @@
+--- a/packages/kokkos-kernels/sparse/CMakeLists.txt
++++ b/packages/kokkos-kernels/sparse/CMakeLists.txt
+@@ -187,3 +187,16 @@ KOKKOSKERNELS_GENERATE_ETI(Sparse_gauss_seidel_apply gauss_seidel_apply
+   SOURCE_LIST SOURCES
+   TYPE_LISTS  FLOATS ORDINALS OFFSETS LAYOUTS DEVICES
+ )
++
++# Workaround for Intel oneAPI DPC++/C++ Compiler 2026.0 ICE (internal
++# compiler error) in the LICM optimization pass when compiling certain
++# Kokkos Kernels gauss_seidel_apply ETI specializations with OpenMP.
++# Reduce optimization to -O1 for the affected file.
++set(_gs_apply_ice_file
++  "${CMAKE_CURRENT_BINARY_DIR}/sparse/eti/generated_specializations_cpp/gauss_seidel_apply/Sparse_gauss_seidel_apply_eti_DOUBLE_ORDINAL_INT_OFFSET_SIZE_T_LAYOUTLEFT_EXECSPACE_OPENMP_MEMSPACE_HOSTSPACE.cpp")
++if(EXISTS "${_gs_apply_ice_file}")
++  set_source_files_properties(
++    "${_gs_apply_ice_file}"
++    PROPERTIES COMPILE_FLAGS "-O1"
++  )
++endif()
