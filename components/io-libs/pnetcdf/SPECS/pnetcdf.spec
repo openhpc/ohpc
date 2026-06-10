@@ -33,7 +33,7 @@ BuildRequires: m4
 BuildRequires: zlib-devel
 BuildRequires: perl(File::Compare)
 BuildRequires: perl(File::Copy)
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: libtool
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -49,8 +49,6 @@ attributes, and variables (> 2B array elements).
 %setup -q -n pnetcdf-%{version}
 
 %build
-export PATH=%{OHPC_UTILS}/autotools/bin:${PATH}
-autoreconf -if
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
@@ -77,7 +75,7 @@ MPICXX=mpicxx \
 CFLAGS="${CFLAGS} -fPIC -DPIC" \
 CXXFLAGS="${CXXFLAGS} -fPIC -DPIC" \
 FCFLAGS="${FCFLAGS} -fPIC" \
-FFLAGS="${F77LAGS} -fPIC" \
+FFLAGS="${F77FLAGS} -fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
