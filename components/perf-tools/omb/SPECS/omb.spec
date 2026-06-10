@@ -18,12 +18,13 @@
 
 Summary:   OSU Micro-benchmarks
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   6.1
+Version:   7.5.2
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://mvapich.cse.ohio-state.edu/benchmarks/
 Source0:   https://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-%{version}.tar.gz
+Patch0:    fix-uninitialized-variables.patch
 
 BuildRequires: make
 
@@ -54,13 +55,17 @@ measure the performances of various MPI operations including:
 %prep
 
 %setup -q -n osu-micro-benchmarks-%{version}
+%patch -P0 -p1
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "arm1" || "%{compiler_family}" == "intel"
 CFLAGS="$CFLAGS -Wno-return-type"
 %endif
 ./configure CC=mpicc CXX=mpicxx \
+%if "%{mpi_family}" == "impi"
+    --disable-mpi4 \
+%endif
     --prefix=%{install_path} \
     --libexec=%{install_path}/bin/ || { cat config.log && exit 1; }
 
