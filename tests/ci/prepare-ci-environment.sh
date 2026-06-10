@@ -6,6 +6,12 @@ set -x
 set -e
 
 FACTORY_VERSION=2.10
+ENABLE_ONEAPI=""
+if [ $# -eq 1 ]; then
+	if [ "${1}" = "intel" ]; then
+		ENABLE_ONEAPI="intel-oneapi-toolkit-release-ohpc"
+	fi
+fi
 
 if [ ! -e /etc/os-release ]; then
 	echo "Cannot detect OS without /etc/os-release"
@@ -18,9 +24,39 @@ fi
 PKG_MANAGER=zypper
 COMMON_PKGS="wget python3 jq man createrepo_c"
 UNAME_M=$(uname -m)
+YES="-n"
 
 retry_counter=0
 max_retries=5
+
+print_header() {
+	echo "############### $1 ###############"
+}
+
+print_env() {
+	set +x
+	loop_command "${PKG_MANAGER}" "${YES}" install procps
+	# As this script can run on multiple different CI systems
+	# the following lines should give some context to the
+	# evnvironment of this CI run.
+	print_header "Environment variables"
+	printenv
+	print_header "uname -a"
+	uname -a || :
+	print_header "Mounted file systems"
+	cat /proc/self/mountinfo || :
+	print_header "Kernel command line"
+	cat /proc/cmdline || :
+	print_header "ulimit -a"
+	ulimit -a
+	print_header "Available memory"
+	free -h
+	print_header "Available disk space"
+	df -h
+	print_header "Available CPUs"
+	lscpu || :
+	set -x
+}
 
 loop_command() {
 	local retry_counter=0
@@ -44,6 +80,7 @@ loop_command() {
 for like in ${ID_LIKE}; do
 	if [ "${like}" = "fedora" ]; then
 		PKG_MANAGER=dnf
+		YES="-y"
 		break
 	fi
 done
@@ -51,7 +88,7 @@ done
 if [ "${PKG_MANAGER}" = "dnf" ]; then
 	# We need to figure out if we are running on RHEL (clone) 8 or 9 and
 	# rpmdev-vercmp from rpmdevtools is pretty good at comparing versions.
-	loop_command "${PKG_MANAGER}" -y  install rpmdevtools crypto-policies-scripts "${COMMON_PKGS}"
+	loop_command "${PKG_MANAGER}" "${YES}"  install rpmdevtools crypto-policies-scripts "${COMMON_PKGS}"
 
 	# Exit status is 0 if the EVR's are equal, 11 if EVR1 is newer, and 12 if EVR2
 		# is newer.  Other exit statuses indicate problems.
@@ -80,7 +117,7 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 fi
 
 dnf_rhel() {
-	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} epel-release dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
 	if [ -z "${NINE}" ]; then
 		loop_command "${PKG_MANAGER}" config-manager --set-enabled powertools
 		if "${PKG_MANAGER}" repolist --all | grep -q "^devel"; then
@@ -92,13 +129,15 @@ dnf_rhel() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" -y install lmod-ohpc ccache
+	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc ccache "${ENABLE_ONEAPI}"
 }
 
 dnf_openeuler() {
-	loop_command "${PKG_MANAGER}" -y install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk
-	loop_command "${PKG_MANAGER}" -y install ohpc-filesystem lmod-ohpc hostname ccache
+	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk
+	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname ccache
 }
+
+print_env
 
 if [ "${PKG_MANAGER}" = "dnf" ]; then
 	if [ "${ID}" = "openEuler" ]; then
@@ -108,13 +147,13 @@ if [ "${PKG_MANAGER}" = "dnf" ]; then
 	fi
 	adduser ohpc || true
 else
-	loop_command "${PKG_MANAGER}" -n install ${COMMON_PKGS} awk rpmbuild ccache
-	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install "${OHPC_RELEASE}"
+	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} awk rpmbuild ccache
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install "${OHPC_RELEASE}"
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" -n --no-gpg-checks refresh
-	loop_command "${PKG_MANAGER}" -n --no-gpg-checks install lmod-ohpc
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks refresh
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc "${ENABLE_ONEAPI}"
 	groupadd ohpc || true
 	useradd -m ohpc -g ohpc || true
 fi
