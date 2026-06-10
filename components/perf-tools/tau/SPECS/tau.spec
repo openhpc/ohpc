@@ -18,28 +18,22 @@
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.31.1
+Version:   2.35.1
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
-Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
-Patch1:    tau-2.31.1-add-explicit-linking-option.patch
-Patch2:    tau-2.31.1-shared_libpdb.patch
-Patch3:    tau-2.31.1-disable_examples.patch
-Patch4:    tau-2.31.1-ucontext.patch
-Patch5:    tau-2.31.1-testplugins_makefile.patch
-Patch6:    tau-2.31.1-paraprof.patch
-Patch7:    tau-2.31.1-python2to3.patch
-Patch8:    tau-2.31.1-profileparam_argc.patch
+# upstream https certificate is broken, use http
+Source0:   http://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
+Patch1:    tau-2.34.1.patch
 
 Provides:  lib%{PNAME}.so()(64bit)(%{PROJ_NAME})
 Provides:  perl(ebs2otf)
 Conflicts: lib%{pname} < %{version}-%{release}
 Obsoletes: lib%{pname} < %{version}-%{release}
 
-%if 0%{?suse_version} || 0%{?sle_version}
+%if 0%{?sle_version}
 BuildRequires: libgomp1
 %else
 BuildRequires: libgomp
@@ -50,17 +44,22 @@ BuildRequires: papi%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
 %endif
 
-%if 0%{?rhel} >= 9
-BuildRequires: curl-minimal
-%else
 BuildRequires: curl
-%endif
 BuildRequires: chrpath sed grep which make
 BuildRequires: postgresql-devel binutils-devel
 BuildRequires: zlib-devel python3-devel
+BuildRequires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
+# Exclude requires that breaks install
+%if "0%{?__requires_exclude}" == "0"
+%global __requires_exclude ^libCg.*$|.*SUNWprivate.*
+%else
+%global __requires_exclude %{__requires_exclude}|^libCg.*$|.*SUNWprivate.*
+%endif
+
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
+Requires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires: binutils-devel
 Requires: java
@@ -87,17 +86,7 @@ automatic instrumentation tool.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
-%global _default_patch_fuzz 1
-
 %patch -P 1 -p1
-%patch -P 2 -p1
-%patch -P 3 -p1
-%patch -P 4 -p1
-%patch -P 5 -p1
-%patch -P 6 -p1
-%patch -P 7 -p1
-%patch -P 8 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
@@ -138,10 +127,34 @@ export INSTALLROOT=${TAUROOT}/TAUBUILD%{install_path}
 %ifarch x86_64
 module load papi
 %endif
+module load otf2
 module load pdtoolkit
 
 export OMPI_LDFLAGS="-Wl,--as-needed -L${MPI_LIB_DIR}"
 export FFLAGS="$FFLAGS -I${MPI_INCLUDE_DIR}"
+
+%if "%{compiler_family}" == "arm1"
+export CFLAGS="${CFLAGS} -fsimdmath"
+%endif
+%if "%{compiler_family}" == "intel"
+export CFLAGS="${CFLAGS} -Wno-register"
+%endif
+
+
+
+
+# Set up ccache via PATH masquerade if enabled.
+# TAU's configure validates -cc/-c++ against a whitelist, so we cannot
+# prepend ccache directly. Instead, create symlinks for the MPI compiler
+# wrappers in PATH so that TAU's build invocations go through ccache.
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+if command -v ccache >/dev/null 2>&1; then
+    CCACHE_WRAP_DIR=$(mktemp -d /tmp/ccache-wrap.XXXXXX)
+    ln -s "$(command -v ccache)" "${CCACHE_WRAP_DIR}/mpicc"
+    ln -s "$(command -v ccache)" "${CCACHE_WRAP_DIR}/mpicxx"
+    export PATH="${CCACHE_WRAP_DIR}:${PATH}"
+fi
+%endif
 
 # Try and figure out architecture
 if [ -n "$detectarch" ]; then
@@ -166,38 +179,50 @@ mkdir -p ${TAUROOT}/TAUBUILD
     -mpiinc=${MPI_INCLUDE_DIR} \
     -mpilib=${MPI_LIB_DIR} \
 %if "%{compiler_family}" == "intel"
-    -fortran=ifort \
-%if "%{mpi_family}" == "impi"
-    -c++=mpiicpc \
-    -cc=mpiicc \
-%else
-    -c++=mpicxx \
-    -cc=mpicc \
-%endif
+    -fortran=ifx \
+    -oparicomp=oneapi \
 %else
 %if "%{compiler_family}" == "arm1"
     -fortran=armflang \
 %else
     -fortran=gfortran \
 %endif
+%endif
+    -opari \
     -c++=mpicxx \
     -cc=mpicc \
-    -opari \
-%endif
 %ifarch x86_64
     -papi=${PAPI_DIR} \
 %endif
+    -otf=${OTF2_DIR} \
     -slog2 \
     -CPUTIME \
     -PROFILE \
     -PROFILECALLPATH \
     -PROFILEPARAM \
     -pdt=${PDTOOLKIT_DIR} \
-    -useropt="%optflags -I${MPI_INCLUDE_DIR} -I${TAUROOT}/include -fno-strict-aliasing" \
+    -useropt="${CFLAGS} -I${MPI_INCLUDE_DIR} -fno-strict-aliasing" \
     -openmp \
+    -pthread \
+    -mpit \
+    -COMPENSATE \
     -extrashlibopts="-fPIC -L${MPI_LIB_DIR} -lmpi -L${INSTALLROOT}/lib"
 
-make clean install
+make %{?_smp_mflags}
+
+%install
+export TAUROOT=$(pwd)
+export INSTALLROOT=${TAUROOT}/TAUBUILD%{install_path}
+
+# OpenHPC compiler/mpi designation
+%ohpc_setup_compiler
+%ifarch x86_64
+module load papi
+%endif
+module load otf2
+module load pdtoolkit
+
+make install
 
 # remove static libs and directories
 find ${INSTALLROOT}/lib -name '*.a' -delete
@@ -207,15 +232,19 @@ find ${INSTALLROOT}/lib -type d -name 'static-*' -delete
 # Use find/replace function -- easy to add more as needed
 # Two stage, using much faster grep to target specific files
 replace_all() {
-    for f in $(grep -Ilr "$1" ${INSTALLROOT}); do
+    for f in $(grep -Ilr -- "$1" ${INSTALLROOT}); do
       sed -i "s|$1|$2|g" $f
     done
 }
 
+replace_all "ccache " ""
 replace_all "${TAUROOT}/TAUBUILD" ""
 replace_all "${TAUROOT}" ""
+replace_all "OPARIINCDIR=-I/include" "OPARIINCDIR=-I%{install_path}/include"
 replace_all "${MPI_DIR}" "\${MPI_DIR}"
+replace_all "${OTF2_DIR}" "\${OTF2_DIR}"
 replace_all "${PDTOOLKIT_DIR}" "\${PDTOOLKIT_DIR}"
+replace_all "-fstack-protector-strong" ""
 %if "%{mpi_family}" == "impi"
 replace_all "${I_MPI_ROOT}" "\${I_MPI_ROOT}"
 %endif
@@ -224,22 +253,32 @@ replace_all "${PAPI_DIR}" "\${PAPI_DIR}"
 replace_all "/x86_64/lib" "/lib"
 %endif
 
+# Fix absolute symlinks that point into the build directory
+find ${INSTALLROOT} -type l | while read link; do
+    target=$(readlink "$link")
+    case "$target" in
+        ${TAUROOT}/TAUBUILD*)
+            relTarget=$(basename "$target")
+            ln -sf "$relTarget" "$link"
+            ;;
+    esac
+done
+
 # Remove RUNPATH entries. Use LMOD environment config instead.
 find ${INSTALLROOT}/lib -type f -name '*.so' -exec chrpath -d {} \;
 
-# Link other bindings
+# Create shared-mpi binding symlink for tau_exec and libTauMpi convenience symlinks
 cd ${INSTALLROOT}/lib
-ln -s shared-callpath-*-trace ${INSTALLROOT}/lib/shared-mpi
-for f in libTAUsh-callpath-*-trace.so; do
+ln -s shared-callpath-* ${INSTALLROOT}/lib/shared-mpi
+for f in libTAUsh-callpath-*.so; do
   ln -s $f ${INSTALLROOT}/lib/${f/libTAUsh/libTauMpi}
 done
 
 
-%install
 mkdir -p %{buildroot}/%{_docdir}
 
 # Copy the install tree to BUILDROOT
-cp -a TAUBUILD/* %{buildroot}
+cp -a ${TAUROOT}/TAUBUILD/* %{buildroot}
 
 # OpenHPC module file
 mkdir -p %{buildroot}%{module_path}
@@ -271,6 +310,7 @@ setenv("%{PNAME}_INC",      "%{install_path}/include")
 setenv("%{PNAME}_MAKEFILE", "%{install_path}/include/Makefile")
 setenv("%{PNAME}_OPTIONS",  "-optRevert -optShared -optNoTrackGOMP")
 
+depends_on("otf2")
 depends_on("pdtoolkit")
 EOF
 
