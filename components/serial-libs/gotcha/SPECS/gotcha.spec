@@ -63,6 +63,10 @@ mkdir gotcha-build
 # CMAKE_CXX_FLAGS_DEBUG set to -O0 to prevent possible test failures
 # due to -O3 set in OHPC_setup_compiler. Does not affect actual
 # GOTCHA build.
+# Strip ccache prefix from compiler variables; pass it via launcher flags
+export CC=$(echo $CC | sed 's/^ccache //')
+export CXX=$(echo $CXX | sed 's/^ccache //')
+
 cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_path} \
     -DCMAKE_BUILD_TYPE=Release \
@@ -70,6 +74,10 @@ cmake \
     -DGOTCHA_ENABLE_TESTS=ON \
     -DCMAKE_C_COMPILER=${CC} \
     -DCMAKE_CXX_COMPILER=${CXX} \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+    -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+%endif
     -DCMAKE_CXX_FLAGS_DEBUG="-O0" \
     -DDEPENDENCIES_PREINSTALLED=TRUE \
     -S . \
