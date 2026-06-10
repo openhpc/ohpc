@@ -69,8 +69,8 @@ cd %{_builddir}
 %{__rm} -rf %{name}-%{version} %{wwextract}
 %{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
 %setup -q -D
-%patch0 -p1
-%patch1 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 
 
 %build

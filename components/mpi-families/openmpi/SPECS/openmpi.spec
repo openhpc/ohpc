@@ -150,7 +150,7 @@ communication techniques.
 %prep
 
 %setup -q -n openmpi-%{version}
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 # OpenHPC compiler designation

@@ -68,6 +68,7 @@ jobs:
     env:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
+        components/perf-tools/papi/SPECS/papi.spec
     container:
       image: ghcr.io/openhpc/ohpc-validate-almalinux:2.x
       options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
@@ -132,6 +133,7 @@ jobs:
     env:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
+        components/perf-tools/papi/SPECS/papi.spec
     container:
       image: ghcr.io/openhpc/ohpc-validate-leap:2.x
       options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined

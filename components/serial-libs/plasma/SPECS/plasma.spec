@@ -63,9 +63,9 @@ cp %{SOURCE2} .
 # Patches created using 2to3
 sed -i "s/\t/    /g;s/^\s*$//;1s|^#!.*env.*python.*$|#!/usr/bin/python3|" \
     configure.py config/*.py tools/*.py
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
 
 %build
 %ohpc_setup_compiler

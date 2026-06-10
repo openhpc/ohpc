@@ -87,7 +87,7 @@ This package provides the nrpe plugin for Nagios-related applications.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1 -b .include_etc_npre_d
+%patch -P 1 -p1 -b .include_etc_npre_d
 
 # Allow building for aarch64
 # https://bugzilla.redhat.com/926244

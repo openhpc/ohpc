@@ -45,9 +45,9 @@ which checks should be run on which nodes.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
-%patch2 -p1
-%patch3 -p0
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 3 -p0
 
 %build
 if [ ! -f configure ]; then

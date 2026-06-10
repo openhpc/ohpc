@@ -124,12 +124,12 @@ cd %{_builddir}
 %{__rm} -rf %{name}-%{version} %{wwextract}
 %{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
 %setup -q -D
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
+%patch -P 4 -p1
+%patch -P 5 -p1
 
 
 %build

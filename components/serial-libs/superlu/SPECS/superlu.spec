@@ -52,7 +52,7 @@ Docu can be found on http://www.netlib.org.
 %prep
 %setup -q -n superlu-%{version}
 %patch -p1
-%patch1 -p1
+%patch -P 1 -p1
 
 %build
 %ohpc_setup_compiler

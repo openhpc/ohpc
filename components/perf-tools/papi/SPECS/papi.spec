@@ -43,7 +43,7 @@ running programs.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
+%patch -P 1 -p1
 
 %build
 

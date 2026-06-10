@@ -85,10 +85,10 @@ A shared library for applications using MUNGE.
 %setup -q -n %{pname}-%{pname}-%{version}
 
 # OpenHPC patches
-%patch1
-%patch2
-%patch3
-%patch4
+%patch -P 1
+%patch -P 2
+%patch -P 3
+%patch -P 4
 
 %build
 ##

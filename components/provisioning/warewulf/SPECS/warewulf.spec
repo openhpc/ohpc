@@ -75,8 +75,8 @@ system for large clusters of bare metal and/or virtual systems.
 
 %prep
 %setup -q -n %{pname}-%{version} -b0 -a2
-%patch0 -p1
-%patch1 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 
 # No network access in OBS, so module downloads will break builds
 sed -i "s/go mod tidy .*$//" Makefile

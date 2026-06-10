@@ -68,7 +68,7 @@ cd %{_builddir}
 %{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
 %setup -q -D
 %if 0%{?openEuler}
-%patch0 -p2
+%patch -P 0 -p2
 %endif
 
 %build

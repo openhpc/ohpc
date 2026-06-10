@@ -79,7 +79,7 @@ including support for static control.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 %ohpc_setup_compiler
