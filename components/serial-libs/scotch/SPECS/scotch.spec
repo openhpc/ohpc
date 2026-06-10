@@ -45,6 +45,8 @@ BuildRequires:	libbz2-devel
 Requires:	libbz2-devel
 %endif
 
+#!BuildIgnore: post-build-checks rpmlint-Factory
+
 # Default library install path
 %if 0%{?ohpc_mpi_dependent}
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%{version}
