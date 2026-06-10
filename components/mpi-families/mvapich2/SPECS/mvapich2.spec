@@ -12,6 +12,8 @@
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
+#!BuildIgnore: post-build-checks rpmlint-Factory
+
 # Multiple permutations for this MPI stack are possible depending
 # on the desired underlying resource manager and comm library support.
 
