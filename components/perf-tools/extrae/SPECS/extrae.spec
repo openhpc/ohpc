@@ -26,10 +26,10 @@ URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
 Patch0:		https://github.com/bsc-performance-tools/extrae/pull/114.patch
 
-
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool make which
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:	make which
 BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	papi%{PROJ_DELIM}
@@ -73,9 +73,6 @@ export compiler_vars="CC=${CC} CXX=${CXX} MPIF90=mpiifort $compiler_vars"
 sed -i '/-\[lLR\]\*)/i\        -loopopt*) ;;' configure
 %endif
 export LDFLAGS="$LDFLAGS -lz"
-%if 0%{?sle_version}
-export LDFLAGS="$LDFLAGS -lsframe"
-%endif
 export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
 export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
 %if "%{compiler_family}" == "arm1"
