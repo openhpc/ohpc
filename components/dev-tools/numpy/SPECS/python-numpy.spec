@@ -158,7 +158,7 @@ PKG_CONFIG_PATH="${OPENBLAS_LIB}/pkgconfig:${PKG_CONFIG_PATH}" \
 # version than the default. Let's point the default python3 binary
 # to that newer version.
 %{__mkdir_p} %{buildroot}/%{install_path}/bin
-ln -sn "$(realpath -m --relative-to='%{install_path}/bin' '%{__python}')" %{buildroot}/%{install_path}/bin/%{python_family}
+ln -sn "$(realpath -m --relative-to='%{install_path}/bin' '%{_bindir}/%{__python}')" %{buildroot}/%{install_path}/bin/%{python_family}
 
 # OpenHPC module file
 %{!?compiler_family: %global compiler_family gnu}
