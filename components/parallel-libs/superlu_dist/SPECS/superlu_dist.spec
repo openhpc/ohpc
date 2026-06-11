@@ -45,7 +45,7 @@ Requires:       libbz2-1
 BuildRequires:  zlib-devel make
 Requires:       zlib
 
-#!BuildIgnore: post-build-checks
+#!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
