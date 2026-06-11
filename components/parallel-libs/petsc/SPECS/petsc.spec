@@ -150,6 +150,9 @@ PETSC_CXX="ccache ${PETSC_CXX}"
 make %{?_smp_mflags}
 
 %install
+# Skip SUSE brp-35-rpath check; the Intel compiler adds an RPATH to
+# /usr/x86_64-suse-linux/lib which brp-35-rpath rejects
+export NO_BRP_CHECK_RPATH=true
 
 make install DESTDIR=$RPM_BUILD_ROOT
 
