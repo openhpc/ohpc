@@ -25,6 +25,7 @@ Group: %{PROJ_NAME}/admin
 URL: https://github.com/mej/nhc/
 Source0: https://github.com/mej/nhc/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Patch0: nhc-ps-chronyd.patch
+Patch1: 5e18b7f-speedup-read-cpuinfo.patch
 Requires: bash
 BuildRequires: automake autoconf
 BuildRequires: make
@@ -42,6 +43,7 @@ which checks should be run on which nodes.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch -P 0 -p1
+%patch -P 1 -p1
 
 %build
 if [ ! -f configure ]; then

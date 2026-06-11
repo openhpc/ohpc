@@ -1,0 +1,779 @@
+From 5e18b7f5f803765a24cb281f8c4b452281482c4c Mon Sep 17 00:00:00 2001
+From: Michael Jennings <mej@eterm.org>
+Date: Fri, 14 May 2021 02:27:53 -0600
+Subject: [PATCH] WIP:  lbnl_hw:  Fixes/speedups for procfs file reads
+
+This branch/changeset extensively refactors `lbnl_hw.nhc` as a
+possible solution/improvement for the `/proc` file I/O problem (e.g.,
+
+ - Split `nhc_hw_gather_data()` into distinct functions per section,
+   allowing more fine-grained control over which `procfs` and/or
+   `sysfs` files actually need to be read and parsed in the first
+   place;
+ - Convert the path+filename for each file being parsed into a
+   configuration variable that users can customize as needed;
+ - Alter the way NHC is pulling data from each file, by using a single
+   `read` invocation, to avoid the
+   [`lseek()`/rebuild problems described](https://github.com/mej/nhc/issues/43#issuecomment-324690311)
+   by @mattmix in #43.
+ - Add support for using a cached copy of the original file (instead
+   of reading directly from `/proc` or `/sys`) to avoid the resulting
+   poor performance; and
+ - Allow for the aforementioned configuration variables to specify a
+   process substitution expression (see `bash(1)` for details) rather
+   than a path+filename.  This, in turn, permits the user to, for
+   example, `grep` out unused lines to minimize parsing time.  (For a
+   specific example and rationale, see
+   [this comment](https://github.com/mej/nhc/issues/30#issuecomment-331285668)
+   from @NateCrawford with relevant performance comparisons.)
+ - Improve the unit tests for this module; now that the hardware
+   checks are capable of reading from a user-defined location, the
+   unit tests feed auto-generated data into the checks via the
+    `/dev/stdin` "file" (really a shell variable).  Not only does this
+   verify the new "user-specified custom data source" code, it also
+   expands the "code coverage" of the unit tests.  The old tests just
+   directly assigned the test data to the right NHC-internal
+   variables; the new tests cover the parsing code as well, not just
+   the checks themselves.
+
+These changes are intended to fix #30, #39, #43, #47, and #118 as well
+as some older LANL-internal issues with
+[Trinity](https://www.lanl.gov/projects/trinity/specifications.php)
+(our Haswell/KNL-based, nineteen-thousand-node HPE/Cray XC40).
+
+And with respect to Trinity, I would be remiss were I to fail to
+express my sincere thanks to @grahamvh, my colleague at @lanl and one
+of the main sysadmins for that system, who helped me immensely in
+brainstorming, devising potential solutions, testing, and providing
+critical feedback en route toward finally getting this problem licked!
+
+Feedback on this approach is much appreciated!
+---
+ scripts/lbnl_hw.nhc   | 300 +++++++++++++++++++++++++++++++-----------
+ test/test_lbnl_hw.nhc | 170 ++++++++++++++++++------
+ 2 files changed, 356 insertions(+), 114 deletions(-)
+
+diff --git a/scripts/lbnl_hw.nhc b/scripts/lbnl_hw.nhc
+index ddc6f82..2a5cd9f 100644
+--- a/scripts/lbnl_hw.nhc
++++ b/scripts/lbnl_hw.nhc
+@@ -1,4 +1,6 @@
+ # LBNL NHC - Hardware Checks
++### -*- Mode: Shell-script; fill-column: 120; comment-fill-column: 120; comment-auto-fill-only-comments: t; \
++### -*- tab-width: 4; eval: (local-set-key "\C-i" 'indent-according-to-mode); eval: (auto-fill-mode 1); -*-
+ #
+ # Michael Jennings <mej@lbl.gov>
+ # 15 December 2010
+@@ -21,34 +23,70 @@ MCELOG="${MCELOG:-mcelog}"
+ MCELOG_ARGS="${MCELOG_ARGS:---client}"
+ MCELOG_MAX_CORRECTED_RATE="${MCELOG_MAX_CORRECTED_RATE:-9}"
+ MCELOG_MAX_UNCORRECTED_RATE="${MCELOG_MAX_UNCORRECTED_RATE:-0}"
+-
+-# Read hardware information from /proc and /sys files.
+-function nhc_hw_gather_data() {
+-    local IFS LINE CORES SIBLINGS MHZ PROCESSOR PHYS_ID PORT INDEX DEV
+-    local -a FIELD PHYS_IDS IB_PORTS
++### FIXME:  Convert all these, and much of the above, to hashmaps
++CPUINFO_FILE_DEFAULT="/proc/cpuinfo"
++CPUINFO_FILE=""
++MEMINFO_FILE_DEFAULT="/proc/meminfo"
++MEMINFO_FILE=""
++KMOD_FILE_DEFAULT="/proc/modules"
++KMOD_FILE=""
++NETDEV_FILE_DEFAULT="/proc/net/dev"
++NETDEV_FILE=""
++
++# Read CPU information from the specified source
++function nhc_hw_cpu_gather_data() {
++    local CORES CPUDATA ERR MHZ PROCESSOR SIBLINGS
++    local -a FIELD PHYS_IDS
++    local -i RC=0
+ 
+     # Gather CPU info
+     PROCESSOR=-1
+-    if [[ -e /proc/cpuinfo ]]; then
+-        while read -a FIELD ; do
+-            if [[ "${FIELD[0]} ${FIELD[1]}" = "processor :" ]]; then
+-                : $((PROCESSOR++))
+-            elif [[ "${FIELD[0]} ${FIELD[1]} ${FIELD[2]}" = "physical id :" ]]; then
+-                PHYS_ID=${FIELD[3]}
+-                if [[ -z "${PHYS_IDS[$PHYS_ID]}" ]]; then
+-                    PHYS_IDS[$PHYS_ID]=1
+-                    : $((HW_SOCKETS++))
+-                fi
+-            elif [[ "${FIELD[0]} ${FIELD[1]}" = "siblings :" ]]; then
+-                SIBLINGS=${FIELD[2]}
+-            elif [[ "${FIELD[0]} ${FIELD[1]} ${FIELD[2]}" = "cpu cores :" ]]; then
+-                CORES=${FIELD[3]}
+-            elif [[ "${FIELD[0]} ${FIELD[1]} ${FIELD[2]}" = "cpu MHz :" ]]; then
+-                MHZ="${FIELD[3]}"
+-                MHZ="${MHZ/%.*}"
+-            fi
+-        done < /proc/cpuinfo
++    if [[ -n "$1" ]]; then
++        CPUINFO_FILE="$1"
++    fi
++    # Set one or both of the below variables to `/proc/cpuinfo` if empty.
++    if [[ ! -e "${CPUINFO_FILE:=${CPUINFO_FILE_DEFAULT:=/proc/cpuinfo}}" ]]; then
++        # If the file doesn't exist, check and see if we should create and fill it.
++        if [[ "${CPUINFO_FILE}" != "${CPUINFO_FILE_DEFAULT}" && -d "${CPUINFO_FILE%/*}" ]]; then
++            # If it doesn't exist and isn't set to the default location, but its `dirname` *does* exist, it's meant to
++            # be a cache file but still needs to be created and populated.
++            ### FIXME: Should NHC be auto-populating this file?
++            ERR=$(cat "${CPUINFO_FILE_DEFAULT}" 2>&1 > "${CPUINFO_FILE}" && chmod 0644 "${CPUINFO_FILE}" 2>&1)
++            RC=$?
++        fi
++    fi
++
++    if [[ -e "${CPUINFO_FILE}" && -r "${CPUINFO_FILE}" ]]; then
++        CPUDATA=$(< "$CPUINFO_FILE")
++        RC=$?
++    else
++        RC=1
++    fi
++    if [[ $RC -ne 0 || -n "${ERR}" ]]; then
++        ### FIXME:  Should this cause a die() or just return bogus values like before (see below)?
++        die 1 "Unable to read CPU data; specified file \"$CPUINFO_FILE\" is missing/unreadable/invalid."
++        return 1
+     fi
++
++    while read -a FIELD ; do
++        if [[ "${FIELD[0]} ${FIELD[1]}" = "processor :" ]]; then
++            ((PROCESSOR++))
++        elif [[ "${FIELD[0]} ${FIELD[1]} ${FIELD[2]}" = "physical id :" ]]; then
++            PHYS_ID=${FIELD[3]}
++            if [[ -z "${PHYS_IDS[$PHYS_ID]}" ]]; then
++                PHYS_IDS[$PHYS_ID]=1
++                ((HW_SOCKETS++))
++            fi
++        elif [[ "${FIELD[0]} ${FIELD[1]}" = "siblings :" ]]; then
++            SIBLINGS=${FIELD[2]}
++        elif [[ "${FIELD[0]} ${FIELD[1]} ${FIELD[2]}" = "cpu cores :" ]]; then
++            CORES=${FIELD[3]}
++        elif [[ "${FIELD[0]} ${FIELD[1]} ${FIELD[2]}" = "cpu MHz :" ]]; then
++            MHZ="${FIELD[3]}"
++            MHZ="${MHZ/%.*}"
++        fi
++    done <<< "${CPUDATA}"
++
+     if [[ $PROCESSOR -ge 0 && $HW_SOCKETS -eq 0 ]]; then
+         HW_SOCKETS=$((PROCESSOR+1))
+         HW_CORES=$HW_SOCKETS
+@@ -59,45 +97,92 @@ function nhc_hw_gather_data() {
+             HW_THREADS=$((HW_SOCKETS*SIBLINGS))
+         fi
+     else
++        # Fill with bogus (albeit sane) values.
+         HW_SOCKETS=1
+         HW_CORES=1
+         HW_THREADS=1
+         MHZ=0
+     fi
+     dbg "Got $HW_SOCKETS $MHZ MHz processors ($HW_CORES cores, $HW_THREADS threads)"
++}
+ 
+-    # Gather memory info
+-    if [[ -e /proc/meminfo ]]; then
+-        while read -a FIELD ; do
+-            if [[ "${FIELD[0]}" = "MemTotal:" ]]; then
+-                HW_RAM_TOTAL=${FIELD[1]}
+-            elif [[ "${FIELD[0]}" = "MemFree:" ]]; then
+-                : $((HW_RAM_FREE += ${FIELD[1]}))
+-            elif [[ "${FIELD[0]}" = "Buffers:" ]]; then
+-                : $((HW_RAM_FREE += ${FIELD[1]}))
+-            elif [[ "${FIELD[0]}" = "Cached:" ]]; then
+-                : $((HW_RAM_FREE += ${FIELD[1]}))
+-            elif [[ "${FIELD[0]}" = "SwapTotal:" ]]; then
+-                HW_SWAP_TOTAL=${FIELD[1]}
+-            elif [[ "${FIELD[0]}" = "SwapFree:" ]]; then
+-                HW_SWAP_FREE=${FIELD[1]}
+-            fi
+-        done < /proc/meminfo
++# Read memory hardware details from specified location (e.g., `/proc/meminfo`)
++function nhc_hw_mem_gather_data() {
++    local ERR IFS LINE
++    local -a FIELD LINES MEMDATA
++    local -i RC=0
++
++    if [[ -n "$1" ]]; then
++        MEMINFO_FILE="$1"
++    fi
++    # Set one or both of the below variables to `/proc/meminfo` if empty.
++    if [[ ! -e "${MEMINFO_FILE:=${MEMINFO_FILE_DEFAULT:=/proc/meminfo}}" ]]; then
++        # If the file doesn't exist, check and see if we should create and fill it.
++        if [[ "${MEMINFO_FILE}" != "${MEMINFO_FILE_DEFAULT}" && -d "${MEMINFO_FILE%/*}" ]]; then
++            # If it doesn't exist and isn't set to the default location, but its `dirname` *does* exist, it's meant to
++            # be a cache file but still needs to be created and populated.
++            ### FIXME: Should NHC be auto-populating this file?
++            ERR=$(cat "${MEMINFO_FILE_DEFAULT}" 2>&1 > "${MEMINFO_FILE}" && chmod 0644 "${MEMINFO_FILE}" 2>&1)
++            RC=$?
++        fi
++    fi
++
++    if [[ -e "${MEMINFO_FILE}" && -r "${MEMINFO_FILE}" ]]; then
++        MEMDATA=$(< "$MEMINFO_FILE")
++        RC=$?
+     else
++        RC=1
++    fi
++    if [[ $RC -ne 0 || -n "${ERR}" ]]; then
++        # FIXME:  Should this cause a die() or just return bogus values like before?
++        die 1 "Unable to read memory data; specified file \"$MEMINFO_FILE\" is missing/unreadable/invalid."
++        return 1
++        # Populate with bogus info
+         HW_RAM_TOTAL=1024
+         HW_RAM_FREE=1
+         HW_SWAP_TOTAL=0
+         HW_SWAP_FREE=0
+     fi
++
++    while read -a FIELD ; do
++        if [[ "${FIELD[0]}" = "MemTotal:" ]]; then
++            HW_RAM_TOTAL=${FIELD[1]}
++        elif [[ "${FIELD[0]}" = "MemFree:" ]]; then
++            ((HW_RAM_FREE += ${FIELD[1]}))
++        elif [[ "${FIELD[0]}" = "Buffers:" ]]; then
++            ((HW_RAM_FREE += ${FIELD[1]}))
++        elif [[ "${FIELD[0]}" = "Cached:" ]]; then
++            ((HW_RAM_FREE += ${FIELD[1]}))
++        elif [[ "${FIELD[0]}" = "SwapTotal:" ]]; then
++            HW_SWAP_TOTAL=${FIELD[1]}
++        elif [[ "${FIELD[0]}" = "SwapFree:" ]]; then
++            HW_SWAP_FREE=${FIELD[1]}
++        fi
++    done <<< "$MEMDATA"
++
+     dbg "Found $HW_RAM_TOTAL kB RAM ($HW_RAM_FREE kB free)"
+     dbg "Found $HW_SWAP_TOTAL kB swap ($HW_SWAP_FREE kB free)"
++}
++
++# Load HSN (currently just IB) hardware information
++function nhc_hw_hsn_gather_data() {
++    local IFS INDEX LINE PORT
++    local -a FIELD IB_PORTS
++
++    # If the top-level IB info directory isn't there, punt early.
++    if [[ ! -d /sys/class/infiniband ]]; then
++        return 0
++    fi
+ 
+-    # Gather IB info
++    # Turn globbing back on so we can internally generate the list of
++    # IB ports.
+     set +f
+     IFS=''
+     IB_PORTS=( /sys/class/infiniband/*/ports/* )
+     IFS=$' \t\n'
+     set -f
++
++    # Gather data from each IB port found.
+     for PORT in "${IB_PORTS[@]}" ; do
+         test -e "$PORT" || break
+         INDEX=${#HW_IB_STATE[*]}
+@@ -112,41 +197,103 @@ function nhc_hw_gather_data() {
+         FIELD=( $LINE )
+         HW_IB_RATE[$INDEX]=${FIELD[0]}
+         IFS=' /'
+-        arr=( $PORT )
+-        HW_IB_DEV[$INDEX]="${arr[4]}:${arr[6]}"
++        FIELD=( $PORT )
++        HW_IB_DEV[$INDEX]="${FIELD[4]}:${FIELD[6]}"
+         IFS=$' \t\n'
+         dbg "Found ${HW_IB_STATE[$INDEX]} (${HW_IB_PHYS_STATE[$INDEX]}) IB Port ${HW_IB_DEV[$INDEX]} (${HW_IB_RATE[$INDEX]} Gb/sec)"
+     done
+     export HW_IB_STATE HW_IB_PHYS_STATE HW_IB_RATE
+ 
+-    # Check if user-leved mad driver loaded and IB diag tools will succeed to run
++    # Check if user-level mad driver is loaded so that IB diag tools will be usable.
+     if [[ -f /sys/class/infiniband_mad/abi_version ]]; then
+-	read HW_IB_UMAD_ABI_VER < /sys/class/infiniband_mad/abi_version
++        read HW_IB_UMAD_ABI_VER < /sys/class/infiniband_mad/abi_version
+     else
+-	HW_IB_UMAD_ABI_VER=0
++        HW_IB_UMAD_ABI_VER=0
+     fi
+     export HW_IB_UMAD_ABI_VER
++}
+ 
+-    # Gather kernel modules
+-    if [[ -e /proc/modules ]]; then
+-        while read -a FIELD ; do
+-            HW_MODULES[${#HW_MODULES[*]}]=${FIELD[0]}
+-            dbg "Found kernel module ${FIELD[0]}"
+-        done < /proc/modules
++# Load kernel module list from /proc/modules
++function nhc_hw_kmod_gather_data() {
++    local MODDATA=""
++    local -a FIELD
++    local -i RC
++
++    if [[ -n "$1" ]]; then
++        KMOD_FILE="$1"
++    fi
++    if [[ -e "${KMOD_FILE}" && -r "${KMOD_FILE}" ]]; then
++        MODDATA=$(< "$KMOD_FILE")
++        RC=$?
++    else
++        RC=1
+     fi
++    if [[ $RC -ne 0 ]]; then
++        # FIXME:  Should this cause a die()?
++        die 1 "Unable to read kernel module data; specified file \"$KMOD_FILE\" is missing/unreadable/invalid."
++        return 1
++    fi
++
++    while read -a FIELD ; do
++        HW_MODULES+=( "${FIELD[0]}" )
++    done <<< "$MODDATA"
++
+     export HW_MODULES
++    dbg "Found kernel modules:  ${HW_MODULES[*]}"
++}
+ 
+-    # Gather Ethernet info
+-    if [[ -e /proc/net/dev ]]; then
+-        while read -a FIELD ; do
+-            if [[ ${FIELD[0]} == *:* ]]; then
+-                DEV=${FIELD[0]%%:*}
+-                HW_ETH_DEV[${#HW_ETH_DEV[*]}]=$DEV
+-                dbg "Found Ethernet device $DEV"
+-            fi
+-        done < /proc/net/dev
++# Load Ethernet hardware information
++function nhc_hw_eth_gather_data() {
++    local DEV DEVDATA ERR
++    local -a FIELD
++
++    if [[ -n "$1" ]]; then
++        NETDEV_FILE="$1"
++    fi
++    # Set one or both of the below variables to `/proc/net/dev` if empty.
++    if [[ ! -e "${NETDEV_FILE:=${NETDEV_FILE_DEFAULT:=/proc/net/dev}}" ]]; then
++        # If the file doesn't exist, check and see if we should create and fill it.
++        if [[ "${NETDEV_FILE}" != "${NETDEV_FILE_DEFAULT}" && -d "${NETDEV_FILE%/*}" ]]; then
++            # If it doesn't exist and isn't set to the default location, but its `dirname` *does* exist, it's meant to
++            # be a cache file but still needs to be created and populated.
++            ### FIXME: Should NHC be auto-populating this file?
++            ERR=$(cat "${NETDEV_FILE_DEFAULT}" 2>&1 > "${NETDEV_FILE}" && chmod 0644 "${NETDEV_FILE}" 2>&1)
++            RC=$?
++        fi
+     fi
++
++    if [[ -e "${NETDEV_FILE}" && -r "${NETDEV_FILE}" ]]; then
++        DEVDATA=$(< "$NETDEV_FILE")
++        RC=$?
++    else
++        RC=1
++    fi
++    if [[ $RC -ne 0 || -n "${ERR}" ]]; then
++        # FIXME:  Should this cause a die()?
++        die 1 "Unable to read network interface data; specified file \"$NETDEV_FILE\" is missing/unreadable/invalid."
++        return 1
++    fi
++
++    # Gather network interface names
++    while read -a FIELD ; do
++        if [[ ${FIELD[0]} == *:* ]]; then
++            DEV=${FIELD[0]%%:*}
++            HW_ETH_DEV+=( "${DEV}" )
++        fi
++    done <<< "${DEVDATA}"
+     export HW_ETH_DEV
++    dbg "Found network devices:  ${HW_ETH_DEV[*]}"
++}
++
++# Call all of the above functions to load all hardware info
++function nhc_hw_gather_data() {
++    # Call each `_gather_data()` sub-function in order.
++    # FIXME:  How to pass data source as $1 to each function?
++    nhc_hw_cpu_gather_data "$@"
++    nhc_hw_mem_gather_data "$@"
++    nhc_hw_hsn_gather_data "$@"
++    nhc_hw_kmod_gather_data "$@"
++    nhc_hw_eth_gather_data "$@"
+ }
+ 
+ # Check that the socket ($1), core ($2), and thread ($3) counts all match.
+@@ -156,7 +303,7 @@ function check_hw_cpuinfo() {
+     local THREADS=$3
+ 
+     if [[ $HW_SOCKETS -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_cpu_gather_data
+     fi
+ 
+     if [[ -n "$SOCKETS" && $SOCKETS -ne $HW_SOCKETS ]]; then
+@@ -181,7 +328,7 @@ function check_hw_physmem() {
+     local RAM_MIN="$1" RAM_MAX="$2" FUDGE="$3"
+ 
+     if [[ $HW_RAM_TOTAL -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_mem_gather_data
+     fi
+ 
+     nhc_common_parse_size "$RAM_MIN" RAM_MIN
+@@ -214,7 +361,7 @@ function check_hw_swap() {
+     local SWAP_MIN="$1" SWAP_MAX="$2" FUDGE="$3"
+ 
+     if [[ $HW_RAM_TOTAL -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_mem_gather_data
+     fi
+ 
+     nhc_common_parse_size "$SWAP_MIN" SWAP_MIN
+@@ -248,7 +395,7 @@ function check_hw_mem() {
+     local MEM_TOTAL
+ 
+     if [[ $HW_RAM_TOTAL -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_mem_gather_data
+     fi
+ 
+     nhc_common_parse_size "$MEM_MIN" MEM_MIN
+@@ -280,7 +427,7 @@ function check_hw_physmem_free() {
+     local RAM_MINFREE=$1
+ 
+     if [[ $HW_RAM_TOTAL -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_mem_gather_data
+     fi
+ 
+     nhc_common_parse_size "$RAM_MINFREE" RAM_MINFREE
+@@ -297,7 +444,7 @@ function check_hw_swap_free() {
+     local SWAP_MINFREE=$1
+ 
+     if [[ $HW_RAM_TOTAL -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_mem_gather_data
+     fi
+ 
+     nhc_common_parse_size "$SWAP_MINFREE" SWAP_MINFREE
+@@ -315,7 +462,7 @@ function check_hw_mem_free() {
+     local MEM_FREE
+ 
+     if [[ $HW_RAM_TOTAL -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_mem_gather_data
+     fi
+ 
+     nhc_common_parse_size "$MEM_MINFREE" MEM_MINFREE
+@@ -337,12 +484,12 @@ function check_hw_ib() {
+     local i
+ 
+     if [[ ${#HW_IB_STATE[*]} -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_hsn_gather_data
+     fi
+ 
+     if [[ $HW_IB_UMAD_ABI_VER -eq 0 ]]; then
+-	die 1 "$FUNCNAME:  Version mismatch between kernel OFED drivers and userspace OFED libraries."
+-	return 1
++        die 1 "$FUNCNAME:  Version mismatch between kernel OFED drivers and userspace OFED libraries."
++        return 1
+     fi
+ 
+     for ((i=0; i < ${#HW_IB_STATE[*]}; i++)); do
+@@ -372,11 +519,10 @@ function check_hw_gm() {
+     local i j
+ 
+     if [[ ${#HW_MODULES[*]} -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_kmod_gather_data
+     fi
+-
+     if [[ ${#HW_ETH_DEV[*]} -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_eth_gather_data
+     fi
+ 
+     for ((i=0; i < ${#HW_ETH_DEV[*]}; i++)); do
+@@ -399,7 +545,7 @@ function check_hw_eth() {
+     local i
+ 
+     if [[ ${#HW_ETH_DEV[*]} -eq 0 ]]; then
+-        nhc_hw_gather_data
++        nhc_hw_eth_gather_data
+     fi
+ 
+     for ((i=0; i < ${#HW_ETH_DEV[*]}; i++)); do
+@@ -467,7 +613,7 @@ function check_hw_mcelog() {
+             die 1 "$MSG"
+             return 1
+         fi
+-        
++
+         # If none of the above thresholds was met, return success.
+         return 0
+     else
+diff --git a/test/test_lbnl_hw.nhc b/test/test_lbnl_hw.nhc
+index ef607f2..0a73689 100644
+--- a/test/test_lbnl_hw.nhc
++++ b/test/test_lbnl_hw.nhc
+@@ -1,6 +1,11 @@
+ # Tests for lbnl_hw.nhc
+ 
+-plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
++plan $((16+7+7+13+13+13+4+4+4+10+3+7+6)) "lbnl_hw.nhc" && {
++    is "`type -t nhc_hw_cpu_gather_data 2>&1`" 'function' 'nhc_hw_cpu_gather_data() loaded properly'
++    is "`type -t nhc_hw_mem_gather_data 2>&1`" 'function' 'nhc_hw_mem_gather_data() loaded properly'
++    is "`type -t nhc_hw_kmod_gather_data 2>&1`" 'function' 'nhc_hw_kmod_gather_data() loaded properly'
++    is "`type -t nhc_hw_hsn_gather_data 2>&1`" 'function' 'nhc_hw_hsn_gather_data() loaded properly'
++    is "`type -t nhc_hw_eth_gather_data 2>&1`" 'function' 'nhc_hw_eth_gather_data() loaded properly'
+     is "`type -t nhc_hw_gather_data 2>&1`" 'function' 'nhc_hw_gather_data() loaded properly'
+     is "`type -t check_hw_cpuinfo 2>&1`" 'function' 'check_hw_cpuinfo() loaded properly'
+     is "`type -t check_hw_physmem 2>&1`" 'function' 'check_hw_physmem() loaded properly'
+@@ -10,11 +15,71 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     is "`type -t check_hw_swap_free 2>&1`" 'function' 'check_hw_swap_free() loaded properly'
+     is "`type -t check_hw_mem_free 2>&1`" 'function' 'check_hw_mem_free() loaded properly'
+     is "`type -t check_hw_ib 2>&1`" 'function' 'check_hw_ib() loaded properly'
+-    is "`type -t check_hw_gm 2>&1`" 'function' 'check_hw_gm() loaded properly'
+     is "`type -t check_hw_eth 2>&1`" 'function' 'check_hw_eth() loaded properly'
++    is "`type -t check_hw_gm 2>&1`" 'function' 'check_hw_gm() loaded properly'
++
++
++    ###
++    ### CPU Info Tests
++    ###
++
++    ### Auto-generate fake `cpuinfo` file.
++    # NOTE:  NHC doesn't use all the data in /proc/cpuinfo; in fact,
++    # it uses very little of it.  The important items are the
++    # "processor" field (and even there, only the count of them
++    # matters) and the "physical id" field (only the count of unique
++    # values), along with the value of one of the "siblings" lines
++    # (currently the last one, though this may change).  So we don't
++    # need to reproduce an entire cpuinfo file to test our code.
++
++    # These are the "input" (independent) variables:  Socket count,
++    # cores-per-socket count, and threads-per-core count.
++    # We'll use a pair of 38-core Ice Lake-SP Xeon processors, no HT
++    CPUINFO_SOCKETS=2
++    CPUINFO_CPS=40
++    CPUINFO_TPC=1
+ 
++    # The rest of this is generic
++    CPUINFO_SIBLINGS=$(( CPUINFO_CPS * CPUINFO_TPC ))
++    CPUINFO_CORES=$CPUINFO_CPS
++    CPUINFO_PROCS=$(( CPUINFO_CPS * CPUINFO_TPC * CPUINFO_SOCKETS ))
++    CPUDATA_STR=""  # Note DATA, not INFO
++    for ((p=0; p<CPUINFO_PROCS; p++)); do
++        CPUDATA_STR+=$(printf '%-16s: %s\n%-16s: %s\n%-16s: %s\n%-16s: %s\n' \
++                              'processor' "$p" \
++                              'physical id' $((p % CPUINFO_SOCKETS)) \
++                              'siblings' "$CPUINFO_SIBLINGS" \
++                              'cpu cores' "$CPUINFO_CORES")
++    done
+ 
+-    # CPU data:  Dual-socket, 6-core Sandy Bridge system with HT on
++    # For our tests, we'll supply the generated "file" as STDIN
++    CPUINFO_FILE="/dev/stdin"
++    # Check for dual-socket 40-core without HT (e.g., Intel Ice Lake-SP 8380)
++    check_hw_cpuinfo 2 80 80 <<< "$CPUDATA_STR"
++    is $? 0 "Valid test hardware:  2 sockets, 40 cores/socket, 1 thread/core"
++    # Check for dual-socket 6-core HT off (e.g., Intel Patsburg/Sandy Bridge E5-2440)
++    check_hw_cpuinfo 2 12 12 <<< "$CPUDATA_STR"
++    is $? 1 "Invalid test hardware:  2 sockets, 6 cores/socket, 1 thread/core"
++    # Check for dual-socket quad-core with HT (e.g., Intel Nehalem E5520)
++    check_hw_cpuinfo 2 8 16 <<< "$CPUDATA_STR"
++    is $? 1 "Invalid test hardware:  2 sockets, 4 cores/socket, 2 threads/core"
++    # Check for dual-socket quad-core no HT (e.g., Intel Clovertown E5345)
++    check_hw_cpuinfo 2 8 8 <<< "$CPUDATA_STR"
++    is $? 1 "Invalid test hardware:  2 sockets, 4 cores/socket, 1 thread/core"
++    # Check for dual-socket single core (e.g., Intel Lindenhurst with Irwindale Xeons)
++    check_hw_cpuinfo 2 2 2 <<< "$CPUDATA_STR"
++    is $? 1 "Invalid test hardware:  2 sockets, 1 core/socket, 1 thread/core"
++    # Check for single-socket single core (e.g., the year 1998)
++    check_hw_cpuinfo 1 1 1 <<< "$CPUDATA_STR"
++    is $? 1 "Invalid test hardware:  1 socket, 1 core/socket, 1 thread/core"
++    # Idiot-proofing
++    check_hw_cpuinfo 0 0 0 <<< "$CPUDATA_STR"
++    is $? 1 "Invalid test hardware:  Non-existent CPU"
++
++
++    # This time, we'll hard-code the CPU data (like before) and run
++    # all the same checks against the data.  This time it's a
++    # dual-socket, 6-core Sandy Bridge system with HT on
+     HW_SOCKETS=2
+     HW_CORES=12
+     HW_THREADS=24
+@@ -42,24 +107,32 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     is $? 1 "Invalid test hardware:  Non-existent CPU"
+ 
+ 
+-    # Memory data:  32GB RAM, 18GB swap
+-    HW_RAM_FREE=27828840
+-    HW_RAM_TOTAL=32857508
+-    HW_SWAP_FREE=18480520
+-    HW_SWAP_TOTAL=18563064
++    ###
++    ### Memory Tests
++    ###
++
++    # This "fake file" generation is far simpler than the last one!
++    MEMDATA_STR=$(printf '%s\n%s\n%s\n%s\n%s\n' \
++                         'MemTotal:       32761604 kB' 'MemFree:        22582488 kB' 'Buffers:            3152 kB' \
++                         'Cached:          7692684 kB' 'SwapTotal:      16516092 kB' 'SwapFree:       16516092 kB')
++    MEMINFO_FILE="/dev/stdin"
++    #HW_RAM_FREE=27828840
++    #HW_RAM_TOTAL=32857508
++    #HW_SWAP_FREE=18480520
++    #HW_SWAP_TOTAL=18563064
+ 
+     # Check ranges of RAM:  0, exact, max below, at max, in range, at min, min above
+-    check_hw_physmem 0 0
++    check_hw_physmem 0 0 <<< "$MEMDATA_STR"
+     is $? 1 "Bogus RAM range:  0kB - 0kB"
+-    check_hw_physmem 32857508 32857508
++    check_hw_physmem 32761604 32761604
+     is $? 0 "Non-range check equal to actual physical RAM size"
+     check_hw_physmem 1 12
+     is $? 1 "RAM range maximum is below actual physical RAM size"
+-    check_hw_physmem 100 32857508
++    check_hw_physmem 100 32761604
+     is $? 0 "RAM range maximum equal to actual physical RAM size"
+     check_hw_physmem 31GB 33GB
+     is $? 0 "RAM range includes actual physical RAM size"
+-    check_hw_physmem 32857508 99G
++    check_hw_physmem 32761604 99G
+     is $? 0 "RAM range minimum equal to actual physical RAM size"
+     check_hw_physmem 98GB 99GB
+     is $? 1 "RAM range minimum is above actual physical RAM size"
+@@ -79,21 +152,21 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     # Check ranges of swap:  0, exact, max below, at max, in range, at min, min above
+     check_hw_swap 0 0
+     is $? 1 "Bogus swap range:  0kB - 0kB"
+-    check_hw_swap 18563064 18563064
++    check_hw_swap 16516092 16516092
+     is $? 0 "Non-range check equal to actual swap size"
+     check_hw_swap 1 12
+     is $? 1 "Swap range maximum is below actual swap size"
+-    check_hw_swap 100 18563064
++    check_hw_swap 100 16516092
+     is $? 0 "Swap range maximum equal to actual swap size"
+-    check_hw_swap 18000000 19G
++    check_hw_swap 16000000 19G
+     is $? 0 "Swap range includes actual swap size"
+-    check_hw_swap 18563064 99G
++    check_hw_swap 16516092 99G
+     is $? 0 "Swap range minimum equal to actual swap size"
+     check_hw_swap 999999999 99G
+     is $? 1 "Swap range minimum is above actual swap size"
+-    check_hw_swap 18g 18g 10%
++    check_hw_swap 16g 16g 10%
+     is $? 0 "Swap range includes actual swap size given 10% fudge factor"
+-    check_hw_swap 18g 18g 0%
++    check_hw_swap 16g 16g 0%
+     is $? 1 "Swap range does not include actual swap size given 0% fudge factor"
+     check_hw_swap 22g 28g 50%
+     is $? 0 "Swap range includes actual swap size given 50% fudge factor (low end)"
+@@ -107,15 +180,15 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     # Check ranges of memory:  0, exact, max below, at max, in range, at min, min above
+     check_hw_mem 0 0
+     is $? 1 "Bogus memory range:  0kB - 0kB"
+-    check_hw_mem 51420572 51420572
++    check_hw_mem 49277696 49277696
+     is $? 0 "Non-range check equal to actual memory size"
+     check_hw_mem 1 12k
+     is $? 1 "Memory range maximum is below actual memory size"
+-    check_hw_mem 100kB 51420572
++    check_hw_mem 100kB 49277696
+     is $? 0 "Memory range maximum equal to actual memory size"
+-    check_hw_mem 48g 52gb
++    check_hw_mem 45g 52gb
+     is $? 0 "Memory range includes actual memory size"
+-    check_hw_mem 51420572 99gb
++    check_hw_mem 49277696 99gb
+     is $? 0 "Memory range minimum equal to actual memory size"
+     check_hw_mem 99999999 99G
+     is $? 1 "Memory range minimum is above actual memory size"
+@@ -137,7 +210,7 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     is $? 0 "Free RAM - 0 (no) minimum"
+     check_hw_physmem_free 100k
+     is $? 0 "Free RAM - Minimum below actual"
+-    check_hw_physmem_free 27828840
++    check_hw_physmem_free 22582488
+     is $? 0 "Free RAM - Minimum equal to actual"
+     check_hw_physmem_free 99999999
+     is $? 1 "Free RAM - Minimum above actual"
+@@ -147,7 +220,7 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     is $? 0 "Free Swap - 0 (no) minimum"
+     check_hw_swap_free 1mb
+     is $? 0 "Free Swap - Minimum below actual"
+-    check_hw_swap_free 18480520
++    check_hw_swap_free 16516092
+     is $? 0 "Free Swap - Minimum equal to actual"
+     check_hw_swap_free 99999M
+     is $? 1 "Free Swap - Minimum above actual"
+@@ -157,7 +230,7 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     is $? 0 "Free memory - 0 (no) minimum"
+     check_hw_mem_free 1M
+     is $? 0 "Free memory - Minimum below actual"
+-    check_hw_mem_free 46309360
++    check_hw_mem_free 39098580
+     is $? 0 "Free memory - Minimum equal to actual"
+     check_hw_mem_free 99999M
+     is $? 1 "Free memory - Minimum above actual"
+@@ -193,21 +266,26 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     is $? 1 "Present:  Infiniband link on ib1"
+ 
+ 
++    ###
++    ### Kernel Module and Myrinet/Ethernet Tests
++    ###
++
+     # Kernel module data:  Pared down list from 2.6.32
+-    HW_MODULES=( "ext3" "jbd" "vfat" "fat" "pcspkr" "fuse" "ipv6" "cdrom" "3w_sas" "ahci" )
+-    # Ethernet data:  4 1GbE NICs, 1 VM bridge, 1 Myrinet card
+-    HW_ETH_DEV=( "lo" "eth0" "eth1" "eth2" "eth3" "virbr0" "virbr0-nic" "myri0" )
++    KMOD_LIST=( "ext3" "jbd" "vfat" "fat" "pcspkr" "fuse" "ipv6" "cdrom" "3w_sas" "ahci" )
++    KMOD_STR=$(IFS=$'\n' ; printf '%s\n' "${KMOD_LIST[*]}")
++    KMOD_STR+=$'\n'
++    KMOD_FILE="/dev/stdin"
+ 
+-    # Check for Myrinet interfaces.  No gm kernel module is present.
+-    check_hw_gm myri0
+-    is $? 1 "Myrinet interface myri0 is present, but no gm driver loaded."
+-    check_hw_gm myri1
+-    is $? 1 "No myri1 interface present."
++    # Ethernet data:  4 1GbE NICs, 1 VM bridge
++    NETDEV_LIST=( "lo:" "eth0:" "eth1:" "eth2:" "eth3:" "virbr0:" "virbr0-nic:" )
++    NETDEV_STR=$(IFS=$'\n' ; printf '%s\n' "${NETDEV_LIST[*]}")
++    NETDEV_STR+=$'\n'
++    NETDEV_FILE="/dev/stdin"
+ 
+-    # If we "add" the kernel module, it should succeed.
+-    HW_MODULES[${#HWMODULES[*]}]=gm
+-    check_hw_gm myri0
+-    is $? 0 "Myrinet interface myri0 is present and gm driver loaded."
++    # At this point, we need to manually load the above data.  There may be
++    # a better way, but it's not coming to mind at the moment.
++    nhc_hw_kmod_gather_data <<< "${KMOD_STR}"
++    nhc_hw_eth_gather_data <<< "${NETDEV_STR}"
+ 
+     # Check for some NICs
+     check_hw_eth lo
+@@ -223,6 +301,24 @@ plan $((11+7+13+13+13+4+4+4+10+3+6+6)) "lbnl_hw.nhc" && {
+     check_hw_eth virbr0
+     is $? 0 "Ethernet interface virbr0 is present."
+ 
++    # Check for Myrinet interfaces.  No gm kernel module is present.
++    check_hw_gm myri0
++    is $? 1 "Myrinet interface myri0 is present, but no gm driver loaded."
++    check_hw_gm myri1
++    is $? 1 "No myri1 interface present."
++
++    # Now we "insert" the Myrinet kernel module; the tests should now pass.
++    KMOD_STR+=$'gm\n'
++    NETDEV_STR+=$'myri0:\n'
++    nhc_hw_kmod_gather_data <<< "${KMOD_STR}"
++    nhc_hw_eth_gather_data <<< "${NETDEV_STR}"
++
++    check_hw_gm myri0
++    is $? 0 "Myrinet interface myri0 is present and gm driver loaded."
++    check_hw_gm myri1
++    isnt $? 0 "Myrinet interface myri1 is still not present."
++
++
+     # Fake MCE log data
+     MCELOG="echo -e"
+     MCELOG_MAX_CORRECTED_RATE="9"
