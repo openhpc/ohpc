@@ -1,0 +1,26 @@
+--- a/tools/fortran_gen.py	1970-01-01 00:00:00.000000000 +0000
++++ b/tools/fortran_gen.py	2025-04-23 12:42:10.677000000 +0000
+@@ -73,7 +73,22 @@
+ arrays_names_1D = ["ipiv", "values", "work", "W"]
+ 
+ # exclude inline functions from the interface
+-exclude_list = ["inline"]
++exclude_list = [
++        "inline",
++        "plasma_pdsycpy_tile2lapack_band",
++        "plasma_pssycpy_tile2lapack_band",
++        "plasma_claebz2",
++        "plasma_context_detach",
++        "plasma_cstevx2",
++        "plasma_context_attach",
++        "plasma_claneg2",
++        "plasma_zstevx2",
++        "plasma_pchecpy_tile2lapack_band",
++        "plasma_pzhecpy_tile2lapack_band",
++        "plasma_zlaneg2",
++        "plasma_eigt_const",
++        "plasma_zlaebz2",
++        ]
+ 
+ # ------------------------------------------------------------
+ 

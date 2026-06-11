@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt	1970-01-01 00:00:00.000000000 +0000
++++ b/CMakeLists.txt	2025-04-23 12:42:17.501000000 +0000
+@@ -531,6 +531,8 @@
+   set(PLASMA_LIBRARIES ${PLASMA_LINALG_LIBRARIES} ${LUA_LIBRARIES})
+ endif( MATH_LIBRARY )
+ 
++target_link_options(plasma PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/plasma_mod.o)
++
+ target_link_libraries( plasmatest plasma plasma_core_blas ${PLASMA_LIBRARIES} )
+ if ( MAGMA_FOUND )
+     target_link_libraries( plasma plasma_core_blas ${PLASMA_LIBRARIES} ${MAGMA_LIBRARIES} ${CUDA_LIBRARIES} )
