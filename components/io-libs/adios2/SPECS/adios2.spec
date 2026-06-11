@@ -37,6 +37,13 @@ BuildRequires:  bzip2-devel
 %endif
 BuildRequires:  zlib-devel
 
+# Intel compiler on Leap 15 uses GCC 7 libstdc++ which lacks <filesystem>;
+# install newer libstdc++ headers so C++17 std::filesystem is available
+%if "%{compiler_family}" == "intel" && 0%{?suse_version}
+BuildRequires:  gcc12-c++
+BuildRequires:  libstdc++6-devel-gcc12
+%endif
+
 BuildRequires: libtool cmake make
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
