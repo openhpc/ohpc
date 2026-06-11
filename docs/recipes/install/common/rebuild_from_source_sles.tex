@@ -27,7 +27,7 @@ Packages modified locally will not be cryptographically signed like the packages
 sms:~ # (*\install*) rpm-build
 
 # Download SRPM from OpenHPC repository and install locally
-sms001:~ # zypper source-install fftw-gnu9-openmpi4-ohpc
+sms001:~ # zypper source-install fftw-gnu9-openmpi5-ohpc
 
 # Modify spec file as desired
 sms001:~ # cd ~/rpmbuild/SPECS
@@ -39,7 +39,7 @@ sms ~rpmbuild/SPECS # rpmbuild -bb --define "OHPC_CFLAGS '-O3 -mtune=native'" \
 
 # Install the new package
 sms ~rpmbuild/SPECS # zypper --no-gpg-checks in \
-        ../RPMS/ARCH/fftw-gnu9-openmpi4-static-ohpc.2.0-3.3.8-6.1.ARCH.rpm
+        ../RPMS/ARCH/fftw-gnu9-openmpi5-static-ohpc.2.0-3.3.8-6.1.ARCH.rpm
 
 # The new module file appears along side the default
 sms ~ # module avail fftw

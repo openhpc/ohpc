@@ -18,11 +18,11 @@ co-installation and use.
 [test@sms ~]$ sudo (*\install*) rpm-build yum-utils
 
 # Install FFTW's build dependencies
-[test@sms ~]$ sudo yum-builddep fftw-gnu9-openmpi4-ohpc
+[test@sms ~]$ sudo yum-builddep fftw-gnu9-openmpi5-ohpc
 
 # Download SRPM from OpenHPC repository and install locally
-[test@sms ~]$ yumdownloader --source fftw-gnu9-openmpi4-ohpc
-[test@sms ~]$ rpm -i ./fftw-gnu9-openmpi4-ohpc-3.3.8-5.1.ohpc.2.0.src.rpm
+[test@sms ~]$ yumdownloader --source fftw-gnu9-openmpi5-ohpc
+[test@sms ~]$ rpm -i ./fftw-gnu9-openmpi5-ohpc-3.3.8-5.1.ohpc.2.0.src.rpm
 
 # Modify spec file as desired
 [test@sms ~]$ cd ~/rpmbuild/SPECS
@@ -37,7 +37,7 @@ co-installation and use.
 
 # Install the new package
 [test@sms ~rpmbuild/SPECS]$ sudo (*\install*) \
-        ../RPMS/ARCH/fftw-gnu9-openmpi4-static-ohpc.2.0-3.3.8-6.1.ARCH.rpm
+        ../RPMS/ARCH/fftw-gnu9-openmpi5-static-ohpc.2.0-3.3.8-6.1.ARCH.rpm
 
 # The new module file appears along side the default
 [test@sms ~]$ module avail fftw
