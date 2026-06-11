@@ -112,6 +112,11 @@ export MPICXX=mpicxx
 cmake \
     -DCMAKE_INSTALL_PREFIX=%{install_path} \
     -DCMAKE_BUILD_TYPE=Release \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+    -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+    -DCMAKE_Fortran_COMPILER_LAUNCHER=ccache \
+%endif
     -DCMAKE_C_BYTE_ORDER=LITTLE_ENDIAN \
     -DCMAKE_C_COMPILER=${MPICC} \
     -DCMAKE_CXX_COMPILER=${MPICXX} \
