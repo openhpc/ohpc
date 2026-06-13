@@ -56,6 +56,8 @@ distro-packages/sigar/SOURCES/sigar-*.tar.gz
 fs/shine/SOURCES/v*.tar.gz
 fs/lustre-client/SOURCES/lustre-*.tar.gz
 io-libs/adios2/SOURCES/v*.tar.gz
+io-libs/cubew/SOURCES/cubew-*.tar.gz
+io-libs/otf2/SOURCES/otf2-*.tar.gz
 io-libs/hdf5/SOURCES/hdf5-*.tar.bz2
 io-libs/netcdf-cxx/SOURCES/v*.tar.gz
 io-libs/netcdf-fortran/SOURCES/v*.tar.gz
@@ -109,12 +111,16 @@ rms/openpbs/SOURCES/v*.tar.gz
 rms/pmix/SOURCES/pmix-*.tar.bz2
 rms/slurm/SOURCES/slurm-*.tar.bz2
 runtimes/charliecloud/SOURCES/charliecloud-*.tar.gz
+serial-libs/cubelib/SOURCES/cubelib-*.tar.gz
+serial-libs/gotcha/SOURCES/gotcha-*.tar.gz
+serial-libs/opari2/SOURCES/opari2-*.tar.gz
 serial-libs/R/SOURCES/R-*.tar.gz
 serial-libs/gsl/SOURCES/gsl-*.tar.gz
 serial-libs/metis/SOURCES/*.tar.gz
 serial-libs/openblas/SOURCES/openblas-*.tar.gz
 serial-libs/plasma/SOURCES/v*.tar.gz
 serial-libs/plasma/SOURCES/plasma*.tar.gz
+serial-libs/plasma/SOURCES/[0-9]*.tar.gz
 serial-libs/scotch/SOURCES/scotch*.tar.gz
 serial-libs/scotch/SOURCES/scotch*.bz2
 serial-libs/superlu/SOURCES/superlu_*.tar.gz
