@@ -1,45 +1,43 @@
-#!/bin/bash
+#!./common/bats/bin/bats
+# -*-sh-*-
 
-cd "$(dirname "$0")"      || exit 1
+load ./common/test_helper_functions || exit 1
+source ./common/functions           || exit 1
 
-source ./LOCAL_ENV        || exit 1
-export BATS_JUNIT_CLASS=$TEST_DIR
-source ./common/TEST_ENV  || exit 1
-source ./common/functions || exit 1
+setup() {
+    source ./common/TEST_ENV
 
-for i in "$@"; do
-    case $i in
-        -c=*|--compiler=*)
-        COMPILER_FAMILIES="${i#*=}"
-        shift
-        ;;
-        -m=*|--mpi=*)
-        MPI_FAMILIES="${i#*=}"
-        shift
-        ;;
-        -t|--tap)
-        BATS_OPTS="$BATS_OPTS -t"
-        shift
-        ;;
-        -x|--xml)
-        BATS_OPTS="$BATS_OPTS -x"
-        shift
-        ;;
-        *)
-            echo "$0: Unknown option - $*"
-            # unknown option
-        ;;
-    esac
-done
+    # Load required modules
+    module purge
+    module load cmake
+    module load "${GCC_DEFAULT}"
 
-echo " "
-echo " "
-echo "-------------------------------------------------------"
-echo "Dev Tools: CMake tests"
-echo "-------------------------------------------------------"
+    # Create out-of-tree build directory
+    BUILD="$(mktemp --directory)"
+}
 
-module purge               || exit 1
-module load cmake          || exit 1
-module load ${GCC_DEFAULT} || exit 1
+teardown() {
+    # Clean up build directory
+    rm -rf "${BUILD}"
+}
 
-./test_cmake $BATS_OPTS
+@test "[dev-tools/cmake] running cmake --system-information" {
+    cmake --system-information | grep ohpc
+}
+
+@test "[dev-tools/cmake] run cmake" {
+    cmake -S "${BATS_TEST_DIRNAME}"/test -B "${BUILD}"
+}
+
+@test "[dev-tools/cmake] run make on generated Makefile" {
+    cmake -S "${BATS_TEST_DIRNAME}"/test -B "${BUILD}"
+    cd "${BUILD}"
+    VERBOSE=1 make
+}
+
+@test "[dev-tools/cmake] run compiled binary" {
+    cmake -S "${BATS_TEST_DIRNAME}"/test -B "${BUILD}"
+    cd "${BUILD}"
+    make
+    "${BUILD}"/COnly
+}
