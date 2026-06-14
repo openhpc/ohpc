@@ -1,4 +1,8 @@
-lint: codespell-lint ruff-check-lint ruff-format-lint whitespace-lint shellcheck-lint
+lint: codespell-lint gitignore-lint ruff-check-lint ruff-format-lint whitespace-lint shellcheck-lint
+
+gitignore-lint:
+	@echo "Checking .gitignore entries are in alphabetical order"
+	python3 check_gitignore_order.py
 
 codespell-lint:
 	@echo "Running 'codespell' on all spec files"
