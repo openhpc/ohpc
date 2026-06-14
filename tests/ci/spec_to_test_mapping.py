@@ -77,6 +77,7 @@ test_map = {
     "components/parallel-libs/trilinos/SPECS/trilinos.spec": ["trilinos", "", ""],
     "components/perf-tools/extrae/SPECS/extrae.spec": ["extrae", "", ""],
     "components/perf-tools/geopm/SPECS/geopm.spec": ["geopm", "", ""],
+    "components/dev-tools/mpi4py/SPECS/python-mpi4py.spec": ["mpi4py", "", ""],
     "components/perf-tools/likwid/SPECS/likwid.spec": ["likwid", "", ""],
     "components/perf-tools/papi/SPECS/papi.spec": ["papi", "", ""],
     "components/perf-tools/scalasca/SPECS/scalasca.spec": [

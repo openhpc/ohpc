@@ -49,7 +49,8 @@ get_python_vars() {
         export _python=python3
         export python_module_prefix=py3
         if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
-            export python_package_prefix=python3
+            export python_package_prefix=python3.12
+            export _python=python3.12
         else
             export python_package_prefix=python3
         fi
