@@ -8,6 +8,3 @@ F90_test_SOURCES  = test_zpotri.f90
 
 TESTS             = test_module
 TESTS            += rm_execution
-
-
-

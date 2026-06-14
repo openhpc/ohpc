@@ -9,36 +9,34 @@ if [ -s ./common/TEST_ENV ];then
 fi
 
 check_rms
-rm=$RESOURCE_MANAGER
 
-testname="libs/PLASMA"
+setup() {
+    rm=$RESOURCE_MANAGER
+    testname="libs/PLASMA"
+    ARGS=0
 
-ARGS=0
+    if [ "$LMOD_FAMILY_COMPILER" == "acfl" ];then
+        skip "plasma tests segfault with acfl"
+    fi
+    if [ "$LMOD_FAMILY_COMPILER" == "intel" ];then
+        skip "plasma tests segfault with intel"
+    fi
+}
 
-@test "[$testname/C_test] C_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+@test "[libs/PLASMA/C_test] C_test under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s C_test ];then
 	flunk "C_test binary does not exist"
     fi
 
-    run_serial_binary ./C_test $ARGS
+    run_serial_binary -t 5 ./C_test "${ARGS}"
     assert_success
 }
 
-@test "[$testname/F_test] F_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    skip
-    if [ ! -s F_test ];then
-	flunk "F_test binary does not exist"
-    fi
-
-    run_serial_binary ./F_test $ARGS
-    assert_success
-}
-
-@test "[$testname/F90_test] F90_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+@test "[libs/PLASMA/F90_test] F90_test under resource manager ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s F90_test ];then
 	flunk "F90_test binary does not exist"
     fi
 
-    run_serial_binary ./F90_test "< gebrd_example.d"
+    run_serial_binary -t 5 ./F90_test "< gebrd_example.d"
     assert_success
 }

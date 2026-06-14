@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT(plasma, 2.8.0, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.69])
+AC_INIT([plasma],[2.8.0],[https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -12,7 +12,7 @@ AC_MSG_CHECKING([for PLASMA_DIR environment variable])
 if test "x$PLASMA_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([PLASMA_DIR not defined - please load plasma environment.])
+   AC_MSG_ERROR([PLASMA_DIR not defined - please load plasma environment.])
 else
    AC_MSG_RESULT([yes])
 fi
@@ -26,15 +26,15 @@ AC_PROG_FC
 AC_C_CONST
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
-  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -qopenmp"
+  CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS} -DHAVE_MKL -qopenmp"
   FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS} -qopenmp"
   FCFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lplasma_core_blas -lmkl_rt -lpthread -lifcore ${LDFLAGS}"
 else
   CFLAGS="-I ${PLASMA_INC} ${CFLAGS} -I${OPENBLAS_INC} -fopenmp"
   FFLAGS="-I ${PLASMA_INC} ${FFLAGS} -fopenmp"
   FCFLAGS="-I ${PLASMA_INC} ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblas -L${OPENBLAS_LIB} -lopenblas -lpthread -lm ${LDFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lplasma_core_blas -L${OPENBLAS_LIB} -lopenblas -lpthread -lm ${LDFLAGS}"
 fi
 
 
@@ -42,7 +42,7 @@ fi
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
@@ -52,10 +52,10 @@ echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
 echo C compiler.................... : `which $CC`
 echo F77 compiler ................. : `which $F77`
-echo F90 compiler ................. : `which $F77`
-echo 
+echo F90 compiler ................. : `which $FC`
+echo
 echo C compiler flags.............. : $CFLAGS
 echo F77 compiler flags............ : $FFLAGS
 echo F90 compiler flags............ : $FCFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'
