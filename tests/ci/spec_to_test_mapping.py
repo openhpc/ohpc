@@ -36,7 +36,7 @@ test_map = {
         "gcc-c++ ncurses-devel",
     ],
     "components/io-libs/adios2/SPECS/adios2.spec": ["adios2", "", ""],
-    "components/io-libs/hdf5/SPECS/hdf5.spec": ["hdf5", "", "zlib-devel"],
+    "components/io-libs/hdf5/SPECS/hdf5.spec": ["hdf5 phdf5", "", "zlib-devel"],
     "components/parallel-libs/ptscotch/SPECS/ptscotch.spec": [
         "ptscotch",
         "",
