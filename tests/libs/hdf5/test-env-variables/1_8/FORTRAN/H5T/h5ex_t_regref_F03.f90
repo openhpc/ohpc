@@ -71,7 +71,7 @@ PROGRAM main
   CALL h5screate_simple_f(2, dims2, space, hdferr)
   CALL h5dcreate_f(file,dataset2, H5T_STD_I8LE, space, dset2, hdferr)
   f_ptr = C_LOC(wdata2(1,1))
-  CALL h5dwrite_f(dset2, H5T_NATIVE_INTEGER_1, f_ptr, hdferr)
+  CALL h5dwrite_f(dset2, h5kind_to_type(KIND(wdata2(1,1)),H5_INTEGER_KIND), f_ptr, hdferr)
   !
   ! Create reference to a list of elements in dset2.
   !
@@ -154,7 +154,7 @@ PROGRAM main
      CALL h5screate_simple_f(1, dims3, memspace, hdferr)
 
      f_ptr = C_LOC(rdata2(1))
-     CALL h5dread_f( dset2, H5T_NATIVE_INTEGER_1, f_ptr, hdferr, memspace, space)
+     CALL h5dread_f( dset2, h5kind_to_type(KIND(rdata2(1)),H5_INTEGER_KIND), f_ptr, hdferr, memspace, space)
      !
      ! Print the name and region data, close and release resources.
      !

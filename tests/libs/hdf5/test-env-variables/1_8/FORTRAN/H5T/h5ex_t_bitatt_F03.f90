@@ -30,9 +30,10 @@ PROGRAM main
   INTEGER(C_SIGNED_CHAR), DIMENSION(1:dim0, 1:dim1), TARGET :: wdata              ! Write buffer 
   INTEGER(C_SIGNED_CHAR), DIMENSION(:,:), ALLOCATABLE, TARGET :: rdata    ! Read buffer
   INTEGER :: A, B, C, D
-  INTEGER :: i, j
-  INTEGER, PARAMETER :: hex =  Z'00000003'
+  INTEGER(C_SIGNED_CHAR) :: i, j
+  INTEGER(C_SIGNED_CHAR) :: hex
   TYPE(C_PTR) :: f_ptr
+  DATA hex /Z'03'/
   !
   ! Initialize FORTRAN interface.
   !

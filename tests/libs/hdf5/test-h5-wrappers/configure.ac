@@ -14,16 +14,27 @@
 # http://hdfgroup.org/HDF5/doc/Copyright.html.  If you do not have
 # access to either file, you may request a copy from help@hdfgroup.org.
 
-AC_PREREQ(2.59)
-AC_INIT(HDF5-tests-h5-wrappers, 0.10, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.69])
+AC_INIT([HDF5-tests-h5-wrappers],[0.10],[https://github.com/openhpc/ohpc])
 dnl AM_INIT_AUTOMAKE takes a list of options that should be applied to
 dnl every Makefile.am when automake is run.
 AM_INIT_AUTOMAKE([foreign])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 # Turn off automake rebuild rules so make doesn't try to run automake
 # (which probably won't work).
-# AM_MAINTAINER_MODE
+AM_MAINTAINER_MODE
+
+# Argument for static linking
+AC_ARG_ENABLE(shared,
+    [AS_HELP_STRING([--disable-shared],
+        [force static linking])],
+    [if test "$enableval" = "no"; then
+        shared_suffix=""
+    else
+        shared_suffix=" -shlib"
+    fi],
+    [shared_suffix=" -shlib"])
 
 # karl.w.schulz@intel.com (8/28/14)
 # verify we have an hdf5 module loaded - indicated by existence of HDF5_DIR
@@ -32,24 +43,51 @@ AC_MSG_CHECKING([for HDF5_DIR environment variable])
 if test "x$HDF5_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([HDF5_DIR not defined - please load hdf5 environment.])
+   AC_MSG_ERROR([HDF5_DIR not defined - please load hdf5 environment.])
 else
    AC_MSG_RESULT([yes])
 fi
 
-# Sets compiler.
+# Checks and sets HDF5 compiler wrappers.
+if test "x$CC" = "x"; then
+  AC_CHECK_PROG([H5CC_EXISTS], [h5cc], [yes], [no])
+  if test "x$H5CC_EXISTS" = "xyes"; then
+    H5C="h5cc"
+  else
+    AC_CHECK_PROG([H5PCC_EXISTS], [h5pcc], [yes], [no])
+    if test "x$H5PCC_EXISTS" = "xyes"; then
+      H5C="h5pcc"
+    else
+      AC_MSG_ERROR([failed to find h5cc or h5pcc])
+    fi
+  fi
+else
+  H5C="$CC"
+fi
+AC_PROG_CC([$H5C])
 
-CC=h5cc
-FC=h5fc
-CXX=h5c++
+if test "x$FC" = "x"; then
+  AC_CHECK_PROG([H5FC_EXISTS], [h5fc], [yes], [no])
+  if test "x$H5FC_EXISTS" = "xyes"; then
+    H5FC="h5fc"
+  else
+    AC_CHECK_PROG([H5PFC_EXISTS], [h5pfc], [yes], [no])
+    if test "x$H5PFC_EXISTS" = "xyes"; then
+      H5FC="h5pfc"
+    else
+      AC_MSG_ERROR([failed to find h5fc or h5pfc])
+    fi
+  fi
+else
+  H5FC="$FC"
+fi
+AC_PROG_FC([$H5FC])
 
-AC_PROG_CC([h5cc])
-AC_PROG_FC([h5fc])
 AC_PROG_CXX([h5c++])
 
 # Add the suffix to CC for shared linking.  Can't just set as an option
 # because it must be first.
-if test "$shared_suffix" && test ! `echo $CC | grep "$shared_suffix"`; then
+if test "$shared_suffix" && test ! `echo ${CC} | grep "$shared_suffix"`; then
     CC=${CC}${shared_suffix}
 fi
 # Checks for typedefs, structures, and compiler characteristics.
@@ -77,17 +115,42 @@ AM_CONDITIONAL(H5G, test "$H5EX_G")
 AM_CONDITIONAL(H5D, test "$H5EX_D")
 AM_CONDITIONAL(H5T, test "$H5EX_T")
 
+# Determine the version of the HDF5 Library
+AC_MSG_CHECKING([the version of the HDF5 Library])
+
+AC_SUBST([H5_LIBVER])
+H5_LIBVER=$(${H5C} -showconfig | grep -i "HDF5 Version:" | sed 's/^.* //g' | sed 's/[-].*//g')
+AC_MSG_RESULT([$H5_LIBVER])
+
+# Test whether one version ($1) is greater than other ($2).
+function version_gt {
+    test "`printf '%s\n' "$@" | sort -V | head -n 1`" != "$1";
+}
+
 # Check if a Fortran 2003 compiler was used for h5fc
 HAVE_FORTRAN_2003="no"
 
 AC_MSG_CHECKING([if h5fc was compiled with Fortran 2003 enabled])
+
+# if HDF5 version is 1.8 and HDF5 used a 2003 Fortran compiler.
 if (${FC} -showconfig 2>&1 | grep 'Fortran 2003 Compiler: yes') > /dev/null; then
-  HAVE_FORTRAN_2003="yes"	
+  HAVE_FORTRAN_2003="yes"
+else
+# check if HDF5 version is > 1.8
+ if version_gt "$H5_LIBVER" "1.9.0"; then
+     HAVE_FORTRAN_2003="yes"
+ fi
 fi
-echo $HAVE_FORTRAN_2003 
+
+AC_MSG_RESULT([$HAVE_FORTRAN_2003])
+
+FORTRAN_2003_CONDITIONAL_F="X$HAVE_FORTRAN_2003"
+AC_SUBST([FORTRAN_2003_CONDITIONAL_F])
+AM_CONDITIONAL([FORTRAN_2003_CONDITIONAL_F], [test "X$HAVE_FORTRAN_2003" = "Xyes"])
 
 # Check if we have Fortran 2003 and Intel compiler; Intel doesn't work with RECURSIVE used by h5ex_g_traverse.f90
 # The example will not be built when Intel compiler is used (EIP 2011/10/14)
+# Also disable h5ex_g_traverse_F03 for HDF5 >= 2.0 where H5O_info_t%addr was removed.
 
 if test "X$HAVE_FORTRAN_2003" = "Xyes"; then
   HAVE_FORTRAN_2003_NOTINTEL="yes"
@@ -99,11 +162,16 @@ if test "X$HAVE_FORTRAN_2003" = "Xyes"; then
     echo "no"
   else
     echo "yes"
-  fi 
+  fi
 fi
 # End check if we have Fortran 2003 and Intel compiler.
 
-AM_CONDITIONAL([FORTRAN_2003_CONDITIONAL_F], [test "X$HAVE_FORTRAN_2003" = "Xyes"])
+# HDF5 >= 2.0 removed H5O_info_t%addr; h5ex_g_traverse_F03 cannot compile
+if version_gt "$H5_LIBVER" "1.99.0"; then
+  echo "HDF5 >= 2.0 detected, disabling h5ex_g_traverse_F03"
+  HAVE_FORTRAN_2003_NOTINTEL="no"
+fi
+
 AM_CONDITIONAL([FORTRAN_2003_NOTINTEL_CONDITIONAL_F], [test "X$HAVE_FORTRAN_2003_NOTINTEL" = "Xyes"])
 
 # Set subdirectories
@@ -118,6 +186,9 @@ AC_CONFIG_FILES([1_10/C/H5D/test.sh], [chmod +x 1_10/C/H5D/test.sh])
 AC_CONFIG_FILES([1_10/C/H5G/test.sh], [chmod +x 1_10/C/H5G/test.sh])
 AC_CONFIG_FILES([1_10/C/H5T/test.sh], [chmod +x 1_10/C/H5T/test.sh])
 
+CFLAGS="${CFLAGS} -Wno-unused-but-set-variable -Wno-format -Wno-switch"
+FCFLAGS="${FCFLAGS} -Wno-unused-variable -Wno-conversion"
+
 # Configure
 AC_OUTPUT
 
@@ -125,15 +196,12 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
-echo C compiler.................... : `which $CC`
-echo C++ compiler.................. : `which $CXX`
-echo Fortran compiler ............. : `which $FC`
-echo 
+echo C compiler.................... : $(which $H5C)
+echo Fortran compiler ............. : $(which $H5FC)
+echo
 echo C compiler flags.............. : $CFLAGS
-echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FCFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'
-

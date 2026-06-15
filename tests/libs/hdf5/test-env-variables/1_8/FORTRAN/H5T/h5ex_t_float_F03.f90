@@ -17,7 +17,7 @@ PROGRAM main
 
   IMPLICIT NONE
   ! This should map to REAL*8 on most modern processors
-  INTEGER, PARAMETER :: real_kind_15 = SELECTED_REAL_KIND(Fortran_REAL_8)
+  INTEGER, PARAMETER :: real_kind_15 = SELECTED_REAL_KIND(15,307)
 
   CHARACTER(LEN=19), PARAMETER :: filename  = "h5ex_t_float_F03.h5"
   CHARACTER(LEN=3) , PARAMETER :: dataset   = "DS1"

@@ -92,7 +92,8 @@ PROGRAM main
   WRITE(*,'(A)') "Objects in the file:"
   
   funptr = C_FUNLOC(op_func)
-  CALL H5Ovisit_f(file, H5_INDEX_NAME_F, H5_ITER_NATIVE_F, funptr, C_NULL_PTR, ret_value, status)
+  ptr = C_NULL_PTR
+  CALL H5Ovisit_f(file, H5_INDEX_NAME_F, H5_ITER_NATIVE_F, funptr, ptr, ret_value, status)
   !
   ! Close and release resources.
   !
