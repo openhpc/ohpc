@@ -1,5 +1,10 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
+DEFS                    =
+AM_CFLAGS               = -Wno-implicit-function-declaration
+
+LDADD                   = ${LIBS}
+
 TESTS                   = ex1
 check_PROGRAMS          = ex1
 ex1_SOURCES             = ex1.c
@@ -50,4 +55,3 @@ ex12f_SOURCES           = ex12f.f
 
 TESTS                  += test_module
 TESTS                  += rm_execution
-
