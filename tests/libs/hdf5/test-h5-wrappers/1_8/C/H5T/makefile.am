@@ -44,4 +44,5 @@ testfiles/h5ex_t_convert.ddl test.sh
 
 
 AM_CPPFLAGS = '-D H5_USE_18_API'
+CLEANFILES = *.h5 *.data tmp.test
 TESTS = tests

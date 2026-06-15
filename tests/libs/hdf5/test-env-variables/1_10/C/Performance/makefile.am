@@ -12,4 +12,5 @@ noinst_PROGRAMS = h5slabread h5slabwrite h5efc
 EXTRA_DIST = 
 
 TESTS_ENVIRONMENT = sh
-TESTS = 
+CLEANFILES = *.h5 *.data tmp.test
+TESTS =

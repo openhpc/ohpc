@@ -34,4 +34,5 @@ h5ex_t_regref.test h5ex_t_regrefatt.test h5ex_t_commit.test \
 h5ex_t_convert.test test.sh
 
 AM_CPPFLAGS = '-D H5_USE_16_API'
+CLEANFILES = *.h5 *.data tmp.test
 TESTS = test.sh

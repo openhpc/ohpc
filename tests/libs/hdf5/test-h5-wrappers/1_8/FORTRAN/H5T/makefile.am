@@ -80,4 +80,5 @@ if FORTRAN_2003_CONDITIONAL_F
   testfiles/h5ex_t_vlstring_F03.ddl
 endif
 
+CLEANFILES = *.h5 *.data tmp.test
 TESTS = test.sh

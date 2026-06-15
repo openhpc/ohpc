@@ -70,4 +70,5 @@ EXTRA_DIST = testfiles/h5ex_t_arrayatt_F03.tst testfiles/h5ex_t_array_F03.tst te
   test.sh
 
 TESTS_ENVIRONMENT = sh
+CLEANFILES = *.h5 *.data tmp.test
 TESTS = test.sh

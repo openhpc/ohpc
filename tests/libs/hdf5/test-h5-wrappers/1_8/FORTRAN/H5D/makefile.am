@@ -58,4 +58,5 @@ if FORTRAN_2003_CONDITIONAL_F
   EXTRA_DIST += testfiles/h5ex_d_rdwr_kind_F03.tst testfiles/h5ex_d_rdwr_kind_F03.dll
 endif
 
+CLEANFILES = h5ex_d_alloc.h5 h5ex_d_checksum.h5 h5ex_d_chunk.h5 h5ex_d_compact.h5 h5ex_d_extern.h5 h5ex_d_fillval.h5 h5ex_d_gzip.h5 h5ex_d_hyper.h5 h5ex_d_rdwr.h5 h5ex_d_transform.h5 h5ex_d_unlimmod.h5 h5ex_d_extern.data tmp.test
 TESTS = test.sh
