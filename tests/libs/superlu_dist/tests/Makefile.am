@@ -1,18 +1,20 @@
-AM_FCFLAGS = "-I ."
-superlupara.o: superlupara.f90
-superlu_mod.o: superlu_mod.f90
+TESTS_ENVIRONMENT           = BATS_NO_SUMMARY=1
 
-check_PROGRAMS                = superlupara
-superlupara_SOURCES           = superlupara.f90
-superlupara_FCFLAGS           = -c
+AM_CFLAGS = -Wno-maybe-uninitialized -Wno-unused-variable
+AM_FCFLAGS = "-I ." -Wno-unused-variable
 
-check_PROGRAMS               += superlu_mod
-superlu_mod_SOURCES           = superlu_mod.f90
-superlu_mod_FCFLAGS           = -c
+# Fortran .mod files are side effects of compiling the corresponding .f90 sources
+superlupara_mod.mod: superlupara.o
+	@:
+superlu_mod.o: superlupara_mod.mod
+superlu_mod.mod: superlu_mod.o
+	@:
+f_5x5.o: superlu_mod.mod
 
-LIBS = -lstdc++
+AM_LDFLAGS = -Wl,--no-as-needed
+LDADD = -lsuperlu_dist -lptscotcherr -lscotcherr ${OHPC_BLAS} -lstdc++
 
-check_PROGRAMS               += pddrive
+check_PROGRAMS                = pddrive
 pddrive_SOURCES               = pddrive.c dcreate_matrix.c
 
 check_PROGRAMS               += pddrive_ABglobal
@@ -48,6 +50,4 @@ f_5x5_SOURCES                 = f_5x5.f90 superlupara.f90 superlu_mod.f90 sp_ien
 TESTS               = test_module
 TESTS              += rm_execution
 
-
-
-
+DISTCLEANFILES = superlu_mod.mod superlupara_mod.mod
