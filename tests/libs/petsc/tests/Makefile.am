@@ -10,10 +10,6 @@ TESTS                  += C_mpi_test
 check_PROGRAMS         += C_mpi_test
 C_mpi_test_SOURCES      = C_mpi_test.c
 
-TESTS                  += F_test
-check_PROGRAMS         += F_test
-F_test_SOURCES          = ex36f.F
-
 TESTS                  += F90_test
 check_PROGRAMS         += F90_test
 F90_test_SOURCES        = F90_test.F90

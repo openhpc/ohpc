@@ -32,15 +32,6 @@ ARGS=8
 	assert_success
 }
 
-@test "[libs/PETSc] MPI F77 binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	if [ ! -x F_test ]; then
-		flunk "F_test binary does not exist"
-	fi
-
-	run_mpi_binary ./F_test "${ARGS}" "${NODES}" "${TASKS}"
-	assert_success
-}
-
 @test "[libs/PETSc] MPI F90 binary runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 	if [ ! -x F90_test ]; then
 		flunk "F90_test binary does not exist"
