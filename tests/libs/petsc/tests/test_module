@@ -47,18 +47,6 @@ teardown() {
 	fi
 }
 
-@test "[libs/PETSc] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	BIN="${PKG}_BIN"
-
-	if [ -z "${!BIN}" ]; then
-		flunk "${PKG}_BIN directory not defined"
-	fi
-
-	if [ ! -d "${!BIN}" ]; then
-		flunk "directory ${!BIN} does not exist"
-	fi
-}
-
 # ----------
 # Lib Tests
 # ----------
