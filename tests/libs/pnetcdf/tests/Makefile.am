@@ -14,14 +14,14 @@ pres_temp_4D_rd_SOURCES     = testutils.c
 TESTS                      += nctst
 check_PROGRAMS             += nctst
 nctst_CXXFLAGS              = -Wno-write-strings
-nctst_LDFLAGS               = -g -I. nctst.cpp
-nctst_SOURCES               = testutils++.cxx
+nctst_LDFLAGS               = -g -I. nctst.cpp -lstdc++
+nctst_SOURCES               = testutils.c
 
 TESTS                      += test_classic
 check_PROGRAMS             += test_classic
 test_classic_CXXFLAGS       = -Wno-write-strings
-test_classic_LDFLAGS        = -g -I. test_classic.cpp
-test_classic_SOURCES        = testutils++.cxx
+test_classic_LDFLAGS        = -g -I. test_classic.cpp -lstdc++
+test_classic_SOURCES        = testutils.c
 
 TESTS                      += f90tst_parallel
 check_PROGRAMS             += f90tst_parallel

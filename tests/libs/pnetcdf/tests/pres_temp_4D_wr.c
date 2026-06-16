@@ -68,14 +68,6 @@
  * non-zero status. */
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); return 2;}
 
-#define CHECK_ERR { \
-    if (err != NC_NOERR) { \
-        nerrs++; \
-        printf("Error: %s at line %d: %s\n", __FILE__,__LINE__,ncmpi_strerror(err)); \
-    } \
-}
-
-
 int
 main(int argc, char ** argv)
 {

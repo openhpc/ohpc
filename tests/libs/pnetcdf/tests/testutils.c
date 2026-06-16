@@ -2,69 +2,16 @@
  *  Copyright (C) 2003, Northwestern University and Argonne National Laboratory
  *  See COPYRIGHT notice in top-level directory.
  */
-/* $Id: testutils.c 2674 2016-12-04 05:35:09Z wkliao $ */
+/* $Id$ */
 
 
 #include <stdio.h>
 #include <limits.h>
-#include <string.h>
+#include <string.h> /* strchr(), strerror(), strdup(), strcpy(), strlen() */
 #include <mpi.h>
 
 #include <pnetcdf.h>
 #include "testutils.h"
-
-void parse_read_args(int argc, char **argv, int rank, params *p)
-{
-	int err, inlen, outlen;
-	if ( rank == 0 ) {
-		if (argc == 3 ) {
-			strncpy(p->infname, argv[1], PATH_MAX-1);
-			strncpy(p->outfname, argv[2], PATH_MAX-1);
-			p->infname[PATH_MAX-1] = '\0';
-			p->outfname[PATH_MAX-1] = '\0';
-		} else if (argc == 1) {
-			strcpy(p->infname, "../data/test_double.nc");
-			strcpy(p->outfname, "testread.nc");
-		} else {
-			fprintf(stderr, "Usage: %s: <source> <destination>\n", 
-					argv[0]);
-			MPI_Abort(MPI_COMM_WORLD, 1);
-		}
-		inlen = strlen(p->infname);
-		outlen = strlen(p->outfname);
-	}
-
-	err = MPI_Bcast(&inlen, 1, MPI_INT, 0, MPI_COMM_WORLD);
-        MPI_ERR(err)
-	err = MPI_Bcast(p->infname, inlen+1, MPI_CHAR, 0, MPI_COMM_WORLD);
-        MPI_ERR(err)
-	err = MPI_Bcast(&outlen, 1, MPI_INT, 0, MPI_COMM_WORLD);
-        MPI_ERR(err)
-	err = MPI_Bcast(p->outfname, outlen+1, MPI_CHAR, 0, MPI_COMM_WORLD);
-        MPI_ERR(err)
-}
-
-void parse_write_args(int argc, char **argv, int rank, params *p)
-{
-	int err, outlen;
-	if ( rank == 0 ) {
-		if (argc == 2 ) {
-			strncpy(p->outfname, argv[1], PATH_MAX-1);
-			p->outfname[PATH_MAX-1] = '\0';
-		} else if (argc == 1) {
-			strcpy(p->outfname, "testwrite.nc");
-		} else {
-			fprintf(stderr, "Usage: %s: <destination>\n", argv[0]);
-			MPI_Abort(MPI_COMM_WORLD, 1);
-		}
-		outlen = strlen(p->outfname);
-	}
-	err = MPI_Bcast(&outlen, 1, MPI_INT, 0, MPI_COMM_WORLD);
-        MPI_ERR(err)
-	err = MPI_Bcast(p->outfname, outlen+1, MPI_CHAR, 0, MPI_COMM_WORLD);
-        MPI_ERR(err)
-}
-
 
 char* nc_err_code_name(int err)
 {
@@ -225,5 +172,116 @@ char* nc_err_code_name(int err)
               sprintf(unknown_str,"Unknown code %d",err);
     }
     return unknown_str;
+}
+
+/*----< inq_env_hint() >-----------------------------------------------------*/
+int
+inq_env_hint(char *hint_key, char **hint_value)
+{
+    char *warn_str="Warning: skip ill-formed hint set in PNETCDF_HINTS";
+    char *env_str;
+
+    /* read hints set in the environment variable PNETCDF_HINTS, a string of
+     * hints separated by ";" and each hint is in the form of hint=value. E.g.
+     * "cb_nodes=16;cb_config_list=*:6". If this environment variable is set,
+     * this subroutine allocates char array for hint_value, copy the hint
+     * value to it, and return 1. Otherwise it returns 0 with *value set to
+     * NULL.
+     */
+
+    *hint_value = NULL;
+
+    /* get environment variable PNETCDF_HINTS */
+    if ((env_str = getenv("PNETCDF_HINTS")) != NULL) {
+        char *env_str_cpy, *hint, *next_hint, *key, *val, *deli;
+        char *hint_saved=NULL;
+
+        env_str_cpy = strdup(env_str);
+        next_hint = env_str_cpy;
+
+        do {
+            hint = next_hint;
+            deli = strchr(hint, ';');
+            if (deli != NULL) {
+                *deli = '\0'; /* add terminate char */
+                next_hint = deli + 1;
+            }
+            else next_hint = "\0";
+            if (hint_saved != NULL) free(hint_saved);
+
+            /* skip all-blank hint */
+            hint_saved = strdup(hint);
+            if (strtok(hint, " \t") == NULL) continue;
+
+            free(hint_saved);
+            hint_saved = strdup(hint); /* save hint for error message */
+
+            deli = strchr(hint, '=');
+            if (deli == NULL) { /* ill-formed hint */
+                printf("%s: '%s'\n", warn_str, hint_saved);
+                continue;
+            }
+            *deli = '\0';
+
+            /* hint key */
+            key = strtok(hint, "= \t");
+            if (key == NULL || NULL != strtok(NULL, "= \t")) {
+                /* expect one token before = */
+                printf("%s: '%s'\n", warn_str, hint_saved);
+                continue;
+            }
+
+            /* hint value */
+            val = strtok(deli+1, "= \t");
+            if (NULL != strtok(NULL, "= \t")) { /* expect one token before = */
+                printf("%s: '%s'\n", warn_str, hint_saved);
+                continue;
+            }
+            if (strcasecmp(key,hint_key) == 0) {
+                /* inquired hint is found */
+                if (val != NULL) {
+                    *hint_value = (char*) malloc(strlen(val)+1);
+                    strcpy(*hint_value, val);
+                }
+                if (hint_saved != NULL) free(hint_saved);
+                free(env_str_cpy);
+                return (val == NULL) ? 0 : 1;
+            }
+        } while (*next_hint != '\0');
+
+        if (hint_saved != NULL) free(hint_saved);
+        free(env_str_cpy);
+    }
+    return 0;
+}
+
+/* File system types recognized by ROMIO in MPICH 4.0.0 */
+static const char* fstypes[] = {"ufs", "nfs", "xfs", "pvfs2", "gpfs", "panfs", "lustre", "daos", "testfs", "ime", "quobyte", NULL};
+
+/* Return a pointer to filename by removing the file system type prefix name if
+ * there is any.  For example, when filename = "lustre:/home/foo/testfile.nc",
+ * remove "lustre:" to return a pointer to "/home/foo/testfile.nc", so the name
+ * can be used in POSIX open() calls.
+ */
+char* remove_file_system_type_prefix(const char *filename)
+{
+    char *ret_filename = (char*)filename;
+
+    if (filename == NULL) return NULL;
+
+    if (strchr(filename, ':') != NULL) { /* there is a prefix end with ':' */
+        /* check if prefix is one of recognized file system types */
+        int i=0;
+        while (fstypes[i] != NULL) {
+            size_t prefix_len = strlen(fstypes[i]);
+            if (!strncmp(filename, fstypes[i], prefix_len)) { /* found */
+                ret_filename += prefix_len + 1;
+                break;
+            }
+            i++;
+        }
+    }
+
+    return ret_filename;
 }
 
