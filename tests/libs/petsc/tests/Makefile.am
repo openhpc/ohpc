@@ -1,5 +1,7 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
+LDADD                   = ${LIBS}
+
 TESTS                   = C_test
 check_PROGRAMS          = C_test
 C_test_SOURCES          = C_test.c
@@ -18,4 +20,3 @@ F90_test_SOURCES        = F90_test.F90
 
 TESTS                  += test_module
 TESTS                  += rm_execution
-

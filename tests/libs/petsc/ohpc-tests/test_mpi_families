@@ -1,44 +1,39 @@
 #!/bin/bash
 # -*-sh-*-
 
-TEST_LOGS=""
-MAKEFLAGS=""
-status=0
+export MAKEFLAGS=""
+STATUS=0
 
-source ./common/TEST_ENV  || exit 1
+source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
 cd libs/petsc || exit 1
 export BATS_JUNIT_CLASS=PETSc
 
-# bootstrap the local autotools project if necessary
+for COMPILER in ${COMPILER_FAMILIES}; do
+	for MPI in ${MPI_FAMILIES}; do
 
-./bootstrap || exit 1
+		echo " "
+		echo " "
+		echo "-------------------------------------------------------"
+		echo "Libraries: petsc tests: ${COMPILER}-${MPI}"
+		echo "-------------------------------------------------------"
 
-for compiler in $COMPILER_FAMILIES ; do
-    for mpi in $MPI_FAMILIES ; do
+		module purge || exit 1
+		module load prun || exit 1
+		module load "${COMPILER}" || exit 1
+		module load "${MPI}" || exit 1
+		module load petsc || exit 1
 
-	echo " "
-	echo " "
-	echo "-------------------------------------------------------"
-	echo "Libraries: petsc tests: $compiler-$mpi"
-	echo "-------------------------------------------------------"
+		./bootstrap || exit 1
+		./configure || exit 1
+		make clean || exit 1
+		make -k check || STATUS=1
 
-	module purge          || exit 1
-        module load prun      || exit 1
-	module load $compiler || exit 1
-	module load $mpi      || exit 1
-	module load petsc     || exit 1
+		save_logs_mpi_family tests "${COMPILER}" "${MPI}"
 
-	./configure           || exit 1
-	make clean            || exit 1
-	make -k check         || status=1
-
-        save_logs_mpi_family tests $compiler $mpi
-
-	make distclean
-    done
+		make distclean
+	done
 done
 
-exit ${status}
-
+exit "${STATUS}"
