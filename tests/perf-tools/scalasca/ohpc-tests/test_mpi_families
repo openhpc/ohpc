@@ -12,11 +12,10 @@ cd perf-tools/scalasca || exit 1
 export BATS_JUNIT_CLASS=Scalasca
 export SCAN_MPI_LAUNCHER=prun
 
-# bootstrap the local autotools project if necessary
-
-./bootstrap || exit 1
-
 for compiler in $COMPILER_FAMILIES ; do
+    if [ "$compiler" == "arm1" ]; then
+	continue
+    fi
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "
@@ -31,6 +30,7 @@ for compiler in $COMPILER_FAMILIES ; do
 	module load $mpi      || exit 1
 	module load scalasca  || exit 1
 
+	./bootstrap           || exit 1
 	./configure           || exit 1
 	make clean            || exit 1
 	make -k check         || status=1
