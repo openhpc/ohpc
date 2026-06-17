@@ -1,3 +1,5 @@
+TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
+
 check_PROGRAMS              = C_markerAPI
 C_markerAPI_SOURCES         = C-markerAPI.c
 
@@ -6,7 +8,3 @@ F_markerAPI_SOURCES         = F-markerAPI.F90
 
 TESTS                = test_module
 TESTS               += rm_execution
-
-
-
-

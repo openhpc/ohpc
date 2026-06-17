@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT([likwid], [4.3.1], [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.69])
+AC_INIT([likwid],[5.5.1],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -14,7 +14,7 @@ AC_MSG_CHECKING([for LIKWID_LIB environment variable])
 if test "x$LIKWID_LIB" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([LIKWID_LIB not defined - please load likwid environment.])
+   AC_MSG_ERROR([LIKWID_LIB not defined - please load likwid environment.])
 else
    AC_MSG_RESULT([yes])
 fi
@@ -23,7 +23,7 @@ AC_MSG_CHECKING([for LIKWID_INC environment variable])
 if test "x$LIKWID_INC" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([LIKWID_INC not defined - please load likwid environment.])
+   AC_MSG_ERROR([LIKWID_INC not defined - please load likwid environment.])
 else
    AC_MSG_RESULT([yes])
 fi
@@ -36,7 +36,7 @@ FC=" "
 OHPC_COMPILER_FAMILY
 
 # Define include path and library linkage from environment variables
-# which should be provided via module loads. 
+# which should be provided via module loads.
 
 CFLAGS="-fopenmp -DLIKWID_PERFMON -I ${LIKWID_INC} ${CFLAGS} -lm"
 FCFLAGS="-fopenmp -DLIKWID_PERFMON -I ${LIKWID_INC} ${FCFLAGS} -lm"
@@ -52,19 +52,19 @@ AC_PROG_RANLIB
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
 echo C compiler.................... : `which $CC`
 echo F90 compiler.................. : `which $F90`
-echo 
+echo
 echo C compiler flags.............. : $CFLAGS
 echo F90 compiler flags............ : $FCFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'
