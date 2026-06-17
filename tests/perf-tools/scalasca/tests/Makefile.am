@@ -6,3 +6,7 @@ SUBDIRS          += serial
 
 TESTS             = test_module
 TESTS            += rm_execution
+
+distclean-local:
+	rm -f *.input.c *.input.prep.c *.input.prep.c.opari.inc \
+	      *.input.prep.opari.c *.input.prep.opari.i

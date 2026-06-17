@@ -40,3 +40,5 @@ endif
 TESTS            += nctest
 TESTS            += compare_test_files.sh
 TESTS            += test_netcdf
+
+DISTCLEANFILES    = nctest_classic.nc nctest_64bit_offset.nc nctest_netcdf4.nc test2.nc temp.tmp

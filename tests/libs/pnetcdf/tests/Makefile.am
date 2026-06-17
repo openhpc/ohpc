@@ -182,3 +182,5 @@ tst_small_LDFLAGS            = -g -I. tst_small.c
 tst_small_SOURCES            = testutils.c
 
 TESTS                      += rm_execution
+
+DISTCLEANFILES              = *.nc *.nc.* typesizes.mod
