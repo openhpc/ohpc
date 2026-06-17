@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_PREREQ(2.59)
-AC_INIT(slepc, 3.7.4, [https://github.com/openhpc/ohpc])
+AC_PREREQ([2.69])
+AC_INIT([slepc],[3.25.1],[https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -13,13 +13,13 @@ AC_MSG_CHECKING([for SLEPC_DIR environment variable])
 if test "x$SLEPC_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([SLEPC_DIR not defined - please load slepc environment.])
+   AC_MSG_ERROR([SLEPC_DIR not defined - please load slepc environment.])
 else
    AC_MSG_RESULT([yes])
    LMOD_PACKAGE_VER([slepc])
 fi
 
-# set compilers to use MPI toolchain 
+# set compilers to use MPI toolchain
 CC=mpicc
 F77=mpif77
 FC=mpif90
@@ -36,12 +36,12 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   CFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${CFLAGS}"
   FFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
   FCFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
-  LDFLAGS="-L${SLEPC_LIB} -lslepc -L${PETSC_LIB} -lpetsc ${LDFLAGS}"
+  LDFLAGS="-L${SLEPC_LIB} -L${PETSC_LIB} ${LDFLAGS}"
 else
   CFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${CFLAGS}"
   FFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
   FCFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
-  LDFLAGS="-L${SLEPC_LIB} -lslepc -L${PETSC_LIB} -lpetsc ${LDFLAGS}"
+  LDFLAGS="-L${SLEPC_LIB} -L${PETSC_LIB} ${LDFLAGS}"
 fi
 
 
@@ -49,7 +49,7 @@ fi
 AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
-AC_OUTPUT()
+AC_OUTPUT
 
 echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
@@ -60,10 +60,10 @@ echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo F77 compiler ................. : `which $F77`
-echo F90 compiler ................. : `which $F77`
-echo 
+echo F90 compiler ................. : `which $FC`
+echo
 echo C compiler flags.............. : $CFLAGS
 echo F77 compiler flags............ : $FFLAGS
 echo F90 compiler flags............ : $FCFLAGS
-echo 
+echo
 echo '-------------------------------------------------------------------------------------------------------------'

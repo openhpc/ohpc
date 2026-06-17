@@ -35,69 +35,67 @@ int main(int argc,char **argv)
   PetscBool          terse;
   PetscViewer        viewer;
   EPSConvergedReason reason;
-  PetscErrorCode     ierr;
+  PetscCall(SlepcInitialize(&argc,&argv,(char*)0,help));
 
-  ierr = SlepcInitialize(&argc,&argv,(char*)0,help);if (ierr) return ierr;
-
-  ierr = PetscOptionsGetInt(NULL,NULL,"-m",&m,NULL);CHKERRQ(ierr);
+  PetscCall(PetscOptionsGetInt(NULL,NULL,"-m",&m,NULL));
   N = m*(m+1)/2;
-  ierr = PetscPrintf(PETSC_COMM_WORLD,"\nMarkov Model, N=%D (m=%D)\n",N,m);CHKERRQ(ierr);
-  ierr = PetscOptionsGetReal(NULL,NULL,"-seconds",&seconds,NULL);CHKERRQ(ierr);
-  ierr = PetscPrintf(PETSC_COMM_WORLD,"Maximum time for computation is set to %g seconds.\n\n",(double)seconds);CHKERRQ(ierr);
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"\nMarkov Model, N=%" PetscInt_FMT " (m=%" PetscInt_FMT ")\n",N,m));
+  PetscCall(PetscOptionsGetReal(NULL,NULL,"-seconds",&seconds,NULL));
+  PetscCall(PetscPrintf(PETSC_COMM_WORLD,"Maximum time for computation is set to %g seconds.\n\n",(double)seconds));
   deadline = seconds;
-  ierr = PetscTimeAdd(&deadline);CHKERRQ(ierr);
+  PetscCall(PetscTimeAdd(&deadline));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      Compute the operator matrix that defines the eigensystem, Ax=kx
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-  ierr = MatCreate(PETSC_COMM_WORLD,&A);CHKERRQ(ierr);
-  ierr = MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,N,N);CHKERRQ(ierr);
-  ierr = MatSetFromOptions(A);CHKERRQ(ierr);
-  ierr = MatSetUp(A);CHKERRQ(ierr);
-  ierr = MatMarkovModel(m,A);CHKERRQ(ierr);
+  PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
+  PetscCall(MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,N,N));
+  PetscCall(MatSetFromOptions(A));
+  PetscCall(MatSetUp(A));
+  PetscCall(MatMarkovModel(m,A));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 Create the eigensolver and set various options
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-  ierr = EPSCreate(PETSC_COMM_WORLD,&eps);CHKERRQ(ierr);
-  ierr = EPSSetOperators(eps,A,NULL);CHKERRQ(ierr);
-  ierr = EPSSetProblemType(eps,EPS_NHEP);CHKERRQ(ierr);
-  ierr = EPSSetStoppingTestFunction(eps,MyStoppingTest,&deadline,NULL);CHKERRQ(ierr);
-  ierr = EPSSetFromOptions(eps);CHKERRQ(ierr);
+  PetscCall(EPSCreate(PETSC_COMM_WORLD,&eps));
+  PetscCall(EPSSetOperators(eps,A,NULL));
+  PetscCall(EPSSetProblemType(eps,EPS_NHEP));
+  PetscCall(EPSSetStoppingTestFunction(eps,MyStoppingTest,&deadline,NULL));
+  PetscCall(EPSSetFromOptions(eps));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                       Solve the eigensystem
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-  ierr = EPSSolve(eps);CHKERRQ(ierr);
+  PetscCall(EPSSolve(eps));
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Display solution and clean up
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
   /* show detailed info unless -terse option is given by user */
-  ierr = PetscOptionsHasName(NULL,NULL,"-terse",&terse);CHKERRQ(ierr);
+  PetscCall(PetscOptionsHasName(NULL,NULL,"-terse",&terse));
   if (terse) {
-    ierr = EPSErrorView(eps,EPS_ERROR_RELATIVE,NULL);CHKERRQ(ierr);
+    PetscCall(EPSErrorView(eps,EPS_ERROR_RELATIVE,NULL));
   } else {
-    ierr = PetscViewerASCIIGetStdout(PETSC_COMM_WORLD,&viewer);CHKERRQ(ierr);
-    ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_INFO_DETAIL);CHKERRQ(ierr);
-    ierr = EPSGetConvergedReason(eps,&reason);CHKERRQ(ierr);
+    PetscCall(PetscViewerASCIIGetStdout(PETSC_COMM_WORLD,&viewer));
+    PetscCall(PetscViewerPushFormat(viewer,PETSC_VIEWER_ASCII_INFO_DETAIL));
+    PetscCall(EPSGetConvergedReason(eps,&reason));
     if (reason!=EPS_CONVERGED_USER) {
-      ierr = EPSConvergedReasonView(eps,viewer);CHKERRQ(ierr);
-      ierr = EPSErrorView(eps,EPS_ERROR_RELATIVE,viewer);CHKERRQ(ierr);
+      PetscCall(EPSConvergedReasonView(eps,viewer));
+      PetscCall(EPSErrorView(eps,EPS_ERROR_RELATIVE,viewer));
     } else {
-      ierr = EPSGetConverged(eps,&nconv);CHKERRQ(ierr);
-      ierr = PetscViewerASCIIPrintf(viewer,"Eigensolve finished with %D converged eigenpairs; reason=%s\n",nconv,EPSConvergedReasons[reason]);CHKERRQ(ierr);
+      PetscCall(EPSGetConverged(eps,&nconv));
+      PetscCall(PetscViewerASCIIPrintf(viewer,"Eigensolve finished with %" PetscInt_FMT " converged eigenpairs; reason=%s\n",nconv,EPSConvergedReasons[reason]));
     }
-    ierr = PetscViewerPopFormat(viewer);CHKERRQ(ierr);
+    PetscCall(PetscViewerPopFormat(viewer));
   }
-  ierr = EPSDestroy(&eps);CHKERRQ(ierr);
-  ierr = MatDestroy(&A);CHKERRQ(ierr);
-  ierr = SlepcFinalize();
-  return ierr;
+  PetscCall(EPSDestroy(&eps));
+  PetscCall(MatDestroy(&A));
+  PetscCall(SlepcFinalize());
+  return 0;
 }
 
 /*
@@ -124,10 +122,9 @@ PetscErrorCode MatMarkovModel(PetscInt m,Mat A)
   const PetscReal cst = 0.5/(PetscReal)(m-1);
   PetscReal       pd,pu;
   PetscInt        Istart,Iend,i,j,jmax,ix=0;
-  PetscErrorCode  ierr;
 
   PetscFunctionBeginUser;
-  ierr = MatGetOwnershipRange(A,&Istart,&Iend);CHKERRQ(ierr);
+  PetscCall(MatGetOwnershipRange(A,&Istart,&Iend));
   for (i=1;i<=m;i++) {
     jmax = m-i+1;
     for (j=1;j<=jmax;j++) {
@@ -137,31 +134,31 @@ PetscErrorCode MatMarkovModel(PetscInt m,Mat A)
         pd = cst*(PetscReal)(i+j-1);
         /* north */
         if (i==1) {
-          ierr = MatSetValue(A,ix-1,ix,2*pd,INSERT_VALUES);CHKERRQ(ierr);
+          PetscCall(MatSetValue(A,ix-1,ix,2*pd,INSERT_VALUES));
         } else {
-          ierr = MatSetValue(A,ix-1,ix,pd,INSERT_VALUES);CHKERRQ(ierr);
+          PetscCall(MatSetValue(A,ix-1,ix,pd,INSERT_VALUES));
         }
         /* east */
         if (j==1) {
-          ierr = MatSetValue(A,ix-1,ix+jmax-1,2*pd,INSERT_VALUES);CHKERRQ(ierr);
+          PetscCall(MatSetValue(A,ix-1,ix+jmax-1,2*pd,INSERT_VALUES));
         } else {
-          ierr = MatSetValue(A,ix-1,ix+jmax-1,pd,INSERT_VALUES);CHKERRQ(ierr);
+          PetscCall(MatSetValue(A,ix-1,ix+jmax-1,pd,INSERT_VALUES));
         }
       }
       /* south */
       pu = 0.5 - cst*(PetscReal)(i+j-3);
       if (j>1) {
-        ierr = MatSetValue(A,ix-1,ix-2,pu,INSERT_VALUES);CHKERRQ(ierr);
+        PetscCall(MatSetValue(A,ix-1,ix-2,pu,INSERT_VALUES));
       }
       /* west */
       if (i>1) {
-        ierr = MatSetValue(A,ix-1,ix-jmax-2,pu,INSERT_VALUES);CHKERRQ(ierr);
+        PetscCall(MatSetValue(A,ix-1,ix-jmax-2,pu,INSERT_VALUES));
       }
     }
   }
-  ierr = MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
-  ierr = MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
-  PetscFunctionReturn(0);
+  PetscCall(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY));
+  PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
+  PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 /*
@@ -171,18 +168,17 @@ PetscErrorCode MatMarkovModel(PetscInt m,Mat A)
 */
 PetscErrorCode MyStoppingTest(EPS eps,PetscInt its,PetscInt max_it,PetscInt nconv,PetscInt nev,EPSConvergedReason *reason,void *ctx)
 {
-  PetscErrorCode ierr;
   PetscLogDouble now,deadline = *(PetscLogDouble*)ctx;
 
   PetscFunctionBeginUser;
   /* check if usual termination conditions are met */
-  ierr = EPSStoppingBasic(eps,its,max_it,nconv,nev,reason,NULL);CHKERRQ(ierr);
+  PetscCall(EPSStoppingBasic(eps,its,max_it,nconv,nev,reason,NULL));
   if (*reason==EPS_CONVERGED_ITERATING) {
     /* check if deadline has expired */
-    ierr = PetscTime(&now);CHKERRQ(ierr);
+    PetscCall(PetscTime(&now));
     if (now>deadline) *reason = EPS_CONVERGED_USER;
   }
-  PetscFunctionReturn(0);
+  PetscFunctionReturn(PETSC_SUCCESS);
 }
 
 /*TEST

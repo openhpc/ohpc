@@ -149,10 +149,10 @@
      &                   PETSC_VIEWER_DEFAULT,vf,ierr)
       call SVDMonitorSet(svd,SVDMONITORFIRST,vf,                        &
      &                   PetscViewerAndFormatDestroy,ierr)
-      call SVDMonitorConvergedCreate(PETSC_VIEWER_STDOUT_WORLD,         &
-     &                   PETSC_VIEWER_DEFAULT,PETSC_NULL_VEC,vf,ierr)
+      call PetscViewerAndFormatCreate(PETSC_VIEWER_STDOUT_WORLD,        &
+     &                   PETSC_VIEWER_DEFAULT,vf,ierr)
       call SVDMonitorSet(svd,SVDMONITORCONVERGED,vf,                    &
-     &                   SVDMonitorConvergedDestroy,ierr)
+     &                   PetscViewerAndFormatDestroy,ierr)
       call SVDMonitorCancel(svd,ierr)
 
 !     ** call the solver
