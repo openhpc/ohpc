@@ -9,4 +9,3 @@ strat_seq_SOURCES       = test_strat_seq.c
 
 TESTS                  += test_module
 TESTS                  += rm_execution
-
