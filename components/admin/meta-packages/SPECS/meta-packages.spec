@@ -86,6 +86,7 @@ Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
 Requires:  python3
+Requires:  %{python_prefix}
 %if 0%{?rhel}
 Requires:  cairo-devel
 Requires:  libpciaccess
