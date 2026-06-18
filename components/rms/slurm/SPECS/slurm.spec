@@ -27,7 +27,7 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	23.11.11
+Version:	25.05.8
 %global rel	1
 Release:	%{?dist}.1
 Summary:	Slurm Workload Manager
@@ -78,7 +78,10 @@ Patch0: slurm.conf.example.patch
 #  Options that are off by default (enable with --with <opt>)
 %bcond_with cray
 %bcond_with cray_network
+%if 0%{?rhel} < 10
 %bcond_with slurmrestd
+%bcond_with jwt
+%endif
 %bcond_with slurmsmwd
 %bcond_with multiple_slurmd
 %bcond_with ucx
@@ -92,7 +95,6 @@ Patch0: slurm.conf.example.patch
 %bcond_with numa
 %bcond_with pmix
 %bcond_with nvml
-%bcond_with jwt
 %bcond_with yaml
 %bcond_with freeipmi
 
@@ -550,6 +552,8 @@ rm -f %{buildroot}/%{_mandir}/man1/sjobexitmod.1
 rm -f %{buildroot}/%{_mandir}/man1/sjstat.1
 %{buildroot}/%{_bindir}/sjstat --roff > %{buildroot}/%{_mandir}/man1/sjstat.1
 
+mkdir -p --mode=0700 %{buildroot}%{_var}/log/slurm
+
 # Build conditional file list for main package
 LIST=./slurm.files
 touch $LIST
@@ -613,6 +617,11 @@ touch $LIST
 %endif
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 
+# Fix the bash completions links to not contain the build root
+cd %{buildroot}/%{_datadir}/bash-completion/completions/
+for i in s*; do ln -sf slurm_completion.sh $i || true; done
+cd -
+
 %post -n %{pname}-example-configs%{PROJ_DELIM}
 if [ ! -e /etc//munge/munge.key -a -c /dev/urandom ]; then
   /bin/dd if=/dev/urandom bs=1 count=1024 \
@@ -623,6 +632,7 @@ fi
 
 %files -f slurm.files
 %{_datadir}/doc
+%{_datadir}/bash-completion/completions/*
 %{_bindir}/s*
 %exclude %{_bindir}/seff
 %exclude %{_bindir}/sjobexitmod
@@ -654,7 +664,7 @@ fi
 %endif
 
 %{OHPC_PUB}
-%doc AUTHORS CONTRIBUTING.md COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
+%doc AUTHORS CONTRIBUTING.md COPYING DISCLAIMER INSTALL LICENSE.OpenSSL README.md RELEASE_NOTES.md SECURITY.md
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
@@ -710,6 +720,7 @@ fi
 %{_sbindir}/slurmdbd
 %{_libdir}/slurm/accounting_storage_mysql.so
 %{_unitdir}/slurmdbd.service
+%attr(0700,slurm,slurm) %dir %{_var}/log/slurm
 #############################################################################
 
 %files -n %{pname}-libpmi%{PROJ_DELIM}
