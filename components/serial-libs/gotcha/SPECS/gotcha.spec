@@ -17,14 +17,14 @@
 
 Summary:        A library for wrapping function calls to shared libraries
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.0.8
+Version:        1.0.10
 Release:        1%{?dist}
 License:        LGPL-2.1-only
 Group:          %{PROJ_NAME}/serial-libs
 URL:            https://github.com/llnl/gotcha
-Source0:        %{url}/archive/%{version}/%{pname}-%{version}.tar.gz
+Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
 BuildRequires:  check-devel
-BuildRequires:  cmake
+BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  make
 BuildRequires:  gcc-c++
 BuildRequires:  git
@@ -57,6 +57,8 @@ sed -i 's/libcheck.a/libcheck.so/g' test/unit/CMakeLists.txt
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+
+module load cmake
 
 mkdir gotcha-build
 
@@ -93,11 +95,13 @@ popd
 %check
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+module load cmake
 ctest --output-on-failure --test-dir gotcha-build
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+module load cmake
 
 cmake --install gotcha-build --prefix %{buildroot}%{install_path}
 # install documentation
