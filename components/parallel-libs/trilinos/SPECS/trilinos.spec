@@ -63,10 +63,13 @@ Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %if "%{compiler_family}" == "intel" && 0%{?suse_version}
 BuildRequires:  gcc12-c++
 BuildRequires:  libstdc++6-devel-gcc12
+Requires:       libstdc++6-devel-gcc12
 %endif
 %if "%{compiler_family}" == "intel" && 0%{?rhel}
 BuildRequires:  gcc-toolset-12-gcc-c++
 BuildRequires:  gcc-toolset-12-libstdc++-devel
+Requires:       gcc-toolset-12-gcc-c++
+Requires:       gcc-toolset-12-libstdc++-devel
 %endif
 
 #!BuildIgnore: post-build-checks
@@ -256,6 +259,10 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib64
+
+%if "%{compiler_family}" == "intel" && 0%{?rhel}
+setenv          %{PNAME}_CXX_FLAGS  "--gcc-toolchain=/opt/rh/gcc-toolset-12/root/usr"
+%endif
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 # Autoload openblas for gnu and llvm builds
