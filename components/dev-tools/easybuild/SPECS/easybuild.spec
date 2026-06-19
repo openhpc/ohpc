@@ -17,11 +17,11 @@
 
 Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   5.3.0
+Version:   5.3.1
 Release:   %{?dist}.1
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
-URL:       https://easybuilders.github.io/easybuild
+URL:       https://easybuild.io
 
 Source0:   https://pypi.io/packages/source/e/easybuild/easybuild-%{version}.tar.gz
 Source1:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild_easyblocks-%{version}.tar.gz
@@ -76,7 +76,7 @@ module-whatis "Name: %{pname}"
 module-whatis "Version: %{version}"
 module-whatis "Category: system tool"
 module-whatis "Description: %{summary}"
-module-whatis "URL: https://easybuilders.github.io/easybuild/"
+module-whatis "URL: https://easybuild.io"
 
 set             version                 %{version}
 set             home                    \$::env(HOME)
