@@ -61,7 +61,7 @@ AC_PROG_CXX
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
-CXXFLAGS="-I${TRILINOS_INC} -I${TRILINOS_INC}/kokkos ${USER_CXX_FLAGS} -std=c++20 -fopenmp ${CFLAGS} -Wno-unused-but-set-variable"
+CXXFLAGS="-I${TRILINOS_INC} -I${TRILINOS_INC}/kokkos ${USER_CXX_FLAGS} -std=c++20 -fopenmp ${TRILINOS_CXX_FLAGS} ${CFLAGS} -Wno-unused-but-set-variable"
 LDFLAGS="-L${TRILINOS_LIB} -lkokkoscontainers -ltpetra -lteuchoskokkoscomm"
 LDFLAGS="${LDFLAGS} -lteuchoskokkoscompat -lteuchosremainder -lteuchosnumerics"
 LDFLAGS="${LDFLAGS} -lteuchoscomm -lteuchosparameterlist -lteuchosparser -lteuchoscore -lkokkoscore"
