@@ -24,7 +24,7 @@ jobs:
       image: ghcr.io/openhpc/ohpc-analysis:latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - id: files
       uses: Ana06/get-changed-files@v2.3.0
     - name: Validate Changes
@@ -59,7 +59,7 @@ jobs:
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Restore ccache
       uses: actions/cache/restore@v5
       with:
@@ -139,7 +139,7 @@ jobs:
         rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /host/opt/ghc
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Restore ccache
       uses: actions/cache/restore@v5
       with:
@@ -214,7 +214,7 @@ jobs:
     name: AlmaLinux 9 Warewulf Slurm Integration
     needs: build_on_rhel
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
         name: rhel-rpms-gnu15-ubuntu-latest
@@ -260,7 +260,7 @@ jobs:
     steps:
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Restore ccache
       uses: actions/cache/restore@v5
       with:
@@ -325,7 +325,7 @@ jobs:
     steps:
     - name: Update packages
       run: dnf -y update
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Restore ccache
       uses: actions/cache/restore@v5
       with:
@@ -397,7 +397,7 @@ jobs:
     steps:
     - name: Update packages
       run: zypper -n update
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Restore ccache
       uses: actions/cache/restore@v5
       with:
@@ -462,7 +462,7 @@ jobs:
     steps:
     - name: Update packages
       run: zypper -n update
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Restore ccache
       uses: actions/cache/restore@v5
       with:
