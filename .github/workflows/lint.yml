@@ -16,7 +16,7 @@ jobs:
     name: Run markdown linter
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Lint markdown
       uses: DavidAnson/markdownlint-cli2-action@v23
       with:
@@ -35,6 +35,6 @@ jobs:
     container:
       image: ghcr.io/openhpc/ohpc-lint:latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Run ${{ matrix.step }}
       run: make -C tests/ci/ ${{ matrix.step }}-lint

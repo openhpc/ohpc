@@ -31,7 +31,7 @@ jobs:
       openeuler-digest-aarch64: ${{ steps.export.outputs.openeuler-digest-aarch64 }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -123,7 +123,7 @@ jobs:
       leap-digest-aarch64: ${{ steps.export.outputs.leap-digest-aarch64 }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: 3.x
 
@@ -215,7 +215,7 @@ jobs:
       leap-digest-aarch64: ${{ steps.export.outputs.leap-digest-aarch64 }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: 2.x
 
