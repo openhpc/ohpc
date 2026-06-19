@@ -23,6 +23,17 @@ done
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
 
+::: {.tip}
+**Note:** If, once you boot the nodes, you find that the IB interface
+was renamed to something other than ib0 and hence not assigned the
+given IP, you can fix it by setting `--type="Infiniband"` and
+`--hwaddr` to the **literal last 6 bytes** of the interface's
+hardware address (the trailing 6 octets of the 20-byte IPoIB
+address, *not* the 48-bit InfiniBand "compatibility MAC"), so that
+the udev.netname overlay can set the persistent interface name.
+This does not make it PXE/DHCP-boot over IB.
+:::
+
 Finally, rebuild the image to incorporate any optional packages installed into
 the chroot during customization, then rebuild the overlays and update the
 Warewulf configuration.
