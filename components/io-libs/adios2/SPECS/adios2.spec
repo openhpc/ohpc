@@ -19,15 +19,12 @@
 
 Summary: The Adaptable IO System v2 (ADIOS2)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.12.0
+Version: 2.12.1
 Release: 1%{?dist}
 License: Apache License 2.0
 Group:   %{PROJ_NAME}/io-libs
 Url:     https://adios2.readthedocs.io/en/latest/index.html
 Source0: https://github.com/ornladios/ADIOS2/archive/refs/tags/v%{version}.tar.gz
-# Fix DILL arm64 Linux build: use __clear_cache instead of macOS sys_icache_invalidate
-# https://github.com/ornladios/ADIOS2/pull/5006
-Patch0:  adios2-dill-arm64-linux.patch
 AutoReq: no
 
 %if 0%{?suse_version}
@@ -70,7 +67,6 @@ how they process the data.
 
 %prep
 %setup -q -n %{PNAME}-%{version}
-%patch -P0 -p1
 
 %build
 mkdir adios2-build
