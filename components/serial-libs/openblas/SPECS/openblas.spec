@@ -16,7 +16,7 @@
 %define pname openblas
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.3.32
+Version:        0.3.33
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
