@@ -4,35 +4,33 @@
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
 check_rms
-rm=$RESOURCE_MANAGER
-
-testname="libs/SuperLU"
 
 NODES=1
-TASKS=`tasks_count 4`
+TASKS=$(tasks_count 4)
 ARGS=null
+TIMEOUT="00:05:00"
 
-@test "[$testname] C test runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    EXE=./superlu
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[libs/SuperLU] C test runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	EXE=./superlu
+	if [ ! -s $EXE ]; then
+		flunk "$EXE binary does not exist"
+	fi
 
-    run_serial_binary $EXE
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" $EXE
+	assert_success
 }
 
-@test "[$testname] F77 test runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
-    EXE=./superlu
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exist"
-    fi
+@test "[libs/SuperLU] F77 test runs under resource manager (${RESOURCE_MANAGER}/$LMOD_FAMILY_COMPILER)" {
+	EXE=./f77
+	if [ ! -s $EXE ]; then
+		flunk "$EXE binary does not exist"
+	fi
 
-    run_serial_binary "$EXE < g20.rua"
-    assert_success
+	run_serial_binary -t "${TIMEOUT}" "$EXE < g20.rua"
+	assert_success
 }
