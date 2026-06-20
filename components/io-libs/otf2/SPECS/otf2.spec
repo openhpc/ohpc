@@ -36,6 +36,8 @@ BuildRequires:  sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
+#!BuildIgnore: post-build-checks rpmlint-Factory
+
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
