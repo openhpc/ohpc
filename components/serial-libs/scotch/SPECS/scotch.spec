@@ -28,14 +28,17 @@ Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:	Graph, mesh and hypergraph partitioning library
 Group:		%{PROJ_NAME}/serial-libs
 %endif
-Version:	7.0.11
+Version:	7.0.12
 Release:	1%{?dist}
 License:	CeCILL-C
 URL:		https://gitlab.inria.fr/scotch/scotch
 Source0:	https://gitlab.inria.fr/scotch/scotch/-/archive/v%{version}/%{base_pname}-v%{version}.tar.bz2
 Source1:	%{base_pname}-rpmlintrc
 
-BuildRequires:	flex bison make cmake%{PROJ_DELIM}
+%define bison_version 3.8.2
+Source2:	https://ftp.gnu.org/gnu/bison/bison-%{bison_version}.tar.xz
+
+BuildRequires:	flex m4 make cmake%{PROJ_DELIM}
 BuildRequires:	zlib-devel
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:	bzip2-devel
@@ -60,13 +63,22 @@ sparse matrix ordering.
 
 %prep
 %setup -q -n %{base_pname}-v%{version}
+%setup -q -T -D -a 2 -n %{base_pname}-v%{version}
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 module load cmake
 
+# Build a local copy of bison (scotch 7.0.12 requires bison >= 3.8.2)
+cd bison-%{bison_version}
+./configure --prefix=%{_builddir}/%{base_pname}-v%{version}/bison-install
+make %{?_smp_mflags}
+make install
+cd ..
+
 cmake -S . -B build \
+    -DBISON_EXECUTABLE=%{_builddir}/%{base_pname}-v%{version}/bison-install/bin/bison \
     -DCMAKE_INSTALL_PREFIX=%{install_path} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_FLAGS="${CFLAGS} -fPIC" \
