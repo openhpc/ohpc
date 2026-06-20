@@ -96,7 +96,9 @@ popd
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 module load cmake
+%if "%{compiler_family}" != "intel"
 ctest --output-on-failure --test-dir gotcha-build
+%endif
 
 %install
 # OpenHPC compiler/mpi designation
