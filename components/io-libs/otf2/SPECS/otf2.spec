@@ -104,7 +104,7 @@ module load sionlib
 make check || true
 
 %install
-
+export NO_BRP_CHECK_RPATH=true
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
