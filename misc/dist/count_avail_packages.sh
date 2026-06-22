@@ -124,9 +124,19 @@ parse_version() {
 
 parse_version "${version}"
 
+# Set OBS project name based on major version
+# Version 2.x uses "OpenHPC:" while 3.x+ uses "OpenHPC${major_ver}:"
+if [[ ${major_ver} -eq 2 ]]; then
+	obs_project="OpenHPC"
+else
+	obs_project="OpenHPC${major_ver}"
+fi
+
 # Set OS list based on major version
 if [[ ${major_ver} -eq 4 ]]; then
 	oses="EL_10 openEuler_24.03"
+elif [[ ${major_ver} -eq 2 ]]; then
+	oses="EL_8 Leap_15"
 else
 	oses="EL_9 Leap_15 openEuler_22.03"
 fi
@@ -150,12 +160,13 @@ get_all_major_versions() {
 
 	if [[ ${repo_type} == "factory" ]]; then
 		base_url="http://obs.openhpc.community:82/"
-		pattern="^OpenHPC[0-9]"
+		# Match both "OpenHPC:" (version 2) and "OpenHPC3:", "OpenHPC4:", etc.
 		result=$(curl -s "${base_url}" |
 			grep -o 'href="[^"]*"' |
 			sed 's/href="//;s/"//' |
-			grep "${pattern}" |
+			grep '^OpenHPC[0-9]*:' |
 			sed 's/^OpenHPC//;s/:$//' |
+			sed 's/^$/2/' |
 			sort -V)
 	else
 		base_url="http://repos.openhpc.community/.staging/OpenHPC"
@@ -176,7 +187,7 @@ get_all_major_versions() {
 # Function to scan OBS directory listing and find available versions
 get_obs_versions() {
 	local major_version=$1
-	local obs_base="http://obs.openhpc.community:82/OpenHPC${major_version}:"
+	local obs_base="http://obs.openhpc.community:82/${obs_project}:"
 
 	debug "Scanning OBS directory listing: ${obs_base}"
 
@@ -258,7 +269,7 @@ if [[ ${USE_FACTORY} -eq 1 ]]; then
 		available_versions=$(get_obs_versions "${major_ver}")
 		if [[ -z ${available_versions} ]]; then
 			echo "Error: No versions found for major version ${major_ver} in factory repositories" >&2
-			echo "OBS URL tested: http://obs.openhpc.community:82/OpenHPC${major_ver}:/" >&2
+			echo "OBS URL tested: http://obs.openhpc.community:82/${obs_project}:/" >&2
 			echo "" >&2
 			echo "Available OpenHPC major versions in factory:" >&2
 
@@ -296,7 +307,7 @@ if [[ ${USE_FACTORY} -eq 1 ]]; then
 
 		if [[ ${version_found} -eq 0 ]]; then
 			echo "Error: Version ${version} not found in factory repositories" >&2
-			echo "OBS URL tested: http://obs.openhpc.community:82/OpenHPC${major_ver}:/" >&2
+			echo "OBS URL tested: http://obs.openhpc.community:82/${obs_project}:/" >&2
 			echo "" >&2
 
 			if [[ -n ${available_versions} ]]; then
@@ -476,9 +487,9 @@ if [[ ${USE_FACTORY} -eq 1 ]]; then
 		for os in ${oses}; do
 			# Construct factory repository URL: OpenHPC4:/4.0:/Factory/EL_10/ or OpenHPC4:/4.0.1:/Factory/EL_10/
 			if [[ -z ${release_micro_ver} || ${release_micro_ver} == "0" ]]; then
-				repobase="http://obs.openhpc.community:82/OpenHPC${major_ver}:/${release_minor_ver}:/Factory/${os}/"
+				repobase="http://obs.openhpc.community:82/${obs_project}:/${release_minor_ver}:/Factory/${os}/"
 			else
-				repobase="http://obs.openhpc.community:82/OpenHPC${major_ver}:/${clean_release}:/Factory/${os}/"
+				repobase="http://obs.openhpc.community:82/${obs_project}:/${clean_release}:/Factory/${os}/"
 			fi
 
 			# Initialize release/OS totals for markdown
