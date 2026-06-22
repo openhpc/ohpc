@@ -8,8 +8,10 @@
 
 likwid-gnu9-ohpc &
 \multirow{1}{*}{5.0.1} &
-\multirow{3}{\linewidth}{Performance tools for the Linux console. \newline {\color{logoblue} \url{https://github.com/RRZE-HPC/likwid}}}\\
+\multirow{4}{\linewidth}{Performance tools for the Linux console. \newline {\color{logoblue} \url{https://github.com/RRZE-HPC/likwid}}}\\
 \cline{1-2} likwid-gnu12-ohpc &\multirow{2}{*}{5.2.2}
+& \\
+\cline{1-2} likwid-gnu15-ohpc &\multirow{2}{*}{5.5.1}
 & \\
 likwid-intel-ohpc &
 & \\
@@ -26,14 +28,14 @@ Allows safer access to model specific registers (MSRs). \newline { \color{logobl
 % <-- begin entry for omb
 omb-gnu9-impi-ohpc &
 \multirow{4}{*}{5.8} &
-\multirow{12}{\linewidth}{OSU Micro-benchmarks. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu/benchmarks}}}\\
+\multirow{17}{\linewidth}{OSU Micro-benchmarks. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu/benchmarks}}}\\
 omb-gnu9-mpich-ohpc &
 & \\
 omb-gnu9-mvapich2-ohpc &
 & \\
 omb-gnu9-openmpi4-ohpc &
 & \\
-\cline{1-2} omb-gnu12-impi-ohpc &\multirow{8}{*}{6.1}
+\cline{1-2} omb-gnu12-impi-ohpc &\multirow{6}{*}{6.1}
 & \\
 omb-gnu12-mpich-ohpc &
 & \\
@@ -41,13 +43,23 @@ omb-gnu12-mvapich2-ohpc &
 & \\
 omb-gnu12-openmpi4-ohpc &
 & \\
+omb-intel-openmpi4-ohpc &
+& \\
+\cline{1-2} omb-gnu15-impi-ohpc &\multirow{8}{*}{7.5.2}
+& \\
+omb-gnu15-mpich-ohpc &
+& \\
+omb-gnu15-mvapich2-ohpc &
+& \\
+omb-gnu15-openmpi5-ohpc &
+& \\
 omb-intel-impi-ohpc &
 & \\
 omb-intel-mpich-ohpc &
 & \\
 omb-intel-mvapich2-ohpc &
 & \\
-omb-intel-openmpi4-ohpc &
+omb-intel-openmpi5-ohpc &
 & \\
 \hline
 % <-- end entry for omb
@@ -75,8 +87,10 @@ Performance Application Programming Interface. \newline { \color{logoblue} \url{
 
 % <-- begin entry for pdtoolkit
 pdtoolkit-gnu12-ohpc &
-\multirow{3}{*}{3.25.1} &
-\multirow{3}{\linewidth}{PDT is a framework for analyzing source code. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/Research/pdt}}}\\
+\multirow{4}{*}{3.25.1} &
+\multirow{4}{\linewidth}{PDT is a framework for analyzing source code. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/Research/pdt}}}\\
+pdtoolkit-gnu15-ohpc &
+& \\
 pdtoolkit-gnu9-ohpc &
 & \\
 pdtoolkit-intel-ohpc &
@@ -86,8 +100,8 @@ pdtoolkit-intel-ohpc &
 
 % <-- begin entry for scalasca
 scalasca-gnu12-impi-ohpc &
-\multirow{12}{*}{2.5} &
-\multirow{12}{\linewidth}{Toolset for performance analysis of large-scale parallel applications. \newline {\color{logoblue} \url{http://www.scalasca.org}}}\\
+\multirow{9}{*}{2.5} &
+\multirow{17}{\linewidth}{Toolset for performance analysis of large-scale parallel applications. \newline {\color{logoblue} \url{http://www.scalasca.org}}}\\
 scalasca-gnu12-mpich-ohpc &
 & \\
 scalasca-gnu12-mvapich2-ohpc &
@@ -102,13 +116,23 @@ scalasca-gnu9-mvapich2-ohpc &
 & \\
 scalasca-gnu9-openmpi4-ohpc &
 & \\
+scalasca-intel-openmpi4-ohpc &
+& \\
+\cline{1-2} scalasca-gnu15-impi-ohpc &\multirow{8}{*}{2.6.2}
+& \\
+scalasca-gnu15-mpich-ohpc &
+& \\
+scalasca-gnu15-mvapich2-ohpc &
+& \\
+scalasca-gnu15-openmpi5-ohpc &
+& \\
 scalasca-intel-impi-ohpc &
 & \\
 scalasca-intel-mpich-ohpc &
 & \\
 scalasca-intel-mvapich2-ohpc &
 & \\
-scalasca-intel-openmpi4-ohpc &
+scalasca-intel-openmpi5-ohpc &
 & \\
 \hline
 % <-- end entry for scalasca
@@ -116,14 +140,14 @@ scalasca-intel-openmpi4-ohpc &
 % <-- begin entry for scorep
 scorep-gnu9-impi-ohpc &
 \multirow{4}{*}{6.0} &
-\multirow{12}{\linewidth}{Scalable Performance Measurement Infrastructure for Parallel Codes. \newline {\color{logoblue} \url{http://www.vi-hps.org/projects/score-p}}}\\
+\multirow{17}{\linewidth}{Scalable Performance Measurement Infrastructure for Parallel Codes. \newline {\color{logoblue} \url{http://www.vi-hps.org/projects/score-p}}}\\
 scorep-gnu9-mpich-ohpc &
 & \\
 scorep-gnu9-mvapich2-ohpc &
 & \\
 scorep-gnu9-openmpi4-ohpc &
 & \\
-\cline{1-2} scorep-gnu12-impi-ohpc &\multirow{8}{*}{7.1}
+\cline{1-2} scorep-gnu12-impi-ohpc &\multirow{6}{*}{7.1}
 & \\
 scorep-gnu12-mpich-ohpc &
 & \\
@@ -131,13 +155,23 @@ scorep-gnu12-mvapich2-ohpc &
 & \\
 scorep-gnu12-openmpi4-ohpc &
 & \\
+scorep-intel-openmpi4-ohpc &
+& \\
+\cline{1-2} scorep-gnu15-impi-ohpc &\multirow{8}{*}{9.4}
+& \\
+scorep-gnu15-mpich-ohpc &
+& \\
+scorep-gnu15-mvapich2-ohpc &
+& \\
+scorep-gnu15-openmpi5-ohpc &
+& \\
 scorep-intel-impi-ohpc &
 & \\
 scorep-intel-mpich-ohpc &
 & \\
 scorep-intel-mvapich2-ohpc &
 & \\
-scorep-intel-openmpi4-ohpc &
+scorep-intel-openmpi5-ohpc &
 & \\
 \hline
 % <-- end entry for scorep

@@ -26,9 +26,21 @@ netcdf-gnu12-mvapich2-ohpc &
 
 % <-- begin entry for netcdf
 netcdf-gnu12-ohpc &
-\multirow{7}{*}{4.9.0} &
-\multirow{7}{\linewidth}{C Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
+\multirow{3}{*}{4.9.0} &
+\multirow{13}{\linewidth}{C Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}}\\
 netcdf-gnu12-openmpi4-ohpc &
+& \\
+netcdf-intel-openmpi4-ohpc &
+& \\
+\cline{1-2} netcdf-gnu15-impi-ohpc &\multirow{10}{*}{4.10.0}
+& \\
+netcdf-gnu15-mpich-ohpc &
+& \\
+netcdf-gnu15-mvapich2-ohpc &
+& \\
+netcdf-gnu15-ohpc &
+& \\
+netcdf-gnu15-openmpi5-ohpc &
 & \\
 netcdf-intel-impi-ohpc &
 & \\
@@ -38,15 +50,36 @@ netcdf-intel-mvapich2-ohpc &
 & \\
 netcdf-intel-ohpc &
 & \\
-netcdf-intel-openmpi4-ohpc &
+netcdf-intel-openmpi5-ohpc &
 & \\
 \hline
 % <-- end entry for netcdf
 
+% <-- begin entry for otf2
+otf2-gnu15-impi-ohpc &
+\multirow{8}{*}{3.2} &
+\multirow{8}{\linewidth}{Open Trace Format 2 library. \newline {\color{logoblue} \url{http://score-p.org}}}\\
+otf2-gnu15-mpich-ohpc &
+& \\
+otf2-gnu15-mvapich2-ohpc &
+& \\
+otf2-gnu15-openmpi5-ohpc &
+& \\
+otf2-intel-impi-ohpc &
+& \\
+otf2-intel-mpich-ohpc &
+& \\
+otf2-intel-mvapich2-ohpc &
+& \\
+otf2-intel-openmpi5-ohpc &
+& \\
+\hline
+% <-- end entry for otf2
+
 % <-- begin entry for phdf5
 phdf5-gnu12-impi-ohpc &
-\multirow{12}{*}{1.10.8} &
-\multirow{12}{\linewidth}{A general purpose library and file format for storing scientific data. \newline {\color{logoblue} \url{http://www.hdfgroup.org/HDF5}}}\\
+\multirow{9}{*}{1.10.8} &
+\multirow{17}{\linewidth}{A general purpose library and file format for storing scientific data. \newline {\color{logoblue} \url{http://www.hdfgroup.org/HDF5}}}\\
 phdf5-gnu12-mpich-ohpc &
 & \\
 phdf5-gnu12-mvapich2-ohpc &
@@ -61,13 +94,23 @@ phdf5-gnu9-mvapich2-ohpc &
 & \\
 phdf5-gnu9-openmpi4-ohpc &
 & \\
+phdf5-intel-openmpi4-ohpc &
+& \\
+\cline{1-2} phdf5-gnu15-impi-ohpc &\multirow{8}{*}{2.1.1}
+& \\
+phdf5-gnu15-mpich-ohpc &
+& \\
+phdf5-gnu15-mvapich2-ohpc &
+& \\
+phdf5-gnu15-openmpi5-ohpc &
+& \\
 phdf5-intel-impi-ohpc &
 & \\
 phdf5-intel-mpich-ohpc &
 & \\
 phdf5-intel-mvapich2-ohpc &
 & \\
-phdf5-intel-openmpi4-ohpc &
+phdf5-intel-openmpi5-ohpc &
 & \\
 \hline
 % <-- end entry for phdf5
@@ -75,14 +118,14 @@ phdf5-intel-openmpi4-ohpc &
 % <-- begin entry for pnetcdf
 pnetcdf-gnu9-impi-ohpc &
 \multirow{4}{*}{1.12.2} &
-\multirow{12}{\linewidth}{A Parallel NetCDF library (PnetCDF). \newline {\color{logoblue} \url{http://cucis.ece.northwestern.edu/projects/PnetCDF}}}\\
+\multirow{17}{\linewidth}{A Parallel NetCDF library (PnetCDF). \newline {\color{logoblue} \url{http://cucis.ece.northwestern.edu/projects/PnetCDF}}}\\
 pnetcdf-gnu9-mpich-ohpc &
 & \\
 pnetcdf-gnu9-mvapich2-ohpc &
 & \\
 pnetcdf-gnu9-openmpi4-ohpc &
 & \\
-\cline{1-2} pnetcdf-gnu12-impi-ohpc &\multirow{8}{*}{1.12.3}
+\cline{1-2} pnetcdf-gnu12-impi-ohpc &\multirow{6}{*}{1.12.3}
 & \\
 pnetcdf-gnu12-mpich-ohpc &
 & \\
@@ -90,13 +133,23 @@ pnetcdf-gnu12-mvapich2-ohpc &
 & \\
 pnetcdf-gnu12-openmpi4-ohpc &
 & \\
+pnetcdf-intel-openmpi4-ohpc &
+& \\
+\cline{1-2} pnetcdf-gnu15-impi-ohpc &\multirow{8}{*}{1.14.1}
+& \\
+pnetcdf-gnu15-mpich-ohpc &
+& \\
+pnetcdf-gnu15-mvapich2-ohpc &
+& \\
+pnetcdf-gnu15-openmpi5-ohpc &
+& \\
 pnetcdf-intel-impi-ohpc &
 & \\
 pnetcdf-intel-mpich-ohpc &
 & \\
 pnetcdf-intel-mvapich2-ohpc &
 & \\
-pnetcdf-intel-openmpi4-ohpc &
+pnetcdf-intel-openmpi5-ohpc &
 & \\
 \hline
 % <-- end entry for pnetcdf
@@ -104,20 +157,28 @@ pnetcdf-intel-openmpi4-ohpc &
 % <-- begin entry for sionlib
 sionlib-gnu9-impi-ohpc &
 \multirow{4}{*}{1.7.4} &
-\multirow{12}{\linewidth}{Scalable I/O Library for Parallel Access to Task-Local Files. \newline {\color{logoblue} \url{http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html}}}\\
+\multirow{17}{\linewidth}{Scalable I/O Library for Parallel Access to Task-Local Files. \newline {\color{logoblue} \url{http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html}}}\\
 sionlib-gnu9-mpich-ohpc &
 & \\
 sionlib-gnu9-mvapich2-ohpc &
 & \\
 sionlib-gnu9-openmpi4-ohpc &
 & \\
-\cline{1-2} sionlib-gnu12-impi-ohpc &\multirow{8}{*}{1.7.7}
+\cline{1-2} sionlib-gnu12-impi-ohpc &\multirow{13}{*}{1.7.7}
 & \\
 sionlib-gnu12-mpich-ohpc &
 & \\
 sionlib-gnu12-mvapich2-ohpc &
 & \\
 sionlib-gnu12-openmpi4-ohpc &
+& \\
+sionlib-gnu15-impi-ohpc &
+& \\
+sionlib-gnu15-mpich-ohpc &
+& \\
+sionlib-gnu15-mvapich2-ohpc &
+& \\
+sionlib-gnu15-openmpi5-ohpc &
 & \\
 sionlib-intel-impi-ohpc &
 & \\
@@ -126,6 +187,8 @@ sionlib-intel-mpich-ohpc &
 sionlib-intel-mvapich2-ohpc &
 & \\
 sionlib-intel-openmpi4-ohpc &
+& \\
+sionlib-intel-openmpi5-ohpc &
 & \\
 \hline
 % <-- end entry for sionlib
