@@ -66,7 +66,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v7
     - name: Restore ccache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}
@@ -115,7 +115,7 @@ jobs:
         mode: save
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -154,7 +154,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v7
     - name: Restore ccache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -220,7 +220,7 @@ jobs:
         mode: save
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: /var/cache/ccache
         key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}
@@ -299,7 +299,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v7
     - name: Restore ccache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}
@@ -332,7 +332,7 @@ jobs:
           /tmp/empty
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -364,7 +364,7 @@ jobs:
       run: dnf -y update
     - uses: actions/checkout@v7
     - name: Restore ccache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}-build
@@ -403,7 +403,7 @@ jobs:
         fi
     - name: Save ccache
       if: always()
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: /var/cache/ccache
         key: ccache-openeuler-${{ matrix.arch }}-${{ github.sha }}-${{ github.run_id }}
