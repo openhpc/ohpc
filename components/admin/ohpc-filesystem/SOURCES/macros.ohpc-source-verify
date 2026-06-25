@@ -1,0 +1,103 @@
+# OpenHPC source-file integrity verification
+#
+# This macro overrides %__spec_prep_pre so that SHA-512 checksums of
+# source files are verified automatically at the start of every %prep
+# section.  No individual spec files need modification.
+#
+# How it works:
+#   1. The Lua block looks for a "sources" manifest in %{_sourcedir}.
+#      The manifest uses BSD-style sha512sum(1) --tag format:
+#          SHA512 (filename) = <hex-digest>
+#   2. If no manifest exists, verification is silently skipped.
+#      This allows incremental adoption across packages.
+#   3. For each entry the actual SHA-512 is computed via sha512sum(1)
+#      (io.popen is used because RPM's embedded Lua has no crypto lib).
+#   4. On any mismatch or missing file the Lua code emits shell
+#      commands that print the error to stderr and "exit 1", which
+#      aborts the prep script.
+#   5. After the Lua block, %{___build_pre} is expanded so the
+#      original build-environment preamble (RPM_SOURCE_DIR,
+#      RPM_OPT_FLAGS, etc.) is preserved.
+#
+# Bootstrap packages (ohpc_bootstrap 1) do not install ohpc-buildroot
+# so this macro file is simply absent and verification is skipped.
+#
+# Generate the manifest with:  misc/gen_sources_checksum.sh <specfile>
+# Verify manually with:        cd SOURCES && sha512sum --check sources
+
+%__spec_prep_pre %{lua:
+    local src_dir  = rpm.expand("%{_sourcedir}")
+    local manifest = src_dir .. "/sources"
+
+    local fh = io.open(manifest, "r")
+    if not fh then
+        -- no manifest present; nothing to verify
+        return
+    end
+
+    local errors = {}
+    local verified = {}
+
+    for line in fh:lines() do
+        -- skip blank lines and comments
+        if line:match("^%s*$") or line:match("^#") then
+            goto continue
+        end
+
+        -- BSD-style: SHA512 (filename) = <hash>
+        local file, expected = line:match(
+            "^SHA512 %((.+)%) = (%x+)$"
+        )
+        if not file or not expected then
+            table.insert(errors,
+                "malformed line in sources manifest: " .. line)
+            goto continue
+        end
+
+        -- Compute the actual checksum of the source file.
+        local path = src_dir .. "/" .. file
+        local cmd  = 'sha512sum --tag "' .. path .. '"'
+        local ph   = io.popen(cmd)
+        if not ph then
+            table.insert(errors,
+                "failed to execute sha512sum for " .. file)
+            goto continue
+        end
+
+        local output = ph:read("*a")
+        ph:close()
+
+        local actual = output:match("= (%x+)")
+        if not actual then
+            table.insert(errors,
+                "source file missing or unreadable: " .. file)
+            goto continue
+        end
+
+        if actual ~= expected then
+            table.insert(errors,
+                "checksum mismatch for " .. file ..
+                "\\n  expected: " .. expected ..
+                "\\n    actual: " .. actual)
+        else
+            table.insert(verified, file)
+        end
+
+        ::continue::
+    end
+    fh:close()
+
+    if #errors > 0 then
+        local msg = "source verification failed:\\n" ..
+            table.concat(errors, "\\n")
+        -- Emit shell commands that print the error and abort the
+        -- prep script.  We cannot rely on %{error:...} because RPM
+        -- swallows macro-expansion errors in __spec_prep_pre.
+        print("echo 'error: " .. msg .. "' >&2\\n")
+        print("exit 1\\n")
+    elseif #verified > 0 then
+        print("echo 'source verification passed: " ..
+            table.concat(verified, ", ") .. "'\\n")
+    end
+}\
+%{___build_pre}
