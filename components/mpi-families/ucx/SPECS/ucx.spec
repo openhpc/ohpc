@@ -19,6 +19,7 @@
 %bcond_with    ugni
 %bcond_with    xpmem
 %bcond_with    java
+%bcond_with    go
 
 %include %{_sourcedir}/OHPC_macros
 %undefine _annotated_build
@@ -106,6 +107,7 @@ This package was built from '' branch, commit c30b7da.
            %_with_arg xpmem xpmem \
            %_with_arg ugni ugni \
            %_with_arg java java \
+           %_with_arg go go \
            %{?configure_options}
 
 make %{?_smp_mflags} V=1
