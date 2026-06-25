@@ -18,7 +18,7 @@
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        %{major}.%{minor}.%{extra}
-Release:        %{?dist}.1
+Release:        1%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
