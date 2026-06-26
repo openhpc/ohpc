@@ -9,8 +9,8 @@
 #----------------------------------------------------------------------------eh-
 
 Name: ohpc-filesystem
-Version: 4.1
-Release: %{?dist}.3
+Version: 4.2
+Release: %{?dist}.4
 Summary: Common top-level OpenHPC directories
 
 Group:   ohpc/admin
@@ -20,6 +20,10 @@ Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
 Source2: ohpc-find-requires
 Source3: ohpc-find-provides
+# RPM macro that verifies SHA-512 checksums of source files during
+# the prep phase.  Installed into /usr/lib/rpm/macros.d/ by
+# ohpc-buildroot so the check applies to all OpenHPC builds.
+Source4: macros.ohpc-source-verify
 
 BuildArch: noarch
 
@@ -45,6 +49,7 @@ builds.
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/{apps,bin,doc,compiler,libs,moduledeps,modulefiles,mpi}
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs
+mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/macros.d
 
 install -p -m 644 %{SOURCE0} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
@@ -52,6 +57,10 @@ install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 # rpm dependency plugins
 install -p -m 755 %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/rpm
 install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
+
+# source verification macro — hooks into %%__spec_prep_pre to check
+# SHA-512 checksums of source files before %%prep runs
+install -p -m 644 %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/rpm/macros.d
 
 %{__mkdir_p} %{buildroot}/usr/lib/rpm/fileattrs/
 %{__cat} <<EOF > %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
@@ -89,8 +98,10 @@ EOF
 %dir /opt/ohpc/admin/ohpc/
 %dir /usr/lib/rpm/
 %dir /usr/lib/rpm/fileattrs/
+%dir /usr/lib/rpm/macros.d/
 /opt/ohpc/admin/ohpc/OHPC_setup_compiler
 /opt/ohpc/admin/ohpc/OHPC_setup_mpi
 /usr/lib/rpm/ohpc-find-provides
 /usr/lib/rpm/ohpc-find-requires
 /usr/lib/rpm/fileattrs/ohpc.attr
+/usr/lib/rpm/macros.d/macros.ohpc-source-verify
