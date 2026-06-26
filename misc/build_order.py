@@ -115,8 +115,17 @@ for k, v in dependency.items():
 # make a list of the dict
 dep_list = [(k, set(v)) for (k, v) in dependency.items()]
 
-# Sort and print
-for i in topological_sort(dep_list):
+# Sort and print.  ohpc-filesystem.spec is forced to the front because
+# it ships the build infrastructure (macros, dependency plugins) that
+# all other packages rely on, yet bootstrap packages like lmod cannot
+# express a BuildRequires on it without creating a circular dependency.
+result = list(topological_sort(dep_list))
+foundation = "ohpc-filesystem.spec"
+if foundation in result:
+    result.remove(foundation)
+    result.insert(0, foundation)
+
+for i in result:
     # Use full path if available, otherwise fall back to spec filename
     output_path = spec_path_dict.get(i, i)
     print("%s" % output_path, end=" ")
