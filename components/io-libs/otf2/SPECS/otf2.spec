@@ -18,7 +18,7 @@
 
 Summary:        Open Trace Format 2 library
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.1.1
+Version:        3.2
 Release:        1%{?dist}
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/io-libs
@@ -49,13 +49,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %setup -q -n %{pname}-%{version}
 dos2unix doc/examples/otf2_high_level_writer_example.py
-rm build-config/py-compile
-for d in . build-backend build-frontend
-do
-  cd $d
-  autoreconf -f -i -v
-  cd -
-done
 
 %build
 
