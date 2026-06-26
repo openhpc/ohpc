@@ -1392,6 +1392,59 @@ def update_gnu_spec_version(spec_file, result_name, new_version, verbose):
     log_info(f"Updated {spec_file}: %global {macro_name} -> {new_version}")
 
 
+def regenerate_source_checksums(spec_file, verbose):
+    """Download updated sources and regenerate the checksum manifest.
+
+    Called after a spec file version has been updated so that the
+    SHA-512 checksums in SOURCES/sources stay in sync.  Uses
+    misc/get_source.sh to fetch new source tarballs, then runs
+    misc/gen_sources_checksum.sh to write the manifest.  Failures
+    are logged but do not abort the update workflow.
+    """
+    misc_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Download updated source files first
+    get_source = os.path.join(misc_dir, "get_source.sh")
+    if os.path.exists(get_source):
+        spec_basename = os.path.basename(spec_file)
+        log_info(f"Fetching sources for {spec_basename}")
+        try:
+            result = subprocess.run(
+                [get_source, spec_basename],
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode != 0:
+                log_warn(
+                    f"get_source.sh failed for {spec_basename}: "
+                    f"{result.stderr.strip()}"
+                )
+        except FileNotFoundError:
+            debug_info("bash not available to run get_source.sh", verbose)
+
+    # Regenerate checksum manifest
+    gen_checksums = os.path.join(misc_dir, "gen_sources_checksum.sh")
+    if not os.path.exists(gen_checksums):
+        debug_info("gen_sources_checksum.sh not found, skipping", verbose)
+        return
+
+    try:
+        result = subprocess.run(
+            [gen_checksums, spec_file],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            log_info(result.stdout.strip())
+        else:
+            debug_info(
+                f"gen_sources_checksum.sh: {result.stderr.strip()}",
+                verbose,
+            )
+    except FileNotFoundError:
+        debug_info("bash not available to run gen_sources_checksum.sh", verbose)
+
+
 def commit_updates(updated_results):
     """Stage updated spec files and create a signed git commit.
 
@@ -1405,10 +1458,18 @@ def commit_updates(updated_results):
     # Collect unique spec files (preserving order)
     spec_files = list(dict.fromkeys(r.spec_file for r in updated_results))
 
-    # Stage the changed spec files
+    # Also collect any regenerated SOURCES/sources manifests
+    sources_files = []
+    for sf in spec_files:
+        manifest = os.path.join(os.path.dirname(sf), "..", "SOURCES", "sources")
+        manifest = os.path.normpath(manifest)
+        if os.path.exists(manifest):
+            sources_files.append(manifest)
+
+    # Stage the changed spec files and sources manifests
     try:
         subprocess.run(
-            ["git", "add"] + spec_files,
+            ["git", "add"] + spec_files + sources_files,
             check=True,
             capture_output=True,
             text=True,
@@ -1996,6 +2057,7 @@ def main(argv=None):
                         latest,
                         config.verbose,
                     )
+                regenerate_source_checksums(r.spec_file, config.verbose)
                 updated.append(r)
             commit_updates(updated)
 
