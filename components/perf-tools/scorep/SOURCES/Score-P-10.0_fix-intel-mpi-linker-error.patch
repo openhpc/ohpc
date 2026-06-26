@@ -1,0 +1,54 @@
+diff --git a/build-config/common/platforms/compiler-mpi-intel b/build-config/common/platforms/compiler-mpi-intel
+index 25bd829e1..77780d102 100644
+--- a/build-config/common/platforms/compiler-mpi-intel
++++ b/build-config/common/platforms/compiler-mpi-intel
+@@ -14,7 +14,6 @@ MPI_FFLAGS={FFLAGS}
+ MPI_FCFLAGS={FCFLAGS}
+ #MPI_LDFLAGS=
+ #MPI_LIBS=
+-MPILIB_LDFLAGS=-Wc,-nolinkage
+ 
+ # # Scalasca1 settings
+ # MPILIB    = -lmpi
+diff --git a/build-config/common/platforms/compiler-mpi-intel2 b/build-config/common/platforms/compiler-mpi-intel2
+index 9150320b3..354342589 100644
+--- a/build-config/common/platforms/compiler-mpi-intel2
++++ b/build-config/common/platforms/compiler-mpi-intel2
+@@ -14,7 +14,6 @@ MPI_FFLAGS={FFLAGS}
+ MPI_FCFLAGS={FCFLAGS}
+ #MPI_LDFLAGS=
+ #MPI_LIBS=
+-MPILIB_LDFLAGS=-Wc,-nolinkage
+ 
+ # # Scalasca1 settings
+ # MPILIB    =
+diff --git a/build-config/common/platforms/compiler-mpi-intel3 b/build-config/common/platforms/compiler-mpi-intel3
+index 31e6893ea..961c97f1b 100644
+--- a/build-config/common/platforms/compiler-mpi-intel3
++++ b/build-config/common/platforms/compiler-mpi-intel3
+@@ -16,7 +16,6 @@ MPI_FFLAGS={FFLAGS}
+ MPI_FCFLAGS={FCFLAGS}
+ #MPI_LDFLAGS=
+ #MPI_LIBS=
+-MPILIB_LDFLAGS=-Wc,-nolinkage
+ 
+ # # Scalasca1 settings
+ # MPILIB    =
+diff --git a/build-config/common/platforms/compiler-mpi-oneapi b/build-config/common/platforms/compiler-mpi-oneapi
+index 7c55835dc..8467f5fb6 100644
+--- a/build-config/common/platforms/compiler-mpi-oneapi
++++ b/build-config/common/platforms/compiler-mpi-oneapi
+@@ -16,4 +16,3 @@ MPI_FFLAGS={FFLAGS}
+ MPI_FCFLAGS={FCFLAGS}
+ #MPI_LDFLAGS=
+ #MPI_LIBS=
+-MPILIB_LDFLAGS=-Wc,-nolinkage
+diff --git a/build-config/common/platforms/platform-mpi-mic b/build-config/common/platforms/platform-mpi-mic
+index 90ffa8f49..20e4edfe0 100644
+--- a/build-config/common/platforms/platform-mpi-mic
++++ b/build-config/common/platforms/platform-mpi-mic
+@@ -14,4 +14,3 @@ MPI_FFLAGS=-g -O2
+ MPI_FCFLAGS=-g -O2
+ #MPI_LDFLAGS=
+ #MPI_LIBS=
+-MPILIB_LDFLAGS=-Wc,-nolinkage
