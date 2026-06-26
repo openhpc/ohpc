@@ -19,6 +19,7 @@ codespell-lint:
 		misc/build_order.sh \
 		misc/check_for_package_updates.py \
 		misc/dist/count_avail_packages.sh \
+		misc/gen_sources_checksum.sh \
 		tests/ci/spec_to_test_mapping.py \
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
@@ -149,6 +150,7 @@ whitespace-lint:
 		misc/build_order.sh \
 		misc/check_for_package_updates.py \
 		misc/dist/count_avail_packages.sh \
+		misc/gen_sources_checksum.sh \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
@@ -253,6 +255,7 @@ shellcheck-lint:
 		-o require-variable-braces,quote-safe-variables,deprecate-which,avoid-nullary-conditions \
 		../../misc/build_srpm.sh \
 		../../misc/build_order.sh \
+		../../misc/gen_sources_checksum.sh \
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
 		../../misc/dist/count_avail_packages.sh \
@@ -452,6 +455,7 @@ shfmt-lint:
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../misc/build_order.sh \
 		../../misc/dist/count_avail_packages.sh \
+		../../misc/gen_sources_checksum.sh \
 		../../tests/common/functions \
 		../../tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
 		../../tests/dev-tools/valgrind/ohpc-tests/test_compiler_families \
