@@ -16,6 +16,7 @@ codespell-lint:
 		tests/ci/integration-test.sh \
 		tests/ci/run_build.py \
 		misc/build_order.py \
+		misc/gen_sources_checksum.sh \
 		tests/ci/spec_to_test_mapping.py \
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
@@ -116,6 +117,7 @@ ruff-format-lint:
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
 	cd ../../; ! git --no-pager grep -E '\s+$$' \*.spec \
+		misc/gen_sources_checksum.sh \
 		components/admin/prun/SOURCES/prun \
 		components/compiler-families/intel-compilers-devel/SOURCES/ohpc-update-modules-intel \
 		components/mpi-families/impi-devel/SOURCES/ohpc-update-modules-impi \
@@ -196,6 +198,7 @@ shellcheck-lint:
 		-o require-variable-braces,quote-safe-variables,deprecate-which,avoid-nullary-conditions \
 		../../misc/build_srpm.sh \
 		../../misc/build_order.sh \
+		../../misc/gen_sources_checksum.sh \
 		../../misc/get_source.sh \
 		../../misc/shell-functions \
 		../../tests/ci/integration-test.sh \
@@ -352,6 +355,7 @@ shfmt-lint:
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../misc/build_order.sh \
 		../../misc/dist/count_avail_packages.sh \
+		../../misc/gen_sources_checksum.sh \
 		../../tests/common/functions \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
 		../../tests/libs/phdf5/ohpc-tests/test_mpi_families \
