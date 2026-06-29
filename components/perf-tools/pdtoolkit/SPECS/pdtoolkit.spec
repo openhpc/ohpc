@@ -47,6 +47,11 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+# ppc64le: PDToolkit configure expects ibm64linux/bin to exist before running
+%ifarch ppc64le
+mkdir -p ibm64linux/bin
+%endif
+
 ./configure -prefix=%buildroot%{install_path} \
         -useropt=-fPIC \
 %if "%{compiler_family}" == "intel"
@@ -77,6 +82,9 @@ rm -f %buildroot%{install_path}/.last_config
 %ifarch x86_64
 %define arch_dir x86_64
 %endif
+%ifarch ppc64le
+%define arch_dir ibm64linux
+%endif
 
 pushd %buildroot%{install_path}/%{arch_dir}/lib
 ar x libpdb.a
@@ -92,17 +100,17 @@ ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
 %endif
 rm -f edg44-c-roseparse
-%ifnarch aarch64
+%ifnarch aarch64 ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 %endif
 rm -f edg44-cxx-roseparse
-%ifnarch aarch64
+%ifnarch aarch64 ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 %endif
 rm -f edg44-upcparse
-%ifnarch aarch64
+%ifnarch aarch64 ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 %endif
@@ -115,8 +123,12 @@ ln -s  ../../contrib/rose/roseparse/roseparse
 ln -s  ../../contrib/maqao/maqao/smaqao
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
 %endif
-sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
-sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
+if [ -f ../../contrib/rose/rose-header-gen/config/depend.pl ]; then
+  sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
+fi
+if [ -f ../../contrib/rose/rose-header-gen/config/cmp.pl ]; then
+  sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
+fi
 rm -f ../../contrib/rose/rose-header-gen/config.log
 rm -f ../../contrib/rose/rose-header-gen/config.status
 popd
