@@ -1396,7 +1396,7 @@ def regenerate_source_checksums(spec_file, verbose):
     """Download updated sources and regenerate the checksum manifest.
 
     Called after a spec file version has been updated so that the
-    SHA-512 checksums in SOURCES/sources stay in sync.  Uses
+    SHA-512 checksums in SOURCES/ohpc.checksums stay in sync.  Uses
     misc/get_source.sh to fetch new source tarballs, then runs
     misc/gen_sources_checksum.sh to write the manifest.  Failures
     are logged but do not abort the update workflow.
@@ -1458,10 +1458,10 @@ def commit_updates(updated_results):
     # Collect unique spec files (preserving order)
     spec_files = list(dict.fromkeys(r.spec_file for r in updated_results))
 
-    # Also collect any regenerated SOURCES/sources manifests
+    # Also collect any regenerated SOURCES/ohpc.checksums manifests
     sources_files = []
     for sf in spec_files:
-        manifest = os.path.join(os.path.dirname(sf), "..", "SOURCES", "sources")
+        manifest = os.path.join(os.path.dirname(sf), "..", "SOURCES", "ohpc.checksums")
         manifest = os.path.normpath(manifest)
         if os.path.exists(manifest):
             sources_files.append(manifest)

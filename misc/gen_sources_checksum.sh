@@ -12,7 +12,7 @@
 #   3. Looks for matching files in the SOURCES/ directory (located
 #      relative to the spec via the standard SPECS/../SOURCES layout).
 #   4. Computes SHA-512 checksums in BSD-style "sha512sum --tag" format
-#      and writes them to SOURCES/sources.
+#      and writes them to SOURCES/ohpc.checksums.
 #
 # The resulting manifest is consumed at build time by the
 # macros.ohpc-source-verify RPM macro (shipped in ohpc-buildroot)
@@ -41,7 +41,7 @@ sources_dir="${spec_dir}/../SOURCES"
 [[ -d "${sources_dir}" ]] || die "SOURCES directory not found: ${sources_dir}"
 sources_dir="$(cd "${sources_dir}" && pwd)"
 
-manifest="${sources_dir}/sources"
+manifest="${sources_dir}/ohpc.checksums"
 
 # Collect Source file basenames from the parsed spec.
 # "rpmspec --parse" expands all macros/conditionals so we see the
@@ -63,7 +63,8 @@ for url in "${source_urls[@]}"; do
 	# OHPC_macros is a shared file injected via %include and is not a
 	# package-specific source; skip it to avoid false mismatches when
 	# the global copy is updated independently.
-	[[ "${base}" == "OHPC_macros" ]] && continue
+	# ohpc.checksums is the manifest itself (Source43); skip it.
+	[[ "${base}" == "OHPC_macros" || "${base}" == "ohpc.checksums" ]] && continue
 	path="${sources_dir}/${base}"
 	if [[ -f "${path}" ]]; then
 		# Write BSD-style checksum with path stripped to bare filename

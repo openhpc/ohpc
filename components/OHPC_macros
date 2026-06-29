@@ -48,14 +48,16 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # this sets Source42 for all SPEC files which include OHPC_macros.
 Source42: OHPC_macros
 
-# Pull in the SHA-512 checksum manifest (SOURCES/sources) when present.
-# The manifest is consumed by the macros.ohpc-source-verify RPM macro
-# (installed by ohpc-buildroot) to verify source file integrity at the
-# start of %prep.  The conditional avoids build failures for packages
-# that have not yet adopted source verification.
+# Pull in the SHA-512 checksum manifest (SOURCES/ohpc.checksums) when
+# present.  The manifest is consumed by the macros.ohpc-source-verify
+# RPM macro (installed by ohpc-buildroot) to verify source file integrity
+# at the start of %prep.  The conditional avoids build failures for
+# packages that have not yet adopted source verification.
+# Note: the file is named "ohpc.checksums" (not "sources") to avoid
+# collisions with COPR's lookaside-cache "sources" file.
 # See also: misc/gen_sources_checksum.sh
-%if %(test -e %{_sourcedir}/sources && echo 1 || echo 0)
-Source43: sources
+%if %(test -e %{_sourcedir}/ohpc.checksums && echo 1 || echo 0)
+Source43: ohpc.checksums
 %endif
 
 # OpenHPC packages also require ohpc-buildroot to access macros used to define
