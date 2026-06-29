@@ -150,7 +150,11 @@ EOF
 %ifarch aarch64 %{arm}
      architecture="arm" \
 %else
+%ifarch ppc64le
+     architecture="power" \
+%else
      architecture="x86" \
+%endif
 %endif
      threading="multi" \
      link="shared" \
