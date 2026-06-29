@@ -146,12 +146,17 @@ elif [ "${arch}" == "ppc64le" ]; then
 	ARCH_OPTS="-mcpu=power9 -mtune=power9"
 fi
 
+TUNE_OPTS=""
+if [ "${arch}" != "ppc64le" ]; then
+	TUNE_OPTS="-mtune=generic"
+fi
+
 if [ "${toolset}" == "gcc" ]; then
-	DEFAULT_OPTS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -mtune=generic ${ARCH_OPTS}"
+	DEFAULT_OPTS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches ${TUNE_OPTS} ${ARCH_OPTS}"
 elif [ "${toolset}" == "intel" ]; then
-	DEFAULT_OPTS="-O3 -g -fexceptions -fstack-protector-strong -mtune=generic ${ARCH_OPTS}"
+	DEFAULT_OPTS="-O3 -g -fexceptions -fstack-protector-strong ${TUNE_OPTS} ${ARCH_OPTS}"
 elif [ "${toolset}" == "arm" ]; then
-	DEFAULT_OPTS="-O3 -g -Wall -fexceptions -fstack-protector-strong -mtune=generic"
+	DEFAULT_OPTS="-O3 -g -Wall -fexceptions -fstack-protector-strong ${TUNE_OPTS}"
 fi
 
 if [ -z "${OHPC_CFLAGS}" ]; then
