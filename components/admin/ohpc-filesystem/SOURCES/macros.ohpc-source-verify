@@ -5,7 +5,7 @@
 # section.  No individual spec files need modification.
 #
 # How it works:
-#   1. The Lua block looks for a "sources" manifest in %{_sourcedir}.
+#   1. The Lua block looks for an "ohpc.checksums" manifest in %{_sourcedir}.
 #      The manifest uses BSD-style sha512sum(1) --tag format:
 #          SHA512 (filename) = <hex-digest>
 #   2. If no manifest exists, verification is silently skipped.
@@ -27,7 +27,7 @@
 
 %__spec_prep_pre %{lua:
     local src_dir  = rpm.expand("%{_sourcedir}")
-    local manifest = src_dir .. "/sources"
+    local manifest = src_dir .. "/ohpc.checksums"
 
     local fh = io.open(manifest, "r")
     if not fh then
