@@ -239,7 +239,7 @@ Version %{version}
 whatis("Name: GNU Compiler Collection")
 whatis("Version: %{version}")
 whatis("Category: compiler, runtime support")
-whatis("Description: GNU Compiler Family (C/C++/Fortran for x86_64)")
+whatis("Description: GNU Compiler Family (C/C++/Fortran)")
 whatis("URL: http://gcc.gnu.org/")
 
 local version = "%{version}"
