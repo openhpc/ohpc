@@ -32,7 +32,10 @@ Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/num
 Patch1:         numpy-icx.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
-BuildRequires:  fdupes gcc
+BuildRequires:  gcc
+%if 0%{?suse_version}
+BuildRequires:  fdupes
+%endif
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -53,6 +56,35 @@ basic linear algebra and random number generation.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch -P1 -p1
+%ifarch ppc64le
+# Fix VSX3 intrinsics used when building with the -mcpu=power9 baseline (numpy PR #29627).
+# Applied as asserted in-place edits rather than a context patch: each substitution is
+# checked so a numpy %{version} layout drift fails the build loudly instead of silently
+# miscompiling the VSX3 half-precision paths (a no-op sed would otherwise pass unnoticed).
+_assert_patched() {
+	# $1 = file, $2 = literal string that MUST be present after the edit
+	if ! grep -qF -- "$2" "$1"; then
+		echo "ERROR: ppc64le numpy VSX3 fix did not apply to $1 (numpy %{version} drift?)" >&2
+		exit 1
+	fi
+}
+
+sed -i "s|args: {'val': '-mcpu=power8', 'match': '.*vsx'}|args: ['-mcpu=power8', '-mvsx']|" meson_cpu/ppc64/meson.build
+_assert_patched meson_cpu/ppc64/meson.build "args: ['-mcpu=power8', '-mvsx']"
+
+sed -i 's|defined(NPY_HAVE_VSX3) && defined(NPY_HAVE_VSX_ASM)|defined(NPY_HAVE_VSX3) \&\& defined(NPY_HAVE_VSX_ASM) \&\& defined(NPY__CPU_TARGET_VSX3)|g' numpy/_core/src/common/half.hpp
+sed -i 's|defined(NPY_HAVE_VSX3) && defined(vec_extract_fp_from_shorth)|defined(NPY_HAVE_VSX3) \&\& defined(vec_extract_fp_from_shorth) \&\& defined(NPY__CPU_TARGET_VSX3)|g' numpy/_core/src/common/half.hpp
+sed -i 's|defined(NPY_HAVE_VSX3) && defined(NPY_HAVE_VSX3_HALF_DOUBLE)|defined(NPY_HAVE_VSX3) \&\& defined(NPY_HAVE_VSX3_HALF_DOUBLE) \&\& defined(NPY__CPU_TARGET_VSX3)|g' numpy/_core/src/common/half.hpp
+_assert_patched numpy/_core/src/common/half.hpp "&& defined(NPY__CPU_TARGET_VSX3)"
+
+# numpy/distutils/ccompiler_opt.py ships in some numpy layouts (incl. 2.4.4) but is not
+# guaranteed across versions; patch it only when this tree provides it so a future
+# relayout degrades to a no-op instead of a hard sed error.
+if [ -f numpy/distutils/ccompiler_opt.py ]; then
+	sed -i "s|flags=\"-mcpu=power8\", implies_detect=False|flags=\"-mcpu=power8 -mvsx\", implies_detect=False|" numpy/distutils/ccompiler_opt.py
+	_assert_patched numpy/distutils/ccompiler_opt.py 'flags="-mcpu=power8 -mvsx"'
+fi
+%endif
 
 %build
 # OpenHPC compiler/mpi designation
