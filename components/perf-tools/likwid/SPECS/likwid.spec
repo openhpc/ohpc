@@ -22,7 +22,10 @@ Release:   1%{?dist}
 License:   GPL-3.0+
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
-Source0:   https://github.com/RRZE-HPC/likwid/archive/v%{version}.tar.gz
+Source0:   https://github.com/RRZE-HPC/likwid/archive/v%{version}/%{pname}-%{version}.tar.gz
+%ifarch ppc64le
+Patch0:    likwid-5.5.1-ppc64le-perfevent.patch
+%endif
 
 %if 0%{?rhel_version}
 BuildRequires: gcc-gfortran
@@ -68,6 +71,9 @@ It consists of:
 
 %prep
 %setup -q -n %{pname}-%{version}
+%ifarch ppc64le
+%patch -P 0 -p1
+%endif
 
 %build
 
@@ -90,7 +96,14 @@ It consists of:
           BUILDFREQ="true" \
           ACCESSMODE="perf_event" \
     %else
+    %ifarch ppc64le
+          COMPILER="GCCPOWER" \
+          BUILDDAEMON="true" \
+          BUILDFREQ="true" \
+          ACCESSMODE="perf_event" \
+    %else
           COMPILER="GCC" \
+    %endif
     %endif
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
@@ -120,7 +133,14 @@ It consists of:
           BUILDFREQ="true" \
           ACCESSMODE="perf_event" \
     %else
+    %ifarch ppc64le
+          COMPILER="GCCPOWER" \
+          BUILDDAEMON="true" \
+          BUILDFREQ="true" \
+          ACCESSMODE="perf_event" \
+    %else
           COMPILER="GCC" \
+    %endif
     %endif
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
