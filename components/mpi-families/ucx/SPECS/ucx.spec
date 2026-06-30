@@ -35,6 +35,8 @@ Group:   %{PROJ_NAME}/mpi-families
 License: BSD
 URL:     http://www.openucx.org
 Source0: https://github.com/openucx/%{pname}/releases/download/v%{version}/%{pname}-%{version}.tar.gz
+# https://github.com/openucx/ucx/pull/11608
+Patch0:  time-include-math.patch
 
 # UCX currently supports only the following architectures
 ExclusiveArch: aarch64 ppc64le x86_64
@@ -90,6 +92,7 @@ This package was built from '' branch, commit c30b7da.
 
 %prep
 %setup -q -n ucx-%{version}
+%patch -P0 -p1
 
 %build
 %define _with_arg()   %{expand:%%{?with_%{1}:--with-%{2}}%%{!?with_%{1}:--without-%{2}}}

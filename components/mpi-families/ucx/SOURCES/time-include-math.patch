@@ -1,0 +1,12 @@
+diff --git a/src/ucs/time/time.h b/src/ucs/time/time.h
+index 48f03ca0432..f257a365510 100644
+--- a/src/ucs/time/time.h
++++ b/src/ucs/time/time.h
+@@ -9,6 +9,7 @@
+ 
+ #include <ucs/arch/cpu.h>
+ #include <ucs/time/time_def.h>
++#include <ucs/sys/math.h>
+ #include <sys/time.h>
+ #include <limits.h>
+ #include <math.h>
