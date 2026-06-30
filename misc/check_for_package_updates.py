@@ -1419,8 +1419,7 @@ def regenerate_source_checksums(spec_file, verbose):
             )
             if result.returncode != 0:
                 log_warn(
-                    f"get_source.sh failed for {spec_basename}: "
-                    f"{result.stderr.strip()}"
+                    f"get_source.sh failed for {spec_basename}: {result.stderr.strip()}"
                 )
         except FileNotFoundError:
             debug_info("bash not available to run get_source.sh", verbose)
