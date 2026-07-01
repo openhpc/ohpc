@@ -124,8 +124,11 @@ PKG_CONFIG_PATH="${OPENBLAS_LIB}/pkgconfig:${PKG_CONFIG_PATH}" \
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%__python -m pip install --prefix=%{install_path} --root=%{buildroot} \
+%__python -m pip install --ignore-installed --prefix=%{install_path} --root=%{buildroot} \
 	--no-index --find-links=dist --no-deps numpy
+
+# Fail the build if pip satisfied the request from a distro numpy already in the build environment.
+test -f %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/%{pname}/__init__.py
 
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
