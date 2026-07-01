@@ -23,9 +23,7 @@ License:   GPL-3.0+
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
 Source0:   https://github.com/RRZE-HPC/likwid/archive/v%{version}/%{pname}-%{version}.tar.gz
-%ifarch ppc64le
 Patch0:    likwid-5.5.1-ppc64le-perfevent.patch
-%endif
 
 %if 0%{?rhel_version}
 BuildRequires: gcc-gfortran
