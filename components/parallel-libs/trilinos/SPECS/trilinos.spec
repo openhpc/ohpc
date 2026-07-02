@@ -37,7 +37,6 @@ Requires:       python3
 
 BuildRequires:  make
 BuildRequires:  cmake
-BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
