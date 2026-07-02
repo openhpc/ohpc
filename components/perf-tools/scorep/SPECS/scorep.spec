@@ -32,7 +32,6 @@ BuildRequires: chrpath
 BuildRequires: cmake
 BuildRequires: cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.9
 BuildRequires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.9
-BuildRequires: fdupes
 BuildRequires: gcc-c++
 BuildRequires: gotcha-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: libunwind-devel
