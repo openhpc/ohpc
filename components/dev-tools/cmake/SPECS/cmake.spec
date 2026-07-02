@@ -30,7 +30,6 @@ BuildRequires:  ncurses-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
-BuildRequires:  jsoncpp-devel
 
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires:  expat-devel
@@ -52,7 +51,7 @@ of your choice.
 %prep
 %setup -q -n %{pname}-%{version}
 
-./bootstrap --system-libs \
+./bootstrap --system-libs --no-system-jsoncpp --no-system-zstd \
 --no-system-librhash \
 --no-system-libuv \
 --no-system-libarchive \
