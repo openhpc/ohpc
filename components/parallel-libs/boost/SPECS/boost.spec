@@ -51,7 +51,6 @@ BuildRequires:  libquadmath-devel
 
 BuildRequires:  make
 BuildRequires:  which
-BuildRequires:  fdupes
 BuildRequires:  dos2unix
 BuildRequires:  gmp-devel
 BuildRequires:  python3-devel
