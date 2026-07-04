@@ -34,6 +34,10 @@
 %global gnu15_mpc_version 1.4.1
 %global gnu15_mpfr_version 4.2.2
 
+# openEuler has no dependable texinfo (none at all on its ppc64le port); build
+# this version inline on openEuler so makeinfo is available for GCC's info manuals.
+%global texinfo_ver 7.0.3
+
 %if "%{compiler_family}" == "gnu12"
 %global gnu_major_ver gnu12
 %global gnu_version %{gnu12_version}
@@ -70,6 +74,8 @@ Source12:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu15_version}/gcc-%{gnu15_v
 Source13:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu15_gmp_version}.tar.bz2
 Source14:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu15_mpc_version}.tar.xz
 Source15:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
+# texinfo, built inline on openEuler (no dependable distro texinfo there)
+Source16:   https://ftpmirror.gnu.org/gnu/texinfo/texinfo-%{texinfo_ver}.tar.xz
 
 %global pname %{gnu_major_ver}-compilers
 
@@ -88,7 +94,10 @@ BuildRequires:  binutils >= 2.30
 BuildRequires:  make >= 3.80
 BuildRequires:  gettext-devel >= 0.14.5
 BuildRequires:  flex >= 2.5.4
+# on openEuler texinfo is built inline (see %build); require the distro one elsewhere
+%if !0%{?openEuler}
 BuildRequires:  texinfo >= 4.7
+%endif
 BuildRequires:  m4 >= 1.4.6
 %if 0%{?sle_version} || 0%{?suse_version}
 BuildRequires:  fdupes
@@ -140,6 +149,18 @@ ln -s mpfr-%{gnu15_mpfr_version} mpfr
 %endif
 
 %build
+
+%if 0%{?openEuler}
+# openEuler has no dependable texinfo (none at all on ppc64le), so build it here
+# to make makeinfo available for GCC's info manuals (same as mvapich2/sowing).
+tar -xf %{SOURCE16}
+pushd texinfo-%{texinfo_ver}
+./configure --prefix=$(pwd)/_install
+make %{?_smp_mflags}
+make install
+export PATH=$(pwd)/_install/bin:${PATH}
+popd
+%endif
 
 mkdir obj
 cd obj
