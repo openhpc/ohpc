@@ -148,6 +148,7 @@ cd obj
              --prefix=%{install_path} \
              --disable-static \
              --enable-shared
+
 make %{?_smp_mflags}
 
 
