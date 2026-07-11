@@ -16,6 +16,7 @@ echo '* soft memlock unlimited' >> \
   /etc/security/limits.d/40-ohpc-limits.conf
 echo '* hard memlock unlimited' >> \
   /etc/security/limits.d/40-ohpc-limits.conf
+
 # Update memlock settings on compute
 {{ compute_echo("* soft memlock unlimited", "/etc/security/limits.d/40-ohpc-limits.conf") }}
 {{ compute_echo("* hard memlock unlimited", "/etc/security/limits.d/40-ohpc-limits.conf") }}

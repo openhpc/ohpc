@@ -33,6 +33,7 @@ bad nodes, reducing the risk of system-induced job failures.
 ```bash
 # Register as SLURM's health check program
 echo "HealthCheckProgram=/usr/sbin/nhc" >> /etc/slurm/slurm.conf
+
 # execute every five minutes
 echo "HealthCheckInterval=300" >> /etc/slurm/slurm.conf
 ```
