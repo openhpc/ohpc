@@ -43,6 +43,7 @@ sed -i "s/ipoib_netmask/${ipoib_netmask}/" \
 # configure NetworkManager to *not* override local /etc/resolv.conf
 echo "[main]"   >  /etc/NetworkManager/conf.d/90-dns-none.conf
 echo "dns=none" >> /etc/NetworkManager/conf.d/90-dns-none.conf
+
 # Start up NetworkManager to initiate ib0
 systemctl start NetworkManager
 
