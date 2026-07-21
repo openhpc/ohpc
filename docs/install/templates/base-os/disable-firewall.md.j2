@@ -12,10 +12,10 @@ follows:
 <!-- ohpc_comment Disable firewall -->
 ```bash
 {% if is_sles %}
-systemctl disable SuSEfirewall2 || true
-systemctl stop SuSEfirewall2 || true
+systemctl disable SuSEfirewall2.service || true
+systemctl stop SuSEfirewall2.service || true
 {% else %}
-systemctl disable --now firewalld || true
+systemctl disable --now firewalld.service || true
 {% endif %}
 ```
 <!-- ohpc_end -->

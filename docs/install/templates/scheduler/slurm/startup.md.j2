@@ -9,8 +9,8 @@ preparation for running user jobs.
 <!-- ohpc_comment Resource Manager Startup -->
 ```bash
 # Start munge and slurm controller on head node
-systemctl enable --now munge
-systemctl enable --now slurmctld
+systemctl enable --now munge.service
+systemctl enable --now slurmctld.service
 ```
 <!-- ohpc_end -->
 

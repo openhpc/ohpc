@@ -102,7 +102,7 @@ cat > /opt/ohpc/admin/cloud-init/compute.yaml <<EOF
           owner: munge:munge
           encoding: base64
       runcmd:
-        - systemctl restart munge
+        - systemctl restart munge.service
 EOF
 ```
 <!-- ohpc_end -->

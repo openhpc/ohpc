@@ -13,7 +13,7 @@ to accept these log requests.
 # Configure head node to receive messages and reload rsyslog configuration
 echo 'module(load="imudp")' >> /etc/rsyslog.d/ohpc.conf
 echo 'input(type="imudp" port="514")' >> /etc/rsyslog.d/ohpc.conf
-systemctl restart rsyslog
+systemctl restart rsyslog.service
 
 # Define compute node forwarding destination
 {{ compute_run("echo '*.* @${sms_ip}:514' > /etc/rsyslog.d/ohpc-forward.conf") }}
