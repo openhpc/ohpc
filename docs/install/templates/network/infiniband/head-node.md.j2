@@ -45,7 +45,7 @@ echo "[main]"   >  /etc/NetworkManager/conf.d/90-dns-none.conf
 echo "dns=none" >> /etc/NetworkManager/conf.d/90-dns-none.conf
 
 # Start up NetworkManager to initiate ib0
-systemctl start NetworkManager
+systemctl start NetworkManager.service
 
 ```
 <!-- ohpc_fi -->

@@ -24,8 +24,8 @@ provisioning service on the *head node*:
 {{ pkg_install }} confluent_ipxe-aarch64 confluent_osdeploy-aarch64
 
 # Enable Confluent and its tools for use in current shell
-systemctl enable --now confluent
-systemctl enable --now httpd
+systemctl enable --now confluent.service
+systemctl enable --now httpd.service
 setsebool -P httpd_can_network_connect on
 semanage fcontext -a -t httpd_sys_content_t '/var/lib/confluent(/.*)?'
 systemctl enable --now tftp.socket

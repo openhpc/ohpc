@@ -27,7 +27,7 @@ yq -i '.nodeprofiles.default.kernel.args -= ["quiet"]' \
 echo "log-debug" >> /etc/dnsmasq.d/ww4-debug.conf
 
 # Enable and start the warewulfd service before using wwctl.
-systemctl enable --now warewulfd
+systemctl enable --now warewulfd.service
 
 # Create a new "nodes" profile and inherit the "default" profile
 wwctl profile add nodes --profile default --comment "Nodes profile"
