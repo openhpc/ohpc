@@ -362,7 +362,7 @@ export OHPC_INPUT_LOCAL="${INPUT_LOCAL}"
 # shellcheck disable=SC2016
 sed -i \
 	-e 's/\(\["rd.shell"\]\)/\1 + ["console=hvc0", "loglevel=5"]/' \
-	-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
+	-e 's/\(systemctl restart rsyslog\.service\)/\1 || true/' \
 	-e "s|#<<< ohpc_proxy:compute >>>#|${WAREWULF_PROXY_REPL}|" \
 	"${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"
 if ! bash -x "${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"; then

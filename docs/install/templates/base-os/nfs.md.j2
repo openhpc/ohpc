@@ -21,7 +21,7 @@ echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 exportfs -a
 
 # Restart and enable nfs server
-systemctl restart nfs-server
-systemctl enable nfs-server
+systemctl restart nfs-server.service
+systemctl enable nfs-server.service
 ```
 <!-- ohpc_end -->

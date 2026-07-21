@@ -20,8 +20,8 @@ for ((i=0; i<num_computes; i++)) ; do
     done >> /etc/conman.conf
 
 # Enable and start conman
-systemctl enable conman
-systemctl start conman
+systemctl enable conman.service
+systemctl start conman.service
 ```
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
