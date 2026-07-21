@@ -236,7 +236,7 @@ packages:
   - pdsh-ohpc
   - lmod-ohpc
 cmds:
-  - cmd: systemctl disable firewalld
+  - cmd: systemctl disable firewalld.service
     loglevel: INFO
   - cmd: >-
       echo '${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid 0 0'
@@ -250,7 +250,7 @@ cmds:
     loglevel: INFO
   - cmd: echo "account required pam_slurm.so" >> /etc/pam.d/sshd
     loglevel: INFO
-  - cmd: systemctl enable munge slurmd
+  - cmd: systemctl enable munge.service slurmd.service
     loglevel: INFO
   - cmd: ln -sf ../usr/share/zoneinfo/UTC /etc/localtime
     loglevel: INFO

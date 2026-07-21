@@ -13,7 +13,7 @@ We first disable the firewall on the compute nodes.
 <!-- ohpc_comment Disable firewall -->
 ```bash
 # Disable firewall for computes
-nodeshell compute systemctl disable --now firewalld
+nodeshell compute systemctl disable --now firewalld.service
 ```
 <!-- ohpc_end -->
 

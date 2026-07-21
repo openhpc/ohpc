@@ -12,8 +12,8 @@ We now start the Slurm daemon on the compute nodes.
 <!-- ohpc_comment Client Resource Manager Startup -->
 ```bash
 # Start munge and slurm controller on head node
-{{ compute_run("systemctl enable --now munge") }}
-{{ compute_run("systemctl enable --now slurmd") }}
+{{ compute_run("systemctl enable --now munge.service") }}
+{{ compute_run("systemctl enable --now slurmd.service") }}
 ```
 <!-- ohpc_end -->
 
