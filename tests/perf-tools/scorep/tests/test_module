@@ -124,8 +124,8 @@ teardown() {
 	assert_success
 }
 
-@test "[${TESTNAME}] Verify availability of COPYING for scorep (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+@test "[${TESTNAME}] Verify availability of README.LICENSES.md for scorep (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
 	# Required for scorep-info license
-	run ls "${SCOREP_DIR}/share/doc/scorep/COPYING"
+	run ls "${SCOREP_DIR}/share/doc/scorep/README.LICENSES.md"
 	assert_success
 }
