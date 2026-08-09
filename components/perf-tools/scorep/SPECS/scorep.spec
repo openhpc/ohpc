@@ -18,13 +18,12 @@
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   10.0
+Version:   10.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/scorep-%{version}/scorep-%{version}.tar.gz
-Patch1:    Score-P-10.0_fix-intel-mpi-linker-error.patch
 BuildRequires: automake
 BuildRequires: bison
 BuildRequires: binutils-devel
@@ -69,7 +68,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch -P 1 -p1
 
 %build
 
@@ -187,11 +185,6 @@ make DESTDIR=$RPM_BUILD_ROOT install
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.a
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*.la
-
-# symlink README.LICENSES.md to COPYING to work around broken scorep-info license in Score-P v10.0
-pushd $RPM_BUILD_ROOT%{install_path}/share/doc/scorep/
-ln -s README.LICENSES.md COPYING
-popd
 
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
