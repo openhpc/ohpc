@@ -32,7 +32,7 @@ BuildRequires: python3-devel
 BuildRequires: byacc
 %endif
 
-%if 0%{?openEuler}
+%if 0%{?openEuler} || 0%{?rhel}
 BuildRequires: perl-devel
 %endif
 
