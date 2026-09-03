@@ -29,6 +29,7 @@ BuildRequires: ncurses-devel make
 BuildRequires: gcc-gfortran
 BuildRequires: chrpath
 BuildRequires: kernel-headers
+BuildRequires: perl
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
