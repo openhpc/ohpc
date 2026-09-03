@@ -124,6 +124,7 @@ BuildRequires: systemd
 BuildRequires: munge-devel
 BuildRequires: python3
 BuildRequires: readline-devel
+BuildRequires: perl
 Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
