@@ -198,33 +198,34 @@ export MPICXX=$CXX
 rm -rf %{buildroot}%{install_path}/lib/cmake
 
 mkdir -p %{buildroot}%{module_path}
-cat << EOF > %{buildroot}%{module_path}/%{version}%{OHPC_CUSTOM_PKG_DELIM}.lua
-help([[
-This module loads the %{pname} library built with the %{compiler_family}
-compiler toolchain and the %{mpi_family} MPI stack.
+cat << EOF > %{buildroot}%{module_path}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
+#%Module1.0#####################################################################
 
-Version %{version}
-]])
+proc ModulesHelp { } {
+    puts stderr " "
+    puts stderr "This module loads the %{pname} library built with the %{compiler_family}"
+    puts stderr "compiler toolchain and the %{mpi_family} MPI stack."
+    puts stderr "\nVersion %{version}\n"
+}
 
-whatis("Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI")
-whatis("Version: %{version}")
-whatis("Category: runtime library")
-whatis("Description: %{summary}")
-whatis("%{url}")
+module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
 
-prepend_path("INCLUDE", "%{install_path}/include")
-prepend_path("LD_LIBRARY_PATH", "%{install_path}/lib")
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
-setenv("%{PNAME}_DIR", "%{install_path}")
-setenv("%{PNAME}_ROOT", "%{install_path}")
-setenv("%{PNAME}_LIB", "%{install_path}/lib")
-setenv("%{PNAME}_INC", "%{install_path}/include")
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_ROOT       %{install_path}
+setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_INC        %{install_path}/include
 
-family("boost")
-
+family boost
 EOF
 
-ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM}.lua %{buildroot}%{module_path}/default
+ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM} %{buildroot}%{module_path}/default
 
 
 %files
