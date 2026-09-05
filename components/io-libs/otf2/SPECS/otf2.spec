@@ -33,7 +33,7 @@ BuildRequires:  chrpath dos2unix
 # Need a new py-compile for Python 3.12
 BuildRequires:  libtool automake
 BuildRequires:  sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 Requires:       sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Default library install path

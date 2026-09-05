@@ -32,7 +32,7 @@ Source0:        https://github.com/hypre-space/hypre/archive/v%{version}.tar.gz#
 BuildRequires:  make
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
-Requires:       lmod%{PROJ_DELIM}
+Requires:       environment(modules)%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version

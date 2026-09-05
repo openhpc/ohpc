@@ -26,7 +26,7 @@ Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
 Patch0:         mfem-4.9-hypre-timing-redefine.patch
 Url:            http://mfem.org
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 BuildRequires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}

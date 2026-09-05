@@ -28,7 +28,7 @@ Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/%{shortver}/dist
 BuildRequires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8
 BuildRequires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0
 BuildRequires: zlib-devel gcc-c++ which make
-Requires: lmod%{PROJ_DELIM} >= 7.6.1
+Requires: environment(modules)%{PROJ_DELIM}
 Requires: cubew-%{compiler_family}%{PROJ_DELIM} >= 4.8
 Requires: cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.4
 Requires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.0

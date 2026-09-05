@@ -26,7 +26,7 @@ Release:        1%{?dist}
 Source0:        https://github.com/sourceryinstitute/OpenCoarrays/archive/refs/tags/%{version}.tar.gz
 Patch1:         opencoarrays-disable-get-comm-test.patch
 Url:            http://www.opencoarrays.org
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  make
 

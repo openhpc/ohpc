@@ -48,7 +48,7 @@ BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  netcdf-%{compiler_family}%{PROJ_DELIM}
 Requires:       netcdf-%{compiler_family}%{PROJ_DELIM}
 %endif
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 

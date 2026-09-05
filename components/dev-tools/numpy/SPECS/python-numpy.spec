@@ -45,7 +45,7 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        https://github.com/numpy/numpy/releases/download/v%{numpy_version_default}/numpy-%{numpy_version_default}.tar.gz
 Source1:        https://github.com/numpy/numpy/releases/download/v%{numpy_version_openeuler}/numpy-%{numpy_version_openeuler}.tar.gz
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  python3-meson-python
 BuildRequires:  %{python_prefix}-pip

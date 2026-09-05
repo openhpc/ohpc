@@ -51,7 +51,7 @@ Requires:  gdb
 Requires:  ipmitool
 Requires:  libstdc++-devel
 Requires:  libunwind
-Requires:  lmod%{PROJ_DELIM}
+Requires:  environment(modules)%{PROJ_DELIM}
 Requires:  losf%{PROJ_DELIM}
 Requires:  make
 Requires:  man
