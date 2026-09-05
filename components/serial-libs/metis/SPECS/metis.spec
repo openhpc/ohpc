@@ -59,33 +59,36 @@ make install DESTDIR=${RPM_BUILD_ROOT}
 
 # OpenHPC module file
 mkdir -p %{buildroot}%{module_path}
-cat << EOF > %{buildroot}%{module_path}/%{version}%{OHPC_CUSTOM_PKG_DELIM}.lua
-help([[
-This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain.
-Version %{version}
-]])
+cat << EOF > %{buildroot}%{module_path}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
+#%Module1.0#####################################################################
 
-whatis("Name: %{PNAME} built with %{compiler_family} toolchain")
-whatis("Version: %{version}")
-whatis("Category: runtime library")
-whatis("Description: %{summary}")
-whatis("%{url}")
+proc ModulesHelp { } {
+    puts stderr " "
+    puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
+    puts stderr "\nVersion %{version}\n"
+}
 
-local version = "%{version}"
+module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
 
-prepend_path("PATH",            "%{install_path}/bin")
-prepend_path("INCLUDE",         "%{install_path}/include")
-prepend_path("LD_LIBRARY_PATH",	"%{install_path}/lib")
+set version     %{version}
 
-setenv("%{PNAME}_DIR", "%{install_path}")
-setenv("%{PNAME}_BIN", "%{install_path}/bin")
-setenv("%{PNAME}_LIB", "%{install_path}/lib")
-setenv("%{PNAME}_INC", "%{install_path}/include")
+prepend-path    PATH                %{install_path}/bin
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
-family("metis")
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_INC        %{install_path}/include
+
+family metis
 EOF
 
-ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM}.lua %{buildroot}%{module_path}/default
+ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM} %{buildroot}%{module_path}/default
 
 mkdir -p %{buildroot}%{_docdir}
 

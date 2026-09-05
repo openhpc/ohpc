@@ -220,35 +220,37 @@ chmod 755 %{buildroot}%{install_path}/bin/c?9
 # OpenHPC module files
 mkdir -p %{buildroot}%{module_path}
 
-cat << EOF > %{buildroot}%{module_path}/%{version}.lua
-help([[
-This module loads the GNU compiler collection"
+cat << EOF > %{buildroot}%{module_path}/%{version}
+#%Module1.0#####################################################################
 
-See the man pages for gcc, g++, and gfortran for detailed information
-on available compiler options and command-line syntax.
+proc ModulesHelp { } {
+    puts stderr " "
+    puts stderr "This module loads the GNU compiler collection"
+    puts stderr " "
+    puts stderr "See the man pages for gcc, g++, and gfortran for detailed information"
+    puts stderr "on available compiler options and command-line syntax."
+    puts stderr "\nVersion %{version}\n"
+}
 
-Version %{version}
-]])
+module-whatis "Name: GNU Compiler Collection"
+module-whatis "Version: %{version}"
+module-whatis "Category: compiler, runtime support"
+module-whatis "Description: GNU Compiler Family (C/C++/Fortran)"
+module-whatis "URL: http://gcc.gnu.org/"
 
-whatis("Name: GNU Compiler Collection")
-whatis("Version: %{version}")
-whatis("Category: compiler, runtime support")
-whatis("Description: GNU Compiler Family (C/C++/Fortran)")
-whatis("URL: http://gcc.gnu.org/")
+set version     %{version}
 
-local version = "%{version}"
+prepend-path    PATH                %{install_path}/bin
+prepend-path    MANPATH             %{install_path}/share/man
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib64
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{gnu_major_ver}
 
-prepend_path("PATH",            "%{install_path}/bin")
-prepend_path("MANPATH",         "%{install_path}/share/man")
-prepend_path("INCLUDE",         "%{install_path}/include")
-prepend_path("LD_LIBRARY_PATH", "%{install_path}/lib64")
-prepend_path("MODULEPATH",      "%{OHPC_MODULEDEPS}/%{gnu_major_ver}")
-
-family("compiler")
+family compiler
 EOF
 
 %if "%{compiler_family}" == "gnu12"
-ln -s %{version}.lua %{buildroot}%{module_path}/default
+ln -s %{version} %{buildroot}%{module_path}/default
 %endif
 
 %files
