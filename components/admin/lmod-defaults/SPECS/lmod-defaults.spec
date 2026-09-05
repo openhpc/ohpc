@@ -31,7 +31,7 @@ License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
-Requires:  lmod%{PROJ_DELIM}
+Requires:  environment(modules)%{PROJ_DELIM}
 
 %if "%{mpi_family}" == "impi"
 Requires:   intel-mpi-devel%{PROJ_DELIM}

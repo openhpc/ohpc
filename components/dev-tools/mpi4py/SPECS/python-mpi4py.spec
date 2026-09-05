@@ -30,7 +30,7 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            https://github.com/mpi4py/mpi4py
 Source0:        https://github.com/mpi4py/mpi4py/releases/download/%{version}/mpi4py-%{version}.tar.gz
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 
 # Default library install path
