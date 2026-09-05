@@ -310,7 +310,10 @@ echo 'depends-on      papi' >> %{buildroot}/%{module_path}/%{version}
 %endif
 
 # Set default version
-ln -s %{version} %{buildroot}/%{module_path}/default
+cat <<EOF >%{buildroot}/%{module_path}/.version
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{version}"
+EOF
 
 
 %files
