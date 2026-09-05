@@ -36,7 +36,7 @@ BuildRequires:  curl-devel
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  libxml2-devel
 BuildRequires:  m4 make
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 %if 0%{?ohpc_mpi_dependent}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

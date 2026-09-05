@@ -47,7 +47,7 @@ Requires:      cubelib-%{compiler_family}%{PROJ_DELIM} >= 4.9
 Requires:      cubew-%{compiler_family}%{PROJ_DELIM} >= 4.9
 Requires:      gotcha-%{compiler_family}%{PROJ_DELIM}
 Requires:      libunwind-devel
-Requires:      lmod%{PROJ_DELIM} >= 7.6.1
+Requires:      environment(modules)%{PROJ_DELIM}
 Requires:      opari2-%{compiler_family}%{PROJ_DELIM} >= 2.0.9
 Requires:      otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.2
 Requires:      papi%{PROJ_DELIM}
