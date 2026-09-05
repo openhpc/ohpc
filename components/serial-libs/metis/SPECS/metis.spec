@@ -88,7 +88,11 @@ setenv          %{PNAME}_INC        %{install_path}/include
 family metis
 EOF
 
-ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM} %{buildroot}%{module_path}/default
+# Set default version
+cat <<EOF >%{buildroot}%{module_path}/.version
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
+EOF
 
 mkdir -p %{buildroot}%{_docdir}
 
