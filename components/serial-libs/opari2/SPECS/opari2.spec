@@ -28,7 +28,7 @@ BuildRequires:  make
 BuildRequires:  gcc-c++
 BuildRequires:  sed
 BuildRequires:  which
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
