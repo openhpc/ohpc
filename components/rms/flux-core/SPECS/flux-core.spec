@@ -102,7 +102,7 @@ separate, optional package.
 # former. hwloc-ohpc's own build has no OpenCL detection at all, so
 # it never has this Requires in the first place. Purge first so a
 # build host's sticky default module collection (e.g. from
-# lmod-defaults-*-ohpc) can't silently swap in an OpenHPC compiler
+# modules-defaults-*-ohpc) can't silently swap in an OpenHPC compiler
 # toolchain instead of the system compiler this still builds with.
 module purge
 module load hwloc

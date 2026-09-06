@@ -63,7 +63,7 @@ setup_local_repo() {
 
 install_packages() {
 	# First remove a possible conflicts from a previous run
-	"${PKG[@]}" remove lmod-defaults-*-ohpc || true
+	"${PKG[@]}" remove modules-defaults-*-ohpc || true
 
 	local rms_pkgs=()
 	if [ "${RMS}" = "flux" ]; then
@@ -86,7 +86,7 @@ install_packages() {
 		prun-ohpc
 		openmpi5-"${COMPILER_FAMILY}"-ohpc
 		mpich-"${COMPILER_FAMILY}"-ohpc
-		lmod-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc
+		modules-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc
 		"${rms_pkgs[@]}"
 	)
 

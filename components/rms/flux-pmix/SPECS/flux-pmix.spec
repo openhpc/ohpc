@@ -72,7 +72,7 @@ the plugin is requested per job with "flux run -o pmi=pmix ...".
 # Like flux-core/flux-security/flux-sched, this builds with the
 # system compiler, not any OpenHPC compiler-family toolchain; purge
 # first so a build host's sticky default module collection (e.g. from
-# lmod-defaults-*-ohpc) can't silently swap in one of those instead.
+# modules-defaults-*-ohpc) can't silently swap in one of those instead.
 module purge
 module load pmix
 export PKG_CONFIG_PATH="${PMIX_LIB}/pkgconfig:${PKG_CONFIG_PATH}"
