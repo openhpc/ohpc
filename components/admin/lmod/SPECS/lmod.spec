@@ -38,6 +38,7 @@ Requires: lua-posix
 Requires: lua
 Provides: environment(modules)
 Obsoletes: environment-modules
+Requires: ohpc-filesystem
 %endif
 %if 0%{?sle_version}
 BuildRequires: lua53-luafilesystem
@@ -49,6 +50,7 @@ Requires: (lmod-apparmor-abstractions%{PROJ_DELIM} if apparmor-abstractions)
 Conflicts: Modules
 %endif
 Provides: environment(modules)%{PROJ_DELIM}
+
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
@@ -174,23 +176,6 @@ source %{OHPC_ADMIN}/lmod/lmod/init/csh >/dev/null
 # Load baseline OpenHPC environment
 module try-add ohpc
 
-EOF
-
-# Starting with RHEL 8 we can load OS provided modules
-%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/os
-#%Module1.0#####################################################################
-
-proc ModulesHelp { } { puts stderr "Enable operating system provided modules" }
-
-module-whatis "Name: Operating System provided modules"
-
-%if 0%{?sle_version}
-append-path MODULEPATH /etc/modulefiles:/usr/share/modules
-%endif
-%if 0%{?rhel} || 0%{?openEuler}
-append-path MODULEPATH /etc/modulefiles:/usr/share/modulefiles
-%endif
 EOF
 
 
