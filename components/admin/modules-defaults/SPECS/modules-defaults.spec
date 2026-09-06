@@ -67,21 +67,14 @@ prepend-path     PATH   %{OHPC_PUB}/bin
 # include local packages installed via spack
 prepend-path MODULEPATH %{OHPC_MODULEDEPS}/spack/
 
+prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
+
 # Define modules to load/unload in order
 set modules_list [list autotools prun %{compiler_family} %{mpi_family}]
-
-if { [ expr [module-info mode load] || [module-info mode display] ] } {
-        prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
-        foreach mod \$modules_list {
-                module try-add \$mod
-        }
+if {[module-info mode remove]} {
+    set modules_list [lreverse \$modules_list]
 }
-
-if [ module-info mode remove ] {
-        foreach mod [lreverse \$modules_list] {
-                module del \$mod
-        }
-}
+module try-add {*}\$modules_list
 EOF
 
 # Additional logic for mpich-(ucx|ofi) variants
