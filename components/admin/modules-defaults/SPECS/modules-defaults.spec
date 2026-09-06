@@ -24,14 +24,17 @@
 %define mpi_module_dir %{OHPC_MODULEDEPS}/%{compiler_family}/%{mpi_family}
 
 Summary:   OpenHPC default login environments
-Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM}
-Version:   2.0
+Name:      modules-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM}
+Version:   2.1
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
 Requires:  environment(modules)%{PROJ_DELIM}
+Suggests:  lmod%{PROJ_DELIM}
+Provides:  lmod-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM} = %{version}-%{release}
+Obsoletes: lmod-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM} < 2.1
 
 %if "%{mpi_family}" == "impi"
 Requires:   intel-mpi-devel%{PROJ_DELIM}

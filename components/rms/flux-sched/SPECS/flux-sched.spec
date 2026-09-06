@@ -87,7 +87,7 @@ the installed flux binary.
 %build
 # hwloc-ohpc, not the base distro's hwloc-devel; same rationale as
 # flux-core.spec. Purge first so a build host's sticky default module
-# collection (e.g. from lmod-defaults-*-ohpc) can't silently swap in
+# collection (e.g. from modules-defaults-*-ohpc) can't silently swap in
 # an OpenHPC compiler toolchain instead of the system compiler this
 # still builds with.
 module purge
