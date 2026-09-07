@@ -1,0 +1,31 @@
+## Complete Basic xCAT Setup for *Head Node*
+
+With xCAT installed, configure the internal provisioning interface and register
+it with xCAT for DHCP service. Then set the cluster domain name used for
+system-wide name resolution.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Complete basic xCAT setup for head node -->
+```bash
+# Verify required variables are set
+: "${sms_eth_internal:?ERROR: sms_eth_internal not set}"
+: "${sms_ip:?ERROR: sms_ip not set}"
+: "${internal_netmask:?ERROR: internal_netmask not set}"
+: "${domain_name:?ERROR: domain_name not set}"
+
+# Enable internal interface for provisioning
+ip link set dev ${sms_eth_internal} up
+ip address add ${sms_ip}/${internal_netmask} broadcast + \
+    dev ${sms_eth_internal}
+
+# Register internal provisioning interface with xCAT for DHCP
+chdef -t site dhcpinterfaces="xcatmn|${sms_eth_internal}"
+
+# Point provisioning services at the internal interface address. Without
+# this, a multi-homed head node may auto-select its external address.
+chdef -t site master=${sms_ip} nameservers=${sms_ip}
+
+# Define local domain name
+chdef -t site domain=${domain_name}
+```
+<!-- ohpc_end -->

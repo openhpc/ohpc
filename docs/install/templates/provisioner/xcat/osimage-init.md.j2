@@ -1,0 +1,66 @@
+## Define Compute Image for Provisioning
+
+The following steps import the distribution installation media for use with
+xCAT. A local copy of the distribution ISO is required; for this recipe the ISO
+is `{{ distro_iso_image }}`. Initialize image creation using `copycds`, assuming
+the ISO is available at `${iso_path}`:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Initialize OS images for use with xCAT -->
+```bash
+: "${iso_path:?ERROR: iso_path not set}"
+
+copycds ${iso_path}/{{ distro_iso_image }}
+```
+<!-- ohpc_end -->
+
+`copycds` derives the OS image names from the distribution metadata inside the
+ISO, which encodes the minor version (for example a Rocky 10.0 x86_64 ISO
+creates `rocky10.0-x86_64-{install,netboot,statelite}-compute`). Stateless
+provisioning uses the `netboot` image and stateful provisioning uses the
+`install` image; `${xcat_image_type}`, set with the provisioning mode above,
+selects the right one. Query the created images and capture the name. If the
+head node already holds images for other distributions or releases the lookup
+is ambiguous, so it fails rather than guessing; set `${xcat_osimage}` in
+`input.local` to choose explicitly. Either way the image is then checked
+against the selected mode, so a name that does not match fails before any
+node or image is modified:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Capture the osimage name matching the selected mode -->
+```bash
+# Query available images
+lsdef -t osimage
+
+# Capture the compute image for the selected provisioning mode. A head node
+# that holds images for several distributions or releases will match more
+# than one; rather than silently taking the first, refuse to guess and let
+# the operator name the image in input.local.
+if [ -z "${xcat_osimage:-}" ]; then
+    xcat_matches=$(lsdef -t osimage 2>/dev/null | \
+        awk -v t="${xcat_image_type}-compute" '$0 ~ t {print $1}')
+    xcat_count=$(printf '%s\n' "${xcat_matches}" | grep -c . || true)
+    if [ "${xcat_count}" -ne 1 ]; then
+        echo "ERROR: expected exactly one ${xcat_image_type}-compute osimage," >&2
+        echo "found ${xcat_count}:" >&2
+        printf '  %s\n' ${xcat_matches} >&2
+        echo "Set xcat_osimage explicitly in input.local." >&2
+        exit 1
+    fi
+    xcat_osimage="${xcat_matches}"
+fi
+
+# Validate the image against the requested mode before anything is changed,
+# whether the name was discovered above or supplied in input.local. xCAT will
+# otherwise happily provision a netboot image to local disk, or the reverse.
+xcat_provmethod=$(lsdef -t osimage -o "${xcat_osimage}" -i provmethod 2>/dev/null \
+    | awk -F= '/provmethod=/{print $2}')
+if [ "${xcat_provmethod}" != "${xcat_image_type}" ]; then
+    echo "ERROR: osimage '${xcat_osimage}' has provmethod='${xcat_provmethod}'," >&2
+    echo "but this run needs '${xcat_image_type}'. Check \${xcat_osimage} and" >&2
+    echo "\${xcat_mode} in input.local." >&2
+    exit 1
+fi
+echo ${xcat_osimage}
+```
+<!-- ohpc_end -->

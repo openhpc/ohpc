@@ -48,6 +48,30 @@ wwctl image exec --build=false {{ baseos }} -- /bin/sh -c \
 
 {% endif %}
 
+{# xCAT Macros #}
+{# One recipe serves both xCAT modes. The chroot/xdsh split is resolved at run
+   time by the shell functions defined in "Select Provisioning Mode", so these
+   macros emit a helper call rather than a mode-specific command. Paths are
+   always image-relative (compute_exec chroots for stateless, targets the live
+   node for stateful). #}
+{% if is_xcat %}
+
+{%- macro compute_sed(regex, file) -%}
+compute_exec "sed -i '{{ regex }}' \
+  '{{ file }}'"
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+compute_exec "echo '{{ string }}' {{ ">>" if append else ">" }} \
+  '{{ file }}'"
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+compute_exec "{{ cmd }}"
+{%- endmacro -%}
+
+{% endif %}
+
 {# Confluent Macros #}
 {% if is_confluent %}
 

@@ -1,8 +1,10 @@
 ## Run a Test Job
 
 With the resource manager enabled for production usage, users should now be able
-to run jobs. To demonstrate this, we will add a "test" user on the **head** node
-that can be used to run an example job.
+{% if not is_xcat %}to run jobs. To demonstrate this, we will add a "test" user on the **head** node
+that can be used to run an example job.{% else %}to run jobs. To demonstrate
+this, the "test" user added in the Post Provisioning section can be used to run
+an example job.{% endif %}
 
 OpenHPC includes a simple "hello-world" MPI application in the
 `/opt/ohpc/pub/examples` directory that can be used for this quick compilation

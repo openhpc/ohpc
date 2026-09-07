@@ -1,0 +1,4 @@
+# The osimage names (and the image directory layout under /install) are
+# derived by copycds from the distribution metadata inside the ISO, which
+# encodes the minor version; the recipe captures them at runtime via lsdef.
+distro_iso_image: "AlmaLinux-10-latest-x86_64-dvd.iso"

@@ -1,0 +1,32 @@
+## Enable xCAT Repository
+
+Enable the public xCAT package repositories. The `xcat-core` repo provides the
+main xCAT packages; `xcat-dep` provides dependencies specific to the OS family
+and architecture. The repository definitions are written locally (the `.repo`
+files published on xcat.org reference a retired development tree and cannot be
+used directly).
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Enable xCAT repositories -->
+```bash
+repobase={{ xcat_repo_base }}
+
+cat << EOF > /etc/yum.repos.d/xcat-core.repo
+[xcat-core]
+name=xCAT core packages
+baseurl=${repobase}/{{ xcat_release }}/xcat-core
+enabled=1
+gpgcheck=1
+gpgkey=${repobase}/{{ xcat_release }}/xcat-core/repodata/repomd.xml.key
+EOF
+
+cat << EOF > /etc/yum.repos.d/xcat-dep.repo
+[xcat-dep]
+name=xCAT dependencies
+baseurl=${repobase}/xcat-dep/{{ xcat_dep_dist }}/{{ arch }}
+enabled=1
+gpgcheck=1
+gpgkey=${repobase}/xcat-dep/{{ xcat_dep_dist }}/{{ arch }}/repodata/repomd.xml.key
+EOF
+```
+<!-- ohpc_end -->
