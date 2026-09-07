@@ -1,0 +1,35 @@
+# xCAT provisioner configuration
+#
+# A single recipe covers both xCAT provisioning modes. The mode is selected at
+# run time by ${xcat_mode} (set in input.local), not at document build
+# time, so one guide and one recipe script serve both:
+#
+#   xcat_mode=stateless  compute nodes boot a RAM-resident image built in a
+#                        chroot on the head node
+#   xcat_mode=stateful   a base OS is installed onto the local disk of each
+#                        compute node, then OpenHPC components are added to
+#                        the running nodes
+#
+# The recipe defines shell helpers (compute_exec, compute_install, ...) once the
+# mode is known; the shared customization chapters call those helpers and work
+# unchanged in both modes.
+
+provisioner: "xcat"
+provisioner_name: "xCAT"
+is_xcat: true
+
+# Compute-image package operations dispatch through the mode-selected shell
+# functions defined in the "Select Provisioning Mode" section.
+pkg_install_chroot: "compute_install"
+pkg_group_install_chroot: "compute_group_install"
+pkg_upgrade_chroot: "compute_upgrade"
+pkg_clean_chroot: "compute_clean"
+
+# xCAT release tree to install from ("latest" tracks the current stable
+# series; set a versioned directory such as "2.18" to pin). The repo
+# definitions are written locally: the .repo files published on xcat.org
+# point at a retired "devel" tree and are not usable directly.
+xcat_release: "latest"
+xcat_repo_base: "https://xcat.org/files/xcat/repos/yum"
+# OS-family component of the xcat-dep repository path (EL10 -> rh10)
+xcat_dep_dist: "rh10"

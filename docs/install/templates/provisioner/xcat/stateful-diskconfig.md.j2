@@ -1,0 +1,26 @@
+### Disk Layout and Root Password
+
+The install applies a default disk layout to the first detected disk (a 1 GiB
+`/boot` plus an LVM volume group holding swap and a `/` volume grown to fill
+the disk). Sites requiring a different layout can register
+a custom partition file in kickstart syntax with
+`chdef -t osimage ${xcat_osimage} partitionfile=<file>`; consult the
+[xCAT documentation](https://xcat-docs.readthedocs.io/en/latest/) for details.
+
+The kickstart generated for stateful installs reads the compute root password
+from the xCAT `passwd` table, so the entry must exist before the provisioning
+image is associated with the nodes. Administrative access relies on the head
+node root ssh keys that xCAT installs during provisioning, so the randomly
+generated password below is intentionally throwaway; sites that want
+interactive (console) root logins should substitute a chosen password for the
+`openssl rand` call. Store the password as a hash:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateful" ] -->
+<!-- ohpc_comment Set root password used by the stateful install -->
+```bash
+chtab key=system passwd.username=root \
+    passwd.password="$(openssl passwd -6 "$(openssl rand -base64 12)")"
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

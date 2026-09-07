@@ -36,6 +36,35 @@ updates are pre-configured.
 {{ pkg_clean }}
 {{ pkg_clean_chroot }}
 ```
+{% elif is_xcat %}
+1. (Optional) Ensure repo metadata is current (on the head node and in the
+   compute environment). Package managers will naturally do this on their own
+   over time, but if you are wanting to access updates immediately after a new
+   release, the following can be used to sync to the latest. The compute-side
+   command depends on how the cluster was provisioned. The helper functions
+   defined while installing are not available in a later shell, so the commands
+   are spelled out in full here.
+
+```bash
+{{ pkg_clean }}
+```
+
+   For a stateful cluster, act on the running compute nodes:
+
+```bash
+xdsh compute dnf clean expire-cache
+```
+
+   For a stateless cluster, act on the image chroot, re-deriving its location:
+
+```bash
+# Name the image explicitly if the head node holds more than one
+xcat_osimage=${xcat_osimage:-$(lsdef -t osimage | \
+    awk '/netboot-compute/{print $1; exit}')}
+CHROOT=$(lsdef -t osimage -o ${xcat_osimage} \
+    -i rootimgdir | awk -F= '/rootimgdir/{print $2}')/rootimg/
+dnf --installroot="${CHROOT}" clean expire-cache
+```
 {% else %}
 1. (Optional) Ensure repo metadata is current (on head node and in chroot
    location(s)). Package managers will naturally do this on their own over time,
@@ -93,6 +122,48 @@ apply the changes.
 
 Note that to update running services such as a resource manager, a service
 restart is required on the compute nodes.
+{% elif is_xcat %}
+3. Upgrade packages in the compute environment
+
+   For a stateful cluster, upgrade the running compute nodes. Note that to
+   update running services such as a resource manager, a service restart is
+   required on the compute nodes.
+
+```bash
+xdsh compute dnf -y upgrade "*-ohpc"
+
+# Any new compute-node Base OS provided dependencies can be installed by
+# updating the ohpc-base-compute metapackage
+xdsh compute dnf -y upgrade "ohpc-base-compute"
+```
+
+   For a stateless cluster, upgrade the image chroot, re-deriving its location
+   if it is not already set in the current shell:
+
+```bash
+# Name the image explicitly if the head node holds more than one
+xcat_osimage=${xcat_osimage:-$(lsdef -t osimage | \
+    awk '/netboot-compute/{print $1; exit}')}
+CHROOT=$(lsdef -t osimage -o ${xcat_osimage} \
+    -i rootimgdir | awk -F= '/rootimgdir/{print $2}')/rootimg/
+
+dnf -y --installroot="${CHROOT}" upgrade "*-ohpc"
+
+# Any new compute-node Base OS provided dependencies can be installed by
+# updating the ohpc-base-compute metapackage
+dnf -y --installroot="${CHROOT}" upgrade "ohpc-base-compute"
+```
+
+4. Rebuild and redeploy the stateless image
+
+   This step applies to stateless provisioning only. In stateful mode the
+   upgrade above already ran on the compute nodes and there is no image to
+   rebuild. Reboot the compute nodes when convenient to pick up the new image.
+
+```bash
+packimage ${xcat_osimage}
+nodeset compute osimage=${xcat_osimage}
+```
 {% else %}
 3. Upgrade packages in compute image
 
