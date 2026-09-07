@@ -1,0 +1,13 @@
+## Add User
+
+Add a new user to the cluster. Distribute the updated credentials to compute
+nodes using `updatenode`:
+
+<!-- ohpc_begin -->
+```bash
+useradd -m test
+
+# Push updated credentials to compute nodes
+updatenode compute -F
+```
+<!-- ohpc_end -->
