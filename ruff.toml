@@ -1,0 +1,3 @@
+# TODO: ease the ruleset for future ruff versions
+[lint]
+select = ["E4", "E7", "E9", "F"]
