@@ -71,7 +71,7 @@ class SectionCommentExtension(Extension):
 
 
 def create_jinja_env(
-    template_dirs: list[Path], config: dict | None = None
+    template_dirs: list[Path], config: Optional[dict] = None
 ) -> Environment:
     """Create Jinja2 environment with template search paths."""
     env = Environment(
