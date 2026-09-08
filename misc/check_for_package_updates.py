@@ -1416,6 +1416,7 @@ def regenerate_source_checksums(spec_file, verbose):
                 [get_source, spec_basename],
                 capture_output=True,
                 text=True,
+                check=False,
             )
             if result.returncode != 0:
                 log_warn(
@@ -1435,6 +1436,7 @@ def regenerate_source_checksums(spec_file, verbose):
             [gen_checksums, spec_file],
             capture_output=True,
             text=True,
+            check=False,
         )
         if result.returncode == 0:
             log_info(result.stdout.strip())
