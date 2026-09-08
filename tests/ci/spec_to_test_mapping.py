@@ -4,11 +4,11 @@
 # and which tests to enable in the test suite.
 # This script will return three shell arrays (TESTS, ADMIN_TESTS and PKGS).
 
-import sys
+import argparse
 import csv
 import os
-import argparse
 import subprocess
+import sys
 
 # This dictionary defines the mapping
 # 'path/to/file.spec': [
@@ -173,20 +173,21 @@ test_map = {
 }
 
 # Check which base OS we are using
-reader = csv.DictReader(open("/etc/os-release"), delimiter="=")
-
 python_prefix = "python3"
 
-for row in reader:
-    key = row.pop("NAME")
-    if key in ["ID_LIKE", "ID"]:
-        for item in list(row.items())[0]:
-            if "rhel" in item:
-                python_prefix = "python3.11"
-                break
-            if "suse" in item:
-                python_prefix = "python311"
-                break
+with open("/etc/os-release") as os_release:
+    reader = csv.DictReader(os_release, delimiter="=")
+
+    for row in reader:
+        key = row.pop("NAME")
+        if key in ["ID_LIKE", "ID"]:
+            for item in next(iter(row.items())):
+                if "rhel" in item:
+                    python_prefix = "python3.11"
+                    break
+                if "suse" in item:
+                    python_prefix = "python311"
+                    break
 
 skip_ci_specs = []
 skip_ci_specs_env = os.getenv("SKIP_CI_SPECS")
@@ -284,7 +285,7 @@ admin_tests = ""
 pkgs = ""
 
 for i in specs_to_process:
-    if i in test_map.keys():
+    if i in test_map:
         if len(tests) > 0:
             tests += " "
         if len(admin_tests) > 0:
@@ -329,11 +330,4 @@ if ohpc_major_version < 4:
 
 pkgs = pkgs.replace("COMPILER_FAMILY", args.compiler_family)
 
-print(
-    "TESTS=(%s) ADMIN_TESTS=(%s) PKGS=(%s)"
-    % (
-        tests,
-        admin_tests,
-        pkgs,
-    )
-)
+print(f"TESTS=({tests}) ADMIN_TESTS=({admin_tests}) PKGS=({pkgs})")

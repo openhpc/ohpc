@@ -74,12 +74,12 @@ class Result:
     """Container for a single package-check result."""
 
     __slots__ = (
-        "name",
         "current_version",
         "latest_version",
-        "status",
+        "name",
         "repo",
         "spec_file",
+        "status",
         "version_pin",
     )
 
@@ -589,10 +589,11 @@ def get_latest_jsc_perftools_version(
 
     versions = []
     for version in matches:
-        if not check_prereleases:
-            if re.search(r"-(rc|alpha|beta|pre|dev)\d*$", version):
-                debug_info(f"Skipping pre-release version: {version}", verbose)
-                continue
+        if not check_prereleases and re.search(
+            r"-(rc|alpha|beta|pre|dev)\d*$", version
+        ):
+            debug_info(f"Skipping pre-release version: {version}", verbose)
+            continue
         if version_pin and not _matches_version_pin(version, version_pin):
             continue
         versions.append(version)
@@ -697,10 +698,11 @@ def get_latest_bsc_ftp_version(
     for v in raw_versions:
         if v == "latest" or not re.match(r"\d", v):
             continue
-        if not check_prereleases:
-            if re.search(r"(rc|alpha|beta|pre|dev)\d*", v, re.IGNORECASE):
-                debug_info(f"Skipping pre-release version: {v}", verbose)
-                continue
+        if not check_prereleases and re.search(
+            r"(rc|alpha|beta|pre|dev)\d*", v, re.IGNORECASE
+        ):
+            debug_info(f"Skipping pre-release version: {v}", verbose)
+            continue
         if version_pin and not _matches_version_pin(v, version_pin):
             continue
         versions.append(v)
@@ -800,10 +802,11 @@ def get_latest_pnetcdf_version(check_prereleases, verbose, version_pin=None):
     for v in raw_versions:
         if v not in seen:
             seen.add(v)
-            if not check_prereleases:
-                if re.search(r"(alpha|beta|rc|pre|dev)", v, re.IGNORECASE):
-                    debug_info(f"Skipping pre-release version: {v}", verbose)
-                    continue
+            if not check_prereleases and re.search(
+                r"(alpha|beta|rc|pre|dev)", v, re.IGNORECASE
+            ):
+                debug_info(f"Skipping pre-release version: {v}", verbose)
+                continue
             if version_pin and not _matches_version_pin(v, version_pin):
                 continue
             versions.append(v)
@@ -1413,6 +1416,7 @@ def regenerate_source_checksums(spec_file, verbose):
                 [get_source, spec_basename],
                 capture_output=True,
                 text=True,
+                check=False,
             )
             if result.returncode != 0:
                 log_warn(
@@ -1432,6 +1436,7 @@ def regenerate_source_checksums(spec_file, verbose):
             [gen_checksums, spec_file],
             capture_output=True,
             text=True,
+            check=False,
         )
         if result.returncode == 0:
             log_info(result.stdout.strip())
@@ -1484,6 +1489,7 @@ def commit_updates(updated_results):
     rc = subprocess.run(
         ["git", "diff", "--cached", "--quiet"],
         capture_output=True,
+        check=False,
     )
     if rc.returncode == 0:
         log_info("No changes to commit")
@@ -1808,6 +1814,7 @@ def display_results_markdown(results, no_glow):
             ["glow", "-w", "0", "-"],
             input=md_text,
             text=True,
+            check=False,
         )
         if proc.returncode != 0:
             print(md_text, end="")
@@ -1864,13 +1871,13 @@ class Config:
     """Configuration parsed from command-line arguments."""
 
     __slots__ = (
-        "verbose",
-        "prereleases",
-        "output",
-        "token",
         "no_glow",
+        "output",
         "package",
+        "prereleases",
+        "token",
         "update",
+        "verbose",
     )
 
     def __init__(self, args):

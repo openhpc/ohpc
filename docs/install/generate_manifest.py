@@ -28,10 +28,10 @@ import argparse
 import re
 import subprocess
 import sys
-import yaml
 from dataclasses import dataclass
 from pathlib import Path
 
+import yaml
 
 # ---------------------------------------------------------------------------
 # Configuration Loading
@@ -252,8 +252,7 @@ def display_name(group: PackageGroup) -> str:
     name = strip_ohpc_suffix(group.base_name)
     for variant in BUILD_VARIANTS:
         suffix = f"-{variant}"
-        if name.endswith(suffix):
-            name = name[: -len(suffix)]
+        name = name.removesuffix(suffix)
     return name
 
 

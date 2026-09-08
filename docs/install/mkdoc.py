@@ -25,10 +25,11 @@ from jinja2 import (
     Environment,
     FileSystemLoader,
     StrictUndefined,
-    TemplateSyntaxError,
     TemplateRuntimeError,
+    TemplateSyntaxError,
     UndefinedError,
 )
+from jinja2.exceptions import TemplateError
 from jinja2.ext import Extension
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -68,7 +69,9 @@ class SectionCommentExtension(Extension):
         )
 
 
-def create_jinja_env(template_dirs: list[Path], config: dict = None) -> Environment:
+def create_jinja_env(
+    template_dirs: list[Path], config: dict | None = None
+) -> Environment:
     """Create Jinja2 environment with template search paths."""
     env = Environment(
         loader=FileSystemLoader([str(d) for d in template_dirs]),
@@ -109,7 +112,7 @@ def render_template(
             for frame in reversed(tb):
                 if frame.filename.endswith(".j2") or "template" in frame.filename:
                     print(f"Error in {frame.filename}", file=sys.stderr)
-                    print(f"  Line {frame.lineno}: {str(e)}", file=sys.stderr)
+                    print(f"  Line {frame.lineno}: {e!s}", file=sys.stderr)
                     break
         raise
 
@@ -118,7 +121,7 @@ def render_document(env: Environment, config: dict) -> str:
     """Render the document from the main chapter template."""
     try:
         return render_template(env, "chapters/main.md.j2", config)
-    except Exception as e:
+    except TemplateError as e:
         print(f"Error rendering chapters/main.md.j2:\n  {e}", file=sys.stderr)
         sys.exit(1)
 

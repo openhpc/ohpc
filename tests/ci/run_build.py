@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 
-import subprocess
-import selectors
 import argparse
-import logging
-import shutil
-import time
-import pwd
-import sys
 import csv
-import os
 import io
+import logging
+import os
+import pwd
+import selectors
+import shutil
+import subprocess
+import sys
+import time
 
 logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -46,21 +47,22 @@ dist = "9999.ci.ohpc"
 version_id = ""
 
 # Check which base OS we are using
-reader = csv.DictReader(open("/etc/os-release"), delimiter="=")
+with open("/etc/os-release") as os_release:
+    reader = csv.DictReader(os_release, delimiter="=")
 
-skip_ci_specs = []
-skip_ci_specs_env = os.getenv("SKIP_CI_SPECS")
-if skip_ci_specs_env:
-    skip_ci_specs = skip_ci_specs_env.rstrip().split()
+    skip_ci_specs = []
+    skip_ci_specs_env = os.getenv("SKIP_CI_SPECS")
+    if skip_ci_specs_env:
+        skip_ci_specs = skip_ci_specs_env.rstrip().split()
 
-for row in reader:
-    key = row.pop("NAME")
-    if key in ["ID_LIKE", "ID"]:
-        for item in list(row.items())[0]:
-            if "fedora" in item or "openEuler" in item:
-                dnf_based = True
-    if key == "VERSION_ID":
-        version_id = list(row.items())[0][1]
+    for row in reader:
+        key = row.pop("NAME")
+        if key in ["ID_LIKE", "ID"]:
+            for item in next(iter(row.items())):
+                if "fedora" in item or "openEuler" in item:
+                    dnf_based = True
+        if key == "VERSION_ID":
+            version_id = next(iter(row.items()))[1]
 
 # Enable ccache for CI builds
 os.makedirs("/etc/rpm", exist_ok=True)
@@ -85,7 +87,7 @@ local_repo_configured = False
 
 
 def run_command(command):
-    logging.info("About to run command %s" % " ".join(command))
+    logger.info(f"About to run command {' '.join(command)}")
     process = subprocess.Popen(
         command,
         bufsize=1,
@@ -134,20 +136,20 @@ def loop_command(command, max_attempts=5):
             (success, output) = run_command(command)
             if success:
                 return (True, output)
-        except Exception as e:
-            logging.error("Exception: %s" % e)
+        except OSError as e:
+            logger.error(f"Exception: {e}")
 
         if attempt_counter >= abs(max_attempts):
             return (False, output)
 
-        logging.info("Retrying attempt '%i'" % attempt_counter)
+        logger.info(f"Retrying attempt '{attempt_counter}'")
         time.sleep(attempt_counter)
 
 
 def get_build_order(specfiles):
     """Use misc/build_order.sh to determine the correct build order
     for the given spec files."""
-    logging.info("Determining build order using misc/build_order.sh")
+    logger.info("Determining build order using misc/build_order.sh")
 
     # Ensure RPM build environment is set up (build_order.sh requires
     # OHPC_macros in the RPM source directory)
@@ -162,13 +164,13 @@ def get_build_order(specfiles):
         macros_src = "components/OHPC_macros"
         if os.path.exists(macros_src):
             shutil.copy2(macros_src, macros_dest)
-            logging.info("Copied OHPC_macros to %s" % macros_dest)
+            logger.info(f"Copied OHPC_macros to {macros_dest}")
         else:
-            logging.warning("components/OHPC_macros not found")
+            logger.warning("components/OHPC_macros not found")
 
     success, output = run_command(["misc/build_order.sh"])
     if not success:
-        logging.warning("misc/build_order.sh failed, using original spec file order")
+        logger.warning("misc/build_order.sh failed, using original spec file order")
         return specfiles
 
     # build_order.sh prints all spec paths in order on one line
@@ -200,9 +202,7 @@ def get_build_order(specfiles):
         return len(ordered)
 
     sorted_specs = sorted(specfiles, key=sort_key)
-    logging.info(
-        "Build order: %s" % " ".join([os.path.basename(s) for s in sorted_specs])
-    )
+    logger.info(f"Build order: {' '.join(os.path.basename(s) for s in sorted_specs)}")
     return sorted_specs
 
 
@@ -220,10 +220,10 @@ def setup_local_repo():
     ]:
         os.chown(d, uid, gid)
 
-    logging.info("Running createrepo_c on %s" % rpmbuild_rpms_dir)
+    logger.info(f"Running createrepo_c on {rpmbuild_rpms_dir}")
     success, _ = run_command(["createrepo_c", rpmbuild_rpms_dir])
     if not success:
-        logging.error("createrepo_c failed on %s" % rpmbuild_rpms_dir)
+        logger.error(f"createrepo_c failed on {rpmbuild_rpms_dir}")
         return False
 
     if not local_repo_configured:
@@ -232,10 +232,10 @@ def setup_local_repo():
             with open(repo_file, "w") as f:
                 f.write("[local-ohpc-ci]\n")
                 f.write("name=Local OpenHPC CI builds\n")
-                f.write("baseurl=file://%s\n" % rpmbuild_rpms_dir)
+                f.write(f"baseurl=file://{rpmbuild_rpms_dir}\n")
                 f.write("enabled=1\n")
                 f.write("gpgcheck=0\n")
-            logging.info("Configured local DNF repository at %s" % repo_file)
+            logger.info(f"Configured local DNF repository at {repo_file}")
         else:
             success, _ = run_command(
                 [
@@ -248,9 +248,9 @@ def setup_local_repo():
                 ]
             )
             if not success:
-                logging.error("Failed to add local zypper repository")
+                logger.error("Failed to add local zypper repository")
                 return False
-            logging.info("Configured local zypper repository")
+            logger.info("Configured local zypper repository")
 
         local_repo_configured = True
 
@@ -282,10 +282,10 @@ def build_srpm_and_rpm(
         if output is not None:
             for line in output.split("\n"):
                 if "No compatible architectures found for build" in line:
-                    logging.info("Skipping unsupported architecture RPM")
+                    logger.info("Skipping unsupported architecture RPM")
                     return True
 
-        logging.error("Running misc/build_srpm.sh failed")
+        logger.error("Running misc/build_srpm.sh failed")
         return False
 
     src_rpm = ""
@@ -295,10 +295,10 @@ def build_srpm_and_rpm(
             break
 
     if src_rpm == "":
-        logging.error("SRPM generation failed")
+        logger.error("SRPM generation failed")
         return False
 
-    logging.info(src_rpm)
+    logger.info(src_rpm)
 
     if dnf_based:
         builddep_command = [
@@ -318,7 +318,7 @@ def build_srpm_and_rpm(
 
     success, _ = loop_command(builddep_command)
     if not success:
-        logging.error("Running '%s' failed" % " ".join(builddep_command))
+        logger.error(f"Running '{' '.join(builddep_command)}' failed")
         return False
 
     tmp_src_rpm = os.path.join("/tmp", os.path.basename(src_rpm))
@@ -335,27 +335,27 @@ def build_srpm_and_rpm(
         build_user,
         "-l",
         "-c",
-        'rpmbuild --define "dist %s" --rebuild %s' % (dist, src_rpm),
+        f'rpmbuild --define "dist {dist}" --rebuild {src_rpm}',
     ]
 
     if mpi_family is not None:
-        rebuild_command[-1] += " --define 'mpi_family %s'" % mpi_family
+        rebuild_command[-1] += f" --define 'mpi_family {mpi_family}'"
 
     if compiler_family is not None:
-        rebuild_command[-1] += " --define 'compiler_family %s'" % compiler_family
+        rebuild_command[-1] += f" --define 'compiler_family {compiler_family}'"
 
     if not_mpi_dependent:
         rebuild_command[-1] += " --define 'ohpc_mpi_dependent 0'"
 
     # Disable parallel builds for below packages on aarch64 to avoid OOM
     pkgs = ["boost-", "paraver-"]
-    if any([x in src_rpm for x in pkgs]) and os.uname().machine == "aarch64":
+    if any(x in src_rpm for x in pkgs) and os.uname().machine == "aarch64":
         rebuild_command[-1] += " --define '_smp_mflags -j1'"
 
-    logging.warning(rebuild_command)
+    logger.warning(rebuild_command)
     success, _ = run_command(rebuild_command)
     if not success:
-        logging.error("Running 'rpmbuild --rebuild' failed")
+        logger.error("Running 'rpmbuild --rebuild' failed")
         return False
 
     return True
@@ -418,12 +418,12 @@ for spec in specfiles:
     just_spec = os.path.basename(spec)
     total += 1
     if spec in skip_ci_specs:
-        logging.info("--> Skipping spec file %s" % spec)
+        logger.info(f"--> Skipping spec file {spec}")
         skipped.append(just_spec)
         continue
 
     spec_found = True
-    logging.info("--> Building RPM from spec file %s" % spec)
+    logger.info(f"--> Building RPM from spec file {spec}")
 
     command = [
         "misc/get_source.sh",
@@ -432,14 +432,13 @@ for spec in specfiles:
 
     success, _ = run_command(command)
     if not success:
-        logging.error("Running misc/get_source.sh failed")
+        logger.error("Running misc/get_source.sh failed")
         failed.append(just_spec)
         continue
 
     # cache spec file contents
-    infile = open(spec)
-    contents = infile.read()
-    infile.close()
+    with open(spec) as infile:
+        contents = infile.read()
 
     if "ohpc_mpi_dependent" in contents:
         families = [
@@ -459,10 +458,10 @@ for spec in specfiles:
                 mpi_family=family,
                 compiler_family=args.compiler_family,
             ):
-                failed.append("%s (%s, %s)" % (just_spec, args.compiler_family, family))
+                failed.append(f"{just_spec} ({args.compiler_family}, {family})")
             else:
                 rebuild_success.append(
-                    "%s (%s, %s)" % (just_spec, args.compiler_family, family)
+                    f"{just_spec} ({args.compiler_family}, {family})"
                 )
 
         if "!?ohpc_mpi_dependent" in contents:
@@ -476,18 +475,18 @@ for spec in specfiles:
                 compiler_family=args.compiler_family,
                 not_mpi_dependent=True,
             ):
-                failed.append("%s (%s)" % (just_spec, args.compiler_family))
+                failed.append(f"{just_spec} ({args.compiler_family})")
             else:
-                rebuild_success.append("%s (%s)" % (just_spec, args.compiler_family))
+                rebuild_success.append(f"{just_spec} ({args.compiler_family})")
 
     elif "ohpc_compiler_dependent" in contents:
         if not build_srpm_and_rpm(
             spec,
             compiler_family=args.compiler_family,
         ):
-            failed.append("%s (%s)" % (just_spec, args.compiler_family))
+            failed.append(f"{just_spec} ({args.compiler_family})")
         else:
-            rebuild_success.append("%s (%s)" % (just_spec, args.compiler_family))
+            rebuild_success.append(f"{just_spec} ({args.compiler_family})")
 
     else:
         if not build_srpm_and_rpm(spec):
@@ -503,27 +502,27 @@ for spec in specfiles:
 
 
 if not spec_found:
-    logging.info("SKIP. Commit without changes to a SPEC file.")
+    logger.info("SKIP. Commit without changes to a SPEC file.")
 
-logging.info("Found %d spec file(s)" % total)
+logger.info(f"Found {total} spec file(s)")
 if build_order_used:
-    logging.info("--> Build order: %s" % " -> ".join(build_order_used))
-logging.info("--> %d rebuild successfully" % len(rebuild_success))
+    logger.info(f"--> Build order: {' -> '.join(build_order_used)}")
+logger.info(f"--> {len(rebuild_success)} rebuild successfully")
 for success in rebuild_success:
-    logging.info("----> %s" % success)
+    logger.info(f"----> {success}")
 
-logging.info("--> %d rebuilds skipped" % len(skipped))
+logger.info(f"--> {len(skipped)} rebuilds skipped")
 
 for skip in skipped:
-    logging.info("----> %s skipped" % skip)
+    logger.info(f"----> {skip} skipped")
 
 if len(failed) > 0:
-    logging.error("--> %d rebuilds failed" % len(failed))
+    logger.error(f"--> {len(failed)} rebuilds failed")
     for fail in failed:
-        logging.info("----> %s failed" % fail)
+        logger.info(f"----> {fail} failed")
 
-    logging.error("ERROR")
+    logger.error("ERROR")
     sys.exit(1)
 
-logging.info("No errors found. Exiting.")
+logger.info("No errors found. Exiting.")
 sys.exit(0)

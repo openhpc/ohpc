@@ -1,5 +1,7 @@
-import numpy as np
+#!/usr/bin/env python3
 import time
+
+import numpy as np
 
 N = 6000
 M = 10000
@@ -32,4 +34,4 @@ for K in k_list:
 
     tm = (end - start) / 5.0
 
-    print("{0:4}, {1:9.7}, {2:9.7}".format(K, tm, get_gflops(M, N, K) / tm))
+    print(f"{K:4}, {tm:9.7}, {get_gflops(M, N, K) / tm:9.7}")
