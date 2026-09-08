@@ -142,9 +142,11 @@ sudo --user="${USER}" --login bash -c "cd ${PWD}/tests; find ./ -name '*.log' -d
 # Always running at least with '--enable-modules'. No need to check for
 # an empty TESTS array.
 MPI_FAMILIES="openmpi5 mpich"
-if [ "$(uname -m)" != "aarch64" ]; then
-	MPI_FAMILIES="${MPI_FAMILIES} mvapich2"
-fi
+
+## Disabling this for now. Sometimes mvapich2 based tests are not working in GitHub Actions.
+##if [ "$(uname -m)" != "aarch64" ]; then
+##	MPI_FAMILIES="${MPI_FAMILIES} mvapich2"
+##fi
 if sudo \
 	--user="${USER}" \
 	--preserve-env=SIMPLE_CI \
