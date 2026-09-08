@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Generate a ChangeLog by comparing pkg-ohpc.all between a previous git
 release tag and the current working tree.
@@ -20,8 +19,9 @@ Output (in the specified manifest directory):
 import argparse
 import subprocess
 import sys
-import yaml
 from pathlib import Path
+
+import yaml
 
 
 def load_config() -> dict:

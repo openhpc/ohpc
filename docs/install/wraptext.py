@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Hard-wrap prose in a Jinja2 markdown template to 80 columns.
 
 Skips: fenced code blocks, HTML comments, Jinja2 block/comment tags,
@@ -22,16 +21,8 @@ LIST_RE = re.compile(r"^(\s*)([-*+]|\d+\.)\s+")
 def is_verbatim(line: str) -> bool:
     """Return True for lines that must be output as-is (not accumulated)."""
     s = line.strip()
-    return (
-        not s  # empty (handled separately)
-        or s.startswith("```")
-        or s.startswith("<!--")
-        or s.startswith("{%")
-        or s.startswith("{#")
-        or s.startswith("|")
-        or s.startswith("#")
-        or s.startswith("\\")
-        or s.startswith(":::")
+    return not s or s.startswith(  # empty (handled separately)
+        ("```", "<!--", "{%", "{#", "|", "#", "\\", ":::")
     )
 
 

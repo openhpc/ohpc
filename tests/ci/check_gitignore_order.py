@@ -69,6 +69,7 @@ def check_single_gitignore(repo_root):
         capture_output=True,
         text=True,
         cwd=repo_root,
+        check=False,
     )
     extra = []
     for line in result.stdout.strip().splitlines():
