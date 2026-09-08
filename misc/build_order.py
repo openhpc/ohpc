@@ -1,9 +1,5 @@
 #!/bin/python3
 
-# To be able to use this script with python2 and python3 the following
-# is needed (just for the last line: print('%s' % i, end=' '))
-from __future__ import print_function
-
 import sys
 
 
@@ -36,9 +32,7 @@ def topological_sort(source):
                 next_emitted.append(name)
         if not next_emitted:
             # all entries have unmet deps, one of two things is wrong...
-            raise ValueError(
-                "cyclic or missing dependency detected: %r" % (next_pending,)
-            )
+            raise ValueError(f"cyclic or missing dependency detected: {next_pending!r}")
         pending = next_pending
         emitted = next_emitted
 
@@ -52,34 +46,35 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 
-for line in open(sys.argv[1]):
-    line = line.rstrip().split(":")
-    # The spec_dict is later used to translate
-    # package names into spec files
-    spec_dict[line[1]] = line[0]
-    # Store full path mapping if available (field 4)
-    if len(line) >= 4:
-        spec_path_dict[line[0]] = line[3]
-    # Ignore the meta_packages
-    if line[1] == "meta-packages":
-        continue
-    # Ignore non ohpc (Build)Requires
-    if line[2] == "NA":
-        continue
-    # Ignore kernel modules
-    if line[2].startswith("kmod"):
-        continue
-    # Ignore the nagios_plugins
-    if line[2].startswith("nagios"):
-        continue
-    # This tries to filter out versions with a "." or _isa with a "("
-    if "." in line[2] or "(" in line[2]:
-        continue
-    if line[0] in dependency:
-        if line[2] not in dependency[line[0]]:
-            dependency[line[0]].append(line[2])
-    else:
-        dependency[line[0]] = [line[2]]
+with open(sys.argv[1]) as depfile:
+    for line in depfile:
+        line = line.rstrip().split(":")
+        # The spec_dict is later used to translate
+        # package names into spec files
+        spec_dict[line[1]] = line[0]
+        # Store full path mapping if available (field 4)
+        if len(line) >= 4:
+            spec_path_dict[line[0]] = line[3]
+        # Ignore the meta_packages
+        if line[1] == "meta-packages":
+            continue
+        # Ignore non ohpc (Build)Requires
+        if line[2] == "NA":
+            continue
+        # Ignore kernel modules
+        if line[2].startswith("kmod"):
+            continue
+        # Ignore the nagios_plugins
+        if line[2].startswith("nagios"):
+            continue
+        # This tries to filter out versions with a "." or _isa with a "("
+        if "." in line[2] or "(" in line[2]:
+            continue
+        if line[0] in dependency:
+            if line[2] not in dependency[line[0]]:
+                dependency[line[0]].append(line[2])
+        else:
+            dependency[line[0]] = [line[2]]
 
 additional = {}
 
@@ -87,7 +82,7 @@ additional = {}
 for v in dependency.values():
     for value in v:
         try:
-            if spec_dict[value] not in dependency.keys():
+            if spec_dict[value] not in dependency:
                 additional[spec_dict[value]] = []
         except KeyError as err:
             # Handle python_prefix rpm macro
@@ -119,6 +114,6 @@ dep_list = [(k, set(v)) for (k, v) in dependency.items()]
 for i in topological_sort(dep_list):
     # Use full path if available, otherwise fall back to spec filename
     output_path = spec_path_dict.get(i, i)
-    print("%s" % output_path, end=" ")
+    print(f"{output_path}", end=" ")
 
-print("")
+print()
