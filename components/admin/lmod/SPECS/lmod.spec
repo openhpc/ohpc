@@ -16,7 +16,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   9.2
+Version:   9.4
 Release:   %{?dist}.1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
@@ -27,6 +27,7 @@ BuildRequires: rsync
 BuildRequires: tcl-devel
 BuildRequires: gcc make bc
 BuildRequires: %{procps}
+BuildRequires: tcsh
 
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: lua-devel
