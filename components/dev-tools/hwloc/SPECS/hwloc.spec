@@ -45,7 +45,7 @@ Requires: libxml2-devel
 
 # Default library install path
 # note that this install path is purposefully not including a version
-# so that RMS packages that do not rely on Lmod environments can
+# so that RMS packages that do not rely on module environments can
 # access in a fixed location. As a result, this package does not support
 # multi-version coinstalls.
 %define install_path %{OHPC_LIBS}/%{pname}

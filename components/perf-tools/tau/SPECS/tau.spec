@@ -253,7 +253,7 @@ find ${INSTALLROOT} -type l | while read link; do
     esac
 done
 
-# Remove RUNPATH entries. Use LMOD environment config instead.
+# Remove RUNPATH entries. Use module environment config instead.
 find ${INSTALLROOT}/lib -type f -name '*.so' -exec chrpath -d {} \;
 
 # Create shared-mpi binding symlink for tau_exec and libTauMpi convenience symlinks
