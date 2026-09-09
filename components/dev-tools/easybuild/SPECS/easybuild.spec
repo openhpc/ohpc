@@ -34,8 +34,9 @@ Requires:  python3
 Requires:  patch
 #!BuildIgnore: post-build-checks
 
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
+# "module" dependency (note that a module tool is pre-populated in the OpenHPC
+# OBS build environment; if building outside, module tool remains a formal build
+# dependency).
 %if !0%{?OHPC_BUILD}
 BuildRequires: environment(modules)%{PROJ_DELIM}
 Requires: environment(modules)%{PROJ_DELIM}
@@ -82,12 +83,19 @@ set             version                 %{version}
 set             home                    \$::env(HOME)
 
 prepend-path    PATH                    %{install_path}/bin
-prepend-path    PATH                    ${LMOD_DIR}
 module          use                     \$home/.local/easybuild/modules/all
 
 setenv          EBROOTEASYBUILD         %{install_path}
 setenv          EBVERSIONEASYBUILD      %{version}
 setenv          EB_PYTHON               python3
+
+# adapt to module tool used
+if {\$ModuleTool eq {Modules}} {
+    setenv      EASYBUILD_MODULES_TOOL  EnvironmentModules
+    setenv      EASYBUILD_MODULE_SYNTAX Tcl
+} else {
+    prepend-path PATH                   ${LMOD_DIR}
+}
 
 prepend-path	PYTHONPATH	    %{install_path}/lib/python%{python3_version}/site-packages
 
