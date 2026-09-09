@@ -50,7 +50,7 @@ Provides OpenHPC-style module compatibility for use with the Arm HPC compiler su
 
 echo "Creating OpenHPC compatibility modulefile for local Arm compiler installation(s)."
 
-# Create a top-level arm/compat module which appends the lmod modulepath to see
+# Create a top-level arm/compat module which appends the modulepath to see
 # modulefiles provided by Arm installation
 
 latest_installed_ver=$(rpm -qa --queryformat "%%{VERSION} %%{NAME}\\n" | grep " arm-linux-compiler" | sort -rn | cut -d " " -f 1)
