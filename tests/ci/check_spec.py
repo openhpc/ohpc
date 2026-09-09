@@ -24,9 +24,11 @@ regex_wrong = [
 regex_required = [
     # Group designation should include %{PROJ_NAME} delimiter and
     # known component area
-    "^Group:.*%{PROJ_NAME}/(admin|compiler-families|dev-tools|distro-packages|"
-    "io-libs|lustre|meta-package|mpi-families|parallel-libs|perf-tools|"
-    "provisioning|rms|runtimes|serial-libs)$",
+    (
+        "^Group:.*%{PROJ_NAME}/(admin|compiler-families|dev-tools|distro-packages|"
+        "io-libs|lustre|meta-package|mpi-families|parallel-libs|perf-tools|"
+        "provisioning|rms|runtimes|serial-libs)$"
+    ),
     # Need a URL
     "(^URL:.*$|Url:.*$)",
 ]
@@ -37,7 +39,7 @@ if len(sys.argv) <= 1:
 
 regex_wrong_string = "(" + "|".join(regex_wrong) + ")"
 
-print("Checking that %s does not exist" % regex_wrong_string)
+print(f"Checking that {regex_wrong_string} does not exist")
 
 pattern = re.compile(regex_wrong_string)
 
@@ -53,26 +55,25 @@ for spec in sys.argv[1:]:
     if not spec.endswith(".spec"):
         continue
     if spec in skip_ci_specs:
-        print("--> Skipping spec file %s" % spec)
+        print(f"--> Skipping spec file {spec}")
         continue
     spec_found = True
-    print("--> Scanning spec file %s" % spec)
+    print(f"--> Scanning spec file {spec}")
 
     # cache spec file contents
-    infile = open(spec)
-    contents = infile.read()
-    infile.close()
+    with open(spec) as infile:
+        contents = infile.read()
 
     # first, verify patterns which should *not* be present
     for line in contents.split("\n"):
         if pattern.match(line):
-            print("    [+] Found %s" % (line.rstrip()))
+            print(f"    [+] Found {line.rstrip()}")
             error = True
 
     # next, verify items which should be present
     for requirement in regex_required:
         if not re.findall(requirement, contents, re.MULTILINE):
-            print("    [-] Missing %s" % requirement)
+            print(f"    [-] Missing {requirement}")
             error = True
 
 if not spec_found:

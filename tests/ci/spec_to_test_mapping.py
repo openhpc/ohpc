@@ -134,7 +134,7 @@ admin_tests = ""
 pkgs = ""
 
 for i in sys.argv[1:]:
-    if i in test_map.keys():
+    if i in test_map:
         if len(tests) > 0:
             tests += " "
         if len(admin_tests) > 0:
@@ -149,11 +149,4 @@ for i in sys.argv[1:]:
             admin_tests += f"--enable-{test_map[i][1]}"
         pkgs += test_map[i][2]
 
-print(
-    "TESTS=(%s) ADMIN_TESTS=(%s) PKGS=(%s)"
-    % (
-        tests,
-        admin_tests,
-        pkgs,
-    )
-)
+print(f"TESTS=({tests}) ADMIN_TESTS=({admin_tests}) PKGS=({pkgs})")
