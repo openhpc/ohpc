@@ -74,12 +74,12 @@ class Result:
     """Container for a single package-check result."""
 
     __slots__ = (
-        "name",
         "current_version",
         "latest_version",
-        "status",
+        "name",
         "repo",
         "spec_file",
+        "status",
         "version_pin",
     )
 
@@ -589,10 +589,11 @@ def get_latest_jsc_perftools_version(
 
     versions = []
     for version in matches:
-        if not check_prereleases:
-            if re.search(r"-(rc|alpha|beta|pre|dev)\d*$", version):
-                debug_info(f"Skipping pre-release version: {version}", verbose)
-                continue
+        if not check_prereleases and re.search(
+            r"-(rc|alpha|beta|pre|dev)\d*$", version
+        ):
+            debug_info(f"Skipping pre-release version: {version}", verbose)
+            continue
         if version_pin and not _matches_version_pin(version, version_pin):
             continue
         versions.append(version)
@@ -697,10 +698,11 @@ def get_latest_bsc_ftp_version(
     for v in raw_versions:
         if v == "latest" or not re.match(r"\d", v):
             continue
-        if not check_prereleases:
-            if re.search(r"(rc|alpha|beta|pre|dev)\d*", v, re.IGNORECASE):
-                debug_info(f"Skipping pre-release version: {v}", verbose)
-                continue
+        if not check_prereleases and re.search(
+            r"(rc|alpha|beta|pre|dev)\d*", v, re.IGNORECASE
+        ):
+            debug_info(f"Skipping pre-release version: {v}", verbose)
+            continue
         if version_pin and not _matches_version_pin(v, version_pin):
             continue
         versions.append(v)
@@ -800,10 +802,11 @@ def get_latest_pnetcdf_version(check_prereleases, verbose, version_pin=None):
     for v in raw_versions:
         if v not in seen:
             seen.add(v)
-            if not check_prereleases:
-                if re.search(r"(alpha|beta|rc|pre|dev)", v, re.IGNORECASE):
-                    debug_info(f"Skipping pre-release version: {v}", verbose)
-                    continue
+            if not check_prereleases and re.search(
+                r"(alpha|beta|rc|pre|dev)", v, re.IGNORECASE
+            ):
+                debug_info(f"Skipping pre-release version: {v}", verbose)
+                continue
             if version_pin and not _matches_version_pin(v, version_pin):
                 continue
             versions.append(v)
@@ -1410,9 +1413,8 @@ def commit_updates(updated_results):
         subprocess.run(
             ["git", "add"] + spec_files,
             check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
+            capture_output=True,
+            text=True,
         )
     except FileNotFoundError:
         log_warn("git not found; skipping commit")
@@ -1424,8 +1426,8 @@ def commit_updates(updated_results):
     # Check if there are actually staged changes
     rc = subprocess.run(
         ["git", "diff", "--cached", "--quiet"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
+        check=False,
     )
     if rc.returncode == 0:
         log_info("No changes to commit")
@@ -1483,16 +1485,14 @@ def commit_updates(updated_results):
     try:
         sob_name = subprocess.run(
             ["git", "config", "user.name"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
+            capture_output=True,
+            text=True,
             check=True,
         ).stdout.strip()
         sob_email = subprocess.run(
             ["git", "config", "user.email"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
+            capture_output=True,
+            text=True,
             check=True,
         ).stdout.strip()
         body_lines.append("")
@@ -1506,9 +1506,8 @@ def commit_updates(updated_results):
         subprocess.run(
             ["git", "commit", "-m", message],
             check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
+            capture_output=True,
+            text=True,
         )
     except subprocess.CalledProcessError as exc:
         log_warn(f"Failed to create commit: {exc.stderr.strip()}")
@@ -1752,7 +1751,8 @@ def display_results_markdown(results, no_glow):
         proc = subprocess.run(
             ["glow", "-w", "0", "-"],
             input=md_text,
-            universal_newlines=True,
+            text=True,
+            check=False,
         )
         if proc.returncode != 0:
             print(md_text, end="")
@@ -1809,13 +1809,13 @@ class Config:
     """Configuration parsed from command-line arguments."""
 
     __slots__ = (
-        "verbose",
-        "prereleases",
-        "output",
-        "token",
         "no_glow",
+        "output",
         "package",
+        "prereleases",
+        "token",
         "update",
+        "verbose",
     )
 
     def __init__(self, args):
