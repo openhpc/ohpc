@@ -34,6 +34,8 @@
 %global gnu15_mpc_version 1.4.1
 %global gnu15_mpfr_version 4.2.2
 
+%global mirror_url https://mirror1.hs-esslingen.de/Mirrors/ftp.gnu.org/
+
 # openEuler has no dependable texinfo (none at all on its ppc64le port); build
 # this version inline on openEuler so makeinfo is available for GCC's info manuals.
 %global texinfo_ver 7.0.3
@@ -55,27 +57,27 @@
 %global gnu_version %{gnu15_version}
 %endif
 
-Source0:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu12_version}/gcc-%{gnu12_version}.tar.xz
-Source1:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu12_gmp_version}.tar.bz2
-Source2:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu12_mpc_version}.tar.gz
-Source3:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu12_mpfr_version}.tar.gz
+Source0:   %{mirror_url}gcc/gcc-%{gnu12_version}/gcc-%{gnu12_version}.tar.xz
+Source1:   %{mirror_url}gmp/gmp-%{gnu12_gmp_version}.tar.bz2
+Source2:   %{mirror_url}mpc/mpc-%{gnu12_mpc_version}.tar.gz
+Source3:   %{mirror_url}mpfr/mpfr-%{gnu12_mpfr_version}.tar.gz
 
-Source4:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu13_version}/gcc-%{gnu13_version}.tar.xz
-Source5:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu13_gmp_version}.tar.bz2
-Source6:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu13_mpc_version}.tar.gz
-Source7:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu13_mpfr_version}.tar.gz
+Source4:   %{mirror_url}gcc/gcc-%{gnu13_version}/gcc-%{gnu13_version}.tar.xz
+Source5:   %{mirror_url}gmp/gmp-%{gnu13_gmp_version}.tar.bz2
+Source6:   %{mirror_url}mpc/mpc-%{gnu13_mpc_version}.tar.gz
+Source7:   %{mirror_url}mpfr/mpfr-%{gnu13_mpfr_version}.tar.gz
 
-Source8:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu14_version}/gcc-%{gnu14_version}.tar.xz
-Source9:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu14_gmp_version}.tar.bz2
-Source10:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu14_mpc_version}.tar.gz
-Source11:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu14_mpfr_version}.tar.gz
+Source8:   %{mirror_url}gcc/gcc-%{gnu14_version}/gcc-%{gnu14_version}.tar.xz
+Source9:   %{mirror_url}gmp/gmp-%{gnu14_gmp_version}.tar.bz2
+Source10:   %{mirror_url}mpc/mpc-%{gnu14_mpc_version}.tar.gz
+Source11:   %{mirror_url}mpfr/mpfr-%{gnu14_mpfr_version}.tar.gz
 
-Source12:   https://ftpmirror.gnu.org/gnu/gcc/gcc-%{gnu15_version}/gcc-%{gnu15_version}.tar.xz
-Source13:   https://ftpmirror.gnu.org/gnu/gmp/gmp-%{gnu15_gmp_version}.tar.bz2
-Source14:   https://ftpmirror.gnu.org/gnu/mpc/mpc-%{gnu15_mpc_version}.tar.xz
-Source15:   https://ftpmirror.gnu.org/gnu/mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
+Source12:   %{mirror_url}gcc/gcc-%{gnu15_version}/gcc-%{gnu15_version}.tar.xz
+Source13:   %{mirror_url}gmp/gmp-%{gnu15_gmp_version}.tar.bz2
+Source14:   %{mirror_url}mpc/mpc-%{gnu15_mpc_version}.tar.xz
+Source15:   %{mirror_url}mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
 # texinfo, built inline on openEuler (no dependable distro texinfo there)
-Source16:   https://ftpmirror.gnu.org/gnu/texinfo/texinfo-%{texinfo_ver}.tar.xz
+Source16:   %{mirror_url}texinfo/texinfo-%{texinfo_ver}.tar.xz
 
 %global pname %{gnu_major_ver}-compilers
 
