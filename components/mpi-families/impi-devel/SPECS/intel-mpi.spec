@@ -42,6 +42,10 @@ Requires: intel-oneapi-mpi-devel-%{exact_mpi_ver}
 Requires: intel-compilers-devel%{PROJ_DELIM} = %{version}
 Requires: prun%{PROJ_DELIM}
 
+# modulecmd needed to run ohpc-update-modules-impi
+Requires(post): environment(modules)%{PROJ_DELIM}
+Requires:       environment(modules)%{PROJ_DELIM}
+
 %description
 Provides OpenHPC-style compatible modules for use with the oneAPI
 MPI Library.
@@ -49,7 +53,6 @@ MPI Library.
 %install
 # Mod generator for oneAPI support
 sed -e 's|@@oneapi_manifest@@|%{oneapi_manifest}|' \
-    -e 's|@@OHPC_ADMIN@@|%{OHPC_ADMIN}|' \
     -e 's|@@OHPC_MODULEDEPS@@|%{OHPC_MODULEDEPS}|g' \
     -e 's|@@OHPC_MODULES@@|%{OHPC_MODULES}|' \
     -e 's|@@exact_deps@@|%{exact_deps}|' \
