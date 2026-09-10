@@ -29,6 +29,7 @@ is_aarch64: false
 is_warewulf: false
 is_openchami: false
 is_confluent: false
+is_xcat: false
 
 ## Scheduler
 is_slurm: false

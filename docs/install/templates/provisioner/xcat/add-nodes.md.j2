@@ -1,0 +1,63 @@
+## Add Compute Nodes into xCAT Database
+
+Add compute nodes and define their properties as objects in the xCAT database.
+Hosts are grouped into a group named *compute* to allow group-level commands
+later in the recipe. Note the use of variable names for hostnames, node IPs, MAC
+addresses, and BMC login credentials — adjust to match local hardware.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add hosts to cluster -->
+```bash
+for ((i=0; i<num_computes; i++)) ; do
+    mkdef -t node ${c_name[$i]} \
+        groups=compute,all \
+        ip=${c_ip[$i]} \
+        mac=${c_mac[$i]} \
+        netboot=xnba \
+        arch={{ arch }} \
+        bmc=${c_bmc[$i]} \
+        bmcusername=${bmc_username} \
+        bmcpassword=${bmc_password} \
+        mgt=ipmi \
+        cons=ipmi \
+        serialport=0 \
+        serialspeed=115200
+done
+```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setup IPoIB networking -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+# Define ib0 netmask
+chdef -t network -o ib0 mask=${ipoib_netmask} net=${c_ipoib[0]}
+
+# Enable secondary NIC configuration
+chdef compute -p postbootscripts=confignics
+
+# Register desired IPoIB IPs per compute
+for ((i=0; i<num_computes; i++)) ; do
+    chdef ${c_name[$i]} \
+        nicips.ib0=${c_ipoib[$i]} \
+        nictypes.ib0="InfiniBand" \
+        nicnetworks.ib0=ib0
+done
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+Complete network service configuration:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Complete networking setup -->
+```bash
+makehosts
+makenetworks
+
+# makedns must run before makedhcp: xCAT's Kea DHCP-DDNS integration
+# requires the DDNS key material that makedns generates
+makedns -n
+makedhcp -n
+```
+<!-- ohpc_end -->

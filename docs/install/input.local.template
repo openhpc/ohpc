@@ -57,8 +57,11 @@ node_disk=${node_disk:=/dev/sda}
 initialize_options="${initialize_options:-usklpta}"
 deployment_protocols="${deployment_protocols:-firmware}"
 dns_domain="${dns_domain:-local}"
-iso_path="${iso_path:-}"
 iso_url="${iso_url:-}"
+
+# Path to directory containing the base OS dvd iso
+# (Confluent and xCAT recipes; set to the directory, not the full filename)
+iso_path="${iso_path:-}"
 
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
@@ -69,6 +72,10 @@ enable_mpich_ucx="${enable_mpich_ucx:-1}"
 enable_ipoib="${enable_ipoib:-0}"
 enable_dracut="${enable_dracut:-1}"
 enable_todisk="${enable_todisk:-0}"
+
+# Provisioning mode (xCAT recipe only): "stateless" boots a netboot image,
+# "stateful" installs to the local disk of each compute node
+xcat_mode="${xcat_mode:-stateless}"
 
 enable_clustershell="${enable_clustershell:-0}"
 enable_ipmisol="${enable_ipmisol:-0}"
