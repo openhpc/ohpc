@@ -355,7 +355,7 @@ export OHPC_INPUT_LOCAL="${INPUT_LOCAL}"
 if [[ "${PROVISIONER}" == "warewulf" ]]; then
 	sed -i \
 		-e 's/\(\["rd.shell"\]\)/\1 + ["console=hvc0", "loglevel=5"]/' \
-		-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
+		-e 's/\(systemctl restart rsyslog\.service\)/\1 || true/' \
 		-e 's|#<<< ohpc_proxy:compute >>>#|echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf|' \
 		"${RECIPE}"
 elif [[ "${PROVISIONER}" == "openchami" ]]; then
@@ -375,7 +375,7 @@ elif [[ "${PROVISIONER}" == "openchami" ]]; then
 	rm -rf /opt/ohpc/admin/data/
 	sed -i \
 		-e 's/console=ttyS0,115200/console=hvc0 loglevel=5/' \
-		-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
+		-e 's/\(systemctl restart rsyslog\.service\)/\1 || true/' \
 		-e 's|--network host \\|--network host \\\n        -v /etc/containers/storage.conf:/etc/containers/storage.conf:ro \\\n        -v /home/builder:/home/builder/.local \\|' \
 		-e 's|dracut --add "dmsquash-live livenet network-manager"|dracut --add "dmsquash-live livenet network-manager" --install "/usr/lib/systemd/systemd-sysroot-fstab-check"|' \
 		"${RECIPE}"

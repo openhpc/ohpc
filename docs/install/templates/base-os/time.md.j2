@@ -13,7 +13,7 @@ systemctl enable chronyd.service
 echo "local stratum 10" >> /etc/chrony.conf
 echo "server ${ntp_server}" >> /etc/chrony.conf
 echo "allow all" >> /etc/chrony.conf
-systemctl restart chronyd
+systemctl restart chronyd.service
 ```
 <!-- ohpc_end -->
 
