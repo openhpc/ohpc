@@ -62,6 +62,7 @@ least squares problems, eigenvalue problems, and singular value problems.
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
+%define blas_lib "-L${OPENBLAS_LIB} -lopenblas"
 %endif
 
 module load cmake
@@ -72,12 +73,19 @@ python3 tools/fortran_gen.py --prefix include/ include/plasma*h
 # Create plasma.mod
 ${FC} -fPIC -c -o include/plasma_mod.o include/plasma_mod.f90
 
+# Point cmake at the openblas module explicitly: FindBLAS searches the
+# system library directories before LD_LIBRARY_PATH, so a distro openblas
+# (e.g. pulled in by python3-numpy) would otherwise be picked up instead.
 mkdir build
 cd build
 cmake \
 	-DPLASMA_DETECT_LUA=1 \
 	-DCMAKE_C_FLAGS="$CFLAGS" \
 	-DCMAKE_INSTALL_PREFIX=%{install_path} \
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+	-DBLAS_LIBRARIES=%{blas_lib} \
+	-DLAPACK_LIBRARIES=%{blas_lib} \
+%endif
 %if "%{compiler_family}" == "intel"
 	-DCMAKE_EXE_LINKER_FLAGS_INIT="-lifcore" \
 %endif
