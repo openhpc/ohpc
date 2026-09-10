@@ -24,14 +24,17 @@
 %define mpi_module_dir %{OHPC_MODULEDEPS}/%{compiler_family}/%{mpi_family}
 
 Summary:   OpenHPC default login environments
-Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM}
-Version:   2.0
+Name:      modules-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM}
+Version:   2.1
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
-Requires:  lmod%{PROJ_DELIM}
+Requires:  environment(modules)%{PROJ_DELIM}
+Suggests:  lmod%{PROJ_DELIM}
+Provides:  lmod-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM} = %{version}-%{release}
+Obsoletes: lmod-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM} < 2.1
 
 %if "%{mpi_family}" == "impi"
 Requires:   intel-mpi-devel%{PROJ_DELIM}
@@ -64,21 +67,14 @@ prepend-path     PATH   %{OHPC_PUB}/bin
 # include local packages installed via spack
 prepend-path MODULEPATH %{OHPC_MODULEDEPS}/spack/
 
+prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
+
 # Define modules to load/unload in order
 set modules_list [list autotools prun %{compiler_family} %{mpi_family}]
-
-if { [ expr [module-info mode load] || [module-info mode display] ] } {
-        prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
-        foreach mod \$modules_list {
-                module try-add \$mod
-        }
+if {[module-info mode remove]} {
+    set modules_list [lreverse \$modules_list]
 }
-
-if [ module-info mode remove ] {
-        foreach mod [lreverse \$modules_list] {
-                module del \$mod
-        }
-}
+module try-add {*}\$modules_list
 EOF
 
 # Additional logic for mpich-(ucx|ofi) variants

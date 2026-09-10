@@ -29,7 +29,7 @@ Source0:        http://mumps-solver.org/MUMPS_%{version}.tar.gz
 Source1:        Makefile.gnu.inc
 Source2:        Makefile.mkl.intel.inc
 Source3:        Makefile.arm.inc
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: libgomp

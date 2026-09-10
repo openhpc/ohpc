@@ -10,7 +10,7 @@ enables autotools, the GNU compiler toolchain, and the OpenMPI stack.
 <!-- ohpc_begin -->
 <!-- ohpc_comment Setup default development environment -->
 ```bash
-{{ pkg_install }} lmod-defaults-{{ gnu_version }}-{{ openmpi_version }}-ohpc
+{{ pkg_install }} modules-defaults-{{ gnu_version }}-{{ openmpi_version }}-ohpc
 ```
 <!-- ohpc_end -->
 
@@ -22,13 +22,13 @@ also provides the GNU compiler toolchain with the MPICH and MVAPICH2 stacks:
 {% if is_aarch64 %}
 If you want to change the default environment from the suggestion above, OpenHPC
 also provides additional default options using the GNU compiler toolchain with
-multiple MPICH variants or MVAPICH2. Relevant lmod-default packages names are as
-follows:
+multiple MPICH variants or MVAPICH2. Relevant modules-default packages names are
+as follows:
 {% endif %}
 
-* lmod-defaults-{{ gnu_version }}-mpich-ofi-ohpc
-* lmod-defaults-{{ gnu_version }}-mpich-ucx-ohpc
+* modules-defaults-{{ gnu_version }}-mpich-ofi-ohpc
+* modules-defaults-{{ gnu_version }}-mpich-ucx-ohpc
 {% if is_x86_64 %}
-* lmod-defaults-{{ gnu_version }}-mvapich2-ohpc
+* modules-defaults-{{ gnu_version }}-mvapich2-ohpc
 {% endif %}
 :::

@@ -16,7 +16,7 @@ if hash zypper >/dev/null 2>&1; then
 fi
 
 # First remove a possible conflicts from a previous run
-"${PKG[@]}" remove lmod-defaults-*-ohpc || true
+"${PKG[@]}" remove modules-defaults-*-ohpc || true
 
 # Then install slurm and needed packages
 INSTALL_PKGS=(
@@ -32,7 +32,7 @@ INSTALL_PKGS=(
 	prun-ohpc
 	openmpi5-"${COMPILER_FAMILY}"-ohpc
 	mpich-"${COMPILER_FAMILY}"-ohpc
-	lmod-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc
+	modules-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc
 	slurm-slurmd-ohpc
 	slurm-slurmctld-ohpc
 	slurm-example-configs-ohpc

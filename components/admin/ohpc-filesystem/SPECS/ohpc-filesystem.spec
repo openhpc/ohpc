@@ -35,7 +35,7 @@ default paths.
 %package -n ohpc-buildroot
 Summary: Common build scripts used in OpenHPC packaging
 Group: ohpc/admin
-Requires: lmod-ohpc
+Requires: environment(modules)-ohpc
 Requires: ohpc-filesystem
 
 %description -n ohpc-buildroot
@@ -80,6 +80,22 @@ EOF
 EOF
 %endif
 
+# Starting with RHEL 8 we can load OS provided modules
+%{__cat} << EOF > %{buildroot}/opt/ohpc/pub/modulefiles/os
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } { puts stderr "Enable operating system provided modules" }
+
+module-whatis "Name: Operating System provided modules"
+
+%if 0%{?sle_version}
+append-path MODULEPATH /etc/modulefiles:/usr/share/modules
+%endif
+%if 0%{?rhel} || 0%{?openEuler}
+append-path MODULEPATH /etc/modulefiles:/usr/share/modulefiles
+%endif
+EOF
+
 
 %files
 %dir /opt/ohpc/
@@ -93,6 +109,7 @@ EOF
 %dir /opt/ohpc/pub/moduledeps/
 %dir /opt/ohpc/pub/modulefiles/
 %dir /opt/ohpc/pub/mpi/
+/opt/ohpc/pub/modulefiles/os
 
 %files -n ohpc-buildroot
 %dir /opt/ohpc/admin/ohpc/
