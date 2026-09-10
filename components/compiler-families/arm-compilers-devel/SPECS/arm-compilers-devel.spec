@@ -36,7 +36,7 @@ Requires: arm-compiler-for-linux-%{latest_installed_ver}-SLES-15
 Requires: armpl-%{latest_installed_ver}.0-SLES-15-arm-linux-compiler
 Requires: armpl-%{latest_installed_ver}.0-SLES-15-gcc
 %endif
-Requires: lmod%{PROJ_DELIM}
+Requires: environment(modules)%{PROJ_DELIM}
 
 %description
 

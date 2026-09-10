@@ -49,6 +49,7 @@ Requires: lua53-luaposix
 Requires: (lmod-apparmor-abstractions%{PROJ_DELIM} if apparmor-abstractions)
 Conflicts: Modules
 %endif
+Provides: environment(modules)%{PROJ_DELIM}
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch

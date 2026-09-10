@@ -58,7 +58,7 @@ Requires:       readline
 Requires:       xdg-utils
 BuildRequires:  libicu-devel
 Requires:	libicu
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14

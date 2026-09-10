@@ -37,8 +37,8 @@ Requires:  patch
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
 %if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-Requires: lmod%{PROJ_DELIM}
+BuildRequires: environment(modules)%{PROJ_DELIM}
+Requires: environment(modules)%{PROJ_DELIM}
 %endif
 
 

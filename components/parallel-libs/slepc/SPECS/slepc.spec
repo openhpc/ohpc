@@ -30,7 +30,7 @@ Url:            http://slepc.upv.es
 Source0:        http://slepc.upv.es/download/distrib/%{pname}-%{version}.tar.gz
 BuildRequires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 
 # A configure script in slepc is made by python
 BuildRequires: python3
