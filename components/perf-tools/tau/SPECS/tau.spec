@@ -271,44 +271,49 @@ cp -a ${TAUROOT}/TAUBUILD/* %{buildroot}
 
 # OpenHPC module file
 mkdir -p %{buildroot}%{module_path}
-cat << EOF > %{buildroot}/%{module_path}/%{version}.lua
-help([[
-This module loads the %{pname} library built with the %{compiler_family}
-compiler toolchain and the %{mpi_family} MPI stack.
+cat << EOF > %{buildroot}/%{module_path}/%{version}
+#%Module1.0#####################################################################
 
-Version %{version}
-]])
+proc ModulesHelp { } {
+    puts stderr " "
+    puts stderr "This module loads the %{pname} library built with the %{compiler_family}"
+    puts stderr "compiler toolchain and the %{mpi_family} MPI stack."
+    puts stderr "\nVersion %{version}\n"
+}
 
-whatis("Name: %{pname} built with %{compiler_family} compiler")
-whatis("Version: %{version}")
-whatis("Category: runtime library")
-whatis("Description: %{summary}")
-whatis("URL %{url}")
+module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
 
-local version = "%{version}"
+set version     %{version}
 
-prepend_path("PATH",            "%{install_path}/bin")
-prepend_path("MANPATH",         "%{install_path}/man")
-prepend_path("INCLUDE",         "%{install_path}/include")
-prepend_path("LD_LIBRARY_PATH", "%{install_path}/lib")
+prepend-path    PATH                %{install_path}/bin
+prepend-path    MANPATH             %{install_path}/man
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
-setenv("%{PNAME}_DIR",      "%{install_path}")
-setenv("%{PNAME}_BIN",      "%{install_path}/bin")
-setenv("%{PNAME}_LIB",      "%{install_path}/lib")
-setenv("%{PNAME}_INC",      "%{install_path}/include")
-setenv("%{PNAME}_MAKEFILE", "%{install_path}/include/Makefile")
-setenv("%{PNAME}_OPTIONS",  "-optRevert -optShared -optNoTrackGOMP")
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
+setenv          %{PNAME}_OPTIONS    "-optRevert -optShared -optNoTrackGOMP"
 
-depends_on("otf2")
-depends_on("pdtoolkit")
+depends-on      otf2
+depends-on      pdtoolkit
 EOF
 
 %ifarch x86_64
-echo 'depends_on("papi")' >> %{buildroot}/%{module_path}/%{version}.lua
+echo 'depends-on      papi' >> %{buildroot}/%{module_path}/%{version}
 %endif
 
 # Set default version
-ln -s %{version}.lua %{buildroot}/%{module_path}/default
+cat <<EOF >%{buildroot}/%{module_path}/.version
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{version}"
+EOF
 
 
 %files

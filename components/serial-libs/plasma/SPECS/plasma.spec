@@ -113,37 +113,44 @@ install -m 644 plasma.mod %{buildroot}%{install_path}/include
 
 # OpenHPC module file
 mkdir -p %{buildroot}%{module_path}
-cat << EOF > %{buildroot}/%{module_path}/%{version}%{OHPC_CUSTOM_PKG_DELIM}.lua
-help([[
-This module loads the %{PNAME} library built with the %{compiler_family}
-compiler toolchain.
-Version %{version}
-]])
+cat << EOF > %{buildroot}/%{module_path}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
+#%Module1.0#####################################################################
 
-whatis("Name: %{PNAME} built with %{compiler_family} compiler")
-whatis("Version: %{version}")
-whatis("Category: runtime library")
-whatis("Description: %{summary}")
-whatis("URL %{url}")
+proc ModulesHelp { } {
+    puts stderr " "
+    puts stderr "This module loads the %{PNAME} library built with the %{compiler_family}"
+    puts stderr "compiler toolchain."
+    puts stderr "\nVersion %{version}\n"
+}
 
-local version = "%{version}"
+module-whatis "Name: %{PNAME} built with %{compiler_family} compiler"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
+
+set version     %{version}
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
--- Require openblas for gnu and llvm compiler families
-depends_on("openblas")
+# Require openblas for gnu and llvm compiler families
+depends-on      openblas
 %endif
 
-prepend_path( "PATH",            "%{install_path}/bin")
-prepend_path( "INCLUDE",         "%{install_path}/include")
-prepend_path( "LD_LIBRARY_PATH", "%{install_path}/lib64")
+prepend-path    PATH                %{install_path}/bin
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib64
 
-setenv("%{PNAME}_DIR", "%{install_path}")
-setenv("%{PNAME}_LIB", "%{install_path}/lib64")
-setenv("%{PNAME}_INC", "%{install_path}/include")
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_LIB        %{install_path}/lib64
+setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-ln -s %{version}%{OHPC_CUSTOM_PKG_DELIM}.lua %{buildroot}%{module_path}/default
+# Set default version
+cat <<EOF >%{buildroot}%{module_path}/.version
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
+EOF
 
 
 %files
