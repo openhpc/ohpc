@@ -38,7 +38,6 @@ Requires: lua-filesystem
 Requires: lua-posix
 Requires: lua
 Provides: environment(modules)
-Obsoletes: environment-modules
 %endif
 %if 0%{?sle_version}
 BuildRequires: lua53-luafilesystem
@@ -50,6 +49,9 @@ Requires: (lmod-apparmor-abstractions%{PROJ_DELIM} if apparmor-abstractions)
 Conflicts: Modules
 %endif
 Provides: environment(modules)%{PROJ_DELIM}
+Requires(post): coreutils
+Requires(post): %{_sbindir}/update-alternatives
+Requires(postun): %{_sbindir}/update-alternatives
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
@@ -88,10 +90,11 @@ unset MODULEPATH
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT install
-# Customize startup script to suit
 
-%{__mkdir_p} %{buildroot}/%{_sysconfdir}/profile.d
-%{__cat} << 'EOF' > %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
+# Customize startup scripts to suit. They are installed as configuration files
+# and registered as alternatives for the /etc/profile.d/modules.{sh,csh} links
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/%{name}
+%{__cat} << 'EOF' > %{buildroot}%{_sysconfdir}/%{name}/profile.sh
 # -*- shell-script -*-
 ########################################################################
 #  This is the system wide source file for setting up
@@ -132,7 +135,7 @@ module try-add ohpc
 
 EOF
 
-%{__cat} << 'EOF' > %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
+%{__cat} << 'EOF' > %{buildroot}%{_sysconfdir}/%{name}/profile.csh
 # -*- shell-script -*-
 ########################################################################
 #  This is the system wide source file for setting up
@@ -197,11 +200,11 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-#install a modulecmd soft link
-# to allow use of scl-utils, among other dependencies
-%{__mkdir_p} %{buildroot}/%{_bindir}
-
-%{__ln_s} %{OHPC_ADMIN}/lmod/lmod/libexec/lmod %{buildroot}/%{_bindir}/modulecmd
+# Setup for alternatives: shell startup scripts and modulecmd command (used
+# by scl-utils, among other dependencies) are links managed by
+# update-alternatives, created in %%post
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/profile.d %{buildroot}%{_bindir}
+touch %{buildroot}%{_sysconfdir}/profile.d/modules.{sh,csh} %{buildroot}%{_bindir}/modulecmd
 
 %if 0%{?sle_version}
 install -d -m755 %{buildroot}%{_sysconfdir}/apparmor.d/abstractions/bash.d
@@ -213,15 +216,37 @@ cat <<EOF > %{buildroot}%{_sysconfdir}/apparmor.d/abstractions/bash.d/lmod
 EOF
 %endif
 
+# modulecmd alternative is registered through the version-independent
+# "lmod/lmod" symbolic link, so the registered path stays valid across upgrades
+%post
+# Cleanup from pre-alternatives
+[ ! -L %{_sysconfdir}/profile.d/modules.sh ] && rm -f %{_sysconfdir}/profile.d/modules.sh
+[ ! -L %{_sysconfdir}/profile.d/modules.csh ] && rm -f %{_sysconfdir}/profile.d/modules.csh
+[ ! -L %{_bindir}/modulecmd ] && rm -f %{_bindir}/modulecmd
+
+# Priority 50 takes precedence over distribution "module" packages
+update-alternatives \
+  --install %{_sysconfdir}/profile.d/modules.sh modules.sh %{_sysconfdir}/%{name}/profile.sh 50 \
+  --slave %{_sysconfdir}/profile.d/modules.csh modules.csh %{_sysconfdir}/%{name}/profile.csh \
+  --slave %{_bindir}/modulecmd modulecmd %{OHPC_ADMIN}/lmod/lmod/libexec/lmod
+
+%postun
+if [ $1 -eq 0 ] ; then
+  update-alternatives --remove modules.sh %{_sysconfdir}/%{name}/profile.sh
+fi
+
 %files
 %dir %{OHPC_HOME}
 %dir %{OHPC_ADMIN}
 %{OHPC_ADMIN}/lmod
-%config %{_sysconfdir}/profile.d/lmod.sh
-%config %{_sysconfdir}/profile.d/lmod.csh
+%dir %{_sysconfdir}/%{name}
+%config %{_sysconfdir}/%{name}/profile.sh
+%config %{_sysconfdir}/%{name}/profile.csh
+%ghost %{_sysconfdir}/profile.d/modules.sh
+%ghost %{_sysconfdir}/profile.d/modules.csh
+%ghost %{_bindir}/modulecmd
 %{OHPC_PUB}
 %doc License README.md README_lua_modulefiles.txt INSTALL
-%{_bindir}/modulecmd
 
 %if 0%{?sle_version}
 %files -n %{pname}-apparmor-abstractions%{PROJ_DELIM}

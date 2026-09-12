@@ -98,7 +98,7 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
-        . /etc/profile.d/lmod.sh
+        if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v7
@@ -199,7 +199,7 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
-        . /etc/profile.d/lmod.sh
+        if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
         chown ohpc -R tests
         if [ "${{ steps.check_all.outputs.run_all }}" == "true" ] && [ "${{ matrix.compiler }}" != "intel" ]; then
           tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ALL
@@ -320,7 +320,7 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
-        . /etc/profile.d/lmod.sh
+        if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }}
         touch /tmp/empty
     - uses: actions/upload-artifact@v7
@@ -396,7 +396,7 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
-        . /etc/profile.d/lmod.sh
+        if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
         chown ohpc -R tests
         if [ "${{ steps.check_all.outputs.run_all }}" == "true" ]; then
           tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ALL
