@@ -389,6 +389,12 @@ def get_latest_github_release(
         debug_info(f"No releases found for {repo}", verbose)
         return None
 
+    if not check_prereleases:
+        releases = [rel for rel in releases if not rel.get("prerelease", False)]
+        if not releases:
+            debug_info(f"No stable releases found for {repo}", verbose)
+            return None
+
     if version_pin:
         for rel in releases:
             tag = rel.get("tag_name", "")
