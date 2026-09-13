@@ -1,4 +1,4 @@
-## Adding local Lmod modules to OpenHPC hierarchy
+## Adding local environment modules to OpenHPC hierarchy
 
 Administrators may wish to add locally built software packages to the OpenHPC
 module hierarchy. This can be accomplished by creating module files in the
@@ -6,7 +6,7 @@ appropriate locations under `/opt/ohpc/pub/moduledeps` or
 `/opt/ohpc/pub/modulefiles`. Two sample module files are included in the
 `examples-ohpc` package—one representing an application with no compiler or MPI
 runtime dependencies, and one dependent on OpenMPI and the GNU toolchain. Simply
-copy these files to the prescribed locations, and the `lmod` application should
+copy these files to the prescribed locations, and the `module` command should
 pick them up automatically.
 
 ```bash
