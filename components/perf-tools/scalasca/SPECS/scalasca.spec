@@ -98,6 +98,21 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
+# Strip ccache prefix from compiler variables; Scalasca's configure passes
+# CC/CXX to MPI wrappers via -cc= which cannot handle "ccache gcc".
+# Instead, use PATH masquerade so the actual compiler invocations still
+# go through ccache during the build.
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+if command -v ccache >/dev/null 2>&1; then
+    CCACHE_WRAP_DIR=$(mktemp -d /tmp/ccache-wrap.XXXXXX)
+    ln -s "$(command -v ccache)" "${CCACHE_WRAP_DIR}/$(echo $CC | sed 's/^ccache //')"
+    ln -s "$(command -v ccache)" "${CCACHE_WRAP_DIR}/$(echo $CXX | sed 's/^ccache //')"
+    export PATH="${CCACHE_WRAP_DIR}:${PATH}"
+fi
+%endif
+export CC=$(echo $CC | sed 's/^ccache //')
+export CXX=$(echo $CXX | sed 's/^ccache //')
+
 ./configure --prefix=%{install_path} \
             --disable-silent-rules \
             --enable-backend-test-runs \
