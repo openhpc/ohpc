@@ -239,6 +239,10 @@ def setup_local_repo():
                 f.write(f"baseurl=file://{rpmbuild_rpms_dir}\n")
                 f.write("enabled=1\n")
                 f.write("gpgcheck=0\n")
+                # createrepo_c is rerun after every build, so make dnf
+                # re-read the local repodata on each invocation instead
+                # of keeping the metadata cached from its first load.
+                f.write("metadata_expire=0\n")
             logger.info(f"Configured local DNF repository at {repo_file}")
         else:
             success, _ = run_command(
