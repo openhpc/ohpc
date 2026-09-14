@@ -94,6 +94,10 @@ def run_command(command):
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         universal_newlines=True,
+        encoding="utf-8",
+        # Output of parallel builds may get interleaved in the middle of a
+        # multibyte character, do not let such invalid UTF-8 abort the job.
+        errors="replace",
     )
 
     buf = io.StringIO()
