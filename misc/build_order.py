@@ -61,8 +61,8 @@ with open(sys.argv[1]) as depfile:
         # Ignore non ohpc (Build)Requires
         if line[2] == "NA":
             continue
-        # Ignore kernel modules
-        if line[2].startswith("kmod"):
+        # Ignore kernel modules, named kmod-* on RHEL and *-kmp elsewhere
+        if line[2].startswith("kmod") or line[2].endswith("-kmp"):
             continue
         # Ignore the nagios_plugins
         if line[2].startswith("nagios"):
