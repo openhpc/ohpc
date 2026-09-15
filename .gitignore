@@ -23,6 +23,7 @@ components/admin/clustershell/SOURCES/v*.tar.gz
 components/admin/conman/SOURCES/conman-*.tar.gz
 components/admin/conman/SOURCES/conman-*.tar.xz
 components/admin/docs/SOURCES/docs-ohpc.tar
+components/admin/environment-modules/SOURCES/modules-*.tar.bz2
 components/admin/genders/SOURCES/genders-*.tar.gz
 components/admin/hpc-workspace/SOURCES/*.tar.gz
 components/admin/lmod/SOURCES/lmod-*.tar.gz
