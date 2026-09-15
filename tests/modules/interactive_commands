@@ -20,6 +20,12 @@ teardown() {
 	rm -f "${OUTPUT}"
 }
 
+# The "module list" message when no module is loaded differs between Lmod
+# and Environment Modules
+assert_no_modules_loaded() {
+	[[ "${output}" == *"No modules loaded"* || "${output}" == *"No Modulefiles Currently Loaded"* ]] || flunk "unexpected module list output: ${output}"
+}
+
 @test "[${TESTNAME}] module purge" {
 	run module purge
 	assert_success
@@ -29,15 +35,16 @@ teardown() {
 	module purge || exit 1
 	run module list
 	assert_success
-	assert_output "No modules loaded"
+	assert_no_modules_loaded
 }
 
 @test "[${TESTNAME}] module help" {
 	module purge || exit 1
 	export MODULEPATH=./example-modules:"${MODULEPATH}"
 	module help test-module &>"${OUTPUT}" || exit 1
+	# drop empty and separator lines to get the help message last
 	local my_output
-	my_output=$(sed '/^$/d' "${OUTPUT}" | tail -1)
+	my_output=$(sed '/^$/d; /^-/d' "${OUTPUT}" | tail -1)
 	assert_equal "Help message from test module" "${my_output}"
 }
 
@@ -70,7 +77,7 @@ teardown() {
 	module unload test-module || exit 1
 	run module list
 	assert_success
-	assert_output "No modules loaded"
+	assert_no_modules_loaded
 
 	# verify environment variable was removed
 	[ -z "${TEST_MODULE}" ]
@@ -82,7 +89,8 @@ teardown() {
 	export MODULEPATH=./example-modules:"${MODULEPATH}"
 	module whatis test-module &>"${OUTPUT}" || exit 1
 	local my_output
-	my_output=$(sed '/^$/d; s/ \+//; s/ *$//' "${OUTPUT}")
+	# drop empty and separator lines, then normalize spacing
+	my_output=$(sed '/^$/d; /^-/d; s/ \+//; s/ *$//' "${OUTPUT}")
 	assert_equal "test-module: whatis: test-module" "${my_output}"
 }
 
@@ -91,9 +99,17 @@ teardown() {
 	export MODULEPATH=./example-modules:"${MODULEPATH}"
 	module load test-module || exit 1
 
-	# verify family conflict
-	run module load test2-module
-	assert_failure
+	# verify family conflict: depending on the module tool configuration,
+	# loading another module of the same family is either refused or
+	# replaces the loaded module, but both are never loaded together
+	module load test2-module 2>/dev/null || true
+	if [[ ":${LOADEDMODULES}:" == *":test-module:"* ]]; then
+		[[ ":${LOADEDMODULES}:" != *":test2-module:"* ]] || flunk "test-module and test2-module both loaded"
+		assert_equal "beeblebrox" "${TEST_MODULE}"
+	else
+		[[ ":${LOADEDMODULES}:" == *":test2-module:"* ]] || flunk "test2-module not loaded after conflict resolution"
+		module swap test2-module test-module || exit 1
+	fi
 
 	module swap test-module test2-module || exit 1
 
@@ -169,5 +185,5 @@ teardown() {
 	module unload test4-module || exit 1
 	run module list
 	assert_success
-	assert_output "No modules loaded"
+	assert_no_modules_loaded
 }
