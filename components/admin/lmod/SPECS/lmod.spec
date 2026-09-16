@@ -140,7 +140,7 @@ if ( \$?PBS_NODEFILE ) then
     exit 0
 endif
 
-setenv LMOD_SETTARG_CMD ":"
+setenv LMOD_SETTARG_CMD "true"
 setenv LMOD_FULL_SETTARG_SUPPORT "no"
 setenv LMOD_COLORIZE "no"
 setenv LMOD_PREPEND_BLOCK "normal"
