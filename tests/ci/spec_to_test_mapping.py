@@ -81,18 +81,18 @@ test_map = {
     "components/perf-tools/extrae/SPECS/extrae.spec": [
         "extrae",
         "",
-        "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
+        "modules-defaults-COMPILER_FAMILY-openmpi5-ohpc",
     ],
     "components/perf-tools/likwid/SPECS/likwid.spec": [
         "likwid",
         "",
-        "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
+        "modules-defaults-COMPILER_FAMILY-openmpi5-ohpc",
     ],
     "components/perf-tools/paraver/SPECS/paraver.spec": [
         "paraver",
         "",
         (
-            "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc "
+            "modules-defaults-COMPILER_FAMILY-openmpi5-ohpc "
             "extrae-COMPILER_FAMILY-openmpi5-ohpc "
             "extrae-COMPILER_FAMILY-mpich-ohpc"
         ),
@@ -101,17 +101,17 @@ test_map = {
     "components/perf-tools/scorep/SPECS/scorep.spec": [
         "scorep",
         "",
-        "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
+        "modules-defaults-COMPILER_FAMILY-openmpi5-ohpc",
     ],
     "components/perf-tools/scalasca/SPECS/scalasca.spec": [
         "scalasca",
         "",
-        "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
+        "modules-defaults-COMPILER_FAMILY-openmpi5-ohpc",
     ],
     "components/perf-tools/tau/SPECS/tau.spec": [
         "tau",
         "",
-        ("lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc man bc"),
+        ("modules-defaults-COMPILER_FAMILY-openmpi5-ohpc man bc"),
     ],
     "components/mpi-families/openmpi/SPECS/openmpi5.spec": ["mpi", "", ""],
     "components/mpi-families/mpich/SPECS/mpich.spec": ["mpi", "", ""],
@@ -130,7 +130,7 @@ test_map = {
     "components/perf-tools/dimemas/SPECS/dimemas.spec": [
         "dimemas",
         "",
-        "lmod-defaults-COMPILER_FAMILY-openmpi5-ohpc",
+        "modules-defaults-COMPILER_FAMILY-openmpi5-ohpc",
     ],
     "components/runtimes/charliecloud/SPECS/charliecloud.spec": [
         "charliecloud",

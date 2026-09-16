@@ -61,8 +61,8 @@ with open(sys.argv[1]) as depfile:
         # Ignore non ohpc (Build)Requires
         if line[2] == "NA":
             continue
-        # Ignore kernel modules
-        if line[2].startswith("kmod"):
+        # Ignore kernel modules, named kmod-* on RHEL and *-kmp elsewhere
+        if line[2].startswith("kmod") or line[2].endswith("-kmp"):
             continue
         # Ignore the nagios_plugins
         if line[2].startswith("nagios"):
@@ -114,11 +114,15 @@ dep_list = [(k, set(v)) for (k, v) in dependency.items()]
 # it ships the build infrastructure (macros, dependency plugins) that
 # all other packages rely on, yet bootstrap packages like lmod cannot
 # express a BuildRequires on it without creating a circular dependency.
+# lmod.spec comes right after it: ohpc-buildroot requires the
+# environment(modules)-ohpc capability it provides, a dependency the
+# sort above cannot see as virtual capabilities are filtered out.
 result = list(topological_sort(dep_list))
-foundation = "ohpc-filesystem.spec"
-if foundation in result:
-    result.remove(foundation)
-    result.insert(0, foundation)
+for foundation in reversed(["ohpc-filesystem.spec", "lmod.spec"]):
+    if foundation in result:
+        result.remove(foundation)
+    if foundation in spec_path_dict:
+        result.insert(0, foundation)
 
 for i in result:
     # Use full path if available, otherwise fall back to spec filename

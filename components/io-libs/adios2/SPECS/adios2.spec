@@ -37,7 +37,7 @@ BuildRequires:  yaml-cpp-devel
 Requires: yaml-cpp
 
 BuildRequires: libtool cmake make
-Requires:      lmod%{PROJ_DELIM} >= 7.6.1
+Requires:      environment(modules)%{PROJ_DELIM}
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: ucx%{PROJ_DELIM}
