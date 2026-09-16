@@ -34,7 +34,7 @@ BuildRequires: make
 BuildRequires: sed
 BuildRequires: lua-devel >= 5.3
 Requires: lua >= 5.3
-Requires: lmod%{PROJ_DELIM} >= 8.7.3
+Requires: environment(modules)%{PROJ_DELIM}
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
