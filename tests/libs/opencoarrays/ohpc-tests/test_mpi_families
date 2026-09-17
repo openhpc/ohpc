@@ -11,7 +11,7 @@ source ./common/functions || exit 1
 cd libs/opencoarrays || exit 1
 export BATS_JUNIT_CLASS=OpenCoarrays
 
-for compiler in gnu15 ; do
+for compiler in gnu16 ; do
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "

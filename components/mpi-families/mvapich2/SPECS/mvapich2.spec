@@ -67,7 +67,7 @@ point-to-point communication for HPC clusters.
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" == "gnu12" || "%{compiler_family}" == "gnu13" || "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu12" || "%{compiler_family}" == "gnu13" || "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 # configure fails with:
 #   The Fortran compiler gfortran does not accept programs that
 #   call the same routine with arguments of different types without
@@ -75,10 +75,10 @@ point-to-point communication for HPC clusters.
 #   Rerun configure with FFLAGS=-fallow-argument-mismatch
 # This seems to fix the build.
 export FFLAGS=-fallow-argument-mismatch
-%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types"
 %endif
-%if "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 export CFLAGS="${CFLAGS} -std=gnu17"
 %endif
 %endif
