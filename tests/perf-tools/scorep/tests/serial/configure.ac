@@ -37,7 +37,7 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
    CXXFLAGS="${CXXFLAGS} -qopenmp -Wno-implicit-function-declaration"
    FCFLAGS="${FCFLAGS} -qopenmp"
 else
-if test "x$LMOD_FAMILY_COMPILER" = "xgnu15" ; then
+if test "x$LMOD_FAMILY_COMPILER" = "xgnu16" ; then
   CFLAGS="${CFLAGS} -fopenmp"
   CXXFLAGS="${CXXFLAGS} -fopenmp"
   FCFLAGS="${FCFLAGS} -fopenmp -fallow-argument-mismatch"

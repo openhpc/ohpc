@@ -30,6 +30,12 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xgnu12"; then
    FC=gfortran
    AC_MSG_RESULT([gnu12])
    OHPC_BLAS="-L${OPENBLAS_LIB} -lopenblas"
+elif test "x$LMOD_FAMILY_COMPILER" = "xgnu16"; then
+   CC=gcc
+   CXX=g++
+   FC=gfortran
+   AC_MSG_RESULT([gnu16])
+   OHPC_BLAS="-L${OPENBLAS_LIB} -lopenblas"
 elif test "x$LMOD_FAMILY_COMPILER" = "xgnu15"; then
    CC=gcc
    CXX=g++

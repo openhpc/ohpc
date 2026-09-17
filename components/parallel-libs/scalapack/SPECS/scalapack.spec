@@ -95,10 +95,10 @@ export CFLAGS="${CFLAGS} -fsimdmath"
 %define blas_lib "-L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl"
 %endif
 
-%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 export FFLAGS="${FFLAGS} -fallow-argument-mismatch"
 %endif
-%if "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 export CFLAGS="${CFLAGS} -std=gnu89"
 %endif
 

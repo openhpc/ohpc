@@ -124,7 +124,7 @@ import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
 local MPI_DIR = [ os.environ MPI_DIR ] ;
-%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
 %endif
 %if ("%{mpi_family}" == "mpich" || "%{mpi_family}" == "mvapich2") && "%{?OHPC_USE_CCACHE}" == "yes"

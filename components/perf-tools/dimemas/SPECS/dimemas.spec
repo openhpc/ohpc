@@ -78,7 +78,7 @@ export CXXFLAGS="${CXXFLAGS} -Wno-register"
 export CFLAGS="${CFLAGS} -fsimdmath"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
 %endif
-%if "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 export CFLAGS="${CFLAGS} -std=gnu17"
 %endif
 

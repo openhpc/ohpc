@@ -1279,10 +1279,10 @@ def check_gnu_compilers(spec_file, config):
     else:
         debug_warn(
             "Could not determine default compiler family from OHPC_macros, "
-            "defaulting to gnu15",
+            "defaulting to gnu16",
             config.verbose,
         )
-        default_family = "gnu15"
+        default_family = "gnu16"
 
     gnu_ver = default_family.replace("gnu", "")
     debug_info(
@@ -1363,7 +1363,7 @@ def update_gnu_spec_version(spec_file, result_name, new_version, verbose):
     component is one of gcc, gmp, mpc, mpfr.
     """
     # Extract the component suffix (gcc, gmp, mpc, mpfr) and version
-    # number from the result name (e.g. "gnu15-compilers-gcc")
+    # number from the result name (e.g. "gnu16-compilers-gcc")
     m = re.match(r"gnu(\d+)-compilers-(\w+)", result_name)
     if not m:
         log_warn(f"Cannot parse GNU component from result name: {result_name}")

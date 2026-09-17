@@ -34,6 +34,11 @@
 %global gnu15_mpc_version 1.4.1
 %global gnu15_mpfr_version 4.2.2
 
+%global gnu16_version 16.2.0
+%global gnu16_gmp_version 6.3.0
+%global gnu16_mpc_version 1.4.1
+%global gnu16_mpfr_version 4.2.2
+
 %global mirror_url https://mirror1.hs-esslingen.de/Mirrors/ftp.gnu.org/
 
 # openEuler has no dependable texinfo (none at all on its ppc64le port); build
@@ -56,6 +61,10 @@
 %global gnu_major_ver gnu15
 %global gnu_version %{gnu15_version}
 %endif
+%if "%{compiler_family}" == "gnu16"
+%global gnu_major_ver gnu16
+%global gnu_version %{gnu16_version}
+%endif
 
 Source0:   %{mirror_url}gcc/gcc-%{gnu12_version}/gcc-%{gnu12_version}.tar.xz
 Source1:   %{mirror_url}gmp/gmp-%{gnu12_gmp_version}.tar.bz2
@@ -76,6 +85,11 @@ Source12:   %{mirror_url}gcc/gcc-%{gnu15_version}/gcc-%{gnu15_version}.tar.xz
 Source13:   %{mirror_url}gmp/gmp-%{gnu15_gmp_version}.tar.bz2
 Source14:   %{mirror_url}mpc/mpc-%{gnu15_mpc_version}.tar.xz
 Source15:   %{mirror_url}mpfr/mpfr-%{gnu15_mpfr_version}.tar.gz
+
+Source17:   %{mirror_url}gcc/gcc-%{gnu16_version}/gcc-%{gnu16_version}.tar.xz
+Source18:   %{mirror_url}gmp/gmp-%{gnu16_gmp_version}.tar.bz2
+Source19:   %{mirror_url}mpc/mpc-%{gnu16_mpc_version}.tar.xz
+Source20:   %{mirror_url}mpfr/mpfr-%{gnu16_mpfr_version}.tar.gz
 # texinfo, built inline on openEuler (no dependable distro texinfo there)
 Source16:   %{mirror_url}texinfo/texinfo-%{texinfo_ver}.tar.xz
 
@@ -148,6 +162,14 @@ ln -s mpfr-%{gnu14_mpfr_version} mpfr
 ln -s gmp-%{gnu15_gmp_version} gmp
 ln -s mpc-%{gnu15_mpc_version} mpc
 ln -s mpfr-%{gnu15_mpfr_version} mpfr
+%endif
+
+%if "%{compiler_family}" == "gnu16"
+%setup -T -q -n gcc-%{version} -b17 -a18 -a19 -a20
+
+ln -s gmp-%{gnu16_gmp_version} gmp
+ln -s mpc-%{gnu16_mpc_version} mpc
+ln -s mpfr-%{gnu16_mpfr_version} mpfr
 %endif
 
 %build
