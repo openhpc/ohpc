@@ -2,10 +2,10 @@ name: 'Upload CCache Stats'
 description: 'Collect and upload ccache statistics as an artifact'
 inputs:
   job-name:
-    description: 'Name of the job for the stats header (e.g., "RHEL (x86_64/gnu15)")'
+    description: 'Name of the job for the stats header (e.g., "RHEL (x86_64/gnu16)")'
     required: true
   artifact-suffix:
-    description: 'Suffix for the artifact name (e.g., "rhel-x86_64-gnu15")'
+    description: 'Suffix for the artifact name (e.g., "rhel-x86_64-gnu16")'
     required: true
 runs:
   using: 'composite'
