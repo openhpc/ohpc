@@ -124,7 +124,7 @@ using python : %{python3_version} : %{__python3} : /usr/include/python%{python3_
 import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
-%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15"
+%if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
 %endif
 using mpi : $MPICXX ;
