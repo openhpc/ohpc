@@ -53,7 +53,7 @@ Requires:       fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 Requires:       %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # Default library install path
