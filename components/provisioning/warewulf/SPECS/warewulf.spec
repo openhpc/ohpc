@@ -89,7 +89,14 @@ Requires: ipxe-bootimgs
 ## OHPC: removed; not available in OHPC build infrastructure
 #BuildRequires: system-release
 BuildRequires: systemd
+## OHPC: edit; openEuler's distro Go is too old for warewulf's go.mod, so use
+## the OpenHPC-provided Go toolchain (components/dev-tools/golang), loaded as a
+## module in %%build. EL ships a new-enough go-toolset, so it keeps distro golang.
+%if 0%{?openEuler}
+BuildRequires: golang%{PROJ_DELIM} >= 1.26
+%else
 BuildRequires: golang >= 1.22
+%endif
 BuildRequires: firewalld-filesystem
 Requires: nfs-utils
 ## OHPC: edit; openEuler ships a single ipxe-bootimgs package like pre-RHEL8
@@ -140,6 +147,13 @@ system for large clusters of bare metal and/or virtual systems.
 
 
 %build
+## OHPC: openEuler builds with the OpenHPC Go toolchain module (distro Go too
+## old); the module sets GOROOT/PATH and GOTOOLCHAIN=local (keeps builds offline).
+%if 0%{?openEuler}
+. /etc/profile.d/lmod.sh
+module use %{OHPC_MODULES}
+module load golang
+%endif
 export OFFLINE_BUILD=1
 ## OHPC: edit; statedir is /srv rather than upstream %%{_sharedstatedir} (/var/lib)
 make defaults \
