@@ -86,6 +86,9 @@ jobs:
     - name: Validate Build
       run: |
         export SKIP_CI_SPECS="${{ env.SKIP_CI_SPECS }}"
+        # openEuler-only: the OpenHPC Go toolchain exists because openEuler's
+        # distro Go is too old; EL ships a new-enough go-toolset, so skip it here.
+        export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/dev-tools/golang/SPECS/golang.spec"
         if [ "${{ matrix.compiler }}" == "intel" ]; then
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/serial-libs/openblas/SPECS/openblas.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/dev-tools/scipy/SPECS/python-scipy.spec"
