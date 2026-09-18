@@ -1,7 +1,7 @@
-FROM docker.io/openeuler/openeuler:24.03-lts-sp2
+FROM docker.io/openeuler/openeuler:24.03-lts-sp3
 
-# Switch to Huawei Cloud mirror
-RUN sed -i "s@repo.openeuler.org@repo.huaweicloud.com/openeuler@g" /etc/yum.repos.d/openEuler.repo
+# Use a US mirror (CI runs on US-based runners; the default/CN mirrors are slow)
+RUN sed -i "s@repo.openeuler.org@mirrors.ocf.berkeley.edu/openeuler@g" /etc/yum.repos.d/openEuler.repo
 
 # Install git first (required for cloning/checkout)
 RUN dnf -y install git
