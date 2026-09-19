@@ -1,0 +1,29 @@
+### Configure NFS Mounts on Compute Nodes
+
+Configure NFS mounts to access the *head node*'s shared filesystems on
+*compute* nodes. First disable the xCAT-managed `/tftpboot` and `/install`
+export entries so they do not conflict with the `/home` and `/opt/ohpc/pub`
+exports configured earlier, then create the client mounts:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateful" ] -->
+<!-- ohpc_comment Configure NFS mounts on compute nodes -->
+```bash
+# Disable the xCAT-managed /tftpboot and /install export entries so
+# they do not conflict with the /home and /opt/ohpc/pub exports
+perl -pi -e "s|/tftpboot|#/tftpboot|" /etc/exports
+perl -pi -e "s|/install|#/install|"   /etc/exports
+exportfs -a
+
+# Add NFS mounts for /home and /opt/ohpc/pub
+NFS_HOME="${sms_ip}:/home /home nfs nfsvers=4,nodev,nosuid 0 0"
+NFS_PUB="${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=4,nodev 0 0"
+{{ compute_run("echo ${NFS_HOME} >> /etc/fstab") }}
+{{ compute_run("echo ${NFS_PUB} >> /etc/fstab") }}
+
+# Create mount point and mount filesystems
+{{ compute_run("mkdir -p /opt/ohpc/pub") }}
+{{ compute_run("mount -a") }}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

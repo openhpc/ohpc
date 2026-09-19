@@ -1,0 +1,54 @@
+### Boot Compute Nodes
+
+Boot the compute nodes; they load the packed image over the network into RAM.
+Because the resource manager was started above, their `slurmd` finds the
+controller as soon as they come up. After the initial PXE boot, subsequent
+boots return to the default BIOS boot device.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateless" ] -->
+<!-- ohpc_comment Set nodes to netboot and power cycle -->
+<!-- ohpc_if_set has_ipmi -->
+```bash
+# Set compute group to boot from network on next boot
+rsetboot compute net
+
+# Power cycle compute nodes
+rpower compute reset
+```
+<!-- ohpc_else -->
+<!-- ohpc_command # No BMC/IPMI available -- signal external reset handler -->
+<!-- ohpc_command for ((i=0; i<num_computes; i++)) ; do -->
+<!-- ohpc_command   echo "#<<< ohpc_reset:$i,${c_name[$i]},${c_bmc[$i]} >>>#" -->
+<!-- ohpc_command done -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Allow for optional sleep to wait for provisioning to complete -->
+<!-- ohpc_command sleep "${provision_wait}" -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+The boot process typically completes in about 5 minutes. Monitor provisioning
+with the `rcons` command, which displays the serial console for a selected node.
+The escape sequence to exit `rcons` is `Ctrl-e c .` typed sequentially.
+
+Once booted, verify successful provisioning with a parallel command across the
+compute nodes. xCAT provides `xdsh`, its native distributed shell, which
+accepts xCAT node names and groups:
+
+```bash
+xdsh compute uptime
+c1:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+c2:  12:56:50 up 13 min,  0 users,  load average: 0.00, 0.02, 0.05
+c3:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.02, 0.05
+c4:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+```
+
+The provisioner-independent `pdsh` utility, installed on the head node as part
+of the `ohpc-base` metapackage, may be used as well:
+
+```bash
+pdsh -w ${compute_prefix}[1-${num_computes}] uptime
+```

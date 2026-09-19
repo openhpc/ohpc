@@ -22,7 +22,7 @@ echo ${sms_ip} ${sms_name} >> /etc/hosts
 {% endif %}
 
 While it is theoretically possible to enable SELinux on a cluster provisioned
-with {{ provisioner }}, doing so is beyond the scope of this document. Even the
+with {{ provisioner_name }}, doing so is beyond the scope of this document. Even the
 use of permissive mode can be problematic and we therefore recommend disabling
 SELinux on the *head node*. If SELinux components are installed locally, the
 `selinuxenabled` command can be used to determine if SELinux is currently

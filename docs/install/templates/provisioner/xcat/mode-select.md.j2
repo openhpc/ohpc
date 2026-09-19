@@ -1,0 +1,58 @@
+## Select Provisioning Mode
+
+xCAT supports two ways of provisioning compute nodes, and this recipe covers
+both. Choose one by setting `${xcat_mode}` in `input.local` before
+running the recipe:
+
+| `xcat_mode` | Mode | How compute nodes run |
+| ----------- | ---- | --------------------- |
+| `stateless` (default) | **stateless** (*netboot*) | Nodes boot a RAM-resident image assembled in a chroot on the head node. Nothing is written to local disk, and the image is rebuilt and redeployed to change the nodes. |
+| `stateful` | **stateful** (*diskful*) | A base OS is installed onto each node's local disk, then OpenHPC components are added to the running nodes. Nodes keep their state across reboots. |
+
+The difference is confined to how the compute environment is created and when
+the nodes first boot. Everything afterwards -- InfiniBand, Omni-Path, memory
+limits, GPU drivers, log forwarding, and the admin tooling -- is identical, and
+is applied through the helper functions defined below. `compute_exec` runs a
+command in the compute environment, and `compute_install` and its siblings
+manage packages there; in stateless mode they act on the image chroot, and in
+stateful mode they act on the running nodes through `xdsh`.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Define compute-environment helpers for the selected mode -->
+```bash
+# Fail closed on a missing or malformed mode. An input.local carried over from
+# the separate stateful recipe has no xcat_mode at all, and silently defaulting
+# it would netboot a fleet that should install to disk.
+case "${xcat_mode:-}" in
+    stateless|stateful) ;;
+    *)  echo "ERROR: xcat_mode must be 'stateless' or 'stateful'," >&2
+        echo "not '${xcat_mode:-<unset>}'. Set it in input.local." >&2
+        exit 1 ;;
+esac
+
+if [ "${xcat_mode}" = "stateful" ]; then
+    # Stateful: act on the running compute nodes over xdsh
+    compute_exec()          { xdsh compute "$@"; }
+    compute_install()       { xdsh compute dnf -y install "$@"; }
+    compute_group_install() { xdsh compute "dnf -y groupinstall '$*'"; }
+    compute_upgrade()       { xdsh compute dnf -y upgrade "$@"; }
+    compute_clean()         { xdsh compute dnf clean expire-cache; }
+    xcat_image_type="install"
+else
+    # Stateless: act on the chroot that backs the netboot image
+    compute_exec()          { chroot "${CHROOT}" /bin/sh -c "$@"; }
+    compute_install()       { dnf -y --installroot="${CHROOT}" install "$@"; }
+    compute_group_install() { dnf -y --installroot="${CHROOT}" groupinstall "$*"; }
+    compute_upgrade()       { dnf -y --installroot="${CHROOT}" upgrade "$@"; }
+    compute_clean()         { dnf --installroot="${CHROOT}" clean expire-cache; }
+    xcat_image_type="netboot"
+fi
+
+# Synclists are registered per image type
+xcat_synclist_dir="/install/custom/${xcat_image_type}"
+```
+<!-- ohpc_end -->
+
+In stateless mode the helpers reference `${CHROOT}`, which is defined later by
+the image build step; because they are shell functions, the value is resolved
+when each helper is called rather than here.
