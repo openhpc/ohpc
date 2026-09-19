@@ -18,13 +18,13 @@
 # version, but the build system was already using a newer version, then
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version. Newer versions may still be installed in parallel.
-%define exact_mpi_ver 2021.14
-%define exact_mkl_ver 2025.0
-%define exact_deps compiler/2025.0.0 mkl/%{exact_mkl_ver} compiler-rt/2025.0.0 debugger/2025.0.0 tbb/2022.0.0
+%define exact_mpi_ver 2021.18
+%define exact_mkl_ver 2026.0
+%define exact_deps compiler/2026.0.0 mkl/%{exact_mkl_ver} compiler-rt/2026.0.0 debugger/2026.0.0 tbb/2023.0.0
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2025.0
+Version:   2026.0
 Release:   %{?dist}.1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
