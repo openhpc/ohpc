@@ -611,7 +611,7 @@ def get_latest_jsc_perftools_version(
 
 def get_latest_gnu_version(project, verbose, version_pin=None):
     """Return the latest version from the GNU FTP mirror."""
-    base_url = f"https://ftpmirror.gnu.org/gnu/{project}/"
+    base_url = f"https://mirror1.hs-esslingen.de/Mirrors/ftp.gnu.org/{project}/"
     debug_info(f"Checking GNU {project} directory listing at {base_url}", verbose)
 
     r = requests.get(base_url, timeout=30)
