@@ -1,12 +1,12 @@
 # Base configuration - universal defaults across all recipes
 
 # OpenHPC version
-ohpc_version: "4.1"
+ohpc_version: "4.2"
 ohpc_version_tree: "4"
 ohpc_repo_server: "http://repos.openhpc.community"
 
 # Compiler and MPI versions
-gnu_version: "gnu15"
+gnu_version: "gnu16"
 openmpi_version: "openmpi5"
 
 # Boolean flags - default to false, overridden in specific configs
