@@ -18,11 +18,11 @@ additional delimiter to allow easy co-installation and use.
 sudo dnf -y install rpm-build dnf-plugins-core
 
 # Install FFTW's build dependencies
-sudo dnf builddep fftw-gnu15-openmpi5-ohpc
+sudo dnf builddep fftw-{{ gnu_version }}-{{ openmpi_version }}-ohpc
 
 # Download SRPM from OpenHPC repository and install locally
-dnf download --source fftw-gnu15-openmpi5-ohpc
-rpm -i ./fftw-gnu15-openmpi5-ohpc-*.rpm
+dnf download --source fftw-{{ gnu_version }}-{{ openmpi_version }}-ohpc
+rpm -i ./fftw-{{ gnu_version }}-{{ openmpi_version }}-ohpc-*.rpm
 
 # Modify spec file as desired
 cd ~/rpmbuild/SPECS
@@ -37,7 +37,7 @@ rpmbuild -bb --define "OHPC_CFLAGS '-O3 -mtune=native'" \
 
 # Install the new package
 sudo dnf -y install \
-        ../RPMS/$(uname -m)/fftw-gnu15-openmpi5-static-ohpc-*.$(uname -m).rpm
+        ../RPMS/$(uname -m)/fftw-{{ gnu_version }}-{{ openmpi_version }}-static-ohpc-*.$(uname -m).rpm
 
 ```
 
