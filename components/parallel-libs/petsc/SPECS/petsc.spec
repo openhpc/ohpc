@@ -25,7 +25,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.25.0
+Version:        3.25.5
 Release:        1%{?dist}
 Source0:        https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-%{version}.tar.gz
 Url:            http://www.mcs.anl.gov/petsc/
@@ -161,7 +161,6 @@ for file in \
 	lib/petsc/bin/taucc.py \
 	lib/petsc/bin/petscnagupgrade.py \
 	lib/petsc/bin/saws/SAWs.py \
-	lib/petsc/bin/petsclogformat.py \
 	share/petsc/examples/config/testparse.py \
 	share/petsc/examples/config/gmakegen.py \
 	share/petsc/examples/config/gmakegentest.py \
