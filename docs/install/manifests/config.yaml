@@ -25,6 +25,7 @@ compiler_families:
   - gnu13
   - gnu14
   - gnu15
+  - gnu16
   - intel
   - arm1
 
