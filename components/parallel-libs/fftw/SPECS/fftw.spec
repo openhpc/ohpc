@@ -21,7 +21,7 @@
 
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.3.10
+Version:   3.3.11
 Release:   1%{?dist}
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
