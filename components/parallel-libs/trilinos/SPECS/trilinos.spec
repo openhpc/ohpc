@@ -17,8 +17,8 @@
 # Base package name
 %define pname trilinos
 %define major 17
-%define minor 0
-%define extra 0
+%define minor 2
+%define extra 1
 %define ver_exp %{major}-%{minor}-%{extra}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -144,6 +144,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
+        -DTPL_ENABLE_gtest=OFF                                          \
         -DLAPACK_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                    \
         -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
 %endif
