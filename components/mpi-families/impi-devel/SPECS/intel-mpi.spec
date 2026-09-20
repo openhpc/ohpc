@@ -19,8 +19,8 @@
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version. Newer versions may still be installed in parallel.
 %define exact_mpi_ver 2021.18
-%define exact_mkl_ver 2026.0
-%define exact_deps compiler/2026.0.0 mkl/%{exact_mkl_ver} compiler-rt/2026.0.0 debugger/2026.0.0 tbb/2023.0.0
+%define exact_mkl_ver 2026.1
+%define exact_deps compiler/2026.1.1 mkl/%{exact_mkl_ver} compiler-rt/2026.1.1 debugger/2026.1.0 tbb/2023.1.0
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
