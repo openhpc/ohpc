@@ -15,7 +15,7 @@
 %global pname boost
 
 %define major_version 1
-%define minor_version 90
+%define minor_version 92
 %define patch_version 0
 %define version_exp %{major_version}_%{minor_version}_%{patch_version}
 
