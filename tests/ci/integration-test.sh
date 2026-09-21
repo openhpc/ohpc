@@ -329,6 +329,32 @@ sed -i "s/\${num_cpus}/${num_cpus}/" /usr/local/bin/ipmitool
 chmod +x /usr/local/bin/ipmitool
 
 # ---------------------------------------------------------------------------
+# Give the compute node image build access to the Factory (OBS) repo and
+# to the local-rpms repo (see above). Neither is otherwise visible to the
+# warewulf chroot: it installs strictly from the released OpenHPC repos
+# baked into the recipe.
+# ---------------------------------------------------------------------------
+FACTORY_REPO_URL=""
+if [ -f /etc/yum.repos.d/obs.repo ]; then
+	FACTORY_REPO_URL=$(awk -F= '/^baseurl=/{print $2; exit}' /etc/yum.repos.d/obs.repo)
+fi
+
+# Extra commands for the warewulf "ohpc_proxy:compute" marker, run on the
+# host right after $CHROOT is defined and before any packages are
+# installed into it. $CHROOT must stay unexpanded here: it's only defined
+# once this text is substituted into the recipe and executed there.
+# shellcheck disable=SC2016
+WAREWULF_PROXY_REPL='echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf'
+if [ -n "${FACTORY_REPO_URL}" ]; then
+	# shellcheck disable=SC2016
+	WAREWULF_PROXY_REPL+='\ncp -v /etc/yum.repos.d/obs.repo $CHROOT/etc/yum.repos.d/'
+fi
+if [ -d /tmp/RPMS ]; then
+	# shellcheck disable=SC2016
+	WAREWULF_PROXY_REPL+='\nmkdir -p $CHROOT/tmp/RPMS\ncp -a /tmp/RPMS/. $CHROOT/tmp/RPMS/\ncp -v /etc/yum.repos.d/local-rpms.repo $CHROOT/etc/yum.repos.d/'
+fi
+
+# ---------------------------------------------------------------------------
 # Run the recipe
 # ---------------------------------------------------------------------------
 export PATH=/usr/local/bin:${PATH}
@@ -337,8 +363,7 @@ export OHPC_INPUT_LOCAL="${INPUT_LOCAL}"
 sed -i \
 	-e 's/\(\["rd.shell"\]\)/\1 + ["console=hvc0", "loglevel=5"]/' \
 	-e 's/\(systemctl restart rsyslog\)/\1 || true/' \
-	-e '/Add OpenHPC base components to compute image/i /usr/bin/cp -vf /etc/yum.repos.d/obs.repo $CHROOT/etc/yum.repos.d' \
-	-e 's|#<<< ohpc_proxy:compute >>>#|echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf|' \
+	-e "s|#<<< ohpc_proxy:compute >>>#|${WAREWULF_PROXY_REPL}|" \
 	"${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"
 if ! bash -x "${RECIPE_DIR}/x86_64/warewulf/slurm/recipe.sh"; then
 	echo "Recipe failed – dumping journal since boot:"
