@@ -82,7 +82,7 @@ Patch0: slurm.conf.example.patch
 #  Options that are off by default (enable with --with <opt>)
 %bcond_with cray
 %bcond_with cray_network
-%if 0%{?rhel} < 10
+%if 0%{?rhel}
 %bcond_with slurmrestd
 %bcond_with jwt
 %endif
@@ -386,18 +386,18 @@ according to the Slurm
 %endif
 
 %if %{with slurmrestd}
-%package slurmrestd
+%package -n %{pname}-slurmrestd%{PROJ_DELIM}
 Summary: Slurm REST API translator
 Group: System Environment/Base
 Requires: %{name}%{?_isa} = %{version}-%{release}
-BuildRequires: http-parser-devel
+BuildRequires: llhttp-devel
 %if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: json-c-devel
 %endif
 %if 0%{?suse_version:1}
 BuildRequires:  libjson-c-devel
 %endif
-%description slurmrestd
+%description -n %{pname}-slurmrestd%{PROJ_DELIM}
 Provides a REST interface to Slurm.
 %endif
 
@@ -772,7 +772,7 @@ fi
 #############################################################################
 
 %if %{with slurmrestd}
-%files slurmrestd
+%files -n %{pname}-slurmrestd%{PROJ_DELIM}
 %{_sbindir}/slurmrestd
 %{_unitdir}/slurmrestd.service
 %endif
