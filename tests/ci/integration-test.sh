@@ -65,6 +65,8 @@ bash "${SCRIPT_DIR}/prepare-ci-environment.sh"
 # ---------------------------------------------------------------------------
 # Add local RPM repository (if /tmp/RPMS exists)
 # ---------------------------------------------------------------------------
+LOCAL_RPMS_HTTP_PORT=8095
+LOCAL_RPMS_HTTP_PID=""
 if [ -d /tmp/RPMS ]; then
 	createrepo_c /tmp/RPMS
 	cat >/etc/yum.repos.d/local-rpms.repo <<-'EOF'
@@ -75,6 +77,16 @@ if [ -d /tmp/RPMS ]; then
 		gpgcheck=0
 		priority=1
 	EOF
+
+	# The compute node image build (warewulf chroot or openchami
+	# image-build containers) cannot see /tmp/RPMS directly. The
+	# warewulf chroot gets the directory copied in below, but
+	# openchami's image-build runs in a podman container with
+	# "--network host", so also serve the repo over HTTP on localhost
+	# for it to reach.
+	python3 -m http.server "${LOCAL_RPMS_HTTP_PORT}" --directory /tmp/RPMS \
+		&>/var/log/local-rpms-http.log &
+	LOCAL_RPMS_HTTP_PID=$!
 fi
 
 # ---------------------------------------------------------------------------
@@ -347,6 +359,54 @@ chmod +x /usr/local/bin/ipmitool
 chmod 755 /opt
 
 # ---------------------------------------------------------------------------
+# Give the compute node image build access to the Factory (OBS) repo and
+# to the local-rpms repo (see above). Neither is otherwise visible to the
+# compute image: both the warewulf chroot and the openchami image-build
+# containers install strictly from the released OpenHPC repos baked into
+# the recipe.
+# ---------------------------------------------------------------------------
+FACTORY_REPO_URL=""
+FACTORY_REPO_GPG=""
+if [ -f /etc/yum.repos.d/obs.repo ]; then
+	FACTORY_REPO_URL=$(awk -F= '/^baseurl=/{print $2; exit}' /etc/yum.repos.d/obs.repo)
+	FACTORY_REPO_GPG=$(awk -F= '/^gpgkey=/{print $2; exit}' /etc/yum.repos.d/obs.repo)
+fi
+
+sed_escape() {
+	printf '%s' "$1" | sed -e 's/[&|\]/\\&/g'
+}
+
+# Extra "repos:" entries for openchami's image-build YAML files. No "gpg:"
+# is set for local-rpms: image-build only imports a GPG key when one is
+# given and otherwise adds the repo unsigned (see
+# OpenCHAMI/image-builder's src/installer.py).
+OPENCHAMI_REPO_YAML=""
+if [ -n "${FACTORY_REPO_URL}" ]; then
+	OPENCHAMI_REPO_YAML+="  - alias: 'OpenHPC-Factory'\n    url: '$(sed_escape "${FACTORY_REPO_URL}")'\n"
+	if [ -n "${FACTORY_REPO_GPG}" ]; then
+		OPENCHAMI_REPO_YAML+="    gpg: '$(sed_escape "${FACTORY_REPO_GPG}")'\n"
+	fi
+fi
+if [ -d /tmp/RPMS ]; then
+	OPENCHAMI_REPO_YAML+="  - alias: 'local-rpms'\n    url: 'http://127.0.0.1:${LOCAL_RPMS_HTTP_PORT}/'\n"
+fi
+
+# Extra commands for the warewulf "ohpc_proxy:compute" marker, run on the
+# host right after $CHROOT is defined and before any packages are
+# installed into it. $CHROOT must stay unexpanded here: it's only defined
+# once this text is substituted into the recipe and executed there.
+# shellcheck disable=SC2016
+WAREWULF_PROXY_REPL='echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf'
+if [ -n "${FACTORY_REPO_URL}" ]; then
+	# shellcheck disable=SC2016
+	WAREWULF_PROXY_REPL+='\ncp -v /etc/yum.repos.d/obs.repo $CHROOT/etc/yum.repos.d/'
+fi
+if [ -d /tmp/RPMS ]; then
+	# shellcheck disable=SC2016
+	WAREWULF_PROXY_REPL+='\nmkdir -p $CHROOT/tmp/RPMS\ncp -a /tmp/RPMS/. $CHROOT/tmp/RPMS/\ncp -v /etc/yum.repos.d/local-rpms.repo $CHROOT/etc/yum.repos.d/'
+fi
+
+# ---------------------------------------------------------------------------
 # Run the recipe
 # ---------------------------------------------------------------------------
 export PATH=/usr/local/bin:${PATH}
@@ -356,7 +416,7 @@ if [[ "${PROVISIONER}" == "warewulf" ]]; then
 	sed -i \
 		-e 's/\(\["rd.shell"\]\)/\1 + ["console=hvc0", "loglevel=5"]/' \
 		-e 's/\(systemctl restart rsyslog\.service\)/\1 || true/' \
-		-e 's|#<<< ohpc_proxy:compute >>>#|echo "max_parallel_downloads=10" >> $CHROOT/etc/dnf/dnf.conf\necho "debuglevel=1" >> $CHROOT/etc/dnf/dnf.conf|' \
+		-e "s|#<<< ohpc_proxy:compute >>>#|${WAREWULF_PROXY_REPL}|" \
 		"${RECIPE}"
 elif [[ "${PROVISIONER}" == "openchami" ]]; then
 	mkdir -p /etc/containers
@@ -379,6 +439,14 @@ elif [[ "${PROVISIONER}" == "openchami" ]]; then
 		-e 's|--network host \\|--network host \\\n        -v /etc/containers/storage.conf:/etc/containers/storage.conf:ro \\\n        -v /home/builder:/home/builder/.local \\|' \
 		-e 's|dracut --add "dmsquash-live livenet network-manager"|dracut --add "dmsquash-live livenet network-manager" --install "/usr/lib/systemd/systemd-sysroot-fstab-check"|' \
 		"${RECIPE}"
+	if [ -n "${OPENCHAMI_REPO_YAML}" ]; then
+		# compute-base.yaml installs the ohpc-release RPM from the
+		# release repo; compute-prod.yaml adds the OpenHPC/
+		# OpenHPC-updates repos directly. Insert the Factory and
+		# local-rpms repos into both, right before the next YAML key.
+		sed -i "/cat > \/opt\/ohpc\/admin\/images\/compute-base.yaml/,/^EOF$/ s|^package_groups:|${OPENCHAMI_REPO_YAML}package_groups:|" "${RECIPE}"
+		sed -i "/cat > \/opt\/ohpc\/admin\/images\/compute-prod.yaml/,/^EOF$/ s|^copyfiles:|${OPENCHAMI_REPO_YAML}copyfiles:|" "${RECIPE}"
+	fi
 fi
 if ! bash -x "${RECIPE}" 2> >(grep -v -e 'Unrecognised xattr prefix' -e '/dev/kmsg: Read-only file system' -e '^$' >&2); then
 	echo "Recipe failed – dumping journal since boot:"
@@ -512,6 +580,10 @@ for ((i = 0; i < num_computes; i++)); do
 		fi
 	fi
 done
+
+if [ -n "${LOCAL_RPMS_HTTP_PID}" ]; then
+	kill "${LOCAL_RPMS_HTTP_PID}" 2>/dev/null || true
+fi
 
 if [[ "${all_up}" -ne 1 ]]; then
 	echo "FAIL: Not all compute nodes came up" >&2
