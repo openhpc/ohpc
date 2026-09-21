@@ -144,7 +144,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
-        -DTPL_ENABLE_gtest=OFF                                          \
         -DLAPACK_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                    \
         -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
 %endif
@@ -191,6 +190,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
         -DTPL_ENABLE_Matio=OFF                                          \
+        -DTPL_ENABLE_gtest=OFF                                          \
         -DTPL_ENABLE_GLM=OFF                                            \
         ..
 
