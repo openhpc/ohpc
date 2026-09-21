@@ -7,7 +7,7 @@ source ../../common/functions || exit 1
 check_compiler_family CC CXX FC
 
 @test "[Compilers] C compiler man/help page (${LMOD_FAMILY_COMPILER})" {
-	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" ]]; then
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" || "${LMOD_FAMILY_COMPILER}" =~ "intel" ]]; then
 		run "${CC}" -help
 		assert_success
 	else
@@ -17,12 +17,8 @@ check_compiler_family CC CXX FC
 }
 
 @test "[Compilers] C++ compiler man/help page (${LMOD_FAMILY_COMPILER})" {
-	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" ]]; then
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" || "${LMOD_FAMILY_COMPILER}" =~ "intel" ]]; then
 		run "${CXX}" -help
-	elif [[ "${LMOD_FAMILY_COMPILER}" =~ "intel" ]]; then
-		# intel oneapi now only provides one man page (icx)
-		run man -w "${CC}"
-		assert_success
 	else
 		run man -w "${CXX}"
 		assert_success
@@ -30,7 +26,7 @@ check_compiler_family CC CXX FC
 }
 
 @test "[Compilers] Fortran compiler man/help page (${LMOD_FAMILY_COMPILER})" {
-	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" ]]; then
+	if [[ "${LMOD_FAMILY_COMPILER}" =~ "llvm" || "${LMOD_FAMILY_COMPILER}" =~ "intel" ]]; then
 		run "${FC}" -help
 		assert_success
 	else
