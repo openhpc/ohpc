@@ -7,7 +7,7 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-# OpenHPC:check-updates:version-pin 25.05
+# OpenHPC:check-updates:version-pin 26.05
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
@@ -31,7 +31,7 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	25.05.9
+Version:	26.05.4
 %global rel	1
 Release:	%{?dist}.1
 Summary:	Slurm Workload Manager
