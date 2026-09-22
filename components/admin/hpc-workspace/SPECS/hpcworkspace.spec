@@ -35,7 +35,12 @@ BuildRequires: ncurses-devel
 BuildRequires: cmake
 Requires: python3
 Requires: python3-pyyaml
-Requires: lua5.1
+# LUACALLOUTS is off by default upstream and this build does not pass
+# -DLUACALLOUTS=TRUE, so the binaries never link against lua5.1.
+# Upstream itself cautions the feature "does not work fully" and
+# should not be used in production, so keep this a weak dependency
+# rather than a hard Requires.
+Suggests: lua5.1
 %if 0%{?suse_version}
 Requires: libboost_system
 Requires: libboost_filesystem
