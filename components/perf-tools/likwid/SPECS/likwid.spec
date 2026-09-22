@@ -38,8 +38,6 @@ BuildRequires: perl
 Requires: perl
 BuildRequires: lua
 Requires: lua
-Requires(post): /sbin/ldconfig
-Requires(postun): /sbin/ldconfig
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -190,12 +188,6 @@ EOF
 ##
 set     ModulesVersion      "%{version}"
 EOF
-
-%post
-/sbin/ldconfig
-
-%postun
-/sbin/ldconfig
 
 %files
 %{OHPC_PUB}
