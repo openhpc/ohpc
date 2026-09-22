@@ -77,15 +77,11 @@ export CFLAGS="${CFLAGS} -Wno-unused-variable"
 export CFLAGS="${CFLAGS} -Wno-unused-but-set-variable"
 export CFLAGS="${CFLAGS} -Wno-unused-function"
 export CFLAGS="${CFLAGS} -Wno-maybe-uninitialized"
-export CFLAGS="${CFLAGS} -Wno-discarded-qualifiers"
 export CFLAGS="${CFLAGS} -Wno-parentheses"
 export CFLAGS="${CFLAGS} -Wno-sign-compare"
 export CFLAGS="${CFLAGS} -Wno-format-overflow"
 export CFLAGS="${CFLAGS} -Wno-comment"
-export CFLAGS="${CFLAGS} -Wno-stringop-truncation"
 export CFLAGS="${CFLAGS} -Wno-format"
-export CFLAGS="${CFLAGS} -Wno-multistatement-macros"
-export CFLAGS="${CFLAGS} -Wno-bool-compare"
 export CFLAGS="${CFLAGS} -Wno-logical-not-parentheses"
 export CFLAGS="${CFLAGS} -Wno-missing-braces"
 export CXXFLAGS="${CXXFLAGS} -Wno-register"
@@ -98,12 +94,30 @@ export CXXFLAGS="${CXXFLAGS} -Wno-parentheses"
 export CXXFLAGS="${CXXFLAGS} -Wno-sign-compare"
 export CXXFLAGS="${CXXFLAGS} -Wno-format-overflow"
 export CXXFLAGS="${CXXFLAGS} -Wno-comment"
-export CXXFLAGS="${CXXFLAGS} -Wno-stringop-truncation"
 export CXXFLAGS="${CXXFLAGS} -Wno-format"
-export CXXFLAGS="${CXXFLAGS} -Wno-multistatement-macros"
-export CXXFLAGS="${CXXFLAGS} -Wno-bool-compare"
 export CXXFLAGS="${CXXFLAGS} -Wno-logical-not-parentheses"
 export CXXFLAGS="${CXXFLAGS} -Wno-missing-braces"
+%if "%{compiler_family}" == "intel"
+# icpx pulls in Intel oneAPI TBB via libstdc++'s <execution> PSTL
+# glue, and TBB's headers use "T" as a template parameter name.
+# dimemas' own extern.h defines a function-like macro also named
+# "T", so the two collide and the build fails with errors like
+# "too many arguments provided to function-like macro invocation".
+# Disable the TBB-based parallel backend so those headers are never
+# pulled in; this should really be fixed upstream by avoiding the
+# name clash.
+export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_TBB_PAR_BACKEND=0"
+%else
+# icx/icpx (clang-based) do not recognize these GCC-specific warning
+# names and warn "unknown warning option" for each one.
+export CFLAGS="${CFLAGS} -Wno-discarded-qualifiers"
+export CFLAGS="${CFLAGS} -Wno-stringop-truncation"
+export CFLAGS="${CFLAGS} -Wno-multistatement-macros"
+export CFLAGS="${CFLAGS} -Wno-bool-compare"
+export CXXFLAGS="${CXXFLAGS} -Wno-stringop-truncation"
+export CXXFLAGS="${CXXFLAGS} -Wno-multistatement-macros"
+export CXXFLAGS="${CXXFLAGS} -Wno-bool-compare"
+%endif
 %if "%{compiler_family}" == "arm1"
 export CFLAGS="${CFLAGS} -fsimdmath"
 export CXXFLAGS="${CXXFLAGS} -fsimdmath"
