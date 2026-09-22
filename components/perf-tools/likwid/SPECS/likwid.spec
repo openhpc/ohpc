@@ -211,6 +211,7 @@ EOF
 %{OHPC_PUB}
 %exclude %{install_path}/sbin/likwid-accessD
 %exclude %{install_path}/sbin/likwid-setFreq
+%exclude %{install_path}/man/man1/*
 %attr(4755, root, root) %{install_path}/sbin/likwid-accessD
 %attr(4755, root, root) %{install_path}/sbin/likwid-setFreq
 %doc INSTALL README.md
