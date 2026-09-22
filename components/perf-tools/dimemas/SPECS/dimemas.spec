@@ -95,6 +95,10 @@ export NO_BRP_CHECK_RPATH=true
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
+# these are data files, not scripts; drop the executable bit upstream
+# ships them with to avoid an rpmbuild "no shebang" warning
+chmod -x $RPM_BUILD_ROOT%{install_path}/share/cfgs/*.cfg
+
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.a
