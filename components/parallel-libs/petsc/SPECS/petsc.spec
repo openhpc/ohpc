@@ -32,6 +32,8 @@ Url:            http://www.mcs.anl.gov/petsc/
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python3-devel
 BuildRequires:  valgrind-devel
 BuildRequires:  make
@@ -63,6 +65,7 @@ differential equations.
 %ohpc_setup_compiler
 
 module load phdf5
+module load hypre
 
 %if "%{compiler_family}" == "arm1"
 module load scalapack
@@ -145,7 +148,9 @@ PETSC_CXX="ccache ${PETSC_CXX}"
         --with-batch=0 \
         --with-hdf5=1 \
         --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-        --with-hdf5-include=$HDF5_INC || cat configure.log
+        --with-hdf5-include=$HDF5_INC \
+        --with-hypre=1 \
+        --with-hypre-dir=$HYPRE_DIR || cat configure.log
 
 make %{?_smp_mflags}
 
@@ -194,8 +199,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 (and scalapack for compiler families other than intel)
+# Require phdf5 and hypre (and scalapack for compiler families other than intel)
 depends-on phdf5
+depends-on hypre
 %if "%{compiler_family}" != "intel"
 depends-on scalapack
 %endif
