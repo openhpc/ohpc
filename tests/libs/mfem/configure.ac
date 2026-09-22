@@ -77,8 +77,13 @@ CXX=mpicxx
 AC_PROG_CXX
 
 CXXFLAGS="-I${HYPRE_INC} -I${MFEM_INC} -I${PETSC_INC} -I${SUPERLU_DIST_INC} ${CXXFLAGS} -std=c++17"
-LDFLAGS="-L${MFEM_LIB} -L${PTSCOTCH_LIB} ${LDFLAGS}"
-LIBS="-lmfem"
+# mfem's own linalg/hypre.hpp references some HYPRE symbols (e.g.
+# HYPRE_ParCSROnProcTriSolve) directly, and object files that
+# instantiate it, such as ex1p_perf.cpp, need them resolved at link
+# time. Link against hypre explicitly instead of relying on picking
+# it up transitively through libmfem.
+LDFLAGS="-L${MFEM_LIB} -L${HYPRE_LIB} -L${PTSCOTCH_LIB} ${LDFLAGS}"
+LIBS="-lmfem -lHYPRE"
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile tests/serial/Makefile tests/parallel/Makefile )
