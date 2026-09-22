@@ -110,7 +110,7 @@ components/perf-tools/dimemas/SOURCES/dimemas-*src.tar.bz2
 components/perf-tools/extrae/SOURCES/extrae-*src.tar.bz2
 components/perf-tools/geopm/SOURCES/*.tar.gz
 components/perf-tools/imb/SOURCES/IMB-v*.tar.gz
-components/perf-tools/likwid/SOURCES/v*.tar.gz
+components/perf-tools/likwid/SOURCES/*.tar.gz
 components/perf-tools/msr-safe/SOURCES/msr-safe-*.tar.gz
 components/perf-tools/omb/SOURCES/osu-micro-benchmarks-*.tar.gz
 components/perf-tools/omb/SOURCES/osu-micro-benchmarks-*.tgz
