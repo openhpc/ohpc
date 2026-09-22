@@ -95,6 +95,9 @@ module load papi
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
+# The install hook creates an absolute symlink; make it relative
+ln -sf extrae-uncore.py $RPM_BUILD_ROOT%{install_path}/bin/extrae-uncore
+
 # fix a path in one of the scripts
 sed -e "s,export EXTRAE_HOME=.*,export EXTRAE_HOME=%{install_path},g" -i $RPM_BUILD_ROOT/%{install_path}/share/tests/overhead/run_overhead_tests.sh
 
