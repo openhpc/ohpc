@@ -82,7 +82,11 @@ It consists of:
           MANPREFIX="%{install_path}/man" \
 %if "%{compiler_family}" == "intel"
           COMPILER="ICC" \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+          CC="ccache icx" \
+%else
           CC="icx" \
+%endif
           FC="ifx" \
           FCFLAGS="-module ./" \
 %else
@@ -101,6 +105,11 @@ It consists of:
           COMPILER="GCC" \
     %endif
     %endif
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+          CC="ccache gcc" \
+%else
+          CC="gcc" \
+%endif
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
@@ -119,7 +128,11 @@ It consists of:
           MANPREFIX="%{buildroot}%{install_path}/man" \
 %if "%{compiler_family}" == "intel"
           COMPILER="ICC" \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+          CC="ccache icx" \
+%else
           CC="icx" \
+%endif
           FC="ifx" \
           FCFLAGS="-module ./" \
 %else
@@ -138,6 +151,11 @@ It consists of:
           COMPILER="GCC" \
     %endif
     %endif
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+          CC="ccache gcc" \
+%else
+          CC="gcc" \
+%endif
           FC="gfortran" \
           FCFLAGS="-J ./ -fsyntax-only" \
 %endif
