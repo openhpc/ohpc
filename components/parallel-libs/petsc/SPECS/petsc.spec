@@ -158,6 +158,39 @@ make %{?_smp_mflags}
 
 make install DESTDIR=$RPM_BUILD_ROOT
 
+# Upstream ships these files executable despite having no shebang,
+# which makes rpmbuild's brp-mangle-shebangs warn while stripping the
+# bit itself anyway. Do it ourselves first so it has nothing left to
+# warn about.
+for file in \
+	share/petsc/matlab/UFgetPetscMat.m \
+	share/petsc/matlab/laplacianlicense.txt \
+	share/petsc/matlab/PetscBinaryRead.m \
+	share/petsc/matlab/PetscBinaryWrite.m \
+	share/petsc/matlab/@PetscOpenFile/write.m \
+	share/petsc/matlab/@PetscOpenFile/PetscOpenFile.m \
+	share/petsc/matlab/@PetscOpenFile/close.m \
+	share/petsc/matlab/@PetscOpenFile/read.m \
+	share/petsc/matlab/PetscBagRead.m \
+	share/petsc/matlab/@PetscOpenSocket/write.m \
+	share/petsc/matlab/@PetscOpenSocket/PetscOpenSocket.m \
+	share/petsc/matlab/@PetscOpenSocket/close.m \
+	share/petsc/matlab/@PetscOpenSocket/read.m \
+	share/petsc/matlab/generatePetscTestFiles.m \
+	share/petsc/matlab/laplacian.m \
+	share/petsc/matlab/PetscReadBinaryMatlab.m \
+	share/petsc/matlab/launch.m \
+	share/petsc/examples/src/sys/tests/ex55.py \
+	share/petsc/examples/config/example_template.py \
+	share/petsc/datafiles/meshes/nozzle.egads \
+	share/petsc/datafiles/meshes/nozzle.igs \
+	share/petsc/datafiles/meshes/nozzle.stp \
+	lib/petsc/bin/petsc_conf.py \
+	lib/petsc/bin/PetscBinaryIO.py \
+	lib/petsc/bin/PetscBinaryIO_tests.py; do
+		chmod -x $RPM_BUILD_ROOT%{install_path}/$file
+done
+
 cd %{buildroot}%{install_path}
 for file in \
 	lib/petsc/bin/petsc_gen_xdmf.py \
