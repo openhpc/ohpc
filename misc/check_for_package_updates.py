@@ -1518,8 +1518,13 @@ def commit_updates(updated_results):
     else:
         subject = f"{prefix}update packages to latest versions"
 
-    if len(subject) > 72:
-        subject = subject[:69] + "..."
+    # Keep the subject within 72 columns. The trailing emoji is two
+    # code points (arrow + variation selector) but renders as two
+    # columns, so reserve three columns for " \u2b06\ufe0f" and
+    # truncate the text before appending it.
+    if len(subject) > 69:
+        subject = subject[:66] + "..."
+    subject += " \u2b06\ufe0f"
 
     # Build commit body -- each result gets two lines so that
     # individual lines stay within 72 characters.
