@@ -109,11 +109,21 @@ EOF
 %dir %{OHPC_ADMIN}
 %dir %{OHPC_MODULES}
 %dir %{_localstatedir}/log/%{pname}
-%{OHPC_ADMIN}/%{pname}
-%{OHPC_MODULES}/%{pname}
+%dir %{OHPC_ADMIN}/%{pname}
+%dir %{install_path}
+%dir %{install_path}/bin
+%{install_path}/bin/ws_extend
+%{install_path}/bin/ws_find
+%{install_path}/bin/ws_list
+%{install_path}/bin/ws_register
+%{install_path}/bin/ws_send_ical
+%{install_path}/bin/ws_share
 %attr(4755, root, root) %{install_path}/bin/ws_allocate
 %attr(4755, root, root) %{install_path}/bin/ws_release
 %attr(4755, root, root) %{install_path}/bin/ws_restore
+%{install_path}/sbin
+%{install_path}/share
+%{OHPC_MODULES}/%{pname}
 
 
 %pre
