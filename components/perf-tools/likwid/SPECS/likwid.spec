@@ -193,14 +193,16 @@ EOF
 
 %post
 /sbin/ldconfig
-chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
-chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
 
 %postun
 /sbin/ldconfig
 
 %files
 %{OHPC_PUB}
+%exclude %{install_path}/sbin/likwid-accessD
+%exclude %{install_path}/sbin/likwid-setFreq
+%attr(4755, root, root) %{install_path}/sbin/likwid-accessD
+%attr(4755, root, root) %{install_path}/sbin/likwid-setFreq
 %doc INSTALL README.md
 %license COPYING
 %doc %{install_path}/man/man1/*
