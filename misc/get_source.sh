@@ -43,13 +43,23 @@ do
 		fi
 		u=$(awk '{ print $2 }' <<< "${u}")
 		echo "Trying to get ${u}"
-		# Try to download only if newer
-		WGET=$(wget -N -nv -P ../SOURCES "${u}" 2>&1)
-		# Handling for github URLs with #/ or #$/
-		if grep -E "#[$]?/" <<< "${u}"; then
-			MV_SOURCE=$(echo "${WGET}" | tail -1 | cut -d\  -f6 | sed -e 's/^"//' -e 's/"$//')
-			MV_DEST=../SOURCES/$(basename "${u}")
-			mv "${MV_SOURCE}" "${MV_DEST}"
+		# Handling for github-style URLs with #/ or #$/, e.g.
+		#   https://github.com/foo/bar/archive/vX.Y.tar.gz#/bar-X.Y.tar.gz
+		# rpm downloads the part before '#' and stores it locally
+		# under the name that follows '#/'. The fragment is a
+		# client-side-only construct that is never sent to the
+		# server, so fetch the URL with it stripped and save
+		# straight to the target name via -O, instead of trying to
+		# rename the file afterwards by parsing wget's log output
+		# (whose format is not the same between wget and wget2).
+		if [[ "${u}" =~ \#[$]?/ ]]; then
+			FETCH_URL=${u%%#*}
+			LOCAL_NAME=$(basename "${u}")
+			echo "Trying to get ${FETCH_URL} as ${LOCAL_NAME}"
+			wget -nv -O "../SOURCES/${LOCAL_NAME}" "${FETCH_URL}"
+		else
+			# Try to download only if newer
+			wget -N -nv -P ../SOURCES "${u}"
 		fi
 	done
 
