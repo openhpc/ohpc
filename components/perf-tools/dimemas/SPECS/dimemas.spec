@@ -107,6 +107,14 @@ export CXXFLAGS="${CXXFLAGS} -Wno-missing-braces"
 # pulled in; this should really be fixed upstream by avoiding the
 # name clash.
 export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_TBB_PAR_BACKEND=0"
+# Silence more warnings from dimemas' own source, specific to
+# clang-based icx/icpx; these should really be fixed upstream too.
+export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types-discards-qualifiers"
+export CFLAGS="${CFLAGS} -Wno-string-plus-int"
+export CFLAGS="${CFLAGS} -Wno-tautological-constant-compare"
+export CXXFLAGS="${CXXFLAGS} -Wno-incompatible-pointer-types-discards-qualifiers"
+export CXXFLAGS="${CXXFLAGS} -Wno-string-plus-int"
+export CXXFLAGS="${CXXFLAGS} -Wno-tautological-constant-compare"
 %else
 # icx/icpx (clang-based) do not recognize these GCC-specific warning
 # names and warn "unknown warning option" for each one.
