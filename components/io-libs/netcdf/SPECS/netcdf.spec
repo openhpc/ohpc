@@ -96,6 +96,14 @@ NetCDF data is:
 %if 0%{?ohpc_mpi_dependent}
 module load phdf5
 export CC=mpicc
+%if "%{mpi_family}" == "impi"
+# Intel MPI provides MPI_Comm_f2c/MPI_Info_f2c only as macros in mpi.h, so
+# autoconf's link-based function check fails. Since 4.10.1 dparallel.c then
+# stops with "#error MPI_Comm_f2c unavailable on a 64-bit system", so tell
+# configure that both are available.
+export ac_cv_func_MPI_Comm_f2c=yes
+export ac_cv_func_MPI_Info_f2c=yes
+%endif
 %else
 module load hdf5
 %endif
