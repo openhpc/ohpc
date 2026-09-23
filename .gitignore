@@ -131,6 +131,7 @@ components/provisioning/warewulf-vnfs/SOURCES/*.tar.gz
 components/provisioning/warewulf/SOURCES/warewulf-*.tar.gz
 
 # ---- Components: source tarballs (rms) ----
+components/rms/flux-security/SOURCES/flux-security-*.tar.gz
 components/rms/magpie/SOURCES/*.tar.gz
 components/rms/munge/SOURCES/munge-*.tar.gz
 components/rms/openpbs/SOURCES/v*.tar.gz
