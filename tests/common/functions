@@ -29,9 +29,35 @@ check_rms() {
 		export RESOURCE_MANAGER=openpbs
 	elif [ -s /etc/slurm/slurm.conf ]; then
 		export RESOURCE_MANAGER=slurm
+	elif [ -s /etc/flux/system/conf.d/bootstrap.toml ]; then
+		export RESOURCE_MANAGER=flux
 	else
 		ERROR "Unsupported or unknown resource manager"
 	fi
+}
+
+# Every run_*_binary caller hardcodes its -t timeout as a PBS/Slurm-style
+# walltime (HH:MM:SS, MM:SS, or a bare number), since that is what those two
+# resource managers expect. flux batch's own -t/--time-limit instead wants a
+# Flux standard duration, whose unitless form is a plain number of minutes,
+# not that walltime string; convert here rather than at every call site.
+flux_timeout_minutes() {
+	local t="$1"
+	case "${t}" in
+	*:*:*)
+		local h m s
+		IFS=: read -r h m s <<<"${t}"
+		echo $(((10#${h} * 60) + 10#${m} + (10#${s} + 59) / 60))
+		;;
+	*:*)
+		local m s
+		IFS=: read -r m s <<<"${t}"
+		echo $((10#${m} + (10#${s} + 59) / 60))
+		;;
+	*)
+		echo "${t}"
+		;;
+	esac
 }
 
 # Check for valid executable
@@ -276,6 +302,36 @@ run_serial_binary() {
 			rm -f "${jobScript}"
 			return "${RC}"
 		fi
+	elif [ "${RESOURCE_MANAGER}" = "flux" ]; then
+		JOB_SCRIPT=".job.${RANDOM}"
+		{
+			echo "#!/bin/bash"
+			echo "${exec_prefix}" "${EXE}" "$@"
+		} >"${JOB_SCRIPT}"
+		chmod 700 "${JOB_SCRIPT}"
+
+		# Same reasoning as run_mpi_binary's flux branch: flux batch's
+		# own default output template doesn't match the jobid actually
+		# printed to stdout, so name it explicitly up front.
+		JOB_OUT="/tmp/job.${USER}.${RANDOM}.out"
+
+		jobId=$(flux batch -N 1 -n 1 -t "$(flux_timeout_minutes "${timeout}")" --output="${JOB_OUT}" "${JOB_SCRIPT}") ||
+			ERROR "Unable to submit batch job"
+
+		echo "Batch job ${jobId} submitted"
+
+		flux job status "${jobId}"
+		RC="$?"
+
+		if [ -n "${output_file}" ]; then
+			mv "${JOB_OUT}" "${output_file}"
+			cat "${output_file}"
+		else
+			cat "${JOB_OUT}" 2>/dev/null
+		fi
+
+		rm -f "${JOB_SCRIPT}"
+		return "${RC}"
 	else
 		ERROR_RETURN "Unsupported resource manager"
 	fi
@@ -295,6 +351,10 @@ run_mpi_binary() {
 		else
 			timeout=2 # default job timeout (in minutes)
 		fi
+	elif [ "${RESOURCE_MANAGER}" = "flux" ]; then
+		# flux's -t/--time-limit takes bare minutes (or a Flux Standard
+		# Duration), not openpbs' HH:MM:SS walltime format below.
+		timeout=2 # default job timeout (in minutes)
 	else
 		timeout="00:02:00"
 	fi
@@ -468,6 +528,57 @@ run_mpi_binary() {
 				mv job.out "${output_file}"
 			fi
 		fi
+		rm "${JOB_SCRIPT}"
+		return "${RC}"
+	elif [ "${RESOURCE_MANAGER}" = "flux" ]; then
+		JOB_SCRIPT="/tmp/job.${USER}.${RANDOM}"
+
+		# Unlike srun inside an salloc/sbatch job, "flux run" with no
+		# sizing flags does not inherit this job's node/task count;
+		# prun's own flux branch reads these to size it explicitly.
+		# See prun's flux_run_prefix() for the full explanation.
+		{
+			echo "#!/bin/bash"
+			echo "export FLUX_JOB_NNODES=${NNODES}"
+			echo "export FLUX_JOB_NTASKS=${NTASKS}"
+		} >"${JOB_SCRIPT}"
+
+		if [ -n "${input_file}" ]; then
+			echo "${mpi_launcher} ${EXE} ${ARGS} < ${input_file}" >>"${JOB_SCRIPT}"
+		else
+			echo "${mpi_launcher} ${EXE} ${ARGS}" >>"${JOB_SCRIPT}"
+		fi
+		chmod +x "${JOB_SCRIPT}"
+
+		# Set an explicit, predictable output path rather than relying
+		# on flux batch's default "flux-{{id}}.out" template: the
+		# jobid it substitutes there is a different, ASCII-only
+		# encoding than the one "flux batch" prints to stdout and
+		# "flux job status"/"flux job attach" accept, so a filename
+		# built from the printed jobid does not actually match the
+		# file flux itself creates.
+		JOB_OUT="/tmp/job.${USER}.${RANDOM}.out"
+
+		# Submit batch job
+		jobId=$(flux batch -N "${NNODES}" -n "${NTASKS}" -t "$(flux_timeout_minutes "${timeout}")" --output="${JOB_OUT}" "${JOB_SCRIPT}") ||
+			ERROR "Unable to submit batch job"
+
+		echo "Batch job ${jobId} submitted"
+
+		# "flux job status" blocks until the job completes and exits
+		# with the job's own largest exit code; unlike slurm's
+		# scontrol-based polling loop above, this needs no separate
+		# wait/poll step or job-state text parsing.
+		flux job status "${jobId}"
+		RC="$?"
+
+		echo " "
+		cat "${JOB_OUT}" 2>/dev/null
+
+		if [ -n "${output_file}" ]; then
+			mv "${JOB_OUT}" "${output_file}"
+		fi
+
 		rm "${JOB_SCRIPT}"
 		return "${RC}"
 	else

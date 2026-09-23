@@ -38,9 +38,14 @@ else
 fi
 
 # RMS test
-AC_CHECK_FILE(/etc/pbs.conf,[enable_pbs=yes],[enable_slurm=yes])
+AC_CHECK_FILE(/etc/pbs.conf,[enable_pbs=yes],[])
+AC_CHECK_FILE(/etc/flux/system/conf.d/bootstrap.toml,[enable_flux=yes],[])
+if test "x$enable_pbs" != "xyes" && test "x$enable_flux" != "xyes" ; then
+   enable_slurm=yes
+fi
 AM_CONDITIONAL(SLURM_ENABLED,test "x$enable_slurm" = "xyes" )
 AM_CONDITIONAL(PBS_ENABLED,test "x$enable_pbs" = "xyes" )
+AM_CONDITIONAL(FLUX_ENABLED,test "x$enable_flux" = "xyes" )
 
 # Provisioner test(s)
 AC_CHECK_FILE(/etc/warewulf/functions,[enable_warewulf=yes],[enable_warewulf=no])
@@ -572,6 +577,9 @@ if test "x$enable_slurm" = "xyes" ; then
 fi
 if test "x$enable_pbs" = "xyes" ; then
    echo Resource manager ............. : OpenPBS
+fi
+if test "x$enable_flux" = "xyes" ; then
+   echo Resource manager ............. : Flux
 fi
 if test "x$enable_warewulf" = "xyes" ; then
    echo Provisioner .................. : Warewulf
