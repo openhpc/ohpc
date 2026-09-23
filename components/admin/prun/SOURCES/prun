@@ -66,6 +66,19 @@ function _debug() {
 	fi
 }
 
+function flux_run_prefix() {
+	# Unlike srun inside an salloc/sbatch job, "flux run" with no
+	# sizing flags does not inherit the enclosing allocation's node
+	# and task count; it defaults to a single task regardless of how
+	# large the allocation actually is. FLUX_JOB_NNODES/FLUX_JOB_NTASKS
+	# are set by run_mpi_binary()'s flux branch for exactly this
+	# reason. Fall back to one task per node in this instance for
+	# standalone use outside that harness.
+	local nnodes="${FLUX_JOB_NNODES:-$(flux getattr size)}"
+	local ntasks="${FLUX_JOB_NTASKS:-${nnodes}}"
+	echo "flux run -N ${nnodes} -n ${ntasks}"
+}
+
 function verify_launcher_avail() {
 	if [ -z "$(type -P "${1}")" ]; then
 		_error "Expected Job launcher $1 not found for ${LMOD_FAMILY_MPI}"
@@ -93,6 +106,9 @@ function launch_impi() {
 			verify_launcher_avail "${LAUNCHER}"
 
 			cmd="${LAUNCHER} -rmk pbs $*"
+		elif [ "${RM}" == "flux" ]; then
+			verify_launcher_avail flux
+			cmd="$(flux_run_prefix) $*"
 		fi
 
 		_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
@@ -112,6 +128,11 @@ function launch_mpich() {
 	elif [[ "${RM}" == "openpbs" ]]; then
 		verify_launcher_avail mpiexec.hydra
 		cmd="mpiexec.hydra -rmk pbs $*"
+	elif [[ "${RM}" == "flux" ]]; then
+		# Flux's own default simple PMI-1/2 is sufficient for mpich
+		# and its derivatives (mvapich2); no bootstrap flags needed.
+		verify_launcher_avail flux
+		cmd="$(flux_run_prefix) $*"
 	else
 		_error "Unknown resource manager -> ${RM}"
 	fi
@@ -132,15 +153,23 @@ function launch_mvapich2() {
 
 		setupenv_mvapich
 
-		LAUNCHER="mpiexec.hydra"
-		verify_launcher_avail "${LAUNCHER}"
-
-		if [ "${RM}" == "slurm" ]; then
-			cmd="${LAUNCHER} -bootstrap slurm $*"
-		elif [ "${RM}" == "openpbs" ]; then
-			cmd="${LAUNCHER} -rmk pbs $*"
+		if [ "${RM}" == "flux" ]; then
+			# Flux's own default simple PMI-1/2 is sufficient for
+			# this mpich derivative; no mpiexec.hydra bootstrap
+			# wrapper needed, same as the plain mpich case.
+			verify_launcher_avail flux
+			cmd="$(flux_run_prefix) $*"
 		else
-			_error "Unknown resource manager -> ${RM}"
+			LAUNCHER="mpiexec.hydra"
+			verify_launcher_avail "${LAUNCHER}"
+
+			if [ "${RM}" == "slurm" ]; then
+				cmd="${LAUNCHER} -bootstrap slurm $*"
+			elif [ "${RM}" == "openpbs" ]; then
+				cmd="${LAUNCHER} -rmk pbs $*"
+			else
+				_error "Unknown resource manager -> ${RM}"
+			fi
 		fi
 
 		_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
@@ -185,6 +214,14 @@ function launch_openmpi() {
 	elif [[ "${RM}" == "openpbs" ]]; then
 		verify_launcher_avail mpiexec
 		cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $*"
+	elif [[ "${RM}" == "flux" ]]; then
+		# Unlike mpich and its derivatives, OpenMPI does not correctly
+		# bootstrap over Flux's default simple PMI-1/2: it detects the
+		# PMI environment but falls back to running disconnected
+		# singleton processes instead of one real parallel job.
+		# -o pmi=pmix requests flux-pmix's shell plugin instead.
+		verify_launcher_avail flux
+		cmd="$(flux_run_prefix) -o pmi=pmix $*"
 	else
 		_error "Unknown resource manager -> ${RM}"
 	fi
@@ -232,6 +269,12 @@ if [ -z "${RM}" ]; then
 	[[ -s /etc/pbs.conf ]] && RM=openpbs
 	[[ -s /etc/slurm/slurm.conf ]] && RM=slurm
 	[[ -s /var/run/slurm/conf/slurm.conf ]] && RM=slurm
+	# Unlike slurm/openpbs, flux has no single well-known system config
+	# file to check for. prun always runs from inside an already
+	# active flux job (submitted via "flux batch"/"flux run"), where
+	# the flux shell has already set FLUX_URI for job tasks, so check
+	# that instead.
+	[[ -n "${FLUX_URI}" ]] && RM=flux
 fi
 
 if ! [ -x "$(command -v "${EXEC}")" ]; then
