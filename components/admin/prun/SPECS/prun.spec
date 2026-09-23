@@ -14,7 +14,7 @@
 
 Summary:   Convenience utility for parallel job launch
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.2
+Version:   3
 Release:   %{?dist}.1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
@@ -32,12 +32,7 @@ prun provides a unified, script-based wrapper for launching parallel jobs
 within a resource manager for a variety of MPI families.
 
 %prep
-
 %{__cp} %SOURCE2 .
-
-
-%build
-# Binary pass-through - empty build section
 
 %install
 %{__mkdir} -p %{buildroot}/%{package_target}
