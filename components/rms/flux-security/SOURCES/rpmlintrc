@@ -1,0 +1,1 @@
+setBadness('permissions-file-setuid-bit', 0)
