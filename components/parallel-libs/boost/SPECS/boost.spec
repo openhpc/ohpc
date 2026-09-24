@@ -30,6 +30,7 @@ Source0:        https://archives.boost.io/release/%{version}/source/boost_%{vers
 Patch0:         boost-1.79.0-oneapi_pch.patch
 Patch1:         boost-1.57.0-python-abi_letters.patch
 Patch2:         boost-icpx-pthread.patch
+Patch3:         boost-1.92.0-mpi_request_equality.patch
 
 %if 0%{?sle_version}
 BuildRequires:  libbz2-devel
@@ -80,6 +81,7 @@ for all users with minimal restrictions.
 %patch -P 0 -p 1
 %patch -P 1 -p 1
 %patch -P 2 -p 1
+%patch -P 3 -p 1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -114,7 +116,12 @@ export MPICXX=$CXX
 export RPM_OPT_FLAGS="$CFLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
 
-cat << "EOF" >> rpm-config.jam
+# Truncate rather than append: this must start from a clean file each
+# %build run, so stale "using mpi : ..." content from a differently
+# configured earlier build of this same extracted tree (e.g. a
+# different mpi_family) can never linger and silently win over the
+# config this run actually generates below.
+cat << "EOF" > rpm-config.jam
 %if 0%{?rhel} >= 9 || 0%{?openEuler}
 using python : %{python3_version} : %{__python3} : /usr/include/python%{python3_version} ;
 %else
@@ -124,6 +131,7 @@ import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
 local MPI_DIR = [ os.environ MPI_DIR ] ;
+local MPICXX = [ os.environ MPICXX ] ;
 %if "%{compiler_family}" == "gnu14" || "%{compiler_family}" == "gnu15" || "%{compiler_family}" == "gnu16"
 using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
 %endif
@@ -137,7 +145,7 @@ using mpi : :
     <find-shared-library>mpicxx
     <find-shared-library>mpi ;
 %else
-using mpi : $MPICXX ;
+using mpi : $(MPICXX) ;
 %endif
 EOF
 
