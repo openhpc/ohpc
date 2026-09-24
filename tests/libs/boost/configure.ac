@@ -31,6 +31,13 @@ AM_CONDITIONAL(GCC, test $LMOD_FAMILY_COMPILER = "gnu")
 
 AC_PROG_CXX
 
+# AC_PROG_CXX's own built-in C++ standard detection only probes up
+# through C++11, embedding "-std=gnu++11" into CXXFLAGS; Boost 1.92's
+# Boost.Math requires C++14. Append a newer -std= after it on the
+# same compile line, which wins since gcc honors the last one given;
+# same fix already applied in mfem's configure.ac.
+CXXFLAGS="${CXXFLAGS} -std=c++17"
+
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile \
                          tests/module/Makefile \
