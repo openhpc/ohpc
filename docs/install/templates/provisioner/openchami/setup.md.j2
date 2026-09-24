@@ -13,7 +13,7 @@ on them like:
 
 ```bash
 systemctl status registry.service
-systemctl restart minio-server.service
+systemctl restart seaweedfs.service
 journalctl -u registry.service
 ```
 :::
@@ -57,33 +57,38 @@ EOF
 ```
 <!-- ohpc_end -->
 
-Then create the local S3 object store quadlet definition.
+Then create the local S3 object store quadlet definition. MinIO is no longer
+usable here: current MinIO container images are no longer published under an
+open source license. [SeaweedFS](https://github.com/seaweedfs/seaweedfs) is
+used instead, since its S3 gateway is compatible enough with the S3 API that
+none of the later `s3cmd` steps in this guide (bucket creation, ACLs, bucket
+policies, anonymous object reads) need to change.
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment Create Minio S3 object storage quadlet -->
+<!-- ohpc_comment Create SeaweedFS S3 object storage quadlet -->
 ```bash
-cat > /etc/containers/systemd/minio.container <<EOF
+cat > /etc/containers/systemd/seaweedfs.container <<EOF
 [Unit]
-Description=Minio S3
+Description=SeaweedFS S3
 After=local-fs.target network-online.target
 Wants=local-fs.target network-online.target
 
 [Container]
-ContainerName=minio-server
-Image=quay.io/minio/minio:latest
+ContainerName=seaweedfs
+Image=docker.io/chrislusf/seaweedfs:latest
 # Volumes
 Volume=/opt/ohpc/admin/data/s3:/data:Z
 
 # Ports
 PublishPort=9000:9000
-PublishPort=9091:9001
+PublishPort=9091:23646
 
 # Environment Variables
-Environment=MINIO_ROOT_USER=admin
-Environment=MINIO_ROOT_PASSWORD=password1234
+Environment=AWS_ACCESS_KEY_ID=admin
+Environment=AWS_SECRET_ACCESS_KEY=password1234
 
 # Command to run in container
-Exec=server /data --console-address :9001
+Exec=mini -dir=/data -s3.port=9000
 
 [Service]
 Restart=always
@@ -94,14 +99,14 @@ EOF
 ```
 <!-- ohpc_end -->
 
-We need to reload the system daemon, and to allow the MinIO, and OCI Registry
-containers to start.
+We need to reload the system daemon, and to allow the SeaweedFS, and OCI
+Registry containers to start.
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment Reload Systemd daemon and start the s3 (minio) and container registry -->
+<!-- ohpc_comment Reload Systemd daemon and start the s3 (seaweedfs) and container registry -->
 ```bash
 systemctl daemon-reload
-systemctl start minio.service
+systemctl start seaweedfs.service
 systemctl start registry.service
 ```
 <!-- ohpc_end -->
