@@ -1,0 +1,24 @@
+--- a/boost/mpi/request.hpp
++++ b/boost/mpi/request.hpp
+@@ -122,7 +122,20 @@
+    * Is this request potentialy pending ?
+    */
+   bool active() const { return bool(m_handler) && m_handler->active(); }
+-  
++
++  /**
++   * Two requests are considered equal when they refer to the same
++   * underlying communication, i.e. share the same handler.
++   */
++  friend bool operator==(request const& lhs, request const& rhs)
++  {
++    return lhs.m_handler == rhs.m_handler;
++  }
++  friend bool operator!=(request const& lhs, request const& rhs)
++  {
++    return !(lhs == rhs);
++  }
++
+   // Some data might need protection while the reqest is processed.
+   void preserve(boost::shared_ptr<void> d);
+ 
