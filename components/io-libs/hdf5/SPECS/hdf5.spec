@@ -79,6 +79,7 @@ export FFLAGS="${FCFLAGS} -fno-lto"
 
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=%{install_path} \
+      -DCMAKE_INSTALL_LIBDIR=lib             \
       -DCMAKE_BUILD_TYPE=Release             \
       -DBUILD_SHARED_LIBS=ON                 \
       -DBUILD_STATIC_LIBS=OFF                \
