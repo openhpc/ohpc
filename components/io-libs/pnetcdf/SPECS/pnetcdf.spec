@@ -64,6 +64,12 @@ export FCFLAGS="${FCFLAGS} -fsimdmath"
 export F77LAGS="${F77LAGS} -fsimdmath"
 %endif
 
+# -fvisibility=default on FCFLAGS/FFLAGS works around an Intel ifx quirk:
+# ifx marks its undefined references to bind(C) external procedures as
+# ELF-hidden when built with -fvisibility=hidden (baked into pnetcdf's
+# own AM_FCFLAGS), and ld then demotes the matching definitions in the
+# F77 C shim to local, dropping nfmpi_* symbols from libpnetcdf.so's
+# dynamic symbol table. gfortran does not do this.
 CC=mpicc \
 CXX=mpicxx \
 F77=mpif77 \
@@ -74,8 +80,8 @@ MPIF77=mpif77 \
 MPICXX=mpicxx \
 CFLAGS="${CFLAGS} -fPIC -DPIC" \
 CXXFLAGS="${CXXFLAGS} -fPIC -DPIC" \
-FCFLAGS="${FCFLAGS} -fPIC" \
-FFLAGS="${F77FLAGS} -fPIC" \
+FCFLAGS="${FCFLAGS} -fPIC -fvisibility=default" \
+FFLAGS="${F77FLAGS} -fPIC -fvisibility=default" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
