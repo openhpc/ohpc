@@ -35,7 +35,7 @@ Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 BuildRequires:  make cmake
 BuildRequires:  tcsh
 
