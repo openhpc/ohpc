@@ -127,6 +127,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm]
         compiler: [gnu16, intel]
+        rms: [slurm, flux]
         include:
           - os: ubuntu-latest
             arch: x86_64
@@ -136,7 +137,7 @@ jobs:
           - os: ubuntu-24.04-arm
             compiler: intel
     runs-on: ${{ matrix.os }}
-    name: Test on RHEL (${{ matrix.arch }}/${{ matrix.compiler }})
+    name: Test on RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }})
     env:
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
@@ -201,10 +202,15 @@ jobs:
         fi
         . /etc/profile.d/lmod.sh
         chown ohpc -R tests
-        if [ "${{ steps.check_all.outputs.run_all }}" == "true" ] && [ "${{ matrix.compiler }}" != "intel" ]; then
-          tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ALL
+        if [ "${{ matrix.rms }}" == "flux" ]; then
+          RUN_TESTS_SCRIPT=tests/ci/setup_flux_and_run_tests.sh
         else
-          tests/ci/setup_slurm_and_run_tests.sh ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
+          RUN_TESTS_SCRIPT=tests/ci/setup_slurm_and_run_tests.sh
+        fi
+        if [ "${{ steps.check_all.outputs.run_all }}" == "true" ] && [ "${{ matrix.compiler }}" != "intel" ]; then
+          "${RUN_TESTS_SCRIPT}" ohpc ${{ matrix.compiler }} ALL
+        else
+          "${RUN_TESTS_SCRIPT}" ohpc ${{ matrix.compiler }} ${{ steps.files.outputs.added_modified }}
         fi
     - name: Upload Test Results
       # To display test results from forked repositories they need to
@@ -212,7 +218,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
+        name: test-results-${{ matrix.rms }}-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: tests/**/*.log.xml
     - name: Save oneAPI package cache
@@ -225,13 +231,13 @@ jobs:
       uses: actions/cache/save@v6
       with:
         path: /var/cache/ccache
-        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-${{ matrix.rms }}
     - name: Upload ccache stats
       if: always()
       uses: ./.github/actions/upload-ccache-stats
       with:
-        job-name: "RHEL (${{ matrix.arch }}/${{ matrix.compiler }})"
-        artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}
+        job-name: "RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }})"
+        artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ matrix.rms }}
 
   integration_test:
     strategy:
@@ -292,6 +298,10 @@ jobs:
       JOB_SKIP_CI_SPECS: |
         components/admin/docs/SPECS/docs.spec
         components/provisioning/warewulf/SPECS/warewulf.spec
+        components/rms/flux-core/SPECS/flux-core.spec
+        components/rms/flux-pmix/SPECS/flux-pmix.spec
+        components/rms/flux-sched/SPECS/flux-sched.spec
+        components/rms/flux-security/SPECS/flux-security.spec
     runs-on: ${{ matrix.os }}
     name: Build on openEuler (${{ matrix.arch }})
     container:
@@ -355,6 +365,10 @@ jobs:
         components/runtimes/charliecloud/SPECS/charliecloud.spec
         components/perf-tools/likwid/SPECS/likwid.spec
         components/provisioning/warewulf/SPECS/warewulf.spec
+        components/rms/flux-core/SPECS/flux-core.spec
+        components/rms/flux-pmix/SPECS/flux-pmix.spec
+        components/rms/flux-sched/SPECS/flux-sched.spec
+        components/rms/flux-security/SPECS/flux-security.spec
     runs-on: ${{ matrix.os }}
     name: Test on openEuler (${{ matrix.arch }}/${{ matrix.compiler }})
     container:
