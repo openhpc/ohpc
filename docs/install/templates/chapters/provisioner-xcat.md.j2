@@ -1,0 +1,45 @@
+{# Provisioner Aggregator #}
+# Install xCAT Provisioner
+
+{% include "provisioner/provisioner.md.j2" %}
+
+This guide covers both xCAT provisioning modes -- **stateless** (*netboot*),
+where compute nodes boot a RAM-resident image served by the head node, and
+**stateful** (*diskful*), where a base OS is installed onto each node's local
+disk and OpenHPC components are added afterwards. The sections up to and
+including *Identify Files for Synchronization* apply to both; after that,
+follow the one section that matches the mode selected below and skip the other.
+
+{% include "provisioner/xcat/xcat-repo.md.j2" %}
+{% include "provisioner/xcat/xcat-install.md.j2" %}
+{% include "provisioner/xcat/xcat-setup.md.j2" %}
+
+{% include "provisioner/xcat/mode-select.md.j2" %}
+
+{% include "provisioner/xcat/osimage-init.md.j2" %}
+{% include "provisioner/xcat/add-nodes.md.j2" %}
+{% include "provisioner/xcat/synclists.md.j2" %}
+
+## Stateless Provisioning
+
+Follow this section when `${xcat_mode}` is `0`. The compute image is
+assembled in a chroot on the head node; the nodes themselves do not boot until
+the *Deploy Cluster* chapter. Skip ahead to *Stateful Provisioning* if you are
+provisioning to local disk.
+
+{% include "provisioner/xcat/stateless-genimage.md.j2" %}
+{% include "provisioner/xcat/stateless-ohpc.md.j2" %}
+{% include "provisioner/xcat/stateless-customize.md.j2" %}
+
+## Stateful Provisioning
+
+Follow this section when `${xcat_mode}` is `1`. The compute nodes are
+installed and booted here, and OpenHPC components are then added to the running
+nodes. Skip this section entirely if you are provisioning stateless.
+
+{% include "provisioner/xcat/stateful-diskconfig.md.j2" %}
+{% include "provisioner/xcat/stateful-install.md.j2" %}
+{% include "provisioner/xcat/stateful-setup.md.j2" %}
+{% include "provisioner/xcat/stateful-ohpc.md.j2" %}
+{% include "provisioner/xcat/stateful-slurm.md.j2" %}
+{% include "provisioner/xcat/stateful-nfs.md.j2" %}

@@ -1,0 +1,54 @@
+### Add OpenHPC Components to the Image
+
+The `genimage` process provides a minimal base OS configuration. Next, add
+additional components to include resource management client services and other
+packages to support the default OpenHPC environment. This process augments the
+chroot-based install and requires access to the base OS and OpenHPC
+repositories.
+
+Enable the necessary package repositories inside the chroot:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateless" ] -->
+<!-- ohpc_comment Enable repos and add OpenHPC components to compute image -->
+```bash
+# Copy credential files first to ensure consistent uid/gids for slurm/munge
+# at package install time. These will be kept in sync via the provisioning
+# synclist after first boot.
+cp /etc/passwd /etc/group ${CHROOT}/etc
+
+# Copy repo files into chroot
+cp /etc/yum.repos.d/OpenHPC*.repo ${CHROOT}/etc/yum.repos.d
+cp /etc/yum.repos.d/epel*.repo    ${CHROOT}/etc/yum.repos.d
+
+# Install compute node base meta-package and disable firewall
+{{ pkg_install_chroot }} ohpc-base-compute
+chroot ${CHROOT} systemctl disable firewalld
+
+# Add Slurm client support meta-package
+{{ pkg_install_chroot }} ohpc-slurm-client
+
+# Enable munge and slurmd to start on boot inside the compute image
+chroot ${CHROOT} systemctl enable munge
+chroot ${CHROOT} systemctl enable slurmd
+
+# Register Slurm server with computes (using "configless" option)
+echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > ${CHROOT}/etc/sysconfig/slurmd
+
+# Add Network Time Protocol (NTP) support
+{{ pkg_install_chroot }} chrony
+
+# Add kernel drivers
+{{ pkg_install_chroot }} kernel
+
+# Rebuild the netboot image with the kernel installed in the compute image
+# (the head node kernel version may differ from the image kernel)
+kver=$(rpm -q --root ${CHROOT} kernel \
+    --qf "%{VERSION}-%{RELEASE}.%{ARCH}\n" | tail -1)
+genimage ${xcat_osimage} -k ${kver}
+
+# Include modules user environment
+{{ pkg_install_chroot }} lmod-ohpc
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

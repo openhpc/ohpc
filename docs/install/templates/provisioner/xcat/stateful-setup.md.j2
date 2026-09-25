@@ -1,0 +1,55 @@
+### Setup Compute Nodes
+
+With the compute nodes running their freshly installed base OS, configure them
+for OpenHPC use. Commands are run on all nodes in parallel with `xdsh`, xCAT's
+native distributed shell.
+
+The remaining steps install packages directly on the running compute nodes
+with the package manager, which requires the nodes to reach the distribution,
+EPEL, and OpenHPC package repositories. By default xCAT points the compute
+default route at the head node; ensure this provides a path to the
+repositories (for example via NAT on the head node or a site gateway
+registered in the xCAT `networks` table), or host a local repository mirror
+on the head node and register it on the computes instead.
+
+We first disable the firewall on the compute nodes.
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateful" ] -->
+<!-- ohpc_comment Configure HTTPS proxy for compute nodes (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Disable firewall on compute nodes -->
+```bash
+# Disable firewall for computes
+xdsh compute systemctl disable --now firewalld
+```
+<!-- ohpc_end -->
+
+The *compute* nodes need access to the EPEL repository, a required dependency
+for OpenHPC packages.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure access to EPEL repo on compute nodes -->
+```bash
+# Add EPEL repo
+{{ pkg_install_chroot }} epel-release
+# Enable CRB
+{{ compute_run("/usr/bin/crb enable") }}
+```
+<!-- ohpc_end -->
+
+And add additional packages.
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add additional packages to compute nodes -->
+```bash
+# Add Network Time Protocol (NTP) support and point it at the head node
+{{ pkg_install_chroot }} chrony
+{{ compute_run("echo server ${sms_ip} iburst >> /etc/chrony.conf") }}
+{{ compute_run("systemctl enable --now chronyd") }}
+
+# Include nfs-utils
+{{ pkg_install_chroot }} nfs-utils
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

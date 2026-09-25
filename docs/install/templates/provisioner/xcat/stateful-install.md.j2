@@ -1,0 +1,109 @@
+### Install the Base OS onto Compute Nodes
+
+In stateful mode the compute nodes are provisioned before OpenHPC components
+are added: associate the install image with the *compute* group, then boot the
+nodes so they run the distribution installer over the network, perform an
+unattended install onto local disk, and reboot into the freshly installed OS.
+
+The steps that follow install packages directly on the running compute nodes
+with the package manager, which requires the nodes to reach the distribution,
+EPEL, and OpenHPC package repositories. By default xCAT points the compute
+default route at the head node; ensure this provides a path to the
+repositories (for example via NAT on the head node or a site gateway
+registered in the xCAT `networks` table), or host a local repository mirror
+on the head node and register it on the computes instead.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateful" ] -->
+<!-- ohpc_comment Associate the install image and boot the compute nodes -->
+```bash
+# Associate provisioning image for compute group
+nodeset compute osimage=${xcat_osimage}
+```
+<!-- ohpc_end -->
+
+Before power cycling, mark the OS that is currently running, if any. `/run` is
+a tmpfs, so the marker cannot survive a reboot. The wait further below refuses
+any node that still carries it, which stops a slow BMC reset from letting the
+system that is about to be replaced satisfy the check when nodes are being
+reinstalled rather than installed for the first time.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Mark the pre-reset OS so it cannot satisfy the wait below -->
+<!-- ohpc_command xdsh compute "touch /run/ohpc-preprovision" >/dev/null 2>&1 || true -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Set nodes to netboot and power cycle -->
+<!-- ohpc_if_set has_ipmi -->
+```bash
+# Set compute group to boot from network on next boot
+rsetboot compute net
+
+# Power cycle compute nodes
+rpower compute reset
+```
+<!-- ohpc_else -->
+<!-- ohpc_command # No BMC/IPMI available -- signal external reset handler -->
+<!-- ohpc_command for ((i=0; i<num_computes; i++)) ; do -->
+<!-- ohpc_command   echo "#<<< ohpc_reset:$i,${c_name[$i]},${c_bmc[$i]} >>>#" -->
+<!-- ohpc_command done -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+The stateful installation typically completes in 5 to 10 minutes, depending on
+BIOS post times and disk speed. Monitor provisioning with the `rcons` command,
+which displays the serial console for a selected node; the escape sequence to
+exit `rcons` is `Ctrl-e c .` typed sequentially. Deployment progress can also
+be queried with `nodestat compute`, which reports the installation state of
+each node until an `sshd` response indicates the node is up.
+
+Wait until every compute node has completed the installation and finished
+booting before proceeding. `sshd` starts before the rest of the boot completes,
+so waiting only for it lets the configuration steps below run against a node
+that still refuses logins and has not finished starting systemd. The loop below
+therefore requires every node to positively report a finished boot *and* to have
+lost the pre-reset marker, so that neither an unreachable node nor one still
+running the previous OS counts as ready. It gives up after `${install_timeout}`
+seconds (two hours by default) rather than waiting forever on an installation
+that failed:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait for compute nodes to complete the stateful install -->
+<!-- ohpc_command # Bound the wait so a failed install cannot hang the recipe forever. -->
+<!-- ohpc_command install_timeout=${install_timeout:-7200} -->
+<!-- ohpc_command deadline=$(( SECONDS + install_timeout )) -->
+<!-- ohpc_command while true; do -->
+<!-- ohpc_command     booted=$(nodestat compute | grep -c ": sshd" || true) -->
+<!-- ohpc_command     ready=0 -->
+<!-- ohpc_command     if [ "$booted" -eq "$num_computes" ]; then -->
+<!-- ohpc_command         # Require every node to report a finished boot. Counting -->
+<!-- ohpc_command         # positives means a refused or lost connection leaves the -->
+<!-- ohpc_command         # count short and keeps waiting, rather than reading as ready. -->
+<!-- ohpc_command         ready=$(xdsh compute "test ! -e /run/ohpc-preprovision \ -->
+<!-- ohpc_command             && systemctl is-system-running" 2>/dev/null \ -->
+<!-- ohpc_command             | grep -cE ": (running|degraded)" || true) -->
+<!-- ohpc_command         if [ "$ready" -eq "$num_computes" ]; then -->
+<!-- ohpc_command             break -->
+<!-- ohpc_command         fi -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command     if [ "$SECONDS" -ge "$deadline" ]; then -->
+<!-- ohpc_command         echo "ERROR: after ${install_timeout}s, $booted of $num_computes nodes" >&2 -->
+<!-- ohpc_command         echo "reported sshd and $ready of $num_computes finished booting." >&2 -->
+<!-- ohpc_command         echo "Inspect with: nodestat compute; rcons <node>" >&2 -->
+<!-- ohpc_command         exit 1 -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command     echo "$booted of $num_computes compute nodes ready" -->
+<!-- ohpc_command     sleep 30 -->
+<!-- ohpc_command done -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+Once installed, verify access with a parallel command across the compute nodes
+using `xdsh`, xCAT's native distributed shell:
+
+```bash
+xdsh compute uptime
+c1:  12:56:50 up  4 min,  0 users,  load average: 0.00, 0.01, 0.04
+c2:  12:56:50 up  3 min,  0 users,  load average: 0.00, 0.02, 0.05
+```

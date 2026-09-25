@@ -1,0 +1,20 @@
+### Initialize the Image Chroot
+
+`genimage` creates a chroot that the compute image is built from. `${CHROOT}`
+names that directory and is used by the customization steps throughout the
+rest of this guide.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateless" ] -->
+<!-- ohpc_comment Create chroot-based compute image -->
+```bash
+# Save chroot location for the compute image
+CHROOT=$(lsdef -t osimage -o ${xcat_osimage} \
+    -i rootimgdir | awk -F= '/rootimgdir/{print $2}')/rootimg/
+export CHROOT
+
+# Build initial chroot image
+genimage ${xcat_osimage}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

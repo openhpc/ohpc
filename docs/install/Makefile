@@ -61,7 +61,7 @@ MANIFESTS     := $(shell find manifests -name '*.md.j2' -o -name '*.md')
 PANDOC_FILES  := $(PANDOC_DIR)/format-filters.lua \
                  $(PANDOC_DIR)/header-includes.tex.j2 \
                  $(PANDOC_DIR)/codeblock-styles.css
-DEPS          := mkdoc.py $(TEMPLATES) $(MANIFESTS) $(PANDOC_FILES)
+DEPS          := mkdoc.py templates/macros.j2 $(TEMPLATES) $(MANIFESTS) $(PANDOC_FILES)
 
 # Manifest directories for manifest/changelog targets
 MANIFEST_DIRS := $(wildcard manifests/*/pkg-ohpc.all)
