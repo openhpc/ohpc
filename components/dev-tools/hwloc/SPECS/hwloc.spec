@@ -13,7 +13,7 @@
 %define pname hwloc
 
 %define major 2
-%define minor 14
+%define minor 15
 %define extra 0
 
 Name:           %{pname}%{PROJ_DELIM}
