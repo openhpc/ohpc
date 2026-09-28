@@ -11,10 +11,10 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname spack
-%define spack_packages_version 2025.11.0
+%define spack_packages_version 2026.06.0
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	1.1.1
+Version:	1.2.2
 Release:	%{?dist}.1
 Summary:	HPC software package management
 
