@@ -36,6 +36,9 @@ BuildRequires: glibc-static
 BuildRequires: hostname
 BuildRequires: rsync
 
+Requires: glibc
+Requires: gcc
+
 ExclusiveArch: x86_64 aarch64
 
 # Keep this deliberately separate from the distro Go: the package is named
