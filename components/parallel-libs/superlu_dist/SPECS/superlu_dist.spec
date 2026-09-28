@@ -17,7 +17,7 @@
 %define pname superlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        9.2.1
+Version:        9.3.0
 Release:        1%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
