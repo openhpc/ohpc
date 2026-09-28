@@ -23,7 +23,7 @@
 %define pname mpi4py
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        4.1.1
+Version:        4.1.2
 Release:        1%{?dist}
 Summary:        Python bindings for the Message Passing Interface (MPI) standard.
 License:        BSD-3-Clause
