@@ -269,6 +269,38 @@ mkdir -p %{buildroot}/%{_docdir}
 # Copy the install tree to BUILDROOT
 cp -a ${TAUROOT}/TAUBUILD/* %{buildroot}
 
+# Upstream ships these non-scripts with the executable bit set, which
+# triggers "is executable but has no shebang" rpmbuild warnings.
+NO_SHEBANG_FILES=(
+    examples/fork/fork.cpp
+    examples/openmp/target/go.sh
+    examples/jupyter_notebooks/go.sh
+    examples/cthreads/hello.c
+    examples/mic/sample.c
+    examples/NPB2.3/sys/print_instructions
+    examples/NPB2.3/sys/print_header
+    examples/horovod/aurora-callbacks/run-aurora-tau.sh
+    examples/horovod/aurora-callbacks/run-aurora.sh
+    examples/plugin/monitoring/clean.sh
+    examples/matmult_api/build.sh
+    examples/mpi4py-c++-f90/wrapper.py
+    examples/mpi4py-c++-f90/samint.i
+    examples/mpi4py-c++-f90/coarse.input
+    examples/mpi4py-c++-f90/samarcrun.py
+    include/Profile/TauKtau.h
+    include/Profile/KtauSymbols.h
+    include/Profile/KtauFuncInfo.h
+    include/Profile/KtauProfiler.h
+    include/Profile/ktau_timer.h
+    include/Profile/ktau_proc_interface.h
+    include/Profile/KtauMergeInfo.h
+    include/Profile/ktau_atomic.h
+    include/Profile/TulipThreadLayer.h
+)
+for f in "${NO_SHEBANG_FILES[@]}"; do
+    chmod -x "%{buildroot}%{install_path}/${f}"
+done
+
 # OpenHPC module file
 mkdir -p %{buildroot}%{module_path}
 cat << EOF > %{buildroot}/%{module_path}/%{version}
