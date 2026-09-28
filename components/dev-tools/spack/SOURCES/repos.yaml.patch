@@ -6,5 +6,5 @@
  repos:
 -  builtin:
 -    git: https://github.com/spack/spack-packages.git
--    branch: releases/v2025.11
+-    branch: releases/v2026.06
 +  builtin: @@SPACK_PACKAGES_PATH@@
