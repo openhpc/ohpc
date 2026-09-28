@@ -170,10 +170,14 @@ fi
 if [ "${#ADMIN_TESTS[@]}" -gt 0 ]; then
 	# The configure script uses the variable $USER to decide if root or not
 	export USER=root
-	cd tests
-	./bootstrap
-	./configure --disable-all --disable-bos --disable-oob --disable-spack "${ADMIN_TESTS[*]}"
-	if ! make check; then
+	# Run in a subshell, like the non-root tests above, so the "cd tests"
+	# below doesn't leave the script's own cwd inside tests/.
+	if ! (
+		cd tests
+		./bootstrap
+		./configure --disable-all --disable-bos --disable-oob --disable-spack "${ADMIN_TESTS[*]}"
+		make check
+	); then
 		TESTS_FAILED=1
 	fi
 fi
