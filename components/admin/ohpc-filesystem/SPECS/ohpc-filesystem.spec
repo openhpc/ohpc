@@ -35,7 +35,7 @@ default paths.
 %package -n ohpc-buildroot
 Summary: Common build scripts used in OpenHPC packaging
 Group: ohpc/admin
-Requires: lmod-ohpc
+Requires: environment(modules)-ohpc
 Requires: ohpc-filesystem
 
 %description -n ohpc-buildroot

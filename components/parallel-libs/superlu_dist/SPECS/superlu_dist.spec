@@ -25,7 +25,7 @@ Group:          %{PROJ_NAME}/parallel-libs
 URL:            https://portal.nersc.gov/project/sparse/superlu/
 Source0:        https://github.com/xiaoyeli/superlu_dist/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
 Patch1:         superlu_dist-parmetis.patch
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 BuildRequires:  cmake
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

@@ -58,7 +58,7 @@ BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 %global __requires_exclude %{__requires_exclude}|^libCg.*$|.*SUNWprivate.*
 %endif
 
-Requires: lmod%{PROJ_DELIM} >= 7.6.1
+Requires: environment(modules)%{PROJ_DELIM}
 Requires: otf2-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires: binutils-devel

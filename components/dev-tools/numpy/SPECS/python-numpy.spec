@@ -29,7 +29,7 @@ Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  python3-meson-python
 BuildRequires:  %{python_prefix}-pip

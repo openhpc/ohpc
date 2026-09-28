@@ -32,7 +32,7 @@ Source0:        https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.g
 
 BuildRequires:  make
 BuildRequires:  zlib-devel >= 1.2.5
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       environment(modules)%{PROJ_DELIM}
 %if 0%{?ohpc_mpi_dependent}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
