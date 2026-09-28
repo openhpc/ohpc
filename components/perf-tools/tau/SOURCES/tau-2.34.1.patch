@@ -78,7 +78,7 @@
  
  tau_ompcheck.o: tau_ompcheck.cpp 
 @@ -142,10 +142,10 @@
- 		gcc -c perf2tau.c -I$(PERFINCDIR)
+ 		$(TAU_CC_FE) -c perf2tau.c -I$(PERFINCDIR)
  
  
 -$(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a:
