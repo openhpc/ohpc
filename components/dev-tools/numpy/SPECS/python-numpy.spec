@@ -21,14 +21,30 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 # Base package name
 %define pname numpy
 
+# openEuler's python3 is still 3.11; numpy >= 2.5 requires >= 3.12.
+# Keep openEuler on the last version that supports 3.11 until openEuler
+# ships a newer python3. Both versions are listed unconditionally (as
+# separate SourceN tags, like gnu-compilers.spec does for its per-family
+# gcc tarballs) so the source-fetching/checksum tooling, which parses
+# this spec without the openEuler macro defined, finds and verifies both.
+%global numpy_version_default 2.5.3
+%global numpy_version_openeuler 2.4.4
+
+%if 0%{?openEuler}
+%global numpy_version %{numpy_version_openeuler}
+%else
+%global numpy_version %{numpy_version_default}
+%endif
+
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        2.5.3
+Version:        %{numpy_version}
 Release:        1%{?dist}
 Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
-Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
+Source0:        https://github.com/numpy/numpy/releases/download/v%{numpy_version_default}/numpy-%{numpy_version_default}.tar.gz
+Source1:        https://github.com/numpy/numpy/releases/download/v%{numpy_version_openeuler}/numpy-%{numpy_version_openeuler}.tar.gz
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  python3-meson-python
@@ -57,7 +73,11 @@ There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
 %prep
-%setup -q -n %{pname}-%{version}
+%if 0%{?openEuler}
+%setup -T -q -n %{pname}-%{version} -b1
+%else
+%setup -T -q -n %{pname}-%{version} -b0
+%endif
 # Convert PEP 639 license string to old-style dict for older meson-python
 sed -i "s|^license = '\(.*\)'|license = {text = '\1'}|" pyproject.toml
 %ifarch ppc64le
