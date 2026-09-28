@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        2.4.4
+Version:        2.5.3
 Release:        1%{?dist}
 Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
