@@ -55,7 +55,7 @@
 ## OHPC: edit-block; Name uses pname+delimiter; Group added
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.7.0
+Version: 4.7.1
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
@@ -78,7 +78,7 @@ Conflicts: warewulf-ipmi
 ## OHPC: removed; not available in OHPC build infrastructure
 #BuildRequires: distribution-release
 BuildRequires: systemd-rpm-macros
-BuildRequires: go >= 1.22
+BuildRequires: go >= 1.26
 BuildRequires: firewall-macros
 BuildRequires: firewalld
 Requires: nfs-kernel-server
@@ -95,7 +95,7 @@ BuildRequires: systemd
 %if 0%{?openEuler}
 BuildRequires: golang%{PROJ_DELIM} >= 1.26
 %else
-BuildRequires: golang >= 1.22
+BuildRequires: golang >= 1.26
 %endif
 BuildRequires: firewalld-filesystem
 Requires: nfs-utils
