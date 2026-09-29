@@ -47,7 +47,7 @@
 ## OHPC: Name uses pname+delimiter; Group added
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A provisioning system for large clusters of bare metal and/or virtual systems
-Version: 4.7.0
+Version: 4.7.1
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/provisioning
@@ -68,7 +68,7 @@ Conflicts: warewulf-ipmi
 %if 0%{?is_suse}
 #BuildRequires: distribution-release ## OHPC: removed; not available in OHPC build infra
 BuildRequires: systemd-rpm-macros
-BuildRequires: go >= 1.22
+BuildRequires: go >= 1.26
 BuildRequires: firewall-macros
 BuildRequires: firewalld
 Requires: nfs-kernel-server
@@ -78,7 +78,7 @@ Requires: ipxe-bootimgs
 # Assume Red Hat/Fedora
 #BuildRequires: system-release ## OHPC: removed; not available in OHPC build infra
 BuildRequires: systemd
-BuildRequires: golang >= 1.22
+BuildRequires: golang >= 1.26
 BuildRequires: firewalld-filesystem
 Requires: nfs-utils
 ## OHPC: openEuler ships a single ipxe-bootimgs package like pre-RHEL8
