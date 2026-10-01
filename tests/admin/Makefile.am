@@ -5,6 +5,7 @@ TESTS  += clustershell
 TESTS  += conman
 TESTS  += genders
 TESTS  += nhc
+TESTS  += prun
 
 if WAREWULF_ENABLED
 TESTS  += warewulf
