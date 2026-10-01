@@ -63,6 +63,7 @@ BuildRequires:	systemd-rpm-macros
 %{?systemd_requires}
 
 Requires:	munge
+Requires(post):	munge
 Requires:	lua
 Requires:	python3
 Requires:	python3-cffi
@@ -165,6 +166,14 @@ ln -sfn ../../python%{python3_version}/site-packages/flux \
 exit 0
 
 %post
+# flux-security signs job requests with munge, which ships no key;
+# create one like slurm's example-configs package does
+if [ ! -e /etc/munge/munge.key -a -c /dev/urandom ]; then
+  /bin/dd if=/dev/urandom bs=1 count=1024 \
+    >/etc/munge/munge.key 2>/dev/null
+  /bin/chown munge:munge /etc/munge/munge.key
+  /bin/chmod 0400 /etc/munge/munge.key
+fi
 %systemd_post flux.service
 
 %preun
