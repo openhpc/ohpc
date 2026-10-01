@@ -1,0 +1,41 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+@test "[prun] unsupported MPI family exits non-zero" {
+    LMOD_FAMILY_MPI=nosuchmpi run prun /bin/true
+    assert_failure
+    [[ "$output" == *"Unsupported or unknown MPI family"* ]]
+}
+
+@test "[prun] mpich with an unknown resource manager exits non-zero" {
+    RM=nosuchrm LMOD_FAMILY_MPI=mpich run prun /bin/true
+    assert_failure
+    [[ "$output" == *"Unknown resource manager"* ]]
+}
+
+@test "[prun] openmpi with an unknown resource manager exits non-zero" {
+    RM=nosuchrm LMOD_FAMILY_MPI=openmpi4 run prun /bin/true
+    assert_failure
+    [[ "$output" == *"Unknown resource manager"* ]]
+}
+
+@test "[prun] mvapich2 with an unknown resource manager exits non-zero" {
+    printf '#!/bin/sh\nexit 0\n' > "$BATS_TEST_TMPDIR/mpiexec.hydra"
+    chmod +x "$BATS_TEST_TMPDIR/mpiexec.hydra"
+    PATH="$BATS_TEST_TMPDIR:$PATH" RM=nosuchrm LMOD_FAMILY_MPI=mvapich2 run prun /bin/true
+    assert_failure
+    [[ "$output" == *"Unknown resource manager"* ]]
+}
+
+@test "[prun] impi with an unknown resource manager exits non-zero" {
+    RM=nosuchrm LMOD_FAMILY_MPI=impi run prun /bin/true
+    assert_failure
+    [[ "$output" == *"Unknown resource manager"* ]]
+}
