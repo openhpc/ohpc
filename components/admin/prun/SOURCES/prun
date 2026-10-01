@@ -109,6 +109,9 @@ function launch_impi() {
 		elif [ "${RM}" == "flux" ]; then
 			verify_launcher_avail flux
 			cmd="$(flux_run_prefix) $*"
+		else
+			_error "Unknown resource manager -> ${RM}"
+			exit 1
 		fi
 
 		_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
@@ -135,6 +138,7 @@ function launch_mpich() {
 		cmd="$(flux_run_prefix) $*"
 	else
 		_error "Unknown resource manager -> ${RM}"
+		exit 1
 	fi
 
 	_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
@@ -169,6 +173,7 @@ function launch_mvapich2() {
 				cmd="${LAUNCHER} -rmk pbs $*"
 			else
 				_error "Unknown resource manager -> ${RM}"
+				exit 1
 			fi
 		fi
 
@@ -224,6 +229,7 @@ function launch_openmpi() {
 		cmd="$(flux_run_prefix) -o pmi=pmix $*"
 	else
 		_error "Unknown resource manager -> ${RM}"
+		exit 1
 	fi
 
 	_info "Launch cmd = ${cmd} (family=${LMOD_FAMILY_MPI})"
@@ -310,4 +316,5 @@ elif [ "${LMOD_FAMILY_MPI}" == "openmpi5" ]; then
 	launch_openmpi "--" "${EXEC}" "${ARGS}"
 else
 	_error "Unsupported or unknown MPI family -> ${LMOD_FAMILY_MPI}"
+	exit 1
 fi

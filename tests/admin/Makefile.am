@@ -14,6 +14,7 @@ TESTS  += genders
 endif
 
 TESTS  += nhc
+TESTS  += prun
 
 if WAREWULF_ENABLED
 TESTS  += warewulf
