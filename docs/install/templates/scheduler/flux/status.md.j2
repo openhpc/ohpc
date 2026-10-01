@@ -1,0 +1,20 @@
+## Check Cluster Status
+
+After this, check the status of the Flux system instance. `flux overlay status`
+shows whether the broker on each compute node has connected to the *head node*,
+and `flux resource status` shows the state of each node as seen by the
+scheduler. All compute nodes should be listed as *avail*, while the *head node*
+is listed as *exclude* since it has been withheld from scheduling:
+
+```bash
+flux overlay status
+flux resource status
+```
+
+In case of additional Flux issues, ensure that `munge.service` and
+`flux.service` are running on the affected nodes, that the hostname of each node
+exactly matches its entry in the `hosts` array of
+`/etc/flux/system/conf.d/system.toml`, and that the configuration and CURVE
+certificate are identical across the nodes. You may also consult the [Flux
+Administrator's
+Guide](https://flux-framework.readthedocs.io/projects/flux-core/en/latest/guide/admin.html).

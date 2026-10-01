@@ -1,0 +1,6 @@
+# Flux scheduler configuration
+
+scheduler: "flux"
+scheduler_name: "Flux"
+is_slurm: false
+is_flux: true

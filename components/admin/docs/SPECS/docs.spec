@@ -86,6 +86,10 @@ for recipe_name in \
 	"rocky10-aarch64-warewulf-slurm" \
 	"almalinux10-x86_64-warewulf-slurm" \
 	"almalinux10-aarch64-warewulf-slurm" \
+	"rocky10-x86_64-warewulf-flux" \
+	"rocky10-aarch64-warewulf-flux" \
+	"almalinux10-x86_64-warewulf-flux" \
+	"almalinux10-aarch64-warewulf-flux" \
 	"rocky10-x86_64-confluent-slurm" \
 	"rocky10-aarch64-confluent-slurm" \
 	"almalinux10-x86_64-confluent-slurm" \
