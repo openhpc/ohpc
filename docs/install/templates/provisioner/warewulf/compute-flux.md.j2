@@ -1,0 +1,25 @@
+## Configure Flux
+
+Similarly, the Flux brokers on the compute nodes need the same system instance
+configuration, CURVE certificate and IMP configuration as the *head node*, as
+well as the cryptographic key that is required by the *munge* authentication
+library to be available on every host in the resource management pool. To
+import these, issue the following:
+
+<!-- ohpc_begin -->
+```bash
+# Configure the Flux system instance, its CURVE certificate and the IMP
+wwctl overlay import --parents nodeconfig /etc/flux/system/conf.d/system.toml
+wwctl overlay import --parents nodeconfig /etc/flux/system/curve.cert
+wwctl overlay chown nodeconfig /etc/flux/system/curve.cert \
+	"$(id -u flux):$(id -g flux)"
+wwctl overlay chmod nodeconfig /etc/flux/system/curve.cert 0400
+wwctl overlay import --parents nodeconfig /etc/flux/imp/conf.d/imp.toml
+
+# Configure munge
+wwctl overlay import --parents nodeconfig /etc/munge/munge.key
+wwctl overlay chown nodeconfig /etc/munge/munge.key "$(id -u munge):$(id -g munge)"
+wwctl overlay chown nodeconfig /etc/munge "$(id -u munge):$(id -g munge)"
+wwctl overlay chmod nodeconfig /etc/munge 0700
+```
+<!-- ohpc_end -->

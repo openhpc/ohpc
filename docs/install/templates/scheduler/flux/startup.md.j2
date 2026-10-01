@@ -1,0 +1,21 @@
+## Start Flux
+
+In an earlier section, the {{ scheduler_name }} resource manager was installed
+and configured for use on both the *head node* and *compute* node instances.
+With the cluster nodes up and functional, we can now startup the resource
+manager services in preparation for running user jobs. The Flux broker on the
+*head node* is rank 0 of the system instance; the brokers on the *compute* nodes
+are started on boot and connect to it.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Resource Manager Startup -->
+```bash
+# Start munge and the Flux system instance on head node
+systemctl enable --now munge.service
+systemctl enable --now flux.service
+```
+<!-- ohpc_end -->
+
+Running systems can pick up most configuration changes with `flux config
+reload`, except for changes to the `bootstrap` table, which require restarting
+`flux.service` on all nodes.
