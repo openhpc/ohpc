@@ -39,7 +39,6 @@ install_packages() {
 	local rms_pkgs=()
 	if [ "${RMS}" = "flux" ]; then
 		rms_pkgs=(flux-security-ohpc flux-core-ohpc flux-sched-ohpc flux-pmix-ohpc)
-		rms_pkgs=()
 	else
 		rms_pkgs=(slurm-slurmd-ohpc slurm-slurmctld-ohpc slurm-example-configs-ohpc slurm-ohpc)
 	fi
