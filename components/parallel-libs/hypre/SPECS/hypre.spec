@@ -37,6 +37,18 @@ Requires:       lmod%{PROJ_DELIM}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
+# External BLAS/LAPACK, expanded at build time after the modules are loaded.
+# Sequential MKL, as hypre is built without OpenMP.
+%if "%{compiler_family}" == "intel"
+%global blas_lapack_libs -L${MKLROOT}/lib -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+%else
+%if "%{compiler_family}" == "arm1"
+%global blas_lapack_libs -armpl
+%else
+%global blas_lapack_libs -L${OPENBLAS_LIB} -lopenblas
+%endif
+%endif
+
 %description
 The goal of the Scalable Linear Solvers project is to develop scalable
 algorithms and software for solving large, sparse linear systems of equations on
@@ -64,7 +76,7 @@ export CFLAGS="${CFLAGS} -fsimdmath"
 %endif
 
 
-FLAGS="${CFLAGS} -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
+FLAGS="${CFLAGS} -fPIC -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
 cd src
 ./configure \
     --prefix=%{install_path} \
@@ -73,20 +85,8 @@ cd src
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
     --with-timing \
     --without-openmp \
-%if "%{compiler_family}" == "intel"
-    --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
-    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
-%else
-%if "%{compiler_family}" == "arm1"
-    --with-blas-lib="-armpl" \
-    --with-lapack-lib="-armpl" \
-%else
-    --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
-    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
-%endif
-%endif
+    --with-blas-lib="%{blas_lapack_libs}" \
+    --with-lapack-lib="%{blas_lapack_libs}" \
     --with-mli \
     --with-superlu-include=$SUPERLU_INC \
     --with-superlu-lib=$SUPERLU_LIB \
@@ -125,7 +125,7 @@ for i in $LIBS; do
     if [ "$i" != "libbHYPREClient-F" -a "$i" != "libbHYPREClient-CX" ]
     then
         ar x ../$i.a
-        mpicxx -shared * -L.. $ADDLIB \
+        mpicxx -shared * -L.. $ADDLIB %{blas_lapack_libs} \
                        -Wl,-soname,$i.so -o ../$i.so
         ADDLIB="-lHYPRE"
     fi
@@ -168,9 +168,6 @@ depends-on openblas
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-%if "%{compiler_family}" == "intel"
-prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
-%endif
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
