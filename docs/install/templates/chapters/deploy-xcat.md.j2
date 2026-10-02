@@ -1,0 +1,24 @@
+{# Deploy Aggregator #}
+# Deploy Cluster
+
+{% include "provisioner/deploy.md.j2" %}
+
+{# Slurm starts on the head node first so that stateless nodes, which boot
+   below, find the controller on their first try, and so that stateful nodes,
+   which are already running, have a controller to register with. #}
+{% include "scheduler/slurm/startup.md.j2" %}
+
+## Stateless Deployment
+
+Follow this section when `${xcat_mode}` is `0`. The customized image is
+packed and the compute nodes boot it over the network.
+
+{% include "provisioner/xcat/deploy-stateless-pack.md.j2" %}
+{% include "provisioner/xcat/deploy-stateless-boot.md.j2" %}
+
+## Stateful Deployment
+
+Follow this section when `${xcat_mode}` is `1`. The compute nodes are
+already running, so only their client daemons need starting.
+
+{% include "provisioner/xcat/deploy-stateful.md.j2" %}

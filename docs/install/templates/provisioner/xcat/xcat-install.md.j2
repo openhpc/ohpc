@@ -1,0 +1,22 @@
+## Install xCAT on *Head Node*
+
+With the OpenHPC and xCAT repositories enabled, install the xCAT provisioning
+system:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install xCAT provisioning services -->
+```bash
+# Install xCAT
+{{ pkg_install }} xCAT
+```
+<!-- ohpc_command export XCATROOT=/opt/xcat -->
+<!-- ohpc_command export PATH=$XCATROOT/bin:$XCATROOT/sbin:$XCATROOT/share/xcat/tools:$PATH -->
+<!-- ohpc_command export PERL_BADLANG=0 -->
+<!-- ohpc_end -->
+
+Source the environment script to make the xCAT tools available in the current
+shell (new login shells pick this up automatically):
+
+```bash
+. /etc/profile.d/xcat.sh
+```

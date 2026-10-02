@@ -1,0 +1,16 @@
+### Pack the Compute Image
+
+The compute image is now complete. Pack it and associate it with the *compute*
+group so the nodes have something to boot.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if [ "${xcat_mode}" = "stateless" ] -->
+<!-- ohpc_comment Pack compute image and associate it with the compute group -->
+```bash
+packimage ${xcat_osimage}
+
+# Associate provisioning image for compute group
+nodeset compute osimage=${xcat_osimage}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

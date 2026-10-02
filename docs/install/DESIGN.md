@@ -7,7 +7,7 @@ for OpenHPC installation recipes.
 
 - Make documentation easier to edit and contribute to
 - Normalize variable names and remove duplication
-- Support multiple provisioners (Warewulf, OpenCHAMI, Confluent) and schedulers (Slurm)
+- Support multiple provisioners (Warewulf, OpenCHAMI, Confluent, xCAT) and schedulers (Slurm)
 - Support multiple distros (Rocky, AlmaLinux, openEuler, SLES) and
   architectures (x86_64, aarch64)
 - Generate installation scripts directly from documentation
@@ -20,7 +20,7 @@ for OpenHPC installation recipes.
 A recipe is defined by two files in `recipes/`:
 
 - **`*.conf`** — ordered list of `config/` YAML files to merge
-- **`*.yaml`** — per-recipe overrides (Confluent only; omitted for other recipes)
+- **`*.yaml`** — per-recipe overrides (Confluent and xCAT recipes; omitted when not needed)
 
 The Makefile merges these into a single `build/*.yaml` using `yq` deep
 merge, which mkdoc.py then reads as its input.
@@ -35,8 +35,9 @@ config/provisioner/warewulf.yaml
 config/scheduler/slurm.yaml
 ```
 
-Confluent recipes additionally have a `.yaml` with two per-combination
-overrides that cannot be derived from the config hierarchy:
+Some recipes additionally have a `.yaml` with per-combination overrides that
+cannot be derived from the config hierarchy (Confluent carries `distro_id` and
+`distro_iso_image`; the xCAT recipes carry `distro_iso_image`):
 
 ```yaml
 # recipes/rocky10-x86_64-confluent-slurm.yaml
@@ -68,7 +69,8 @@ config/
 ├── provisioner/
 │   ├── warewulf.yaml            # is_warewulf: true, provisioner_name: "Warewulf"
 │   ├── openchami.yaml           # is_openchami: true, provisioner_name: "OpenCHAMI"
-│   └── confluent.yaml           # is_confluent: true, provisioner_name: "Confluent"
+│   ├── confluent.yaml           # is_confluent: true, provisioner_name: "Confluent"
+│   └── xcat.yaml               # is_xcat: true, provisioner_name: "xCAT"
 └── scheduler/
     └── slurm.yaml               # is_slurm: true, scheduler_name: "Slurm"
 ```
@@ -92,6 +94,25 @@ provisioners have fundamentally different workflows:
 - **Confluent**: boot nodes from Confluent → configure live nodes via nodeshell
 - **OpenCHAMI**: build layered container image (podman + yq) → cloud-init →
   boot nodes
+- **xCAT**: copycds ISO → define nodes → then one of
+  - *stateless*: genimage chroot → customize chroot → packimage → rsetboot/rpower
+  - *stateful*: install base OS to disk → configure live nodes via xdsh
+
+xCAT is a single recipe covering both provisioning modes. Unlike the other
+differences in this document, the mode is chosen at **run time** by
+`${enable_stateful}` (from `input.local`) rather than at build time, so one
+guide and one `recipe.sh` serve both. `templates/provisioner/xcat/` holds the
+shared steps plus the mode-specific ones, named `stateless-*` and `stateful-*`
+and gated with `ohpc_if`.
+
+The mode split is confined to how the compute environment is created and when
+the nodes first boot. Everything after that is shared: a "Select Provisioning
+Mode" section defines shell functions (`compute_exec`, `compute_install`,
+`compute_group_install`, `compute_upgrade`, `compute_clean`) that act on the
+image chroot in stateless mode and on the running nodes via `xdsh` in stateful
+mode, and the shared customization chapters call those helpers unchanged. This
+is why the xCAT column of the macro table below emits a helper call rather than
+a concrete command.
 
 Aggregator templates use `{% include %}` to compose sections:
 
@@ -157,7 +178,7 @@ InfiniBand and OmniPath compute-side go here.
 
 **deploy-*** — Cluster booted; compute nodes provisioned; Slurm started. Scope:
 maintenance-window actions (adding/removing nodes). Most provisioners boot here;
-Confluent boots during `provisioner-confluent`.
+Confluent boots during its `provisioner-*` chapter, as does xCAT in stateful mode.
 
 **dev-tools** — Login-node development tools: compilers, MPI, performance tools,
 third-party libraries.
@@ -217,12 +238,12 @@ yq -i '.packages += {{ packages | tojson }}' \
 These four macros abstract all provisioner differences for compute image
 operations. Templates use them without knowing which provisioner is active:
 
-| Macro | Warewulf | Confluent | OpenCHAMI |
-| ----- | -------- | --------- | --------- |
-| `compute_install(packages)` | `dnf install` in chroot | `nodeshell compute dnf install` | `yq` append to packages array |
-| `compute_sed(regex, file)` | `sed -i` on `$CHROOT/file` | `nodeshell compute sed -i` | `yq` append to cmds array |
-| `compute_echo(string, file)` | `echo` to `$CHROOT/file` | `nodeshell compute echo` | `yq` append to cmds array |
-| `compute_run(cmd)` | `wwctl image exec` | `nodeshell compute` | `yq` append to cmds array |
+| Macro | Warewulf | Confluent | OpenCHAMI | xCAT |
+| ----- | -------- | --------- | --------- | ---- | ------------- |
+| `compute_install(packages)` | `dnf install` in chroot | `nodeshell compute dnf install` | `yq` append to packages array | `compute_install` helper (mode-selected) |
+| `compute_sed(regex, file)` | `sed -i` on `$CHROOT/file` | `nodeshell compute sed -i` | `yq` append to cmds array | `compute_exec "sed -i ..."` |
+| `compute_echo(string, file)` | `echo` to `$CHROOT/file` | `nodeshell compute echo` | `yq` append to cmds array | `compute_exec "echo ..."` |
+| `compute_run(cmd)` | `wwctl image exec` | `nodeshell compute` | `yq` append to cmds array | `compute_exec` |
 
 `head_install(packages)` installs packages on the head node (uses
 `pkg_install`, consistent across provisioners).
@@ -512,10 +533,12 @@ docs/install/
 │   │   ├── provisioner-warewulf.md.j2
 │   │   ├── provisioner-confluent.md.j2
 │   │   ├── provisioner-openchami.md.j2
+│   │   ├── provisioner-xcat.md.j2
 │   │   ├── customize.md.j2
 │   │   ├── deploy-warewulf.md.j2
 │   │   ├── deploy-confluent.md.j2
 │   │   ├── deploy-openchami.md.j2
+│   │   ├── deploy-xcat.md.j2
 │   │   ├── dev-tools.md.j2
 │   │   ├── test.md.j2
 │   │   ├── post.md.j2
@@ -527,7 +550,8 @@ docs/install/
 │   ├── provisioner/
 │   │   ├── warewulf/
 │   │   ├── confluent/
-│   │   └── openchami/
+│   │   ├── openchami/
+│   │   └── xcat/
 │   ├── scheduler/
 │   │   └── slurm/
 │   ├── network/
@@ -551,9 +575,11 @@ docs/install/
 │   ├── el10-aarch64/
 │   ├── oe2403-x86_64/
 │   └── oe2403-aarch64/
-├── recipes/                     # Recipe YAML files (source only)
-│   ├── rocky10-x86_64-warewulf-slurm.yaml
-│   ├── almalinux10-x86_64-warewulf-slurm.yaml
+├── recipes/                     # Recipe definitions (source only)
+│   ├── rocky10-x86_64-warewulf-slurm.conf
+│   ├── almalinux10-x86_64-warewulf-slurm.conf
+│   ├── rocky10-x86_64-xcat-slurm.conf
+│   ├── rocky10-x86_64-xcat-slurm.yaml
 │   └── ...
 └── build/                       # Generated output (gitignored)
     ├── header-includes.tex      # Rendered from pandoc/header-includes.tex.j2
@@ -675,7 +701,7 @@ simple and correct.
 The Makefile injects `vc_revision` and `vc_date` (from `git log`) into
 each `build/*.yaml` via `yq` during the merge step, so mkdoc.py needs
 no subprocess calls. The `.yaml` prerequisite for `build/%.yaml` is
-optional via `.SECONDEXPANSION` — only Confluent recipes have one.
+optional via `.SECONDEXPANSION` — only some recipes (Confluent, xCAT) have one.
 
 ### RPM Packaging
 
@@ -717,10 +743,11 @@ python3 tests/ci/run_build.py $USER components/admin/docs/SPECS/docs.spec
 
 ### Recipe Naming
 
-Recipes are named `{distro}{version}-{arch}-{provisioner}-{scheduler}.yaml`
-and live in `recipes/`. See existing recipes for examples. The 14 current
-recipes cover Warewulf, Confluent, and OpenCHAMI across Rocky, AlmaLinux,
-and openEuler on x86\_64 and aarch64.
+Recipes are named `{distro}{version}-{arch}-{provisioner}-{scheduler}.conf`
+(with an optional `.yaml` override alongside) and live in `recipes/`. See
+existing recipes for examples. The 18 current recipes cover Warewulf,
+Confluent, OpenCHAMI, and xCAT across Rocky, AlmaLinux, and
+openEuler on x86\_64 and aarch64.
 
 ### Manifest Directory Naming
 
