@@ -1,0 +1,117 @@
+## Add Flux on Head Node
+
+The following command adds the {{ scheduler_name }} framework to the chosen
+*head node*: `flux-core` (the message broker and job manager), `flux-sched` (the
+Fluxion graph-based scheduler) and `flux-security` (the job request signing
+library and the setuid IMP that starts job processes as the submitting user).
+Note that the components needed by the compute nodes will be added to the
+corresponding compute image in a subsequent step. Flux runs as a *system
+instance*: one Flux broker per node, all connected in a tree-based overlay
+network rooted at the head node. Note that Flux leverages the use of the *munge*
+library to sign job requests and this daemon also needs to be running on all
+hosts within the resource management pool.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add resource management services on head node -->
+```bash
+# Install Flux packages
+{{ pkg_install }} flux-core-ohpc flux-security-ohpc flux-sched-ohpc
+
+# Create the munge key used to sign Flux job requests
+[ -e /etc/munge/munge.key ] || /usr/sbin/mungekey --create
+chown munge:munge /etc/munge/munge.key
+chmod 0400 /etc/munge/munge.key
+```
+<!-- ohpc_end -->
+
+The connections between the Flux brokers are authenticated and encrypted using a
+CURVE certificate that has to be identical on all nodes and must only be
+readable by the `flux` user. The certificate is generated as the `flux` user and
+then moved into place, as `flux` has no write access to `/etc/flux/system`:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Create CURVE certificate for the Flux overlay network -->
+```bash
+runuser -u flux -- flux keygen /tmp/curve.cert
+mv /tmp/curve.cert /etc/flux/system/curve.cert
+chown flux:flux /etc/flux/system/curve.cert
+chmod 0400 /etc/flux/system/curve.cert
+```
+<!-- ohpc_end -->
+
+Next, configure the {{ scheduler_name }} system instance. The `bootstrap` table
+lists all hosts in rank order: the *head node* is rank 0 and the parent of all
+compute nodes, which connect to it on TCP port 8050. The `exec` and `access`
+tables let users other than the `flux` instance owner run jobs through the IMP,
+and the `resource` table withholds the *head node* (rank 0) from scheduling. Since the
+same configuration is used on all nodes, it will also be made available to the
+compute nodes in a subsequent step.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure the Flux system instance -->
+```bash
+cat > /etc/flux/system/conf.d/system.toml <<EOF
+# Path to the IMP used to start jobs as the submitting user
+[exec]
+imp = "/usr/libexec/flux/flux-imp"
+
+# Allow users other than the instance owner to run jobs, and give root
+# owner privileges for administration
+[access]
+allow-guest-user = true
+allow-root-owner = true
+
+# Overlay network: hosts in rank order; the head node is rank 0 and the
+# parent of all compute nodes
+[bootstrap]
+curve_cert = "/etc/flux/system/curve.cert"
+
+[[bootstrap.hosts]]
+host = "${sms_name}"
+bind = "tcp://${sms_ip}:8050"
+connect = "tcp://${sms_ip}:8050"
+
+[[bootstrap.hosts]]
+host = "${compute_prefix}[1-${num_computes}]"
+
+# Do not schedule jobs on the head node (rank 0). The rank is used
+# instead of the hostname, as hostnames cannot be mapped to ranks
+# before the resources of all nodes have been discovered.
+[resource]
+exclude = "0"
+EOF
+```
+<!-- ohpc_end -->
+
+Finally, configure the IMP. As the only part of Flux that runs with root
+privileges, it has its own configuration, which has to be owned by `root` and
+must not be writable by other users. It only allows the `flux` user to start
+jobs on behalf of the submitting user, and only with the installed Flux job
+shell:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure the Flux IMP -->
+```bash
+cat > /etc/flux/imp/conf.d/imp.toml <<'EOF'
+[exec]
+allowed-users = [ "flux" ]
+allowed-shells = [ "/usr/libexec/flux/flux-shell" ]
+EOF
+chmod 0644 /etc/flux/imp/conf.d/imp.toml
+```
+<!-- ohpc_end -->
+
+::: {.tip}
+**Note:** Each `host` entry in the `bootstrap` table must exactly match the
+output of the `hostname` command on that node, which is how each Flux broker
+determines its own rank. With the configuration above, the resources of each
+compute node are discovered via hwloc as its broker joins the instance, and the
+full resource inventory is only defined once all compute nodes have joined.
+Production systems will typically describe their resources statically instead,
+using `[[resource.config]]` entries or an R file generated with `flux R`, so
+that jobs can be scheduled even while some nodes are down. Changes to the
+`bootstrap` table only take effect after restarting Flux on all nodes. Please
+refer to the [Flux Administrator's
+Guide](https://flux-framework.readthedocs.io/projects/flux-core/en/latest/guide/admin.html)
+and `flux-config-resource(5)` for more detailed information.
+:::

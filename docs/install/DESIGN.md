@@ -7,7 +7,8 @@ for OpenHPC installation recipes.
 
 - Make documentation easier to edit and contribute to
 - Normalize variable names and remove duplication
-- Support multiple provisioners (Warewulf, OpenCHAMI, Confluent) and schedulers (Slurm)
+- Support multiple provisioners (Warewulf, OpenCHAMI, Confluent) and schedulers
+  (Slurm, Flux)
 - Support multiple distros (Rocky, AlmaLinux, openEuler, SLES) and
   architectures (x86_64, aarch64)
 - Generate installation scripts directly from documentation
@@ -70,7 +71,8 @@ config/
 │   ├── openchami.yaml           # is_openchami: true, provisioner_name: "OpenCHAMI"
 │   └── confluent.yaml           # is_confluent: true, provisioner_name: "Confluent"
 └── scheduler/
-    └── slurm.yaml               # is_slurm: true, scheduler_name: "Slurm"
+    ├── slurm.yaml               # is_slurm: true, scheduler_name: "Slurm"
+    └── flux.yaml                # is_flux: true, scheduler_name: "Flux"
 ```
 
 Boolean flags (e.g., `is_x86_64`, `is_warewulf`, `is_el`) default to `false` in
@@ -100,7 +102,7 @@ Aggregator templates use `{% include %}` to compose sections:
 # Install OpenHPC Development Components
 {% include "dev-tools/intro.md.j2" %}
 {% include "dev-tools/compilers.md.j2" %}
-{% include "scheduler/slurm/mpi.md.j2" %}
+{% include "dev-tools/mpi.md.j2" %}
 {% include "dev-tools/perf-tools.md.j2" %}
 {% if is_x86_64 %}
 {% include "dev-tools/third-party-mpi-libs-x86.md.j2" %}
@@ -142,9 +144,11 @@ time sync, NFS, networking. InfiniBand and OmniPath server-side installed here
 
 **ohpc** — OpenHPC repository and base packages on the head node.
 
-**scheduler-slurm** — Slurm installed on the head node only. Compute-side Slurm
-configuration goes in `provisioner-*`; Slurm startup goes in `deploy-*`. Adding
-a second scheduler would require refactoring this split.
+**scheduler-*** — Scheduler (Slurm or Flux) installed on the head node only,
+selected via `scheduler`. Compute-side scheduler configuration goes in
+`provisioner-*`; scheduler startup goes in `deploy-*`. Both select the
+scheduler-specific templates with `{% if is_slurm %}` / `{% elif is_flux %}`.
+Flux is currently only wired into the Warewulf chapters.
 
 **provisioner-*** — Provisioner fully installed; base compute node, image, or
 definition created with: epel, repos, ohpc-compute, kernel, firewall disabled,
@@ -155,7 +159,7 @@ are configured; compute nodes may or may not be running. Use `compute_*` macros
 for provisioner-agnostic operations (see [Macro System](#macro-system)).
 InfiniBand and OmniPath compute-side go here.
 
-**deploy-*** — Cluster booted; compute nodes provisioned; Slurm started. Scope:
+**deploy-*** — Cluster booted; compute nodes provisioned; scheduler started. Scope:
 maintenance-window actions (adding/removing nodes). Most provisioners boot here;
 Confluent boots during `provisioner-confluent`.
 
@@ -509,6 +513,7 @@ docs/install/
 │   │   ├── base-os.md.j2
 │   │   ├── ohpc.md.j2
 │   │   ├── scheduler-slurm.md.j2
+│   │   ├── scheduler-flux.md.j2
 │   │   ├── provisioner-warewulf.md.j2
 │   │   ├── provisioner-confluent.md.j2
 │   │   ├── provisioner-openchami.md.j2
@@ -529,7 +534,8 @@ docs/install/
 │   │   ├── confluent/
 │   │   └── openchami/
 │   ├── scheduler/
-│   │   └── slurm/
+│   │   ├── slurm/
+│   │   └── flux/
 │   ├── network/
 │   │   ├── infiniband/
 │   │   └── omnipath/

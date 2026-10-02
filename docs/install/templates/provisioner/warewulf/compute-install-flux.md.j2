@@ -1,0 +1,20 @@
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add Flux and other components to compute instance -->
+```bash
+wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
+  # Add Flux, including flux-pmix, which OpenMPI jobs need to
+  # bootstrap under Flux
+  dnf -y install flux-core-ohpc flux-pmix-ohpc
+
+  # Enable services to start on boot
+  systemctl enable munge.service
+  systemctl enable flux.service
+
+  # Add Network Time Protocol (NTP) support
+  dnf -y install chrony
+
+  # Include modules user environment
+  dnf -y install lmod-ohpc
+EOF
+```
+<!-- ohpc_end -->
