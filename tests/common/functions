@@ -536,7 +536,7 @@ run_mpi_binary() {
 		# Unlike srun inside an salloc/sbatch job, "flux run" with no
 		# sizing flags does not inherit this job's node/task count;
 		# prun's own flux branch reads these to size it explicitly.
-		# See prun's flux_run_prefix() for the full explanation.
+		# See prun's launch_flux() for the full explanation.
 		{
 			echo "#!/bin/bash"
 			echo "export FLUX_JOB_NNODES=${NNODES}"
