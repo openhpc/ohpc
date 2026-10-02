@@ -2,6 +2,7 @@
 
 import argparse
 import csv
+import glob
 import io
 import logging
 import os
@@ -369,60 +370,60 @@ def build_srpm_and_rpm(
     return True
 
 
+DOCS_SPEC = "components/admin/docs/SPECS/docs.spec"
+TESTS_SPEC = "components/admin/test-suite/SPECS/tests.spec"
+
+
+def specs_for_file(path):
+    """Return the spec file(s) that build the given changed file."""
+    if path == DOCS_SPEC or "docs/install/" in path:
+        return [DOCS_SPEC]
+    if "components/admin/docs/SOURCES/" in path:
+        return [DOCS_SPEC]
+    if path == TESTS_SPEC or "tests/" in path:
+        return [TESTS_SPEC]
+    if "components/admin/test-suite/SOURCES/" in path:
+        return [TESTS_SPEC]
+    if path.endswith(".spec"):
+        return [path]
+    if not path.startswith("components/"):
+        return []
+
+    # Any other file in a component, for example a changed source file like
+    # components/admin/prun/SOURCES/prun, is built by the spec file in that
+    # component's SPECS directory.
+    directory = os.path.dirname(os.path.normpath(path))
+    while directory not in ("", "components"):
+        specs = sorted(glob.glob(os.path.join(directory, "SPECS", "*.spec")))
+        if specs:
+            return specs
+        directory = os.path.dirname(directory)
+    return []
+
+
 skipped = []
 failed = []
 rebuild_success = []
 total = 0
-docs_spec_executed = False
-tests_spec_executed = False
 
-# Determine the number of actual spec files to build
-specfiles = args.specfiles
-spec_count = sum(
-    1
-    for s in specfiles
-    if s.endswith(".spec")
-    or "components/admin/docs/SPECS/docs.spec" == s
-    or "docs/install/" in s
-    or "components/admin/docs/SOURCES/" in s
-    or "components/admin/test-suite/SPECS/tests.spec" == s
-    or "tests/" in s
-    or "components/admin/test-suite/SOURCES/" in s
-)
-multiple_specs = spec_count > 1
+# Map the changed files to the spec files building them. Each spec file is
+# only listed once, even if multiple files of its component have changed.
+specfiles = []
+for changed_file in args.specfiles:
+    for spec in specs_for_file(changed_file):
+        if spec != changed_file:
+            logger.info(f"{changed_file} is built by {spec}")
+        if spec not in specfiles:
+            specfiles.append(spec)
+
+multiple_specs = len(specfiles) > 1
 build_order_used = None
 
 if multiple_specs:
     specfiles = get_build_order(specfiles)
-    build_order_used = [os.path.basename(s) for s in specfiles if s.endswith(".spec")]
+    build_order_used = [os.path.basename(s) for s in specfiles]
 
 for spec in specfiles:
-    # if more than one docs related file are modified then
-    # build the docs.spec just once
-    # START OF LOGIC FOR DOCS
-    if "components/admin/docs/SPECS/docs.spec" == spec:
-        if docs_spec_executed:
-            continue
-        docs_spec_executed = True
-    elif not docs_spec_executed and (
-        "docs/install/" in spec or "components/admin/docs/SOURCES/" in spec
-    ):
-        docs_spec_executed = True
-        spec = "components/admin/docs/SPECS/docs.spec"
-    # END OF LOGIC FOR DOCS
-    # START OF LOGIC FOR TESTS
-    elif "components/admin/test-suite/SPECS/tests.spec" == spec:
-        if tests_spec_executed:
-            continue
-        tests_spec_executed = True
-    elif not tests_spec_executed and (
-        "tests/" in spec or "components/admin/test-suite/SOURCES/" in spec
-    ):
-        tests_spec_executed = True
-        spec = "components/admin/test-suite/SPECS/tests.spec"
-    # END OF LOGIC FOR TESTS
-    elif not spec.endswith(".spec"):
-        continue
     just_spec = os.path.basename(spec)
     total += 1
     if spec in skip_ci_specs:

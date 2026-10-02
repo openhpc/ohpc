@@ -9,6 +9,9 @@ This directory contains scripts, tools, and configurations used for OpenHPC's co
 
 **Features**:
 - Builds source RPMs (SRPMs) and binary RPMs from spec files
+- Accepts any changed file: a non-spec file inside a component (e.g.
+  `components/admin/prun/SOURCES/prun`) builds that component's spec file,
+  and each spec file is only built once
 - Supports multiple compiler families (GNU, Intel, ARM, LLVM)
 - Handles multiple MPI implementations (OpenMPI, MPICH, MVAPICH2, Intel MPI)
 - Automatic dependency resolution using `dnf builddep` or `zypper source-install`
