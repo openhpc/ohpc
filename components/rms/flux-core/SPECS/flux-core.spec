@@ -141,6 +141,16 @@ export QA_RPATHS=$(( 0x0001 ))
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/flux/system/conf.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/flux/system/cron.d
 
+# Jobs started through the IMP inherit the broker's resource limits,
+# not the limits.d ones PAM applies to logins. Without this, systemd's
+# 8 MiB default memlock limit caps every job, which breaks RDMA-based
+# MPI. Same as slurmd.service's own LimitMEMLOCK.
+%{__mkdir_p} %{buildroot}%{_unitdir}/flux.service.d
+%{__cat} > %{buildroot}%{_unitdir}/flux.service.d/ohpc-limits.conf <<'EOF'
+[Service]
+LimitMEMLOCK=infinity
+EOF
+
 # Make the installed python module symlinks relative instead of
 # absolute, same reasoning as the extrae-uncore fix. The directory is
 # named "pythonX.Y", not just "X.Y".
@@ -197,6 +207,7 @@ fi
 %{python3_sitearch}/flux
 %{python3_sitearch}/_flux
 %{_unitdir}/flux.service
+%{_unitdir}/flux.service.d
 %{_unitdir}/flux-prolog@.service
 %{_unitdir}/flux-epilog@.service
 %{_unitdir}/flux-housekeeping@.service
