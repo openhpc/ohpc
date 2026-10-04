@@ -323,25 +323,28 @@ run_serial_binary() {
 
 		# Same reasoning as run_mpi_binary's flux branch: flux batch's
 		# own default output template doesn't match the jobid actually
-		# printed to stdout, so name it explicitly up front.
-		JOB_OUT="/tmp/job.${USER}.${RANDOM}.out"
+		# printed to stdout, so name it explicitly up front, in the
+		# shared submission directory rather than the compute node's /tmp.
+		JOB_OUT="${PWD}/.job.${RANDOM}.out"
 
 		jobId=$(flux batch -N 1 -n 1 -t "$(flux_timeout_minutes "${timeout}")" --output="${JOB_OUT}" "${JOB_SCRIPT}") ||
 			ERROR "Unable to submit batch job"
 
 		echo "Batch job ${jobId} submitted"
 
-		flux job status "${jobId}"
-		RC="$?"
+		# Capture the status without tripping errexit, so a failed
+		# job's output still gets shown below.
+		RC=0
+		flux job status "${jobId}" || RC="$?"
 
 		if [ -n "${output_file}" ]; then
 			mv "${JOB_OUT}" "${output_file}"
 			cat "${output_file}"
 		else
-			cat "${JOB_OUT}" 2>/dev/null
+			cat "${JOB_OUT}" 2>/dev/null || true
 		fi
 
-		rm -f "${JOB_SCRIPT}"
+		rm -f "${JOB_SCRIPT}" "${JOB_OUT}"
 		return "${RC}"
 	else
 		ERROR_RETURN "Unsupported resource manager"
@@ -567,8 +570,10 @@ run_mpi_binary() {
 		# encoding than the one "flux batch" prints to stdout and
 		# "flux job status"/"flux job attach" accept, so a filename
 		# built from the printed jobid does not actually match the
-		# file flux itself creates.
-		JOB_OUT="/tmp/job.${USER}.${RANDOM}.out"
+		# file flux itself creates. The job shell writes it on the first
+		# compute node, so keep it in the shared submission directory
+		# rather than that node's /tmp.
+		JOB_OUT="${PWD}/.job.${RANDOM}.out"
 
 		# Submit batch job
 		jobId=$(flux batch -N "${NNODES}" -n "${NTASKS}" -t "$(flux_timeout_minutes "${timeout}")" --output="${JOB_OUT}" "${JOB_SCRIPT}") ||
@@ -580,17 +585,17 @@ run_mpi_binary() {
 		# with the job's own largest exit code; unlike slurm's
 		# scontrol-based polling loop above, this needs no separate
 		# wait/poll step or job-state text parsing.
-		flux job status "${jobId}"
-		RC="$?"
+		RC=0
+		flux job status "${jobId}" || RC="$?"
 
 		echo " "
-		cat "${JOB_OUT}" 2>/dev/null
+		cat "${JOB_OUT}" 2>/dev/null || true
 
 		if [ -n "${output_file}" ]; then
 			mv "${JOB_OUT}" "${output_file}"
 		fi
 
-		rm "${JOB_SCRIPT}"
+		rm -f "${JOB_SCRIPT}" "${JOB_OUT}"
 		return "${RC}"
 	else
 		ERROR_RETURN "Unsupported resource manager"
