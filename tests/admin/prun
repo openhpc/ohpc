@@ -8,6 +8,14 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
+setup() {
+    if [ -z "$MODULEPATH" ];then
+        . /etc/profile.d/lmod.sh || exit 1
+    fi
+    module purge        || exit 1
+    module load prun || exit 1
+}
+
 @test "[prun] unsupported MPI family exits non-zero" {
     LMOD_FAMILY_MPI=nosuchmpi run prun /bin/true
     assert_failure
