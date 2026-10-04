@@ -391,6 +391,25 @@ Requires:  pdsh-mod-slurm%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-slurm-server
 Collection of server packages for SLURM
 
+%package -n %{PROJ_NAME}-flux-client
+Summary:   OpenHPC client packages for Flux
+Requires:  flux-core%{PROJ_DELIM}
+Requires:  flux-pmix%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-flux-client
+Collection of client packages for Flux
+
+%package -n %{PROJ_NAME}-flux-server
+Summary:   OpenHPC server packages for Flux
+Requires:  flux-core%{PROJ_DELIM}
+Requires:  flux-sched%{PROJ_DELIM}
+Requires:  flux-security%{PROJ_DELIM}
+# Compute nodes typically NFS-mount /opt from the head node, so the
+# pmix-ohpc that flux-pmix pulls in has to be installed here for the
+# compute nodes' flux-pmix shell plugin to find libpmix
+Requires:  flux-pmix%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-flux-server
+Collection of server packages for Flux
+
 %package -n %{PROJ_NAME}-warewulf
 Summary:   OpenHPC base packages for Warewulf
 # Warewulf 4.x ships as a single package; the warewulf3-style split packages
@@ -857,6 +876,8 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-%{compiler_family}-serial-libs
 %files -n %{PROJ_NAME}-slurm-client
 %files -n %{PROJ_NAME}-slurm-server
+%files -n %{PROJ_NAME}-flux-client
+%files -n %{PROJ_NAME}-flux-server
 %files -n %{PROJ_NAME}-warewulf
 # x86_64 specific groups
 %ifnarch aarch64 ppc64le
