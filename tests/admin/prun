@@ -14,6 +14,21 @@ setup() {
     fi
     module purge        || exit 1
     module load prun || exit 1
+    mkdir -p "$BATS_TEST_TMPDIR/bin"
+    cat > "$BATS_TEST_TMPDIR/bin/launcher" <<'EOF'
+#!/bin/bash
+printf '<%s>\n' "$@"
+EOF
+    chmod +x "$BATS_TEST_TMPDIR/bin/launcher"
+    local launcher
+    for launcher in srun mpiexec.hydra mpirun mpiexec flux; do
+        ln -sf launcher "$BATS_TEST_TMPDIR/bin/$launcher"
+    done
+    PRUN_TEST_EXEC="$BATS_TEST_TMPDIR/application with spaces"
+    printf '#!/bin/sh\nexit 0\n' > "$PRUN_TEST_EXEC"
+    chmod +x "$PRUN_TEST_EXEC"
+    touch "$BATS_TEST_TMPDIR/input.dat"
+    cd "$BATS_TEST_TMPDIR"
 }
 
 @test "[prun] unsupported MPI family exits non-zero" {
@@ -46,4 +61,191 @@ setup() {
     RM=nosuchrm LMOD_FAMILY_MPI=impi run prun /bin/true
     assert_failure
     [[ "$output" == *"Unknown resource manager"* ]]
+}
+
+check_prun_executable() {
+    local resource_manager="$1" mpi_family="$2" launchers="$3"
+    local expected_prefix="$4"
+    local executable="$PRUN_TEST_EXEC"
+
+    PATH="$BATS_TEST_TMPDIR/bin:$PATH" RM="$resource_manager" \
+        LMOD_FAMILY_MPI="$mpi_family" OHPC_MPI_LAUNCHERS="$launchers" \
+        MPI_DIR=/mpi PBS_NODEFILE=/nodes \
+        FLUX_JOB_NNODES=2 FLUX_JOB_NTASKS=4 \
+        run prun "$executable" "two words" "" '*.dat' $'tab\tvalue' $'line\nbreak'
+    assert_success
+    local expected="$expected_prefix
+<$executable>
+<two words>
+<>
+<*.dat>
+<tab	value>
+<line
+break>"
+    [[ "$output" == *"$expected" ]] || assert_equal "$expected" "$output"
+}
+
+@test "[prun] slurm launchers preserve executable paths and application arguments" {
+    check_prun_executable slurm impi '' '<--mpi=pmi2>'
+    check_prun_executable slurm mpich pmix '<--mpi=pmix>'
+    check_prun_executable slurm mpich '' $'<-bootstrap>\n<slurm>'
+    check_prun_executable slurm mvapich2 '' $'<-bootstrap>\n<slurm>'
+    local family
+    for family in openmpi openmpi3 openmpi4 openmpi5; do
+        local prefix='<--mpi=pmix>'
+        [[ "$family" != openmpi5 ]] || prefix+=$'\n<-->'
+        check_prun_executable slurm "$family" pmix "$prefix"
+        prefix=''
+        [[ "$family" != openmpi5 ]] || prefix='<-->'
+        check_prun_executable slurm "$family" '' "$prefix"
+    done
+}
+
+@test "[prun] openpbs launchers preserve executable paths and application arguments" {
+    local family
+    for family in impi mpich mvapich2; do
+        check_prun_executable openpbs "$family" '' $'<-rmk>\n<pbs>'
+    done
+    for family in openmpi openmpi3 openmpi4 openmpi5; do
+        local prefix=$'<-x>\n<LD_LIBRARY_PATH>\n<--prefix>\n</mpi>\n<--hostfile>\n</nodes>'
+        [[ "$family" != openmpi5 ]] || prefix+=$'\n<-->'
+        check_prun_executable openpbs "$family" '' "$prefix"
+    done
+}
+
+@test "[prun] flux launchers preserve executable paths and application arguments" {
+    local family
+    for family in impi mpich mvapich2; do
+        check_prun_executable flux "$family" '' $'<run>\n<-N>\n<2>\n<-n>\n<4>'
+    done
+    for family in openmpi openmpi3 openmpi4 openmpi5; do
+        local prefix=$'<run>\n<-N>\n<2>\n<-n>\n<4>\n<-o>\n<pmi=pmix>'
+        [[ "$family" != openmpi5 ]] || prefix+=$'\n<-->'
+        check_prun_executable flux "$family" '' "$prefix"
+    done
+}
+
+@test "[prun] starts an executable whose filename contains spaces" {
+    cat > "$BATS_TEST_TMPDIR/srun" <<'LAUNCHER'
+#!/bin/bash
+[[ "$1" == --mpi=pmix ]] || exit 2
+shift
+"$@"
+LAUNCHER
+    chmod +x "$BATS_TEST_TMPDIR/srun"
+    local executable="$BATS_TEST_TMPDIR/application with spaces"
+    printf '#!/bin/sh\nprintf "application started\\n"\n' > "$executable"
+    chmod +x "$executable"
+    PATH="$BATS_TEST_TMPDIR:$PATH" RM=slurm LMOD_FAMILY_MPI=mpich \
+        OHPC_MPI_LAUNCHERS=pmix run prun "$executable"
+    assert_success
+    [[ "${lines[-1]}" == 'application started' ]]
+}
+
+@test "[prun] starts the checked executable rather than a glob match" {
+    cat > "$BATS_TEST_TMPDIR/srun" <<'LAUNCHER'
+#!/bin/bash
+[[ "$1" == --mpi=pmix ]] || exit 2
+shift
+"$@"
+LAUNCHER
+    chmod +x "$BATS_TEST_TMPDIR/srun"
+    local checked_dir="$BATS_TEST_TMPDIR/build[debug]"
+    local other_dir="$BATS_TEST_TMPDIR/buildd"
+    mkdir -p "$checked_dir" "$other_dir"
+    printf '#!/bin/sh\nprintf "checked application started\\n"\n' > "$checked_dir/application"
+    printf '#!/bin/sh\nprintf "other application started\\n"\n' > "$other_dir/application"
+    chmod +x "$checked_dir/application" "$other_dir/application"
+    PATH="$BATS_TEST_TMPDIR:$PATH" RM=slurm LMOD_FAMILY_MPI=mpich \
+        OHPC_MPI_LAUNCHERS=pmix run prun "$checked_dir/application"
+    assert_success
+    [[ "${lines[-1]}" == 'checked application started' ]]
+}
+
+@test "[prun] openpbs keeps OpenMPI prefix and node file paths literal" {
+    local family
+    local mpi_dir="$BATS_TEST_TMPDIR/open mpi[5]"
+    local nodefile="$BATS_TEST_TMPDIR/pbs nodes[1]"
+    mkdir -p "$mpi_dir" "$BATS_TEST_TMPDIR/open mpi5"
+    touch "$nodefile" "$BATS_TEST_TMPDIR/pbs nodes1"
+    for family in openmpi openmpi3 openmpi4 openmpi5; do
+        PATH="$BATS_TEST_TMPDIR/bin:$PATH" RM=openpbs LMOD_FAMILY_MPI="$family" \
+            MPI_DIR="$mpi_dir" PBS_NODEFILE="$nodefile" \
+            run prun "$PRUN_TEST_EXEC" 'two words' '' '*.dat'
+        assert_success
+        local expected="<--prefix>
+<$mpi_dir>
+<--hostfile>
+<$nodefile>"
+        [[ "$family" != openmpi5 ]] || expected+=$'\n<-->'
+        expected+="
+<$PRUN_TEST_EXEC>
+<two words>
+<>
+<*.dat>"
+        [[ "$output" == *"$expected" ]] || assert_equal "$expected" "$output"
+    done
+}
+
+@test "[prun] impi and mvapich2 reject non-native modes from configuration" {
+    local configured_prun="$BATS_TEST_TMPDIR/configured-prun"
+    local config="$BATS_TEST_TMPDIR/prun.conf"
+    sed "s|^CONFIG=.*|CONFIG=$config|" "$(command -v prun)" > "$configured_prun"
+    chmod +x "$configured_prun"
+    printf 'MODE=hybrid\n' > "$config"
+    local family resource_manager
+    for family in impi mvapich2; do
+        for resource_manager in slurm openpbs flux; do
+            PATH="$BATS_TEST_TMPDIR/bin:$PATH" RM="$resource_manager" \
+                LMOD_FAMILY_MPI="$family" run "$configured_prun" /bin/true
+            assert_failure
+            [[ "$output" == *"Unsupported launch mode -> hybrid ($family)"* ]]
+        done
+    done
+}
+
+@test "[prun] returns the launcher exit status" {
+    printf '#!/bin/sh\nexit 37\n' > "$BATS_TEST_TMPDIR/bin/launcher"
+    local family resource_manager
+    for family in impi mpich mvapich2 openmpi openmpi3 openmpi4 openmpi5; do
+        for resource_manager in slurm openpbs flux; do
+            PATH="$BATS_TEST_TMPDIR/bin:$PATH" RM="$resource_manager" \
+                LMOD_FAMILY_MPI="$family" OHPC_MPI_LAUNCHERS=pmix \
+                FLUX_JOB_NNODES=2 FLUX_JOB_NTASKS=4 \
+                run prun /bin/true 'two words'
+            assert_equal 37 "$status"
+        done
+    done
+}
+
+@test "[prun] launch log quotes arguments for shell replay" {
+    PATH="$BATS_TEST_TMPDIR/bin:$PATH" RM=slurm LMOD_FAMILY_MPI=mpich \
+        OHPC_MPI_LAUNCHERS=pmix run prun "$PRUN_TEST_EXEC" 'two words' '' '*.dat' $'line\nbreak' '; exit 99'
+    assert_success
+    local logged_command="${lines[2]#*Launch cmd = }"
+    logged_command="${logged_command% (family=mpich)}"
+    [[ "$logged_command" == *"two\\ words '' \*.dat"* ]]
+    local expected="$output"
+    expected="${expected#*$' (family=mpich)\n'}"
+    PATH="$BATS_TEST_TMPDIR/bin:$PATH" run bash -c "$logged_command"
+    assert_success
+    assert_output "$expected"
+}
+
+@test "[prun] flux uses allocation size and one task per node by default" {
+    cat > "$BATS_TEST_TMPDIR/bin/launcher" <<'EOF'
+#!/bin/bash
+if [[ "$1" == getattr && "$2" == size ]]; then
+    printf '3\n'
+else
+    printf '<%s>\n' "$@"
+fi
+EOF
+    local family
+    for family in mpich openmpi5; do
+        PATH="$BATS_TEST_TMPDIR/bin:$PATH" RM=flux LMOD_FAMILY_MPI="$family" \
+            FLUX_JOB_NNODES= FLUX_JOB_NTASKS= run prun /bin/true
+        assert_success
+        [[ "$output" == *$'<run>\n<-N>\n<3>\n<-n>\n<3>'* ]]
+    done
 }
