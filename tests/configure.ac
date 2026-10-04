@@ -39,7 +39,18 @@ fi
 
 # RMS test
 AC_CHECK_FILE(/etc/pbs.conf,[enable_pbs=yes],[])
-AC_CHECK_FILE(/etc/flux/system/conf.d/bootstrap.toml,[enable_flux=yes],[])
+# Flux reads every *.toml in its conf.d, whatever the files are called
+AC_MSG_CHECKING([for a configured Flux system instance])
+for conf in /etc/flux/system/conf.d/*.toml; do
+   if test -s "$conf"; then
+      enable_flux=yes
+   fi
+done
+if test "x$enable_flux" = "xyes"; then
+   AC_MSG_RESULT([yes])
+else
+   AC_MSG_RESULT([no])
+fi
 if test "x$enable_pbs" != "xyes" && test "x$enable_flux" != "xyes" ; then
    enable_slurm=yes
 fi

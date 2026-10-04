@@ -22,6 +22,17 @@ check_if_rpm_installed() {
 	rpm -q --quiet "$1" || ERROR "RPM $1 is not installed locally"
 }
 
+# The Flux system instance reads every *.toml in its conf.d, whatever the
+# files are called (the install guide writes a single system.toml, the CI
+# setup writes bootstrap.toml and others), so look for any non-empty one.
+flux_system_configured() {
+	local conf
+	for conf in /etc/flux/system/conf.d/*.toml; do
+		[ -s "${conf}" ] && return 0
+	done
+	return 1
+}
+
 # Check if we have a known/supported resource manager
 check_rms() {
 
@@ -29,7 +40,7 @@ check_rms() {
 		export RESOURCE_MANAGER=openpbs
 	elif [ -s /etc/slurm/slurm.conf ]; then
 		export RESOURCE_MANAGER=slurm
-	elif [ -s /etc/flux/system/conf.d/bootstrap.toml ]; then
+	elif flux_system_configured; then
 		export RESOURCE_MANAGER=flux
 	else
 		ERROR "Unsupported or unknown resource manager"
