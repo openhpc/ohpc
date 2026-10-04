@@ -39,6 +39,9 @@ URL:       http://www.open-mpi.org
 Source0:   http://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-%{version}.tar.bz2
 Source3:   pbs-config
 Patch0:    openmpi-5.x-pbs-config.patch
+# Backport of upstream 8885c93db2 (open-mpi/ompi#14423): refuse inbound
+# TCP/UCT connections naming a job we were never introduced to
+Patch1:    openmpi-5.0.11-refuse-unknown-jobid.patch
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -128,6 +131,7 @@ communication techniques.
 
 %setup -q -n openmpi-%{version}
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 # OpenHPC compiler designation

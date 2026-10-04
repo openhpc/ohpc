@@ -1,0 +1,328 @@
+From 8885c93db2fb18f16904cdfc40e20f466f1674de Mon Sep 17 00:00:00 2001
+From: George Bosilca <gbosilca@nvidia.com>
+Date: Sat, 12 Sep 2026 18:39:31 -0400
+Subject: [PATCH] ompi/proc: refuse a name from a job we have not been
+ introduced to
+
+ompi_proc_for_name() builds a skeleton ompi_proc_t for any name it is
+handed; the only NULL it can return is out of memory.  That suits the
+callers whose names come from the runtime, but it is also the function
+installed as OPAL's opal_proc_for_name hook, and two btls reach it with
+a name they read out of an inbound connection handshake:
+mca_btl_tcp_proc_lookup() and mca_btl_uct_process_connection_request().
+Anything that can open a socket to us can put any name it likes there.
+
+The cost of accepting such a name is not the proc.  It is what happens
+next: mca_btl_tcp_proc_create() asks for the peer's published addresses
+through OPAL_MODEX_RECV, which is a bare PMIx_Get with no info array --
+no PMIX_TIMEOUT, no PMIX_IMMEDIATE -- so for a namespace nobody has
+heard of it blocks for as long as PMIx cares to wait, on the progress
+thread, from inside the listener's event callback.
+
+Keep the set of jobids we have been introduced to and return NULL for
+any name outside it.  There are exactly two ways into that set: our own
+job, recorded by ompi_proc_init(), and every job the runtime hands us
+through ompi_proc_find_and_add(), which covers instance setup,
+ompi_proc_unpack(), and dpm.  dpm calls it before PMIx_Connect() and
+long before add_procs(), so no peer of a dynamically connected job can
+arrive ahead of its own introduction.
+
+Entries are never removed.  A job that has departed is still a job
+whose names were once valid, and remembering it only means we get one
+step further before failing to reach it, which is what happens today.
+
+The check belongs in ompi_proc_for_name() and not in
+ompi_proc_for_name_nolock(): ompi_proc_pack() resolves sentinels
+through the latter and dereferences the result immediately, and a
+sentinel can only ever encode our own jobid, so that path is both
+unaffected and better left alone.
+
+This bounds a mistake, a stale connection from a job that has exited,
+or outright garbage.  It is not authentication: our jobid is not a
+secret, so a peer that copies it still reaches the modex.
+
+Two callers had to be taught about the new NULL.  btl_tcp, btl_sm and
+ompi/errhandler already handled it, the last with precisely these
+semantics -- "we are not 'MPI connected' with this proc".
+comm_ft_propagator passed the result straight into
+ompi_proc_is_active(), which dereferences it.  And
+mca_btl_uct_process_connection_request() read
+endpoint->uct_eps[req->context_id] three lines above its own
+"if (NULL == endpoint)" test; that was already wrong before this
+commit, and is reordered here because this commit makes it reachable.
+
+Signed-off-by: George Bosilca <gbosilca@nvidia.com>
+
+[OpenHPC: backport of upstream commit 8885c93db2fb (open-mpi/ompi#14423,
+ merged to main and v6.0.x, not in any v5.0.x release) to 5.0.11.
+ Applied unchanged except opal/mca/btl/uct/btl_uct_tl.c: 5.0.11 has a
+ BTL_VERBOSE between mca_btl_uct_get_ep() and the NULL endpoint check,
+ so the new NULL remote_proc check and the deferred tl_endpoint
+ dereference are placed around it.]
+---
+ 6 files changed, 125 insertions(+), 5 deletions(-)
+
+diff --git a/ompi/communicator/communicator.h b/ompi/communicator/communicator.h
+index 354c39e..cab6917 100644
+--- a/ompi/communicator/communicator.h
++++ b/ompi/communicator/communicator.h
+@@ -803,6 +803,10 @@ typedef struct ompi_comm_rbcast_message_t {
+     uint8_t  type;
+ } ompi_comm_rbcast_message_t;
+ 
++/* The return value is not a status: it says whether the message is news
++ * to us and therefore has to be forwarded to complete the broadcast.
++ * Zero stops it here -- a duplicate, or nothing this process has to act
++ * on -- and non-zero passes it on. */
+ typedef int (*ompi_comm_rbcast_cb_t)(ompi_communicator_t* comm, ompi_comm_rbcast_message_t* msg);
+ 
+ OMPI_DECLSPEC int ompi_comm_rbcast_register_cb_type(ompi_comm_rbcast_cb_t callback);
+diff --git a/ompi/communicator/ft/comm_ft_propagator.c b/ompi/communicator/ft/comm_ft_propagator.c
+index d203f11..09dbdf0 100644
+--- a/ompi/communicator/ft/comm_ft_propagator.c
++++ b/ompi/communicator/ft/comm_ft_propagator.c
+@@ -89,6 +89,13 @@ int ompi_comm_failure_propagate(ompi_communicator_t* comm, ompi_proc_t* proc, in
+  */
+ static int ompi_comm_failure_propagator_local(ompi_communicator_t* comm, ompi_comm_failure_propagator_message_t* msg) {
+     ompi_proc_t* proc = (ompi_proc_t*)ompi_proc_for_name(msg->proc_name);
++    if( NULL == proc ) {
++        /* A job we were never introduced to, so nothing of ours involves
++         * this proc and there is nothing to propagate.  Cannot happen for
++         * a message that arrived on a communicator we are a member of;
++         * checked because ompi_proc_is_active() would dereference it. */
++        return false;
++    }
+     if( !ompi_proc_is_active(proc) ) {
+         OPAL_OUTPUT_VERBOSE((9, ompi_ftmpi_output_handle,
+                 "%s %s: failure of %s has already been propagated on comm %s:%d",
+diff --git a/ompi/proc/proc.c b/ompi/proc/proc.c
+index 0805069..efa9023 100644
+--- a/ompi/proc/proc.c
++++ b/ompi/proc/proc.c
+@@ -53,10 +53,59 @@ static opal_hash_table_t ompi_proc_hash;
+ 
+ ompi_proc_t* ompi_proc_local_proc = NULL;
+ 
++/* The jobs we have been introduced to, and so the only jobs a name we
++ * are handed can legitimately belong to: our own, plus every job the
++ * runtime has told us about through ompi_proc_find_and_add(). Entries
++ * are never removed -- a job that has departed is still a job whose
++ * names were once valid, and keeping it only means we get one step
++ * further before failing to reach it, which is today's behaviour
++ * anyway. One entry per job, so linear search is the right shape.
++ * Guarded by ompi_proc_lock. */
++static ompi_jobid_t *ompi_proc_jobids = NULL;
++static size_t ompi_proc_num_jobids = 0;
++static size_t ompi_proc_max_jobids = 0;
++
+ static void ompi_proc_construct(ompi_proc_t* proc);
+ static void ompi_proc_destruct(ompi_proc_t* proc);
+ static ompi_proc_t *ompi_proc_for_name_nolock (const opal_process_name_t proc_name);
+ 
++/* Both require ompi_proc_lock, except during init and finalize where
++ * there is by definition nobody to race. */
++static bool ompi_proc_jobid_known_nolock (ompi_jobid_t jobid)
++{
++    for (size_t i = 0 ; i < ompi_proc_num_jobids ; ++i) {
++        if (jobid == ompi_proc_jobids[i]) {
++            return true;
++        }
++    }
++
++    return false;
++}
++
++static void ompi_proc_jobid_learn_nolock (ompi_jobid_t jobid)
++{
++    if (ompi_proc_jobid_known_nolock (jobid)) {
++        return;
++    }
++
++    if (ompi_proc_num_jobids == ompi_proc_max_jobids) {
++        size_t grown = (0 == ompi_proc_max_jobids) ? 4 : 2 * ompi_proc_max_jobids;
++        ompi_jobid_t *jobids = (ompi_jobid_t *) realloc (ompi_proc_jobids,
++                                                         grown * sizeof (*jobids));
++        if (NULL == jobids) {
++            /* Nothing useful to do about it here, and failing closed would
++             * refuse a peer we are legitimately talking to. Leave the set
++             * as it is; the worst case is the unbounded lookup we used to
++             * do unconditionally. */
++            return;
++        }
++        ompi_proc_jobids = jobids;
++        ompi_proc_max_jobids = grown;
++    }
++
++    ompi_proc_jobids[ompi_proc_num_jobids++] = jobid;
++}
++
+ OBJ_CLASS_INSTANCE(
+     ompi_proc_t,
+     opal_proc_t,
+@@ -230,6 +279,23 @@ opal_proc_t *ompi_proc_for_name (const opal_process_name_t proc_name)
+     }
+ 
+     opal_mutex_lock (&ompi_proc_lock);
++
++    /* Some callers reach here with a name they were handed by a peer
++     * rather than by the runtime -- the tcp and uct btls resolve the
++     * guid out of a connection handshake, and an unreachable machine
++     * can put any name it likes in one. Building a proc for a job
++     * nobody has introduced us to is how such a name ends up costing a
++     * modex lookup for a process that cannot exist, so refuse it here
++     * instead, before anything is allocated. This bounds a mistake or
++     * a stale connection; it is not authentication, since our own
++     * jobid is not a secret. Note that sentinels resolve through
++     * ompi_proc_for_name_nolock() directly and are unaffected: they
++     * can only ever encode our own jobid. */
++    if (!ompi_proc_jobid_known_nolock (proc_name.jobid)) {
++        opal_mutex_unlock (&ompi_proc_lock);
++        return NULL;
++    }
++
+     proc = ompi_proc_for_name_nolock (proc_name);
+     opal_mutex_unlock (&ompi_proc_lock);
+ 
+@@ -252,6 +318,9 @@ int ompi_proc_init(void)
+         return ret;
+     }
+ 
++    /* our own job is the one job we never have to be told about */
++    ompi_proc_jobid_learn_nolock (OMPI_PROC_MY_NAME->jobid);
++
+     /* create a proc for the local process */
+     ret = ompi_proc_allocate (OMPI_PROC_MY_NAME->jobid, OMPI_PROC_MY_NAME->vpid, &proc);
+     if (OMPI_SUCCESS != ret) {
+@@ -409,6 +478,11 @@ int ompi_proc_finalize (void)
+     OBJ_DESTRUCT(&ompi_proc_lock);
+     OBJ_DESTRUCT(&ompi_proc_hash);
+ 
++    free (ompi_proc_jobids);
++    ompi_proc_jobids = NULL;
++    ompi_proc_num_jobids = 0;
++    ompi_proc_max_jobids = 0;
++
+     return OMPI_SUCCESS;
+ }
+ 
+@@ -687,6 +761,15 @@ ompi_proc_find_and_add(const ompi_process_name_t * name, bool* isnew)
+     /* return the proc-struct which matches this jobid+process id */
+     mask = OMPI_RTE_CMP_JOBID | OMPI_RTE_CMP_VPID;
+     opal_mutex_lock (&ompi_proc_lock);
++
++    /* This is the runtime introducing a proc to us -- through
++     * connect/accept, through spawn, or as part of our own instance --
++     * so it is also the moment that job becomes one whose names we will
++     * honour. Recorded before the proc is built, and dpm calls this
++     * before PMIx_Connect(), let alone add_procs(), so no peer of that
++     * job can arrive ahead of its own introduction. */
++    ompi_proc_jobid_learn_nolock (name->jobid);
++
+     OPAL_LIST_FOREACH(proc, &ompi_proc_list, ompi_proc_t) {
+         if (OPAL_EQUAL == ompi_rte_compare_name_fields(mask, &proc->super.proc_name, name)) {
+             rproc = proc;
+diff --git a/ompi/proc/proc.h b/ompi/proc/proc.h
+index 028d134..df908c2 100644
+--- a/ompi/proc/proc.h
++++ b/ompi/proc/proc.h
+@@ -119,7 +119,7 @@ OMPI_DECLSPEC extern opal_list_t  ompi_proc_list;
+  * includes the architecture and hostname, which will be available by
+  * the conclusion of the stage gate.
+  *
+- * @retval OMPI_SUCESS  System successfully initialized
++ * @retval OMPI_SUCCESS  System successfully initialized
+  * @retval OMPI_ERROR   Initialization failed due to unspecified error
+  */
+ OMPI_DECLSPEC int ompi_proc_init(void);
+@@ -338,7 +338,7 @@ OMPI_DECLSPEC int ompi_proc_pack(ompi_proc_t **proclist,
+  *                         provided if information is not needed.
+  * @param[out] newproclist List of new procs added as a result of
+  *                         the unpack operation.  NULL may be
+- *                         provided if informationis not needed.
++ *                         provided if information is not needed.
+  *
+  * Return value:
+  *   OMPI_SUCCESS               on success
+@@ -360,7 +360,7 @@ OMPI_DECLSPEC int ompi_proc_unpack(pmix_data_buffer_t *buf,
+  * @note This is primarily used when restarting a process and thus
+  * need to update the jobid and node name.
+  *
+- * @retval OMPI_SUCESS  System successfully refreshed
++ * @retval OMPI_SUCCESS  System successfully refreshed
+  * @retval OMPI_ERROR   Refresh failed due to unspecified error
+  */
+ OMPI_DECLSPEC int ompi_proc_refresh(void);
+@@ -371,11 +371,23 @@ OMPI_DECLSPEC int ompi_proc_refresh(void);
+  * @param[in] proc_name opal process name
+  *
+  * @returns cached or new ompi_proc_t for the given process name
++ * @returns NULL if the name belongs to a job we have not been introduced
++ *          to, or on allocation failure
+  *
+  * This function looks up the given process name in the hash of existing
+  * ompi_proc_t structures. If no ompi_proc_t structure exists matching the
+  * given name a new ompi_proc_t is allocated, initialized, and returned.
+  *
++ * @note Every caller must handle NULL. A name is only built into a proc if
++ * its jobid is one we have been introduced to: our own, recorded by
++ * ompi_proc_init(), and every job the runtime hands us through
++ * ompi_proc_find_and_add() -- instance setup, ompi_proc_unpack(), and dpm,
++ * which introduces a job before it connects to it. Any other name is
++ * refused, because this is also OPAL's opal_proc_for_name hook and some
++ * callers reach it with a name read out of an inbound connection
++ * handshake rather than one the runtime gave them. A jobid, once known,
++ * stays known for the life of the process.
++ *
+  * @note The ompi_proc_t is added to the local list of processes but is not
+  * added to any communicator. ompi_comm_peer_lookup is responsible for caching
+  * the ompi_proc_t on a communicator.
+diff --git a/opal/mca/btl/uct/btl_uct_tl.c b/opal/mca/btl/uct/btl_uct_tl.c
+index 5669e88..8469d1e 100644
+--- a/opal/mca/btl/uct/btl_uct_tl.c
++++ b/opal/mca/btl/uct/btl_uct_tl.c
+@@ -194,11 +194,18 @@ int mca_btl_uct_process_connection_request(mca_btl_uct_module_t *module,
+                                            mca_btl_uct_conn_req_t *req)
+ {
+     struct opal_proc_t *remote_proc = opal_proc_for_name(req->proc_name);
+-    mca_btl_base_endpoint_t *endpoint = mca_btl_uct_get_ep(&module->super, remote_proc);
+-    mca_btl_uct_tl_endpoint_t *tl_endpoint = endpoint->uct_eps[req->context_id] + req->tl_index;
++    mca_btl_base_endpoint_t *endpoint;
++    mca_btl_uct_tl_endpoint_t *tl_endpoint;
+     int32_t ep_flags;
+     int rc;
+ 
++    if (NULL == remote_proc) {
++        BTL_ERROR(("connection request names a process we know nothing about"));
++        return UCS_ERR_UNREACHABLE;
++    }
++
++    endpoint = mca_btl_uct_get_ep(&module->super, remote_proc);
++
+     BTL_VERBOSE(("got connection request for endpoint %p. type = %d. context id = %d",
+                  (void *) endpoint, req->type, req->context_id));
+ 
+@@ -207,6 +214,8 @@ int mca_btl_uct_process_connection_request(mca_btl_uct_module_t *module,
+         return UCS_ERR_UNREACHABLE;
+     }
+ 
++    tl_endpoint = endpoint->uct_eps[req->context_id] + req->tl_index;
++
+     assert(req->type < 2);
+ 
+     ep_flags = opal_atomic_fetch_or_32(&tl_endpoint->flags, MCA_BTL_UCT_ENDPOINT_FLAG_CONN_REC);
+diff --git a/opal/util/proc.h b/opal/util/proc.h
+index df8c60d..4ef71fd 100644
+--- a/opal/util/proc.h
++++ b/opal/util/proc.h
+@@ -164,6 +164,11 @@ OPAL_DECLSPEC extern int (*opal_convert_string_to_jobid)(opal_jobid_t *jobid,
+  * Lookup an opal_proc_t by name
+  *
+  * @param name (IN) name to lookup
++ *
++ * Returns NULL if the upper layer will not vouch for the name -- it may
++ * have come from a peer rather than from the runtime -- or if the proc
++ * could not be created. A caller that resolves a name out of an inbound
++ * connection handshake has to expect that and drop the connection.
+  */
+ OPAL_DECLSPEC extern struct opal_proc_t *(*opal_proc_for_name)(const opal_process_name_t name);
+ 
