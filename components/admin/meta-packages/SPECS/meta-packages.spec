@@ -391,6 +391,8 @@ Requires:  pdsh-mod-slurm%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-slurm-server
 Collection of server packages for SLURM
 
+# Flux is only packaged for RHEL and its clones
+%if 0%{?rhel}
 %package -n %{PROJ_NAME}-flux-client
 Summary:   OpenHPC client packages for Flux
 Requires:  flux-core%{PROJ_DELIM}
@@ -409,6 +411,7 @@ Requires:  flux-security%{PROJ_DELIM}
 Requires:  flux-pmix%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-flux-server
 Collection of server packages for Flux
+%endif
 
 %package -n %{PROJ_NAME}-warewulf
 Summary:   OpenHPC base packages for Warewulf
@@ -876,8 +879,10 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-%{compiler_family}-serial-libs
 %files -n %{PROJ_NAME}-slurm-client
 %files -n %{PROJ_NAME}-slurm-server
+%if 0%{?rhel}
 %files -n %{PROJ_NAME}-flux-client
 %files -n %{PROJ_NAME}-flux-server
+%endif
 %files -n %{PROJ_NAME}-warewulf
 # x86_64 specific groups
 %ifnarch aarch64 ppc64le
