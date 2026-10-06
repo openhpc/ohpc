@@ -8,17 +8,22 @@ follow the distro provided directions to install the Base OS on your chosen
 verify that it is provisioned with the required {{ distro_full_name }}
 distribution.
 
+{# Warewulf writes the head node's /etc/hosts entry itself (host overlay, via
+   wwctl configure --all). #}
 {% if not is_warewulf %}
 Prior to beginning the installation process of OpenHPC components, several
 additional considerations are noted here for the head node configuration. First,
 the installation recipe herein assumes that the head node name is resolvable
 locally. Depending on the manner in which you installed the Base OS, there may
-be an adequate entry already defined in `/etc/hosts`. If not, the following
-addition can be used to identify your head node.
+be an adequate entry already defined in `/etc/hosts`. If not, add one so the head
+node resolves itself by name (this guide relies on it for name-based commands):
 
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add the head node name to /etc/hosts so it resolves locally -->
 ```bash
 echo ${sms_ip} ${sms_name} >> /etc/hosts
 ```
+<!-- ohpc_end -->
 {% endif %}
 
 While it is theoretically possible to enable SELinux on a cluster provisioned
