@@ -15,6 +15,37 @@ if hash zypper >/dev/null 2>&1; then
 	PKG=("zypper" "-n" "--no-gpg-checks")
 fi
 
+# Packages built earlier in this CI run (downloaded from the build job)
+# might not be available from the build system yet. Turn them into a
+# local repository, preferred over all other repositories, so that every
+# package installed below can resolve dependencies against them.
+setup_local_repo() {
+	local rpms_dir=/home/"${USER}"/rpmbuild/RPMS
+
+	if ! find "${rpms_dir}" -name "*.rpm" -print -quit 2>/dev/null | grep -q .; then
+		return
+	fi
+
+	createrepo_c "${rpms_dir}"
+
+	if hash zypper >/dev/null 2>&1; then
+		zypper rr local-ohpc-ci || true
+		zypper ar -G -f -p 1 "${rpms_dir}" local-ohpc-ci
+	else
+		cat >/etc/yum.repos.d/local-ohpc-ci.repo <<-EOF
+			[local-ohpc-ci]
+			name=Local OpenHPC CI builds
+			baseurl=file://${rpms_dir}
+			enabled=1
+			gpgcheck=0
+			priority=1
+			metadata_expire=0
+		EOF
+	fi
+}
+
+setup_local_repo
+
 # First remove a possible conflicts from a previous run
 "${PKG[@]}" remove lmod-defaults-*-ohpc || true
 
