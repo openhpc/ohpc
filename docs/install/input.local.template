@@ -45,7 +45,7 @@ provision_wait="${provision_wait:-180}"
 
 # DNS settings
 dns_servers="${dns_servers:-172.30.0.254}"
-domain_name="${domain_name:-local}"
+dns_domain="${dns_domain:-local}"
 
 # Provisioning interface used by compute hosts (Warewulf recipe only)
 eth_provision="${eth_provision:-eth0}"
@@ -56,11 +56,10 @@ node_disk=${node_disk:=/dev/sda}
 # Confluent-specific settings (only used by Confluent recipes)
 initialize_options="${initialize_options:-usklpta}"
 deployment_protocols="${deployment_protocols:-firmware}"
-dns_domain="${dns_domain:-local}"
 iso_url="${iso_url:-}"
 
-# Path to directory containing the base OS dvd iso
-# (Confluent and xCAT recipes; set to the directory, not the full filename)
+# Path to the base OS dvd iso file (Confluent and xCAT recipes; defaults to
+# the distribution's ISO filename in the current directory)
 iso_path="${iso_path:-}"
 
 # Flags for optional installation/configuration
