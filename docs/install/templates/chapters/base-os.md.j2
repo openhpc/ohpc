@@ -13,10 +13,6 @@
 
 {% include "base-os/disable-firewall.md.j2" %}
 
-{% if not is_warewulf %}
-{% include "base-os/hostname.md.j2" %}
-{% endif %}
-
 {% include "base-os/time.md.j2" %}
 
 {% if not is_warewulf %}

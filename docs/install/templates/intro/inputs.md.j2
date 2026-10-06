@@ -49,8 +49,8 @@ Required variables:
 * `iso_url` - ISO download base URL (optional; overrides default upstream location)
 {% endif %}
 {% if is_xcat %}
-* `${domain_name}` - DNS domain name for cluster (e.g. `local`)
-* `iso_path` - path to directory containing the base OS dvd iso (`{{ distro_iso_image }}`)
+* `${dns_domain}` - DNS domain name for cluster (e.g. `local`)
+* `iso_path` - location of compute node base os dvd iso (default: `{{ distro_iso_image }}`)
 * `${xcat_mode}` - provisioning mode: `stateless` (netboot) or `stateful`
   (install to local disk)
 

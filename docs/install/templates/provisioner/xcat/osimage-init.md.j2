@@ -8,9 +8,9 @@ the ISO is available at `${iso_path}`:
 <!-- ohpc_begin -->
 <!-- ohpc_comment Initialize OS images for use with xCAT -->
 ```bash
-: "${iso_path:?ERROR: iso_path not set}"
+: "${iso_path:={{ distro_iso_image }}}"
 
-copycds ${iso_path}/{{ distro_iso_image }}
+copycds "${iso_path}"
 ```
 <!-- ohpc_end -->
 
