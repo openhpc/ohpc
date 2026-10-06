@@ -13,7 +13,7 @@ for ((i=0; i<num_computes; i++)) ; do
         groups=compute,all \
         ip=${c_ip[$i]} \
         mac=${c_mac[$i]} \
-        netboot=xnba \
+        netboot={{ 'xnba' if arch == 'x86_64' else 'grub2' }} \
         arch={{ arch }} \
         bmc=${c_bmc[$i]} \
         bmcusername=${bmc_username} \
@@ -52,6 +52,7 @@ Complete network service configuration:
 <!-- ohpc_begin -->
 <!-- ohpc_comment Complete networking setup -->
 ```bash
+# Generate /etc/hosts and network definitions from the node defs
 makehosts
 makenetworks
 

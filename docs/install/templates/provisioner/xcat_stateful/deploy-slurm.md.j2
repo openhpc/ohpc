@@ -1,0 +1,7 @@
+## Check Slurm on the Compute Nodes
+
+Once provisioning is complete every compute node has installed the base OS and
+OpenHPC, run the configuration postscript, and started `munge` and `slurmd`.
+Check the nodes with `sinfo`; all should report *idle* (without an asterisk). If
+a node is shown as *unknown*, `scontrol update partition=normal state=idle` will
+clear it.

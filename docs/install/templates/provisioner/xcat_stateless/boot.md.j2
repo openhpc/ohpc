@@ -1,0 +1,50 @@
+## Boot Compute Nodes
+
+Boot the compute nodes; they load the packed image over the network into RAM.
+Because the resource manager was started above, each node's scheduler daemon
+finds the head node as soon as it comes up. After the initial PXE boot, subsequent
+boots return to the default BIOS boot device.
+
+{% include "provisioner/xcat/power-cycle.md.j2" %}
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait until every compute node has netbooted and sshd responds. -->
+<!-- ohpc_command # A fixed sleep races a slow netboot; poll node state instead and -->
+<!-- ohpc_command # bound the wait so a failed boot cannot hang the recipe forever. -->
+<!-- ohpc_command boot_timeout=${boot_timeout:-900} -->
+<!-- ohpc_command deadline=$(( SECONDS + boot_timeout )) -->
+<!-- ohpc_command while true; do -->
+<!-- ohpc_command     booted=$(nodestat compute | grep -c ": sshd" || true) -->
+<!-- ohpc_command     [ "$booted" -eq "$num_computes" ] && break -->
+<!-- ohpc_command     if [ "$SECONDS" -ge "$deadline" ]; then -->
+<!-- ohpc_command         echo "ERROR: after ${boot_timeout}s, $booted of $num_computes nodes reported sshd." >&2 -->
+<!-- ohpc_command         echo "Inspect with: nodestat compute; rcons <node>" >&2 -->
+<!-- ohpc_command         exit 1 -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command     echo "$booted of $num_computes compute nodes ready" -->
+<!-- ohpc_command     sleep 10 -->
+<!-- ohpc_command done -->
+<!-- ohpc_end -->
+
+The boot process typically completes in about 5 minutes. Monitor provisioning
+with the `rcons` command, which displays the serial console for a selected node.
+The escape sequence to exit `rcons` is `Ctrl-e c .` typed sequentially.
+
+Once booted, verify successful provisioning with a parallel command across the
+compute nodes. xCAT provides `xdsh`, its native distributed shell, which
+accepts xCAT node names and groups:
+
+```bash
+xdsh compute uptime
+c1:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+c2:  12:56:50 up 13 min,  0 users,  load average: 0.00, 0.02, 0.05
+c3:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.02, 0.05
+c4:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+```
+
+The provisioner-independent `pdsh` utility, installed on the head node as part
+of the `ohpc-base` metapackage, may be used as well:
+
+```bash
+pdsh -w ${compute_prefix}[1-${num_computes}] uptime
+```

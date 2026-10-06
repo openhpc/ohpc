@@ -30,6 +30,8 @@ is_warewulf: false
 is_openchami: false
 is_confluent: false
 is_xcat: false
+is_xcat_stateless: false
+is_xcat_stateful: false
 
 ## Scheduler
 is_slurm: false

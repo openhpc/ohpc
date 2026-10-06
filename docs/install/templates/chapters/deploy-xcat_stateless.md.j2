@@ -1,0 +1,13 @@
+{# Deploy Aggregator #}
+# Deploy Cluster
+
+{% include "provisioner/deploy.md.j2" %}
+
+{# The scheduler starts on the head node first so that the compute nodes, which
+   boot below, find it on their first try. #}
+{% include "scheduler/" ~ scheduler ~ "/startup.md.j2" %}
+
+The customized image is packed and the compute nodes boot it over the network.
+
+{% include "provisioner/xcat_stateless/pack.md.j2" %}
+{% include "provisioner/xcat_stateless/boot.md.j2" %}

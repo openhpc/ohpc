@@ -4,3 +4,6 @@ scheduler: "flux"
 scheduler_name: "Flux"
 is_slurm: false
 is_flux: true
+# Compute-side client meta-package, for provisioners that install packages from
+# a list (xCAT otherpkglist)
+scheduler_compute_package: "ohpc-flux-client"

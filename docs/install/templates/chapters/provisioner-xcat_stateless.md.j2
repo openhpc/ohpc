@@ -1,0 +1,23 @@
+{# Provisioner Aggregator #}
+# Install xCAT Provisioner
+
+{% include "provisioner/provisioner.md.j2" %}
+
+This guide provisions compute nodes in **stateless** (*netboot*) mode: each node
+boots a RAM-resident image assembled in a chroot on the head node. Nothing is
+written to local disk, and the image is rebuilt and redeployed to change the
+nodes. The compute nodes do not boot until the *Deploy Cluster* chapter.
+
+{% include "provisioner/xcat/xcat-repo.md.j2" %}
+{% include "provisioner/xcat/xcat-install.md.j2" %}
+{% include "provisioner/xcat/xcat-setup.md.j2" %}
+
+{% include "provisioner/xcat/osimage-init.md.j2" %}
+{% include "provisioner/xcat/add-nodes.md.j2" %}
+{% include "provisioner/xcat/synclists.md.j2" %}
+
+{% include "provisioner/xcat_stateless/genimage.md.j2" %}
+{% include "provisioner/xcat_stateless/ohpc.md.j2" %}
+{% include "provisioner/xcat/compute-config.md.j2" %}
+{% include "provisioner/xcat/compute-" ~ scheduler ~ ".md.j2" %}
+{% include "provisioner/xcat_stateless/customize.md.j2" %}

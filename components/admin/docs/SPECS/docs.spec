@@ -100,8 +100,10 @@ for recipe_name in \
 	"almalinux10-aarch64-openchami-slurm" \
 	"openeuler24.03-x86_64-warewulf-slurm" \
 	"openeuler24.03-aarch64-warewulf-slurm" \
-	"rocky10-x86_64-xcat-slurm" \
-	"almalinux10-x86_64-xcat-slurm" \
+	"rocky10-x86_64-xcat_stateless-slurm" \
+	"rocky10-x86_64-xcat_stateful-slurm" \
+	"almalinux10-x86_64-xcat_stateless-slurm" \
+	"almalinux10-x86_64-xcat_stateful-slurm" \
 ; do
 	# Parse: distro-arch-provisioner-scheduler -> distro/arch/provisioner/scheduler
 	distro=$(echo "${recipe_name}" | cut -d- -f1)

@@ -1,0 +1,31 @@
+## Configure OpenHPC on the Compute Nodes
+
+Apply the baseline compute-node configuration: disable the firewall, point
+chrony at the head node, add the NFS client mounts, and enable the cluster
+services. The service enables come last -- a stateful node runs this
+configuration after boot with no further restart, so the settings must be in
+place before the services start. The scheduler's own configuration follows in
+the next section.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure OpenHPC on the compute nodes -->
+```bash
+# Disable the firewall on the compute nodes
+{{ compute_service_disable("firewalld.service") }}
+
+# Point time synchronization at the head node
+{{ compute_run("echo server ${sms_ip} iburst >> /etc/chrony.conf") }}
+
+# NFS client mounts of /home and the OpenHPC public tree
+{{ compute_run("echo ${sms_ip}:/home /home nfs nfsvers=4,nodev,nosuid >> /etc/fstab") }}
+{{ compute_run("echo ${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=4,nodev >> /etc/fstab") }}
+{%- if is_xcat_stateful %}
+{{ compute_run("mkdir -p /opt/ohpc/pub") }}
+{{ compute_run("mount -a") }}
+{%- endif %}
+
+# Enable the cluster services
+{{ compute_service_enable("munge.service") }}
+{{ compute_service_enable("chronyd.service") }}
+```
+<!-- ohpc_end -->

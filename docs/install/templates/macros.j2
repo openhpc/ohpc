@@ -16,6 +16,7 @@ Notes on strings
 Functions:
 * compute_sed(regex, file): run `sed -i` with regex on file.
 * compute_echo(string, file, append=true): append string to file, if append=false overwrite.
+* compute_service_enable(service): enable a systemd service on the compute node (image provisioners: `enable`; live provisioners: `enable --now`).
 * pkg_install_image(packages): install packages, use array for multiple packages ["pkg1", "pkg2"]
 -->
 
@@ -26,6 +27,21 @@ Functions:
 
 {%- macro compute_install(packages) -%}
 {{ pkg_install_chroot }} {{ packages if packages is string else packages | join(' ') }}
+{%- endmacro -%}
+
+{# Enable a systemd service on the compute node, composing on compute_run. Image
+   provisioners enable it to start on next boot; live provisioners (xcat_stateful,
+   confluent) override this to add --now, because their configuration runs on the
+   node post-boot with no further reboot -- a bare enable would leave the service
+   enabled but not started, and nothing surfaces the error. #}
+{%- macro compute_service_enable(service) -%}
+{{ compute_run("systemctl enable " ~ service) }}
+{%- endmacro -%}
+
+{# Disable a systemd service on the compute node -- the --now counterpart of
+   compute_service_enable; same image-vs-live split. #}
+{%- macro compute_service_disable(service) -%}
+{{ compute_run("systemctl disable " ~ service) }}
 {%- endmacro -%}
 
 {# Warewulf Macros #}
@@ -48,26 +64,65 @@ wwctl image exec --build=false {{ baseos }} -- /bin/sh -c \
 
 {% endif %}
 
-{# xCAT Macros #}
-{# One recipe serves both xCAT modes. The chroot/xdsh split is resolved at run
-   time by the shell functions defined in "Select Provisioning Mode", so these
-   macros emit a helper call rather than a mode-specific command. Paths are
-   always image-relative (compute_exec chroots for stateless, targets the live
-   node for stateful). #}
-{% if is_xcat %}
+{# xCAT stateless Macros #}
+{# Stateless (netboot) operates on the image chroot at ${CHROOT}, like Warewulf
+   but executing directly in the chroot rather than via wwctl. #}
+{% if is_xcat_stateless %}
 
 {%- macro compute_sed(regex, file) -%}
-compute_exec "sed -i '{{ regex }}' \
-  '{{ file }}'"
+sed -i '{{ regex }}' \
+	"$CHROOT{{ file }}"
 {%- endmacro -%}
 
 {%- macro compute_echo(string, file, append=true) -%}
-compute_exec "echo '{{ string }}' {{ ">>" if append else ">" }} \
-  '{{ file }}'"
+echo '{{ string }}' {{ ">>" if append else ">" }} \
+	"$CHROOT{{ file }}"
 {%- endmacro -%}
 
 {%- macro compute_run(cmd) -%}
-compute_exec "{{ cmd }}"
+chroot "$CHROOT" /bin/sh -c \
+  "{{ cmd }}"
+{%- endmacro -%}
+
+{% endif %}
+
+{# xCAT stateful Macros #}
+{# Stateful (diskful) is definition-based, like OpenCHAMI: rather than acting on
+   a live node, the compute package list and configuration are accumulated on the
+   head into an otherpkgs pkglist ($OHPC_OTHERPKGS) and an xCAT postscript
+   ($OHPC_POSTSCRIPT). xCAT installs and runs them automatically when the node is
+   provisioned, so there is no live-node ssh. Both files are created fresh (and
+   the shell variables exported) by the "Stage the Compute Configuration" step,
+   so a full recipe run is idempotent. Recipe variables such as ${sms_ip} are
+   expanded here, as the head writes the files. #}
+{% if is_xcat_stateful %}
+
+{%- macro compute_install(packages) -%}
+printf '%s\n' {{ packages if packages is string else packages | join(' ') }} \
+  >> "$OHPC_OTHERPKGS"
+{%- endmacro -%}
+
+{%- macro compute_sed(regex, file) -%}
+echo "sed -i '{{ regex }}' \
+'{{ file }}'" >> "$OHPC_POSTSCRIPT"
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+echo "echo '{{ string }}' {{ ">>" if append else ">" }} \
+'{{ file }}'" >> "$OHPC_POSTSCRIPT"
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+echo "{{ cmd }}" \
+  >> "$OHPC_POSTSCRIPT"
+{%- endmacro -%}
+
+{%- macro compute_service_enable(service) -%}
+{{ compute_run("systemctl enable --now " ~ service) }}
+{%- endmacro -%}
+
+{%- macro compute_service_disable(service) -%}
+{{ compute_run("systemctl disable --now " ~ service) }}
 {%- endmacro -%}
 
 {% endif %}
@@ -87,6 +142,14 @@ nodeshell compute 'echo "{{ string }}" {{ ">>" if append else ">" }} \
 
 {%- macro compute_run(cmd) -%}
 nodeshell compute "{{ cmd }}"
+{%- endmacro -%}
+
+{%- macro compute_service_enable(service) -%}
+{{ compute_run("systemctl enable --now " ~ service) }}
+{%- endmacro -%}
+
+{%- macro compute_service_disable(service) -%}
+{{ compute_run("systemctl disable --now " ~ service) }}
 {%- endmacro -%}
 
 {% endif %}

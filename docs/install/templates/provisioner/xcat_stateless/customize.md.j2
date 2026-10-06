@@ -1,0 +1,12 @@
+## Disable Conflicting xCAT Exports
+
+The head node exports `/home` and `/opt/ohpc/pub`; disable the default
+xCAT-managed `/tftpboot` and `/install` export entries so they do not conflict.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Disable conflicting xCAT exports -->
+```bash
+sed -i "s|/tftpboot|#/tftpboot|" /etc/exports
+sed -i "s|/install|#/install|"   /etc/exports
+```
+<!-- ohpc_end -->

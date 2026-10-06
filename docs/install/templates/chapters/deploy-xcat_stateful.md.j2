@@ -1,0 +1,12 @@
+{# Deploy Aggregator #}
+# Deploy Cluster
+
+{% include "provisioner/deploy.md.j2" %}
+
+{# The scheduler is started on the head node first, before the compute nodes are
+   provisioned (Slurm in configless mode: each node's slurmd fetches its
+   configuration from the controller as it first boots). #}
+{% include "scheduler/" ~ scheduler ~ "/startup.md.j2" %}
+
+{% include "provisioner/xcat_stateful/install.md.j2" %}
+{% include "provisioner/xcat_stateful/deploy-" ~ scheduler ~ ".md.j2" %}
