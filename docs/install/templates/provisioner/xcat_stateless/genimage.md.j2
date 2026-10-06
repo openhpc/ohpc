@@ -1,0 +1,70 @@
+## Build the Compute Image
+
+The OpenHPC components are installed into the compute image the xCAT-native way:
+the osimage's `otherpkglist` names the extra packages and `otherpkgdir` names
+the repositories that provide them, and `genimage` installs them in the same
+pass as the base OS -- with the copycds base repositories in context, so
+dependencies resolve. `${CHROOT}` names the image directory and is used by the
+customization steps later in this guide.
+
+Before the image is built, the head node's `passwd` and `group` are copied into
+it so that the service accounts `genimage` creates (munge, and the scheduler's
+own) take the same UIDs and GIDs as the head. Without this, the boot-time synclist later installs
+the head's credentials over image-local UIDs, leaving munge's on-disk state
+orphaned so that the service fails to start.
+
+`genimage` builds the image with `gpgcheck=0` for every repository (base and
+extra alike), so the OpenHPC packages -- though signed -- are not
+signature-verified at build time, consistent with how xCAT builds the base
+image. Sites requiring verification should install OpenHPC on the booted nodes
+instead (see the stateful recipe) or patch xCAT's `genimage`.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Register OpenHPC components as otherpkgs on the osimage -->
+```bash
+# Save chroot location for the compute image
+rootimgdir=$(lsdef -t osimage -o ${xcat_osimage} -i rootimgdir \
+    | awk -F= '/rootimgdir=/{print $2}')
+CHROOT=${rootimgdir}/rootimg
+export CHROOT
+
+# Seed the head's passwd/group so genimage's service accounts take its UIDs
+mkdir -p ${CHROOT}/etc
+cp /etc/passwd /etc/group ${CHROOT}/etc
+
+# Extra repositories for the image build: OpenHPC (base + updates), EPEL, and
+# CRB. The base OS repos come from the copycds tree automatically; these are the
+# additions.
+chdef -t osimage ${xcat_osimage} otherpkgdir="\
+{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/,\
+{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/updates/{{ ostree }}/,\
+{{ epel_base_url }}{{ distro_version }}/Everything/{{ arch }}/,\
+{{ distro_base_url }}{{ distro_version }}/CRB/{{ arch }}/os/"
+
+# OpenHPC packages to add on top of the base OS image
+mkdir -p /install/custom/netboot/{{ distro }}
+cat > /install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist << 'EOF'
+ohpc-base-compute
+{{ scheduler_compute_package }}
+lmod-ohpc
+chrony
+EOF
+chdef -t osimage ${xcat_osimage} \
+    otherpkglist=/install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist
+```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add site or pre-release OpenHPC repositories to the image build (site-specific) -->
+<!-- ohpc_command #<<< ohpc_repo:compute >>># -->
+<!-- ohpc_end -->
+
+Build the image. `genimage` installs the base OS and the OpenHPC components
+together and builds the netboot initrd:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Build the compute image (base OS + OpenHPC in one pass) -->
+```bash
+genimage ${xcat_osimage}
+```
+<!-- ohpc_end -->

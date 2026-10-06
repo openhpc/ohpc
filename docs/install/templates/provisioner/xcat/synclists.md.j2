@@ -2,14 +2,19 @@
 
 xCAT includes functionality to synchronize files from the head node to managed
 hosts via *synclists*. This is one way to distribute user credentials to compute
-nodes. In stateless mode the synclist is applied when the image boots; in
-stateful mode the default `syncfiles` postscript applies it during the install,
-and changes can be pushed on demand afterwards with `updatenode`. Enable the
-synclist feature and register credential files:
+nodes.
+{%- if is_xcat_stateless %} The synclist is applied when the compute image
+boots.{% else %} The default `syncfiles` postscript applies the synclist during
+the install, and changes can be pushed on demand afterwards with
+`updatenode`.{% endif %} Enable the synclist feature and register credential
+files:
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Import files -->
 ```bash
+# Synclists are registered per image type
+xcat_synclist_dir="/install/custom/{{ xcat_image_type }}"
+
 # Define path for xCAT synclist file
 mkdir -p ${xcat_synclist_dir}
 chdef -t osimage -o ${xcat_osimage} \

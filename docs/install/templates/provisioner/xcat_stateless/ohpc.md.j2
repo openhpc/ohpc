@@ -1,0 +1,21 @@
+## Configure OpenHPC in the Compute Image
+
+`genimage` installed the OpenHPC core components above. The customization
+chapters that follow -- node health checks, development tools, and optional
+InfiniBand or GPU support -- install further packages into the compute image, so
+first make their repositories available inside it. The freshly built image
+carries the distro repositories disabled and neither the OpenHPC nor the EPEL
+repository, so add them to the image:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Make the OpenHPC, EPEL, and base OS repos available in the image -->
+```bash
+# Copy the OpenHPC and EPEL repository definitions into the image
+cp /etc/yum.repos.d/OpenHPC*.repo ${CHROOT}/etc/yum.repos.d
+cp /etc/yum.repos.d/epel*.repo    ${CHROOT}/etc/yum.repos.d
+
+# Enable the base OS repositories and CRB in the image (they ship disabled)
+dnf --installroot="${CHROOT}" config-manager \
+    --set-enabled baseos --set-enabled appstream --set-enabled crb
+```
+<!-- ohpc_end -->

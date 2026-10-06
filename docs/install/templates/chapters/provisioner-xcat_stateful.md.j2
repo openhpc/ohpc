@@ -1,0 +1,25 @@
+{# Provisioner Aggregator #}
+# Install xCAT Provisioner
+
+{% include "provisioner/provisioner.md.j2" %}
+
+This guide provisions compute nodes in **stateful** (*diskful*) mode: a base OS
+is installed onto each node's local disk and the OpenHPC components are installed
+in the same provisioning pass. Nodes keep their state across reboots. Following
+the xCAT model, the OpenHPC package list and configuration are staged on the head
+node and applied automatically by xCAT when each node installs and first boots --
+there is no configuration over a live-node shell. The nodes are booted later, in
+the deploy chapter.
+
+{% include "provisioner/xcat/xcat-repo.md.j2" %}
+{% include "provisioner/xcat/xcat-install.md.j2" %}
+{% include "provisioner/xcat/xcat-setup.md.j2" %}
+
+{% include "provisioner/xcat/osimage-init.md.j2" %}
+{% include "provisioner/xcat/add-nodes.md.j2" %}
+{% include "provisioner/xcat/synclists.md.j2" %}
+
+{% include "provisioner/xcat_stateful/diskconfig.md.j2" %}
+{% include "provisioner/xcat_stateful/stage.md.j2" %}
+{% include "provisioner/xcat/compute-config.md.j2" %}
+{% include "provisioner/xcat/compute-" ~ scheduler ~ ".md.j2" %}

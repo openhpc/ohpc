@@ -1,0 +1,21 @@
+{#- Shared PXE-boot + power-cycle step for both xCAT modes (stateless netboot and
+   stateful install). With a BMC, xCAT sets the next boot to network and power
+   cycles; without one (has_ipmi=0), it emits ohpc_reset placeholders for an
+   external handler. -#}
+<!-- ohpc_begin -->
+<!-- ohpc_comment Set nodes to netboot and power cycle -->
+<!-- ohpc_if_set has_ipmi -->
+```bash
+# Set compute group to boot from network on next boot
+rsetboot compute net
+
+# Power cycle compute nodes
+rpower compute reset
+```
+<!-- ohpc_else -->
+<!-- ohpc_command # No BMC/IPMI available -- signal external reset handler -->
+<!-- ohpc_command for ((i=0; i<num_computes; i++)) ; do -->
+<!-- ohpc_command   echo "#<<< ohpc_reset:$i,${c_name[$i]},${c_bmc[$i]} >>>#" -->
+<!-- ohpc_command done -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

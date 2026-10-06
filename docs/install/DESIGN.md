@@ -21,7 +21,8 @@ for OpenHPC installation recipes.
 A recipe is defined by two files in `recipes/`:
 
 - **`*.conf`** — ordered list of `config/` YAML files to merge
-- **`*.yaml`** — per-recipe overrides (Confluent and xCAT recipes; omitted when not needed)
+- **`*.yaml`** — per-recipe overrides (Confluent and xCAT recipes; omitted
+  when not needed)
 
 The Makefile merges these into a single `build/*.yaml` using `yq` deep
 merge, which mkdoc.py then reads as its input.
@@ -71,7 +72,8 @@ config/
 │   ├── warewulf.yaml            # is_warewulf: true, provisioner_name: "Warewulf"
 │   ├── openchami.yaml           # is_openchami: true, provisioner_name: "OpenCHAMI"
 │   ├── confluent.yaml           # is_confluent: true, provisioner_name: "Confluent"
-│   └── xcat.yaml               # is_xcat: true, provisioner_name: "xCAT"
+│   ├── xcat_stateless.yaml     # is_xcat + is_xcat_stateless: true (netboot)
+│   └── xcat_stateful.yaml      # is_xcat + is_xcat_stateful: true (diskful)
 └── scheduler/
     ├── slurm.yaml               # is_slurm: true, scheduler_name: "Slurm"
     └── flux.yaml                # is_flux: true, scheduler_name: "Flux"
@@ -96,25 +98,42 @@ provisioners have fundamentally different workflows:
 - **Confluent**: boot nodes from Confluent → configure live nodes via nodeshell
 - **OpenCHAMI**: build layered container image (podman + yq) → cloud-init →
   boot nodes
-- **xCAT**: copycds ISO → define nodes → then one of
-  - *stateless*: genimage chroot → customize chroot → packimage → rsetboot/rpower
-  - *stateful*: install base OS to disk → configure live nodes via xdsh
+- **xCAT**: copycds ISO → define nodes → then, per provisioning mode:
+  - *stateless* (`xcat_stateless`): genimage chroot → customize chroot →
+    packimage → rsetboot/rpower
+  - *stateful* (`xcat_stateful`): install base OS to disk → configure live
+    nodes via xdsh
 
-xCAT is a single recipe covering both provisioning modes. Unlike the other
-differences in this document, the mode is chosen at **run time** by
-`${enable_stateful}` (from `input.local`) rather than at build time, so one
-guide and one `recipe.sh` serve both. `templates/provisioner/xcat/` holds the
-shared steps plus the mode-specific ones, named `stateless-*` and `stateful-*`
-and gated with `ohpc_if`.
+xCAT ships as **two provisioners**, `xcat_stateless` and `xcat_stateful`,
+selected at build time like any other provisioner (each recipe picks one). This
+follows the OpenHPC 2.x xCAT structure (separate `xcat` and `xcat_stateful`
+recipes sharing common includes) and keeps each guide linear. The genuinely
+shared steps live in `templates/provisioner/xcat/` (repo, install, setup,
+osimage-init, add-nodes, synclists) and are included by both provisioners'
+chapters; the mode-specific steps live in
+`templates/provisioner/xcat_stateless/` and
+`templates/provisioner/xcat_stateful/`.
 
-The mode split is confined to how the compute environment is created and when
-the nodes first boot. Everything after that is shared: a "Select Provisioning
-Mode" section defines shell functions (`compute_exec`, `compute_install`,
-`compute_group_install`, `compute_upgrade`, `compute_clean`) that act on the
-image chroot in stateless mode and on the running nodes via `xdsh` in stateful
-mode, and the shared customization chapters call those helpers unchanged. This
-is why the xCAT column of the macro table below emits a helper call rather than
-a concrete command.
+Because the mode is a build-time split, each recipe's compute-environment
+commands are concrete, with no runtime dispatch: `xcat_stateless` operates on
+the image chroot like Warewulf (`dnf --installroot`, `$CHROOT`), and
+`xcat_stateful` accumulates a pkglist and postscript like OpenCHAMI. Each sets
+`pkg_install_chroot` (and its siblings) in its config, so the shared
+customization chapters work unchanged, exactly as they do for Warewulf and
+Confluent.
+
+**Cross-checking against upstream xCAT.** The canonical stateless-netboot
+workflow lives in the xCAT docs, arch-neutral, under
+`admin-guides/manage_clusters/common/deployment/`
+(`create_img` → `generate_img` → `deploy_os`; the per-arch pages just `include`
+it), plus `advanced/mixed_cluster/building_stateless_images` for the cross-arch
+build. The recipe follows it throughout — copycds/osimage, `otherpkgdir` +
+`otherpkglist` + `genimage`, synclists, `packimage` → `nodeset` →
+`rsetboot`/`rpower`. The one deliberate departure: it customizes the image by
+**direct chroot** (`dnf --installroot`, `chroot $CHROOT`), not xCAT's
+recommended postinstall/postbootscripts — so the shared customization chapters
+work identically across Warewulf and xCAT, and image errors surface at build
+time rather than on the booted nodes.
 
 Aggregator templates use `{% include %}` to compose sections:
 
@@ -168,8 +187,9 @@ time sync, NFS, networking. InfiniBand and OmniPath server-side installed here
 **scheduler-*** — Scheduler (Slurm or Flux) installed on the head node only,
 selected via `scheduler`. Compute-side scheduler configuration goes in
 `provisioner-*`; scheduler startup goes in `deploy-*`. Both select the
-scheduler-specific templates with `{% if is_slurm %}` / `{% elif is_flux %}`.
-Flux is currently only wired into the Warewulf chapters.
+scheduler-specific templates by convention include (see [Handling Scheduler
+Differences](#handling-scheduler-differences)). Flux is currently only wired
+into the Warewulf chapters.
 
 **provisioner-*** — Provisioner fully installed; base compute node, image, or
 definition created with: epel, repos, ohpc-compute, kernel, firewall disabled,
@@ -182,7 +202,7 @@ InfiniBand and OmniPath compute-side go here.
 
 **deploy-*** — Cluster booted; compute nodes provisioned; scheduler started. Scope:
 maintenance-window actions (adding/removing nodes). Most provisioners boot here;
-Confluent boots during its `provisioner-*` chapter, as does xCAT in stateful mode.
+Confluent boots during its `provisioner-*` chapter, as does `xcat_stateful`.
 
 **dev-tools** — Login-node development tools: compilers, MPI, performance tools,
 third-party libraries.
@@ -212,6 +232,31 @@ changes, because they use `{{ pkg_install_chroot }}` rather than hardcoded
 commands. Macro abstraction (see below) extends this to structural operations
 on the compute image.
 
+### Handling Scheduler Differences
+
+The same strategies apply to schedulers, under one rule that keeps adding a
+scheduler a drop-in: **scheduler-specific content never goes in a template that
+every scheduler shares.** A shared provisioner template must not name a
+scheduler's commands, packages, or daemons. Put that content where the scheduler
+selects it:
+
+- **A scheduler-named template, chosen by a convention include** — compute
+  configuration in `provisioner/<provisioner>/compute-<scheduler>.md.j2`,
+  compute packages in `compute-install-<scheduler>.md.j2`, post-boot steps in
+  `deploy-<scheduler>.md.j2`, and `scheduler/<scheduler>/` for startup, status
+  and the test job — included as
+  `{% include "provisioner/xcat/compute-" ~ scheduler ~ ".md.j2" %}`. Adding a
+  scheduler to a provisioner then means adding those files, with no aggregator
+  edits.
+- **A scheduler config value**, for a single name inside an otherwise shared
+  command — `scheduler_compute_package` in `config/scheduler/*.yaml`, used by
+  the xCAT package lists.
+- **A conditional block**, only for a feature one scheduler has and the others
+  lack — `{% if is_slurm %}` around the Slurm PAM and NHC settings.
+
+Convention includes are section-marked like literal ones: `mkdoc.py` emits the
+resolved path, so the generated script stays traceable.
+
 ### Macro System
 
 Global macros are defined in `templates/macros.j2` and loaded by `mkdoc.py`
@@ -239,15 +284,25 @@ yq -i '.packages += {{ packages | tojson }}' \
 
 #### Compute Image Macros
 
-These four macros abstract all provisioner differences for compute image
-operations. Templates use them without knowing which provisioner is active:
+These macros abstract provisioner differences for compute-node operations, so
+templates use them without knowing the active provisioner. The authoritative set
+-- and each macro's per-provisioner rendering -- lives in
+[`templates/macros.j2`](templates/macros.j2), documented inline; treat that file
+as the source of truth rather than re-tabulating it here.
 
-| Macro | Warewulf | Confluent | OpenCHAMI | xCAT |
-| ----- | -------- | --------- | --------- | ---- | ------------- |
-| `compute_install(packages)` | `dnf install` in chroot | `nodeshell compute dnf install` | `yq` append to packages array | `compute_install` helper (mode-selected) |
-| `compute_sed(regex, file)` | `sed -i` on `$CHROOT/file` | `nodeshell compute sed -i` | `yq` append to cmds array | `compute_exec "sed -i ..."` |
-| `compute_echo(string, file)` | `echo` to `$CHROOT/file` | `nodeshell compute echo` | `yq` append to cmds array | `compute_exec "echo ..."` |
-| `compute_run(cmd)` | `wwctl image exec` | `nodeshell compute` | `yq` append to cmds array | `compute_exec` |
+The pattern groups by provisioner *paradigm*:
+
+- **image / chroot** (warewulf, xcat_stateless) -- edit the image on disk
+  (`wwctl image exec` or `chroot $CHROOT`).
+- **definition-accumulation** (openchami, xcat_stateful) -- append to a
+  definition applied later (OpenCHAMI's image YAML; xCAT's `$OHPC_OTHERPKGS`
+  pkglist and `$OHPC_POSTSCRIPT`).
+- **live / remote** (confluent) -- act on the running node via `nodeshell`.
+
+The verbs are `compute_install`, `compute_sed`, `compute_echo`, `compute_run`,
+and the service pair `compute_service_enable` / `compute_service_disable` --
+which resolve to `systemctl enable|disable` for image paradigms and `... --now`
+for live ones, so a service configured post-boot is actually started.
 
 `head_install(packages)` installs packages on the head node (uses
 `pkg_install`, consistent across provisioners).
@@ -417,6 +472,41 @@ no-op comments.
 - `templates/provisioner/confluent/compute-setup.md.j2` — `compute` placeholder
 - `templates/provisioner/openchami/compute-image-build.md.j2` — `image` placeholder
 
+#### Repository Placeholders
+
+Some deployments need package repositories beyond the OpenHPC release repo the
+recipe enables with `ohpc-release` — a locally mirrored OpenHPC repo, an
+air-gapped mirror, a site add-on repo, or (for CI/testing) the OpenHPC OBS
+pre-release Factory repo that carries packages not yet in a release. The set,
+URLs, and GPG policy are entirely site-specific, so the recipe emits
+placeholders instead of hard-coding them, right after the OpenHPC repository is
+enabled in each context, so an expanded repo supplements the release repo for
+every package install that follows.
+
+Three repository placeholder types appear, in script order:
+
+| Placeholder | Location | Context |
+| --- | --- | --- |
+| `#<<< ohpc_repo:head >>>#` | After `ohpc-release` on the head | Head node (`dnf config-manager`, a `.repo` file) |
+| `#<<< ohpc_repo:compute >>>#` | After the compute repo is set up | Warewulf image chroot / Confluent nodeshell / xCAT `otherpkgdir` |
+| `#<<< ohpc_repo:image >>>#` | OpenCHAMI image build only | Image-builder repo configuration |
+
+As with the proxy placeholders, a pre-processor replaces each with the commands
+that add the needed repositories; leaving one unchanged (or empty) is a no-op.
+The expansion is context-specific: a Warewulf `compute` adds the repo inside the
+image (`wwctl image exec … dnf config-manager …`), a Confluent one uses
+`nodeshell`, and an xCAT one appends to the osimage's `otherpkgdir`
+(`chdef -p -t osimage … otherpkgdir=,<url>`) before `genimage`/provisioning.
+
+**Template source locations for repository placeholders:**
+
+- `templates/ohpc/enable-ohpc-repo.md.j2` — `head` placeholder
+- `templates/provisioner/warewulf/compute-create-image.md.j2` — `compute` placeholder
+- `templates/provisioner/confluent/compute-ohpc.md.j2` — `compute` placeholder
+- `templates/provisioner/xcat_stateless/genimage.md.j2` — `compute` placeholder (`otherpkgdir`)
+- `templates/provisioner/xcat_stateful/stage.md.j2` — `compute` placeholder (`otherpkgdir`)
+- `templates/provisioner/openchami/compute-image-build.md.j2` — `image` placeholder
+
 #### Node Reset Placeholders
 
 In environments without IPMI (e.g., VMs on a hypervisor), compute nodes cannot
@@ -538,12 +628,14 @@ docs/install/
 │   │   ├── provisioner-warewulf.md.j2
 │   │   ├── provisioner-confluent.md.j2
 │   │   ├── provisioner-openchami.md.j2
-│   │   ├── provisioner-xcat.md.j2
+│   │   ├── provisioner-xcat_stateless.md.j2
+│   │   ├── provisioner-xcat_stateful.md.j2
 │   │   ├── customize.md.j2
 │   │   ├── deploy-warewulf.md.j2
 │   │   ├── deploy-confluent.md.j2
 │   │   ├── deploy-openchami.md.j2
-│   │   ├── deploy-xcat.md.j2
+│   │   ├── deploy-xcat_stateless.md.j2
+│   │   ├── deploy-xcat_stateful.md.j2
 │   │   ├── dev-tools.md.j2
 │   │   ├── test.md.j2
 │   │   ├── post.md.j2
@@ -556,7 +648,9 @@ docs/install/
 │   │   ├── warewulf/
 │   │   ├── confluent/
 │   │   ├── openchami/
-│   │   └── xcat/
+│   │   ├── xcat/               # steps shared by both xCAT modes
+│   │   ├── xcat_stateless/
+│   │   └── xcat_stateful/
 │   ├── scheduler/
 │   │   ├── slurm/
 │   │   └── flux/
@@ -584,8 +678,8 @@ docs/install/
 ├── recipes/                     # Recipe definitions (source only)
 │   ├── rocky10-x86_64-warewulf-slurm.conf
 │   ├── almalinux10-x86_64-warewulf-slurm.conf
-│   ├── rocky10-x86_64-xcat-slurm.conf
-│   ├── rocky10-x86_64-xcat-slurm.yaml
+│   ├── rocky10-x86_64-xcat_stateless-slurm.conf
+│   ├── rocky10-x86_64-xcat_stateless-slurm.yaml
 │   └── ...
 └── build/                       # Generated output (gitignored)
     ├── header-includes.tex      # Rendered from pandoc/header-includes.tex.j2
@@ -708,6 +802,26 @@ The Makefile injects `vc_revision` and `vc_date` (from `git log`) into
 each `build/*.yaml` via `yq` during the merge step, so mkdoc.py needs
 no subprocess calls. The `.yaml` prerequisite for `build/%.yaml` is
 optional via `.SECONDEXPANSION` — only some recipes (Confluent, xCAT) have one.
+
+### Markdown Line Conventions
+
+[`.markdownlint.json`](.markdownlint.json) records the formatting an editor's
+markdownlint integration applies to the `.md` files here (DESIGN.md, and a
+rendered `build/*.md` if opened):
+
+- **MD013 line length — 80 columns for prose, 87 inside code blocks**
+  (`code_block_line_length`), tables unlimited. Wrap recipe `bash` to 87 and
+  prose to 80 so the rendered guide and its PDF stay within the page.
+- **MD022 / MD031 / MD032 / MD041 disabled** — a rendered recipe's headings,
+  fenced blocks, and lists abut the `ohpc_` HTML-comment markers, so the
+  blank-line-around and first-line-heading rules do not apply.
+
+These limits are **not enforced on the install docs**. CI's markdownlint
+([`.github/workflows/lint.yml`](../../.github/workflows/lint.yml)) covers only the
+repo-root `README`/`CONTRIBUTING` files; the `.md.j2` templates are not Markdown,
+and `build/*.md` is generated and gitignored. Treat the limits as a convention
+the editor config helps you keep. Enforcing them on these docs (a `make` target,
+or added `lint.yml` globs over `build/*.md`) is future work.
 
 ### RPM Packaging
 

@@ -3,3 +3,6 @@
 scheduler: "slurm"
 scheduler_name: "Slurm"
 is_slurm: true
+# Compute-side client meta-package, for provisioners that install packages from
+# a list (xCAT otherpkglist)
+scheduler_compute_package: "ohpc-slurm-client"

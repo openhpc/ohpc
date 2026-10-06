@@ -58,11 +58,12 @@ xdsh compute dnf clean expire-cache
    For a stateless cluster, act on the image chroot, re-deriving its location:
 
 ```bash
-# Name the image explicitly if the head node holds more than one
-xcat_osimage=${xcat_osimage:-$(lsdef -t osimage | \
-    awk '/netboot-compute/{print $1; exit}')}
-CHROOT=$(lsdef -t osimage -o ${xcat_osimage} \
-    -i rootimgdir | awk -F= '/rootimgdir/{print $2}')/rootimg/
+# Read the image the compute nodes were provisioned with
+xcat_osimage=${xcat_osimage:-$(lsdef compute -i provmethod | \
+    awk -F= '/provmethod=/{print $2; exit}')}
+rootimgdir=$(lsdef -t osimage -o ${xcat_osimage} -i rootimgdir \
+    | awk -F= '/rootimgdir=/{print $2}')
+CHROOT=${rootimgdir}/rootimg
 dnf --installroot="${CHROOT}" clean expire-cache
 ```
 {% else %}
@@ -141,11 +142,12 @@ xdsh compute dnf -y upgrade "ohpc-base-compute"
    if it is not already set in the current shell:
 
 ```bash
-# Name the image explicitly if the head node holds more than one
-xcat_osimage=${xcat_osimage:-$(lsdef -t osimage | \
-    awk '/netboot-compute/{print $1; exit}')}
-CHROOT=$(lsdef -t osimage -o ${xcat_osimage} \
-    -i rootimgdir | awk -F= '/rootimgdir/{print $2}')/rootimg/
+# Read the image the compute nodes were provisioned with
+xcat_osimage=${xcat_osimage:-$(lsdef compute -i provmethod | \
+    awk -F= '/provmethod=/{print $2; exit}')}
+rootimgdir=$(lsdef -t osimage -o ${xcat_osimage} -i rootimgdir \
+    | awk -F= '/rootimgdir=/{print $2}')
+CHROOT=${rootimgdir}/rootimg
 
 dnf -y --installroot="${CHROOT}" upgrade "*-ohpc"
 

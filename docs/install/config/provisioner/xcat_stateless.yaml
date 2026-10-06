@@ -1,0 +1,31 @@
+# xCAT stateless (netboot) provisioner configuration
+#
+# Compute nodes boot a RAM-resident image assembled in a chroot on the head
+# node. Nothing is written to local disk; the image is rebuilt and redeployed
+# to change the nodes. Compute-environment operations act on the image chroot
+# rooted at ${CHROOT} (defined by the image build step), so the command forms
+# below mirror the Warewulf chroot pattern.
+
+provisioner: "xcat_stateless"
+provisioner_name: "xCAT"
+is_xcat: true
+is_xcat_stateless: true
+
+# copycds creates one osimage per provisioning method; the netboot image backs
+# a stateless deployment. Used to select and validate the image by provmethod.
+xcat_image_type: "netboot"
+
+# xCAT release tree to install from ("latest" tracks the current stable
+# series; set a versioned directory such as "2.18" to pin). The repo
+# definitions are written locally: the .repo files published on xcat.org
+# point at a retired "devel" tree and are not usable directly.
+xcat_release: "latest"
+xcat_repo_base: "https://xcat.org/files/xcat/repos/yum"
+# OS-family component of the xcat-dep repository path (EL10 -> rh10)
+xcat_dep_dist: "rh10"
+
+# Compute-image package operations run against the chroot with dnf --installroot.
+pkg_install_chroot: 'dnf -y --installroot="${CHROOT}" install'
+pkg_group_install_chroot: 'dnf -y --installroot="${CHROOT}" groupinstall'
+pkg_upgrade_chroot: 'dnf -y --installroot="${CHROOT}" upgrade'
+pkg_clean_chroot: 'dnf --installroot="${CHROOT}" clean expire-cache'

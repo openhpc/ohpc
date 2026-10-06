@@ -18,6 +18,11 @@ ohpc-release-{{ ohpc_version_tree }}-1.{{ distro_tag }}.{{ arch }}.rpm
 ```
 <!-- ohpc_end -->
 
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add site or pre-release OpenHPC repositories to the compute nodes (site-specific) -->
+<!-- ohpc_command #<<< ohpc_repo:compute >>># -->
+<!-- ohpc_end -->
+
 Additionally, a workaround is needed for OpenHPC documentation files, which are
 installed into a read-only NFS share /opt/ohpc/pub. Any package attempting to
 write to that directory will fail to install. The following prevents that by

@@ -1,0 +1,14 @@
+## Configure Slurm on the Compute Nodes
+
+Point each compute node's `slurmd` at the head node (configless mode) and enable
+it. The setting is written before the service is enabled, so a stateful node
+that applies this after boot starts `slurmd` with it already in place.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Configure Slurm on the compute nodes -->
+```bash
+# Register the Slurm server with the computes (configless mode)
+{{ compute_run("echo SLURMD_OPTIONS=--conf-server ${sms_ip} > /etc/sysconfig/slurmd") }}
+{{ compute_service_enable("slurmd.service") }}
+```
+<!-- ohpc_end -->

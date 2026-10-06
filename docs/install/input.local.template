@@ -72,10 +72,6 @@ enable_ipoib="${enable_ipoib:-0}"
 enable_dracut="${enable_dracut:-1}"
 enable_todisk="${enable_todisk:-0}"
 
-# Provisioning mode (xCAT recipe only): "stateless" boots a netboot image,
-# "stateful" installs to the local disk of each compute node
-xcat_mode="${xcat_mode:-stateless}"
-
 enable_clustershell="${enable_clustershell:-0}"
 enable_ipmisol="${enable_ipmisol:-0}"
 enable_opensm="${enable_opensm:-0}"

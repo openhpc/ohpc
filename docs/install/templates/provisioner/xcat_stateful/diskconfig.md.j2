@@ -1,4 +1,4 @@
-### Disk Layout and Root Password
+## Disk Layout and Root Password
 
 The install applies a default disk layout to the first detected disk (a 1 GiB
 `/boot` plus an LVM volume group holding swap and a `/` volume grown to fill
@@ -16,11 +16,9 @@ interactive (console) root logins should substitute a chosen password for the
 `openssl rand` call. Store the password as a hash:
 
 <!-- ohpc_begin -->
-<!-- ohpc_if [ "${xcat_mode}" = "stateful" ] -->
 <!-- ohpc_comment Set root password used by the stateful install -->
 ```bash
 chtab key=system passwd.username=root \
     passwd.password="$(openssl passwd -6 "$(openssl rand -base64 12)")"
 ```
-<!-- ohpc_fi -->
 <!-- ohpc_end -->

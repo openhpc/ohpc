@@ -51,8 +51,6 @@ Required variables:
 {% if is_xcat %}
 * `${dns_domain}` - DNS domain name for cluster (e.g. `local`)
 * `iso_path` - location of compute node base os dvd iso (default: `{{ distro_iso_image }}`)
-* `${xcat_mode}` - provisioning mode: `stateless` (netboot) or `stateful`
-  (install to local disk)
 
 {% endif %}
 {% if is_x86_64 %}

@@ -1,21 +1,33 @@
-### Install the Base OS onto Compute Nodes
+## Provision the Compute Nodes
 
-In stateful mode the compute nodes are provisioned before OpenHPC components
-are added: associate the install image with the *compute* group, then boot the
-nodes so they run the distribution installer over the network, perform an
-unattended install onto local disk, and reboot into the freshly installed OS.
+Everything the compute nodes need was staged on the head node during the
+provisioner chapter: the install image, the OpenHPC package list
+(`otherpkglist`/`otherpkgdir`), and the `ohpc-config` postscript. Provisioning
+now applies all of it in a single pass -- associate the install image with the
+*compute* group and boot the nodes, and xCAT installs the base OS onto local
+disk, installs the OpenHPC packages from the staged repositories, runs the
+configuration postscript, and reboots each node into a ready state.
 
-The steps that follow install packages directly on the running compute nodes
-with the package manager, which requires the nodes to reach the distribution,
-EPEL, and OpenHPC package repositories. By default xCAT points the compute
-default route at the head node; ensure this provides a path to the
-repositories (for example via NAT on the head node or a site gateway
-registered in the xCAT `networks` table), or host a local repository mirror
-on the head node and register it on the computes instead.
+The OpenHPC packages are pulled from the OpenHPC, EPEL, and CRB repositories
+named by `otherpkgdir`, so the nodes must be able to reach them during the
+install. By default xCAT points the compute default route at the head node;
+ensure this provides a path to those repositories (for example via NAT on the
+head node or a site gateway registered in the xCAT `networks` table), or host a
+local mirror on the head node and name it in `otherpkgdir` instead.
+
+The `${OHPC_POSTSCRIPT}` configuration script is now complete: the provisioner
+chapter created it and the customization chapters appended to it. Review it
+before provisioning -- it is a plain shell script, and this is the point to
+confirm it holds what you expect (its commands are appended in order and are not
+de-duplicated, so if you re-ran earlier steps, check for repeated lines):
 
 <!-- ohpc_begin -->
-<!-- ohpc_if [ "${xcat_mode}" = "stateful" ] -->
-<!-- ohpc_comment Associate the install image and boot the compute nodes -->
+<!-- ohpc_comment Review the assembled compute configuration postscript -->
+<!-- ohpc_command cat "${OHPC_POSTSCRIPT}" -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Associate the install image with the compute group -->
 ```bash
 # Associate provisioning image for compute group
 nodeset compute osimage=${xcat_osimage}
@@ -33,23 +45,7 @@ reinstalled rather than installed for the first time.
 <!-- ohpc_command xdsh compute "touch /run/ohpc-preprovision" >/dev/null 2>&1 || true -->
 <!-- ohpc_end -->
 
-<!-- ohpc_begin -->
-<!-- ohpc_comment Set nodes to netboot and power cycle -->
-<!-- ohpc_if_set has_ipmi -->
-```bash
-# Set compute group to boot from network on next boot
-rsetboot compute net
-
-# Power cycle compute nodes
-rpower compute reset
-```
-<!-- ohpc_else -->
-<!-- ohpc_command # No BMC/IPMI available -- signal external reset handler -->
-<!-- ohpc_command for ((i=0; i<num_computes; i++)) ; do -->
-<!-- ohpc_command   echo "#<<< ohpc_reset:$i,${c_name[$i]},${c_bmc[$i]} >>>#" -->
-<!-- ohpc_command done -->
-<!-- ohpc_fi -->
-<!-- ohpc_end -->
+{% include "provisioner/xcat/power-cycle.md.j2" %}
 
 The stateful installation typically completes in 5 to 10 minutes, depending on
 BIOS post times and disk speed. Monitor provisioning with the `rcons` command,
@@ -96,7 +92,6 @@ that failed:
 <!-- ohpc_command     echo "$booted of $num_computes compute nodes ready" -->
 <!-- ohpc_command     sleep 30 -->
 <!-- ohpc_command done -->
-<!-- ohpc_fi -->
 <!-- ohpc_end -->
 
 Once installed, verify access with a parallel command across the compute nodes
