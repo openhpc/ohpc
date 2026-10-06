@@ -53,14 +53,9 @@ echo "debuglevel=1" >>/etc/dnf/dnf.conf
 # ---------------------------------------------------------------------------
 # Enable EPEL (not enabled by default on AlmaLinux Lima images)
 # ---------------------------------------------------------------------------
-dnf -y install epel-release libselinux-utils 'dnf-command(config-manager)'
+dnf -y install epel-release createrepo_c libselinux-utils 'dnf-command(config-manager)'
 dnf config-manager --set-enabled epel
 dnf config-manager --set-enabled crb
-
-# ---------------------------------------------------------------------------
-# Prepare CI environment (installs OpenHPC repos, base packages)
-# ---------------------------------------------------------------------------
-bash "${SCRIPT_DIR}/prepare-ci-environment.sh"
 
 # ---------------------------------------------------------------------------
 # Add local RPM repository (if /tmp/RPMS exists)
@@ -88,6 +83,11 @@ if [ -d /tmp/RPMS ]; then
 		&>/var/log/local-rpms-http.log &
 	LOCAL_RPMS_HTTP_PID=$!
 fi
+
+# ---------------------------------------------------------------------------
+# Prepare CI environment (installs OpenHPC repos, base packages)
+# ---------------------------------------------------------------------------
+bash "${SCRIPT_DIR}/prepare-ci-environment.sh"
 
 # ---------------------------------------------------------------------------
 # Install docs-ohpc (provides recipe.sh + input.local template)
