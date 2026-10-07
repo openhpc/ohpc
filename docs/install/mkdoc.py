@@ -55,18 +55,26 @@ def load_yaml(path: Path) -> dict:
 
 
 class SectionCommentExtension(Extension):
-    """Inject <!-- +section: path --> ... <!-- -section --> comments around every {% include %}."""
+    """Wrap every ``{% include X %}`` with ``<!-- +section: X -->`` /
+    ``<!-- -section: X -->`` markers that label the sections of the generated
+    recipe.
+
+    ``X`` is re-emitted as the include's own expression inside ``{{ }}``, so Jinja
+    resolves it at render time. This marks dynamic includes such as
+    ``{% include "scheduler/" ~ scheduler ~ "/startup.md.j2" %}`` with their
+    concrete path, not only literal-string includes — and a literal
+    ``{% include "foo.md.j2" %}`` yields ``{{ "foo.md.j2" }}``, which renders
+    exactly as before. Reusing Jinja's own evaluation avoids re-implementing
+    path resolution here."""
+
+    _INCLUDE = re.compile(r"{%-?\s*include\s+(?P<expr>.+?)\s*-?%}")
 
     def preprocess(self, source, name, filename=None):
-        def add_comment(match):
-            path = match.group(1)
+        def wrap(match):
+            path = "{{ " + match.group("expr") + " }}"
             return f"<!-- +section: {path} -->\n{match.group(0)}\n<!-- -section: {path} -->\n"
 
-        return re.sub(
-            r'{%-?\s*include\s+["\']([^"\']+)["\']\s*-?%}',
-            add_comment,
-            source,
-        )
+        return self._INCLUDE.sub(wrap, source)
 
 
 def create_jinja_env(
