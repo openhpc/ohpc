@@ -150,7 +150,7 @@ system for large clusters of bare metal and/or virtual systems.
 ## OHPC: openEuler builds with the OpenHPC Go toolchain module (distro Go too
 ## old); the module sets GOROOT/PATH and GOTOOLCHAIN=local (keeps builds offline).
 %if 0%{?openEuler}
-. /etc/profile.d/lmod.sh
+. /etc/profile.d/modules.sh
 module use %{OHPC_MODULES}
 module load golang
 %endif
