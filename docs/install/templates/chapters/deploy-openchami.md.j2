@@ -16,5 +16,5 @@
 {% include "boot/wait.md.j2" %}
 {% include "provisioner/openchami/wait.md.j2" %}
 
-{% include "scheduler/slurm/startup.md.j2" %}
-{% include "scheduler/slurm/compute-startup.md.j2" %}
+{% include "scheduler/" ~ scheduler ~ "/startup.md.j2" %}
+{% include "scheduler/" ~ scheduler ~ "/compute-startup.md.j2" %}
