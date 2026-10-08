@@ -8,14 +8,87 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
+export MODULE_TOOL_PROFILE=/etc/lmod"${DELIM}"/profile.sh
+export MODULE_TOOL_PROFILE_CSH=/etc/lmod"${DELIM}"/profile.csh
+export MODULE_TOOL_CMD=/opt/ohpc/admin/lmod/lmod/libexec/lmod
+export MODULE_TOOL_VERSION="Modules based on Lua"
+source ./common/module_tool_functions || exit 1
+
 setup() {
-    if [ -z "$MODULEPATH" ];then
-        . /etc/profile.d/modules.sh || exit 1
-    fi
-    module purge        || exit 1
+    check_if_rpm_installed lmod"${DELIM}"
+    # Initialize Lmod from its own startup script, whatever module tool the
+    # /etc/profile.d/modules.sh alternative selects
+    . /etc/lmod-ohpc/profile.sh || exit 1
+    module purge || exit 1
 }
 
 
-@test "[lmod] test that the setup function passed" {
+@test "[lmod] rpm installed" {
+    check_if_rpm_installed lmod"${DELIM}"
+}
+
+@test "[lmod] module command is Lmod" {
+    run module --version
     assert_success
+    assert_module_tool_version "$output"
+}
+
+@test "[lmod] OpenHPC modulefiles directory in MODULEPATH" {
+    [[ ":$MODULEPATH:" == *":/opt/ohpc/pub/modulefiles:"* ]] || flunk "OpenHPC modulefiles not enabled: $MODULEPATH"
+}
+
+@test "[lmod] alternatives links registered" {
+    [ -L /etc/profile.d/modules.sh ]
+    [ -L /etc/profile.d/modules.csh ]
+    [ -L /usr/bin/modulecmd ]
+
+    run update-alternatives --display modules.sh
+    assert_success
+    assert_alternatives_registered "$output"
+}
+
+@test "[lmod] alternatives select Lmod unless Environment Modules is installed" {
+    if alternatives_manual; then
+        skip "module tool selected manually"
+    fi
+    if rpm -q --quiet environment-modules"${DELIM}"; then
+        skip "environment-modules${DELIM} takes precedence"
+    fi
+    assert_module_tool_selected
+}
+
+@test "[lmod] modulecmd loads a module" {
+    check_modulecmd "$MODULE_TOOL_CMD"
+}
+
+@test "[lmod] /usr/bin/modulecmd is Lmod when selected" {
+    module_tool_selected || skip "another module tool is selected"
+
+    check_modulecmd /usr/bin/modulecmd
+}
+
+@test "[lmod] tcsh initializes Lmod from its startup script" {
+    command -v tcsh >/dev/null || skip "tcsh not installed"
+
+    check_tcsh_startup_script
+}
+
+@test "[lmod] bash login shell initializes Lmod when selected" {
+    module_tool_selected || skip "another module tool is selected"
+
+    check_bash_login_shell
+}
+
+@test "[lmod] tcsh login shell initializes Lmod when selected" {
+    module_tool_selected || skip "another module tool is selected"
+    command -v tcsh >/dev/null || skip "tcsh not installed"
+
+    check_tcsh_login_shell
+}
+
+@test "[lmod] login shell loads the default OpenHPC environment when selected" {
+    module_tool_selected || skip "another module tool is selected"
+    [ -e /opt/ohpc/pub/modulefiles/ohpc ] || skip "no modules-defaults package installed"
+
+    check_default_environment_loaded
 }
