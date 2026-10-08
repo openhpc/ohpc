@@ -1,10 +1,28 @@
 ## Install OpenHPC Base Packages
 
-Now OpenHPC packages can be installed. To add the base package on the head node
-issue the following:
+Now OpenHPC packages can be installed. The `ohpc-base` meta-package requires a
+module tool to manage the user environment, and OpenHPC provides two of them:
+[Lmod](https://lmod.readthedocs.io) in the `lmod-ohpc` package and
+[Environment Modules](https://modules.readthedocs.io) in the
+`environment-modules-ohpc` package. Both read the OpenHPC module hierarchy and
+provide the `module` command. The `${modules_package}` variable in `input.local`
+selects the one installed on the head node and, later in this guide, on the
+compute nodes; it defaults to `lmod-ohpc`. To add the base package and the
+module tool on the head node issue the following:
 
 <!-- ohpc_begin -->
+<!-- ohpc_comment Install OpenHPC base packages and the module tool -->
 ```bash
-{{ pkg_install }} ohpc-base
+{{ pkg_install }} ohpc-base ${modules_package}
 ```
 <!-- ohpc_end -->
+
+::: {.tip}
+Naming the module tool keeps the choice explicit; `ohpc-base` alone normally
+pulls in Lmod, which it suggests. The two tools can also be installed side by
+side: the startup scripts `/etc/profile.d/modules.sh` and `modules.csh`, which
+define the `module` command, and `/usr/bin/modulecmd` are links managed with
+`alternatives`, and `environment-modules-ohpc` takes precedence over `lmod-ohpc`
+when both are present. Run `alternatives --config modules.sh` to select the
+active tool.
+:::

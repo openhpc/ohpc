@@ -45,12 +45,13 @@ nodes:
 ```
 <!-- ohpc_end -->
 
-Next, we can include additional components:
+Next, we can include additional components, starting with the module tool
+selected with `${modules_package}`, as on the head node:
 <!-- ohpc_begin -->
 <!-- ohpc_comment Add OpenHPC components to compute instance -->
 ```bash
 
 # Include modules user environment
-{{ pkg_install_chroot }} lmod-ohpc
+{{ pkg_install_chroot }} ${modules_package}
 ```
 <!-- ohpc_end -->

@@ -62,6 +62,10 @@ iso_url="${iso_url:-}"
 # the distribution's ISO filename in the current directory)
 iso_path="${iso_path:-}"
 
+# Module tool installed on the head node and the compute nodes: "lmod-ohpc"
+# (Lmod) or "environment-modules-ohpc" (Environment Modules)
+modules_package="${modules_package:-lmod-ohpc}"
+
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
 enable_roce="${enable_roce:-0}"

@@ -48,9 +48,10 @@ mkdir -p /install/custom/netboot/{{ distro }}
 cat > /install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist << 'EOF'
 ohpc-base-compute
 {{ scheduler_compute_package }}
-lmod-ohpc
 chrony
 EOF
+# Module tool, the same one as on the head node (see input.local)
+echo "${modules_package}" >> /install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist
 chdef -t osimage ${xcat_osimage} \
     otherpkglist=/install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist
 ```

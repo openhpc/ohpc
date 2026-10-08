@@ -55,10 +55,11 @@ Required variables:
 * `iso_url` - ISO download base URL (optional; overrides default upstream location)
 
 {% endif %}
-{% if is_x86_64 or is_warewulf %}
 Optional variables:
 
-{% endif -%}
+* `${modules_package}` - Module tool installed on the head node and the computes:
+  `lmod-ohpc` (Lmod, the default) or `environment-modules-ohpc` (Environment
+  Modules)
 {% if is_x86_64 -%}
 * `${sysmgmtd_host}` - BeeGFS System Management host name
 * `${mgs_fs_name}` - Lustre MGS mount name
