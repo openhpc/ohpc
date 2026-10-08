@@ -148,8 +148,8 @@ AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" )
 #------------------------------------------------------------------------------------------
 # lmod
 AC_ARG_ENABLE([lmod],
-	 [AS_HELP_STRING([--enable-lod],[Enable lmod tests (default=yes, root only)])],
-	 [],[enable_lmod=yes])
+	 [AS_HELP_STRING([--enable-lmod],[Enable lmod tests (default=yes, root only)])],[],
+	 [AX_OPTION_DEFAULT(type=short,enable_lmod,yes)])
 AM_CONDITIONAL(LMOD_ENABLED,test "x$enable_lmod" = "xyes" ) 
 
 
