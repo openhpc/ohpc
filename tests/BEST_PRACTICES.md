@@ -246,7 +246,7 @@ TASKS=$(tasks_count 8)
 
 ```bash
 @test "[${TESTNAME}] Verify $PKG module is loaded and matches rpm version" {
-    module list "${MODULE}" | grep "1) ${MODULE}" >&"${OUTPUT}" || exit 1
+    module_list_entry "${MODULE}" >"${OUTPUT}" || exit 1
     run grep "${MODULE}" "${OUTPUT}"
     assert_success
 
@@ -256,7 +256,7 @@ TASKS=$(tasks_count 8)
     local version
     version="$(rpm -q --queryformat='%{VERSION}\n' "${rpm}")"
     run cat "${OUTPUT}"
-    assert_output "  1) ${MODULE}/$version"
+    assert_output "1) ${MODULE}/$version"
 }
 ```
 
