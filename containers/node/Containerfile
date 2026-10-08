@@ -1,8 +1,10 @@
 FROM openhpc/openhpc:4
 ## Update ../container/Containerfile with any changes made here.
 
+## Same module tool as the one installed in the openhpc image
+ARG MODULES_PACKAGE=lmod-ohpc
 ## Base compute node
-RUN dnf install -y ohpc-base-compute lmod-ohpc \
+RUN dnf install -y ohpc-base-compute $MODULES_PACKAGE \
     git patch file zstd bzip2 xz \
     python3 python3-pip \
     gcc-c++ gcc-gfortran \

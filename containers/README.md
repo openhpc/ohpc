@@ -20,6 +20,13 @@ Docker, set the `CONTAINER` environment variable as follows:
 export CONTAINER=podman
 ```
 
+The images use Lmod as module tool. To use Environment Modules instead, set
+the `MODULES_PACKAGE` environment variable before building:
+
+```bash
+export MODULES_PACKAGE=environment-modules-ohpc
+```
+
 Build and Run the cluster with the following:
 
 ```bash
