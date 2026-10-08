@@ -154,3 +154,12 @@ tasks_count() {
   fi
   echo $TASKS
 }
+
+# Print the entries "module list" reports for the loaded modules matching
+# the given name, like "1) gnu16/16.1.0", one per line. The surrounding
+# whitespace, which differs between module tools, is stripped. Lmod, as
+# built for OpenHPC (--with-redirect=yes), prints on stdout whereas
+# Environment Modules prints on stderr, so both streams are read.
+module_list_entry() {
+    module list "$1" 2>&1 | sed -n -E 's/^[[:space:]]*([0-9]+\) .*[^[:space:]])[[:space:]]*$/\1/p'
+}

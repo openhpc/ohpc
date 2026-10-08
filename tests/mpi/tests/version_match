@@ -19,17 +19,17 @@ teardown() {
 }
 
 @test "[MPI] MPI module loaded (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
-	module list "${LMOD_FAMILY_MPI}" &>"${OUTPUT}" || exit 1
+	module_list_entry "${LMOD_FAMILY_MPI}" >"${OUTPUT}" || exit 1
 	local my_module
-	my_module=$(sed '/^\s*$/d' "${OUTPUT}" | sed 's/^[ \t]*//' | tail -1)
+	my_module=$(tail -1 "${OUTPUT}")
 	echo "${my_module}" | grep -q "1) ${LMOD_FAMILY_MPI}/"
 	assert_success
 }
 
 @test "[MPI] MPI module version available (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
-	module list "${LMOD_FAMILY_MPI}" &>"${OUTPUT}" || exit 1
+	module_list_entry "${LMOD_FAMILY_MPI}" >"${OUTPUT}" || exit 1
 	local my_version
-	my_version=$(sed '/^\s*$/d' "${OUTPUT}" | sed 's/^[ \t]*//' | tail -1 | awk -F "${LMOD_FAMILY_MPI}/" '{print $2}')
+	my_version=$(tail -1 "${OUTPUT}" | awk -F "${LMOD_FAMILY_MPI}/" '{print $2}')
 
 	if [ -z "${my_version}" ]; then
 		flunk "ERROR: unable to ascertain module version (${my_version})"
@@ -37,9 +37,9 @@ teardown() {
 }
 
 @test "[MPI] mpicc, mpicxx, and mpif90 versions match module (${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
-	module list "${LMOD_FAMILY_MPI}" &>"${OUTPUT}" || exit 1
+	module_list_entry "${LMOD_FAMILY_MPI}" >"${OUTPUT}" || exit 1
 	local my_mod_version
-	my_mod_version=$(sed '/^\s*$/d' "${OUTPUT}" | sed 's/^[ \t]*//' | tail -1 | awk -F "${LMOD_FAMILY_MPI}/" '{print $2}')
+	my_mod_version=$(tail -1 "${OUTPUT}" | awk -F "${LMOD_FAMILY_MPI}/" '{print $2}')
 
 	# strip off ucx|ofi if present in module version string (e.g. for mpich variants)
 	if [[ "${my_mod_version}" =~ "-ucx" ]]; then
