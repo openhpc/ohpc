@@ -53,6 +53,7 @@ RELEASE_MONITORING_MAP = {
     "mpich": "id:8071",
     "gsl": "id:1267",
     "cmake": "id:306",
+    "environment-modules": "id:700",
 }
 
 
