@@ -169,6 +169,11 @@ test_map = {
         "",
     ],
     "components/admin/lmod/SPECS/lmod.spec": ["", "lmod", ""],
+    "components/admin/environment-modules/SPECS/environment-modules.spec": [
+        "",
+        "environment-modules",
+        "",
+    ],
     "components/dev-tools/numpy/SPECS/python-numpy.spec": ["numpy", "", ""],
 }
 
