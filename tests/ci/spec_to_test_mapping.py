@@ -218,6 +218,9 @@ all_test_packages = [
     "cmake-ohpc",
     "conman-ohpc",
     "EasyBuild-ohpc",
+    # Selected over lmod-ohpc by alternatives, so ALL runs test under
+    # Environment Modules
+    "environment-modules-ohpc",
     "losf-ohpc",
     "papi-ohpc",
     "paraver-ohpc",
