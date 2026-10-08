@@ -15,7 +15,7 @@ library=libmetis
 header=metis.h
 
 @test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
-    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    module_list_entry $module >.cmd_output || exit 1
     run grep $module .cmd_output 
     assert_success
     
@@ -24,7 +24,7 @@ header=metis.h
     rpm=$(get_rpm_name ${module})
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
-    assert_output "  1) $module/$version"
+    assert_output "1) $module/$version"
 }
 
 @test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {

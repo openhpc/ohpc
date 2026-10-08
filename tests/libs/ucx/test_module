@@ -21,14 +21,14 @@ setup() {
 
 
 @test "[$testname] Verify $module module loads and matches rpm version" {
-    module list $module/ | grep "1) $module" >& .cmd_output || exit 1
+    module_list_entry $module/ >.cmd_output || exit 1
     run grep $module .cmd_output 
     assert_success
     
    # check version against rpm
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     run cat .cmd_output
-    assert_output "  1) $module/$version"
+    assert_output "1) $module/$version"
 
     # check binary version against rpm
     ucx_info -v | head -1 | awk '{print $3}'  | awk -F 'version=' '{print $2}' >& .cmd_output
