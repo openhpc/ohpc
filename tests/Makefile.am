@@ -46,6 +46,10 @@ if LMOD_ENABLED
    SUBDIRS += admin/lmod
 endif
 
+if ENVIRONMENT_MODULES_ENABLED
+   SUBDIRS += admin/environment-modules
+endif
+
 
 else # non root tests
 

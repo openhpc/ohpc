@@ -152,6 +152,13 @@ AC_ARG_ENABLE([lmod],
 	 [AX_OPTION_DEFAULT(type=short,enable_lmod,yes)])
 AM_CONDITIONAL(LMOD_ENABLED,test "x$enable_lmod" = "xyes" ) 
 
+#------------------------------------------------------------------------------------------
+# Environment Modules
+AC_ARG_ENABLE([environment-modules],
+	 [AS_HELP_STRING([--enable-environment-modules],[Enable Environment Modules tests (default=yes, root only)])],[],
+	 [AX_OPTION_DEFAULT(type=short,enable_environment_modules,yes)])
+AM_CONDITIONAL(ENVIRONMENT_MODULES_ENABLED,test "x$enable_environment_modules" = "xyes" )
+
 
 #-----------------
 # User level tests
@@ -553,6 +560,7 @@ AC_CONFIG_FILES([Makefile
        dev-tools/easybuild/Makefile
        dev-tools/cuda/Makefile
        admin/lmod/Makefile
+       admin/environment-modules/Makefile
        admin/spack/Makefile
        dev-tools/mpi4py/Makefile
        dev-tools/mpi4py/tests/Makefile
@@ -647,6 +655,12 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Lmod...................... : enabled
     else
        echo '    'Lmod...................... : disabled
+    fi
+
+    if test "x$enable_environment_modules" = "xyes"; then
+       echo '    'Environment Modules....... : enabled
+    else
+       echo '    'Environment Modules....... : disabled
     fi
 
 else
