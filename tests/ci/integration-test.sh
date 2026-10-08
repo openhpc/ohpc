@@ -226,6 +226,7 @@ internal_network="${internal_network:-192.168.100.0}"
 
 ipv4_gateway="${ipv4_gateway:-192.168.100.1}"
 ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
+modules_package="${modules_package:-lmod-ohpc}"
 
 dns_servers="${dns_servers:-1.1.1.1}"
 dns_domain="${dns_domain:-local}"
