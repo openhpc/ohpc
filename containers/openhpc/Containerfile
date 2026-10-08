@@ -5,11 +5,13 @@ FROM registry.docker.com/rockylinux/rockylinux:10
 ARG ARCH=aarch64
 RUN dnf install -y http://repos.openhpc.community/OpenHPC/4/EL_10/$ARCH/ohpc-release-4-1.el10.$ARCH.rpm
 
+## Module tool: lmod-ohpc (Lmod) or environment-modules-ohpc (Environment Modules)
+ARG MODULES_PACKAGE=lmod-ohpc
 RUN dnf install -y dnf-plugins-core && \
     dnf config-manager --set-enabled crb && \
     dnf upgrade -y && \
     dnf install -y unzip jq yq procps-ng iproute bind-utils findutils && \
-    dnf install -y ohpc-base
+    dnf install -y ohpc-base $MODULES_PACKAGE
 
 ## Common packages
 RUN dnf install -y iputils vim rsync unzip git
