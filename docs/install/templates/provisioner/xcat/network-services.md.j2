@@ -1,0 +1,18 @@
+## Complete the Network Services
+
+Generate the host, network, DNS, and DHCP configuration from the node
+definitions:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Complete networking setup -->
+```bash
+# Generate /etc/hosts and network definitions from the node defs
+makehosts
+makenetworks
+
+# makedns must run before makedhcp: xCAT's Kea DHCP-DDNS integration
+# requires the DDNS key material that makedns generates
+makedns -n
+makedhcp -n
+```
+<!-- ohpc_end -->

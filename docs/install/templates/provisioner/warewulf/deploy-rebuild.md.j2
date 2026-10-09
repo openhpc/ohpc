@@ -1,0 +1,19 @@
+## Rebuild the Image and Overlays
+
+Rebuild the image to incorporate any optional packages installed into
+the chroot during customization, then rebuild the overlays and update the
+Warewulf configuration.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Rebuild image and overlays after customization -->
+```bash
+# Rebuild image to include any customization chroot changes
+wwctl image build {{ baseos }}
+
+# build the overlays for all the nodes
+wwctl overlay build
+
+# Update Warewulf configure
+wwctl configure --all
+```
+<!-- ohpc_end -->

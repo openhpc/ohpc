@@ -3,6 +3,8 @@
 
 {% include "provisioner/deploy.md.j2"%}
 {% include "provisioner/warewulf/deploy-add-nodes.md.j2" %}
+{% include "network/infiniband/compute-ipoib.md.j2" %}
+{% include "provisioner/warewulf/deploy-rebuild.md.j2" %}
 
 {# Scheduler must start after nodes have been added #}
 {% include "scheduler/" ~ scheduler ~ "/startup.md.j2" %}
