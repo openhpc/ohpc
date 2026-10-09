@@ -34,11 +34,13 @@ cp /etc/passwd /etc/group ${CHROOT}/etc
 
 # Extra repositories for the image build: OpenHPC (base + updates), EPEL, and
 # CRB. The base OS repos come from the copycds tree automatically; these are the
-# additions.
+# additions. EPEL is the tree for the image's EL minor release (e.g. 10.2), the
+# one epel-release selects on the head node.
+epel_release=${xcat_osver##*[a-z]}
 chdef -t osimage ${xcat_osimage} otherpkgdir="\
 {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/,\
 {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/updates/{{ ostree }}/,\
-{{ epel_base_url }}{{ distro_version }}/Everything/{{ arch }}/,\
+{{ epel_base_url }}${epel_release}/Everything/{{ arch }}/,\
 {{ distro_base_url }}{{ distro_version }}/CRB/{{ arch }}/os/"
 
 # OpenHPC packages to add on top of the base OS image
@@ -57,6 +59,11 @@ chdef -t osimage ${xcat_osimage} \
 <!-- ohpc_begin -->
 <!-- ohpc_comment Add site or pre-release OpenHPC repositories to the image build (site-specific) -->
 <!-- ohpc_command #<<< ohpc_repo:compute >>># -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Proxy settings for the image build (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
 <!-- ohpc_end -->
 
 Build the image. `genimage` installs the base OS and the OpenHPC components
