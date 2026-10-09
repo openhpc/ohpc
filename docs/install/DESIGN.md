@@ -302,10 +302,11 @@ The pattern groups by provisioner *paradigm*:
   pkglist and `$OHPC_POSTSCRIPT`).
 - **live / remote** (confluent) -- act on the running node via `nodeshell`.
 
-The verbs are `compute_install`, `compute_sed`, `compute_echo`, `compute_run`,
-and the service pair `compute_service_enable` / `compute_service_disable` --
-which resolve to `systemctl enable|disable` for image paradigms and `... --now`
-for live ones, so a service configured post-boot is actually started.
+The verbs are `compute_install`, `compute_group_install`, `compute_sed`,
+`compute_echo`, `compute_run`, and the service pair `compute_service_enable` /
+`compute_service_disable` -- which resolve to `systemctl enable|disable` for
+image paradigms and `... --now` for live ones, so a service configured post-boot
+is actually started.
 
 `head_install(packages)` installs packages on the head node (uses
 `pkg_install`, consistent across provisioners).

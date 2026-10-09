@@ -49,16 +49,3 @@ And add additional packages.
 {{ pkg_install_chroot }} nfs-utils
 ```
 <!-- ohpc_end -->
-
-### InfiniBand Support (Optional)
-
-Optionally add the InfiniBand support.
-<!-- ohpc_begin -->
-<!-- ohpc_comment Optionally add InfiniBand support services in compute node image -->
-<!-- ohpc_if_set enable_ib -->
-```bash
-# Optionally add IB support and enable
-{{ pkg_group_install_chroot }} "InfiniBand Support"
-```
-<!-- ohpc_fi -->
-<!-- ohpc_end -->
