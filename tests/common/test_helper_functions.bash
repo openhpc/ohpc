@@ -160,6 +160,9 @@ tasks_count() {
 # whitespace, which differs between module tools, is stripped. Lmod, as
 # built for OpenHPC (--with-redirect=yes), prints on stdout whereas
 # Environment Modules prints on stderr, so both streams are read.
+# Environment Modules also appends the symbolic versions and tags of the
+# loaded modules, like "(default)" or "<aL>": MODULES_LIST_OUTPUT=idx keeps
+# only the indexed entry names, Lmod ignores this variable.
 module_list_entry() {
-    module list "$1" 2>&1 | sed -n -E 's/^[[:space:]]*([0-9]+\) .*[^[:space:]])[[:space:]]*$/\1/p'
+    MODULES_LIST_OUTPUT=idx module list "$1" 2>&1 | sed -n -E 's/^[[:space:]]*([0-9]+\) .*[^[:space:]])[[:space:]]*$/\1/p'
 }
