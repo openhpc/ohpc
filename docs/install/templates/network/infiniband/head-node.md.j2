@@ -20,33 +20,23 @@ systemctl restart rdma-load-modules@infiniband.service
 With the InfiniBand drivers included, you can also enable (optional) IPoIB
 functionality which provides a mechanism to send IP packets over the IB network.
 If you plan to mount a Lustre file system over InfiniBand, then having IPoIB
-enabled is a requirement for the Lustre client. OpenHPC provides a template
-configuration file to aid in setting up an *ib0* interface on the *head node*.
-To use, copy the template provided and update the `${sms_ipoib}` and
-`${ipoib_netmask}` entries to match local desired settings (alter ib0 naming as
-appropriate if system contains dual-ported or multiple HCAs).
+enabled is a requirement for the Lustre client. The following creates a
+NetworkManager connection for the IPoIB interface `${ipoib_dev}` on the *head
+node*, with the address `${sms_ipoib}` and subnet prefix
+`${ipoib_prefix_length}`. Set `${ipoib_dev}` to the name the system gives the
+interface, for example `ibp3s0` under predictable interface naming, and add one
+connection per port if the system contains dual-ported or multiple HCAs.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Optionally enable IPoIB interface on head node -->
 <!-- ohpc_if_set enable_ipoib -->
-<!-- ohpc_comment Enable ib0 -->
 ```bash
-cp /opt/ohpc/pub/examples/network/centos/ifcfg-ib0 \
-	/etc/sysconfig/network-scripts
+# Define the local IPoIB interface, address, and subnet prefix
+nmcli connection add type infiniband con-name ipoib ifname "${ipoib_dev}" \
+	ipv4.method manual ipv4.addresses "${sms_ipoib}/${ipoib_prefix_length}"
 
-# Define local IPoIB address and netmask
-sed -i "s/master_ipoib/${sms_ipoib}/" \
-	/etc/sysconfig/network-scripts/ifcfg-ib0
-sed -i "s/ipoib_netmask/${ipoib_netmask}/" \
-	/etc/sysconfig/network-scripts/ifcfg-ib0
-
-# configure NetworkManager to *not* override local /etc/resolv.conf
-echo "[main]"   >  /etc/NetworkManager/conf.d/90-dns-none.conf
-echo "dns=none" >> /etc/NetworkManager/conf.d/90-dns-none.conf
-
-# Start up NetworkManager to initiate ib0
-systemctl start NetworkManager.service
-
+# Bring up the IPoIB interface
+nmcli connection up ipoib
 ```
 <!-- ohpc_fi -->
 <!-- ohpc_end -->

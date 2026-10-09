@@ -59,6 +59,10 @@ Optional variables:
 * `${sysmgmtd_host}` - BeeGFS System Management host name
 * `${mgs_fs_name}` - Lustre MGS mount name
 * `${sms_ipoib}` - IPoIB address for head node
+* `${ipoib_dev}` - IPoIB interface name on head node and computes (e.g. `ib0`,
+  or `ibp3s0` with predictable interface naming)
 * `${ipoib_netmask}` - Subnet netmask for internal IPoIB
+* `${ipoib_prefix_length}` - Subnet prefix length for internal IPoIB (e.g. `16`;
+  must be consistent with `${ipoib_netmask}`)
 * `${c_ipoib[0]}`, `${c_ipoib[1]}`, ... - IPoIB addresses for computes
 {% endif %}
