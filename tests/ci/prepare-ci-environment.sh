@@ -198,6 +198,14 @@ dnf_openeuler() {
 	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/openhpc/OpenHPC/repo/openeuler-24.03_LTS_SP2/openhpc-OpenHPC-openeuler-24.03_LTS_SP2.repo
 	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem "${MODULES_PACKAGE}" hostname bats ccache
 
+	# openEuler's ccache.csh lacks a final newline: tcsh then fails to find
+	# its last "endif" when skipping the block it closes, which happens in
+	# every root login shell, and aborts /etc/csh.login before the module
+	# startup script is sourced ("then: then/endif not found")
+	if [ -n "$(tail -c1 /etc/profile.d/ccache.csh 2>/dev/null)" ]; then
+		echo >>/etc/profile.d/ccache.csh
+	fi
+
 	# We need to have the latest glibc installed for valgrind tests on openEuler
 	"${PKG_MANAGER}" "${YES}" upgrade
 }
