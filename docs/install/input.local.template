@@ -132,8 +132,15 @@ slurm_node_config="${slurm_node_config:-NodeName=${compute_prefix}[1-${num_compu
 # additional arguments to enable optional arguments for bootstrap kernel
 kargs="${kargs:-acpi_pad.disable=1}"
 
+# IPoIB interface name on head node and computes (e.g. ibp3s0 with predictable naming)
+ipoib_dev="${ipoib_dev:-ib0}"
+
 # Subnet netmask for IPoIB network
 ipoib_netmask="${ipoib_netmask:-255.255.0.0}"
+
+# Subnet prefix length for IPoIB network (must be consistent with ipoib_netmask,
+# e.g. 255.255.0.0 <-> 16, 255.255.255.0 <-> 24)
+ipoib_prefix_length="${ipoib_prefix_length:-16}"
 
 # IPoIB address for head node
 sms_ipoib="${sms_ipoib:-192.168.0.1}"
