@@ -49,7 +49,7 @@ for compilers in @@OHPC_MODULEDEPS@@/oneapi/compiler/2*; do
 		continue
 	fi
 	# For the default, also specify the MKL version
-	if [ "${ver}" = "@@exact_intel_ver@@" ]; then
+	if [ "${ver}" = "@@exact_intel_ver_module@@" ]; then
 		mklver="mkl/@@exact_mkl_ver@@"
 	else
 		mklver="mkl"
