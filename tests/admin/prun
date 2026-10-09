@@ -125,7 +125,7 @@ break>"
     done
 }
 
-@test "[prun] starts an executable whose filename contains spaces" {
+install_srun_wrapper() {
     cat > "$BATS_TEST_TMPDIR/srun" <<'LAUNCHER'
 #!/bin/bash
 [[ "$1" == --mpi=pmix ]] || exit 2
@@ -133,6 +133,10 @@ shift
 "$@"
 LAUNCHER
     chmod +x "$BATS_TEST_TMPDIR/srun"
+}
+
+@test "[prun] starts an executable whose filename contains spaces" {
+    install_srun_wrapper
     local executable="$BATS_TEST_TMPDIR/application with spaces"
     printf '#!/bin/sh\nprintf "application started\\n"\n' > "$executable"
     chmod +x "$executable"
@@ -143,13 +147,7 @@ LAUNCHER
 }
 
 @test "[prun] starts the checked executable rather than a glob match" {
-    cat > "$BATS_TEST_TMPDIR/srun" <<'LAUNCHER'
-#!/bin/bash
-[[ "$1" == --mpi=pmix ]] || exit 2
-shift
-"$@"
-LAUNCHER
-    chmod +x "$BATS_TEST_TMPDIR/srun"
+    install_srun_wrapper
     local checked_dir="$BATS_TEST_TMPDIR/build[debug]"
     local other_dir="$BATS_TEST_TMPDIR/buildd"
     mkdir -p "$checked_dir" "$other_dir"
@@ -222,7 +220,9 @@ LAUNCHER
     PATH="$BATS_TEST_TMPDIR/bin:$PATH" RM=slurm LMOD_FAMILY_MPI=mpich \
         OHPC_MPI_LAUNCHERS=pmix run prun "$PRUN_TEST_EXEC" 'two words' '' '*.dat' $'line\nbreak' '; exit 99'
     assert_success
-    local logged_command="${lines[2]#*Launch cmd = }"
+    local logged_command
+    logged_command=$(grep -m1 'Launch cmd = ' <<< "$output")
+    logged_command="${logged_command#*Launch cmd = }"
     logged_command="${logged_command% (family=mpich)}"
     [[ "$logged_command" == *"two\\ words '' \*.dat"* ]]
     local expected="$output"
