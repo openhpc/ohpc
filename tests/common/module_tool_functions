@@ -102,6 +102,6 @@ check_default_environment_loaded() {
     local result
     result=$(login_shell bash -l -c "echo LOADEDMODULES=\$LOADEDMODULES; echo COMPILER=\$LMOD_FAMILY_COMPILER; echo MPI=\$LMOD_FAMILY_MPI" 2>&1) || flunk "login shell failed: ${result}"
     [[ "${result}" == *"LOADEDMODULES="*"ohpc"* ]] || flunk "ohpc module not loaded: ${result}"
-    [[ "${result}" == *"COMPILER="?* ]] || flunk "compiler family not set: ${result}"
-    [[ "${result}" == *"MPI="?* ]] || flunk "MPI family not set: ${result}"
+    [[ "${result}" == *"COMPILER="[![:space:]]* ]] || flunk "compiler family not set: ${result}"
+    [[ "${result}" == *"MPI="[![:space:]]* ]] || flunk "MPI family not set: ${result}"
 }
