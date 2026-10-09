@@ -1,8 +1,11 @@
 ## Complete Basic xCAT Setup for *Head Node*
 
 With xCAT installed, register the internal provisioning interface with xCAT for
-DHCP service. Then set the cluster domain name used for system-wide name
-resolution.
+DHCP service. The head node serves DNS to the cluster (`makedns`, below), so it
+is the compute nodes' name server and forwards other lookups to
+`${dns_servers}`. Then set the cluster domain name used for system-wide name
+resolution; `makedns` requires the head node to resolve by its name in that
+domain, so add it to `/etc/hosts`.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Complete basic xCAT setup for head node -->
@@ -16,9 +19,11 @@ chdef -t site dhcpinterfaces="xcatmn|${sms_eth_internal}"
 
 # Point provisioning services at the internal interface address. Without
 # this, a multi-homed head node may auto-select its external address.
-chdef -t site master=${sms_ip} nameservers=${sms_ip}
+# The head node is the cluster's name server; it forwards other names upstream.
+chdef -t site master=${sms_ip} nameservers=${sms_ip} forwarders=${dns_servers}
 
-# Define local domain name
+# Define local domain name; makedns needs the head node's name in this domain
 chdef -t site domain=${dns_domain:-local}
+echo "${sms_ip} ${sms_name}.${dns_domain:-local}" >> /etc/hosts
 ```
 <!-- ohpc_end -->

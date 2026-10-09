@@ -417,7 +417,7 @@ Three proxy placeholder types appear in each recipe, each once, in script order:
 | Placeholder | Location | Context |
 | --- | --- | --- |
 | `#<<< ohpc_proxy:head >>>#` | Near top, before first `dnf` | Head node setup (CA cert, dnf.conf, profile.d) |
-| `#<<< ohpc_proxy:compute >>>#` | Compute image/node setup | Warewulf chroot or Confluent nodeshell commands |
+| `#<<< ohpc_proxy:compute >>>#` | Compute image/node setup | Warewulf chroot or Confluent nodeshell commands; xCAT stateless: before `genimage` (the `genimage` command hands the build to the xcatd daemon, which runs dnf with its own generated config, so the proxy must be in xcatd's environment, e.g. a systemd drop-in, not the recipe's shell or the head's `dnf.conf`); xCAT stateful: before the nodes install (they fetch their own packages, so register a site postscript in `postscripts`, which runs before the `otherpkgs` postbootscript) |
 | `#<<< ohpc_proxy:image >>>#` | OpenCHAMI image build only | Image-builder config (local registry must bypass proxy) |
 
 **Finding placeholders in a generated script:**

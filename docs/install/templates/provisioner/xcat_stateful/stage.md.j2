@@ -41,12 +41,14 @@ EOF
 
 # OpenHPC (base + updates), EPEL, and CRB repositories that provide the packages
 # above. The base OS repositories are served from the head node's /install tree
-# automatically.
+# automatically. EPEL is the tree for the image's EL minor release (e.g. 10.2),
+# the one epel-release selects on the head node.
+epel_release=${xcat_osver##*[a-z]}
 chdef -t osimage ${xcat_osimage} \
     otherpkglist="${OHPC_OTHERPKGS}" \
     otherpkgdir="{{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/{{ ostree }}/,\
 {{ ohpc_repo_server }}/OpenHPC/{{ ohpc_version_tree }}/updates/{{ ostree }}/,\
-{{ epel_base_url }}{{ distro_version }}/Everything/{{ arch }}/,\
+{{ epel_base_url }}${epel_release}/Everything/{{ arch }}/,\
 {{ distro_base_url }}{{ distro_version }}/CRB/{{ arch }}/os/"
 
 # Create the compute configuration postscript; the "Configure OpenHPC on the
@@ -66,6 +68,11 @@ chdef compute -p postbootscripts={{ xcat_config_postscript | default("ohpc-confi
 <!-- ohpc_begin -->
 <!-- ohpc_comment Add site or pre-release OpenHPC repositories to the compute provisioning (site-specific) -->
 <!-- ohpc_command #<<< ohpc_repo:compute >>># -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Proxy settings for the compute provisioning (site-specific) -->
+<!-- ohpc_command #<<< ohpc_proxy:compute >>># -->
 <!-- ohpc_end -->
 
 The head node exports `/home` and `/opt/ohpc/pub`; disable the xCAT-managed
