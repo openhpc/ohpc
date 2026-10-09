@@ -1,0 +1,24 @@
+Warewulf's NetworkManager overlay configures the interface on each node from a
+network device of type `infiniband`:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+for ((i=0; i<num_computes; i++)) ; do
+	wwctl node set --yes "${c_name[$i]}" --netname=ib --type=infiniband \
+		--netdev="${ipoib_dev}" --ipaddr="${c_ipoib[$i]}" \
+		--netmask="${ipoib_netmask}"
+done
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+::: {.tip}
+**Note:** If, once you boot the nodes, you find that the IB interface
+has a name other than `${ipoib_dev}` and hence was not assigned the
+given IP, you can fix it by setting `--hwaddr` to the **literal last
+6 bytes** of the interface's hardware address (the trailing 6 octets
+of the 20-byte IPoIB address, *not* the 48-bit InfiniBand
+"compatibility MAC"), so that the udev.netname overlay can set the
+persistent interface name. This does not make it PXE/DHCP-boot over IB.
+:::

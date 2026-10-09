@@ -1,0 +1,6 @@
+::: {.tip}
+**Note:** This recipe does not yet configure IPoIB on {{ provisioner_name }}
+compute nodes. The InfiniBand drivers are in the compute image; deliver each
+node's address on `${ipoib_dev}` with a per-node NetworkManager connection, for
+example from cloud-init.
+:::

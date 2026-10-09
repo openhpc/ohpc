@@ -1,0 +1,23 @@
+xCAT configures the interface on each node from its `nic*` attributes, applied
+by the `confignics` postscript at boot:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setup IPoIB networking -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+# Define the IPoIB network
+chdef -t network -o ipoib mask=${ipoib_netmask} net=${c_ipoib[0]}
+
+# Enable secondary NIC configuration
+chdef compute -p postbootscripts=confignics
+
+# Register desired IPoIB IPs per compute
+for ((i=0; i<num_computes; i++)) ; do
+    chdef "${c_name[$i]}" \
+        nicips."${ipoib_dev}"="${c_ipoib[$i]}" \
+        nictypes."${ipoib_dev}"="InfiniBand" \
+        nicnetworks."${ipoib_dev}"=ipoib
+done
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
