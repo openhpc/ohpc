@@ -19,7 +19,7 @@
 # the resulting binaries might rely on symbols which are not present
 # in the minimum version.  Newer versions may still be installed in parallel.
 %define exact_intel_ver 2026.1
-%define exact_intel_ver_module 2026.1.0
+%define exact_intel_ver_module 2026.1.1
 %define exact_mkl_ver 2026.1
 %define exact_deps umf/1.1.0 compiler/2026.1.1 mkl/%{exact_mkl_ver} compiler-rt/2026.1.1 debugger/2026.1.0 tbb/2023.0.0 tcm/1.5
 
