@@ -18,6 +18,7 @@ Functions:
 * compute_echo(string, file, append=true): append string to file, if append=false overwrite.
 * compute_service_enable(service): enable a systemd service on the compute node (image provisioners: `enable`; live provisioners: `enable --now`).
 * pkg_install_image(packages): install packages, use array for multiple packages ["pkg1", "pkg2"]
+* compute_group_install(groups): install package groups, use array for multiple groups
 -->
 
 {# Default Macros - last defined wins #}
@@ -42,6 +43,11 @@ Functions:
    compute_service_enable; same image-vs-live split. #}
 {%- macro compute_service_disable(service) -%}
 {{ compute_run("systemctl disable " ~ service) }}
+{%- endmacro -%}
+
+{# Install package groups on the compute node (quoted: group names have spaces). #}
+{%- macro compute_group_install(groups) -%}
+{{ pkg_group_install_chroot }} "{{ groups if groups is string else groups | join('" "') }}"
 {%- endmacro -%}
 
 {# Warewulf Macros #}
@@ -102,6 +108,13 @@ printf '%s\n' {{ packages if packages is string else packages | join(' ') }} \
   >> "$OHPC_OTHERPKGS"
 {%- endmacro -%}
 
+{# Package groups go to the postscript (dnf groupinstall on the node): a group
+   name has spaces, which the otherpkgs pkglist (one package per line) does not
+   express as a group. #}
+{%- macro compute_group_install(groups) -%}
+{{ compute_run("dnf -y groupinstall '" ~ (groups if groups is string else groups | join("' '")) ~ "'") }}
+{%- endmacro -%}
+
 {%- macro compute_sed(regex, file) -%}
 echo "sed -i '{{ regex }}' \
 '{{ file }}'" >> "$OHPC_POSTSCRIPT"
@@ -159,6 +172,11 @@ nodeshell compute "{{ cmd }}"
 
 {%- macro compute_install(packages) -%}
 yq -i '.packages += {{ ([packages] if packages is string else packages) | tojson }}' \
+	/opt/ohpc/admin/images/compute-prod.yaml
+{%- endmacro -%}
+
+{%- macro compute_group_install(groups) -%}
+yq -i '.package_groups += {{ ([groups] if groups is string else groups) | tojson }}' \
 	/opt/ohpc/admin/images/compute-prod.yaml
 {%- endmacro -%}
 
