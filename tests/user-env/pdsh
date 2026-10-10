@@ -70,9 +70,9 @@ setup_file() {
 	[[ "${RESOURCE_MANAGER}" != "slurm" ]] && skip "Only applicable for slurm"
 
 	if [[ -n "${SIMPLE_CI}" ]]; then
-		run pdsh -P normal -R exec grep . /proc/sys/kernel/ostype
+		run pdsh -S -P normal -R exec grep . /proc/sys/kernel/ostype
 	else
-		run pdsh -P normal 'grep . /proc/sys/kernel/ostype'
+		run pdsh -S -P normal 'grep . /proc/sys/kernel/ostype'
 	fi
 	assert_success
 }
