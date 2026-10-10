@@ -169,6 +169,11 @@ test_map = {
         "",
     ],
     "components/admin/lmod/SPECS/lmod.spec": ["", "lmod", ""],
+    "components/admin/environment-modules/SPECS/environment-modules.spec": [
+        "",
+        "environment-modules",
+        "",
+    ],
     "components/dev-tools/numpy/SPECS/python-numpy.spec": ["numpy", "", ""],
 }
 
@@ -213,6 +218,9 @@ all_test_packages = [
     "cmake-ohpc",
     "conman-ohpc",
     "EasyBuild-ohpc",
+    # Selected over lmod-ohpc by alternatives, so ALL runs test under
+    # Environment Modules
+    "environment-modules-ohpc",
     "losf-ohpc",
     "papi-ohpc",
     "paraver-ohpc",

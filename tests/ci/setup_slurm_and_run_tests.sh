@@ -404,7 +404,7 @@ run_test_suite() {
 		if ! (
 			cd tests
 			./bootstrap
-			./configure --disable-all --disable-bos --disable-oob --disable-spack "${ADMIN_TESTS[*]}"
+			./configure --disable-all --disable-bos --disable-oob --disable-spack "${ADMIN_TESTS[@]}"
 			make check
 		); then
 			TESTS_FAILED=1

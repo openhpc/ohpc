@@ -1,0 +1,11 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+
+. ../common/functions
+
+if [ -s ../common/TEST_ENV ]; then
+	source ../common/TEST_ENV
+fi
+
+@test "[modules] Check if a module RPM is installed" {
+	rpm -q --quiet --whatprovides "environment(modules)${DELIM}" || ERROR "no RPM provides environment(modules)${DELIM}"
+}

@@ -51,7 +51,9 @@ Requires:  gdb
 Requires:  ipmitool
 Requires:  libstdc++-devel
 Requires:  libunwind
+# Any OpenHPC module tool fits, Lmod is the default one when none is named
 Requires:  environment(modules)%{PROJ_DELIM}
+Suggests:  lmod%{PROJ_DELIM}
 Requires:  losf%{PROJ_DELIM}
 Requires:  make
 Requires:  man

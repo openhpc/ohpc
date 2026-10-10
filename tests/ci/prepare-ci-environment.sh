@@ -13,9 +13,13 @@ usage() {
 	echo
 	echo "Parameters:"
 	echo " intel           Enable Intel OneAPI toolkit"
+	echo
+	echo "Environment:"
+	echo " MODULES_PACKAGE Module tool package to install (default: lmod-ohpc)"
 }
 
 FACTORY_VERSION=4.2
+MODULES_PACKAGE="${MODULES_PACKAGE:-lmod-ohpc}"
 ENABLE_ONEAPI=""
 PRE_RELEASE=""
 
@@ -183,7 +187,7 @@ dnf_rhel() {
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats ccache "${ENABLE_ONEAPI}"
+	loop_command "${PKG_MANAGER}" "${YES}" install "${MODULES_PACKAGE}" bats ccache "${ENABLE_ONEAPI}"
 }
 
 dnf_openeuler() {
@@ -192,7 +196,15 @@ dnf_openeuler() {
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
 	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/openhpc/OpenHPC/repo/openeuler-24.03_LTS_SP2/openhpc-OpenHPC-openeuler-24.03_LTS_SP2.repo
-	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats ccache
+	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem "${MODULES_PACKAGE}" hostname bats ccache
+
+	# openEuler's ccache.csh lacks a final newline: tcsh then fails to find
+	# its last "endif" when skipping the block it closes, which happens in
+	# every root login shell, and aborts /etc/csh.login before the module
+	# startup script is sourced ("then: then/endif not found")
+	if [ -n "$(tail -c1 /etc/profile.d/ccache.csh 2>/dev/null)" ]; then
+		echo >>/etc/profile.d/ccache.csh
+	fi
 
 	# We need to have the latest glibc installed for valgrind tests on openEuler
 	"${PKG_MANAGER}" "${YES}" upgrade
@@ -212,7 +224,7 @@ else
 	if [ "${FACTORY_VERSION}" != "" ]; then
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 	fi
-	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc "${ENABLE_ONEAPI}"
+	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install "${MODULES_PACKAGE}" "${ENABLE_ONEAPI}"
 	useradd -m ohpc || true
 fi
 

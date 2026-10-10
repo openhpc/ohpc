@@ -1,0 +1,128 @@
+# shellcheck shell=bash
+# -*-sh-*-
+
+#-------------------------------------
+# OHPC module tool admin test functions
+#-------------------------------------
+#
+# Shared by the Lmod and Environment Modules admin tests, which export
+# before sourcing this file:
+#   MODULE_TOOL_PROFILE      sh startup script, target of the modules.sh
+#                            alternative
+#   MODULE_TOOL_PROFILE_CSH  csh startup script, target of the modules.csh
+#                            alternative
+#   MODULE_TOOL_CMD          modulecmd script, target of the modulecmd
+#                            alternative
+#   MODULE_TOOL_VERSION      string identifying the tool in the output of
+#                            "module --version"
+#
+# Tests run as root: select_module_tool switches the alternatives to the
+# tool and teardown switches them back.
+
+EXAMPLE_MODULES=${BATS_TEST_DIRNAME}/../../modules/example-modules
+
+# Commands checking the module tool is initialized, valid in sh and csh
+MODULE_TOOL_PROBE="module --version; echo MODULEPATH=\$MODULEPATH"
+
+# The tool is the module tool selected by the alternatives system
+module_tool_selected() {
+    [ "$(readlink -f /etc/profile.d/modules.sh)" = "$(readlink -f "${MODULE_TOOL_PROFILE}")" ]
+}
+
+# The administrator forced a module tool with update-alternatives --set
+alternatives_manual() {
+    update-alternatives --display modules.sh 2>/dev/null | head -1 | grep -q manual
+}
+
+# Make the tool the selected one for the current test. A manual choice of
+# the administrator is respected, an automatic choice of another tool is
+# overridden until teardown, so the checks run whatever tools are installed
+select_module_tool() {
+    module_tool_selected && return
+    alternatives_manual && skip "another module tool selected manually"
+    update-alternatives --set modules.sh "${MODULE_TOOL_PROFILE}" >/dev/null \
+        || flunk "cannot select ${MODULE_TOOL_PROFILE}"
+    MODULE_TOOL_FORCED=1
+}
+
+# Restore the automatic alternatives choice after a test that forced the tool
+teardown() {
+    if [ -n "${MODULE_TOOL_FORCED}" ]; then
+        update-alternatives --auto modules.sh >/dev/null
+    fi
+}
+
+# Run a login shell from a clean environment
+login_shell() {
+    env -i HOME="${HOME}" USER="${USER}" TERM=dumb "$@"
+}
+
+# Check the output of "module --version"
+assert_module_tool_version() {
+    [[ "$1" == *"${MODULE_TOOL_VERSION}"* ]] || flunk "unexpected version: $1"
+}
+
+# Check the output of "update-alternatives --display modules.sh"
+assert_alternatives_registered() {
+    [[ "$1" == *"${MODULE_TOOL_PROFILE} - priority"* ]] || flunk "startup script not registered: $1"
+    [[ "$1" == *"modules.csh: ${MODULE_TOOL_PROFILE_CSH}"* ]] || flunk "csh startup script not registered: $1"
+    [[ "$1" == *"modulecmd: ${MODULE_TOOL_CMD}"* ]] || flunk "modulecmd not registered: $1"
+}
+
+# Check an alternatives link resolves to the given file
+assert_alternative_target() {
+    [ "$(readlink -f "$1")" = "$(readlink -f "$2")" ] || flunk "$1 points to $(readlink -f "$1")"
+}
+
+# Check the alternatives links all resolve to the tool
+assert_module_tool_selected() {
+    assert_alternative_target /etc/profile.d/modules.sh "${MODULE_TOOL_PROFILE}"
+    assert_alternative_target /etc/profile.d/modules.csh "${MODULE_TOOL_PROFILE_CSH}"
+    assert_alternative_target /usr/bin/modulecmd "${MODULE_TOOL_CMD}"
+}
+
+# Check a modulecmd script is the tool and loads a modulefile from a sh script
+check_modulecmd() {
+    local result
+    result=$("$1" sh --version 2>&1) || flunk "$1 failed: ${result}"
+    assert_module_tool_version "${result}"
+
+    eval "$(MODULEPATH=${EXAMPLE_MODULES} "$1" sh load test-module)" || exit 1
+    assert_equal "beeblebrox" "${TEST_MODULE}"
+}
+
+# Check the module tool is initialized in the shell started by the given
+# command, which runs MODULE_TOOL_PROBE
+check_module_tool_initialized() {
+    local result
+    result=$("$@" 2>&1) || flunk "$* failed: ${result}"
+    assert_module_tool_version "${result}"
+    [[ "${result}" == *"MODULEPATH="*"/opt/ohpc/pub/modulefiles"* ]] || flunk "OpenHPC modulefiles not enabled: ${result}"
+}
+
+# Check tcsh initializes the module tool from its csh startup script, which
+# defines the module alias for the following lines only
+check_tcsh_startup_script() {
+    check_module_tool_initialized tcsh -f <<< "source ${MODULE_TOOL_PROFILE_CSH}
+${MODULE_TOOL_PROBE}"
+}
+
+# Check a bash login shell initializes the module tool
+check_bash_login_shell() {
+    check_module_tool_initialized login_shell bash -l -c "${MODULE_TOOL_PROBE}"
+}
+
+# Check a tcsh login shell initializes the module tool
+check_tcsh_login_shell() {
+    check_module_tool_initialized login_shell tcsh -l <<< "${MODULE_TOOL_PROBE}"
+}
+
+# Check a login shell loads the default OpenHPC environment, which sets the
+# compiler and MPI family variables
+check_default_environment_loaded() {
+    local result
+    result=$(login_shell bash -l -c "echo LOADEDMODULES=\$LOADEDMODULES; echo COMPILER=\$LMOD_FAMILY_COMPILER; echo MPI=\$LMOD_FAMILY_MPI" 2>&1) || flunk "login shell failed: ${result}"
+    [[ "${result}" == *"LOADEDMODULES="*"ohpc"* ]] || flunk "ohpc module not loaded: ${result}"
+    [[ "${result}" == *"COMPILER="[![:space:]]* ]] || flunk "compiler family not set: ${result}"
+    [[ "${result}" == *"MPI="[![:space:]]* ]] || flunk "MPI family not set: ${result}"
+}

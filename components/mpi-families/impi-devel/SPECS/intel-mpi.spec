@@ -20,7 +20,7 @@
 # in the minimum version. Newer versions may still be installed in parallel.
 %define exact_mpi_ver 2021.18
 %define exact_mkl_ver 2026.1
-%define exact_deps compiler/2026.1.1 mkl/%{exact_mkl_ver} compiler-rt/2026.1.1 debugger/2026.1.0 tbb/2023.1.0
+%define exact_deps compiler/2026.1.1 mkl/%{exact_mkl_ver} compiler-rt/2026.1.1 debugger/2026.1.0 tbb/2023.1
 
 Summary:   OpenHPC compatibility package for Intel(R) oneAPI MPI Library
 Name:      %{pname}%{PROJ_DELIM}
@@ -42,6 +42,10 @@ Requires: intel-oneapi-mpi-devel-%{exact_mpi_ver}
 Requires: intel-compilers-devel%{PROJ_DELIM} = %{version}
 Requires: prun%{PROJ_DELIM}
 
+# modulecmd needed to run ohpc-update-modules-impi
+Requires(post): environment(modules)%{PROJ_DELIM}
+Requires:       environment(modules)%{PROJ_DELIM}
+
 %description
 Provides OpenHPC-style compatible modules for use with the oneAPI
 MPI Library.
@@ -49,7 +53,6 @@ MPI Library.
 %install
 # Mod generator for oneAPI support
 sed -e 's|@@oneapi_manifest@@|%{oneapi_manifest}|' \
-    -e 's|@@OHPC_ADMIN@@|%{OHPC_ADMIN}|' \
     -e 's|@@OHPC_MODULEDEPS@@|%{OHPC_MODULEDEPS}|g' \
     -e 's|@@OHPC_MODULES@@|%{OHPC_MODULES}|' \
     -e 's|@@exact_deps@@|%{exact_deps}|' \

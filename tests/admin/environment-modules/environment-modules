@@ -1,0 +1,93 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+export MODULE_TOOL_PROFILE=/opt/ohpc/admin/environment-modules/init/profile.sh
+export MODULE_TOOL_PROFILE_CSH=/opt/ohpc/admin/environment-modules/init/profile.csh
+export MODULE_TOOL_CMD=/opt/ohpc/admin/environment-modules/libexec/modulecmd.tcl
+export MODULE_TOOL_VERSION="Modules Release "
+source ./common/module_tool_functions || exit 1
+
+setup() {
+    check_if_rpm_installed environment-modules"${DELIM}"
+    # Initialize Environment Modules from its own installation directory,
+    # whatever module tool the /etc/profile.d/modules.sh alternative selects
+    . /opt/ohpc/admin/environment-modules/init/profile.sh || exit 1
+    module purge || exit 1
+}
+
+
+@test "[environment-modules] rpm installed" {
+    check_if_rpm_installed environment-modules"${DELIM}"
+}
+
+@test "[environment-modules] module command is Environment Modules" {
+    run module --version
+    assert_success
+    assert_module_tool_version "$output"
+}
+
+@test "[environment-modules] OpenHPC modulefiles directory in MODULEPATH" {
+    run module use
+    assert_success
+    [[ "$output" == *"/opt/ohpc/pub/modulefiles"* ]] || flunk "OpenHPC modulefiles not enabled: $output"
+}
+
+@test "[environment-modules] alternatives links registered" {
+    [ -L /etc/profile.d/modules.sh ]
+    [ -L /etc/profile.d/modules.csh ]
+    [ -L /usr/bin/modulecmd ]
+
+    run update-alternatives --display modules.sh
+    assert_success
+    assert_alternatives_registered "$output"
+}
+
+@test "[environment-modules] alternatives select Environment Modules, also over Lmod" {
+    if alternatives_manual; then
+        skip "module tool selected manually"
+    fi
+    assert_module_tool_selected
+}
+
+@test "[environment-modules] modulecmd loads a module" {
+    check_modulecmd "$MODULE_TOOL_CMD"
+}
+
+@test "[environment-modules] /usr/bin/modulecmd is Environment Modules once selected" {
+    select_module_tool
+
+    check_modulecmd /usr/bin/modulecmd
+}
+
+@test "[environment-modules] tcsh initializes Environment Modules from its startup script" {
+    command -v tcsh >/dev/null || skip "tcsh not installed"
+
+    check_tcsh_startup_script
+}
+
+@test "[environment-modules] bash login shell initializes Environment Modules once selected" {
+    select_module_tool
+
+    check_bash_login_shell
+}
+
+@test "[environment-modules] tcsh login shell initializes Environment Modules once selected" {
+    select_module_tool
+    command -v tcsh >/dev/null || skip "tcsh not installed"
+
+    check_tcsh_login_shell
+}
+
+@test "[environment-modules] login shell loads the default OpenHPC environment once Environment Modules is selected" {
+    select_module_tool
+    [ -e /opt/ohpc/pub/modulefiles/ohpc ] || skip "no modules-defaults package installed"
+
+    check_default_environment_loaded
+}

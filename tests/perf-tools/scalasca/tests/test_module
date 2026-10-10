@@ -14,7 +14,7 @@ module=scalasca
 rpm=scalasca-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
 @test "[$TESTNAME] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-	module list $module | grep "1) $module" >&.cmd_output || exit 1
+	module_list_entry $module >.cmd_output || exit 1
 	run grep $module .cmd_output
 	assert_success
 
@@ -22,7 +22,7 @@ rpm=scalasca-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 	local version
 	version="$(rpm -q --queryformat='%{VERSION}\n' "$rpm")"
 	run cat .cmd_output
-	assert_output "  1) $module/$version"
+	assert_output "1) $module/$version"
 }
 
 @test "[$TESTNAME] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {

@@ -48,13 +48,11 @@ for mpis in @@OHPC_MODULEDEPS@@/oneapi/mpi/2*; do
 	modname=$(testfile @@OHPC_MODULEDEPS@@/intel/impi/"${ver}")
 
 	# Get value for MPI_DIR
-	eval "$(@@OHPC_ADMIN@@/lmod/lmod/libexec/lmod --expert use @@OHPC_MODULEDEPS@@/oneapi)"
-	# shellcheck disable=SC2086
-	eval "$(@@OHPC_ADMIN@@/lmod/lmod/libexec/lmod --expert load mpi/"${ver}")"
+	eval "$(modulecmd sh use @@OHPC_MODULEDEPS@@/oneapi)"
+	eval "$(modulecmd sh load mpi/"${ver}")"
 	MPIDIR=${I_MPI_ROOT}
-	# shellcheck disable=SC2086
-	eval "$(@@OHPC_ADMIN@@/lmod/lmod/libexec/lmod --expert unload mpi/"${ver}")"
-	eval "$(@@OHPC_ADMIN@@/lmod/lmod/libexec/lmod --expert unuse @@OHPC_MODULEDEPS@@/oneapi)"
+	eval "$(modulecmd sh unload mpi/"${ver}")"
+	eval "$(modulecmd sh unuse @@OHPC_MODULEDEPS@@/oneapi)"
 
 	cat <<EOF >"${modname}"
 #%Module1.0#####################################################################
