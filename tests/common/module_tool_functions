@@ -15,6 +15,9 @@
 #                            alternative
 #   MODULE_TOOL_VERSION      string identifying the tool in the output of
 #                            "module --version"
+#
+# Tests run as root: select_module_tool switches the alternatives to the
+# tool and teardown switches them back.
 
 EXAMPLE_MODULES=${BATS_TEST_DIRNAME}/../../modules/example-modules
 
@@ -29,6 +32,24 @@ module_tool_selected() {
 # The administrator forced a module tool with update-alternatives --set
 alternatives_manual() {
     update-alternatives --display modules.sh 2>/dev/null | head -1 | grep -q manual
+}
+
+# Make the tool the selected one for the current test. A manual choice of
+# the administrator is respected, an automatic choice of another tool is
+# overridden until teardown, so the checks run whatever tools are installed
+select_module_tool() {
+    module_tool_selected && return
+    alternatives_manual && skip "another module tool selected manually"
+    update-alternatives --set modules.sh "${MODULE_TOOL_PROFILE}" >/dev/null \
+        || flunk "cannot select ${MODULE_TOOL_PROFILE}"
+    MODULE_TOOL_FORCED=1
+}
+
+# Restore the automatic alternatives choice after a test that forced the tool
+teardown() {
+    if [ -n "${MODULE_TOOL_FORCED}" ]; then
+        update-alternatives --auto modules.sh >/dev/null
+    fi
 }
 
 # Run a login shell from a clean environment

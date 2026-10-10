@@ -60,8 +60,8 @@ setup() {
     check_modulecmd "$MODULE_TOOL_CMD"
 }
 
-@test "[environment-modules] /usr/bin/modulecmd is Environment Modules when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[environment-modules] /usr/bin/modulecmd is Environment Modules once selected" {
+    select_module_tool
 
     check_modulecmd /usr/bin/modulecmd
 }
@@ -72,21 +72,21 @@ setup() {
     check_tcsh_startup_script
 }
 
-@test "[environment-modules] bash login shell initializes Environment Modules when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[environment-modules] bash login shell initializes Environment Modules once selected" {
+    select_module_tool
 
     check_bash_login_shell
 }
 
-@test "[environment-modules] tcsh login shell initializes Environment Modules when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[environment-modules] tcsh login shell initializes Environment Modules once selected" {
+    select_module_tool
     command -v tcsh >/dev/null || skip "tcsh not installed"
 
     check_tcsh_login_shell
 }
 
-@test "[environment-modules] login shell loads the default OpenHPC environment when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[environment-modules] login shell loads the default OpenHPC environment once Environment Modules is selected" {
+    select_module_tool
     [ -e /opt/ohpc/pub/modulefiles/ohpc ] || skip "no modules-defaults package installed"
 
     check_default_environment_loaded

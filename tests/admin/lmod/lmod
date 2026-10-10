@@ -61,8 +61,8 @@ setup() {
     check_modulecmd "$MODULE_TOOL_CMD"
 }
 
-@test "[lmod] /usr/bin/modulecmd is Lmod when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[lmod] /usr/bin/modulecmd is Lmod once selected" {
+    select_module_tool
 
     check_modulecmd /usr/bin/modulecmd
 }
@@ -73,21 +73,21 @@ setup() {
     check_tcsh_startup_script
 }
 
-@test "[lmod] bash login shell initializes Lmod when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[lmod] bash login shell initializes Lmod once selected" {
+    select_module_tool
 
     check_bash_login_shell
 }
 
-@test "[lmod] tcsh login shell initializes Lmod when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[lmod] tcsh login shell initializes Lmod once selected" {
+    select_module_tool
     command -v tcsh >/dev/null || skip "tcsh not installed"
 
     check_tcsh_login_shell
 }
 
-@test "[lmod] login shell loads the default OpenHPC environment when selected" {
-    module_tool_selected || skip "another module tool is selected"
+@test "[lmod] login shell loads the default OpenHPC environment once Lmod is selected" {
+    select_module_tool
     [ -e /opt/ohpc/pub/modulefiles/ohpc ] || skip "no modules-defaults package installed"
 
     check_default_environment_loaded
