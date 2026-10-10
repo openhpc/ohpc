@@ -27,3 +27,17 @@ chdef -t site domain=${dns_domain:-local}
 echo "${sms_ip} ${sms_name}.${dns_domain:-local}" >> /etc/hosts
 ```
 <!-- ohpc_end -->
+
+xCAT installs the same ssh host keys, generated in `/etc/xcat/hostkeys` during
+the xCAT installation, on every compute node, but only configures `root` on the
+head node to accept them. Add them to the system-wide known hosts so that all
+users can reach the compute nodes with ssh (e.g. via `pdsh`) while host key
+checking stays enabled:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Trust the xCAT compute node host keys for all users -->
+```bash
+awk -v hosts="${compute_prefix}*" '{print hosts, $1, $2}' \
+    /etc/xcat/hostkeys/ssh_host_*_key.pub >> /etc/ssh/ssh_known_hosts
+```
+<!-- ohpc_end -->
