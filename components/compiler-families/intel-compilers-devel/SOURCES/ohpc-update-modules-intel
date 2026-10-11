@@ -94,7 +94,16 @@ module load "umf"
 module load "compiler/\$version"
 module load "${mklver}"
 
-family "compiler"
+# Environment Modules implements "family" as a conflict on the family name,
+# which matches the oneAPI compiler/<version> module loaded above. Only set
+# the family variables there; other compiler families still exclude this
+# module through their own "family compiler" conflict.
+if {\$ModuleTool eq {Modules}} {
+    setenv          MODULES_FAMILY_COMPILER intel
+    setenv          LMOD_FAMILY_COMPILER    intel
+} else {
+    family "compiler"
+}
 EOF
 
 	modprocess "${modname}"
