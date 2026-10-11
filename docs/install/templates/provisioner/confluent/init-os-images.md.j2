@@ -61,3 +61,17 @@ echo "/etc/hosts -> /etc/hosts" >> \
 	/var/lib/confluent/public/os/${distro_id}/syncfiles
 ```
 <!-- ohpc_end -->
+
+If IPoIB will be configured on the compute nodes (see below), add `rdma-core`
+to the image's package list: Confluent configures only the interfaces present
+when a node first boots, and a minimal install lacks the package that loads the
+IPoIB driver.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Install the IPoIB driver loader with the OS -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+echo rdma-core >> /var/lib/confluent/public/os/${distro_id}/packagelist
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

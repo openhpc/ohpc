@@ -1,1 +1,5 @@
 {% include "provisioner/xcat/compute-ipoib.md.j2" %}
+
+The postscript that applies these attributes is registered in [Stage the
+Compute Configuration](#stage-the-compute-configuration), after `ohpc-config`:
+the InfiniBand packages that create `${ipoib_dev}` are installed there.
