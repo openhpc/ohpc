@@ -13,3 +13,23 @@ until pdsh -w "${compute_prefix}[1-${num_computes}]" true \
 done
 ```
 <!-- ohpc_end -->
+
+If IPoIB is configured, check that it came up on every compute: NetworkManager
+activates each node's connection once the interface and its InfiniBand link
+appear.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Verify IPoIB on the compute nodes -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+for ((t=0; ; t++)) ; do
+	pdsh -S -w "${compute_prefix}[1-${num_computes}]" \
+		"nmcli -g GENERAL.STATE connection show ${ipoib_dev} | grep -qx activated" \
+		>/dev/null 2>&1 && { echo "compute IPoIB: OK"; break; }
+	(( t < 30 )) || { echo "compute IPoIB: FAILED"; exit 1; }
+	echo "Waiting for IPoIB on the compute nodes..."
+	sleep 10
+done
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

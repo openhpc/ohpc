@@ -66,6 +66,17 @@ chdef compute -p postbootscripts={{ xcat_config_postscript | default("ohpc-confi
 <!-- ohpc_end -->
 
 <!-- ohpc_begin -->
+<!-- ohpc_comment Configure IPoIB after the OpenHPC configuration -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+# Apply the IPoIB nic* attributes after the postscript above has installed the
+# InfiniBand packages; until then the IPoIB interface does not exist.
+chdef compute -p postbootscripts=confignetwork
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
 <!-- ohpc_comment Add site or pre-release OpenHPC repositories to the compute provisioning (site-specific) -->
 <!-- ohpc_command #<<< ohpc_repo:compute >>># -->
 <!-- ohpc_end -->

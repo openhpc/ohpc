@@ -1,5 +1,6 @@
 xCAT configures the interface on each node from its `nic*` attributes, applied
-by the `confignics` postscript at boot:
+by the `confignetwork` postscript at boot (`confignics` is deprecated and no
+longer configures anything):
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Setup IPoIB networking -->
@@ -7,9 +8,6 @@ by the `confignics` postscript at boot:
 ```bash
 # Define the IPoIB network
 chdef -t network -o ipoib mask=${ipoib_netmask} net=${c_ipoib[0]}
-
-# Enable secondary NIC configuration
-chdef compute -p postbootscripts=confignics
 
 # Register desired IPoIB IPs per compute
 for ((i=0; i<num_computes; i++)) ; do
