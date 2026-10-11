@@ -30,33 +30,38 @@ setup_file() {
 	assert_success
 }
 
+# Run pdsh with the given arguments on c1 and c2. With slurm, hold both
+# nodes in a job while pdsh runs, as pam_slurm only allows ssh logins to
+# nodes on which the user has a running job.
+run_pdsh_on_computes() {
+	if [[ "${RESOURCE_MANAGER}" != "slurm" ]]; then
+		run pdsh "$@"
+		return
+	fi
+
+	local jobid
+	jobid=$(sbatch --parsable -N 2 -w "c[1-2]" --time=00:05:00 --wrap="sleep infinity")
+
+	# Wait for the job to start running
+	local i
+	for i in $(seq 1 60); do
+		if [[ "$(squeue -j "${jobid}" -h -o "%T")" == "RUNNING" ]]; then
+			break
+		fi
+		sleep 1
+	done
+
+	run pdsh "$@"
+
+	# Clean up the reservation
+	scancel "${jobid}"
+}
+
 @test "[${TESTNAME}] run a shell command on c[1-2] (${RESOURCE_MANAGER})" {
 	[[ -n "${SIMPLE_CI}" ]] && skip "SSH not available in SIMPLE_CI"
 
-	if [[ "${RESOURCE_MANAGER}" == "slurm" ]]; then
-		local jobid
-		jobid=$(sbatch --parsable -N 2 --time=00:05:00 --wrap="sleep infinity")
-
-		# Wait for the job to start running
-		local i
-		for i in $(seq 1 60); do
-			if [[ "$(squeue -j "${jobid}" -h -o "%T")" == "RUNNING" ]]; then
-				break
-			fi
-			sleep 1
-		done
-
-		# Run pdsh test and capture result
-		run pdsh -S -w c[1-2] 'grep . /proc/sys/kernel/ostype'
-
-		# Clean up the reservation
-		scancel "${jobid}"
-
-		assert_success
-	else
-		run pdsh -S -w c[1-2] 'grep . /proc/sys/kernel/ostype'
-		assert_success
-	fi
+	run_pdsh_on_computes -S -w "c[1-2]" 'grep . /proc/sys/kernel/ostype'
+	assert_success
 }
 
 @test "[${TESTNAME}] check for pdsh-mod-slurm RPM (${RESOURCE_MANAGER})" {
@@ -72,7 +77,9 @@ setup_file() {
 	if [[ -n "${SIMPLE_CI}" ]]; then
 		run pdsh -S -P normal -R exec grep . /proc/sys/kernel/ostype
 	else
-		run pdsh -S -P normal 'grep . /proc/sys/kernel/ostype'
+		# The partition can contain more nodes than c1 and c2; filter
+		# its node list down to those two with a regex
+		run_pdsh_on_computes -S -P normal -w '/^c[12]$/' 'grep . /proc/sys/kernel/ostype'
 	fi
 	assert_success
 }
