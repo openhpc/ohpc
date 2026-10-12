@@ -155,8 +155,8 @@ AM_CONDITIONAL(LMOD_ENABLED,test "x$enable_lmod" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Environment Modules
 AC_ARG_ENABLE([environment-modules],
-	 [AS_HELP_STRING([--enable-environment-modules],[Enable Environment Modules tests (default=yes, root only)])],[],
-	 [AX_OPTION_DEFAULT(type=short,enable_environment_modules,yes)])
+	 [AS_HELP_STRING([--enable-environment-modules],[Enable Environment Modules tests (default=no, root only)])],[],
+	 [AX_OPTION_DEFAULT(type=short,enable_environment_modules,no)])
 AM_CONDITIONAL(ENVIRONMENT_MODULES_ENABLED,test "x$enable_environment_modules" = "xyes" )
 
 
