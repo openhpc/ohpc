@@ -99,10 +99,11 @@ provisioners have fundamentally different workflows:
 - **OpenCHAMI**: build layered container image (podman + yq) → cloud-init →
   boot nodes
 - **xCAT**: copycds ISO → define nodes → then, per provisioning mode:
-  - *stateless* (`xcat_stateless`): genimage chroot → customize chroot →
-    packimage → rsetboot/rpower
-  - *stateful* (`xcat_stateful`): install base OS to disk → configure live
-    nodes via xdsh
+  - *stateless* (`xcat_stateless`): genimage chroot (base OS + OpenHPC via
+    `otherpkgs`) → customize chroot → packimage → rsetboot/rpower
+  - *stateful* (`xcat_stateful`): kickstart the base OS to disk, with OpenHPC
+    staged as `otherpkgs` and a configuration postscript → nodes boot
+    configured (no live-node shell)
 
 xCAT ships as **two provisioners**, `xcat_stateless` and `xcat_stateful`,
 selected at build time like any other provisioner (each recipe picks one). This
@@ -133,7 +134,9 @@ build. The recipe follows it throughout — copycds/osimage, `otherpkgdir` +
 **direct chroot** (`dnf --installroot`, `chroot $CHROOT`), not xCAT's
 recommended postinstall/postbootscripts — so the shared customization chapters
 work identically across Warewulf and xCAT, and image errors surface at build
-time rather than on the booted nodes.
+time rather than on the booted nodes. For `xcat_stateful` the same
+customization calls accumulate in the staged postscript the nodes run at
+install.
 
 Aggregator templates use `{% include %}` to compose sections:
 
@@ -209,7 +212,8 @@ chapters include it once its nodes are defined.
 
 **deploy-*** — Cluster booted; compute nodes provisioned; scheduler started. Scope:
 maintenance-window actions (adding/removing nodes). Most provisioners boot here;
-Confluent boots during its `provisioner-*` chapter, as does `xcat_stateful`.
+Confluent boots during its `provisioner-*` chapter; `xcat_stateful` stages its
+install there and boots here.
 
 **dev-tools** — Login-node development tools: compilers, MPI, performance tools,
 third-party libraries.
@@ -328,6 +332,9 @@ is actually started.
   inside double-quoted shell strings).
 - `compute_sed(regex, file)` — regex in single quotes, absolute file path
   without `$CHROOT` prefix (macros add it for Warewulf).
+- Call `compute_*` macros before the deploy chapter: definition-based
+  provisioners (OpenCHAMI, `xcat_stateful`) apply the accumulated definition
+  when nodes boot in `deploy-*`, so a later call never reaches the nodes.
 
 #### Script Extraction Markers
 
@@ -425,7 +432,7 @@ Three proxy placeholder types appear in each recipe, each once, in script order:
 | Placeholder | Location | Context |
 | --- | --- | --- |
 | `#<<< ohpc_proxy:head >>>#` | Near top, before first `dnf` | Head node setup (CA cert, dnf.conf, profile.d) |
-| `#<<< ohpc_proxy:compute >>>#` | Compute image/node setup | Warewulf chroot or Confluent nodeshell commands; xCAT stateless: before `genimage` (the `genimage` command hands the build to the xcatd daemon, which runs dnf with its own generated config, so the proxy must be in xcatd's environment, e.g. a systemd drop-in, not the recipe's shell or the head's `dnf.conf`); xCAT stateful: before the nodes install (they fetch their own packages, so register a site postscript in `postscripts`, which runs before the `otherpkgs` postbootscript) |
+| `#<<< ohpc_proxy:compute >>>#` | Compute image/node setup | Warewulf chroot or Confluent nodeshell commands; xCAT stateless: before `genimage`, which runs inside xcatd with its own generated dnf config — append `#ENV:https_proxy=… no_proxy=<sms_ip>#` to the image's otherpkglist (xCAT applies it to that install pass; the value can't contain a comma); xCAT stateful: before the nodes install (they fetch their own packages, so register a site postscript in `postscripts`, which runs before the `otherpkgs` postbootscript) |
 | `#<<< ohpc_proxy:image >>>#` | OpenCHAMI image build only | Image-builder config (local registry must bypass proxy) |
 
 **Finding placeholders in a generated script:**
