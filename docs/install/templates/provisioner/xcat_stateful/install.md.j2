@@ -47,6 +47,38 @@ reinstalled rather than installed for the first time.
 
 {% include "provisioner/xcat/power-cycle.md.j2" %}
 
+`rsetboot compute net` applies to the next boot only, and the boot into the
+installer uses it up. When the installation finishes, a node whose firmware
+prefers the network would boot from the network again instead of starting the
+new system. Once every compute node reports the `installing` status, set the
+next boot to the local disk:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set has_ipmi -->
+<!-- ohpc_comment Boot from disk once the installer is running on every node -->
+<!-- ohpc_command install_start_timeout=${install_start_timeout:-600} -->
+<!-- ohpc_command deadline=$(( SECONDS + install_start_timeout )) -->
+<!-- ohpc_command while [ "$(lsdef compute -i status -c | grep -c "=installing$")" -ne "$num_computes" ]; do -->
+<!-- ohpc_command     if [ "$SECONDS" -ge "$deadline" ]; then -->
+<!-- ohpc_command         echo "ERROR: not all $num_computes nodes reached the installer in ${install_start_timeout}s" >&2 -->
+<!-- ohpc_command         lsdef compute -i status -c >&2 -->
+<!-- ohpc_command         exit 1 -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command     sleep 10 -->
+<!-- ohpc_command done -->
+```bash
+# Every compute node should report status=installing
+lsdef compute -i status -c
+
+# Boot from the local disk when the installation finishes
+rsetboot compute hd
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+Without a BMC, the site's reset handler must also leave the nodes booting from
+their disk.
+
 The stateful installation typically completes in 5 to 10 minutes, depending on
 BIOS post times and disk speed. Monitor provisioning with the `rcons` command,
 which displays the serial console for a selected node; the escape sequence to
