@@ -27,7 +27,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 # separate SourceN tags, like gnu-compilers.spec does for its per-family
 # gcc tarballs) so the source-fetching/checksum tooling, which parses
 # this spec without the openEuler macro defined, finds and verifies both.
-%global numpy_version_default 2.5.3
+%global numpy_version_default 2.5.4
 %global numpy_version_openeuler 2.4.4
 
 %if 0%{?openEuler}
