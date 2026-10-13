@@ -14,12 +14,13 @@ Usage:
     mkdoc.py <build/name.yaml> --ignore-warnings      # Don't fail on warnings
 """
 
+from __future__ import annotations
+
 import argparse
 import re
 import sys
 import traceback
 from pathlib import Path
-from typing import Optional, Union
 
 import yaml
 from jinja2 import (
@@ -56,22 +57,30 @@ def load_yaml(path: Path) -> dict:
 
 
 class SectionCommentExtension(Extension):
-    """Inject <!-- +section: path --> ... <!-- -section --> comments around every {% include %}."""
+    """Wrap every ``{% include X %}`` with ``<!-- +section: X -->`` /
+    ``<!-- -section: X -->`` markers that label the sections of the generated
+    recipe.
+
+    ``X`` is re-emitted as the include's own expression inside ``{{ }}``, so Jinja
+    resolves it at render time. This marks dynamic includes such as
+    ``{% include "scheduler/" ~ scheduler ~ "/startup.md.j2" %}`` with their
+    concrete path, not only literal-string includes — and a literal
+    ``{% include "foo.md.j2" %}`` yields ``{{ "foo.md.j2" }}``, which renders
+    exactly as before. Reusing Jinja's own evaluation avoids re-implementing
+    path resolution here."""
+
+    _INCLUDE = re.compile(r"{%-?\s*include\s+(?P<expr>.+?)\s*-?%}")
 
     def preprocess(self, source, name, filename=None):
-        def add_comment(match):
-            path = match.group(1)
+        def wrap(match):
+            path = "{{ " + match.group("expr") + " }}"
             return f"<!-- +section: {path} -->\n{match.group(0)}\n<!-- -section: {path} -->\n"
 
-        return re.sub(
-            r'{%-?\s*include\s+["\']([^"\']+)["\']\s*-?%}',
-            add_comment,
-            source,
-        )
+        return self._INCLUDE.sub(wrap, source)
 
 
 def create_jinja_env(
-    template_dirs: list[Path], config: Optional[dict] = None
+    template_dirs: list[Path], config: dict | None = None
 ) -> Environment:
     """Create Jinja2 environment with template search paths."""
     env = Environment(
@@ -308,7 +317,7 @@ def extract_recipe_script(content: str) -> str:
 
 def resolve_output(
     flag, suffix: str, config_path: Path, build_dir: Path
-) -> Optional[Path]:
+) -> Path | None:
     """Resolve an output flag: True -> default path, Path -> as-is, None -> skip."""
     if flag is True:
         build_dir.mkdir(exist_ok=True)
@@ -318,7 +327,7 @@ def resolve_output(
 
 def build(
     config_path: Path,
-    markdown_output: Optional[Path] = None,
+    markdown_output: Path | None = None,
     script_output=None,
     list_vars: bool = False,
     ignore_warnings: bool = False,
@@ -395,7 +404,7 @@ def build(
         print(f"Generated: {script_output}")
 
 
-def parse_output_flag(args, with_name: str, path_name: str) -> Union[Path, bool, None]:
+def parse_output_flag(args, with_name: str, path_name: str) -> Path | bool | None:
     """Parse a --with-X / --X PATH flag pair into True, Path, or None."""
     with_flag = getattr(args, with_name)
     path_flag = getattr(args, path_name)

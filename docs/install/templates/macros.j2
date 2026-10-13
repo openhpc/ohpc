@@ -16,7 +16,9 @@ Notes on strings
 Functions:
 * compute_sed(regex, file): run `sed -i` with regex on file.
 * compute_echo(string, file, append=true): append string to file, if append=false overwrite.
+* compute_service_enable(service): enable a systemd service on the compute node (image provisioners: `enable`; live provisioners: `enable --now`).
 * pkg_install_image(packages): install packages, use array for multiple packages ["pkg1", "pkg2"]
+* compute_group_install(groups): install package groups, use array for multiple groups
 -->
 
 {# Default Macros - last defined wins #}
@@ -26,6 +28,26 @@ Functions:
 
 {%- macro compute_install(packages) -%}
 {{ pkg_install_chroot }} {{ packages if packages is string else packages | join(' ') }}
+{%- endmacro -%}
+
+{# Enable a systemd service on the compute node, composing on compute_run. Image
+   provisioners enable it to start on next boot; live provisioners (xcat_stateful,
+   confluent) override this to add --now, because their configuration runs on the
+   node post-boot with no further reboot -- a bare enable would leave the service
+   enabled but not started, and nothing surfaces the error. #}
+{%- macro compute_service_enable(service) -%}
+{{ compute_run("systemctl enable " ~ service) }}
+{%- endmacro -%}
+
+{# Disable a systemd service on the compute node -- the --now counterpart of
+   compute_service_enable; same image-vs-live split. #}
+{%- macro compute_service_disable(service) -%}
+{{ compute_run("systemctl disable " ~ service) }}
+{%- endmacro -%}
+
+{# Install package groups on the compute node (quoted: group names have spaces). #}
+{%- macro compute_group_install(groups) -%}
+{{ pkg_group_install_chroot }} "{{ groups if groups is string else groups | join('" "') }}"
 {%- endmacro -%}
 
 {# Warewulf Macros #}
@@ -49,6 +71,7 @@ wwctl image exec --build=false {{ baseos }} -- /bin/sh -c \
 {% endif %}
 
 {# Warewulf v3 Macros #}
+{# Warewulf 3 (3.x only) edits the image chroot directly, like xCAT stateless. #}
 {% if is_warewulf3 %}
 
 {%- macro compute_sed(regex, file) -%}
@@ -64,6 +87,76 @@ echo '{{ string }}' {{ ">>" if append else ">" }} \
 {%- macro compute_run(cmd) -%}
 chroot $CHROOT /bin/sh -c \
   "{{ cmd }}"
+{%- endmacro -%}
+
+{% endif %}
+
+{# xCAT stateless Macros #}
+{# Stateless (netboot) operates on the image chroot at ${CHROOT}, like Warewulf
+   but executing directly in the chroot rather than via wwctl. #}
+{% if is_xcat_stateless %}
+
+{%- macro compute_sed(regex, file) -%}
+sed -i '{{ regex }}' \
+	"$CHROOT{{ file }}"
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+echo '{{ string }}' {{ ">>" if append else ">" }} \
+	"$CHROOT{{ file }}"
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+chroot "$CHROOT" /bin/sh -c \
+  "{{ cmd }}"
+{%- endmacro -%}
+
+{% endif %}
+
+{# xCAT stateful Macros #}
+{# Stateful (diskful) is definition-based, like OpenCHAMI: rather than acting on
+   a live node, the compute package list and configuration are accumulated on the
+   head into an otherpkgs pkglist ($OHPC_OTHERPKGS) and an xCAT postscript
+   ($OHPC_POSTSCRIPT). xCAT installs and runs them automatically when the node is
+   provisioned, so there is no live-node ssh. Both files are created fresh (and
+   the shell variables exported) by the "Stage the Compute Configuration" step,
+   so a full recipe run is idempotent. Recipe variables such as ${sms_ip} are
+   expanded here, as the head writes the files. #}
+{% if is_xcat_stateful %}
+
+{%- macro compute_install(packages) -%}
+printf '%s\n' {{ packages if packages is string else packages | join(' ') }} \
+  >> "$OHPC_OTHERPKGS"
+{%- endmacro -%}
+
+{# Package groups go to the postscript (dnf groupinstall on the node): a group
+   name has spaces, which the otherpkgs pkglist (one package per line) does not
+   express as a group. #}
+{%- macro compute_group_install(groups) -%}
+{{ compute_run("dnf -y groupinstall '" ~ (groups if groups is string else groups | join("' '")) ~ "'") }}
+{%- endmacro -%}
+
+{%- macro compute_sed(regex, file) -%}
+echo "sed -i '{{ regex }}' \
+'{{ file }}'" >> "$OHPC_POSTSCRIPT"
+{%- endmacro -%}
+
+{%- macro compute_echo(string, file, append=true) -%}
+echo "echo '{{ string }}' {{ ">>" if append else ">" }} \
+'{{ file }}'" >> "$OHPC_POSTSCRIPT"
+{%- endmacro -%}
+
+{%- macro compute_run(cmd) -%}
+echo "{{ cmd }}" \
+  >> "$OHPC_POSTSCRIPT"
+{%- endmacro -%}
+
+{%- macro compute_service_enable(service) -%}
+{{ compute_run("systemctl enable --now " ~ service) }}
+{%- endmacro -%}
+
+{%- macro compute_service_disable(service) -%}
+{{ compute_run("systemctl disable --now " ~ service) }}
 {%- endmacro -%}
 
 {% endif %}
@@ -85,6 +178,14 @@ nodeshell compute 'echo "{{ string }}" {{ ">>" if append else ">" }} \
 nodeshell compute "{{ cmd }}"
 {%- endmacro -%}
 
+{%- macro compute_service_enable(service) -%}
+{{ compute_run("systemctl enable --now " ~ service) }}
+{%- endmacro -%}
+
+{%- macro compute_service_disable(service) -%}
+{{ compute_run("systemctl disable --now " ~ service) }}
+{%- endmacro -%}
+
 {% endif %}
 
 {# OpenCHAMI Macros #}
@@ -92,6 +193,11 @@ nodeshell compute "{{ cmd }}"
 
 {%- macro compute_install(packages) -%}
 yq -i '.packages += {{ ([packages] if packages is string else packages) | tojson }}' \
+	/opt/ohpc/admin/images/compute-prod.yaml
+{%- endmacro -%}
+
+{%- macro compute_group_install(groups) -%}
+yq -i '.package_groups += {{ ([groups] if groups is string else groups) | tojson }}' \
 	/opt/ohpc/admin/images/compute-prod.yaml
 {%- endmacro -%}
 
