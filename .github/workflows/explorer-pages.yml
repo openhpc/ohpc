@@ -1,0 +1,74 @@
+name: Recipe explorer (GitHub Pages)
+
+# Publishes the browser-side recipe explorer (docs/install/explorer/) as a
+# static site, one copy of docs/install per published ref:
+#
+#   <pages-url>/<ref>/explorer/      the explorer for that ref's templates
+#   <pages-url>/versions.json        what the page's version switcher offers
+#   <pages-url>/                     redirects to the default (first) ref
+#
+# The build is managed from the tip: this workflow and explorer/mksite.py run
+# from the branch that triggered it (4.x), which is the first, default entry.
+# Other refs to publish alongside are listed in RELEASE_REFS, e.g. a release
+# branch or a docs-only tag `v4.1.GA.docs=4.1`. Each ref is rendered by the
+# explorer committed in that ref (its engine must match its mkdoc.py); a ref
+# that predates the explorer gets the tip's overlaid.
+#
+# Requires, in the repository settings: Pages source = "GitHub Actions". If
+# 4.x is not the repository's default branch, allow it on the github-pages
+# environment's deployment branch rules.
+
+on:
+  push:
+    branches:
+      - 4.x
+    paths:
+      - docs/install/**
+      - .github/workflows/explorer-pages.yml
+  workflow_dispatch:
+
+env:
+  # Space-separated REF or REF=LABEL entries published after the tip.
+  RELEASE_REFS: "v4.1.GA=4.1 3.x v3.6.GA=3.6"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # mksite.py exports other refs from this clone
+          fetch-tags: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+      - name: Install Python dependencies (mkdoc.py --manifest)
+        run: pip install -r docs/install/requirements.txt
+      - name: Assemble the site
+        run: |
+          python3 docs/install/explorer/mksite.py --out _site --allow-overlay \
+            "${GITHUB_REF_NAME}" ${RELEASE_REFS}
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

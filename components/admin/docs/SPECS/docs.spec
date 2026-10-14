@@ -71,6 +71,7 @@ pushd %{recipe_base}
 make PYTHON=python3                # .md + .sh
 make PYTHON=python3 pdf            # .pdf
 make PYTHON=python3 html           # .html
+make PYTHON=python3 explorer       # explorer/manifest.json
 popd
 
 %install
@@ -122,6 +123,17 @@ done
 for distro in "almalinux10" "rocky10" "openeuler24.03"; do
 	install -m 0644 -p -D "%{recipe_base}/input.local.template" "%{recipe_dest}/${distro}/input.local"
 done
+
+# Install the recipe sources with the browser-side explorer (docs/install/explorer):
+# served by any static web server rooted here, it renders every recipe from the
+# templates, e.g. `cd %{OHPC_PUB}/doc/install && python3 -m http.server`, then
+# open /explorer/.
+%{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc/install
+cp -a %{recipe_base}/. %{buildroot}%{OHPC_PUB}/doc/install/
+rm -rf %{buildroot}%{OHPC_PUB}/doc/install/build \
+       %{buildroot}%{OHPC_PUB}/doc/install/.venv \
+       %{buildroot}%{OHPC_PUB}/doc/install/explorer/test
+find %{buildroot}%{OHPC_PUB}/doc/install -name __pycache__ -prune -exec rm -rf {} +
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
