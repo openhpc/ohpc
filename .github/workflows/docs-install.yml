@@ -1,0 +1,48 @@
+name: Install docs
+
+# Builds every install recipe (Markdown + recipe.sh) and checks the two
+# implementations of the docs pipeline against each other:
+#
+#   - mkdoc.py's marker grammar against tests/markers.md -> tests/markers.sh
+#   - the browser-side explorer (docs/install/explorer, nunjucks) against the
+#     Python build, byte-for-byte for every recipe (explorer/test/parity.mjs)
+#
+# Branch-agnostic on purpose: the same file runs on every release branch.
+
+on:
+  push:
+    paths:
+      - docs/install/**
+      - .github/workflows/docs-install.yml
+  pull_request:
+    paths:
+      - docs/install/**
+      - .github/workflows/docs-install.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-parity:
+    name: Build recipes, marker grammar, explorer parity
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs/install
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Build all recipes (.md + .sh)
+        run: make PYTHON=python3
+      - name: Marker grammar (mkdoc.py)
+        run: python3 -m unittest discover -s tests -v
+      - name: Explorer manifest
+        run: make PYTHON=python3 explorer
+      - name: Marker grammar (engine.js)
+        run: node explorer/test/markers.mjs
+      - name: Explorer parity with the Python build
+        run: node explorer/test/parity.mjs
