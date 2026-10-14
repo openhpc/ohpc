@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenHPC Recipe Explorer</title>
+<meta name="description" content="Choose a base OS, architecture, provisioner and scheduler and read the OpenHPC install guide for exactly that path — rendered in your browser from the recipe templates.">
+<link rel="icon" href="../templates/figures/4x_icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/hljs-github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="vendor/hljs-github-dark.min.css" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="masthead">
+  <a class="brand" href="#" title="Start over">
+    <img src="../templates/figures/ohpc_logo_blue.png" alt="OpenHPC" width="120" height="40">
+    <span class="brand-text">
+      <span class="brand-title">Cluster Building Recipes</span>
+      <span class="brand-sub">choose your own adventure</span>
+    </span>
+  </a>
+  <div id="pathbar" class="pathbar" hidden></div>
+  <span id="rev" class="rev" title="Templates revision this page is rendering from"></span>
+</header>
+
+<section id="intro" class="intro">
+  <h1>Build an OpenHPC cluster. Pick your path.</h1>
+  <p>
+    Every OpenHPC install guide is one path through the same set of recipe templates.
+    Choose the four things that shape yours and this page renders that guide right here,
+    from the <code>.md.j2</code> sources &mdash; with the <code>recipe.sh</code> and an
+    <code>input.local</code> to take with you.
+  </p>
+</section>
+
+<div id="chooser" class="chooser" aria-label="Choose your recipe"></div>
+
+<div class="reader">
+  <aside class="sidebar">
+    <nav id="toc" class="toc-nav" aria-label="Contents"></nav>
+    <div id="options" class="options"></div>
+    <div class="switches">
+      <h3>View</h3>
+      <label><input type="checkbox" id="sw-skipped"> show steps you switched off</label>
+      <label><input type="checkbox" id="sw-script"> show script-only lines</label>
+      <label><input type="checkbox" id="sw-sources" checked> show template sources</label>
+    </div>
+    <div class="downloads-box">
+      <h3>Take it with you</h3>
+      <div id="downloads" class="downloads"></div>
+    </div>
+    <p id="stamp" class="stamp"></p>
+  </aside>
+  <main>
+    <div id="status" class="status" hidden></div>
+    <div id="guide"></div>
+  </main>
+</div>
+
+<footer class="foot">
+  <p>
+    Rendered client-side from the OpenHPC install templates
+    (<a href="https://github.com/openhpc/ohpc/tree/4.x/docs/install" target="_blank" rel="noopener">docs/install</a>).
+    The guide text is licensed <a href="http://creativecommons.org/licenses/by/4.0" target="_blank" rel="noopener">CC BY 4.0</a>.
+    Something rendered oddly? The PDF/HTML from <code>make</code> remain the reference; the
+    <a href="README.md">README</a> explains how this page works.
+  </p>
+</footer>
+
+<script src="vendor/nunjucks.js"></script>
+<script src="vendor/js-yaml.min.js"></script>
+<script src="vendor/marked.min.js"></script>
+<script src="vendor/highlight.min.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@
 #   html       Build all recipes as HTML
 #   check      Run shellcheck on generated scripts
 #   manifest   Regenerate manifest tables from .all files
+#   explorer   Generate explorer/manifest.json for the client-side recipe explorer
 #   changelog  Generate ChangeLogs (OLD_REF=v4.0.GA)
 #   clean      Remove generated files
 #   help       Show available targets
@@ -76,7 +77,7 @@ SHELLCHECK_EXCLUDE := SC2154,SC1090,SC2129
 # Prevent Make from deleting merged config files as intermediates
 .PRECIOUS: build/%.yaml
 
-.PHONY: all script pdf html check manifest changelog clean help
+.PHONY: all script pdf html check manifest explorer changelog clean help
 
 .SECONDEXPANSION:
 
@@ -130,6 +131,14 @@ manifest:
 		$(PYTHON) generate_manifest.py $$d; \
 	done
 
+# Index for the browser-side recipe explorer (explorer/index.html). It lists the
+# recipes, the template files and the input.local flags, plus vc_revision/date;
+# the page renders the guides itself from templates/, config/ and recipes/.
+explorer: explorer/manifest.json
+
+explorer/manifest.json: mkdoc.py $(RECIPES) $(wildcard recipes/*.yaml) $(CONFIGS) $(TEMPLATES) $(MANIFESTS) input.local.template
+	$(MKDOC) --manifest
+
 changelog:
 	@for d in $(MANIFEST_DIRS); do \
 		echo "Generating changelog: $$d"; \
@@ -138,7 +147,7 @@ changelog:
 
 clean:
 	rm -f build/*.md build/*.sh build/*.pdf build/*.html build/*.tex build/*.yaml
-	rm -f manifests/*/ChangeLog
+	rm -f manifests/*/ChangeLog explorer/manifest.json
 
 help:
 	@echo "Targets:"
@@ -148,6 +157,7 @@ help:
 	@echo "  html       Build all recipes as HTML"
 	@echo "  check      Run shellcheck on generated scripts"
 	@echo "  manifest   Regenerate manifest tables from .all files"
+	@echo "  explorer   Generate explorer/manifest.json for the recipe explorer page"
 	@echo "  changelog  Generate ChangeLogs (OLD_REF=$(OLD_REF))"
 	@echo "  clean      Remove generated files"
 	@echo "  help       Show this message"
