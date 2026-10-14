@@ -59,6 +59,7 @@ from the OpenHPC software stack.
 cd %{recipe_source}
 make PYTHON=python3
 make PYTHON=python3 pdf
+make PYTHON=python3 explorer       # explorer/manifest.json
 
 %install
 
@@ -111,6 +112,17 @@ for distro in "rocky9" "almalinux9" "leap15" "openeuler22.03"; do
 	install -m 0644 -p "%{recipe_source}/input.local.template" \
 		"%{recipe_dest}/${distro}/input.local"
 done
+
+# Install the recipe sources with the browser-side explorer (docs/install/explorer):
+# served by any static web server rooted here, it renders every recipe from the
+# templates, e.g. `cd %{OHPC_PUB}/doc/install && python3 -m http.server`, then
+# open /explorer/.
+%{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc/install
+cp -a %{recipe_source}/. %{buildroot}%{OHPC_PUB}/doc/install/
+rm -rf %{buildroot}%{OHPC_PUB}/doc/install/build \
+       %{buildroot}%{OHPC_PUB}/doc/install/.venv \
+       %{buildroot}%{OHPC_PUB}/doc/install/explorer/test
+find %{buildroot}%{OHPC_PUB}/doc/install -name __pycache__ -prune -exec rm -rf {} +
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 

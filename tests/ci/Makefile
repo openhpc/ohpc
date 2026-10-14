@@ -92,7 +92,11 @@ ruff-check-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
-		../../tests/ci/spec_to_test_mapping.py
+		../../tests/ci/spec_to_test_mapping.py \
+		../../docs/install/mkdoc.py \
+		../../docs/install/explorer/mksite.py \
+		../../docs/install/explorer/test/e2e.py \
+		../../docs/install/tests/test_markers.py
 
 ruff-format-lint:
 	@echo "Running 'ruff format' on selected Python files"
@@ -101,7 +105,11 @@ ruff-format-lint:
 		../../tests/ci/check_spec.py \
 		../../tests/ci/run_build.py \
 		../../misc/build_order.py \
-		../../tests/ci/spec_to_test_mapping.py
+		../../tests/ci/spec_to_test_mapping.py \
+		../../docs/install/mkdoc.py \
+		../../docs/install/explorer/mksite.py \
+		../../docs/install/explorer/test/e2e.py \
+		../../docs/install/tests/test_markers.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
