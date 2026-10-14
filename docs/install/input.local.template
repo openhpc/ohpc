@@ -82,6 +82,10 @@ enable_lustre_client="${enable_lustre_client:-0}"
 enable_pmix="${enable_pmix:-0}"
 enable_nhc="${enable_nhc:-1}"
 
+# GPU driver flags
+enable_nvidia_gpu_driver="${enable_nvidia_gpu_driver:-0}"
+enable_amd_gpu_driver="${enable_amd_gpu_driver:-0}"
+
 # Vendor compiler package flags
 enable_intel_packages="${enable_intel_packages:-0}"
 
