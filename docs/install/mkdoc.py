@@ -12,11 +12,15 @@ Usage:
     mkdoc.py <build/name.yaml> --script output.sh     # Generate .sh at custom path
     mkdoc.py <build/name.yaml> --list-vars            # Show all variables
     mkdoc.py <build/name.yaml> --ignore-warnings      # Don't fail on warnings
+    mkdoc.py --manifest                               # Write explorer/manifest.json
 """
 
 import argparse
+import json
 import re
+import subprocess
 import sys
+import time
 import traceback
 from pathlib import Path
 
@@ -309,6 +313,123 @@ def extract_recipe_script(content: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Explorer manifest (explorer/manifest.json)
+# ---------------------------------------------------------------------------
+#
+# The browser-side recipe explorer (explorer/) renders the guides from the
+# templates in the browser. A static web server has no directory listing, so
+# this is the one index the page needs: the recipes with the config files each
+# .conf merges (what the Makefile's build/%.yaml rule does), the files the
+# template loader may fetch, the runtime enable_*/has_* flags declared in
+# input.local.template, and the vc_revision/vc_date the Makefile injects.
+
+MANIFEST_PATH = BASE_DIR / "explorer" / "manifest.json"
+# Directories the loader searches (templates, manifests), plus config/ so the
+# page can pick axis config files without probing.
+MANIFEST_ROOTS = ("templates", "manifests", "config")
+MANIFEST_SUFFIXES = (".j2", ".md", ".svg", ".png", ".yaml")
+FLAG_RE = re.compile(
+    r'^(?P<name>(enable_|has_|update_)\w+)="?\$\{(?P=name):-(?P<default>[^}]*)\}"?'
+)
+
+
+def git_output(*args: str) -> str | None:
+    """stdout of a git command run in docs/install, or None if unavailable."""
+    try:
+        return subprocess.run(
+            ["git", *args], cwd=BASE_DIR, check=True, capture_output=True, text=True
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+
+
+def manifest_recipes(base: Path = BASE_DIR) -> list[dict]:
+    entries = []
+    for conf in sorted((base / "recipes").glob("*.conf")):
+        files = [
+            line.strip()
+            for line in conf.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ]
+        override = conf.with_suffix(".yaml")
+        entries.append(
+            {
+                "name": conf.stem,
+                "conf": f"recipes/{conf.name}",
+                "configs": files,
+                "override": f"recipes/{override.name}" if override.exists() else None,
+            }
+        )
+    return entries
+
+
+def manifest_files(base: Path = BASE_DIR) -> list[str]:
+    files = []
+    for root in MANIFEST_ROOTS:
+        for path in sorted((base / root).rglob("*")):
+            if path.is_file() and path.suffix in MANIFEST_SUFFIXES:
+                files.append(path.relative_to(base).as_posix())
+    return files
+
+
+def manifest_flags(base: Path = BASE_DIR) -> list[dict]:
+    """enable_*/has_* flags and defaults from input.local.template; the
+    preceding comment line is kept as the flag's description."""
+    flags = []
+    comment = None
+    template = base / "input.local.template"
+    for line in template.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            text = stripped.lstrip("#").strip()
+            comment = text if text and not set(text) <= {"-"} else None
+            continue
+        match = FLAG_RE.match(stripped)
+        if match:
+            default = match.group("default")
+            flags.append(
+                {
+                    "name": match.group("name"),
+                    "default": int(default) if default.isdigit() else default,
+                    "description": comment,
+                }
+            )
+        comment = None
+    return flags
+
+
+def write_manifest(
+    output: Path,
+    vc_revision: str | None = None,
+    vc_date: str | None = None,
+    vc_branch: str | None = None,
+    base: Path = BASE_DIR,
+) -> None:
+    """Write the explorer manifest for the docs/install tree at `base`. The
+    vc_* overrides serve trees that are not a git checkout (explorer/mksite.py
+    exports refs with `git archive`)."""
+    manifest = {
+        "generated": time.strftime("%Y-%m-%d", time.gmtime()),
+        "vc_revision": vc_revision
+        or git_output("log", "-1", "HEAD", "--pretty=format:%H")
+        or "non-git-checkout",
+        "vc_date": vc_date
+        or git_output("log", "-1", "HEAD", "--pretty=format:%as")
+        or time.strftime("%Y-%m-%d", time.gmtime()),
+        "vc_branch": vc_branch or git_output("rev-parse", "--abbrev-ref", "HEAD"),
+        "recipes": manifest_recipes(base),
+        "files": manifest_files(base),
+        "flags": manifest_flags(base),
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(
+        f"Wrote {output}: {len(manifest['recipes'])} recipes, "
+        f"{len(manifest['files'])} files, {len(manifest['flags'])} flags"
+    )
+
+
+# ---------------------------------------------------------------------------
 # Main Build Function
 # ---------------------------------------------------------------------------
 
@@ -433,7 +554,30 @@ Examples:
     )
     parser.add_argument(
         "config",
+        nargs="?",
         help="Pre-merged config YAML file (build/<name>.yaml)",
+    )
+    parser.add_argument(
+        "--manifest",
+        nargs="?",
+        const=str(MANIFEST_PATH),
+        metavar="PATH",
+        help=f"Write the recipe explorer's manifest (default: {MANIFEST_PATH.relative_to(BASE_DIR)}) and exit",
+    )
+    parser.add_argument(
+        "--vc-revision",
+        help="with --manifest: commit hash to stamp (default: git HEAD)",
+    )
+    parser.add_argument(
+        "--vc-date", help="with --manifest: commit date YYYY-MM-DD (default: git HEAD)"
+    )
+    parser.add_argument(
+        "--vc-branch", help="with --manifest: branch or tag name (default: git HEAD)"
+    )
+    parser.add_argument(
+        "--base",
+        metavar="DIR",
+        help="with --manifest: the docs/install tree to index (default: this one)",
     )
     parser.add_argument(
         "--markdown",
@@ -462,6 +606,18 @@ Examples:
     )
 
     args = parser.parse_args()
+
+    if args.manifest:
+        write_manifest(
+            Path(args.manifest),
+            args.vc_revision,
+            args.vc_date,
+            args.vc_branch,
+            Path(args.base).resolve() if args.base else BASE_DIR,
+        )
+        return
+    if not args.config:
+        parser.error("a config file is required unless --manifest is given")
 
     config_path = Path(args.config).resolve()
     markdown_output = Path(args.markdown) if args.markdown else None
