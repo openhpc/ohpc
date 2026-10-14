@@ -1,2 +1,3 @@
 [codespell]
 ignore-words-list = reenable, caf, CAF, ser, Alph, COnly
+skip = */explorer/vendor/*

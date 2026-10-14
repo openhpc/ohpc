@@ -488,7 +488,7 @@ For both patterns, document the new type in this section.
 
 ```text
 docs/install/
-├── mkdoc.py                     # Main build tool
+├── mkdoc.py                     # Main build tool (+ --manifest for the explorer)
 ├── generate_manifest.py         # Package manifest generator
 ├── pandoc/                      # Pandoc support files (PDF + HTML)
 │   ├── header-includes.tex.j2   # LaTeX header template (page headers, code styling)
@@ -551,9 +551,19 @@ docs/install/
 │   ├── el10-aarch64/
 │   ├── oe2403-x86_64/
 │   └── oe2403-aarch64/
-├── recipes/                     # Recipe YAML files (source only)
-│   ├── rocky10-x86_64-warewulf-slurm.yaml
-│   ├── almalinux10-x86_64-warewulf-slurm.yaml
+├── explorer/                    # Client-side recipe explorer (see explorer/README.md)
+│   ├── index.html, app.js       # The page: choose a path, read that guide
+│   ├── engine.js                # JS port of the Makefile+mkdoc.py pipeline (nunjucks)
+│   ├── render-html.js           # Guide Markdown -> DOM (provenance, optional steps)
+│   ├── mksite.py                # Multi-version site: one docs/install per git ref + versions.json
+│   ├── test/parity.mjs          # Byte-for-byte check against build/*.md and *.sh
+│   └── vendor/                  # nunjucks, js-yaml, marked, highlight.js
+├── recipes/                     # Recipe definitions (source only)
+│   ├── rocky9-x86_64-warewulf-slurm.conf
+│   ├── almalinux9-x86_64-warewulf-slurm.conf
+│   ├── rocky9-x86_64-warewulf3-openpbs.conf
+│   ├── rocky9-x86_64-confluent-slurm.conf
+│   ├── rocky9-x86_64-confluent-slurm.yaml
 │   └── ...
 └── build/                       # Generated output (gitignored)
     ├── header-includes.tex      # Rendered from pandoc/header-includes.tex.j2
@@ -678,6 +688,24 @@ each `build/*.yaml` via `yq` during the merge step, so mkdoc.py needs
 no subprocess calls. The `.yaml` prerequisite for `build/%.yaml` is
 optional via `.SECONDEXPANSION` — only Confluent recipes have one.
 
+### Recipe explorer (browser-side rendering)
+
+`explorer/` is a static web page that renders any recipe **in the browser**
+from the same `templates/`, `config/` and `recipes/` sources — no server-side
+build, only `make explorer` to write the index it needs (`manifest.json`). Its
+`engine.js` mirrors this pipeline (config merge, include markers, macros,
+script extraction) with nunjucks in place of Jinja2, and
+`explorer/test/parity.mjs` checks every recipe's Markdown and script
+byte-for-byte against `build/`. **When `mkdoc.py` or the Makefile merge step
+changes, update `engine.js` and run the parity test.** Each release branch
+carries its own copy of `explorer/`, rendered against that branch's templates
+and `mkdoc.py`: port explorer changes between branches by cherry-pick
+(`git cherry-pick -x`) so the copies stay identical until a branch has a
+reason to diverge. The multi-version site build (`explorer/mksite.py`, the
+Pages workflow) lives on the tip only. Design, the
+Jinja2↔nunjucks differences it handles, and the test commands are in
+[`explorer/README.md`](explorer/README.md).
+
 ### RPM Packaging
 
 The `docs-ohpc` RPM is built from `components/admin/docs/`:
@@ -728,10 +756,11 @@ introduced in later versions:
 
 ### Recipe Naming
 
-Recipes are named `{distro}{version}-{arch}-{provisioner}-{scheduler}.yaml`
-and live in `recipes/`. See existing recipes for examples. The 14 current
-recipes cover Warewulf, Confluent, and OpenCHAMI across Rocky, AlmaLinux,
-and openEuler on x86\_64 and aarch64.
+Recipes are named `{distro}{version}-{arch}-{provisioner}-{scheduler}.conf`
+(with an optional `.yaml` override alongside) and live in `recipes/`. See
+existing recipes for examples. The 28 current recipes cover Warewulf,
+Warewulf 3, Confluent, and OpenCHAMI with Slurm or OpenPBS across Rocky 9,
+AlmaLinux 9, openEuler 22.03, and openSUSE Leap 15 on x86\_64 and aarch64.
 
 ### Manifest Directory Naming
 

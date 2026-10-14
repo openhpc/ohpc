@@ -345,6 +345,7 @@ containers/examples/mpi/mpi
 # ---- Docs: install ----
 docs/install/.venv/
 docs/install/build/
+docs/install/explorer/manifest.json
 
 # ---- Docs: papers ----
 docs/papers/HPCSYSPROS/hpcsyspros.aux
