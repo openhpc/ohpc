@@ -58,7 +58,7 @@ jobs:
         run: |
           python3 docs/install/explorer/mksite.py --out _site --allow-overlay \
             "${GITHUB_REF_NAME}" ${RELEASE_REFS}
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
