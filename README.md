@@ -30,7 +30,10 @@ guides tailored for each supported provisioning system and resource manager
 with detailed example instructions for installing a cluster are also available.
 Copies of the ```ohpc-release``` package and installation guides along with
 more information is available on the relevant release series pages
-([2.x][2xbranch], [3.x][3xbranch] or [4.x][4xbranch]).
+([2.x][2xbranch], [3.x][3xbranch] or [4.x][4xbranch]). The installation
+guides can also be read online in the [recipe explorer][explorer]: choose a
+base OS, architecture, provisioner and resource manager, and it renders the
+matching guide for the current releases and development branches.
 
 ---
 
@@ -59,5 +62,6 @@ using the [System Registration Form][register].
 [2xbranch]: https://github.com/openhpc/ohpc/wiki/2.x
 [3xbranch]: https://github.com/openhpc/ohpc/wiki/3.x
 [4xbranch]: https://github.com/openhpc/ohpc/wiki/4.x
+[explorer]: https://openhpc.github.io/ohpc/
 [register]: https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI
 [userlist]: https://groups.io/g/openhpc-users
