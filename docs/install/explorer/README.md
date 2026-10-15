@@ -6,9 +6,9 @@ architecture, provisioner and scheduler (the four axes a `recipes/*.conf` is
 named by), choose the optional features you plan to enable, and read the guide
 for exactly that path — with the `recipe.sh` and an `input.local` to download.
 
-It is a proof of concept. The PDF/HTML that `make pdf`/`make html` produce
-remain the reference rendering; this page is a different *view* of the same
-templates, not a second source.
+The published site is <https://openhpc.github.io/ohpc/>. The PDF/HTML that
+`make pdf`/`make html` produce remain the reference rendering; this page is a
+different *view* of the same templates, not a second source.
 
 ## Running it
 
