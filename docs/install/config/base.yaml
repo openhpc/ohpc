@@ -9,6 +9,10 @@ ohpc_repo_server: "http://repos.openhpc.community"
 gnu_version: "gnu16"
 openmpi_version: "openmpi5"
 
+# Module tool package: "lmod-ohpc" (Lmod) or "environment-modules-ohpc"
+# (Environment Modules). Installed on the head node and the compute nodes.
+modules_package: "lmod-ohpc"
+
 # Boolean flags - default to false, overridden in specific configs
 
 ## Debug and Dev (only edit locally in a development environment)

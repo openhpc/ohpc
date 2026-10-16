@@ -13,7 +13,7 @@ wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
   dnf -y install chrony
 
   # Include modules user environment
-  dnf -y install lmod-ohpc
+  dnf -y install {{ modules_package }}
 EOF
 ```
 <!-- ohpc_end -->
