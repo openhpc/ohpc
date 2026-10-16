@@ -1,0 +1,53 @@
+## Optionally add RoCE support on *head node*
+
+RoCE (RDMA over Converged Ethernet) runs RDMA over Ethernet NICs that support
+it, for example NVIDIA ConnectX "Dx" models. It uses the same distro-provided
+RDMA stack as InfiniBand, but it needs no subnet manager and no IPoIB: RDMA
+traffic is addressed by the Ethernet interface's own IP address. This recipe
+runs RoCE over the internal cluster network. The following command adds the
+RDMA stack to the *head node*. If you enabled InfiniBand above, the stack is
+already installed and the script skips this step.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally add RoCE support on head node -->
+<!-- ohpc_if_set enable_roce -->
+<!-- ohpc_if [[ ${enable_ib} -ne 1 ]] -->
+```bash
+{{ pkg_group_install }} "InfiniBand Support"
+# Load the RDMA drivers for the RoCE NIC
+udevadm trigger --type=devices --action=add
+systemctl restart rdma-load-modules@rdma.service
+```
+<!-- ohpc_fi -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+RoCE takes its own MTU (up to 4096 bytes) from the Ethernet MTU: the largest
+that fits with room for headers. An Ethernet MTU of 1500 gives RoCE 1024, and
+exactly 4096 gives only 2048; about 4200 or more (9000 is common) gives the full
+4096. RoCE works at the default MTU, and a larger one adds a little bandwidth.
+Every host and switch port on the network must carry the larger frames.
+{% if is_warewulf %}
+To use one, set `${roce_mtu}`. The following sets it on the *head node*'s
+internal interface, now and across reboots; [Enable RoCE
+drivers](#enable-roce-drivers) sets the same value on the computes.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally set the RoCE MTU on head node -->
+<!-- ohpc_if_set enable_roce -->
+<!-- ohpc_if [[ -n "${roce_mtu}" ]] -->
+```bash
+# Set the Ethernet MTU on the internal interface
+nmcli connection modify \
+	"$(nmcli -g GENERAL.CONNECTION device show "${sms_eth_internal}")" \
+	802-3-ethernet.mtu "${roce_mtu}"
+ip link set dev "${sms_eth_internal}" mtu "${roce_mtu}"
+```
+<!-- ohpc_fi -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+{% else %}
+This recipe leaves the MTU unchanged. To use a larger one, set the same value
+on the *head node*'s internal interface and on the computes' interfaces in your
+{{ provisioner_name }} network configuration.
+{% endif %}

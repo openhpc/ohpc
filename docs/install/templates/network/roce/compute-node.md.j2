@@ -1,0 +1,37 @@
+## Enable RoCE drivers
+
+If your compute resources support RoCE, the following commands add the same
+RDMA stack to the compute image. If you enabled InfiniBand drivers above, the
+stack is already there and the script skips the install.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add RoCE (RDMA) drivers to compute image -->
+<!-- ohpc_if_set enable_roce -->
+<!-- ohpc_if [[ ${enable_ib} -ne 1 ]] -->
+```bash
+# Add RDMA support
+{{ compute_group_install("InfiniBand Support") }}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+{% if is_warewulf %}
+
+If you set `${roce_mtu}`, the following gives the computes' provisioning
+interface the same MTU as the *head node*'s internal interface.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Optionally set the RoCE MTU on compute nodes -->
+<!-- ohpc_if_set enable_roce -->
+<!-- ohpc_if [[ -n "${roce_mtu}" ]] -->
+```bash
+wwctl profile set -y nodes --netname=default --mtu="${roce_mtu}"
+```
+<!-- ohpc_fi -->
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+{% endif %}
+
+To run MPI over RoCE, select the RDMA device and port for UCX, for example
+`UCX_NET_DEVICES=mlx5_1:1`; `rdma link` lists each RDMA device with its network
+interface.
