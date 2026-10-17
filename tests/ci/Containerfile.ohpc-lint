@@ -1,3 +1,7 @@
 FROM registry.fedoraproject.org/fedora:latest
 
-RUN dnf -y install codespell make ruff ShellCheck shfmt clang-tools-extra git bats
+# python3-jinja2 and python3-pyyaml let the recipe explorer site build
+# (docs/install/explorer/mksite.py via mkdoc.py --manifest) run in this
+# image too; see .github/workflows/explorer-pages.yml.
+RUN dnf -y install codespell make ruff ShellCheck shfmt clang-tools-extra git bats \
+    python3-jinja2 python3-pyyaml
