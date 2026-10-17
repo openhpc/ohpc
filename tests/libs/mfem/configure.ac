@@ -98,7 +98,7 @@ echo Package version................. : $PACKAGE-$VERSION
 echo OHPC compiler toolchain......... : $LMOD_FAMILY_COMPILER
 echo OHPC MPI toolchain.............. : $LMOD_FAMILY_MPI
 echo
-echo CXX compiler.................... : `which $CXX`
+echo CXX compiler.................... : `which ${CXX%% *}`
 echo CXX compiler flags.............. : $CXXFLAGS
 echo
 echo Libs............................ : $LIBS
