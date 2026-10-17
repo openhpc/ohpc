@@ -57,10 +57,10 @@ echo
 echo Package version............... : $PACKAGE-$VERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
-echo C compiler.................... : `which $CC`
-echo C++ compiler.................. : `which $CXX`
-echo Fortran compiler ............. : `which $FC`
-echo F77 compiler ................. : `which $F77`
+echo C compiler.................... : `which ${CC%% *}`
+echo C++ compiler.................. : `which ${CXX%% *}`
+echo Fortran compiler ............. : `which ${FC%% *}`
+echo F77 compiler ................. : `which ${F77%% *}`
 echo
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
