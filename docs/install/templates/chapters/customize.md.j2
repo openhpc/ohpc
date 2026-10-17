@@ -20,7 +20,7 @@
 {% endif %}
 {% include "customize/syslog.md.j2" %}
 
-{% if is_el %}
+{% if is_el and is_x86_64 %}
 {% include "customize/oneapi-mountpoint.md.j2" %}
 {% endif %}
 
