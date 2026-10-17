@@ -178,6 +178,12 @@ nodeshell compute 'echo "{{ string }}" {{ ">>" if append else ">" }} \
 nodeshell compute "{{ cmd }}"
 {%- endmacro -%}
 
+{#- nodeshell joins its arguments into one remote command line, so a quoted group
+   name with spaces would split; quote it inside the command instead. #}
+{%- macro compute_group_install(groups) -%}
+{{ compute_run("dnf -y groupinstall '" ~ (groups if groups is string else groups | join("' '")) ~ "'") }}
+{%- endmacro -%}
+
 {%- macro compute_service_enable(service) -%}
 {{ compute_run("systemctl enable --now " ~ service) }}
 {%- endmacro -%}
