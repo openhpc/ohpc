@@ -136,9 +136,13 @@ When adding content, choose the chapter whose preconditions match.
 
 **introduction** — Overview, requirements, and input variables.
 
-**base-os** — Head node setup: epel, ohpc repos, ohpc-base packages, firewall,
-time sync, NFS, networking. InfiniBand and OmniPath server-side installed here
-(optional). Provisioners (notably Warewulf) handle parts of this themselves.
+**base-os** — Head node setup from distro packages and tools only: EPEL/CRB
+repos, firewall, time sync, NFS, networking. InfiniBand and OmniPath server-side
+installed here (optional), IPoIB configured with `nmcli`. Nothing from OpenHPC
+is installed yet, so steps here must not use OpenHPC packages or files (such as
+the templates in `examples-ohpc`). One known exception: Leap 15 keeps its
+earlier IPoIB step, which copies an `examples-ohpc` template. Provisioners
+(notably Warewulf) handle parts of this themselves.
 
 **ohpc** — OpenHPC repository and base packages on the head node.
 
