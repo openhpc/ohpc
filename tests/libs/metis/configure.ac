@@ -55,7 +55,7 @@ echo
 echo Package version............... : $PACKAGE-$VERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
-echo C compiler.................... : `which $CC`
+echo C compiler.................... : `which ${CC%% *}`
 echo C compiler flags.............. : $CFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
 echo
