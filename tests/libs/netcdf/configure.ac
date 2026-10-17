@@ -76,10 +76,10 @@ else
   echo Parallel tests disabled
 fi
 echo
-echo C compiler.................... : `which $CC`
+echo C compiler.................... : `which ${CC%% *}`
 if test "x$enable_all" = "xyes"; then
-echo C++ compiler.................. : `which $CXX`
-echo Fortran compiler ............. : `which $FC`
+echo C++ compiler.................. : `which ${CXX%% *}`
+echo Fortran compiler ............. : `which ${FC%% *}`
 fi
 echo
 echo C compiler flags.............. : $CFLAGS
