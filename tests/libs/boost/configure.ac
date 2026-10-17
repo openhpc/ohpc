@@ -60,7 +60,7 @@ echo Package version............... : $PACKAGE-$VERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
-echo C++ compiler.................. : `which $CXX`
+echo C++ compiler.................. : `which ${CXX%% *}`
 echo C++ compiler flags............ : $CXXFLAGS
 echo Boost CPPFLAGS flags.......... : -I$BOOST_DIR/include
 echo
