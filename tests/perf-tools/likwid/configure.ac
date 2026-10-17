@@ -61,8 +61,8 @@ echo
 echo Package version............... : $PACKAGE-$VERSION
 echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
 echo
-echo C compiler.................... : `which $CC`
-echo F90 compiler.................. : `which $F90`
+echo C compiler.................... : `which ${CC%% *}`
+echo F90 compiler.................. : `which ${F90%% *}`
 echo
 echo C compiler flags.............. : $CFLAGS
 echo F90 compiler flags............ : $FCFLAGS
