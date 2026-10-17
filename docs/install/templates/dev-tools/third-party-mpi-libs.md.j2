@@ -6,10 +6,12 @@
 {{ pkg_install }} ohpc-{{ gnu_version }}-{{ openmpi_version }}-parallel-libs
 ```
 <!-- ohpc_fi -->
+{% if is_x86_64 %}
 <!-- ohpc_if_set enable_ib -->
 <!-- ohpc_command {{ pkg_install }} ohpc-{{ gnu_version }}-mvapich2-parallel-libs -->
 <!-- ohpc_fi -->
 <!-- ohpc_if_set enable_opa -->
 <!-- ohpc_command {{ pkg_install }} ohpc-{{ gnu_version }}-mvapich2-parallel-libs -->
 <!-- ohpc_fi -->
+{% endif %}
 <!-- ohpc_end -->

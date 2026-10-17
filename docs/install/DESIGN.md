@@ -102,9 +102,7 @@ Aggregator templates use `{% include %}` to compose sections:
 {% include "dev-tools/compilers.md.j2" %}
 {% include "scheduler/slurm/mpi.md.j2" %}
 {% include "dev-tools/perf-tools.md.j2" %}
-{% if is_x86_64 %}
-{% include "dev-tools/third-party-mpi-libs-x86.md.j2" %}
-{% endif %}
+{% include "dev-tools/third-party-mpi-libs.md.j2" %}
 ```
 
 Distro-specific content (e.g., `distro/rocky/repos.md.j2`) is included
