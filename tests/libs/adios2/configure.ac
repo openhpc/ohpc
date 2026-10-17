@@ -56,9 +56,9 @@ echo Package version................. : $PACKAGE-$VERSION
 echo OHPC compiler toolchain......... : $LMOD_FAMILY_COMPILER
 echo OHPC MPI toolchain.............. : $LMOD_FAMILY_MPI
 echo
-echo CXX compiler.................... : `which $CXX`
+echo CXX compiler.................... : `which ${CXX%% *}`
 echo CXX compiler flags.............. : $CXXFLAGS
-echo F90 compiler.................... : `which $FC`
+echo F90 compiler.................... : `which ${FC%% *}`
 echo F90 compiler flags.............. : $FCFLAGS
 echo LD flags........................ : $LDFLAGS
 echo LIBS............................ : $LIBS
