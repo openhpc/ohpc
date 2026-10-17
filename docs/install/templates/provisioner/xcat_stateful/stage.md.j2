@@ -72,16 +72,6 @@ chdef compute -p postbootscripts={{ xcat_config_postscript | default("ohpc-confi
 # Apply the IPoIB nic* attributes after the postscript above has installed the
 # InfiniBand packages; until then the IPoIB interface does not exist.
 chdef compute -p postbootscripts=confignetwork
-
-# confignetwork reuses the IPoIB connection the OS installer created, which does
-# not start at boot, and leaves it that way; turn autoconnect on so IPoIB comes
-# back after a reboot. (Workaround until xCAT's configib sets it.)
-cat > /install/postscripts/ohpc-ipoib-autoconnect << EOF
-#!/bin/sh
-nmcli connection modify ${ipoib_dev} connection.autoconnect yes
-EOF
-chmod 0755 /install/postscripts/ohpc-ipoib-autoconnect
-chdef compute -p postbootscripts=ohpc-ipoib-autoconnect
 ```
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
