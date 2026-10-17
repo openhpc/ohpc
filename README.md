@@ -54,6 +54,13 @@ but we are happy to guide contributors through the process.
 
 Please see the steps described in [CONTRIBUTING.md](CONTRIBUTING.md).
 
+### Project governance
+
+OpenHPC is governed by a Governing Board and a Technical Steering Committee
+(TSC). The governance documentation, including the current TSC members, the
+TSC election process and the TSC meeting details, is maintained in the
+[openhpc/governance][governance] repository.
+
 ### Register your system
 
 If you are using elements of OpenHPC, please consider registering your system(s)
@@ -63,5 +70,6 @@ using the [System Registration Form][register].
 [3xbranch]: https://github.com/openhpc/ohpc/wiki/3.x
 [4xbranch]: https://github.com/openhpc/ohpc/wiki/4.x
 [explorer]: https://openhpc.github.io/ohpc/
+[governance]: https://github.com/openhpc/governance
 [register]: https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI
 [userlist]: https://groups.io/g/openhpc-users
