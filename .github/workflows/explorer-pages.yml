@@ -44,16 +44,15 @@ jobs:
   build:
     name: Build site
     runs-on: ubuntu-latest
+    container:
+      # Fedora image with python3-jinja2 and python3-pyyaml (mkdoc.py
+      # --manifest) and git (mksite.py); see tests/ci/Containerfile.ohpc-lint.
+      image: ghcr.io/openhpc/ohpc-lint:latest
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # mksite.py exports other refs from this clone
           fetch-tags: true
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.x"
-      - name: Install Python dependencies (mkdoc.py --manifest)
-        run: pip install -r docs/install/requirements.txt
       - name: Assemble the site
         run: |
           python3 docs/install/explorer/mksite.py --out _site --allow-overlay \
