@@ -218,12 +218,13 @@ yq -i '.packages += {{ packages | tojson }}' \
 
 #### Compute Image Macros
 
-These four macros abstract all provisioner differences for compute image
+These macros abstract all provisioner differences for compute image
 operations. Templates use them without knowing which provisioner is active:
 
 | Macro | Warewulf | Confluent | OpenCHAMI |
 | ----- | -------- | --------- | --------- |
 | `compute_install(packages)` | `dnf install` in chroot | `nodeshell compute dnf install` | `yq` append to packages array |
+| `compute_group_install(groups)` | `dnf groupinstall` in chroot | `nodeshell compute "dnf groupinstall '...'"` | `yq` append to package_groups array |
 | `compute_sed(regex, file)` | `sed -i` on `$CHROOT/file` | `nodeshell compute sed -i` | `yq` append to cmds array |
 | `compute_echo(string, file)` | `echo` to `$CHROOT/file` | `nodeshell compute echo` | `yq` append to cmds array |
 | `compute_run(cmd)` | `wwctl image exec` | `nodeshell compute` | `yq` append to cmds array |
