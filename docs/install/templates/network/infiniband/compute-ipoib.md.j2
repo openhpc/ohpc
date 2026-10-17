@@ -1,0 +1,11 @@
+## Optionally configure IPoIB on *compute nodes*
+
+To use IPoIB on the compute nodes (required if planning to mount Lustre/BeeGFS
+over IB; see [Optionally add InfiniBand support services on *head
+node*](#optionally-add-infiniband-support-services-on-head-node)), give each
+compute its own address `${c_ipoib[i]}` on the IPoIB interface `${ipoib_dev}`,
+with the `${ipoib_netmask}` netmask (`${ipoib_prefix_length}` prefix). These
+are per-node settings, so they belong in the {{ provisioner_name }} node
+definitions:
+
+{% include "provisioner/" ~ provisioner ~ "/compute-ipoib.md.j2" %}

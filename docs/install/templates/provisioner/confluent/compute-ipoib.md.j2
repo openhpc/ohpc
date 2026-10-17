@@ -1,0 +1,12 @@
+<!-- ohpc_begin -->
+<!-- ohpc_comment Setup IPoIB networking -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+# Register desired IPoIB IPs per compute
+for ((i=0; i<num_computes; i++)) ; do
+	nodeattrib "${c_name[$i]}" net.ib.interface_names="${ipoib_dev}" \
+		net.ib.ipv4_address="${c_ipoib[$i]}/${ipoib_prefix_length}"
+done
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->

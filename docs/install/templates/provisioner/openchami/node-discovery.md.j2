@@ -52,6 +52,18 @@ done
 ```
 <!-- ohpc_end -->
 
+If IPoIB is configured on the compute nodes, add each one to its IPoIB group.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add the computes to their IPoIB groups -->
+<!-- ohpc_if_set enable_ipoib -->
+```bash
+yq -i '.nodes[] |= (.groups += ["ipoib-" + .name])' \
+	/opt/ohpc/admin/nodes/nodes.yaml
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
 Now use the generated file to populate the SMD database.
 
 <!-- ohpc_begin -->

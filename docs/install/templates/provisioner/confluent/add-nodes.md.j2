@@ -34,23 +34,6 @@ detection and configuration. Consult the [Confluent Hardware Discovery & Define
 Node Guide](https://hpc.lenovo.com/users/documentation/confluentdisco.html).
 :::
 
-If enabling *optional* IPoIB functionality (e.g. to support Lustre over
-InfiniBand), additional settings are required to define the IPoIB network with
-Confluent and specify desired IP settings for each compute. This can be
-accomplished as follows for the *ib0* interface:
-
-<!-- ohpc_begin -->
-<!-- ohpc_comment Setup IPoIB networking -->
-<!-- ohpc_if_set enable_ipoib -->
-```bash
-# Register desired IPoIB IPs per compute
-for ((i=0; i<$num_computes; i++)) ; do
-	nodeattrib ${c_name[i]} net.ib0.ipv4_address=${c_ipoib[i]}/${ipoib_netmask}
-done
-```
-<!-- ohpc_fi -->
-<!-- ohpc_end -->
-
 `confluent2hosts` can be used to help generate /etc/hosts entries for a
 noderange. It can read from the Confluent database, using -a. In this mode, each
 net.value.attribute group is pulled together into hosts lines. ipv4 and ipv6

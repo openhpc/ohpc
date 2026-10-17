@@ -157,7 +157,12 @@ NFS mounts. InfiniBand/OmniPath compute-side excluded here (goes in `customize`)
 **customize** — Compute image additions. Head node, provisioner, and scheduler
 are configured; compute nodes may or may not be running. Use `compute_*` macros
 for provisioner-agnostic operations (see [Macro System](#macro-system)).
-InfiniBand and OmniPath compute-side go here.
+InfiniBand and OmniPath compute-side drivers go here. Compute IPoIB addresses
+are per-node, so they go with node registration instead:
+`network/infiniband/compute-ipoib.md.j2` is shared prose that includes
+`provisioner/<provisioner>/compute-ipoib.md.j2`, and each provisioner's
+chapters include it once its nodes are defined. Warewulf 3 has no compute IPoIB
+step yet, so its chapters do not include it.
 
 **deploy-*** — Cluster booted; compute nodes provisioned; Slurm started. Scope:
 maintenance-window actions (adding/removing nodes). Most provisioners boot here;
