@@ -62,6 +62,7 @@ iso_url="${iso_url:-}"
 
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
+enable_roce="${enable_roce:-0}"
 enable_opa="${enable_opa:-0}"
 enable_opafm="${enable_opafm:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
@@ -129,6 +130,11 @@ slurm_node_config="${slurm_node_config:-NodeName=${compute_prefix}[1-${num_compu
 
 # additional arguments to enable optional arguments for bootstrap kernel
 kargs="${kargs:-acpi_pad.disable=1}"
+
+# Ethernet MTU for RoCE on the internal network, head node and computes (Warewulf recipe
+# only; empty leaves it unchanged). 4200 or more (e.g. 9000) gives RoCE MTU 4096; exactly
+# 4096 gives only RoCE MTU 2048
+roce_mtu="${roce_mtu:-}"
 
 # IPoIB interface name on head node and computes (e.g. ibp3s0 with predictable naming)
 ipoib_dev="${ipoib_dev:-ib0}"
