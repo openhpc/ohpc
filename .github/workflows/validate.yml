@@ -256,6 +256,9 @@ jobs:
       with:
         name: rhel-rpms-gnu16-ubuntu-latest
         path: rpms
+    - name: Check for integration tests marker
+      id: check_integration
+      uses: ./.github/actions/check-integration-tests
     - name: Disable AppArmor
       run: |
         sudo aa-teardown || true
@@ -281,6 +284,7 @@ jobs:
     - name: Run integration test
       run: >-
         sudo podman exec -it -l
+        -e INTEGRATION_TESTS="${{ steps.check_integration.outputs.tests }}"
         bash -c "cd /home/ohpc; bash tests/ci/integration-test.sh -p ${{ matrix.provisioner }}"
     - name: Debug via SSH
       if: failure()
