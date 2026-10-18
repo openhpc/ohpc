@@ -3,13 +3,20 @@
 To add the optional NVIDIA GPU driver to the compute nodes, an additional
 external {{ pkg_manager }} repository provided by NVIDIA must be configured.
 Once the repository is configured, the GPU driver needs to be installed on the
-compute image and the corresponding toolkit installed on the SMS node.
+compute image and the corresponding toolkit installed on the head node.
 
 OpenHPC provides a convenience package to enable the NVIDIA repository locally
 along with compatibility packages that integrate the NVIDIA HPC SDK within the
 standard OpenHPC user environment.
 
-{# FIXME: Test GPU on Warewulf.  The Newer Confluent version was used over the Warewulf version. #}
+::: {.tip}
+**Note:** The driver is NVIDIA's open GPU kernel module
+(`kmod-nvidia-open-dkms`), which supports GPUs of the Turing architecture and
+newer. {% if is_el %}NVIDIA's EL{{ distro_version }} repository offers it as the
+`nvidia-driver:open-dkms` module stream, which the recipe enables before the
+install; the `nvidia-driver:latest-dkms` stream holds the proprietary module
+for older GPUs.{% endif %}
+:::
 
 <!-- ohpc_begin -->
 <!-- ohpc_if_set enable_nvidia_gpu_driver -->
@@ -19,15 +26,23 @@ standard OpenHPC user environment.
 
 # Add NVIDIA GPU driver repository to the compute nodes
 {{ compute_install("cuda-repo-ohpc") }}
+{%- if is_el %}
+
+# Select the open kernel module stream (EL{{ distro_version }} uses DNF modules)
+{{ compute_run("dnf -y module enable nvidia-driver:open-dkms") }}
+{%- endif %}
 
 # Install the GPU driver on the compute nodes
-{{ compute_install("nvidia-driver:latest-dkms") }}
+{{ compute_install(["nvidia-driver-cuda", "kmod-nvidia-open-dkms"]) }}
+
+# Build the driver for the image's kernel (DKMS otherwise targets the running kernel)
+{{ compute_run("dkms autoinstall -k \\$(ls /lib/modules | sort -V | tail -n 1)") }}
 
 # Enable DKMS service to automatically rebuild driver
 {{ compute_run("systemctl enable dkms") }}
 
 # Install the toolkit on the head node
-{{ compute_install(["cuda-devel-ohpc", "nvidia-driver-cuda"]) }}
+{{ head_install("cuda-devel-ohpc") }}
 ```
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
