@@ -56,8 +56,10 @@ echo "Provisioner: ${PROVISIONER}"
 # skipped rather than failing, so that one list serves every matrix job.
 # ---------------------------------------------------------------------------
 declare -A TEST_PROVISIONERS=(
+	[eessi]="warewulf"
 )
 declare -A TEST_RECIPE_FLAGS=(
+	[eessi]="enable_eessi"
 )
 KNOWN_TESTS="$(sed -n 's/^AC_ARG_ENABLE(\[\([a-z0-9_-]*\)\].*/\1/p' \
 	"${SCRIPT_DIR}/../configure.ac")"
