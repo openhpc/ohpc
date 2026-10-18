@@ -89,6 +89,9 @@ enable_amd_gpu_driver="${enable_amd_gpu_driver:-0}"
 # Vendor compiler package flags
 enable_intel_packages="${enable_intel_packages:-0}"
 
+# EESSI software stack via CernVM-FS (EL x86_64 Warewulf recipes only)
+enable_eessi="${enable_eessi:-0}"
+
 update_slurm_nodeconfig="${update_slurm_nodeconfig:-0}"
 
 # -------------------------

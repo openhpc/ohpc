@@ -1,0 +1,128 @@
+## EESSI
+
+[EESSI](https://www.eessi.io/), the European Environment for Scientific
+Software Installations, is a shared stack of optimized scientific software that
+is distributed through [CernVM-FS](https://cernvm.cern.ch/fs/). CernVM-FS is a
+read-only, HTTP-based network file system: clients mount a repository on demand
+under `/cvmfs` and download only the files that are actually accessed into a
+local cache. This optional section installs the CernVM-FS client on the *head
+node* and in the compute image, makes the `software.eessi.io` repository
+available, and adds a module that gives users access to the EESSI software
+through the usual `module` commands.
+
+::: {.tip}
+The configuration shown here lets every node fetch content directly from the
+public EESSI servers, which is adequate for a small test cluster. For a
+production cluster it is highly recommended to run a local [Squid
+proxy](https://cvmfs-contrib.github.io/cvmfs-tutorial-2021/03_stratum1_proxies/)
+and point the clients at it with `CVMFS_HTTP_PROXY` in
+`/etc/cvmfs/default.local`, so that repeated downloads are served from inside
+the cluster and the load on the public servers is reduced. See the EESSI
+documentation on [native installation on
+clusters](https://www.eessi.io/docs/getting_access/native_installation/#native-install-on-clusters)
+for details.
+:::
+
+The CernVM-FS client requires a local cache. On the *head node* the cache is
+kept on disk in the default location (`/var/lib/cvmfs`) with a limit of 10 GB:
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_eessi -->
+```bash
+# Install CernVM-FS on the head node
+{{ pkg_install }} \
+	https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+{{ pkg_install }} cvmfs
+
+# Install the EESSI configuration for CernVM-FS
+eessi_rpm="https://github.com/EESSI/filesystem-layer/releases/download"
+eessi_rpm="${eessi_rpm}/latest/cvmfs-config-eessi-latest.noarch.rpm"
+{{ pkg_install }} "${eessi_rpm}"
+
+# Create the client configuration (no proxy, 10 GB local cache)
+echo 'CVMFS_CLIENT_PROFILE="single"' > /etc/cvmfs/default.local
+echo 'CVMFS_QUOTA_LIMIT=10000' >> /etc/cvmfs/default.local
+
+# Configure autofs and make the EESSI repository accessible
+cvmfs_config setup
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+The compute nodes boot a stateless image and have no local disk for the cache,
+so the cache is placed in memory under `/dev/shm` and limited to 4 GB. Note
+that this memory is no longer available to jobs, so size `CVMFS_QUOTA_LIMIT`
+according to the amount of RAM in the compute nodes and the software that is
+expected to be used. Alternatives, such as a loopback file per node on a shared
+file system, are described in the EESSI documentation on [diskless worker
+nodes](https://www.eessi.io/docs/training-events/2025/tutorial-best-practices-cvmfs-hpc/configuration_hpc/#diskless-worker-nodes).
+Because the image is not booted while it is being customized, `cvmfs_config
+setup` is told not to start autofs; the service is enabled instead and starts
+when the nodes boot.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_eessi -->
+```bash
+# Install CernVM-FS and the EESSI configuration in the compute image
+{{ pkg_install_chroot }} \
+	https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+{{ compute_install("cvmfs") }}
+{{ compute_install('"${eessi_rpm}"') }}
+
+# Create the client configuration (no proxy, 4 GB cache in memory)
+{{ compute_echo('CVMFS_CLIENT_PROFILE="single"', "/etc/cvmfs/default.local", false) }}
+{{ compute_echo("CVMFS_CACHE_BASE=/dev/shm/cvmfs-cache", "/etc/cvmfs/default.local") }}
+{{ compute_echo("CVMFS_QUOTA_LIMIT=4000", "/etc/cvmfs/default.local") }}
+
+# Configure autofs in the image and enable it for the next boot
+{{ compute_run("cvmfs_config setup nostart") }}
+{{ compute_service_enable("autofs") }}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+Finally, add an `eessi` module to the OpenHPC module hierarchy. It appends the
+EESSI module directory from the repository to the module search path. Since
+`/opt/ohpc/pub` is exported to the compute nodes, the module is available there
+as well.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_eessi -->
+```bash
+# Add an eessi module that extends MODULEPATH with the EESSI modules
+cat << 'EOF' > /opt/ohpc/pub/modulefiles/eessi.lua
+help([[
+Adds the modules of EESSI, the European Environment for Scientific Software
+Installations, to the module search path. EESSI is provided through CernVM-FS
+under /cvmfs/software.eessi.io. Load one of the EESSI/<version> modules
+afterwards to access the software of that EESSI version.
+]])
+whatis("Name: eessi")
+whatis("Description: EESSI software stack provided through CernVM-FS")
+whatis("URL: https://www.eessi.io/")
+
+append_path("MODULEPATH", "/cvmfs/software.eessi.io/init/modules")
+EOF
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+With the `eessi` module loaded, the `EESSI` module becomes visible. EESSI
+publishes one `EESSI/<version>` module per release of its software stack, and
+loading one of them provides access to all of the software of that version,
+detecting the CPU of the node to select the matching optimized builds. For
+example:
+
+```console
+[test@sms ~]$ module load eessi
+[test@sms ~]$ module avail EESSI
+
+-------------------- /cvmfs/software.eessi.io/init/modules ---------------------
+   EESSI/2023.06 (D)    EESSI/2025.06    EESSI/2026.06
+
+  Where:
+   D:  Default Module
+
+[test@sms ~]$ module load EESSI/2026.06
+[test@sms ~]$ module avail
+```
