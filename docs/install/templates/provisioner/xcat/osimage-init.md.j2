@@ -2,7 +2,9 @@
 
 The following steps import the distribution installation media for use with
 xCAT. A local copy of the distribution ISO is required; for this recipe the ISO
-is `{{ distro_iso_image }}`, assumed to be at `${iso_path}`.
+is `{{ distro_iso_image }}`, available from the {{ distro_full_name }}
+[download]({{ distro_download_page }}) page and expected at `${iso_path}`. If
+it is not already present there, it is downloaded first.
 
 `copycds` names the OS images after the distribution it finds inside the ISO,
 including the minor release (for example a Rocky 10.0 x86_64 ISO creates
@@ -19,6 +21,9 @@ ISO, import it, and select the `{{ xcat_image_type }}` image this
 <!-- ohpc_comment Initialize OS images for use with xCAT -->
 ```bash
 : "${iso_path:={{ distro_iso_image }}}"
+iso_url="${iso_url:={{ distro_base_url }}{{ distro_version }}/isos/{{ arch }}}"
+[[ -f "${iso_path}" ]] || \
+    curl -fo "${iso_path}" "${iso_url}/{{ distro_iso_image }}"
 
 # Read the distribution name (e.g. alma10.2) that copycds names the images after
 xcat_osver=$(copycds -i "${iso_path}" | awk -F: '/^DISTNAME/{print $2}')

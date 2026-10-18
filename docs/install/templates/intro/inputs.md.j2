@@ -52,6 +52,7 @@ Required variables:
 {% endif %}
 {% if is_xcat %}
 * `iso_path` - location of compute node base os dvd iso (default: `{{ distro_iso_image }}`)
+* `iso_url` - ISO download base URL (optional; overrides default upstream location)
 
 {% endif %}
 {% if is_x86_64 or is_warewulf %}
