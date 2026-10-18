@@ -23,6 +23,10 @@
 {% include "customize/oneapi-mountpoint.md.j2" %}
 {% endif %}
 
+{% if is_el and is_warewulf and is_x86_64 %}
+{% include "customize/eessi.md.j2" %}
+{% endif %}
+
 ## Cluster Admin Tools
 {% include "customize/clustershell.md.j2" %}
 {% include "customize/genders.md.j2" %}
