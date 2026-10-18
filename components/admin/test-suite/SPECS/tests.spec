@@ -50,7 +50,7 @@ a default configuration is setup to enable collective testing. The test suite
 is made available under an '%{testuser}' user account.
 
 %prep
-%setup -n tests-ohpc
+%setup -q -n tests-ohpc
 
 %build
 
