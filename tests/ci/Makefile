@@ -24,6 +24,7 @@ codespell-lint:
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
+		tests/dev-tools/eessi/zstd_check.sh \
 		tests/user-env/mem_limits \
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
@@ -144,6 +145,7 @@ whitespace-lint:
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
+		tests/dev-tools/eessi/zstd_check.sh \
 		tests/user-env/ompi_info \
 		tests/perf-tools/dimemas/tests/test_module \
 		tests/perf-tools/extrae/tests/test_module \
@@ -258,6 +260,7 @@ shellcheck-lint:
 		../../tests/dev-tools/cmake/run \
 		../../tests/dev-tools/easybuild/EasyBuild \
 		../../tests/dev-tools/eessi/eessi \
+		../../tests/dev-tools/eessi/zstd_check.sh \
 		../../tests/user-env/mem_limits \
 		../../tests/user-env/ompi_info \
 		../../tests/perf-tools/dimemas/tests/test_module \
@@ -410,6 +413,7 @@ shfmt-lint:
 		../../tests/compilers/tests/debugger \
 		../../tests/modules/interactive_commands
 	shfmt -w -d \
+		../../tests/dev-tools/eessi/zstd_check.sh \
 		../../tests/perf-tools/extrae/tests/tracec.sh \
 		../../tests/perf-tools/extrae/tests/tracef.sh \
 		../../tests/ci/integration-test.sh \
