@@ -9,7 +9,13 @@
 #   - ~8 GB RAM, 4+ CPUs recommended
 #
 # Usage:
-#   sudo bash tests/ci/integration-test.sh [-k] [-p warewulf|openchami]
+#   sudo bash tests/ci/integration-test.sh [-k] [-p warewulf|openchami] \
+#       [-t "test ..."]
+#
+# -t (or INTEGRATION_TESTS in the environment) lists optional tests to run in
+# addition to the default set, named after the --enable options of
+# tests/configure. In CI the list comes from an [INTEGRATION:test,...] marker
+# in the PR description (see .github/actions/check-integration-tests).
 
 # shellcheck disable=SC2034,SC2154
 
@@ -18,13 +24,15 @@ set -ex
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SHUTDOWN_VMS="${SHUTDOWN_VMS:-1}"
 PROVISIONER="${PROVISIONER:-warewulf}"
+INTEGRATION_TESTS="${INTEGRATION_TESTS:-}"
 
-while getopts "kp:" opt; do
+while getopts "kp:t:" opt; do
 	case "${opt}" in
 	k) SHUTDOWN_VMS=0 ;;
 	p) PROVISIONER="${OPTARG}" ;;
+	t) INTEGRATION_TESTS="${OPTARG}" ;;
 	*)
-		echo "Usage: $0 [-k] [-p warewulf|openchami]" >&2
+		echo "Usage: $0 [-k] [-p warewulf|openchami] [-t \"test ...\"]" >&2
 		exit 1
 		;;
 	esac
@@ -37,6 +45,41 @@ if [[ "${PROVISIONER}" != "warewulf" && "${PROVISIONER}" != "openchami" ]]; then
 fi
 
 echo "Provisioner: ${PROVISIONER}"
+
+# ---------------------------------------------------------------------------
+# Optional tests
+#
+# Every name must be an --enable option of tests/configure. The tables below
+# restrict a test to the provisioners that support it (unlisted tests are
+# supported everywhere) and name the input.local flag that enables the
+# corresponding feature in the recipe, if there is one. Unsupported tests are
+# skipped rather than failing, so that one list serves every matrix job.
+# ---------------------------------------------------------------------------
+declare -A TEST_PROVISIONERS=(
+)
+declare -A TEST_RECIPE_FLAGS=(
+)
+KNOWN_TESTS="$(sed -n 's/^AC_ARG_ENABLE(\[\([a-z0-9_-]*\)\].*/\1/p' \
+	"${SCRIPT_DIR}/../configure.ac")"
+ENABLE_TESTS=()
+RECIPE_FLAGS=()
+read -ra REQUESTED_TESTS <<<"${INTEGRATION_TESTS}"
+for test in "${REQUESTED_TESTS[@]}"; do
+	if ! grep -qx "${test}" <<<"${KNOWN_TESTS}"; then
+		echo "ERROR: unknown test '${test}', see --enable options of tests/configure" >&2
+		exit 1
+	fi
+	if [[ -n "${TEST_PROVISIONERS[${test}]:-}" &&
+		" ${TEST_PROVISIONERS[${test}]} " != *" ${PROVISIONER} "* ]]; then
+		echo "Skipping test '${test}': not supported with ${PROVISIONER}"
+		continue
+	fi
+	ENABLE_TESTS+=("--enable-${test}")
+	if [[ -n "${TEST_RECIPE_FLAGS[${test}]:-}" ]]; then
+		RECIPE_FLAGS+=("${TEST_RECIPE_FLAGS[${test}]}=1")
+	fi
+done
+echo "Optional tests: ${ENABLE_TESTS[*]:-none}"
 
 # ---------------------------------------------------------------------------
 # System info
@@ -235,6 +278,11 @@ sms_ipoib="${sms_ipoib:-192.168.0.1}"
 c_ipoib[0]=${c_ipoib[0]:-192.168.1.1}
 c_ipoib[1]=${c_ipoib[1]:-192.168.1.2}
 INPUTEOF
+
+# Enable the recipe features needed by the optional tests
+for flag in "${RECIPE_FLAGS[@]}"; do
+	echo "${flag}" >>"${INPUT_LOCAL}"
+done
 
 # ---------------------------------------------------------------------------
 # Install fake ipmitool
@@ -546,6 +594,7 @@ if runuser -l ohpc-test -c "\
 			--enable-modules \
 			--enable-rms-harness \
 			--enable-compilers \
+			${ENABLE_TESTS[*]} \
 			--with-mpi-families='openmpi5 mpich'; \
 		make -k check"; then
 	echo "User-level tests passed"

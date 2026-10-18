@@ -1,0 +1,38 @@
+name: 'Check for integration tests marker'
+description: >-
+  Parse an [INTEGRATION:test1,test2] marker from the PR description. The
+  names are --enable options of tests/configure and are validated against
+  tests/configure.ac. The list is passed to tests/ci/integration-test.sh,
+  which skips tests that are not supported with the provisioner under test.
+
+outputs:
+  tests:
+    description: 'Space-separated optional tests (tests/configure --enable names)'
+    value: ${{ steps.check.outputs.tests }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: check
+      shell: bash
+      env:
+        PR_BODY: ${{ github.event.pull_request.body }}
+      run: |
+        tests=""
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          marker=$(echo "$PR_BODY" | grep -o '\[INTEGRATION:[^]]*\]' | head -1 || true)
+          tests=$(echo "$marker" | sed 's/^\[INTEGRATION://; s/\]$//' |
+            tr ',' ' ' | tr '[:upper:]' '[:lower:]')
+        fi
+        known=$(sed -n 's/^AC_ARG_ENABLE(\[\([a-z0-9_-]*\)\].*/\1/p' tests/configure.ac)
+        for t in $tests; do
+          if ! grep -qx "$t" <<<"$known"; then
+            echo "::error::unknown test '$t' in [INTEGRATION:...] marker," \
+              "see the --enable options in tests/configure.ac"
+            exit 1
+          fi
+        done
+        # shellcheck disable=SC2086
+        tests=$(echo $tests)
+        echo "Optional integration tests: ${tests:-none}"
+        echo "tests=$tests" >> "$GITHUB_OUTPUT"
