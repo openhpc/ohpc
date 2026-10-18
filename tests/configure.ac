@@ -298,6 +298,12 @@ AC_ARG_ENABLE([cuda],
    [AX_OPTION_DEFAULT(type=long,enable_cuda,no)])
 AM_CONDITIONAL(CUDA_ENABLED,test "x$enable_cuda" = "xyes" )
 #------------------------------------------------------------------------------------------
+# EESSI
+AC_ARG_ENABLE([eessi],
+   [AS_HELP_STRING([--enable-eessi],[Enable EESSI tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_eessi,no)])
+AM_CONDITIONAL(EESSI_ENABLED,test "x$enable_eessi" = "xyes" )
+#------------------------------------------------------------------------------------------
 # GEOPM
 AC_ARG_ENABLE([geopm],
    [AS_HELP_STRING([--enable-geopm],[Enable geopm tests (default=no)])],[],
@@ -559,6 +565,7 @@ AC_CONFIG_FILES([Makefile
        fs/lustre/Makefile
        dev-tools/easybuild/Makefile
        dev-tools/cuda/Makefile
+       dev-tools/eessi/Makefile
        admin/lmod/Makefile
        admin/environment-modules/Makefile
        admin/spack/Makefile
@@ -721,6 +728,12 @@ echo    Dev Tools:
        echo '    'cuda...................... : enabled
     else
        echo '    'cuda...................... : disabled
+    fi
+
+    if test "x$enable_eessi" = "xyes"; then
+       echo '    'EESSI..................... : enabled
+    else
+       echo '    'EESSI..................... : disabled
     fi
 
     if test "x$enable_hwloc" = "xyes"; then
