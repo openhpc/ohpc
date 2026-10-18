@@ -65,6 +65,10 @@ if CUDA_ENABLED
    SUBDIRS += dev-tools/cuda
 endif
 
+if EESSI_ENABLED
+   SUBDIRS += dev-tools/eessi
+endif
+
 if LUSTRE_ENABLED
    SUBDIRS += fs/lustre
 endif

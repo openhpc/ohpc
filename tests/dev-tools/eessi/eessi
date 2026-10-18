@@ -1,0 +1,70 @@
+#!/usr/bin/env -S bats --report-formatter junit --formatter tap
+# -*-sh-*-
+
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
+
+if [ -s ../../common/TEST_ENV ]; then
+	source ../../common/TEST_ENV
+fi
+
+setup_file() {
+	check_rms
+	EESSI_REPO="/cvmfs/software.eessi.io"
+	EESSI_VERSION="${EESSI_VERSION:-2026.06}"
+	export EESSI_REPO EESSI_VERSION
+}
+
+setup() {
+	OUTPUT="$(mktemp)"
+	export OUTPUT
+}
+
+teardown() {
+	rm -f "${OUTPUT}" hello_go
+}
+
+@test "[dev-tools/eessi] check for cvmfs RPM" {
+	run check_if_rpm_installed cvmfs
+	assert_success
+}
+
+@test "[dev-tools/eessi] EESSI repository is mounted on the head node" {
+	# Access the repository first so that autofs mounts it on demand
+	run ls "${EESSI_REPO}/init/modules"
+	assert_success
+	run mountpoint -q "${EESSI_REPO}"
+	assert_success
+}
+
+@test "[dev-tools/eessi] EESSI repository is mounted on the compute nodes (${RESOURCE_MANAGER})" {
+	run_serial_binary ls "${EESSI_REPO}/init/modules"
+	assert_success
+}
+
+@test "[dev-tools/eessi] eessi module adds the EESSI modules to MODULEPATH" {
+	module load eessi
+	run grep -q "${EESSI_REPO}/init/modules" <<<"${MODULEPATH}"
+	assert_success
+	run test -f "${EESSI_REPO}/init/modules/EESSI/${EESSI_VERSION}.lua"
+	assert_success
+}
+
+@test "[dev-tools/eessi] load EESSI/${EESSI_VERSION} and Go" {
+	module load eessi
+	module load "EESSI/${EESSI_VERSION}"
+	module load Go
+	run go version
+	assert_success
+}
+
+@test "[dev-tools/eessi] build a Go program and run it under ${RESOURCE_MANAGER}" {
+	module load eessi
+	module load "EESSI/${EESSI_VERSION}"
+	module load Go
+	go build -o hello_go hello.go
+	run_serial_binary -o "${OUTPUT}" ./hello_go
+	assert_success
+	run grep "Hello from Go" "${OUTPUT}"
+	assert_success
+}
