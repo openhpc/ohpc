@@ -56,9 +56,14 @@ according to the amount of RAM in the compute nodes and the software that is
 expected to be used. Alternatives, such as a loopback file per node on a shared
 file system, are described in the EESSI documentation on [diskless worker
 nodes](https://www.eessi.io/docs/training-events/2025/tutorial-best-practices-cvmfs-hpc/configuration_hpc/#diskless-worker-nodes).
-Because the image is not booted while it is being customized, `cvmfs_config
-setup` is told not to start autofs; the service is enabled instead and starts
-when the nodes boot.
+The `cvmfs` package depends on `selinux-policy`, which the Warewulf node
+image deliberately does not contain. Installing it brings back
+`/etc/selinux/config` with SELinux set to enforcing, and the stateless nodes
+would then boot with a policy loaded on an unlabeled root file system and
+fail. The configuration is therefore set back to disabled. Because the image
+is not booted while it is being customized, `cvmfs_config setup` is told not
+to start autofs; the service is enabled instead and starts when the nodes
+boot.
 
 <!-- ohpc_begin -->
 <!-- ohpc_if_set enable_eessi -->
@@ -68,6 +73,10 @@ when the nodes boot.
 	https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
 {{ compute_install("cvmfs") }}
 {{ compute_install('"${eessi_rpm}"') }}
+
+# cvmfs depends on selinux-policy, which the compute image deliberately
+# omits; keep SELinux disabled so the nodes do not boot enforcing
+{{ compute_sed("s/^SELINUX=.*/SELINUX=disabled/", "/etc/selinux/config") }}
 
 # Create the client configuration (no proxy, 4 GB cache in memory)
 {{ compute_echo('CVMFS_CLIENT_PROFILE="single"', "/etc/cvmfs/default.local", false) }}
