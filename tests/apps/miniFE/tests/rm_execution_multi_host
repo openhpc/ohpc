@@ -30,6 +30,7 @@ NODES=$((NUM_COMPUTES < TEST_MAX_COMPUTES ? NUM_COMPUTES : TEST_MAX_COMPUTES))
 TASKS=$((NODES*TEST_NUM_RANKS))
 ARGS="nx=$nx ny=$ny nz=$nz verify_solution=$TEST_VERIFY"
 EXE=$TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+run_tag=miniFE.${nx}x${ny}x${nz}.P${TASKS}
 
 # set global env settings
 export OMP_NUM_THREADS=$TEST_NUM_THREADS
@@ -43,15 +44,20 @@ fi
         flunk "missing $EXE"
     fi
 
+    # miniFE writes $run_tag.<timestamp>.yaml; drop leftovers from
+    # earlier runs so that the log test only sees this run's output
+    rm -f $run_tag.[0-9]*.yaml
     run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS
     assert_success
 }
 
 @test "[Apps/miniFE] log miniFE multi node results ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run_tag=miniFE.${nx}x${ny}x${nz}.P${TASKS}
-    run_yaml=`ls -t $run_tag.*.yaml | head -n 1`
+    run_yaml=`ls -t $run_tag.[0-9]*.yaml 2>/dev/null | head -n 1`
     wrk_yaml=$run_tag.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI.yaml
-    mv $run_yaml $wrk_yaml || exit 1
+    if [ -z "$run_yaml" ];then
+        flunk "no $run_tag output found, did the run fail?"
+    fi
+    mv $run_yaml $wrk_yaml || flunk "Unable to move ${run_yaml} file to ${wrk_yaml}"
 
     str="Total Program Time"
     ref_time=`grep $str ref/$wrk_yaml | cut -d ' ' -f4`
