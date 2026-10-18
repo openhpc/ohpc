@@ -15,7 +15,7 @@
 
 Name:           docs%{PROJ_DELIM}
 Version:        4.1.0
-Release:        1
+Release:        %{?dist}.1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
