@@ -231,7 +231,9 @@ def extract_recipe_script(content: str) -> str:
     lines = []
     in_run_block = False
     in_code_block = False
-    current_section = None
+    # Includes nest, so the current section is the top of a stack: when an
+    # included child closes, the enclosing template becomes current again.
+    section_stack = []
 
     for line in content.split("\n"):
         # Pass through section markers
@@ -240,14 +242,16 @@ def extract_recipe_script(content: str) -> str:
             where, section = match.groups()
             lines.append(f"# --- {where}section: {section} ---")
             if where == "+":
-                current_section = section
+                section_stack.append(section)
+            elif section_stack:
+                section_stack.pop()
             continue
 
         # Track run blocks
         if "<!-- ohpc_begin -->" in line:
             in_run_block = True
-            if current_section:
-                lines.append(f"echo '=== section: {current_section} ==='")
+            if section_stack:
+                lines.append(f"echo '=== section: {section_stack[-1]} ==='")
             continue
         if "<!-- ohpc_end -->" in line:
             in_run_block = False

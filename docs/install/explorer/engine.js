@@ -108,19 +108,22 @@ export function extractScript(markdown) {
   const lines = [];
   let inRun = false;
   let inCode = false;
-  let currentSection = null;
+  // Includes nest: the current section is the top of a stack, so the enclosing
+  // template becomes current again when an included child closes.
+  const sectionStack = [];
   const errors = [];
 
   for (const line of markdown.split("\n")) {
     let m = /<!-- ([+-])section: (.+) -->/.exec(line);
     if (m) {
       lines.push(`# --- ${m[1]}section: ${m[2]} ---`);
-      if (m[1] === "+") currentSection = m[2];
+      if (m[1] === "+") sectionStack.push(m[2]);
+      else sectionStack.pop();
       continue;
     }
     if (line.includes("<!-- ohpc_begin -->")) {
       inRun = true;
-      if (currentSection) lines.push(`echo '=== section: ${currentSection} ==='`);
+      if (sectionStack.length) lines.push(`echo '=== section: ${sectionStack.at(-1)} ==='`);
       continue;
     }
     if (line.includes("<!-- ohpc_end -->")) {
