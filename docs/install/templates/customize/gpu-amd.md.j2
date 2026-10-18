@@ -1,0 +1,53 @@
+## AMD GPU Drivers
+
+AMD Instinct GPUs use the `amdgpu` kernel driver included in the
+{{ distro_name }} kernel, so no additional kernel module is needed. The compute
+image does need the GPU firmware (part of `linux-firmware`, from the
+distribution's BaseOS repository); without it, `amdgpu` cannot initialize the
+GPUs. The
+ROCm runtime and tools come from AMD's ROCm repository for
+EL{{ distro_version }}: the HIP runtime on the compute nodes, and the HIP
+development tools on the head node for building applications. `${rocm_repo}`
+names the repository, and with it the ROCm release (a `main` directory under
+<https://repo.radeon.com/rocm/rhel{{ distro_version }}/>). AMD's HIP runtime
+package requires the ROCm compiler toolchain, so the compute image also gains
+it; together these packages add about 2.3 GB to the image.
+
+The distribution's udev rules give all users access to the GPU devices
+(`/dev/kfd` and `/dev/dri/renderD*`), so users need no additional group
+membership to run GPU jobs.
+
+<!-- ohpc_begin -->
+<!-- ohpc_if_set enable_amd_gpu_driver -->
+```bash
+# Add the ROCm repository to the head node
+rpm --import https://repo.radeon.com/rocm/rocm.gpg.key
+{{ pkg_add_repo }} "${rocm_repo}"
+
+# Add the ROCm repository to the compute nodes
+{{ compute_run("rpm --import https://repo.radeon.com/rocm/rocm.gpg.key") }}
+{{ compute_run("dnf -y config-manager --add-repo ${rocm_repo}") }}
+
+# Install the GPU firmware and the ROCm runtime on the compute nodes
+{{ compute_install(["linux-firmware", "rocm-hip-runtime"]) }}
+{{ compute_install(["rocminfo", "rocm-smi-lib"]) }}
+
+# Install the ROCm HIP development tools on the head node
+{{ head_install(["rocm-hip-runtime-devel", "hipcc", "rocminfo"]) }}
+```
+<!-- ohpc_fi -->
+<!-- ohpc_end -->
+
+::: {.tip}
+**Tip:** Once the compute nodes boot, `rocminfo` on a compute node lists each
+GPU as an agent (e.g. `gfx908` for an Instinct MI100), and `rocm-smi` shows
+their temperature, power and utilization. AMD supports ROCm with its own
+`amdgpu-dkms` kernel module rather than the in-kernel driver; if a GPU does not
+appear, install `amdgpu-dkms` from the same repository's `amdgpu` channel in the
+compute image.
+
+When the head node has no GPU, `hipcc` cannot detect the target and builds for
+a default architecture that may not run on the compute nodes' GPUs. Name the
+GPU architecture explicitly, e.g. `hipcc --offload-arch=gfx908 -o app app.hip`
+for an Instinct MI100.
+:::

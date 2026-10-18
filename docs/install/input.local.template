@@ -81,6 +81,10 @@ enable_lustre_client="${enable_lustre_client:-0}"
 enable_pmix="${enable_pmix:-0}"
 enable_nhc="${enable_nhc:-1}"
 
+# GPU driver flags
+enable_nvidia_gpu_driver="${enable_nvidia_gpu_driver:-0}"
+enable_amd_gpu_driver="${enable_amd_gpu_driver:-0}"
+
 # Vendor compiler package flags
 enable_intel_packages="${enable_intel_packages:-0}"
 
@@ -135,6 +139,10 @@ kargs="${kargs:-acpi_pad.disable=1}"
 # only; empty leaves it unchanged). 4200 or more (e.g. 9000) gives RoCE MTU 4096; exactly
 # 4096 gives only RoCE MTU 2048
 roce_mtu="${roce_mtu:-}"
+
+# ROCm repository for the AMD GPU drivers section (a release's main directory under
+# https://repo.radeon.com/rocm/rhel9/)
+rocm_repo="${rocm_repo:-https://repo.radeon.com/rocm/rhel9/7.2.4/main}"
 
 # IPoIB interface name on head node and computes (e.g. ibp3s0 with predictable naming)
 ipoib_dev="${ipoib_dev:-ib0}"

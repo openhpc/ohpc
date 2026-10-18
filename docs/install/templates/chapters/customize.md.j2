@@ -14,7 +14,10 @@
 {% include "scheduler/slurm/pam.md.j2" %}
 {% endif %}
 
-{% include "customize/gpu.md.j2" %}
+{% include "customize/gpu-nvidia.md.j2" %}
+{% if is_el and is_x86_64 %}
+{% include "customize/gpu-amd.md.j2" %}
+{% endif %}
 {% include "customize/syslog.md.j2" %}
 
 {% if is_el %}
