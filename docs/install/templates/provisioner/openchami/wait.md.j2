@@ -1,7 +1,6 @@
 ## Wait for Compute Nodes
 
-Wait for all compute nodes to become accessible via SSH. Cloud-init must
-complete and restart munge and slurmd before the nodes are ready.
+Wait for all compute nodes to become accessible via SSH.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Wait for compute nodes to be accessible -->
@@ -11,6 +10,18 @@ until pdsh -S -w "${compute_prefix}[1-${num_computes}]" true \
 	echo "Waiting for compute nodes..."
 	sleep 10
 done
+```
+<!-- ohpc_end -->
+
+`sshd` answers before cloud-init has finished: its final stage still has to
+write the munge key and run the `runcmd` restarts. Wait for it to complete on
+every node, so that the resource manager steps below do not restart daemons
+that cloud-init is restarting at the same time.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait for cloud-init to finish on the compute nodes -->
+```bash
+pdsh -w "${compute_prefix}[1-${num_computes}]" cloud-init status --wait
 ```
 <!-- ohpc_end -->
 
