@@ -16,7 +16,9 @@ nodesetboot compute network
 At this point, the *head node* should be able to boot the newly defined compute
 nodes. This is done by using the `nodepower` Confluent command leveraging IPMI
 protocol set up during the *compute* node definition in the previous section.
-The following power cycles each of the desired hosts.
+The following power cycles each of the desired hosts. Without a BMC
+(`has_ipmi=0`), the recipe instead prints one `ohpc_reset` line per node for
+an external reset handler, as the other provisioners' boot steps do.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Boot compute nodes -->
@@ -24,6 +26,11 @@ The following power cycles each of the desired hosts.
 ```bash
 nodepower compute boot
 ```
+<!-- ohpc_else -->
+<!-- ohpc_command # No BMC/IPMI available -- signal external reset handler -->
+<!-- ohpc_command for ((i=0; i<num_computes; i++)) ; do -->
+<!-- ohpc_command   echo "#<<< ohpc_reset:$i,${c_name[$i]},${c_bmc[$i]} >>>#" -->
+<!-- ohpc_command done -->
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
 
