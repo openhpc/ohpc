@@ -97,7 +97,7 @@ dnf -y install docs-ohpc
 # ---------------------------------------------------------------------------
 # Install VM and networking dependencies
 # ---------------------------------------------------------------------------
-dnf -y install qemu-kvm ipxe-roms-qemu iproute initscripts-service fuse-overlayfs
+dnf -y install qemu-kvm ipxe-roms-qemu iproute initscripts-service fuse-overlayfs nftables
 
 # ---------------------------------------------------------------------------
 # Compute node definitions
@@ -133,6 +133,16 @@ done
 
 echo "192.168.100.1 sms" >>/etc/hosts
 hostnamectl hostname sms
+
+# Route the compute nodes to the Internet through the SMS. The recipe sets
+# the SMS as gateway and 1.1.1.1 as DNS on the nodes; this is needed for
+# anything that fetches from outside, such as CernVM-FS for EESSI. The
+# masquerade is local to this network namespace, the host NATs it again.
+sysctl -w net.ipv4.ip_forward=1
+nft add table ip nat
+nft add chain ip nat postrouting '{ type nat hook postrouting priority srcnat; }'
+nft add rule ip nat postrouting ip saddr 192.168.100.0/24 \
+	ip daddr != 192.168.100.0/24 masquerade
 
 # ---------------------------------------------------------------------------
 # Generate input.local
