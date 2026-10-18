@@ -50,8 +50,6 @@ EOF
 <!-- ohpc_begin -->
 <!-- ohpc_comment Configure HTTPS proxy for image build (site-specific) -->
 <!-- ohpc_command #<<< ohpc_proxy:image >>># -->
-<!-- ohpc_comment Add site or pre-release OpenHPC repositories to the image build (site-specific) -->
-<!-- ohpc_command #<<< ohpc_repo:image >>># -->
 <!-- ohpc_end -->
 
 Build this first layer:
@@ -258,4 +256,9 @@ cmds:
     loglevel: INFO
 EOF
 ```
+<!-- ohpc_end -->
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Add site or pre-release OpenHPC repositories to compute-prod.yaml (site-specific) -->
+<!-- ohpc_command #<<< ohpc_repo:image >>># -->
 <!-- ohpc_end -->

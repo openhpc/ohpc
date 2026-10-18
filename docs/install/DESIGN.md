@@ -502,14 +502,18 @@ Three repository placeholder types appear, in script order:
 | --- | --- | --- |
 | `#<<< ohpc_repo:head >>>#` | After `ohpc-release` on the head | Head node (`dnf config-manager`, a `.repo` file) |
 | `#<<< ohpc_repo:compute >>>#` | After the compute repo is set up | Warewulf image chroot / Confluent nodeshell / xCAT `otherpkgdir` |
-| `#<<< ohpc_repo:image >>>#` | OpenCHAMI image build only | Image-builder repo configuration |
+| `#<<< ohpc_repo:image >>>#` | OpenCHAMI only, after `compute-prod.yaml` is written and before it is built | Compute image definition (`yq -i '.repos += [...]'`) |
 
 As with the proxy placeholders, a pre-processor replaces each with the commands
 that add the needed repositories; leaving one unchanged (or empty) is a no-op.
 The expansion is context-specific: a Warewulf `compute` adds the repo inside the
 image (`wwctl image exec … dnf config-manager …`), a Confluent one uses
-`nodeshell`, and an xCAT one appends to the osimage's `otherpkgdir`
-(`chdef -p -t osimage … otherpkgdir=,<url>`) before `genimage`/provisioning.
+`nodeshell`, an xCAT one appends to the osimage's `otherpkgdir`
+(`chdef -p -t osimage … otherpkgdir=,<url>`) before `genimage`/provisioning,
+and an OpenCHAMI `image` one appends to the `repos:` list of the compute image
+definition (`yq -i '.repos += [{"alias": …, "url": …, "gpg": …}]'
+/opt/ohpc/admin/images/compute-prod.yaml`), which is why that placeholder comes
+after the definition is written rather than before the first image build.
 
 **Template source locations for repository placeholders:**
 
