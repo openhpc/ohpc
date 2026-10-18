@@ -41,9 +41,12 @@ INSTALL = HERE.parent  # docs/install
 
 
 def git(*args: str, cwd: Path = INSTALL) -> str:
-    return subprocess.run(
-        ["git", *args], cwd=cwd, check=True, capture_output=True, text=True
-    ).stdout.strip()
+    proc = subprocess.run(
+        ["git", *args], cwd=cwd, check=False, capture_output=True, text=True
+    )
+    if proc.returncode != 0:
+        sys.exit(f"git {' '.join(args)} failed in {cwd}:\n{proc.stderr.strip()}")
+    return proc.stdout.strip()
 
 
 def resolve_ref(ref: str) -> str:
