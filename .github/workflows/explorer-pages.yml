@@ -53,6 +53,10 @@ jobs:
         with:
           fetch-depth: 0 # mksite.py exports other refs from this clone
           fetch-tags: true
+      - name: Trust the checkout
+        # The workspace is owned by the runner user while the container runs
+        # as root; without this, every git command in mksite.py fails.
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Assemble the site
         run: |
           python3 docs/install/explorer/mksite.py --out _site --allow-overlay \
