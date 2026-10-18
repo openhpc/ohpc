@@ -19,8 +19,15 @@ fi
 }
 
 @test "[BOS] master IB HCA port active" {
-    status=`ibv_devinfo | grep state | awk '{print $2}'`
-    assert_equal "$status" "PORT_ACTIVE"
+    states=`ibv_devinfo | grep state | awk '{print $2}'`
+    if [ -z "$states" ];then
+        flunk
+    fi
+    for status in $states; do
+        if [ "$status" != "PORT_ACTIVE" ];then
+            flunk
+        fi
+    done
 }
 
 @test "[BOS] compute IB HCA ports active" {
