@@ -183,11 +183,16 @@ hostnamectl hostname sms
 # the SMS as gateway and 1.1.1.1 as DNS on the nodes; this is needed for
 # anything that fetches from outside, such as CernVM-FS for EESSI. The
 # masquerade is local to this network namespace, the host NATs it again.
+# Only traffic leaving through the uplink is masqueraded: requests to the
+# OpenCHAMI services, which haproxy forwards to nested containers on
+# 10.89.0.0/24, must keep the node's address, because the cloud-init
+# server identifies a node by the source address of its request.
+uplink="$(ip route show default | awk '/^default/ { print $5; exit }')"
 sysctl -w net.ipv4.ip_forward=1
 nft add table ip nat
 nft add chain ip nat postrouting '{ type nat hook postrouting priority srcnat; }'
 nft add rule ip nat postrouting ip saddr 192.168.100.0/24 \
-	ip daddr != 192.168.100.0/24 masquerade
+	oifname "${uplink}" masquerade
 
 # ---------------------------------------------------------------------------
 # Generate input.local
