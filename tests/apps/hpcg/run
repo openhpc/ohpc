@@ -7,6 +7,8 @@ export BATS_JUNIT_CLASS=$TEST_DIR
 source ./common/TEST_ENV || exit 1
 source ./common/functions || exit 1
 
+status=0
+
 for i in "$@"; do
 	case $i in
 	-c=* | --compiler=*)
@@ -43,11 +45,11 @@ for compiler in $COMPILER_FAMILIES; do
 		module load "$mpi" || exit 1
 
 		export BATS_REPORT_FILENAME=build.log.xml
-		./build
+		./build || status=1
 		export BATS_REPORT_FILENAME=rm_execution_single_host.log.xml
-		./rm_execution_single_host
+		./rm_execution_single_host || status=1
 		export BATS_REPORT_FILENAME=rm_execution_multi_host.log.xml
-		./rm_execution_multi_host
+		./rm_execution_multi_host || status=1
 
 		# save .log files for potential integration with CI
 		save_logs_mpi_family . "$compiler" "$mpi"
@@ -63,7 +65,7 @@ if [ -r log.HPCG ]; then
 	echo "-------------------------------------------------------"
 	echo "Apps: HPCG tests: Results Summary"
 	echo "-------------------------------------------------------"
-	print "%-24s %-10s %-10s %16s %16s\n" \
+	printf "%-24s %-10s %-10s %16s %16s\n" \
 		Run_ID Compiler MPI_Stack Ref_GFLOP/s Curr_GFLOP/s
 	cat log.HPCG
 
@@ -71,3 +73,5 @@ if [ -r log.HPCG ]; then
 	cat log.HPCG >>logs/log.HPCG
 	rm log.HPCG
 fi
+
+exit ${status}
