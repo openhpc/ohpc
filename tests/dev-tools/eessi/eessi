@@ -38,7 +38,7 @@ teardown() {
 }
 
 @test "[dev-tools/eessi] EESSI repository is mounted on the compute nodes (${RESOURCE_MANAGER})" {
-	run_serial_binary ls "${EESSI_REPO}/init/modules"
+	run run_serial_binary ls "${EESSI_REPO}/init/modules"
 	assert_success
 }
 
@@ -63,8 +63,20 @@ teardown() {
 	module load "EESSI/${EESSI_VERSION}"
 	module load Go
 	go build -o hello_go hello.go
-	run_serial_binary -o "${OUTPUT}" ./hello_go
+	run run_serial_binary -o "${OUTPUT}" ./hello_go
 	assert_success
 	run grep "Hello from Go" "${OUTPUT}"
+	assert_success
+}
+
+@test "[dev-tools/eessi] zstd from EESSI is on CernVM-FS and works on the head node" {
+	run ./zstd_check.sh
+	assert_success
+}
+
+@test "[dev-tools/eessi] zstd from EESSI is on CernVM-FS and works on the compute nodes (${RESOURCE_MANAGER})" {
+	run run_serial_binary -o "${OUTPUT}" ./zstd_check.sh
+	assert_success
+	run grep "zstd round trip succeeded" "${OUTPUT}"
 	assert_success
 }
