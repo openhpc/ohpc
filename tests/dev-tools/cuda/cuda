@@ -17,7 +17,8 @@ teardown() {
 }
 
 @test "[dev-tools/cuda] run nvidia-smi" {
-	run_serial_binary nvidia-smi
+	# nvidia-smi is only installed on the GPU compute nodes, not the head node
+	run_serial_binary --skip-local-check nvidia-smi
 }
 
 @test "[dev-tools/cuda] check for nvcc" {
