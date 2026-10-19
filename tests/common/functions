@@ -594,13 +594,21 @@ run_mpi_binary() {
 		# rather than that node's /tmp.
 		JOB_OUT="${PWD}/.job.${RANDOM}.out"
 
-		# In SIMPLE_CI all Flux nodes run on the same host, so run one
-		# MPI batch job at a time there. Every batch job is a separate
-		# Flux sub-instance, and sub-instances started at the same time
-		# can give their first job the same ID. Flux passes that ID to
-		# MPI as the PMI kvsname, and MPICH names its shared memory
-		# segments after it, so two such jobs on the same host corrupt
-		# each other's communication.
+		# Every batch job is a separate Flux sub-instance, and
+		# sub-instances started at the same time can give their first
+		# job the same ID. Flux passes that ID to MPI as the PMI
+		# kvsname, and MPICH names its shared memory segments after
+		# it, so two such jobs on the same host corrupt each other's
+		# communication. Tests that run in parallel (bats -j) submit
+		# their batch jobs at the same time, and on a cluster with two
+		# compute nodes they all land on the same two nodes, so
+		# allocate the nodes exclusively, like the Slurm partition
+		# does with Oversubscribe=EXCLUSIVE, and the jobs run one
+		# after another.
+		#
+		# In SIMPLE_CI (GitHub Actions) all Flux nodes run on the same
+		# host, where exclusive nodes still share /dev/shm, so run one
+		# MPI batch job at a time there with a lock instead.
 		local flux_lock_fd=""
 		if [ -n "${SIMPLE_CI}" ]; then
 			exec {flux_lock_fd}>"/tmp/ohpc-flux-mpi.${USER}.lock"
@@ -608,7 +616,7 @@ run_mpi_binary() {
 		fi
 
 		# Submit batch job
-		jobId=$(flux batch -N "${NNODES}" -n "${NTASKS}" -t "$(flux_timeout_minutes "${timeout}")" --output="${JOB_OUT}" "${JOB_SCRIPT}") ||
+		jobId=$(flux batch --exclusive -N "${NNODES}" -n "${NTASKS}" -t "$(flux_timeout_minutes "${timeout}")" --output="${JOB_OUT}" "${JOB_SCRIPT}") ||
 			ERROR "Unable to submit batch job"
 
 		echo "Batch job ${jobId} submitted"
