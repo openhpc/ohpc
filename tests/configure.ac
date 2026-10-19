@@ -118,7 +118,22 @@ AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/test-driver-ohpc'])
 AC_ARG_ENABLE([admin],
    [AS_HELP_STRING([--enable-admin],[Enable administrator environment tests (default=yes, root only)],,120)],[],
    [AX_OPTION_DEFAULT(type=short,enable_admin,yes)])
-AM_CONDITIONAL(ADMIN_ENABLED,test "x$enable_admin" = "xyes" ) 
+AM_CONDITIONAL(ADMIN_ENABLED,test "x$enable_admin" = "xyes" )
+# Optional administrator tools: the recipe installs each only when its input is set
+# (enable_clustershell, enable_genders, enable_ipmisol), so a site that leaves one out
+# disables its tests here.
+AC_ARG_ENABLE([clustershell],
+   [AS_HELP_STRING([--enable-clustershell],[Enable ClusterShell tests (default=yes, root only)])],[],
+   [enable_clustershell=yes])
+AM_CONDITIONAL(CLUSTERSHELL_ENABLED,test "x$enable_clustershell" = "xyes" )
+AC_ARG_ENABLE([genders],
+   [AS_HELP_STRING([--enable-genders],[Enable genders tests (default=yes, root only)])],[],
+   [enable_genders=yes])
+AM_CONDITIONAL(GENDERS_ENABLED,test "x$enable_genders" = "xyes" )
+AC_ARG_ENABLE([conman],
+   [AS_HELP_STRING([--enable-conman],[Enable ConMan tests (default=yes, root only)])],[],
+   [enable_conman=yes])
+AM_CONDITIONAL(CONMAN_ENABLED,test "x$enable_conman" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Base operating system 
 AC_ARG_ENABLE([bos],
@@ -624,15 +639,33 @@ if test "x$ROOT_ENABLED" = "x1" ; then
 
     if test "x$enable_bos" = "xyes"; then
        echo '    'Base operating system..... : enabled
-    else 
+    else
        echo '    'Base operating system..... : disabled
+    fi
+
+    if test "x$enable_clustershell" = "xyes"; then
+       echo '    'ClusterShell.............. : enabled
+    else
+       echo '    'ClusterShell.............. : disabled
+    fi
+
+    if test "x$enable_conman" = "xyes"; then
+       echo '    'ConMan.................... : enabled
+    else
+       echo '    'ConMan.................... : disabled
     fi
 
     if test "x$FABRIC" = "xnone"; then
        echo '    'Fabric.................... : disabled
     else 
         echo '    'Fabric.................... : ${FABRIC}
-    fi	
+    fi
+
+    if test "x$enable_genders" = "xyes"; then
+       echo '    'Genders................... : enabled
+    else
+       echo '    'Genders................... : disabled
+    fi
 
     if test "x$enable_hardware" = "xyes"; then
        echo '    'Hardware benchmarks....... : enabled	
