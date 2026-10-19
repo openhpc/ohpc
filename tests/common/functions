@@ -236,14 +236,20 @@ check_compiler_family() {
 }
 
 # Run serial binary through resource manager
+#
+# The executable is checked for on the node running the tests before it is
+# handed to the resource manager. Pass --skip-local-check for binaries that
+# only exist on the compute nodes (e.g. nvidia-smi on a GPU-less head node).
 run_serial_binary() {
 
 	# Parse optional arguments
 	output_file=""
 	timeout=1 # default job timeout (in minutes)
+	local skip_local_check=0
 
 	local OPTIND=1
-	while getopts "o:s:t:" OPTION; do
+	# "-:" lets getopts hand a "--long-option" over as "-" with OPTARG=long-option
+	while getopts "o:s:t:-:" OPTION; do
 		case "${OPTION}" in
 		o)
 			output_file="${OPTARG}"
@@ -253,6 +259,17 @@ run_serial_binary() {
 			;;
 		t)
 			timeout="${OPTARG}"
+			;;
+		-)
+			case "${OPTARG}" in
+			skip-local-check)
+				skip_local_check=1
+				;;
+			*)
+				echo "Unknown option --${OPTARG} given to run_serial_binary" >&2
+				exit 1
+				;;
+			esac
 			;;
 		'?')
 			echo "Unknown option given to run_serial_binary" >&2
@@ -266,8 +283,10 @@ run_serial_binary() {
 	EXE="$1"
 	shift
 
-	# shellcheck disable=SC2086
-	check_exe ${EXE}
+	if [ "${skip_local_check}" -eq 0 ]; then
+		# shellcheck disable=SC2086
+		check_exe ${EXE}
+	fi
 
 	if [ -z "${scalasca}" ]; then
 		exec_prefix=""
