@@ -23,6 +23,12 @@ clusters](https://www.eessi.io/docs/getting_access/native_installation/#native-i
 for details.
 :::
 
+Without a local proxy, the clients are configured with `CVMFS_USE_CDN=yes`.
+They then fetch content through a content delivery network (CDN) instead of
+contacting the EESSI mirror servers directly, which keeps the load on those
+servers low. The setting is not needed, and should be removed, once a local
+proxy is configured.
+
 The CernVM-FS client requires a local cache. On the *head node* the cache is
 kept on disk in the default location (`/var/lib/cvmfs`) with a limit of 10 GB:
 
@@ -39,8 +45,9 @@ eessi_rpm="https://github.com/EESSI/filesystem-layer/releases/download"
 eessi_rpm="${eessi_rpm}/latest/cvmfs-config-eessi-latest.noarch.rpm"
 {{ pkg_install }} "${eessi_rpm}"
 
-# Create the client configuration (no proxy, 10 GB local cache)
+# Create the client configuration (no proxy, use CDN, 10 GB local cache)
 echo 'CVMFS_CLIENT_PROFILE="single"' > /etc/cvmfs/default.local
+echo 'CVMFS_USE_CDN=yes' >> /etc/cvmfs/default.local
 echo 'CVMFS_QUOTA_LIMIT=10000' >> /etc/cvmfs/default.local
 
 # Configure autofs and make the EESSI repository accessible
@@ -78,8 +85,9 @@ boot.
 # omits; keep SELinux disabled so the nodes do not boot enforcing
 {{ compute_sed("s/^SELINUX=.*/SELINUX=disabled/", "/etc/selinux/config") }}
 
-# Create the client configuration (no proxy, 4 GB cache in memory)
+# Create the client configuration (no proxy, use CDN, 4 GB cache in memory)
 {{ compute_echo('CVMFS_CLIENT_PROFILE="single"', "/etc/cvmfs/default.local", false) }}
+{{ compute_echo("CVMFS_USE_CDN=yes", "/etc/cvmfs/default.local") }}
 {{ compute_echo("CVMFS_CACHE_BASE=/dev/shm/cvmfs-cache", "/etc/cvmfs/default.local") }}
 {{ compute_echo("CVMFS_QUOTA_LIMIT=4000", "/etc/cvmfs/default.local") }}
 
@@ -135,3 +143,8 @@ example:
 [test@sms ~]$ module load EESSI/2026.06
 [test@sms ~]$ module avail
 ```
+
+Questions and problems concerning EESSI itself, such as missing software or
+issues with the CernVM-FS repository, are best directed to the EESSI project.
+The available channels, including a Slack workspace and a support portal, are
+listed on the [EESSI support page](https://www.eessi.io/docs/support/).
