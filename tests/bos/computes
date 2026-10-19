@@ -16,7 +16,7 @@ if [ $? -ne 0 ]; then
 fi
 
 num_computes=`koomie_cf -x "c[0-9]+\b" uptime | grep "load average" | wc -l`
-if [ "$num_computes" -lt 0 ];then
+if [ "$num_computes" -lt 1 ];then
     ERROR "Test requires at least 1 available compute node"
 fi
 sms_kernel=`uname -r`
