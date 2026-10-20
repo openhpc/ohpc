@@ -63,7 +63,7 @@ module avail mpich
 -------------------- /opt/ohpc/pub/moduledeps/{{ gnu_version }}---------------------
    mpich/3.4.3-ofi    mpich/3.4.3-ucx (D)
 ```
-
+{% if is_x86_64 %}
 If your system includes InfiniBand and you enabled underlying support in
 [InfiniBand support](#optionally-add-infiniband-support-services-on-head-node)
 and [Enable Infiniband Drivers](#enable-infiniband-drivers), an additional
@@ -87,7 +87,7 @@ of MVAPICH2 instead:
 ```
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
-
+{% endif %}
 <!--
 https://github.com/openhpc/ohpc/issues/1273
 disabling until we can get pmix/openmpi/slurm to play nicely
