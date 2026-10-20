@@ -50,7 +50,7 @@ templates/chapters/main.md.j2 ──▶ nunjucks (Jinja2 for JS) ◀────
 | `engine.js` | Port of `../Makefile` + `../mkdoc.py`: config merge (yq `*` semantics), the `<!-- +section -->` include markers, macro loading, `tojson`, script extraction, line-length warnings. Environment-agnostic (fetch in the page, `fs` under node). |
 | `render-html.js` | Guide Markdown → DOM: rewrites the pandoc-only syntax (`::: {.tip}`, `[x]{.class}`, image/heading attributes, stray LaTeX), parses with marked, then turns the HTML-comment markers into structure — provenance wrappers per template, optional-step blocks per `ohpc_if_set` flag, `recipe.sh` regions, script-only lines — and numbers the headings. |
 | `app.js` | The page: chooser, URL state, sidebar (TOC, flags, view switches, downloads). |
-| `mksite.py` | Assembles a **multi-version site**: `git archive` of each ref's `docs/install` into `<out>/<ref>/`, its `manifest.json`, and one `<out>/versions.json` for the page's version switcher. Exports committed trees only (not the working copy). See "Versions" below. |
+| `mksite.py` | Assembles a **multi-version site**: `git archive` of each ref's `docs/install` into `<out>/<label>/`, its `manifest.json`, and one `<out>/versions.json` for the page's version switcher. Exports committed trees only (not the working copy). See "Versions" below. |
 | `manifest.json` | Written by `../mkdoc.py --manifest` (`make explorer`): recipe list, loader file list, `enable_*` flags from `input.local.template`, git revision. A static host has no directory listing, so this is the one index the page needs. Git-ignored. |
 | `vendor/` | nunjucks 3.2.4 (unminified, see below), js-yaml 4.1.0, marked 15.0.7, highlight.js 11.11.1 + two themes. No build step, no CDN at runtime. |
 | `test/parity.mjs` | Renders every recipe under node and diffs the Markdown and script byte-for-byte against `../build/`. **Run it after any change to engine.js or mkdoc.py.** It stamps each render with the revision in `build/<name>.yaml`, so a `build/` older than HEAD still compares. |
@@ -131,8 +131,13 @@ entries it shows a version switcher in the masthead, otherwise nothing changes.
 A bare checkout served as today never has one.
 
 ```bash
-python3 explorer/mksite.py --out ../../_site "4.x=development" "v4.1.GA.docs=4.1"
+python3 explorer/mksite.py --out ../../_site 4.x v4.1.GA=4.1
 ```
+
+A ref is `REF` or `REF=LABEL`. The label is what the switcher shows and the
+directory the ref is published under, so the tag `v4.1.GA` above lands in
+`4.1/explorer/`; without one the ref names both (`4.x/explorer/`). Two refs
+that would share a directory are refused.
 
 - **The explorer that renders a ref is the one committed in that ref**, so its
   `engine.js` matches that ref's `mkdoc.py`. `--allow-overlay` copies the
@@ -145,7 +150,7 @@ python3 explorer/mksite.py --out ../../_site "4.x=development" "v4.1.GA.docs=4.1
   tag (say `v4.1.GA.docs`) is just another ref there.
 - Switching keeps the hash (recipe and flags); a recipe that does not exist in
   the other version falls back to its chooser.
-- `e2e.py --root <site> --prefix <ref>/` exercises the switcher against a
+- `e2e.py --root <site> --prefix <label>/` exercises the switcher against a
   `mksite.py` output.
 
 ## Known limits

@@ -3,7 +3,7 @@
 Assemble a multi-version static site for the recipe explorer.
 
 Each ref (a branch or tag of this repository) is exported with ``git archive``
-into ``<out>/<ref>/`` as its ``docs/install`` tree, its ``manifest.json`` is
+into ``<out>/<label>/`` as its ``docs/install`` tree, its ``manifest.json`` is
 generated there, and one ``<out>/versions.json`` lists them so the page's
 version switcher can offer them. The page itself is unchanged: a bare
 ``docs/install`` checkout has no ``versions.json`` above it and shows no
@@ -16,11 +16,13 @@ in ``versions.json``; expect its script section markers to differ from the
 released recipe.sh.
 
 Usage (from docs/install; the git repository is found from there):
-    python3 explorer/mksite.py --out ../../_site 4.x=development v4.1.GA.docs=4.1
-    python3 explorer/mksite.py --out _site HEAD=development    # the checkout itself
+    python3 explorer/mksite.py --out ../../_site 4.x v4.1.GA=4.1
+    python3 explorer/mksite.py --out _site HEAD    # the checkout itself
 
-A ref is written as ``REF`` or ``REF=LABEL``. The first ref is the default
-(the site root redirects to it).
+A ref is written as ``REF`` or ``REF=LABEL``; the label names the version in
+the switcher and its directory (``v4.1.GA=4.1`` → ``<out>/4.1/``), and
+defaults to the ref (``HEAD`` → the current branch). The first ref is the
+default (the site root redirects to it).
 """
 
 from __future__ import annotations
@@ -70,14 +72,14 @@ def resolve_ref(ref: str) -> str:
     )
 
 
-def safe_dir(ref: str) -> str:
-    """Directory name for a ref: ``refs/heads/4.x`` or ``feature/x`` → flat."""
+def safe_dir(label: str) -> str:
+    """Directory name for a label or ref: ``refs/heads/4.x`` or ``feature/x`` → flat."""
     return (
         re.sub(
             r"[^A-Za-z0-9._-]+",
             "-",
-            ref.replace("refs/heads/", "").replace("refs/tags/", ""),
-        )
+            label.replace("refs/heads/", "").replace("refs/tags/", ""),
+        ).strip(".")
         or "ref"
     )
 
@@ -145,16 +147,22 @@ def main() -> int:
 
     out: Path = args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
-    versions = []
+    specs, seen = [], {}
     for spec in args.refs:
         ref, _, label = spec.partition("=")
         label = label or ref
+        name = safe_dir(
+            label if label != "HEAD" else git("rev-parse", "--abbrev-ref", "HEAD")
+        )
+        if name in seen:
+            sys.exit(f"error: {seen[name]!r} and {ref!r} would both be {name}/")
+        seen[name] = ref
+        specs.append((ref, label, name))
+    versions = []
+    for ref, label, name in specs:
         git_ref = resolve_ref(ref)
         revision = git("rev-parse", git_ref)
         vc_date = git("log", "-1", "--pretty=format:%as", git_ref)
-        name = safe_dir(
-            ref if ref != "HEAD" else git("rev-parse", "--abbrev-ref", "HEAD")
-        )
         dest = out / name
         if dest.exists():
             shutil.rmtree(dest)

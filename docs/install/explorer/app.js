@@ -15,7 +15,7 @@ import { renderGuide, applyFlags } from "./render-html.js";
 
 const BASE = "../"; // docs/install, relative to explorer/
 // A multi-version site (explorer/mksite.py) places each ref's docs/install at
-// <site>/<ref>/ and a versions.json at <site>/. From explorer/ that is two
+// <site>/<label>/ and a versions.json at <site>/. From explorer/ that is two
 // levels up; a bare docs/install checkout has none there, and the switcher
 // stays hidden.
 const VERSIONS_URL = "../../versions.json";
