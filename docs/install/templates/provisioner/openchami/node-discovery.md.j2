@@ -6,7 +6,10 @@ creating a way for adding nodes that do not have redfish capabilities, or when
 you just want to provide a list of nodes.
 
 Create the `nodes.yaml` file the static discovery will use to populate SMD.
-Also add the compute node names to `/etc/hosts` for SSH access.
+Also add the compute nodes to `/etc/hosts` for SSH access, with both the short
+and the fully qualified name, `<name> <name>.${dns_domain}`, as xCAT's
+`makehosts` and Confluent's `confluent2hosts` write them; tools such as the test
+suite's `koomie_cf` find hosts only by a dotted name.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Discovering Nodes -->
@@ -47,7 +50,7 @@ done
 
 ## Add nodes to /etc/hosts
 for((i=0; i < $num_computes; i++)); do
-	echo "${c_ip[$i]} ${c_name[$i]}" >> /etc/hosts
+	echo "${c_ip[$i]} ${c_name[$i]} ${c_name[$i]}.${dns_domain:-local}" >> /etc/hosts
 done
 ```
 <!-- ohpc_end -->

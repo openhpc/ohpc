@@ -28,6 +28,9 @@ Required variables:
 * `${ipv4_gateway}` - Default gateway for the internal network
 * `${dns_servers}` - DNS resolver for the internal network
 {% endif %}
+{%- if is_confluent or is_openchami %}
+* `${dns_domain}` - DNS domain name for cluster (e.g. `local`)
+{%- endif %}
 * `${ntp_server}` - Local ntp server for time synchronization
 * `${bmc_username}` - BMC username for use by IPMI
 * `${bmc_password}` - BMC password for use by IPMI
@@ -44,7 +47,6 @@ Required variables:
 {% if is_confluent %}
 * `initialize_options` - `usklpta`
 * `deployment_protocols` - `firmware`
-* `${dns_domain}` - DNS domain name for cluster (e.g. `local`)
 * `iso_path` - location of compute node base os dvd iso (default: `{{ distro_iso_image }}`)
 * `iso_url` - ISO download base URL (optional; overrides default upstream location)
 {% endif %}
