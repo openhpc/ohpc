@@ -228,7 +228,7 @@ ipv4_gateway="${ipv4_gateway:-192.168.100.1}"
 ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
 
 dns_servers="${dns_servers:-1.1.1.1}"
-domain_name="${domain_name:-local}"
+dns_domain="${dns_domain:-local}"
 
 has_ipmi="${has_ipmi:-1}"
 bmc_username="${bmc_username:-admin}"
