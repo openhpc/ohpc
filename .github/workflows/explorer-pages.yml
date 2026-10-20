@@ -3,16 +3,16 @@ name: Recipe explorer (GitHub Pages)
 # Publishes the browser-side recipe explorer (docs/install/explorer/) as a
 # static site, one copy of docs/install per published ref:
 #
-#   <pages-url>/<ref>/explorer/      the explorer for that ref's templates
+#   <pages-url>/<label>/explorer/    the explorer for that ref's templates
 #   <pages-url>/versions.json        what the page's version switcher offers
 #   <pages-url>/                     redirects to the default (first) ref
 #
 # The build is managed from the tip: this workflow and explorer/mksite.py run
 # from the branch that triggered it (4.x), which is the first, default entry.
 # Other refs to publish alongside are listed in RELEASE_REFS, e.g. a release
-# branch or a docs-only tag `v4.1.GA.docs=4.1`. Each ref is rendered by the
-# explorer committed in that ref (its engine must match its mkdoc.py); a ref
-# that predates the explorer gets the tip's overlaid.
+# branch or a tag `v4.1.GA=4.1`, published under its label (4.1/). Each ref
+# is rendered by the explorer committed in that ref (its engine must match its
+# mkdoc.py); a ref that predates the explorer gets the tip's overlaid.
 #
 # Requires, in the repository settings: Pages source = "GitHub Actions". If
 # 4.x is not the repository's default branch, allow it on the github-pages
