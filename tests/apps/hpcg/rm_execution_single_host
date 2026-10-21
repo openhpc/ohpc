@@ -14,14 +14,18 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
+# ranks per node: TEST_NUM_RANKS from the environment, else one per CPU of the
+# smallest node, so the job fits the nodes it runs on
+TEST_NUM_RANKS=${TEST_NUM_RANKS:-$(node_cpus)}
+
 # init run options
-nx=32
+nx=$TEST_HPCG_NX
 ny=$nx
 nz=$nx
-nt=10
+nt=$TEST_HPCG_TIME
 
 NODES=1
-TASKS=$((NODES*TEST_NUM_RANKS))
+TASKS=$(tasks_count $((NODES*TEST_NUM_RANKS)))
 ARGS="$nx $ny $nz $nt"
 EXE=$TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
 
