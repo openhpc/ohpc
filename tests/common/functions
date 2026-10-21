@@ -47,6 +47,24 @@ check_rms() {
 	fi
 }
 
+# The CPUs of the smallest node the resource manager schedules, for sizing a
+# job's ranks per node to the nodes it will run on. 8 when the manager does not
+# say (openpbs, or a query that fails).
+node_cpus() {
+	local cpus=""
+	if [ "${RESOURCE_MANAGER}" = "slurm" ]; then
+		cpus=$(sinfo -h -N -o '%c' 2>/dev/null | sort -n | head -1)
+	elif [ "${RESOURCE_MANAGER}" = "flux" ]; then
+		cpus=$(flux resource list -s up -no '{nnodes} {ncores}' 2>/dev/null | awk '$1 > 0 {print int($2 / $1)}')
+	fi
+	case "${cpus}" in
+	'' | *[!0-9]* | 0)
+		cpus=8
+		;;
+	esac
+	echo "${cpus}"
+}
+
 # Every run_*_binary caller hardcodes its -t timeout as a PBS/Slurm-style
 # walltime (HH:MM:SS, MM:SS, or a bare number), since that is what those two
 # resource managers expect. flux batch's own -t/--time-limit instead wants a
