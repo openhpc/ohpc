@@ -483,8 +483,14 @@ run_mpi_binary() {
 
 		tmpState="/tmp/submitId.${RANDOM}"
 
-		sbatch "${JOB_SCRIPT}" >&"${tmpState}"
 		echo "job script = ${JOB_SCRIPT}"
+		# bats runs the test under set -e, so a refused sbatch ended the test
+		# right here with no message: check it, and show what Slurm said
+		if ! sbatch "${JOB_SCRIPT}" >&"${tmpState}"; then
+			cat "${tmpState}"
+			rm -f "${tmpState}"
+			ERROR "Unable to submit batch job"
+		fi
 
 		head -1 "${tmpState}" | grep -q "Submitted batch job" || ERROR "Unable to submit batch job"
 		jobId=$(head -1 "${tmpState}" | awk '{print $4}')
@@ -526,6 +532,30 @@ run_mpi_binary() {
 				echo " "
 				echo "Job ${jobId} cancelled..."
 				break
+
+			elif echo "${tmpState}" | grep -E -q "JobState=PENDING"; then
+				# A job pending for a reason that cannot clear on its own will
+				# never run: no node configuration in the partition fits its
+				# request (PartitionConfig, what Slurm gives -N 2 -n 16 on two
+				# 4-CPU nodes), its node count or time limit is outside the
+				# partition's (PartitionNodeLimit, PartitionTimeLimit), no node
+				# satisfies its constraints (BadConstraints), or its account or
+				# QOS is invalid (squeue(1), JOB REASON CODES). Cancel it and
+				# fail now, with Slurm's reason, rather than poll for 3000 s and
+				# fail on the missing output file. Resources, Priority and the
+				# like clear as other jobs finish, so those keep waiting.
+				local TMP_REASON
+				TMP_REASON=$(scontrol show job "${jobId}" | grep Reason | awk '{print $2}')
+				case "${TMP_REASON}" in
+				Reason=PartitionConfig | Reason=PartitionNodeLimit | Reason=PartitionTimeLimit | Reason=BadConstraints | Reason=InvalidAccount | Reason=InvalidQOS)
+					echo " "
+					echo "Job ${jobId} can never start: ${TMP_REASON}"
+					scancel "${jobId}"
+					rm -f "${JOB_SCRIPT}"
+					return 1
+					;;
+				esac
+				sleep 1
 
 			else
 				sleep 1
