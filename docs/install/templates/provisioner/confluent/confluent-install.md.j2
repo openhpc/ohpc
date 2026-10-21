@@ -4,12 +4,17 @@ To begin, enable use of the public Confluent repository by adding it to the
 local list of available package repositories. This also requires network access
 from your *head node* to the internet, or alternatively, that the repository be
 mirrored locally. In this case, we use the network.
+Confluent is pinned at version {{ confluent_version }} by using Lenovo's
+{{ confluent_repo_release }} release repository in place of `latest`, so that a new
+Confluent release does not change what this recipe installs.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Enable Confluent repositories -->
 ```bash
 {{ pkg_install }} \
 https://hpc.lenovo.com/yum/latest/{{ distro_tag }}/{{ arch }}/lenovo-hpc-yum-1-1.{{ arch }}.rpm
+dnf config-manager --save --setopt=lenovo-hpc.baseurl=\
+https://hpc.lenovo.com/yum/{{ confluent_repo_release }}/{{ distro_tag }}/{{ arch }}/
 ```
 <!-- ohpc_end -->
 
@@ -21,7 +26,7 @@ provisioning service on the *head node*:
 # Install Confluent and required packages
 {{ pkg_install }} lenovo-confluent
 {{ pkg_install }} tftp-server nfs-utils policycoreutils-python-utils yq jq
-{{ pkg_install }} confluent_ipxe-aarch64 confluent_osdeploy-aarch64
+{{ pkg_install }} confluent_ipxe-aarch64 confluent_osdeploy-aarch64-{{ confluent_version }}
 
 # Enable Confluent and its tools for use in current shell
 systemctl enable --now confluent
