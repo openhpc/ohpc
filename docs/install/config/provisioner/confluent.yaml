@@ -4,6 +4,10 @@ provisioner: "confluent"
 provisioner_name: "Confluent"
 is_confluent: true
 
+# Confluent version, and the Lenovo release repository that ships it
+confluent_version: "3.15.6"
+confluent_repo_release: "26.7.2"
+
 # Override chroot commands with nodeshell equivalents
 # This allows shared sections (infiniband, omnipath, nhc) to work unchanged
 pkg_install_chroot: "nodeshell compute dnf -y install"
