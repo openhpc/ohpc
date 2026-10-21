@@ -98,6 +98,10 @@ def main() -> int:
         if not args.url:
             ctx.route(ORIGIN + "**", serve_from_disk)
         page = ctx.new_page()
+        page.add_init_script(
+            "Object.defineProperty(navigator, 'clipboard', {value: {writeText: "
+            "text => { window.__copiedChapterLink = text; return Promise.resolve(); }}})"
+        )
         page.on(
             "console",
             lambda m: (
@@ -136,6 +140,24 @@ def main() -> int:
             failures.append(f"too few chapters rendered: {h1s}")
         if toc != h1s:
             failures.append(f"toc chapters {toc} != h1 count {h1s}")
+        chapter_links = page.locator(".guide .chapter-link")
+        if chapter_links.count() != h1s:
+            failures.append(f"chapter links {chapter_links.count()} != h1 count {h1s}")
+        deep_chapter = page.locator(".guide h1").nth(6).get_attribute("id")
+        chapter_links.nth(6).click()
+        page.wait_for_function("Boolean(window.__copiedChapterLink)")
+        copied = page.evaluate("window.__copiedChapterLink")
+        if f"chapter={deep_chapter}" not in copied:
+            failures.append(f"copied chapter link missing chapter query: {copied}")
+        page.goto("about:blank")
+        page.goto(copied)
+        page.wait_for_function(f"document.querySelector('#guide').dataset.recipe === '{sample}'")
+        page.wait_for_function(
+            "(id) => document.getElementById(id).getBoundingClientRect().top < 100",
+            arg=deep_chapter,
+        )
+        if "chapter=" in page.url:
+            failures.append("chapter query was not consumed after restoring the chapter")
         if conds == 0:
             failures.append("no optional-step blocks found")
         page.screenshot(path=str(shots / "02-guide-top.png"))
@@ -197,6 +219,22 @@ def main() -> int:
         page.locator("#toc .toc-chapter a").nth(4).click()
         page.wait_for_timeout(600)
         page.screenshot(path=str(shots / "03-guide-chapter.png"))
+
+        # a TOC jump is not a deep link: it must not write chapter= into the
+        # URL, and a later view-switch re-render must leave the reader in
+        # place (toggles used to jump back to the last jump target)
+        if "chapter=" in page.url:
+            failures.append(f"TOC jump wrote a chapter query into the URL: {page.url}")
+        page.evaluate("window.scrollTo(0, document.body.scrollHeight - 900)")
+        page.wait_for_timeout(200)
+        y_before = page.evaluate("window.scrollY")
+        page.locator("#sw-sources").click()
+        page.wait_for_timeout(300)
+        y_after = page.evaluate("window.scrollY")
+        if abs(y_after - y_before) > 5:
+            failures.append(f"toggling a view switch moved the reader: {y_before} -> {y_after}")
+        page.locator("#sw-sources").click()  # back to the default
+        page.wait_for_timeout(200)
 
         # provenance badge appears on hover
         first_src = page.locator(".guide .src").nth(6)
