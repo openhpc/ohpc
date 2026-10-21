@@ -246,6 +246,8 @@ cmds:
       echo '${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev,nosuid 0 0'
       >> /etc/fstab
     loglevel: INFO
+  - cmd: echo 'server ${sms_ip} iburst' >> /etc/chrony.conf
+    loglevel: INFO
   - cmd: mkdir -p /opt/ohpc/pub
     loglevel: INFO
   - cmd: echo "account required pam_slurm.so" >> /etc/pam.d/sshd
