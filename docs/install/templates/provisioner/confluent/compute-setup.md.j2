@@ -38,12 +38,15 @@ for OpenHPC packages.
 ```
 <!-- ohpc_end -->
 
-And add additional packages.
+And add additional packages, with the head node as the compute nodes' time
+server.
 <!-- ohpc_begin -->
 <!-- ohpc_comment Add additional packages to compute image -->
 ```bash
-# Add Network Time Protocol (NTP) support
+# Add Network Time Protocol (NTP) support, synchronized to the head node
 {{ pkg_install_chroot }} chrony
+{{ compute_run("echo server ${sms_ip} iburst >> /etc/chrony.conf") }}
+{{ compute_run("systemctl restart chronyd.service") }}
 
 # Include nfs-utils
 {{ pkg_install_chroot }} nfs-utils
