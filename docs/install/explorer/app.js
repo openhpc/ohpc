@@ -86,6 +86,7 @@ const h = (tag, attrs = {}, ...children) => {
 const state = {
   axes: { distro: null, arch: null, provisioner: null, scheduler: null },
   flags: {}, // name → 0/1 (only when the user changed it from the default)
+  chapter: null, // chapter heading id to restore when a deep link is opened
   skipped: false, // show optional steps that are switched off
   scriptOnly: false, // show script-only lines
   sources: true, // show template provenance badges
@@ -94,6 +95,7 @@ const state = {
 function readHash() {
   const raw = location.hash.replace(/^#\/?/, "");
   state.flags = {};
+  state.chapter = null;
   state.skipped = false;
   state.scriptOnly = false;
   state.sources = true;
@@ -119,19 +121,26 @@ function readHash() {
     if (k === "skipped") state.skipped = v === "1";
     else if (k === "script") state.scriptOnly = v === "1";
     else if (k === "sources") state.sources = v !== "0";
+    else if (k === "chapter") state.chapter = v;
     else if (FLAG_RE.test(k)) state.flags[k] = Number(v) ? 1 : 0;
   }
 }
 
-function writeHash() {
+function hashFor(chapter = state.chapter) {
   const name = currentRecipeName();
+  if (!name) return "";
   const params = new URLSearchParams();
   for (const [k, v] of Object.entries(state.flags)) params.set(k, String(v));
   if (state.skipped) params.set("skipped", "1");
   if (state.scriptOnly) params.set("script", "1");
   if (!state.sources) params.set("sources", "0");
+  if (chapter) params.set("chapter", chapter);
   const q = params.toString();
-  const next = (name || "") + (q ? "?" + q : "");
+  return name + (q ? "?" + q : "");
+}
+
+function writeHash() {
+  const next = hashFor();
   if (location.hash.replace(/^#\/?/, "") !== next) {
     history.replaceState(null, "", next ? "#" + next : location.pathname + location.search);
   }
@@ -245,6 +254,7 @@ function renderChooser() {
                 // clear the axes that conflict, keep this one
                 for (const other of AXES) if (other.key !== ax.key) state.axes[other.key] = null;
               }
+              state.chapter = null;
               state.axes[ax.key] = selected ? null : v;
               update();
             },
@@ -261,7 +271,7 @@ function renderChooser() {
         ? h("span", {}, "Your path: ", h("code", {}, currentRecipeName()))
         : `${n} of ${recipes.length} paths still open`,
       " ",
-      h("button", { type: "button", class: "link", onclick: () => { for (const ax of AXES) state.axes[ax.key] = null; state.flags = {}; update(); } }, "start over")
+      h("button", { type: "button", class: "link", onclick: () => { for (const ax of AXES) state.axes[ax.key] = null; state.flags = {}; state.chapter = null; update(); } }, "start over")
     )
   );
 }
@@ -319,6 +329,7 @@ async function renderCurrent() {
   document.body.classList.add("reading");
   if (rendered && rendered.name === name) {
     applyView();
+    await restoreChapter();
     return;
   }
   const seq = ++renderSeq;
@@ -350,6 +361,7 @@ async function renderCurrent() {
         h("pre", { class: "error" }, result.scriptErrors.join("\n")));
     }
     applyView();
+    await restoreChapter();
   } catch (err) {
     console.error(err);
     status.hidden = false;
@@ -362,8 +374,29 @@ async function renderCurrent() {
 }
 
 function addChapterNav(article, toc) {
-  const chapters = toc.filter((t) => t.level === 1 && t.number);
+  const chapters = toc.filter((t) => t.level === 1);
+  const headings = new Map(
+    Array.from(article.querySelectorAll("h1[id]"), (heading) => [heading.id, heading])
+  );
   const wrappers = Array.from(article.querySelectorAll(':scope > .src[data-src^="chapters/"]'));
+  // Use the processed TOC as the source of truth so every chapter heading,
+  // including the headings nested in the appendices aggregator, gets a link.
+  for (const chapter of chapters) {
+    const first = headings.get(chapter.id);
+    if (!first || first.querySelector(".chapter-link")) continue;
+    const copy = h(
+      "button",
+      {
+        type: "button",
+        class: "chapter-link",
+        "aria-label": `Copy a link to ${first.textContent.trim()}`,
+        title: "Copy a link to this chapter",
+        onclick: () => copyChapterLink(first.id, copy),
+      },
+      "Copy link"
+    );
+    first.append(copy);
+  }
   for (const wrap of wrappers) {
     const first = wrap.querySelector("h1");
     if (!first) continue;
@@ -379,10 +412,57 @@ function addChapterNav(article, toc) {
   }
 }
 
-function jumpTo(id) {
+function jumpTo(id, behavior = "smooth") {
   const target = document.getElementById(id);
   if (!target) return;
-  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  target.scrollIntoView({ behavior, block: "start" });
+}
+
+function waitForImages(article) {
+  return Promise.all(Array.from(article.querySelectorAll("img"), (img) => {
+    const decoded = () => img.decode().catch(() => {});
+    if (img.complete) return decoded();
+    return new Promise((resolve) => {
+      const done = () => {
+        img.removeEventListener("load", done);
+        img.removeEventListener("error", done);
+        resolve(decoded());
+      };
+      img.addEventListener("load", done, { once: true });
+      img.addEventListener("error", done, { once: true });
+    });
+  }));
+}
+
+async function restoreChapter() {
+  const id = state.chapter;
+  const view = rendered;
+  if (!id || !view) return;
+  // Consume the one-shot URL instruction before waiting. Otherwise an option
+  // update during image loading writes the old chapter back into the hash and
+  // starts another restore, moving the reader unexpectedly.
+  state.chapter = null;
+  writeHash();
+  await waitForImages(view.article);
+  if (rendered !== view) return;
+  jumpTo(id, "instant");
+}
+
+async function copyChapterLink(id, button) {
+  const url = new URL(location.href);
+  url.hash = hashFor(id);
+  if (!navigator.clipboard) {
+    button.textContent = "Copy unavailable";
+    setTimeout(() => { button.textContent = "Copy link"; }, 1500);
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(url.href);
+    button.textContent = "Copied";
+  } catch {
+    button.textContent = "Copy failed";
+  }
+  setTimeout(() => { button.textContent = "Copy link"; }, 1500);
 }
 
 function renderToc(toc) {

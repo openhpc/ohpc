@@ -24,7 +24,10 @@ host. The page needs only the files it fetches: `explorer/`, `templates/`,
 `manifests/`, `config/`, `recipes/` and `input.local.template`. It must be
 served over HTTP — `file://` blocks the fetches and the ES module.
 
-A path is linkable: `#rocky10-x86_64-warewulf-slurm?enable_ib=1&skipped=1`.
+A path is linkable: `#rocky10-x86_64-warewulf-slurm?enable_ib=1&skipped=1`. Each
+heading's Copy link button adds `chapter=<heading-id>` to deep-link into the
+guide; the parameter is applied once when the guide renders, so later option
+changes do not jump the reader back.
 
 Trust boundary: the page injects template-derived HTML (the same first-party
 content that becomes the PDF) without sanitising; nothing from the URL reaches
