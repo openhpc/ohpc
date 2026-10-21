@@ -31,7 +31,16 @@ AutoReq: no
 BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 BuildRequires:  yaml-cpp-devel
+# AutoReq is disabled, so add the yaml-cpp dependency manually. Depend on the
+# SONAME of the library adios2 is linked against instead of on the package
+# name: yaml-cpp is regularly updated to versions with a new SONAME and the
+# old library is then provided by a compat package.
+%global yaml_cpp_soname %(rpm -q --provides -f "$(readlink -f %{_libdir}/libyaml-cpp.so 2>/dev/null)" 2>/dev/null | grep '^libyaml-cpp[.]so' | head -n1)
+%if "%{yaml_cpp_soname}" != ""
+Requires: %{yaml_cpp_soname}
+%else
 Requires: yaml-cpp
+%endif
 
 BuildRequires: libtool cmake make
 Requires:      environment(modules)%{PROJ_DELIM}
