@@ -5,5 +5,5 @@ provisioner_name: "OpenCHAMI"
 is_openchami: true
 
 # OpenCHAMI component versions
-openchami_version: "0.1.4"
+openchami_version: "0.1.6"
 ochami_version: "0.7.2"
