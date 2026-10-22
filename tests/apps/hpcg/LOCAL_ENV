@@ -3,13 +3,15 @@ TEST_DIR=$(pwd | sed "s#$(cd $(readlink common); cd ..; pwd)##")
 CMD_TIMEOUT="5:00"
 TEST_EXE="./bin/xhpcg"
 TEST_MAX_COMPUTES=1024
-# Ranks per node: one per CPU of the smallest node (node_cpus in common/functions),
-# one thread each. TEST_NUM_RANKS in the environment overrides it.
+# Ranks per node: two, whatever the machine, with one thread each. That is all
+# this test needs; TEST_NUM_RANKS in the environment asks for more.
+TEST_NUM_RANKS=${TEST_NUM_RANKS:-2}
 TEST_NUM_THREADS=${TEST_NUM_THREADS:-1}
 # HPCG's own inputs (as in bin/hpcg.dat): the local grid per rank and the run time
-# in seconds. The default is a small problem that finishes in seconds, so CI can
-# run it; TEST_HPCG_NX=104 TEST_HPCG_TIME=60 is hpcg.dat's size.
+# in seconds. The default is a small problem, so CI can run it. HPCG_Init discards
+# a run time below 10 and runs its quick path instead, so 10 is the smallest value
+# that has any effect; TEST_HPCG_NX=104 TEST_HPCG_TIME=60 is hpcg.dat's size.
 TEST_HPCG_NX=${TEST_HPCG_NX:-16}
-TEST_HPCG_TIME=${TEST_HPCG_TIME:-1}
+TEST_HPCG_TIME=${TEST_HPCG_TIME:-10}
 TEST_VERIFY=1
 TEST_PERFLOG=./log.HPCG

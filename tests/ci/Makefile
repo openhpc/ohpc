@@ -22,6 +22,7 @@ codespell-lint:
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
 		tests/bos/computes \
+		tests/apps/hpcg/hpcg_functions \
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
@@ -155,6 +156,7 @@ whitespace-lint:
 		tests/user-env/mem_limits \
 		tests/common/functions \
 		tests/bos/computes \
+		tests/apps/hpcg/hpcg_functions \
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
@@ -262,6 +264,7 @@ shellcheck-lint:
 		../../tests/ci/prepare-ci-environment.sh \
 		../../tests/ci/setup_slurm_and_run_tests.sh \
 		../../tests/common/functions \
+		../../tests/apps/hpcg/hpcg_functions \
 		../../components/OHPC_setup_compiler \
 		../../components/OHPC_setup_mpi \
 		../../components/admin/prun/SOURCES/prun \
@@ -462,6 +465,7 @@ shfmt-lint:
 		../../misc/dist/count_avail_packages.sh \
 		../../misc/gen_sources_checksum.sh \
 		../../tests/common/functions \
+		../../tests/apps/hpcg/hpcg_functions \
 		../../tests/dev-tools/numpy/ohpc-tests/test_compiler_families \
 		../../tests/dev-tools/valgrind/ohpc-tests/test_compiler_families \
 		../../tests/libs/hdf5/ohpc-tests/test_compiler_families \
