@@ -1,0 +1,42 @@
+# shellcheck shell=bash
+# -*-sh-*-
+#
+# Helpers shared by apps/hpcg's single- and multi-host execution tests.
+
+# Rename this run's HPCG result file to one naming the problem, the rank count
+# and the toolchain, then append its GFLOP/s rating to TEST_PERFLOG beside the
+# reference run's. Takes the local grid's nx, ny and nz and the total number of
+# ranks; reads LMOD_FAMILY_COMPILER, LMOD_FAMILY_MPI and TEST_PERFLOG.
+log_hpcg_results() {
+	local nx="$1" ny="$2" nz="$3" tasks="$4"
+	local run_tag run_yaml wrk_yaml str ref_perf cur_perf fmt
+
+	run_tag="HPCG.${nx}x${ny}x${nz}.P${tasks}"
+
+	# HPCG names its result file after the time the run ended, so the newest
+	# one is this run's. A run that did not finish leaves none behind, and
+	# saying so beats letting mv report a missing operand.
+	echo "Finding latest HPCG-Benchmark-*.yaml in $(pwd)"
+	# shellcheck disable=SC2012 # -t sorts by time, which find cannot do
+	run_yaml=$(ls -t HPCG-Benchmark-*.yaml 2>/dev/null | head -n 1)
+	if [ -z "${run_yaml}" ]; then
+		flunk "no HPCG-Benchmark-*.yaml in $(pwd): the run produced no result"
+		return 1
+	fi
+
+	wrk_yaml="${run_tag}.${LMOD_FAMILY_COMPILER}.${LMOD_FAMILY_MPI}.yaml"
+	echo "Moving ${run_yaml} to ${wrk_yaml}"
+	mv "${run_yaml}" "${wrk_yaml}"
+
+	str="HPCG result is VALID"
+	ref_perf=$(grep "${str}" "ref/${wrk_yaml}" 2>/dev/null | cut -d ' ' -f12)
+	cur_perf=$(grep "${str}" "${wrk_yaml}" | cut -d ' ' -f12)
+
+	[ -n "${ref_perf}" ] || ref_perf="?"
+	[ -n "${cur_perf}" ] || cur_perf="?"
+
+	fmt="%-24s %-10s %-10s %16s %16s\n"
+	# shellcheck disable=SC2059 # fmt is this file's own format string
+	printf "${fmt}" "${run_tag}" "${LMOD_FAMILY_COMPILER}" \
+		"${LMOD_FAMILY_MPI}" "${ref_perf}" "${cur_perf}" >>"${TEST_PERFLOG}"
+}

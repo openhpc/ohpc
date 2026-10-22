@@ -3,6 +3,7 @@
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
+source ./hpcg_functions || exit 1
 source ./common/TEST_ENV
 
 if [ -s ./LOCAL_ENV ];then
@@ -13,10 +14,6 @@ fi
 
 check_rms
 rm=$RESOURCE_MANAGER
-
-# ranks per node: TEST_NUM_RANKS from the environment, else one per CPU of the
-# smallest node, so the job fits the nodes it runs on
-TEST_NUM_RANKS=${TEST_NUM_RANKS:-$(node_cpus)}
 
 # init run options
 nx=$TEST_HPCG_NX
@@ -51,25 +48,5 @@ fi
 }
 
 @test "[$TEST_DIR] log HPCG multi node results ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run_tag=HPCG.${nx}x${ny}x${nz}.P${TASKS}
-    echo "Finding latest HPCG-Bencmark-*.yaml in $(pwd)"
-    run_yaml=`ls -t HPCG-Benchmark-*.yaml | head -n 1`
-    wrk_yaml=$run_tag.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI.yaml
-    echo "Moving $run_yaml to $wrk_yaml"
-    mv $run_yaml $wrk_yaml
-
-    str="HPCG result is VALID"
-    ref_perf=`grep "$str" ref/$wrk_yaml | cut -d ' ' -f12`
-    cur_perf=`grep "$str"     $wrk_yaml | cut -d ' ' -f12`
-
-    if [ -z $ref_perf ];then
-        ref_perf="?"
-    fi
-
-    if [ -z $cur_perf ];then
-        cur_perf="?"
-    fi
-
-    fmt="%-24s %-10s %-10s %16s %16s\n"
-    printf "$fmt" $run_tag $LMOD_FAMILY_COMPILER $LMOD_FAMILY_MPI $ref_perf $cur_perf >>$TEST_PERFLOG
+    log_hpcg_results "$nx" "$ny" "$nz" "$TASKS"
 }
