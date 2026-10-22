@@ -131,17 +131,27 @@ jobs:
         os: [ubuntu-latest, ubuntu-24.04-arm]
         compiler: [gnu16, intel]
         rms: [slurm, flux]
+        modules: [lmod-ohpc]
         include:
           - os: ubuntu-latest
             arch: x86_64
           - os: ubuntu-24.04-arm
             arch: aarch64
+          # Run the tests under Environment Modules in one configuration
+          - os: ubuntu-latest
+            arch: x86_64
+            compiler: gnu16
+            rms: slurm
+            modules: environment-modules-ohpc
+            name_suffix: /environment-modules
+            artifact_suffix: -environment-modules
         exclude:
           - os: ubuntu-24.04-arm
             compiler: intel
     runs-on: ${{ matrix.os }}
-    name: Test on RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }})
+    name: Test on RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }}${{ matrix.name_suffix }})
     env:
+      MODULES_PACKAGE: ${{ matrix.modules }}
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
     container:
@@ -221,7 +231,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: test-results-${{ matrix.rms }}-${{ matrix.compiler }}-${{ matrix.os }}
+        name: test-results-${{ matrix.rms }}-${{ matrix.compiler }}-${{ matrix.os }}${{ matrix.artifact_suffix }}
         retention-days: 1
         path: tests/**/*.log.xml
     - name: Save oneAPI package cache
@@ -234,13 +244,13 @@ jobs:
       uses: actions/cache/save@v6
       with:
         path: /var/cache/ccache
-        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-${{ matrix.rms }}
+        key: ccache-rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ github.sha }}-${{ github.run_id }}-${{ matrix.rms }}${{ matrix.artifact_suffix }}
     - name: Upload ccache stats
       if: always()
       uses: ./.github/actions/upload-ccache-stats
       with:
-        job-name: "RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }})"
-        artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ matrix.rms }}
+        job-name: "RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }}${{ matrix.name_suffix }})"
+        artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ matrix.rms }}${{ matrix.artifact_suffix }}
 
   integration_test:
     strategy:
