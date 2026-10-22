@@ -198,6 +198,7 @@ These tools are designed to work together in CI pipelines:
 
 ### Global CI Configuration
 - `SKIP_CI_SPECS`: Space-separated list of spec files to skip
+- `MODULES_PACKAGE`: Module tool package to test under, `lmod-ohpc` (default) or `environment-modules-ohpc`; `prepare-ci-environment.sh` installs it, `setup_slurm_and_run_tests.sh` selects it with the alternatives system and enables its admin test
 - `SIMPLE_CI`: Set to 1 for simplified CI mode
 - `PARSE_DOC_TEST_IMPL`: Set to "python" to test Python parse_doc implementation
 
