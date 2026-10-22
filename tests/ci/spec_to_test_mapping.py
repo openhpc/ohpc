@@ -218,9 +218,10 @@ all_test_packages = [
     "cmake-ohpc",
     "conman-ohpc",
     "EasyBuild-ohpc",
-    # Selected over lmod-ohpc by alternatives, so ALL runs test under
-    # Environment Modules
+    # Checked by their admin tests, which ALL runs enable; the tests run
+    # under the module tool the test script selects, whichever is installed
     "environment-modules-ohpc",
+    "lmod-ohpc",
     "losf-ohpc",
     "papi-ohpc",
     "paraver-ohpc",

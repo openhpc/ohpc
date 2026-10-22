@@ -26,6 +26,26 @@ shift
 COMPILER_FAMILY=$1
 shift
 
+# Module tool the tests run under: both lmod-ohpc and
+# environment-modules-ohpc may be installed (a rebuilt package, or the
+# ALL test packages), so the one asked for is selected explicitly below
+# and its own admin test is enabled.
+MODULES_PACKAGE="${MODULES_PACKAGE:-lmod-ohpc}"
+case "${MODULES_PACKAGE}" in
+lmod-ohpc)
+	MODULES_PROFILE=/etc/lmod-ohpc/profile.sh
+	MODULES_ADMIN_TEST=lmod
+	;;
+environment-modules-ohpc)
+	MODULES_PROFILE=/opt/ohpc/admin/environment-modules/init/profile.sh
+	MODULES_ADMIN_TEST=environment-modules
+	;;
+*)
+	echo "Unknown module tool package '${MODULES_PACKAGE}'" >&2
+	exit 1
+	;;
+esac
+
 PKG=("dnf" "-y")
 
 if hash zypper >/dev/null 2>&1; then
@@ -84,6 +104,7 @@ install_packages() {
 		automake
 		libtool
 		prun-ohpc
+		"${MODULES_PACKAGE}"
 		openmpi5-"${COMPILER_FAMILY}"-ohpc
 		mpich-"${COMPILER_FAMILY}"-ohpc
 		modules-defaults-"${COMPILER_FAMILY}"-openmpi5-ohpc
@@ -112,6 +133,13 @@ install_packages() {
 		"${PKG[@]}" remove slurm-*-ohpc || true
 	fi
 	rm -f /etc/pbs.conf
+}
+
+# Point the module command and the shell startup scripts to the module
+# tool under test, whichever tool the alternatives would pick on their own
+select_module_tool() {
+	update-alternatives --set modules.sh "${MODULES_PROFILE}"
+	update-alternatives --display modules.sh
 }
 
 # Common to both RMS: bring up munged, the shared auth daemon both
@@ -346,6 +374,14 @@ run_test_suite() {
 	if [ "${#PKGS[@]}" -gt 0 ]; then
 		"${PKG[@]}" install "${PKGS[@]}"
 	fi
+
+	# Installed above or by install_packages, a module tool registers
+	# itself with the alternatives, so select the one under test last
+	select_module_tool
+
+	# Always check the module tool under test, in addition to the admin
+	# tests selected from the changed spec files
+	ADMIN_TESTS+=("--enable-${MODULES_ADMIN_TEST}")
 
 	export SIMPLE_CI=1
 	TESTS_FAILED=1
