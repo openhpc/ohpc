@@ -23,6 +23,9 @@ codespell-lint:
 		tests/common/functions \
 		tests/bos/computes \
 		tests/apps/hpcg/hpcg_functions \
+		tests/apps/hpcg/ohpc-tests/test_mpi_families \
+		tests/apps/hpcg/rm_execution_single_host \
+		tests/apps/hpcg/rm_execution_multi_host \
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
@@ -157,6 +160,9 @@ whitespace-lint:
 		tests/common/functions \
 		tests/bos/computes \
 		tests/apps/hpcg/hpcg_functions \
+		tests/apps/hpcg/ohpc-tests/test_mpi_families \
+		tests/apps/hpcg/rm_execution_single_host \
+		tests/apps/hpcg/rm_execution_multi_host \
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
@@ -281,7 +287,9 @@ shellcheck-lint:
 		../../containers/examples/mpi/*.sh
 	shellcheck --exclude=SC2239,SC1091 \
 		../../tests/bos/computes \
-		../../tests/apps/hpcg/run \
+		../../tests/apps/hpcg/ohpc-tests/test_mpi_families \
+		../../tests/apps/hpcg/rm_execution_single_host \
+		../../tests/apps/hpcg/rm_execution_multi_host \
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/run \
 		../../tests/dev-tools/easybuild/EasyBuild \
@@ -378,7 +386,9 @@ shfmt-lint:
 	shfmt \
 		-w -d -ln bats \
 		../../tests/bos/computes \
-		../../tests/apps/hpcg/run \
+		../../tests/apps/hpcg/ohpc-tests/test_mpi_families \
+		../../tests/apps/hpcg/rm_execution_single_host \
+		../../tests/apps/hpcg/rm_execution_multi_host \
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/run \
 		../../tests/dev-tools/easybuild/EasyBuild \
