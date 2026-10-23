@@ -3,6 +3,30 @@
 #
 # Helpers shared by apps/hpcg's single- and multi-host execution tests.
 
+# The ranks to run per node: TEST_NUM_RANKS from the environment, else one per
+# core of the smallest node but no more than TEST_MAX_RANKS. The cap is two,
+# which is all this test needs. It is here to show that HPCG builds and runs
+# under the resource manager across nodes, not to measure the machine, and two
+# ranks a node exercise every path that matters: an exchange between ranks
+# sharing a node, an exchange across nodes, and collectives over all of them.
+# A node with one CPU still gets one rank. node_cores asks the resource
+# manager, so check_rms has to have run first.
+hpcg_ranks_per_node() {
+	local cap="${TEST_MAX_RANKS:-2}" cores
+
+	if [ -n "${TEST_NUM_RANKS:-}" ]; then
+		echo "${TEST_NUM_RANKS}"
+		return
+	fi
+
+	cores=$(node_cores)
+	if [ "${cores}" -lt "${cap}" ]; then
+		echo "${cores}"
+	else
+		echo "${cap}"
+	fi
+}
+
 # Rename this run's HPCG result file to one naming the problem, the rank count
 # and the toolchain, then append its GFLOP/s rating to TEST_PERFLOG beside the
 # reference run's. Takes the local grid's nx, ny and nz and the total number of

@@ -1,0 +1,96 @@
+#!/bin/bash
+# -*-sh-*-
+
+source ./common/TEST_ENV || exit 1
+source ./common/functions || exit 1
+
+cd apps/hpcg || exit 1
+export BATS_JUNIT_CLASS=/apps/hpcg
+
+# The top-level test suite runs this script from its own make check, and
+# automake's check rule passes TEST_LOGS on that make's command line. GNU make
+# hands such an override to every nested make through MAKEFLAGS, so the make
+# check below would inherit the caller's list of logs: it would clean the very
+# file this script's output goes to and then fail to recreate it. Build from a
+# clean make environment instead.
+unset MAKEFLAGS MAKELEVEL MFLAGS TESTS TEST_LOGS TEST_SUITE_LOG
+
+status=0
+
+for i in "$@"; do
+	case ${i} in
+	-c=* | --compiler=*)
+		COMPILER_FAMILIES="${i#*=}"
+		shift
+		;;
+	-m=* | --mpi=*)
+		MPI_FAMILIES="${i#*=}"
+		shift
+		;;
+	*)
+		echo "$0: Unknown option - $*"
+		# unknown option
+		;;
+	esac
+done
+
+rm -f log.HPCG
+
+for compiler in ${COMPILER_FAMILIES}; do
+	for mpi in ${MPI_FAMILIES}; do
+
+		echo
+		echo
+		echo "-------------------------------------------------------"
+		echo "Apps: HPCG tests: ${compiler}-${mpi}"
+		echo "-------------------------------------------------------"
+
+		rm -f HPCG*.yaml
+		rm -f hpcg_log_*.txt
+		rm -f job*out
+
+		module purge || exit 1
+		module load prun || exit 1
+		# A family whose module is missing fails, and the others still run
+		if ! module load "${compiler}" || ! module load "${mpi}"; then
+			echo "Apps: HPCG tests: ${compiler}-${mpi}: module not available, family FAILED"
+			status=1
+			continue
+		fi
+
+		# make check builds xhpcg and then runs the execution tests
+		./bootstrap || exit 1
+		./configure || exit 1
+		make clean || exit 1
+
+		make -k check || status=1
+
+		# save .log files for potential integration with CI
+		save_logs_mpi_family . "${compiler}" "${mpi}"
+		for artifact in HPCG*.yaml hpcg_log_*.txt job*out; do
+			# a family that failed before it ran leaves none of these
+			if [ -e "${artifact}" ]; then
+				mv "${artifact}" "family-${compiler}-${mpi}"
+			fi
+		done
+
+		make distclean
+	done
+done
+
+if [ -r log.HPCG ]; then
+	echo
+	echo
+	echo "-------------------------------------------------------"
+	echo "Apps: HPCG tests: Results Summary"
+	echo "-------------------------------------------------------"
+	printf "%-24s %-10s %-10s %16s %16s\n" \
+		Run_ID Compiler MPI_Stack Ref_GFLOP/s Curr_GFLOP/s
+	cat log.HPCG
+
+	mkdir -p logs
+	cat log.HPCG >>logs/log.HPCG
+	rm log.HPCG
+fi
+
+exit ${status}
