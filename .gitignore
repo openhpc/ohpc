@@ -166,6 +166,7 @@ tests/**/*.log.xml
 tests/**/*.o
 tests/**/*.trs
 tests/**/.deps/
+tests/**/.dirstamp
 tests/**/aclocal.m4
 tests/**/autom4te.cache/
 tests/**/compile
@@ -190,7 +191,6 @@ tests/apps/hpcg/**/*.yaml
 tests/apps/hpcg/**/hpcg_log_*.txt
 tests/apps/hpcg/**/log.HPCG
 tests/apps/hpcg/**/xhpcg
-tests/apps/hpcg/**/xhpcg.*
 
 # ---- Tests: apps/miniDFT ----
 tests/apps/miniDFT/**/log.miniDFT

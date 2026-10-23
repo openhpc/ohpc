@@ -99,7 +99,7 @@ endif
 #----------------------------------------------------------------------
 
 if HPCG_ENABLED
-   TESTS += apps/hpcg/run
+   TESTS += apps/hpcg/ohpc-tests/test_mpi_families
 endif
 
 if MINIDFT_ENABLED
