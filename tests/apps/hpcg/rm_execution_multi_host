@@ -1,52 +1,61 @@
 #!/usr/bin/env -S bats --report-formatter junit --formatter tap
 # -*-sh-*-
+#
+# No -j here: the logging test consumes the run's result file, so the two
+# tests in this file have to run in order.
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 source ./hpcg_functions || exit 1
-source ./common/TEST_ENV
 
-if [ -s ./LOCAL_ENV ];then
-   . ./LOCAL_ENV
-else
-    ERROR "LOCAL_ENV does not exist"
+if [ -s ./common/TEST_ENV ]; then
+	source ./common/TEST_ENV
 fi
 
-check_rms
-rm=$RESOURCE_MANAGER
+setup_file() {
+	# check_rms first: node_cores, by way of hpcg_ranks_per_node below, asks
+	# the resource manager how big a node is, and cannot until it knows which
+	# one it is talking to.
+	check_rms
 
-# init run options
-nx=$TEST_HPCG_NX
-ny=$nx
-nz=$nx
-nt=$TEST_HPCG_TIME
+	TESTNAME="apps/HPCG"
+	# Ten minutes rather than five. HPCG at this size is latency bound, and
+	# MPICH over libfabric's socket providers costs several times what Open
+	# MPI's does on a node that is itself emulated, so leave room and let only
+	# a genuinely wedged run hit the limit.
+	TIMEOUT="10:00"
+	EXE=./xhpcg
+	TEST_PERFLOG=./log.HPCG
+	MAX_COMPUTES=1024
 
-NODES=$((NUM_COMPUTES < TEST_MAX_COMPUTES ? NUM_COMPUTES : TEST_MAX_COMPUTES))
-TASKS=$(tasks_count $((NODES * TEST_NUM_RANKS)))
-ARGS="$nx $ny $nz $nt"
-EXE=$TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+	# HPCG's own inputs, as in bin/hpcg.dat: the local grid per rank and
+	# the run time in seconds. HPCG_Init discards a run time below 10 and
+	# runs its quick path instead, so 10 is the smallest value that has any
+	# effect; TEST_HPCG_NX=104 TEST_HPCG_TIME=60 is hpcg.dat's own size.
+	NX="${TEST_HPCG_NX:-16}"
+	ARGS="${NX} ${NX} ${NX} ${TEST_HPCG_TIME:-10}"
 
-# set global env settings
-export OMP_NUM_THREADS=$TEST_NUM_THREADS
-if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
-    export MV2_ENABLE_AFFINITY=0
-    export IPATH_NO_CPUAFFINITY=1
-fi
+	NODES=$((NUM_COMPUTES < MAX_COMPUTES ? NUM_COMPUTES : MAX_COMPUTES))
+	TASKS=$(tasks_count $((NODES * $(hpcg_ranks_per_node))))
 
-@test "[$TEST_DIR] check if resource manager is defined" {
-    if [ "x$rm" = "x" ]; then
-        flunk "missing resource manager"
-    fi
+	export OMP_NUM_THREADS="${TEST_NUM_THREADS:-1}"
+	if [ "${LMOD_FAMILY_MPI}" = "mvapich2" ]; then
+		export MV2_ENABLE_AFFINITY=0
+		export IPATH_NO_CPUAFFINITY=1
+	fi
+
+	export TESTNAME TIMEOUT EXE TEST_PERFLOG NX ARGS NODES TASKS
 }
 
-@test "[$TEST_DIR] run HPCG on multi nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -x $EXE ];then
-        flunk "missing $EXE"
-    fi
+@test "[${TESTNAME}] run HPCG on multiple nodes (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	if [ ! -x "${EXE}" ]; then
+		flunk "missing ${EXE}"
+	fi
 
-    run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS
+	run_mpi_binary -t "${TIMEOUT}" "${EXE}" "${ARGS}" "${NODES}" "${TASKS}"
+	assert_success
 }
 
-@test "[$TEST_DIR] log HPCG multi node results ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    log_hpcg_results "$nx" "$ny" "$nz" "$TASKS"
+@test "[${TESTNAME}] log HPCG multi node results (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER}/${LMOD_FAMILY_MPI})" {
+	log_hpcg_results "${NX}" "${NX}" "${NX}" "${TASKS}"
 }
