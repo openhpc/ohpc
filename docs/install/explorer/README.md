@@ -143,8 +143,8 @@ shows share their wording, so a reader can tell which switch made what
 appear: "show lines only in recipe.sh" shows blocks tagged "only in
 recipe.sh", "show recipe conditions" the "recipe condition" labels,
 "preview optional features that are off" the folded cards under "Optional
-features"; a flag whose steps exist only in recipe.sh is tagged "only in
-recipe.sh" (in the collapsed "more" group), and the script download is
+features"; flags whose steps exist only in recipe.sh sit in a collapsed group
+labelled "only in recipe.sh", and the script download is
 labelled recipe.sh like the tags. Keep a new switch or label to that rule. (The
 feature checkboxes drop the `enable_` prefix the cards show, to keep the list
 short.)

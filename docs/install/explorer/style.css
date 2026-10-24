@@ -146,7 +146,6 @@ main { padding: 16px 32px 80px; min-width: 0; }
 .flag { display: flex; align-items: center; gap: 8px; padding: 3px 6px; border-radius: 6px; cursor: pointer; }
 .flag:hover { background: var(--surface-2); }
 .flag-name { font-family: var(--mono); font-size: 0.82rem; }
-.flag-tag { font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
 .choice { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 3px 6px; }
 .choice select { font: inherit; font-size: 0.82rem; max-width: 100%; }
 .flag-count { margin-left: auto; font-size: 0.72rem; background: var(--accent-soft); color: var(--text); border-radius: 999px; padding: 0 7px; }
