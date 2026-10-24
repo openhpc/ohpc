@@ -50,4 +50,4 @@ enable_clustershell: false
 enable_genders: false
 enable_magpie: false
 enable_conman: false
-enable_mpi_defaults: true
+enable_default_mpi: true
