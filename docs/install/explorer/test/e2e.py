@@ -198,15 +198,32 @@ def main() -> int:
         ]
         for c in choices:
             other = next(v for v in c["choices"] if v != c["default"])
-            page.locator(f"#options select[data-choice='{c['name']}']").select_option(
-                other
+            page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
+            page.wait_for_timeout(200)
+            y_before = page.evaluate("window.scrollY")
+            # set it from script: select_option would scroll the selector into view
+            page.locator(f"#options select[data-choice='{c['name']}']").evaluate(
+                "(e, v) => { e.value = v; e.dispatchEvent(new Event('change')); }", other
             )
             page.wait_for_function(f"location.hash.includes('{c['name']}={other}')")
+            page.wait_for_timeout(300)
+            y_after = page.evaluate("window.scrollY")
+            if abs(y_after - y_before) > 50:
+                failures.append(f"picking {c['name']} moved the reader: {y_before} -> {y_after}")
             href = page.locator("#downloads a.dl").nth(2).get_attribute("href")
             local = page.evaluate("(u) => fetch(u).then(r => r.text())", href)
             line = f'{c["name"]}="${{{c["name"]}:-{other}}}"'
             if line not in local:
                 failures.append(f"input.local download lacks {line}")
+            # the guide's commands show the pick; the recipe.sh download does not
+            shown_default = f"${{{c['name']}:-{other}}}"
+            guide_code = page.locator(".guide pre").all_text_contents()
+            if not any(shown_default in t for t in guide_code):
+                failures.append(f"guide commands do not show {shown_default}")
+            href = page.locator("#downloads a.dl").nth(1).get_attribute("href")
+            script = page.evaluate("(u) => fetch(u).then(r => r.text())", href)
+            if shown_default in script:
+                failures.append("recipe.sh download changed with the pick")
             page.goto(f"{page_url}#{sample}?{c['name']}=not-a-choice")
             page.wait_for_function(
                 f"document.querySelector('#guide').dataset.recipe === '{sample}'"
@@ -256,6 +273,7 @@ def main() -> int:
         page.evaluate("window.scrollTo(0, document.body.scrollHeight - 900)")
         page.wait_for_timeout(200)
         y_before = page.evaluate("window.scrollY")
+        page.locator("#developer > summary").click()  # the developer switches
         page.locator("#sw-sources").click()
         page.wait_for_timeout(300)
         y_after = page.evaluate("window.scrollY")
@@ -264,10 +282,25 @@ def main() -> int:
         page.locator("#sw-sources").click()  # back to the default
         page.wait_for_timeout(200)
 
-        # provenance badge appears on hover
+        # provenance badge appears on hover, with template sources switched on
+        page.locator("#sw-sources").check()
         first_src = page.locator(".guide .src").nth(6)
         first_src.hover()
         badge_visible = first_src.locator("> .src-badge").is_visible()
+        page.locator("#sw-sources").uncheck()
+
+        # shell conditions (ohpc_if) are labelled only on request
+        visible_labels = (
+            "Array.from(document.querySelectorAll('.guide .cond.cond-expr > .cond-label'))"
+            ".filter((e) => e.getClientRects().length).length"
+        )
+        hidden = page.evaluate(visible_labels) == 0
+        page.locator("#sw-conditions").check()
+        shown = page.evaluate(visible_labels) > 0
+        page.locator("#sw-conditions").uncheck()
+        print(f"condition labels: hidden by default {hidden}, shown on request {shown}")
+        if not (hidden and shown):
+            failures.append("show recipe conditions does not toggle the labels")
         print(f"source badge visible on hover: {badge_visible}")
         if not badge_visible:
             failures.append("provenance badge not visible on hover")

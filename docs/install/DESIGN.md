@@ -615,6 +615,15 @@ docs/install/
 - Display names: `provisioner_name`, `scheduler_name` (used in page
   headers and titles)
 
+### Pick-one input.local settings
+
+A setting that takes one of a fixed set of values lists them on the line
+before it in `input.local.template`, as a JSON list:
+`NAME_choices='["value-a","value-b"]'`, then `NAME="${NAME:-value-a}"`. The
+explorer offers the list as a selector. The default stays the one in
+`${name:-default}`, and `mkdoc.py --manifest` fails the build if it is not in
+the list; the list's order does not matter.
+
 ## Build Tools
 
 ### mkdoc.py

@@ -110,22 +110,42 @@ depends on them, so keep it in CI):
 
 ### What the page adds on top of the Markdown
 
-- **Provenance.** Hover any paragraph to see which template produced it; the
-  badge links to the source file on the same host (and names the GitHub path).
 - **Optional steps.** `<!-- ohpc_if_set enable_x -->` blocks become cards that
   fold when the flag is off; the sidebar toggles are the `enable_*` flags from
   `input.local.template`, and the downloaded `input.local` carries the choice.
-  General `ohpc_if CONDITION` blocks are shown labelled but not evaluated.
+  Clicking a folded card's label enables the feature; "preview optional
+  features that are off" unfolds their steps, dimmed, without enabling them.
 - **Pick-one settings.** A setting with a fixed set of values declares them
   as a JSON list on the line before it in `input.local.template`:
   `modules_package_choices='["lmod-ohpc","environment-modules-ohpc"]'`, then
-  `modules_package="${modules_package:-lmod-ohpc}"`. The sidebar shows a
+  `modules_package="${modules_package:-lmod-ohpc}"`. The default is the one in
+  `${name:-default}`, which must be in the list; the list's order does not
+  matter. `mkdoc.py --manifest` fails on a list that is not JSON, not
+  followed by its setting, or without the default. The sidebar shows a
   selector, the hash carries the pick (`?modules_package=…`; a value not in
   the list is ignored), and the downloaded `input.local` gets it as the
-  default. `mkdoc.py --manifest` fails on a list that is not JSON, not
-  followed by its setting, or without the default.
-- **recipe.sh regions** are tagged; `ohpc_command`/`ohpc_comment` lines, which
-  exist only in the script, can be shown with the "script-only lines" switch.
+  default. The guide's commands show the pick as the default too
+  (`${modules_package:-environment-modules-ohpc}`), so a pasted command uses
+  it and an `input.local` that sets the variable still wins; the recipe.sh
+  and Markdown downloads stay the build output, and recipe.sh gets the pick
+  from the downloaded `input.local`. A pick edits the affected code blocks in
+  place rather than re-rendering the guide, so the reader does not move.
+- **Developer switches** (a collapsed "Developer" section, off by default):
+  "show lines only in recipe.sh" shows the `ohpc_command`/`ohpc_comment` lines
+  that exist only in the script; "show template source files" adds a hover
+  badge naming the template that produced a paragraph, linked to the file;
+  "show recipe conditions" labels the general `ohpc_if CONDITION` blocks
+  ("recipe condition — if …"), which are shown but not evaluated. Code blocks
+  that go into recipe.sh are tagged "in recipe.sh" either way.
+
+**Labels say what they control, in the same words.** A switch and the thing it
+shows share their wording, so a reader can tell which switch made what
+appear: "show lines only in recipe.sh" shows blocks tagged "only in
+recipe.sh", "show recipe conditions" the "recipe condition" labels,
+"preview optional features that are off" the folded cards under "Optional
+features"; a feature's checkbox shows the same `enable_x` name as its cards,
+and the script download is labelled recipe.sh like the tags. Keep a new switch
+or label to that rule.
 
 The marker comments are read as **top-level** nodes of the rendered guide:
 keep them at column 0, outside fenced `:::` divs and list items, and properly

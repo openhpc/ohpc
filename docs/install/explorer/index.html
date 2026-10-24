@@ -41,9 +41,13 @@
     <div id="options" class="options"></div>
     <div class="switches">
       <h3>View</h3>
-      <label><input type="checkbox" id="sw-skipped"> show steps you switched off</label>
-      <label><input type="checkbox" id="sw-script"> show script-only lines</label>
-      <label><input type="checkbox" id="sw-sources" checked> show template sources</label>
+      <label><input type="checkbox" id="sw-skipped"> preview optional features that are off</label>
+      <details id="developer" class="developer">
+        <summary>Developer</summary>
+        <label><input type="checkbox" id="sw-script"> show lines only in recipe.sh</label>
+        <label><input type="checkbox" id="sw-sources"> show template source files</label>
+        <label><input type="checkbox" id="sw-conditions"> show recipe conditions</label>
+      </details>
     </div>
     <div class="downloads-box">
       <h3>Take it with you</h3>

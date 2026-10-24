@@ -149,6 +149,7 @@ main { padding: 16px 32px 80px; min-width: 0; }
 .choice { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 3px 6px; }
 .choice select { font: inherit; font-size: 0.82rem; max-width: 100%; }
 .flag-count { margin-left: auto; font-size: 0.72rem; background: var(--accent-soft); color: var(--text); border-radius: 999px; padding: 0 7px; }
+.developer summary { cursor: pointer; color: var(--muted); font-size: 0.82rem; margin: 6px 0; }
 .more-flags summary { cursor: pointer; color: var(--muted); font-size: 0.82rem; margin: 6px 0; }
 .switches label { display: block; padding: 2px 0; color: var(--text); }
 .downloads { display: flex; flex-direction: column; gap: 6px; }
@@ -185,7 +186,7 @@ main { padding: 16px 32px 80px; min-width: 0; }
 .guide pre:hover .copy, .guide pre .copy:focus { opacity: 1; }
 .guide .recipe > pre { border-left: 3px solid var(--accent); padding-top: 24px; }
 .guide .recipe > pre::before {
-  content: "recipe.sh"; position: absolute; top: 5px; left: 12px; font: 600 0.62rem var(--sans);
+  content: "in recipe.sh"; position: absolute; top: 5px; left: 12px; font: 600 0.62rem var(--sans);
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); opacity: 0.8;
 }
 .guide img { max-width: 100%; height: auto; }
@@ -239,7 +240,7 @@ body.show-sources .guide .src.hovered { outline: 1px dashed color-mix(in srgb, v
 .guide .cond.on > .cond-label::before { content: "✓ "; }
 .guide .cond.off { border-style: dashed; border-color: var(--off); background: var(--off-soft); }
 .guide .cond.off > .cond-label { color: var(--off); }
-.guide .cond.off > .cond-label::after { content: " — switched off; folded"; text-transform: none; letter-spacing: 0; }
+.guide .cond.off > .cond-label::after { content: " — switched off, click to enable"; text-transform: none; letter-spacing: 0; }
 .guide .cond.off > :not(.cond-label) { display: none; }
 body.show-skipped .guide .cond.off > :not(.cond-label) { display: revert; opacity: 0.6; }
 body.show-skipped .guide .cond.off > .cond-label::after { content: " — switched off"; }
@@ -247,21 +248,19 @@ body.show-skipped .guide .cond.off > .cond-label::after { content: " — switche
 body.show-skipped .guide .cond.off > .table-wrap { display: block; }
 .guide .cond.cond-expr { border-left: 3px solid var(--muted); }
 .guide .cond.cond-expr > .cond-label code { white-space: normal; }
+/* shell conditions (ohpc_if) are recipe.sh detail: shown only on request */
+body:not(.show-conditions) .guide .cond.cond-expr { margin: 0; padding: 0; border: 0; background: none; }
+body:not(.show-conditions) .guide .cond.cond-expr > .cond-label { display: none; }
 
 /* script-only lines */
 .guide .script-only { display: none; }
 body.show-script-only .guide pre.script-only { display: block; border-style: dashed; opacity: 0.85; padding-top: 24px; }
 body.show-script-only .guide .cond.script-only { display: block; }
 body.show-script-only .guide pre.script-only::before {
-  content: "recipe.sh only"; position: absolute; top: 5px; left: 12px; font: 600 0.62rem var(--sans);
+  content: "only in recipe.sh"; position: absolute; top: 5px; left: 12px; font: 600 0.62rem var(--sans);
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
 }
 
-/* chapter navigation */
-.chapter-next { margin: 2.5em 0 0; text-align: right; }
-.chapter-next a { display: inline-block; text-decoration: none; font-weight: 600; background: var(--accent-soft); color: var(--text); padding: 8px 14px; border-radius: 999px; }
-.chapter-next a:hover { background: var(--accent); color: var(--accent-ink); }
-.chapter-next a:hover .secno { color: inherit; }
 
 /* footer */
 .foot { max-width: 1100px; margin: 40px auto; padding: 0 16px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); }
