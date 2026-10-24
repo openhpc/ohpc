@@ -13,7 +13,7 @@ module tool on the head node issue the following:
 <!-- ohpc_begin -->
 <!-- ohpc_comment Install OpenHPC base packages and the module tool -->
 ```bash
-{{ pkg_install }} ohpc-base ${modules_package}
+{{ pkg_install }} ohpc-base ${modules_package:-lmod-ohpc}
 ```
 <!-- ohpc_end -->
 

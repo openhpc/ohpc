@@ -52,6 +52,6 @@ selected with `${modules_package}`, as on the head node:
 ```bash
 
 # Include modules user environment
-{{ pkg_install_chroot }} ${modules_package}
+{{ pkg_install_chroot }} ${modules_package:-lmod-ohpc}
 ```
 <!-- ohpc_end -->
