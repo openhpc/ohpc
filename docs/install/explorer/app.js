@@ -540,8 +540,12 @@ function renderOptions(usedFlags) {
   const root = $("#options");
   root.textContent = "";
   const names = new Set([...manifest.flags.map((f) => f.name), ...usedFlags.keys()]);
-  const used = [...names].filter((n) => usedFlags.has(n));
+  // a flag whose steps all exist only in recipe.sh changes nothing a reader sees
+  const shown = (n) => rendered.article.querySelectorAll(`.cond[data-flag="${CSS.escape(n)}"]:not(.script-only)`).length;
+  const used = [...names].filter((n) => usedFlags.has(n) && shown(n));
+  const scriptOnly = [...names].filter((n) => usedFlags.has(n) && !shown(n));
   const unused = [...names].filter((n) => !usedFlags.has(n));
+  const more = [...scriptOnly, ...unused];
 
   const row = (name) => {
     const f = manifest.flags.find((x) => x.name === name);
@@ -559,8 +563,9 @@ function renderOptions(usedFlags) {
           update();
         },
       }),
-      h("span", { class: "flag-name" }, name),
-      count ? h("span", { class: "flag-count", title: `${count} optional step${count > 1 ? "s" : ""} in this guide` }, String(count)) : null
+      h("span", { class: "flag-name" }, name.replace(/^enable_/, "")),
+      scriptOnly.includes(name) ? h("span", { class: "flag-tag" }, "only in recipe.sh") : null,
+      count && !scriptOnly.includes(name) ? h("span", { class: "flag-count", title: `${count} optional step${count > 1 ? "s" : ""} in this guide` }, String(count)) : null
     );
   };
 
@@ -587,8 +592,8 @@ function renderOptions(usedFlags) {
     h("h3", {}, "Optional features"),
     h("p", { class: "hint" }, "The ", h("code", {}, "enable_*"), " switches from ", h("code", {}, "input.local"), ". Steps you switch off are folded away; the recipe.sh keeps them behind ", h("code", {}, "if"), "."),
     h("div", { class: "flags" }, used.map(row)),
-    unused.length
-      ? h("details", { class: "more-flags" }, h("summary", {}, `${unused.length} more (not referenced in this guide)`), h("div", { class: "flags" }, unused.map(row)))
+    more.length
+      ? h("details", { class: "more-flags" }, h("summary", {}, `${more.length} more (not shown in this guide)`), h("div", { class: "flags" }, more.map(row)))
       : null
   );
 }
