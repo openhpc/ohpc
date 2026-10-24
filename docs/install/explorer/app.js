@@ -86,6 +86,7 @@ const h = (tag, attrs = {}, ...children) => {
 const state = {
   axes: { distro: null, arch: null, provisioner: null, scheduler: null },
   flags: {}, // name → 0/1 (only when the user changed it from the default)
+  choices: {}, // name → value of a pick-one setting (only when changed from the default)
   chapter: null, // chapter heading id to restore when a deep link is opened
   skipped: false, // show optional steps that are switched off
   scriptOnly: false, // show script-only lines
@@ -95,6 +96,7 @@ const state = {
 function readHash() {
   const raw = location.hash.replace(/^#\/?/, "");
   state.flags = {};
+  state.choices = {};
   state.chapter = null;
   state.skipped = false;
   state.scriptOnly = false;
@@ -123,6 +125,7 @@ function readHash() {
     else if (k === "sources") state.sources = v !== "0";
     else if (k === "chapter") state.chapter = v;
     else if (FLAG_RE.test(k)) state.flags[k] = Number(v) ? 1 : 0;
+    else if (choiceOf(k)?.choices.includes(v)) state.choices[k] = v;
   }
 }
 
@@ -131,6 +134,7 @@ function hashFor(chapter = state.chapter) {
   if (!name) return "";
   const params = new URLSearchParams();
   for (const [k, v] of Object.entries(state.flags)) params.set(k, String(v));
+  for (const [k, v] of Object.entries(state.choices)) params.set(k, v);
   if (state.skipped) params.set("skipped", "1");
   if (state.scriptOnly) params.set("script", "1");
   if (!state.sources) params.set("sources", "0");
@@ -271,7 +275,7 @@ function renderChooser() {
         ? h("span", {}, "Your path: ", h("code", {}, currentRecipeName()))
         : `${n} of ${recipes.length} paths still open`,
       " ",
-      h("button", { type: "button", class: "link", onclick: () => { for (const ax of AXES) state.axes[ax.key] = null; state.flags = {}; state.chapter = null; update(); } }, "start over")
+      h("button", { type: "button", class: "link", onclick: () => { for (const ax of AXES) state.axes[ax.key] = null; state.flags = {}; state.choices = {}; state.chapter = null; update(); } }, "start over")
     )
   );
 }
@@ -494,6 +498,16 @@ function flagValue(name) {
   return f ? Number(f.default) : undefined;
 }
 
+// pick-one settings (NAME_choices lists in input.local.template); absent in a
+// manifest written before they existed
+function choiceOf(name) {
+  return (manifest.choices || []).find((c) => c.name === name);
+}
+
+function choiceValue(name) {
+  return state.choices[name] ?? choiceOf(name)?.default;
+}
+
 function allFlagValues() {
   const out = {};
   for (const f of manifest.flags) out[f.name] = flagValue(f.name);
@@ -529,7 +543,26 @@ function renderOptions(usedFlags) {
     );
   };
 
+  const choice = (c) => {
+    const id = "choice-" + c.name;
+    return h("label", { class: "choice", for: id, title: c.description || "" },
+      h("span", { class: "flag-name" }, c.name),
+      h("select", {
+        id, dataset: { choice: c.name },
+        onchange: (e) => {
+          if (e.target.value === c.default) delete state.choices[c.name];
+          else state.choices[c.name] = e.target.value;
+          update();
+        },
+      }, c.choices.map((v) => h("option", { value: v, selected: v === choiceValue(c.name) }, v)))
+    );
+  };
+  const choices = manifest.choices || [];
+
   root.append(
+    choices.length ? h("h3", {}, "Settings") : null,
+    choices.length ? h("p", { class: "hint" }, "Pick-one settings from ", h("code", {}, "input.local"), "; the downloaded ", h("code", {}, "input.local"), " carries your choice.") : null,
+    choices.length ? h("div", { class: "flags" }, choices.map(choice)) : null,
     h("h3", {}, "Optional features"),
     h("p", { class: "hint" }, "The ", h("code", {}, "enable_*"), " switches from ", h("code", {}, "input.local"), ". Steps you switch off are folded away; the recipe.sh keeps them behind ", h("code", {}, "if"), "."),
     h("div", { class: "flags" }, used.map(row)),
@@ -551,6 +584,9 @@ function applyView() {
   for (const input of $("#options").querySelectorAll("input[data-flag]")) {
     input.checked = flagValue(input.dataset.flag) === 1;
   }
+  for (const select of $("#options").querySelectorAll("select[data-choice]")) {
+    select.value = choiceValue(select.dataset.choice);
+  }
   renderDownloads();
 }
 
@@ -562,7 +598,9 @@ let inputLocalTemplate = null;
 
 function buildInputLocal() {
   let text = inputLocalTemplate || "";
-  for (const [name, v] of Object.entries(allFlagValues())) {
+  const values = { ...allFlagValues() };
+  for (const c of manifest.choices || []) values[c.name] = choiceValue(c.name);
+  for (const [name, v] of Object.entries(values)) {
     if (v === undefined) continue;
     const re = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     text = text.replace(new RegExp(`^(${re}="?)\\$\\{${re}:-[^}]*\\}`, "m"), `$1\${${name}:-${v}}`);
@@ -592,7 +630,7 @@ function renderDownloads() {
   root.append(
     link("Install guide", `Install_guide-${name}.md`, result.markdown, "text/markdown", "The guide as Markdown — the same file `make` writes to build/"),
     link("Recipe script", `recipe-${name}.sh`, result.script, "text/x-shellscript", "Every command in the guide, extracted into one script (the recipe.sh shipped in docs-ohpc)"),
-    link("input.local", `input.local-${name}`, buildInputLocal(), "text/plain", "The input.local template with your optional-feature choices applied"),
+    link("input.local", `input.local-${name}`, buildInputLocal(), "text/plain", "The input.local template with your settings and optional-feature choices applied"),
   );
 }
 
