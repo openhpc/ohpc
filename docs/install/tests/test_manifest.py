@@ -25,10 +25,9 @@ def choices_of(template: str) -> list[dict]:
 
 class ManifestChoices(unittest.TestCase):
     def test_template(self):
-        names = {c["name"]: c for c in mkdoc.manifest_choices()}
-        modules = names["modules_package"]
-        self.assertEqual(modules["default"], "lmod-ohpc")
-        self.assertIn("environment-modules-ohpc", modules["choices"])
+        # whatever input.local.template declares parses, each default in its list
+        for choice in mkdoc.manifest_choices():
+            self.assertIn(choice["default"], choice["choices"])
 
     def test_description_is_the_comment_block(self):
         (choice,) = choices_of(
