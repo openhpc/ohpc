@@ -11,6 +11,17 @@ available, and adds a module that gives users access to the EESSI software
 through the usual `module` commands.
 
 ::: {.tip}
+This section needs Lmod, that is `${modules_package}` left at its default of
+`lmod-ohpc`. EESSI publishes its initialization modules as Lua modulefiles,
+`EESSI/<version>.lua`, and only Lmod reads those; the `eessi` module added
+below is written the same way. Support for Environment Modules is so far a
+[proposal](https://modules.readthedocs.io/en/latest/design/eessi.html) in the
+Environment Modules documentation rather than something EESSI ships. With
+`environment-modules-ohpc` selected the repository below still mounts and its
+files can be used directly, but the EESSI modules cannot be loaded.
+:::
+
+::: {.tip}
 The configuration shown here lets every node fetch content directly from the
 public EESSI servers, which is adequate for a small test cluster. For a
 production cluster it is highly recommended to run a local [Squid
@@ -98,10 +109,10 @@ boot.
 <!-- ohpc_fi -->
 <!-- ohpc_end -->
 
-Finally, add an `eessi` module to the OpenHPC module hierarchy. It appends the
-EESSI module directory from the repository to the module search path. Since
-`/opt/ohpc/pub` is exported to the compute nodes, the module is available there
-as well.
+Finally, add an `eessi` module to the OpenHPC module hierarchy, as a Lua
+modulefile like EESSI's own. It appends the EESSI module directory from the
+repository to the module search path. Since `/opt/ohpc/pub` is exported to the
+compute nodes, the module is available there as well.
 
 <!-- ohpc_begin -->
 <!-- ohpc_if_set enable_eessi -->
