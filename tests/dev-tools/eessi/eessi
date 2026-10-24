@@ -24,6 +24,19 @@ teardown() {
 	rm -f "${OUTPUT}" hello_go
 }
 
+# EESSI publishes its initialization modules as Lua modulefiles,
+# EESSI/<version>.lua, and only Lmod reads those. Environment Modules support
+# is so far a proposal in the Environment Modules documentation rather than
+# something EESSI ships, so the tests that load a module are skipped when the
+# active tool is not Lmod. LMOD_VERSION is Lmod's own variable; Environment
+# Modules does not set it. The CernVM-FS checks need no module tool and run
+# either way.
+require_lmod() {
+	if [ -z "${LMOD_VERSION:-}" ]; then
+		skip "EESSI's modules are Lua modulefiles, which need Lmod"
+	fi
+}
+
 @test "[dev-tools/eessi] check for cvmfs RPM" {
 	run check_if_rpm_installed cvmfs
 	assert_success
@@ -43,6 +56,8 @@ teardown() {
 }
 
 @test "[dev-tools/eessi] eessi module adds the EESSI modules to MODULEPATH" {
+	require_lmod
+
 	module load eessi
 	run grep -q "${EESSI_REPO}/init/modules" <<<"${MODULEPATH}"
 	assert_success
@@ -51,6 +66,8 @@ teardown() {
 }
 
 @test "[dev-tools/eessi] load EESSI/${EESSI_VERSION} and Go" {
+	require_lmod
+
 	module load eessi
 	module load "EESSI/${EESSI_VERSION}"
 	module load Go
@@ -59,6 +76,8 @@ teardown() {
 }
 
 @test "[dev-tools/eessi] build a Go program and run it under ${RESOURCE_MANAGER}" {
+	require_lmod
+
 	module load eessi
 	module load "EESSI/${EESSI_VERSION}"
 	module load Go
@@ -70,11 +89,15 @@ teardown() {
 }
 
 @test "[dev-tools/eessi] zstd from EESSI is on CernVM-FS and works on the head node" {
+	require_lmod
+
 	run ./zstd_check.sh
 	assert_success
 }
 
 @test "[dev-tools/eessi] zstd from EESSI is on CernVM-FS and works on the compute nodes (${RESOURCE_MANAGER})" {
+	require_lmod
+
 	run run_serial_binary -o "${OUTPUT}" ./zstd_check.sh
 	assert_success
 	run grep "zstd round trip succeeded" "${OUTPUT}"
