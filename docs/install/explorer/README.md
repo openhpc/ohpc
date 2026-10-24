@@ -143,9 +143,11 @@ shows share their wording, so a reader can tell which switch made what
 appear: "show lines only in recipe.sh" shows blocks tagged "only in
 recipe.sh", "show recipe conditions" the "recipe condition" labels,
 "preview optional features that are off" the folded cards under "Optional
-features"; a feature's checkbox shows the same `enable_x` name as its cards,
-and the script download is labelled recipe.sh like the tags. Keep a new switch
-or label to that rule.
+features"; a flag whose steps exist only in recipe.sh is tagged "only in
+recipe.sh" (in the collapsed "more" group), and the script download is
+labelled recipe.sh like the tags. Keep a new switch or label to that rule. (The
+feature checkboxes drop the `enable_` prefix the cards show, to keep the list
+short.)
 
 The marker comments are read as **top-level** nodes of the rendered guide:
 keep them at column 0, outside fenced `:::` divs and list items, and properly
