@@ -767,6 +767,13 @@ matches `input.local.template`, and that a setting given a default anywhere
 has it everywhere. A new setting used only bare is not caught, so check new
 `${name}` uses in review.
 
+A setting that takes one of a fixed set of values lists them on the line
+before it in `input.local.template`, as a JSON list:
+`modules_package_choices='["lmod-ohpc","environment-modules-ohpc"]'`. The
+explorer offers the list as a selector. The default stays the one in
+`${name:-default}`, and `mkdoc.py --manifest` fails the build if it is not in
+the list; the list's order does not matter.
+
 ## Build Tools
 
 ### mkdoc.py

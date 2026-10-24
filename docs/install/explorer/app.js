@@ -90,7 +90,8 @@ const state = {
   chapter: null, // chapter heading id to restore when a deep link is opened
   skipped: false, // show optional steps that are switched off
   scriptOnly: false, // show script-only lines
-  sources: true, // show template provenance badges
+  sources: false, // show template provenance badges
+  conditions: false, // label the steps run under a shell condition (ohpc_if)
 };
 
 function readHash() {
@@ -100,7 +101,8 @@ function readHash() {
   state.chapter = null;
   state.skipped = false;
   state.scriptOnly = false;
-  state.sources = true;
+  state.sources = false;
+  state.conditions = false;
   const clearAxes = () => { for (const k of Object.keys(state.axes)) state.axes[k] = null; };
   if (!raw) {
     clearAxes();
@@ -122,7 +124,8 @@ function readHash() {
   for (const [k, v] of params) {
     if (k === "skipped") state.skipped = v === "1";
     else if (k === "script") state.scriptOnly = v === "1";
-    else if (k === "sources") state.sources = v !== "0";
+    else if (k === "sources") state.sources = v === "1";
+    else if (k === "conditions") state.conditions = v === "1";
     else if (k === "chapter") state.chapter = v;
     else if (FLAG_RE.test(k)) state.flags[k] = Number(v) ? 1 : 0;
     else if (choiceOf(k)?.choices.includes(v)) state.choices[k] = v;
@@ -137,7 +140,8 @@ function hashFor(chapter = state.chapter) {
   for (const [k, v] of Object.entries(state.choices)) params.set(k, v);
   if (state.skipped) params.set("skipped", "1");
   if (state.scriptOnly) params.set("script", "1");
-  if (!state.sources) params.set("sources", "0");
+  if (state.sources) params.set("sources", "1");
+  if (state.conditions) params.set("conditions", "1");
   if (chapter) params.set("chapter", chapter);
   const q = params.toString();
   return name + (q ? "?" + q : "");
@@ -347,7 +351,7 @@ async function renderCurrent() {
     const result = await engine.render(name, { onProgress: (m) => (status.textContent = `Rendering your guide… ${m}`) });
     if (seq !== renderSeq) return; // a newer path was chosen meanwhile
     const { article, toc, flags } = renderGuide(result.markdown, { marked, hljs, resolveImage, sourceLink });
-    rendered = { name, result, article, toc, flags };
+    rendered = { name, result, article, toc, flags, choiceCode: choiceCode(article) };
     addChapterNav(article, toc);
     main.appendChild(article);
     main.dataset.recipe = name;
@@ -382,7 +386,6 @@ function addChapterNav(article, toc) {
   const headings = new Map(
     Array.from(article.querySelectorAll("h1[id]"), (heading) => [heading.id, heading])
   );
-  const wrappers = Array.from(article.querySelectorAll(':scope > .src[data-src^="chapters/"]'));
   // Use the processed TOC as the source of truth so every chapter heading,
   // including the headings nested in the appendices aggregator, gets a link.
   for (const chapter of chapters) {
@@ -400,19 +403,6 @@ function addChapterNav(article, toc) {
       "Copy link"
     );
     first.append(copy);
-  }
-  for (const wrap of wrappers) {
-    const first = wrap.querySelector("h1");
-    if (!first) continue;
-    const idx = chapters.findIndex((c) => c.id === first.id);
-    const next = idx >= 0 ? chapters[idx + 1] : null;
-    if (!next) continue;
-    wrap.appendChild(
-      h("nav", { class: "chapter-next" },
-        h("a", { href: "#" + next.id, onclick: (e) => { e.preventDefault(); jumpTo(next.id); } },
-          "Continue to ", h("span", { class: "secno" }, next.number), next.text, " →")
-      )
-    );
   }
 }
 
@@ -508,6 +498,37 @@ function choiceValue(name) {
   return state.choices[name] ?? choiceOf(name)?.default;
 }
 
+// A pick-one setting appears in commands as ${name:-default} (DESIGN.md); show
+// the reader's pick as that default, so a pasted command uses it. Only the page
+// changes: the recipe.sh and Markdown downloads stay the build output, and the
+// pick reaches recipe.sh through the downloaded input.local. The code blocks
+// are edited in place, so a pick never re-renders the guide or moves the reader.
+function choiceCode(article) {
+  const tokens = (manifest.choices || []).map((c) => `\${${c.name}:-${c.default}}`);
+  const blocks = new Map(); // <code> → its text as rendered, with the defaults
+  for (const code of article.querySelectorAll("pre > code")) {
+    if (tokens.some((t) => code.textContent.includes(t))) blocks.set(code, code.textContent);
+  }
+  return blocks;
+}
+
+function applyChoices() {
+  for (const [code, text] of rendered.choiceCode) {
+    let shown = text;
+    for (const c of manifest.choices || []) {
+      shown = shown.split(`\${${c.name}:-${c.default}}`).join(`\${${c.name}:-${choiceValue(c.name)}}`);
+    }
+    if (code.textContent === shown) continue;
+    code.textContent = shown;
+    delete code.dataset.highlighted;
+    try {
+      hljs.highlightElement(code);
+    } catch {
+      /* leave plain */
+    }
+  }
+}
+
 function allFlagValues() {
   const out = {};
   for (const f of manifest.flags) out[f.name] = flagValue(f.name);
@@ -538,7 +559,7 @@ function renderOptions(usedFlags) {
           update();
         },
       }),
-      h("span", { class: "flag-name" }, name.replace(/^enable_/, "")),
+      h("span", { class: "flag-name" }, name),
       count ? h("span", { class: "flag-count", title: `${count} optional step${count > 1 ? "s" : ""} in this guide` }, String(count)) : null
     );
   };
@@ -575,12 +596,16 @@ function renderOptions(usedFlags) {
 function applyView() {
   if (!rendered) return;
   applyFlags(rendered.article, allFlagValues());
+  applyChoices();
   document.body.classList.toggle("show-skipped", state.skipped);
   document.body.classList.toggle("show-script-only", state.scriptOnly);
   document.body.classList.toggle("show-sources", state.sources);
+  document.body.classList.toggle("show-conditions", state.conditions);
   $("#sw-skipped").checked = state.skipped;
   $("#sw-script").checked = state.scriptOnly;
   $("#sw-sources").checked = state.sources;
+  $("#sw-conditions").checked = state.conditions;
+  if (state.scriptOnly || state.sources || state.conditions) $("#developer").open = true;
   for (const input of $("#options").querySelectorAll("input[data-flag]")) {
     input.checked = flagValue(input.dataset.flag) === 1;
   }
@@ -629,7 +654,7 @@ function renderDownloads() {
     h("a", { class: "dl", download: file, href: blobLink(file, content, type), title }, label, h("small", {}, file));
   root.append(
     link("Install guide", `Install_guide-${name}.md`, result.markdown, "text/markdown", "The guide as Markdown — the same file `make` writes to build/"),
-    link("Recipe script", `recipe-${name}.sh`, result.script, "text/x-shellscript", "Every command in the guide, extracted into one script (the recipe.sh shipped in docs-ohpc)"),
+    link("recipe.sh", `recipe-${name}.sh`, result.script, "text/x-shellscript", "Every command in the guide, extracted into one script (the recipe.sh shipped in docs-ohpc)"),
     link("input.local", `input.local-${name}`, buildInputLocal(), "text/plain", "The input.local template with your settings and optional-feature choices applied"),
   );
 }
@@ -697,6 +722,7 @@ async function init() {
   $("#sw-skipped").addEventListener("change", (e) => { state.skipped = e.target.checked; update(); });
   $("#sw-script").addEventListener("change", (e) => { state.scriptOnly = e.target.checked; update(); });
   $("#sw-sources").addEventListener("change", (e) => { state.sources = e.target.checked; update(); });
+  $("#sw-conditions").addEventListener("change", (e) => { state.conditions = e.target.checked; update(); });
   window.addEventListener("hashchange", () => { readHash(); update(); });
   document.addEventListener("click", (e) => {
     // clicking an optional block's label flips its flag
