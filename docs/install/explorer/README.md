@@ -54,7 +54,7 @@ templates/chapters/main.md.j2 ──▶ nunjucks (Jinja2 for JS) ◀────
 | `render-html.js` | Guide Markdown → DOM: rewrites the pandoc-only syntax (`::: {.tip}`, `[x]{.class}`, image/heading attributes, stray LaTeX), parses with marked, then turns the HTML-comment markers into structure — provenance wrappers per template, optional-step blocks per `ohpc_if_set` flag, `recipe.sh` regions, script-only lines — and numbers the headings. |
 | `app.js` | The page: chooser, URL state, sidebar (TOC, flags, view switches, downloads). |
 | `mksite.py` | Assembles a **multi-version site**: `git archive` of each ref's `docs/install` into `<out>/<label>/`, its `manifest.json`, and one `<out>/versions.json` for the page's version switcher. Exports committed trees only (not the working copy). See "Versions" below. |
-| `manifest.json` | Written by `../mkdoc.py --manifest` (`make explorer`): recipe list, loader file list, `enable_*` flags from `input.local.template`, git revision. A static host has no directory listing, so this is the one index the page needs. Git-ignored. |
+| `manifest.json` | Written by `../mkdoc.py --manifest` (`make explorer`): recipe list, loader file list, `enable_*` flags and pick-one settings (below) from `input.local.template`, git revision. A static host has no directory listing, so this is the one index the page needs. Git-ignored. |
 | `vendor/` | nunjucks 3.2.4 (unminified, see below), js-yaml 4.1.0, marked 15.0.7, highlight.js 11.11.1 + two themes. No build step, no CDN at runtime. |
 | `test/parity.mjs` | Renders every recipe under node and diffs the Markdown and script byte-for-byte against `../build/`. **Run it after any change to engine.js or mkdoc.py.** It stamps each render with the revision in `build/<name>.yaml`, so a `build/` older than HEAD still compares. |
 | `test/e2e.py` | Playwright check of the page: chooser, a path, flag toggles, downloads, provenance hover, dark mode, phone width, every recipe. Serves the tree from disk through request interception, so no web server is needed. |
@@ -116,6 +116,14 @@ depends on them, so keep it in CI):
   fold when the flag is off; the sidebar toggles are the `enable_*` flags from
   `input.local.template`, and the downloaded `input.local` carries the choice.
   General `ohpc_if CONDITION` blocks are shown labelled but not evaluated.
+- **Pick-one settings.** A setting with a fixed set of values declares them
+  as a JSON list on the line before it in `input.local.template`:
+  `modules_package_choices='["lmod-ohpc","environment-modules-ohpc"]'`, then
+  `modules_package="${modules_package:-lmod-ohpc}"`. The sidebar shows a
+  selector, the hash carries the pick (`?modules_package=…`; a value not in
+  the list is ignored), and the downloaded `input.local` gets it as the
+  default. `mkdoc.py --manifest` fails on a list that is not JSON, not
+  followed by its setting, or without the default.
 - **recipe.sh regions** are tagged; `ohpc_command`/`ohpc_comment` lines, which
   exist only in the script, can be shown with the "script-only lines" switch.
 

@@ -135,6 +135,7 @@ ruff-check-lint:
 		../../docs/install/explorer/test/e2e.py \
 		../../docs/install/tests/test_markers.py \
 		../../docs/install/tests/test_defaults.py \
+		../../docs/install/tests/test_manifest.py \
 		../../docs/install/mkdoc.py \
 		../../docs/install/wraptext.py
 
@@ -154,6 +155,7 @@ ruff-format-lint:
 		../../docs/install/explorer/test/e2e.py \
 		../../docs/install/tests/test_markers.py \
 		../../docs/install/tests/test_defaults.py \
+		../../docs/install/tests/test_manifest.py \
 		../../docs/install/mkdoc.py \
 		../../docs/install/wraptext.py
 

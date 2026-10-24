@@ -192,6 +192,34 @@ def main() -> int:
                 else "recipe.sh downloaded (no build/ to compare)"
             )
 
+        # pick-one settings: the selector writes the hash and the input.local
+        choices = json.loads((BASE / "explorer" / "manifest.json").read_text())[
+            "choices"
+        ]
+        for c in choices:
+            other = next(v for v in c["choices"] if v != c["default"])
+            page.locator(f"#options select[data-choice='{c['name']}']").select_option(
+                other
+            )
+            page.wait_for_function(f"location.hash.includes('{c['name']}={other}')")
+            href = page.locator("#downloads a.dl").nth(2).get_attribute("href")
+            local = page.evaluate("(u) => fetch(u).then(r => r.text())", href)
+            line = f'{c["name"]}="${{{c["name"]}:-{other}}}"'
+            if line not in local:
+                failures.append(f"input.local download lacks {line}")
+            page.goto(f"{page_url}#{sample}?{c['name']}=not-a-choice")
+            page.wait_for_function(
+                f"document.querySelector('#guide').dataset.recipe === '{sample}'"
+            )
+            shown = page.locator(
+                f"#options select[data-choice='{c['name']}']"
+            ).input_value()
+            if shown != c["default"]:
+                failures.append(f"{c['name']}: a value not in the list was taken")
+            print(f"{c['name']}: {other} in hash and input.local; bad value ignored")
+        if not choices:
+            failures.append("manifest.json lists no choices")
+
         # a hostile/garbled flag name in the hash must not break the page
         page.goto(f"{page_url}#{sample}?enable_(=1&enable_ib=1")
         page.wait_for_function(

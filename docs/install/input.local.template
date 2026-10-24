@@ -64,6 +64,7 @@ iso_path="${iso_path:-}"
 
 # Module tool installed on the head node and the compute nodes: "lmod-ohpc"
 # (Lmod) or "environment-modules-ohpc" (Environment Modules)
+modules_package_choices='["lmod-ohpc","environment-modules-ohpc"]'
 modules_package="${modules_package:-lmod-ohpc}"
 
 # Flags for optional installation/configuration
