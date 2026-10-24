@@ -35,7 +35,7 @@ test_map = {
     "components/dev-tools/easybuild/SPECS/easybuild.spec": [
         "easybuild",
         "",
-        ("gcc-c++", "openssl-devel"),
+        "gcc-c++",
     ],
     "components/io-libs/adios2/SPECS/adios2.spec": [
         "adios2",
