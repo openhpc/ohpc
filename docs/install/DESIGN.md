@@ -747,6 +747,26 @@ docs/install/
 - Display names: `provisioner_name`, `scheduler_name` (used in page
   headers and titles)
 
+### input.local variables in commands
+
+Readers paste the guide's commands into a shell that may never have sourced
+`input.local`, so the way a command names an `input.local` variable decides
+what happens then:
+
+- A setting that works at its default (the module tool, the DNS domain, the
+  Confluent options) is written `${name:-default}` in every command, with the
+  default from `input.local.template`. Bare, it expands to nothing and the
+  command can still succeed: `dnf -y install ohpc-base ${modules_package}`
+  installs no module tool.
+- A site value the reader must supply (`${sms_ip}`, `${sms_name}`, the `c_*`
+  arrays) stays bare. A placeholder default would set up the wrong cluster
+  without an error.
+
+`tests/test_defaults.py` checks that each `${name:-default}` in a code block
+matches `input.local.template`, and that a setting given a default anywhere
+has it everywhere. A new setting used only bare is not caught, so check new
+`${name}` uses in review.
+
 ## Build Tools
 
 ### mkdoc.py

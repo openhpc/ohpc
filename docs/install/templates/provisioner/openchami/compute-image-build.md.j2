@@ -234,7 +234,7 @@ packages:
   - ohpc-base-compute
   - ohpc-slurm-client
   - pdsh-ohpc
-  - ${modules_package}
+  - ${modules_package:-lmod-ohpc}
 cmds:
   - cmd: systemctl disable firewalld.service
     loglevel: INFO

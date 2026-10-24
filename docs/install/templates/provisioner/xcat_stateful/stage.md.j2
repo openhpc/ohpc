@@ -38,7 +38,7 @@ chrony
 nfs-utils
 EOF
 # Module tool, the same one as on the head node (see input.local)
-echo "${modules_package}" >> "${OHPC_OTHERPKGS}"
+echo "${modules_package:-lmod-ohpc}" >> "${OHPC_OTHERPKGS}"
 
 # OpenHPC (base + updates), EPEL, and CRB repositories that provide the packages
 # above. The base OS repositories are served from the head node's /install tree

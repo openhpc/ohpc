@@ -51,7 +51,8 @@ ohpc-base-compute
 chrony
 EOF
 # Module tool, the same one as on the head node (see input.local)
-echo "${modules_package}" >> /install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist
+echo "${modules_package:-lmod-ohpc}" >> \
+    /install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist
 chdef -t osimage ${xcat_osimage} \
     otherpkglist=/install/custom/netboot/{{ distro }}/ohpc.otherpkgs.pkglist
 ```
