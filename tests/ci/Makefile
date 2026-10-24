@@ -96,7 +96,8 @@ ruff-check-lint:
 		../../docs/install/mkdoc.py \
 		../../docs/install/explorer/mksite.py \
 		../../docs/install/explorer/test/e2e.py \
-		../../docs/install/tests/test_markers.py
+		../../docs/install/tests/test_markers.py \
+		../../docs/install/tests/test_manifest.py
 
 ruff-format-lint:
 	@echo "Running 'ruff format' on selected Python files"
@@ -109,7 +110,8 @@ ruff-format-lint:
 		../../docs/install/mkdoc.py \
 		../../docs/install/explorer/mksite.py \
 		../../docs/install/explorer/test/e2e.py \
-		../../docs/install/tests/test_markers.py
+		../../docs/install/tests/test_markers.py \
+		../../docs/install/tests/test_manifest.py
 
 whitespace-lint:
 	@echo "Checking spec files for trailing whitespaces"
