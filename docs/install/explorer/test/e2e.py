@@ -192,19 +192,19 @@ def main() -> int:
                 else "recipe.sh downloaded (no build/ to compare)"
             )
 
-        # a flag whose steps exist only in recipe.sh sits in the collapsed group
+        # flags whose steps exist only in recipe.sh sit in their own collapsed group
         misplaced = page.evaluate(
             """() => [...new Set([...document.querySelectorAll('.guide .cond[data-flag]')]
                 .map((c) => c.dataset.flag))]
               .filter((f) => !document.querySelector(
                   `.guide .cond[data-flag="${f}"]:not(.script-only)`))
               .filter((f) => !document.querySelector(
-                  `#options .more-flags input[data-flag="${f}"]`))"""
+                  `#options .script-only-flags input[data-flag="${f}"]`))"""
         )
         if misplaced:
             failures.append(f"recipe.sh-only flags outside the collapsed group: {misplaced}")
-        tagged = page.locator("#options .more-flags .flag-tag").count()
-        print(f"recipe.sh-only flags tagged in the collapsed group: {tagged}")
+        grouped = page.locator("#options .script-only-flags input[data-flag]").count()
+        print(f"flags in the 'only in recipe.sh' group: {grouped}")
 
         # pick-one settings: the selector writes the hash and the input.local
         choices = json.loads((BASE / "explorer" / "manifest.json").read_text())[
