@@ -326,8 +326,9 @@ def extract_recipe_script(content: str) -> str:
 # templates in the browser. A static web server has no directory listing, so
 # this is the one index the page needs: the recipes with the config files each
 # .conf merges (what the Makefile's build/%.yaml rule does), the files the
-# template loader may fetch, the runtime enable_*/has_* flags declared in
-# input.local.template, and the vc_revision/vc_date the Makefile injects.
+# template loader may fetch, the runtime enable_*/has_* flags and the pick-one
+# settings declared in input.local.template, and the vc_revision/vc_date the
+# Makefile injects.
 
 MANIFEST_PATH = BASE_DIR / "explorer" / "manifest.json"
 # Directories the loader searches (templates, manifests), plus config/ so the
@@ -337,6 +338,10 @@ MANIFEST_SUFFIXES = (".j2", ".md", ".svg", ".png", ".yaml")
 FLAG_RE = re.compile(
     r'^(?P<name>(enable_|has_|update_)\w+)="?\$\{(?P=name):-(?P<default>[^}]*)\}"?'
 )
+# A pick-one setting: NAME_choices='["a","b"]' (a JSON list) on the line before
+# NAME="${NAME:-a}". The explorer offers the list as a selector.
+CHOICES_RE = re.compile(r"^(?P<name>\w+)_choices='(?P<choices>[^']*)'$")
+SETTING_RE = re.compile(r'^(?P<name>\w+)="?\$\{(?P=name):-(?P<default>[^}]*)\}"?')
 
 
 def git_output(*args: str) -> str | None:
@@ -404,6 +409,73 @@ def manifest_flags(base: Path = BASE_DIR) -> list[dict]:
     return flags
 
 
+def manifest_choices(base: Path = BASE_DIR) -> list[dict]:
+    """Pick-one settings from input.local.template: a NAME_choices JSON list
+    directly before NAME="${NAME:-default}". The comment block above the pair is
+    the setting's description. A list that is not JSON, not a list of strings,
+    not followed by its setting, or without the default fails the build."""
+    choices = []
+    comment = None
+    pending = None
+    template = base / "input.local.template"
+    for number, line in enumerate(
+        template.read_text(encoding="utf-8").splitlines(), start=1
+    ):
+        stripped = line.strip()
+        where = f"input.local.template:{number}"
+        if pending:
+            match = SETTING_RE.match(stripped)
+            if not match or match.group("name") != pending["name"]:
+                raise ValueError(
+                    f"{where}: {pending['name']}_choices must be followed by "
+                    f'{pending["name"]}="${{{pending["name"]}:-...}}"'
+                )
+            if match.group("default") not in pending["choices"]:
+                raise ValueError(
+                    f"{where}: default {match.group('default')!r} of "
+                    f"{pending['name']} is not one of {pending['choices']}"
+                )
+            choices.append({**pending, "default": match.group("default")})
+            pending = None
+            comment = None
+            continue
+        if stripped.startswith("#"):
+            text = stripped.lstrip("#").strip()
+            if text and not set(text) <= {"-"}:
+                comment = f"{comment} {text}" if comment else text
+            else:
+                comment = None
+            continue
+        match = CHOICES_RE.match(stripped)
+        if match:
+            try:
+                values = json.loads(match.group("choices"))
+            except json.JSONDecodeError as e:
+                raise ValueError(f"{where}: {match.group('name')}_choices: {e}")
+            if (
+                not isinstance(values, list)
+                or not values
+                or not all(isinstance(v, str) and v for v in values)
+            ):
+                raise ValueError(
+                    f"{where}: {match.group('name')}_choices must be a JSON list "
+                    "of non-empty strings"
+                )
+            pending = {
+                "name": match.group("name"),
+                "choices": values,
+                "description": comment,
+            }
+            continue
+        comment = None
+    if pending:
+        raise ValueError(
+            f"input.local.template: {pending['name']}_choices is not followed by "
+            f"its setting"
+        )
+    return choices
+
+
 def write_manifest(
     output: Path,
     vc_revision: str | None = None,
@@ -426,12 +498,14 @@ def write_manifest(
         "recipes": manifest_recipes(base),
         "files": manifest_files(base),
         "flags": manifest_flags(base),
+        "choices": manifest_choices(base),
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(
         f"Wrote {output}: {len(manifest['recipes'])} recipes, "
-        f"{len(manifest['files'])} files, {len(manifest['flags'])} flags"
+        f"{len(manifest['files'])} files, {len(manifest['flags'])} flags, "
+        f"{len(manifest['choices'])} choices"
     )
 
 
@@ -614,13 +688,17 @@ Examples:
     args = parser.parse_args()
 
     if args.manifest:
-        write_manifest(
-            Path(args.manifest),
-            args.vc_revision,
-            args.vc_date,
-            args.vc_branch,
-            Path(args.base).resolve() if args.base else BASE_DIR,
-        )
+        try:
+            write_manifest(
+                Path(args.manifest),
+                args.vc_revision,
+                args.vc_date,
+                args.vc_branch,
+                Path(args.base).resolve() if args.base else BASE_DIR,
+            )
+        except ValueError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
         return
     if not args.config:
         parser.error("a config file is required unless --manifest is given")
