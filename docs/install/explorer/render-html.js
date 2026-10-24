@@ -201,7 +201,7 @@ export function structureMarkers(root, { sourceLink } = {}) {
           const wrap = el(doc, "div", "cond cond-expr");
           wrap.dataset.cond = arg;
           const label = el(doc, "div", "cond-label");
-          label.innerHTML = `conditional &mdash; <code>if ${escapeHtml(arg)}</code>`;
+          label.innerHTML = `recipe condition &mdash; <code>if ${escapeHtml(arg)}</code>`;
           wrap.appendChild(label);
           push("cond", wrap, "if " + arg);
           break;
