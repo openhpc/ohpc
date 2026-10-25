@@ -21,6 +21,7 @@ codespell-lint:
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
+		tests/bos/computes \
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
@@ -142,6 +143,7 @@ whitespace-lint:
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
 		tests/common/functions \
+		tests/bos/computes \
 		tests/dev-tools/cmake/run \
 		tests/dev-tools/easybuild/EasyBuild \
 		tests/dev-tools/eessi/eessi \
@@ -255,6 +257,7 @@ shellcheck-lint:
 		../../containers/*.sh \
 		../../containers/examples/mpi/*.sh
 	shellcheck --exclude=SC2239,SC1091 \
+		../../tests/bos/computes \
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/run \
@@ -342,6 +345,7 @@ shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
 	shfmt \
 		-w -d -ln bats \
+		../../tests/bos/computes \
 		../../tests/apps/hpcg/run \
 		../../tests/dev-tools/cuda/cuda \
 		../../tests/dev-tools/cmake/run \
