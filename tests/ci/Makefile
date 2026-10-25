@@ -24,6 +24,7 @@ codespell-lint:
 		components/admin/prun/SOURCES/prun \
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/common/functions \
+		tests/bos/computes \
 		tests/apps/hpcg/hpcg_functions \
 		tests/apps/hpcg/ohpc-tests/test_mpi_families \
 		tests/apps/hpcg/rm_execution_single_host \
@@ -173,6 +174,7 @@ whitespace-lint:
 		components/rms/slurm/SOURCES/slurm.epilog.clean \
 		tests/user-env/mem_limits \
 		tests/common/functions \
+		tests/bos/computes \
 		tests/apps/hpcg/hpcg_functions \
 		tests/apps/hpcg/ohpc-tests/test_mpi_families \
 		tests/apps/hpcg/rm_execution_single_host \
@@ -301,6 +303,7 @@ shellcheck-lint:
 		../../containers/*.sh \
 		../../containers/examples/mpi/*.sh
 	shellcheck --exclude=SC2239,SC1091 \
+		../../tests/bos/computes \
 		../../tests/apps/hpcg/ohpc-tests/test_mpi_families \
 		../../tests/apps/hpcg/rm_execution_single_host \
 		../../tests/apps/hpcg/rm_execution_multi_host \
@@ -399,6 +402,7 @@ shfmt-lint:
 	@echo "Running 'shfmt' on selected shell scripts"
 	shfmt \
 		-w -d -ln bats \
+		../../tests/bos/computes \
 		../../tests/apps/hpcg/ohpc-tests/test_mpi_families \
 		../../tests/apps/hpcg/rm_execution_single_host \
 		../../tests/apps/hpcg/rm_execution_multi_host \
