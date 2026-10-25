@@ -1,62 +1,100 @@
 #!/usr/bin/env -S bats --report-formatter junit --formatter tap
 # -*-sh-*-
 
-load ./common/test_helper_functions
-source ./common/functions || exit 1
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
 
-if [ -s ./common/TEST_ENV ];then
-    source ./common/TEST_ENV
+if [ -s ../common/TEST_ENV ]; then
+	source ../common/TEST_ENV
 fi
 
-# Test how many computes we have available presently
+setup_file() {
+	TESTNAME="BOS"
+	SYSLOG="${SYSLOG:-/var/log/messages}"
 
-which koomie_cf >& /dev/null 
-if [ $? -ne 0 ]; then 
-    ERROR "koomie_cf executable not found - please verify losf is installed."
-fi
+	if ! command -v koomie_cf >/dev/null 2>&1; then
+		ERROR "koomie_cf executable not found - please verify losf is installed."
+	fi
 
-num_computes=`koomie_cf -x "c[0-9]+\b" uptime | grep "load average" | wc -l`
-if [ "$num_computes" -lt 1 ];then
-    ERROR "Test requires at least 1 available compute node"
-fi
+	# koomie_cf prefixes every line of output with the host it came from,
+	# so the first field of the uptime lines is the name of a compute that
+	# answered. Collect them once; the tests below need the names, not just
+	# how many there are.
+	COMPUTES=$(koomie_cf -x "c[0-9]+\b" uptime | awk '/load average/ {print $1}')
+	if [ -z "${COMPUTES}" ]; then
+		ERROR "Test requires at least 1 available compute node"
+	fi
 
-@test "[BOS] increased locked memory limits " {
-    [[ -n "$SIMPLE_CI" ]] && skip "Skipping memlock settings in SIMPLE_CI mode"
-    [[ "$ARCH" == "aarch64" ]] && skip "Skipping memlock settings for ARCH=$ARCH"
-
-    # Environment Modules prints the modules it loads on every login, so
-    # the output of koomie_cf holds more than the limit of each host.
-    # Keep only the lines that are a host name followed by a limit, which
-    # drops the header and whatever the login printed around it.
-    limits='^[^[:space:]]+[[:space:]]+(unlimited|[0-9]+)$'
-
-    koomie_cf -x "c[0-9]+\b" prlimit -l -o SOFT | grep -E "$limits" >& .cmd_output || exit 1
-
-    for limit in `cat .cmd_output | awk '{print $2}'`; do
-	assert_equal $limit unlimited
-    done
-
-    rm -f .cmd_output
-
-    koomie_cf -x "c[0-9]+\b" prlimit -l -o HARD | grep -E "$limits" >& .cmd_output || exit 1
-
-    for limit in `cat .cmd_output | awk '{print $2}'`; do
-	assert_equal $limit unlimited
-    done
-
-    rm -f .cmd_output
-
+	export TESTNAME SYSLOG COMPUTES
 }
 
-@test "[BOS] syslog forwarding " {
-    test_string=$(head /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1)
-    koomie_cf -x "c[0-9]+\b" logger $test_string
-    if [ grep $test_string /var/log/messages | wc -l != $num_computes ];then
-        for n in `seq 1 $num_computes`; do
-            if [ ! grep $test_string | grep c$n ];then
-                echo "No syslog forward from c$n."
-            fi
-        done
-        flunk
-    fi
+setup() {
+	OUTPUT="$(mktemp)"
+
+	export OUTPUT
+}
+
+teardown() {
+	rm -f "${OUTPUT}"
+}
+
+@test "[${TESTNAME}] increased locked memory limits" {
+	[[ -n "${SIMPLE_CI}" ]] && skip "Skipping memlock settings in SIMPLE_CI mode"
+	[[ "${ARCH}" == "aarch64" ]] && skip "Skipping memlock settings for ARCH=${ARCH}"
+
+	local bound host limit limits
+
+	# Environment Modules prints the modules it loads on every login, so
+	# the output of koomie_cf holds more than the limit of each host.
+	# Keep only the lines that are a host name followed by a limit, which
+	# drops the header and whatever the login printed around it.
+	limits='^[^[:space:]]+[[:space:]]+(unlimited|[0-9]+)$'
+
+	for bound in SOFT HARD; do
+		koomie_cf -x "c[0-9]+\b" prlimit -l -o "${bound}" |
+			grep -E "${limits}" >"${OUTPUT}" ||
+			flunk "no ${bound} memlock limit reported by any compute"
+
+		while read -r host limit; do
+			if [ "${limit}" != "unlimited" ]; then
+				flunk "${host}: ${bound} memlock limit is ${limit}"
+			fi
+		done <"${OUTPUT}"
+	done
+}
+
+@test "[${TESTNAME}] syslog forwarding" {
+	local host missing token
+
+	if [ ! -s "${SYSLOG}" ]; then
+		flunk "${SYSLOG} does not exist on the head node"
+	fi
+
+	# A token of this run only, so that a message of an earlier run cannot
+	# be mistaken for a fresh one. RANDOM avoids reading /dev/urandom,
+	# which has deadlocked this test in the past.
+	token="ohpc-syslog-${RANDOM}-${RANDOM}"
+
+	koomie_cf -x "c[0-9]+\b" logger "${token}"
+
+	# Forwarding is asynchronous, so give the messages time to arrive. A
+	# compute is done as soon as the log of the head node holds a line with
+	# both its name and the token.
+	for _ in $(seq 10); do
+		missing=""
+		while read -r host; do
+			grep -q -- "${host}.*${token}" "${SYSLOG}" ||
+				missing="${missing} ${host}"
+		done <<<"${COMPUTES}"
+
+		if [ -z "${missing}" ]; then
+			break
+		fi
+
+		sleep 1
+	done
+
+	if [ -n "${missing}" ]; then
+		flunk "no syslog message forwarded from:${missing}"
+	fi
 }
