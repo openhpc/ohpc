@@ -45,7 +45,13 @@ sms_kernel=`uname -r`
     [[ -n "$SIMPLE_CI" ]] && skip "Skipping memlock settings in SIMPLE_CI mode"
     [[ "$ARCH" == "aarch64" ]] && skip "Skipping memlock settings for ARCH=$ARCH"
 
-    koomie_cf -x "c[0-9]+\b" prlimit -l -o SOFT | grep -v SOFT >& .cmd_output || exit 1
+    # Environment Modules prints the modules it loads on every login, so
+    # the output of koomie_cf holds more than the limit of each host.
+    # Keep only the lines that are a host name followed by a limit, which
+    # drops the header and whatever the login printed around it.
+    limits='^[^[:space:]]+[[:space:]]+(unlimited|[0-9]+)$'
+
+    koomie_cf -x "c[0-9]+\b" prlimit -l -o SOFT | grep -E "$limits" >& .cmd_output || exit 1
 
     for limit in `cat .cmd_output | awk '{print $2}'`; do
 	assert_equal $limit unlimited
@@ -53,7 +59,7 @@ sms_kernel=`uname -r`
 
     rm -f .cmd_output
 
-    koomie_cf -x "c[0-9]+\b" prlimit -l -o HARD | grep -v HARD >& .cmd_output || exit 1
+    koomie_cf -x "c[0-9]+\b" prlimit -l -o HARD | grep -E "$limits" >& .cmd_output || exit 1
 
     for limit in `cat .cmd_output | awk '{print $2}'`; do
 	assert_equal $limit unlimited
