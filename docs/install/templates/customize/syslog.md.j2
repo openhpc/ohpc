@@ -25,5 +25,8 @@ systemctl restart rsyslog.service
 {{ compute_sed("s/^mail/#mail/","/etc/rsyslog.conf") }}
 {{ compute_sed("s/^cron/#cron/","/etc/rsyslog.conf") }}
 {{ compute_sed("s/^uucp/#uucp/","/etc/rsyslog.conf") }}
+
+# Let the compute nodes pick up the new configuration
+{{ compute_service_restart("rsyslog.service") }}
 ```
 <!-- ohpc_end -->

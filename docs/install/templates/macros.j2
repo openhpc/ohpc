@@ -17,6 +17,7 @@ Functions:
 * compute_sed(regex, file): run `sed -i` with regex on file.
 * compute_echo(string, file, append=true): append string to file, if append=false overwrite.
 * compute_service_enable(service): enable a systemd service on the compute node (image provisioners: `enable`; live provisioners: `enable --now`).
+* compute_service_restart(service): make a changed configuration file take effect on the compute node (image provisioners: `enable`; live provisioners: `restart`).
 * pkg_install_image(packages): install packages, use array for multiple packages ["pkg1", "pkg2"]
 * compute_group_install(groups): install package groups, use array for multiple groups
 -->
@@ -43,6 +44,16 @@ Functions:
    compute_service_enable; same image-vs-live split. #}
 {%- macro compute_service_disable(service) -%}
 {{ compute_run("systemctl disable " ~ service) }}
+{%- endmacro -%}
+
+{# Make a service on the compute node pick up a configuration file the recipe
+   has just written. Image provisioners write into an image whose services are
+   not running, so the file is in place before the first boot and enabling the
+   service is all that is left; live provisioners (xcat_stateful, confluent)
+   override this to restart it, because their configuration lands on a node
+   that has already booted and nothing reboots it afterwards. #}
+{%- macro compute_service_restart(service) -%}
+{{ compute_run("systemctl enable " ~ service) }}
 {%- endmacro -%}
 
 {# Install package groups on the compute node (quoted: group names have spaces). #}
@@ -138,6 +149,10 @@ echo "{{ cmd }}" \
 {{ compute_run("systemctl disable --now " ~ service) }}
 {%- endmacro -%}
 
+{%- macro compute_service_restart(service) -%}
+{{ compute_run("systemctl restart " ~ service) }}
+{%- endmacro -%}
+
 {% endif %}
 
 {# Confluent Macros #}
@@ -169,6 +184,10 @@ nodeshell compute "{{ cmd }}"
 
 {%- macro compute_service_disable(service) -%}
 {{ compute_run("systemctl disable --now " ~ service) }}
+{%- endmacro -%}
+
+{%- macro compute_service_restart(service) -%}
+{{ compute_run("systemctl restart " ~ service) }}
 {%- endmacro -%}
 
 {% endif %}
