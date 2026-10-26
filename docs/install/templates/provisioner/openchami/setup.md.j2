@@ -75,7 +75,7 @@ Wants=local-fs.target network-online.target
 
 [Container]
 ContainerName=seaweedfs
-Image=docker.io/chrislusf/seaweedfs:latest
+Image=docker.io/chrislusf/seaweedfs:{{ seaweedfs_version }}
 # Volumes
 Volume=/opt/ohpc/admin/data/s3:/data:Z
 

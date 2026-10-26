@@ -36,8 +36,21 @@ EOF
 <!-- ohpc_end -->
 
 Now we can use the tool to create the buckets we'll need and set ACLs to public.
+The S3 API answers a few seconds after `seaweedfs.service` starts, so wait
+until `s3cmd ls` succeeds before creating the buckets.
 
 <!-- ohpc_begin -->
+<!-- ohpc_comment Wait for the S3 endpoint to answer -->
+<!-- ohpc_command s3_wait_start=$SECONDS -->
+<!-- ohpc_command until s3cmd ls >/dev/null 2>&1; do -->
+<!-- ohpc_command     if (( SECONDS - s3_wait_start >= 120 )); then -->
+<!-- ohpc_command         echo "ERROR: S3 endpoint ${sms_name}:9000 not answering after 120s" >&2 -->
+<!-- ohpc_command         exit 1 -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command     echo "Waiting for the S3 endpoint ${sms_name}:9000..." -->
+<!-- ohpc_command     sleep 2 -->
+<!-- ohpc_command done -->
+<!-- ohpc_command echo "S3 endpoint ${sms_name}:9000 answered after $(( SECONDS - s3_wait_start ))s" -->
 <!-- ohpc_comment Creating S3 buckets -->
 ```bash
 s3cmd mb s3://efi
