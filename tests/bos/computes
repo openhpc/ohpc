@@ -10,7 +10,7 @@ fi
 
 setup_file() {
 	TESTNAME="BOS"
-	SYSLOG="${SYSLOG:-/var/log/messages}"
+	LOGDIR="${LOGDIR:-/var/log}"
 
 	if ! command -v koomie_cf >/dev/null 2>&1; then
 		ERROR "koomie_cf executable not found - please verify losf is installed."
@@ -25,17 +25,18 @@ setup_file() {
 		ERROR "Test requires at least 1 available compute node"
 	fi
 
-	export TESTNAME SYSLOG COMPUTES
+	export TESTNAME LOGDIR COMPUTES
 }
 
 setup() {
 	OUTPUT="$(mktemp)"
+	STAMP="$(mktemp)"
 
-	export OUTPUT
+	export OUTPUT STAMP
 }
 
 teardown() {
-	rm -f "${OUTPUT}"
+	rm -f "${OUTPUT}" "${STAMP}"
 }
 
 @test "[${TESTNAME}] increased locked memory limits" {
@@ -66,24 +67,31 @@ teardown() {
 @test "[${TESTNAME}] syslog forwarding" {
 	local host missing token
 
-	if [ ! -s "${SYSLOG}" ]; then
-		flunk "${SYSLOG} does not exist on the head node"
-	fi
-
 	# A token of this run only, so that a message of an earlier run cannot
 	# be mistaken for a fresh one. RANDOM avoids reading /dev/urandom,
 	# which has deadlocked this test in the past.
 	token="ohpc-syslog-${RANDOM}-${RANDOM}"
 
+	# STAMP is the moment before the messages are sent, so that only the
+	# logs written afterwards have to be searched below.
+	touch "${STAMP}"
+
 	koomie_cf -x "c[0-9]+\b" logger "${token}"
 
+	# Where a forwarded message ends up is up to rsyslog on the head node
+	# and is not the same everywhere: xCAT files the messages of the nodes
+	# in /var/log/xcat/computes.log rather than in /var/log/messages. Look
+	# for the token in every log written since, instead of naming one file.
+	#
 	# Forwarding is asynchronous, so give the messages time to arrive. A
-	# compute is done as soon as the log of the head node holds a line with
-	# both its name and the token.
+	# compute is done as soon as one of those lines carries its name.
 	for _ in $(seq 10); do
+		find "${LOGDIR}" -type f -newer "${STAMP}" \
+			-exec grep -hIs -- "${token}" {} + >"${OUTPUT}" || true
+
 		missing=""
 		while read -r host; do
-			grep -q -- "${host}.*${token}" "${SYSLOG}" ||
+			grep -q -- "${host}" "${OUTPUT}" ||
 				missing="${missing} ${host}"
 		done <<<"${COMPUTES}"
 
@@ -95,6 +103,6 @@ teardown() {
 	done
 
 	if [ -n "${missing}" ]; then
-		flunk "no syslog message forwarded from:${missing}"
+		flunk "no syslog message in ${LOGDIR} from:${missing}"
 	fi
 }
