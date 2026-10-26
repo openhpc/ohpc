@@ -273,6 +273,10 @@ jobs:
       run: |
         sudo aa-teardown || true
         sudo systemctl disable apparmor
+    - name: Enable unprivileged user namespaces
+      run: |
+        sudo sysctl -w kernel.unprivileged_userns_clone=1 || true
+        sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
     - name: Start AlmaLinux 10 container
       run: >-
         sudo mkdir -p /mnt/nested-container;
