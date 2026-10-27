@@ -22,9 +22,11 @@ Release:   %{?dist}.1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/dev-tools
-BuildArch: x86_64
-# These repositories are needed for the driver.
+ExclusiveArch: x86_64 aarch64
+# These repositories are needed for the driver. NVIDIA names the aarch64
+# (sbsa) repository file the same as the x86_64 one.
 Source1:   https://developer.download.nvidia.com/compute/cuda/repos/rhel10/x86_64/cuda-rhel10.repo
+Source3:   https://developer.download.nvidia.com/compute/cuda/repos/rhel10/sbsa/cuda-rhel10.repo#/cuda-rhel10-sbsa.repo
 # These repositories are needed for the toolkit. nvhpc install the cuda toolkit
 # in /opt in contrast to the normal cuda-toolkit which is installed in /usr/local.
 # /opt is easier to manage for NFS exports. nvhpc also comes with modulefiles.
@@ -49,10 +51,15 @@ Installs and configures the online repository for the cuda toolkit
 
 %install
 %define repodir %{_sysconfdir}/yum.repos.d
-%define cuda_repofile %{SOURCE1}
+%define cuda_repofile cuda-rhel10.repo
 %define nvhpc_repofile %{SOURCE2}
 
-install -D -m644 %{cuda_repofile} %{nvhpc_repofile} -t %{buildroot}%{repodir}
+%ifarch aarch64
+install -D -m644 %{SOURCE3} %{buildroot}%{repodir}/%{cuda_repofile}
+%else
+install -D -m644 %{SOURCE1} %{buildroot}%{repodir}/%{cuda_repofile}
+%endif
+install -D -m644 %{nvhpc_repofile} -t %{buildroot}%{repodir}
 
 mkdir -p %{buildroot}/%{OHPC_MODULES}
 
@@ -75,5 +82,5 @@ EOF
 %{OHPC_MODULES}/cuda
 
 %files -n cuda-repo%{PROJ_DELIM}
-%{repodir}/%{basename:%{cuda_repofile}}
+%{repodir}/%{cuda_repofile}
 %{repodir}/%{basename:%{nvhpc_repofile}}
