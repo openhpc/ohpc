@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-End-to-end check of the recipe explorer with Playwright (Chromium).
+End-to-end check of the recipe explorer with Playwright (Chromium by default;
+--browser firefox or webkit for the others).
 
 By default no web server is needed: requests to http://ohpc.test/ are routed
 to files under docs/install, so the page runs exactly as it would on a static
@@ -9,8 +10,11 @@ host. Pass --url http://host:port/ to test a real server instead.
     python3 explorer/test/e2e.py                 # all recipes, screenshots to build/explorer-shots/
     python3 explorer/test/e2e.py --quick         # one recipe only
     python3 explorer/test/e2e.py --url http://127.0.0.1:8000/
+    python3 explorer/test/e2e.py --url https://openhpc.github.io/ohpc/ --prefix 4.x/
+    python3 explorer/test/e2e.py --browser firefox
+    python3 explorer/test/e2e.py --browser firefox --channel moz-firefox   # the installed Firefox
 
-Requires: pip install playwright && playwright install chromium
+Requires: pip install playwright && playwright install chromium (firefox, webkit)
 """
 
 import argparse
@@ -19,6 +23,7 @@ import mimetypes
 import sys
 import time
 from pathlib import Path
+from urllib.parse import urljoin
 
 from playwright.sync_api import sync_playwright
 
@@ -58,6 +63,33 @@ def serve_from_disk(route, request):
     route.fulfill(status=200, body=path.read_bytes(), content_type=ctype)
 
 
+def click_in_sidebar(page, selector):
+    """Click a sidebar control as a reader would: scroll the sidebar to it,
+    then click with the mouse. locator.click() scrolls it into view itself,
+    which in Firefox moves the page too."""
+    page.evaluate(
+        """(sel) => {
+            const sb = document.querySelector('.sidebar');
+            const top = document.querySelector(sel).getBoundingClientRect().top;
+            sb.scrollTop += top - sb.getBoundingClientRect().top - 200;
+        }""",
+        selector,
+    )
+    box = page.locator(selector).bounding_box()
+    page.mouse.click(box["x"] + 5, box["y"] + box["height"] / 2)
+
+
+def load_versions(page, page_url, args):
+    """The versions.json the page probes (two levels above explorer/), or None."""
+    if not args.url:
+        versions_file = (SERVE_ROOT / "versions.json") if args.root else None
+        if versions_file and versions_file.exists():
+            return json.loads(versions_file.read_text())
+        return None
+    resp = page.request.get(urljoin(page_url, "../../versions.json"))
+    return resp.json() if resp.ok else None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", help="serve from this base URL instead of disk")
@@ -73,6 +105,13 @@ def main() -> int:
     ap.add_argument("--quick", action="store_true", help="only render one recipe")
     ap.add_argument("--shots", default=str(BASE / "build" / "explorer-shots"))
     ap.add_argument("--headed", action="store_true")
+    ap.add_argument(
+        "--browser", choices=["chromium", "firefox", "webkit"], default="chromium"
+    )
+    ap.add_argument(
+        "--channel",
+        help="an installed browser instead of Playwright's, e.g. moz-firefox or chrome",
+    )
     args = ap.parse_args()
 
     shots = Path(args.shots)
@@ -91,9 +130,14 @@ def main() -> int:
     failures = []
     console_errors = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=not args.headed, args=["--single-process", "--no-zygote"]
+        # the Chromium flags let it start inside a macOS sandbox
+        launch_args = (
+            ["--single-process", "--no-zygote"] if args.browser == "chromium" else []
         )
+        browser = getattr(p, args.browser).launch(
+            headless=not args.headed, args=launch_args, channel=args.channel
+        )
+        print(f"browser: {args.browser} {browser.version}")
         ctx = browser.new_context(viewport={"width": 1400, "height": 900})
         if not args.url:
             ctx.route(ORIGIN + "**", serve_from_disk)
@@ -212,7 +256,11 @@ def main() -> int:
         ]
         for c in choices:
             other = next(v for v in c["choices"] if v != c["default"])
-            page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
+            # instant: the page scrolls smoothly, and WebKit would still be
+            # moving when scrollY is read
+            page.evaluate(
+                "window.scrollTo({ top: document.body.scrollHeight / 2, behavior: 'instant' })"
+            )
             page.wait_for_timeout(200)
             y_before = page.evaluate("window.scrollY")
             # set it from script: select_option would scroll the selector into view
@@ -284,11 +332,13 @@ def main() -> int:
         # place (toggles used to jump back to the last jump target)
         if "chapter=" in page.url:
             failures.append(f"TOC jump wrote a chapter query into the URL: {page.url}")
-        page.evaluate("window.scrollTo(0, document.body.scrollHeight - 900)")
+        page.evaluate(
+            "window.scrollTo({ top: document.body.scrollHeight - 900, behavior: 'instant' })"
+        )
         page.wait_for_timeout(200)
         y_before = page.evaluate("window.scrollY")
-        page.locator("#developer > summary").click()  # the developer switches
-        page.locator("#sw-sources").click()
+        click_in_sidebar(page, "#developer > summary")  # the developer switches
+        click_in_sidebar(page, "#sw-sources")
         page.wait_for_timeout(300)
         y_after = page.evaluate("window.scrollY")
         if abs(y_after - y_before) > 5:
@@ -320,9 +370,9 @@ def main() -> int:
             failures.append("provenance badge not visible on hover")
 
         # version switcher: present only on a multi-version site
-        versions_file = (SERVE_ROOT / "versions.json") if args.root else None
-        if versions_file and versions_file.exists():
-            n_versions = len(json.loads(versions_file.read_text())["versions"])
+        versions = load_versions(page, page_url, args)
+        if versions:
+            n_versions = len(versions["versions"])
             page.wait_for_selector("#version", timeout=10000)
             options = page.locator("#version option").count()
             selected = page.locator("#version").input_value()
