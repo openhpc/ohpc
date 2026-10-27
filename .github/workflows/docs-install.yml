@@ -5,7 +5,8 @@ name: Install docs
 #
 #   - mkdoc.py's marker grammar against tests/markers.md -> tests/markers.sh
 #   - the browser-side explorer (docs/install/explorer, nunjucks) against the
-#     Python build, byte-for-byte for every recipe (explorer/test/parity.mjs)
+#     Python build, byte-for-byte for every recipe (explorer/test/parity.mjs),
+#     and that its stack stays shallow enough for Firefox (explorer/test/stack.mjs)
 #
 # Branch-agnostic on purpose: the same file runs on every release branch.
 
@@ -46,3 +47,5 @@ jobs:
         run: node explorer/test/markers.mjs
       - name: Explorer parity with the Python build
         run: node explorer/test/parity.mjs
+      - name: Explorer stack depth
+        run: node explorer/test/stack.mjs
