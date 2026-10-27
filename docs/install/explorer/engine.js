@@ -16,7 +16,8 @@
  * Jinja2 ↔ nunjucks notes (keep in sync with mkdoc.py):
  *   - mkdoc.py's SectionCommentExtension wraps every `{% include %}` in
  *     `<!-- +section: X -->` / `<!-- -section: X -->`; `preprocessIncludes()`
- *     does the same text rewrite before nunjucks compiles a template.
+ *     does the same text rewrite before nunjucks compiles a template, and
+ *     turns the include into a call so the stack stays shallow (makeEnvironment).
  *   - macros.j2 is rendered once with the merged config and its exported macros
  *     are installed as globals (mkdoc.py: `env.globals.update(module.__dict__)`).
  *   - Jinja's `tojson` filter is added (`pyJson`, with Python's `, ` separators).
@@ -69,11 +70,16 @@ export function pyJson(value) {
   return walk(value);
 }
 
-/** mkdoc.py SectionCommentExtension.preprocess, verbatim semantics. */
+/** Name of the global that stands in for `{% include %}` (see makeEnvironment). */
+const INCLUDE_FN = "_explorer_include";
+
+/** mkdoc.py SectionCommentExtension.preprocess, verbatim semantics, with the
+ *  include itself turned into a call to INCLUDE_FN. */
 export function preprocessIncludes(source) {
-  return source.replace(/{%-?\s*include\s+(.+?)\s*-?%}/g, (m, expr) => {
+  return source.replace(/{%(-?)\s*include\s+(.+?)\s*(-?)%}/g, (m, l, expr, r) => {
     const path = "{{ " + expr + " }}";
-    return `<!-- +section: ${path} -->\n${m}\n<!-- -section: ${path} -->\n`;
+    const call = `{{${l} ${INCLUDE_FN}(${expr}) ${r}}}`;
+    return `<!-- +section: ${path} -->\n${call}\n<!-- -section: ${path} -->\n`;
   });
 }
 
@@ -385,6 +391,15 @@ export function createEngine({ nunjucks, jsyaml, readText, manifest = null }) {
     });
     env.addFilter("tojson", pyJson);
     for (const [k, v] of Object.entries(config)) env.addGlobal(k, v);
+    // nunjucks runs the rest of a template inside the callback of each
+    // `{% include %}`, so the stack grows with every include rendered (about
+    // 30 frames each, 2700 for a whole guide) and Firefox throws "too much
+    // recursion". Rendering each include as a call that returns keeps the
+    // stack to the include depth. The child gets the caller's variables,
+    // including a top-level `{% set %}`, as an include would.
+    env.addGlobal(INCLUDE_FN, function (name) {
+      return env.getTemplate(name).render(this.getVariables());
+    });
     return env;
   }
 
