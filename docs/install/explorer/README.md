@@ -57,10 +57,12 @@ templates/chapters/main.md.j2 ──▶ nunjucks (Jinja2 for JS) ◀────
 | `manifest.json` | Written by `../mkdoc.py --manifest` (`make explorer`): recipe list, loader file list, `enable_*` flags and pick-one settings (below) from `input.local.template`, git revision. A static host has no directory listing, so this is the one index the page needs. Git-ignored. |
 | `vendor/` | nunjucks 3.2.4 (unminified, see below), js-yaml 4.1.0, marked 15.0.7, highlight.js 11.11.1 + two themes. No build step, no CDN at runtime. |
 | `test/parity.mjs` | Renders every recipe under node and diffs the Markdown and script byte-for-byte against `../build/`. **Run it after any change to engine.js or mkdoc.py.** It stamps each render with the revision in `build/<name>.yaml`, so a `build/` older than HEAD still compares. |
-| `test/e2e.py` | Playwright check of the page: chooser, a path, flag toggles, downloads, provenance hover, dark mode, phone width, every recipe. Serves the tree from disk through request interception, so no web server is needed. |
+| `test/stack.mjs` | Renders every recipe under node and fails if the JS stack at any template load exceeds 200 frames (see "Includes as calls" below). |
+| `test/e2e.py` | Playwright check of the page: chooser, a path, flag toggles, downloads, provenance hover, dark mode, phone width, every recipe. Serves the tree from disk through request interception, so no web server is needed. `--browser firefox` or `webkit` runs it in the other engines, `--channel moz-firefox` in the installed Firefox. |
 
 ```bash
 make && make explorer && node explorer/test/parity.mjs       # engine parity
+node explorer/test/stack.mjs                                 # stack depth
 python3 explorer/test/e2e.py [--quick] [--url http://host/]  # page (needs playwright + chromium)
 ```
 
@@ -86,6 +88,13 @@ differences the templates actually hit; keep this list in sync with
   aggregators use. Templates are therefore rendered from an in-memory cache; a
   miss raises `NeedsFetch`, the engine fetches and retries. `manifest.json`'s
   file list lets the page warm the cache up front.
+- **Includes as calls.** nunjucks runs the rest of a template inside the
+  callback of each `{% include %}`, so the stack grows with every include
+  rendered: about 2700 frames for a whole guide, which Firefox refuses with
+  "too much recursion". `preprocessIncludes()` therefore turns each include
+  into a call to a global that renders the child with the caller's variables
+  and returns its text, which keeps the stack to the include depth.
+  `test/stack.mjs` holds it there.
 - `autoescape` off, undefined variables throw, trailing newlines kept — the
   `mkdoc.py` settings.
 
