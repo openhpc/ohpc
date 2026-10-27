@@ -3,6 +3,8 @@
 | ohpc-autotools | Collection of GNU autotools packages. |
 | ohpc-base | Collection of base packages. |
 | ohpc-base-compute | Collection of compute node base packages. |
+| ohpc-flux-client | Collection of client packages for Flux. |
+| ohpc-flux-server | Collection of server packages for Flux. |
 | ohpc-gnu15-io-libs | Collection of IO library builds for use with GNU compiler toolchain. |
 | ohpc-gnu15-mpich-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime. |
 | ohpc-gnu15-mpich-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime. |
@@ -19,6 +21,22 @@
 | ohpc-gnu15-python3-libs | Collection of python3 related library builds for use with GNU compiler toolchain. |
 | ohpc-gnu15-runtimes | Collection of runtimes for use with GNU compiler toolchain. |
 | ohpc-gnu15-serial-libs | Collection of serial library builds for use with GNU compiler toolchain. |
+| ohpc-gnu16-io-libs | Collection of IO library builds for use with GNU compiler toolchain. |
+| ohpc-gnu16-mpich-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime. |
+| ohpc-gnu16-mpich-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime. |
+| ohpc-gnu16-mpich-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime. |
+| ohpc-gnu16-mvapich2-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu16-mvapich2-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu16-mvapich2-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime. |
+| ohpc-gnu16-openmpi5-io-libs | Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime. |
+| ohpc-gnu16-openmpi5-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime. |
+| ohpc-gnu16-openmpi5-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime. |
+| ohpc-gnu16-parallel-libs | Collection of parallel library builds for use with GNU compiler toolchain. |
+| ohpc-gnu16-perf-tools | Collection of performance tool builds for use with GNU compiler toolchain. |
+| ohpc-gnu16-python-libs | Collection of python related library builds for use with GNU compiler toolchain. |
+| ohpc-gnu16-python3-libs | Collection of python3 related library builds for use with GNU compiler toolchain. |
+| ohpc-gnu16-runtimes | Collection of runtimes for use with GNU compiler toolchain. |
+| ohpc-gnu16-serial-libs | Collection of serial library builds for use with GNU compiler toolchain. |
 | ohpc-intel-impi-io-libs | Collection of IO library builds for use with Intel(R) oneAPI Toolkit and Intel(R) MPI runtime. |
 | ohpc-intel-impi-parallel-libs | Collection of parallel library builds for use with Intel(R) oneAPI Toolkit and the Intel(R) MPI Library. |
 | ohpc-intel-impi-perf-tools | Collection of performance tool builds for use with Intel(R) oneAPI Toolkit compiler toolchain and the Intel(R) MPI runtime. |
