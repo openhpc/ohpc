@@ -2,11 +2,18 @@
 
 # shellcheck disable=SC2086
 
-set -x
 set -e
+
+# Send the xtrace output and every command's stderr down stdout. GitHub Actions
+# reads stdout and stderr as separate streams and interleaves them by arrival,
+# so without this the "set -x" lines land in whatever log group happens to be
+# open when they show up rather than the one they belong to.
+exec 2>&1
 
 FACTORY_VERSION=3.7
 ENABLE_ONEAPI=""
+# Set once the environment report is done; see group_start() below.
+GROUP_XTRACE=""
 if [ $# -eq 1 ]; then
 	if [ "${1}" = "intel" ]; then
 		ENABLE_ONEAPI="intel-oneapi-toolkit-release-ohpc"
@@ -45,29 +52,77 @@ print_header() {
 	echo "############### $1 ###############"
 }
 
+# GitHub Actions renders "::group::"/"::endgroup::" as a section of the job log
+# that is collapsed by default. Other CI systems just print the plain header.
+#
+# The helpers also own xtrace: it is switched on inside a group and off again
+# before the group closes, so that the trace of a command is collapsed together
+# with its output and nothing is traced between two groups. Tracing only starts
+# once GROUP_XTRACE is set, which keeps the environment report below readable.
+group_start() {
+	{ set +x; } 2>/dev/null
+	if [ -n "${GITHUB_ACTIONS:-}" ]; then
+		echo "::group::$1"
+	else
+		print_header "$1"
+	fi
+	if [ -n "${GROUP_XTRACE}" ]; then
+		set -x
+	fi
+}
+
+group_end() {
+	{ set +x; } 2>/dev/null
+	if [ -n "${GITHUB_ACTIONS:-}" ]; then
+		echo "::endgroup::"
+	fi
+}
+
 print_env() {
-	set +x
+	group_start "Install procps"
 	loop_command "${PKG_MANAGER}" "${YES}" install procps
+	group_end
 	# As this script can run on multiple different CI systems
 	# the following lines should give some context to the
 	# evnvironment of this CI run.
-	print_header "Environment variables"
+	group_start "Environment variables"
 	printenv
-	print_header "uname -a"
+	group_end
+	# printenv only reports exported variables, so the settings this script
+	# derives for itself have to be listed explicitly.
+	group_start "Script variables"
+	for var in \
+		ID ID_LIKE VERSION_ID PLATFORM_ID UNAME_M \
+		PKG_MANAGER YES COMMON_PKGS \
+		ENABLE_ONEAPI \
+		EPEL_RELEASE CRB_REPO \
+		OBS_SERVER PROJECT REPOSITORY_URL \
+		FACTORY_VERSION FACTORY_REPOSITORY FACTORY_REPOSITORY_DESTINATION \
+		OHPC_RELEASE; do
+		echo "${var}=${!var-}"
+	done
+	group_end
+	group_start "uname -a"
 	uname -a || :
-	print_header "Mounted file systems"
+	group_end
+	group_start "Mounted file systems"
 	cat /proc/self/mountinfo || :
-	print_header "Kernel command line"
+	group_end
+	group_start "Kernel command line"
 	cat /proc/cmdline || :
-	print_header "ulimit -a"
+	group_end
+	group_start "ulimit -a"
 	ulimit -a
-	print_header "Available memory"
+	group_end
+	group_start "Available memory"
 	free -h
-	print_header "Available disk space"
+	group_end
+	group_start "Available disk space"
 	df -h
-	print_header "Available CPUs"
+	group_end
+	group_start "Available CPUs"
 	lscpu || :
-	set -x
+	group_end
 }
 
 loop_command() {
@@ -101,7 +156,9 @@ if [ "${ID}" = "openEuler" ]; then
 	YES="-y"
 fi
 
+group_start "Install common packages"
 loop_command "${PKG_MANAGER}" "${YES}" install "${COMMON_PKGS}"
+group_end
 if [ "${PKG_MANAGER}" = "dnf" ]; then
 	# If there is a release, this is the place to install the corresponding
 	# release RPM. As long as there is no release RPM only the OBS repository
@@ -132,46 +189,81 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 fi
 
 dnf_rhel() {
+	group_start "Install build dependencies"
 	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} "${EPEL_RELEASE}" dnf-plugins-core git rpm-build gawk "${OHPC_RELEASE}"
+	group_end
+	group_start "Enable the ${CRB_REPO} repository"
 	loop_command "${PKG_MANAGER}" config-manager --set-enabled "${CRB_REPO}"
+	group_end
 	if [ "${FACTORY_VERSION}" != "" ]; then
+		group_start "Add the OBS Factory repository"
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
+		group_end
 	fi
+	group_start "Install lmod-ohpc, bats and ccache"
 	loop_command "${PKG_MANAGER}" "${YES}" install lmod-ohpc bats ccache "${ENABLE_ONEAPI}"
+	group_end
 }
 
 dnf_openeuler() {
+	group_start "Install build dependencies"
 	loop_command "${PKG_MANAGER}" "${YES}" install ${COMMON_PKGS} git dnf-plugins-core rpm-build gawk "${OHPC_RELEASE}"
+	group_end
 	if [ "${FACTORY_VERSION}" != "" ]; then
+		group_start "Add the OBS Factory repository"
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
+		group_end
 	fi
+	group_start "Add the openEuler OpenHPC repository"
 	loop_command wget -P /etc/yum.repos.d/ https://eur.openeuler.openatom.cn/coprs/mgrigorov/OpenHPC/repo/openeuler-22.03_LTS_SP3/mgrigorov-OpenHPC-openeuler-22.03_LTS_SP3.repo
+	group_end
+	group_start "Install lmod-ohpc, bats and ccache"
 	loop_command "${PKG_MANAGER}" "${YES}" install ohpc-filesystem lmod-ohpc hostname bats ccache
+	group_end
+	group_start "Add the golang 1.21 repository"
 	# This repository contains golang 1.21 copied from 24.03
 	# shellcheck disable=SC2016
 	echo -e '[go.1.21]\nname=go.1.21\nbaseurl=https://repos.openhpc.community/.staging/golang-1.21-openEuler-24.03-LTS/$basearch/\nenabled=1\ngpgcheck=0' >/etc/yum.repos.d/go.1.21.repo
+	group_end
 	# We need to have the latest glibc installed for valgrind tests on openEuler
+	group_start "Upgrade all packages"
 	"${PKG_MANAGER}" "${YES}" upgrade
+	group_end
 }
 
 print_env
 
+# From here on the interesting part is what gets installed, so let the groups
+# trace their own commands.
+GROUP_XTRACE=1
 if [ "${PKG_MANAGER}" = "dnf" ]; then
 	if [ "${ID}" = "openEuler" ]; then
 		dnf_openeuler
 	else
 		dnf_rhel
 	fi
+	group_start "Create the ohpc user"
 	adduser ohpc || true
+	group_end
 else
+	group_start "Install build dependencies"
 	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install ${COMMON_PKGS} awk rpmbuild bats ccache "${OHPC_RELEASE}"
+	group_end
 	if [ "${FACTORY_VERSION}" != "" ]; then
+		group_start "Add the OBS Factory repository"
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
+		group_end
 	fi
+	group_start "Install lmod-ohpc"
 	loop_command "${PKG_MANAGER}" "${YES}" --no-gpg-checks install lmod-ohpc "${ENABLE_ONEAPI}"
+	group_end
+	group_start "Create the ohpc user"
 	useradd -m ohpc -U || true
+	group_end
 fi
 
 # Setup ccache
+group_start "Set up ccache"
 echo "cache_dir=/var/cache/ccache" >/etc/ccache.conf
 install -d -o ohpc -g ohpc /var/cache/ccache
+group_end
