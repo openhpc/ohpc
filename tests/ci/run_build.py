@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import contextlib
 import csv
 import glob
 import io
@@ -13,8 +14,35 @@ import subprocess
 import sys
 import time
 
-logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
+# Log to stdout, where run_command() already writes the build output. GitHub
+# Actions reads stdout and stderr as separate streams and interleaves them by
+# arrival, so leaving the two apart puts the log lines in whatever group
+# happens to be open when they show up rather than the one they belong to.
+logging.basicConfig(
+    format="%(asctime)s %(message)s", level=logging.INFO, stream=sys.stdout
+)
 logger = logging.getLogger(__name__)
+
+GITHUB_ACTIONS = bool(os.getenv("GITHUB_ACTIONS"))
+
+
+@contextlib.contextmanager
+def log_group(title):
+    """Print the block as a section of the job log, collapsed by default.
+
+    GitHub Actions renders "::group::"/"::endgroup::" that way; on other CI
+    systems the markers are just two more lines. The group is closed even when
+    the block raises or returns early, so a failed build cannot swallow the
+    rest of the log into its section.
+    """
+    if GITHUB_ACTIONS:
+        print(f"::group::{title}", flush=True)
+    try:
+        yield
+    finally:
+        if GITHUB_ACTIONS:
+            print("::endgroup::", flush=True)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -420,7 +448,8 @@ multiple_specs = len(specfiles) > 1
 build_order_used = None
 
 if multiple_specs:
-    specfiles = get_build_order(specfiles)
+    with log_group("Determining build order"):
+        specfiles = get_build_order(specfiles)
     build_order_used = [os.path.basename(s) for s in specfiles]
 
 for spec in specfiles:
@@ -439,7 +468,8 @@ for spec in specfiles:
         just_spec,
     ]
 
-    success, _ = run_command(command)
+    with log_group(f"Fetching sources for {just_spec}"):
+        success, _ = run_command(command)
     if not success:
         logger.error("Running misc/get_source.sh failed")
         failed.append(just_spec)
@@ -462,16 +492,17 @@ for spec in specfiles:
         for family in families:
             if family == "mvapich2" and os.uname().machine == "aarch64":
                 continue
-            if not build_srpm_and_rpm(
-                spec,
-                mpi_family=family,
-                compiler_family=args.compiler_family,
-            ):
-                failed.append(f"{just_spec} ({args.compiler_family}, {family})")
-            else:
-                rebuild_success.append(
-                    f"{just_spec} ({args.compiler_family}, {family})"
+            label = f"{just_spec} ({args.compiler_family}, {family})"
+            with log_group(f"Building {label}"):
+                built = build_srpm_and_rpm(
+                    spec,
+                    mpi_family=family,
+                    compiler_family=args.compiler_family,
                 )
+            if not built:
+                failed.append(label)
+            else:
+                rebuild_success.append(label)
 
         if "!?ohpc_mpi_dependent" in contents:
             # This is a package that can be built with and without MPI support.
@@ -479,26 +510,34 @@ for spec in specfiles:
             # '%{!?ohpc_mpi_dependent:%define ohpc_mpi_dependent 1}'
             # If that exists we need to rebuild it once more with
             # ohpc_mpi_dependent set to 0.
-            if not build_srpm_and_rpm(
-                spec,
-                compiler_family=args.compiler_family,
-                not_mpi_dependent=True,
-            ):
+            label = f"{just_spec} ({args.compiler_family}, no MPI)"
+            with log_group(f"Building {label}"):
+                built = build_srpm_and_rpm(
+                    spec,
+                    compiler_family=args.compiler_family,
+                    not_mpi_dependent=True,
+                )
+            if not built:
                 failed.append(f"{just_spec} ({args.compiler_family})")
             else:
                 rebuild_success.append(f"{just_spec} ({args.compiler_family})")
 
     elif "ohpc_compiler_dependent" in contents:
-        if not build_srpm_and_rpm(
-            spec,
-            compiler_family=args.compiler_family,
-        ):
-            failed.append(f"{just_spec} ({args.compiler_family})")
+        label = f"{just_spec} ({args.compiler_family})"
+        with log_group(f"Building {label}"):
+            built = build_srpm_and_rpm(
+                spec,
+                compiler_family=args.compiler_family,
+            )
+        if not built:
+            failed.append(label)
         else:
-            rebuild_success.append(f"{just_spec} ({args.compiler_family})")
+            rebuild_success.append(label)
 
     else:
-        if not build_srpm_and_rpm(spec):
+        with log_group(f"Building {just_spec}"):
+            built = build_srpm_and_rpm(spec)
+        if not built:
             failed.append(just_spec)
         else:
             rebuild_success.append(just_spec)
@@ -507,7 +546,8 @@ for spec in specfiles:
     # spec so that subsequent builds can use the just-built RPMs
     # as dependencies.
     if multiple_specs:
-        setup_local_repo()
+        with log_group(f"Updating local repository after {just_spec}"):
+            setup_local_repo()
 
 
 if not spec_found:
