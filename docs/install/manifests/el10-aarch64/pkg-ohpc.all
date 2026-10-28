@@ -18,12 +18,14 @@ cubelib-gnu15-ohpc 4.9.1 http://www.scalasca.org/software/cube-4.x/download.html
 cubelib-gnu16-ohpc 4.9.1 http://www.scalasca.org/software/cube-4.x/download.html ohpc/serial-libs CUBE Uniform Behavioral Encoding generic presentation library component
 cubew-gnu15-ohpc 4.9.1 http://www.scalasca.org/software/cube-4.x/download.html ohpc/io-libs CUBE Uniform Behavioral Encoding generic presentation writer component
 cubew-gnu16-ohpc 4.9.1 http://www.scalasca.org/software/cube-4.x/download.html ohpc/io-libs CUBE Uniform Behavioral Encoding generic presentation writer component
+cuda-devel-ohpc 25.9 https://github.com/openhpc/ohpc ohpc/dev-tools OpenHPC compatibility package for cuda
+cuda-repo-ohpc 25.9 https://github.com/openhpc/ohpc ohpc/dev-tools Cuda toolkit online repository
 dimemas-gnu15-mpich-ohpc 5.5.0 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu15-openmpi5-ohpc 5.5.0 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu16-mpich-ohpc 5.6.0 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 dimemas-gnu16-openmpi5-ohpc 5.6.0 https://tools.bsc.es ohpc/perf-tools Dimemas tool
 docs-ohpc 4.0.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
-docs-ohpc 4.1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+docs-ohpc 4.2.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 environment-modules-ohpc 5.7.0 https://envmodules.io ohpc/admin Provides dynamic modification of a user's environment
 examples-ohpc 2.0 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 extrae-gnu15-mpich-ohpc 5.0.4 https://tools.bsc.es ohpc/perf-tools Extrae tool
@@ -204,7 +206,7 @@ tau-gnu15-mpich-ohpc 2.35.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc
 tau-gnu15-openmpi5-ohpc 2.35.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu16-mpich-ohpc 2.35.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu16-openmpi5-ohpc 2.35.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-test-suite-ohpc 4.1.0 https://github.com/openhpc/ohpc ohpc/admin Integration test suite for OpenHPC
+test-suite-ohpc 4.2.0 https://github.com/openhpc/ohpc ohpc/admin Integration test suite for OpenHPC
 trilinos-gnu15-mpich-ohpc 17.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu15-openmpi5-ohpc 17.0.0 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu16-mpich-ohpc 17.2.1 https://trilinos.org/ ohpc/parallel-libs A collection of libraries of numerical algorithms
