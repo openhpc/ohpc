@@ -14,7 +14,7 @@
 %define recipe_dest %{buildroot}/%{OHPC_PUB}/doc/recipes
 
 Name:           docs%{PROJ_DELIM}
-Version:        4.1.0
+Version:        4.2.0
 Release:        %{?dist}.1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
