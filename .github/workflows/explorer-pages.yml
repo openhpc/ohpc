@@ -29,7 +29,7 @@ on:
 
 env:
   # Space-separated REF or REF=LABEL entries published after the tip.
-  RELEASE_REFS: "v4.1.GA=4.1 3.x v3.6.GA=3.6"
+  RELEASE_REFS: "v4.2.GA=4.2 v4.1.GA=4.1 3.x v3.6.GA=3.6"
 
 permissions:
   contents: read
