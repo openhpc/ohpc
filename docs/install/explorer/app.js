@@ -152,6 +152,7 @@ function writeHash() {
   if (location.hash.replace(/^#\/?/, "") !== next) {
     history.replaceState(null, "", next ? "#" + next : location.pathname + location.search);
   }
+  for (const a of document.querySelectorAll("#toc a[data-chapter]")) a.href = "#" + hashFor(a.dataset.chapter);
 }
 
 /* ------------------------------------------------------------------------ */
@@ -466,7 +467,9 @@ function renderToc(toc) {
   let current = null;
   for (const t of toc) {
     if (t.level > 2) continue;
-    const link = h("a", { href: "#" + t.id, onclick: (e) => { e.preventDefault(); jumpTo(t.id); } },
+    // the href is a full chapter link, so copying it or opening it in a new
+    // tab works; a plain click still only scrolls (writeHash keeps it current)
+    const link = h("a", { href: "#" + hashFor(t.id), dataset: { chapter: t.id }, onclick: (e) => { e.preventDefault(); jumpTo(t.id); } },
       t.number ? h("span", { class: "secno" }, t.number) : null, t.text);
     if (t.level === 1) {
       current = h("li", { class: "toc-chapter" }, link, h("ol", {}));

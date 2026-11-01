@@ -332,6 +332,21 @@ def main() -> int:
         # place (toggles used to jump back to the last jump target)
         if "chapter=" in page.url:
             failures.append(f"TOC jump wrote a chapter query into the URL: {page.url}")
+        # ...but its href is a full chapter link with the current options, so
+        # copying it or opening it in a new tab lands on that chapter (a bare
+        # #<heading id> fell back to the chooser)
+        toc_link = page.locator("#toc .toc-chapter a").nth(4)
+        toc_id = toc_link.get_attribute("data-chapter")
+        toc_href = toc_link.get_attribute("href")
+        if toc_href != f"#{sample}?enable_ib=1&chapter={toc_id}":
+            failures.append(f"TOC link is not a chapter link: {toc_href}")
+        page.goto("about:blank")
+        page.goto(page_url + toc_href)
+        page.wait_for_function(f"document.querySelector('#guide').dataset.recipe === '{sample}'")
+        page.wait_for_function(
+            "(id) => document.getElementById(id).getBoundingClientRect().top < 100",
+            arg=toc_id,
+        )
         page.evaluate(
             "window.scrollTo({ top: document.body.scrollHeight - 900, behavior: 'instant' })"
         )
@@ -343,6 +358,8 @@ def main() -> int:
         y_after = page.evaluate("window.scrollY")
         if abs(y_after - y_before) > 5:
             failures.append(f"toggling a view switch moved the reader: {y_before} -> {y_after}")
+        if "sources=1" not in (toc_link.get_attribute("href") or ""):
+            failures.append(f"TOC link did not follow the view switch: {toc_link.get_attribute('href')}")
         page.locator("#sw-sources").click()  # back to the default
         page.wait_for_timeout(200)
 
