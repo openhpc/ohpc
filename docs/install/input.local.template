@@ -47,6 +47,10 @@ provision_wait="${provision_wait:-180}"
 # measured from the end of the provision_wait sleep above. (OpenCHAMI only)
 node_boot_timeout="${node_boot_timeout:-600}"
 
+# Time allowed for cloud-init to finish on a compute node, in seconds. Raise it
+# if a large cluster's nodes all fetch their payload at once. (OpenCHAMI only)
+cloud_init_timeout="${cloud_init_timeout:-600}"
+
 # DNS settings
 dns_servers="${dns_servers:-172.30.0.254}"
 dns_domain="${dns_domain:-local}"
