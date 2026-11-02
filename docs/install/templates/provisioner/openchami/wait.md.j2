@@ -29,10 +29,21 @@ write the munge key and run the `runcmd` restarts. Wait for it to complete on
 every node, so that the resource manager steps below do not restart daemons
 that cloud-init is restarting at the same time.
 
+`cloud-init status --wait` blocks for as long as cloud-init takes, with no
+limit of its own, so bound it on the node with `cloud_init_timeout`. The test
+on the exit status fails this step when cloud-init timed out (`timeout` reports
+124) or failed (1), and lets a run that finished with recoverable errors (2)
+through: any `cc_*` module warning produces one, and a cluster whose nodes are
+up and usable should not stop here for that. `$?` and `$rc` are escaped so that
+the compute node expands them rather than the head node.
+
 <!-- ohpc_begin -->
 <!-- ohpc_comment Wait for cloud-init to finish on the compute nodes -->
 ```bash
-pdsh -w "${compute_prefix}[1-${num_computes}]" cloud-init status --wait
+pdsh -S -w "${compute_prefix}[1-${num_computes}]" \
+	"timeout ${cloud_init_timeout:-600} cloud-init status --wait; \
+	rc=\$?; [ \$rc -eq 0 ] || [ \$rc -eq 2 ]" \
+	|| { echo "cloud-init: FAILED or did not finish in time"; exit 1; }
 ```
 <!-- ohpc_end -->
 
