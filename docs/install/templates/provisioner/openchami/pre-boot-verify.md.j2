@@ -29,7 +29,7 @@ ochami -k cloud-init defaults get \
 ```
 <!-- ohpc_end -->
 
-Finally, confirm that the compute group cloud-init configuration is present.
+Next, confirm that the compute group cloud-init configuration is present.
 This is what delivers the SSH keys and munge key to the node at boot:
 
 <!-- ohpc_begin -->
@@ -42,3 +42,43 @@ ochami -k cloud-init group get raw compute \
 ```
 <!-- ohpc_end -->
 
+Finally, confirm that the cloud-init server resolves each compute node by its
+IP address. This is the lookup the node itself performs at boot, and the only
+check here that has to run after node discovery.
+
+The server answers `/cloud-init/meta-data` from an in-memory map of SMD's
+Ethernet interfaces that it refreshes on a timer, so a node registered a moment
+ago is not visible to it yet. A node that boots into that window gets no
+cloud-init data at all, which means no root SSH key and no munge key, and it
+never becomes reachable. Wait for the lookup to succeed before powering the
+nodes on.
+
+The check below asks the cloud-init server the question the node will ask, with
+`X-Forwarded-For` carrying the node's address so that the server resolves the
+same entry. It asks the server's container directly rather than through
+haproxy, because haproxy replaces `X-Forwarded-For` with the address the
+request came from, so through it the server would look up the head node
+instead. The node's own request through haproxy is tested when it boots.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Verify the cloud-init server resolves each compute node -->
+```bash
+cloud_init_ip=$(podman inspect --format \
+	'{%raw%}{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}{%endraw%}' \
+	cloud-init-server)
+for ((i=0; i<num_computes; i++)); do
+	for ((t=0; ; t++)) ; do
+		curl -fsS -m 5 -o /dev/null \
+			-H "X-Forwarded-For: ${c_ip[$i]}" \
+			"http://${cloud_init_ip}:27777/meta-data" && break
+		(( t < 18 )) || {
+			echo "cloud-init node: FAILED for ${c_name[$i]}"
+			exit 1
+		}
+		echo "Waiting for cloud-init to resolve ${c_name[$i]}..."
+		sleep 5
+	done
+done
+echo "cloud-init node: OK"
+```
+<!-- ohpc_end -->
