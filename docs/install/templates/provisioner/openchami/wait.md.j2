@@ -1,12 +1,23 @@
 ## Wait for Compute Nodes
 
-Wait for all compute nodes to become accessible via SSH.
+Wait for all compute nodes to become accessible via SSH, for up to
+`node_boot_timeout` seconds. A node that is not reachable by then is not slow,
+it has failed to provision, and the checks below cannot tell you anything
+useful about it.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Wait for compute nodes to be accessible -->
 ```bash
-until pdsh -S -w "${compute_prefix}[1-${num_computes}]" true \
-	>/dev/null 2>&1; do
+deadline=$(( SECONDS + ${node_boot_timeout:-600} ))
+while true ; do
+	pdsh -S -w "${compute_prefix}[1-${num_computes}]" true \
+		>/dev/null 2>&1 && { echo "compute nodes: OK"; break; }
+	if (( SECONDS >= deadline )); then
+		echo "compute nodes: FAILED, no SSH in ${node_boot_timeout:-600}s"
+		echo "Check the node console, and the cloud-init server with"
+		echo "  podman logs cloud-init-server"
+		exit 1
+	fi
 	echo "Waiting for compute nodes..."
 	sleep 10
 done

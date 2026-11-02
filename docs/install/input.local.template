@@ -43,6 +43,10 @@ bmc_password="${bmc_password:-unknown}"
 # Additional time to wait for compute nodes to provision (seconds)
 provision_wait="${provision_wait:-180}"
 
+# Time allowed for a compute node to boot far enough to answer SSH, in seconds,
+# measured from the end of the provision_wait sleep above. (OpenCHAMI only)
+node_boot_timeout="${node_boot_timeout:-600}"
+
 # DNS settings
 dns_servers="${dns_servers:-172.30.0.254}"
 dns_domain="${dns_domain:-local}"
