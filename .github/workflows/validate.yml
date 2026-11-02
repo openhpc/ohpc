@@ -216,6 +216,10 @@ jobs:
     runs-on: ubuntu-latest
     name: AlmaLinux 9 Warewulf Slurm Integration
     needs: build_on_rhel
+    # The job provisions VMs and can wait on them, so without a limit it
+    # inherits the six hour default and a hung boot has to be cancelled by
+    # hand. The run itself takes 10 to 16 minutes.
+    timeout-minutes: 60
     steps:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
