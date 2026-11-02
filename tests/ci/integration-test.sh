@@ -442,6 +442,45 @@ sed_escape() {
 	printf '%s' "$1" | sed -e 's/[&|\]/\\&/g'
 }
 
+# Everything known about a failed provisioning attempt, dumped while the head
+# node is still up. The node consoles in the job log show what the node saw;
+# without this there is nothing at all about what the head node answered, so
+# a failure here cannot be told apart from a failure there.
+dump_diagnostics() {
+	echo "=== journal since boot ==="
+	journalctl -b --no-pager || true
+
+	[[ "${PROVISIONER}" == "openchami" ]] || return 0
+
+	echo "=== openchami.target ==="
+	systemctl list-dependencies --no-pager openchami.target || true
+	systemctl list-units --failed --no-pager || true
+
+	echo "=== containers ==="
+	podman ps -a || true
+
+	# The cloud-init server resolves a node by the source address of its
+	# request, which haproxy passes on in X-Forwarded-For. Ask it the same
+	# question each compute node asks, so a 422 here names the node the
+	# server cannot resolve. Ask the server directly: haproxy replaces
+	# X-Forwarded-For with the address the request came from.
+	cloud_init_ip=$(podman inspect --format \
+		'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \
+		cloud-init-server 2>/dev/null) || true
+	for ((i = 0; i < num_computes; i++)); do
+		echo "=== cloud-init meta-data as ${c_name[${i}]} ==="
+		curl -sS -m 5 -o /dev/null -w '%{http_code}\n' \
+			-H "X-Forwarded-For: ${c_ip[${i}]}" \
+			"http://${cloud_init_ip}:27777/meta-data" ||
+			true
+	done
+
+	for container in cloud-init-server smd bss haproxy; do
+		echo "=== podman logs ${container} ==="
+		podman logs --tail 200 "${container}" 2>&1 || true
+	done
+}
+
 # Extra "repos:" entries for openchami's image-build YAML files. No "gpg:"
 # is set for local-rpms: image-build only imports a GPG key when one is
 # given and otherwise adds the repo unsigned (see
@@ -515,8 +554,8 @@ elif [[ "${PROVISIONER}" == "openchami" ]]; then
 	fi
 fi
 if ! bash -x "${RECIPE}" 2> >(grep -v -e 'Unrecognised xattr prefix' -e '/dev/kmsg: Read-only file system' -e '^$' >&2); then
-	echo "Recipe failed – dumping journal since boot:"
-	journalctl -b --no-pager
+	echo "Recipe failed, dumping diagnostics:"
+	dump_diagnostics
 	exit 1
 fi
 
@@ -547,6 +586,10 @@ for ((i = 0; i < num_computes; i++)); do
 		all_up=0
 	fi
 done
+
+if [[ "${all_up}" -ne 1 ]]; then
+	dump_diagnostics
+fi
 
 # ---------------------------------------------------------------------------
 # Mark compute nodes as idle in Slurm
