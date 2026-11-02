@@ -7,10 +7,17 @@ on:
   pull_request:
     branches:
       - 4.x
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Open an interactive SSH (tmate) session if a job fails'
+        type: boolean
+        default: false
 
 permissions:
   actions: write
   contents: read
+  pull-requests: read
 
 env:
   SKIP_CI_SPECS: |
@@ -260,6 +267,10 @@ jobs:
     runs-on: ubuntu-latest
     name: AlmaLinux 10 ${{ matrix.provisioner }} Slurm Integration
     needs: build_on_rhel
+    # The job provisions VMs and can wait on them, so without a limit it
+    # inherits the six hour default and a hung boot has to be cancelled by
+    # hand. The run itself takes 10 to 16 minutes.
+    timeout-minutes: 60
     steps:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
@@ -300,8 +311,14 @@ jobs:
         sudo podman exec -it -l
         -e INTEGRATION_TESTS="${{ steps.check_integration.outputs.tests }}"
         bash -c "cd /home/ohpc; bash tests/ci/integration-test.sh -p ${{ matrix.provisioner }}"
+    # Opens an interactive session and holds the runner until someone
+    # connects and exits, so it must not fire on an ordinary failure: a
+    # two minute package mirror hiccup otherwise occupies a runner for
+    # hours. Re-run the workflow by hand (Actions, Run workflow) with
+    # "Open an interactive SSH session" ticked when you want to debug.
     - name: Debug via SSH
-      if: failure()
+      if: failure() && inputs.debug_enabled
+      timeout-minutes: 30
       uses: mxschmitt/action-tmate@v3
       with:
         limit-access-to-actor: true
