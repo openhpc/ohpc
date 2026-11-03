@@ -5,6 +5,6 @@ provisioner_name: "OpenCHAMI"
 is_openchami: true
 
 # OpenCHAMI component versions
-openchami_version: "0.1.6"
+openchami_version: "0.1.7"
 ochami_version: "0.7.2"
 seaweedfs_version: "4.50"
