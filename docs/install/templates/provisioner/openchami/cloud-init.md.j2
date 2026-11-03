@@ -59,11 +59,20 @@ cloud-init client, to provide post-boot configurations. The configuration below
 is a minimal configuration that should at least let the root user login using
 the public key and distribute the munge key file to all compute nodes.
 
+The cloud-init server answers any process on a compute node, so the `bootcmd`
+below lets only root on the compute nodes reach it (ports 8081 and 8443 on the
+head node). Otherwise any user on a compute node could read the munge key from
+the server.
+
 <!-- ohpc_begin -->
 <!-- ohpc_comment Cloudinit -->
 ```bash
 munge_key=$(cat /etc/munge/munge.key | base64 -w 0)
 export munge_key
+sms_addrs="${sms_ip}"
+if [[ ${enable_ipoib} -eq 1 ]]; then
+	sms_addrs="${sms_addrs}, ${sms_ipoib}"
+fi
 cat > /opt/ohpc/admin/cloud-init/compute.yaml <<EOF
 - name: compute
   description: "compute template"
@@ -80,6 +89,12 @@ cat > /opt/ohpc/admin/cloud-init/compute.yaml <<EOF
       users:
         - name: root
           ssh_authorized_keys: {%raw%}{{ ds.meta_data.instance_data.v1.public_keys }}{%endraw%}
+      bootcmd:
+        - nft add table inet ohpc
+        - nft 'add chain inet ohpc output { type filter hook output priority 0 ; }'
+        - >-
+          nft 'add rule inet ohpc output ip daddr { ${sms_addrs} }
+          tcp dport { 8081, 8443 } meta skuid != 0 reject'
       write_files:
         - content: ${munge_key}
           path: /etc/munge/munge.key
