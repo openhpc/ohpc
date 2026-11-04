@@ -1,0 +1,103 @@
+## Limiting Access to cloud-init
+
+The cloud-init server gives each node its configuration, including the munge
+key, and its admin API changes that configuration for every node. haproxy
+publishes it on ports 8081 and 8443 of the head node. The steps below have
+haproxy answer `/cloud-init` only from privileged source ports (1-1023), which
+only root can use, and `/cloud-init/admin` only from the head node itself.
+podman's published ports keep the client's address and source port, so haproxy
+sees them as the client sent them.
+
+Root on the compute nodes gets a privileged source port from the nftables rules
+in the compute image (see [Building the Base OS
+Image](#building-the-base-os-image)). Root on the head node gets one from the
+rules below, so `ochami cloud-init` commands keep working when run as root
+against `${sms_ip}` (the address in the `ochami` configuration). They don't work
+as another user, or through `127.0.0.1`.
+
+First add the access rules to haproxy's `openchami` frontend, next to the
+`/cloud-init` path rule, check the configuration, and reload haproxy in place.
+haproxy's master process re-reads its configuration on `SIGUSR2`. Restarting
+`haproxy.service` instead also restarts the other services in
+`openchami.target`.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Limit cloud-init to privileged source ports and its admin API to the head -->
+```bash
+haproxy_cfg=/etc/openchami/configs/haproxy.cfg
+acl_file=/opt/ohpc/admin/haproxy/cloud-init-access.cfg
+mkdir -p /opt/ohpc/admin/haproxy
+cat > "${acl_file}" <<EOF
+  # OpenHPC: /cloud-init only from privileged source ports, and
+  # /cloud-init/admin only from the head node
+  acl SRC_privport src_port 1:1023
+  acl SRC_head src ${sms_ip}
+  acl PATH_cloud-init-admin path_beg -i /cloud-init/admin
+  http-request deny deny_status 403 if PATH_cloud-init !SRC_privport
+  http-request deny deny_status 403 if PATH_cloud-init-admin !SRC_head
+EOF
+if ! grep -q 'acl SRC_privport' "${haproxy_cfg}"; then
+	sed -i "/^ *acl PATH_cloud-init path_beg/r ${acl_file}" "${haproxy_cfg}"
+fi
+grep -q 'acl SRC_privport' "${haproxy_cfg}" \
+	|| { echo "ERROR: cloud-init access rules not in ${haproxy_cfg}" >&2; exit 1; }
+podman exec haproxy haproxy -c -f /usr/local/etc/haproxy/haproxy.cfg
+podman kill --signal USR2 haproxy
+```
+<!-- ohpc_end -->
+
+Then the head node's own rules. Root's connections to ports 8081 and 8443 on
+`${sms_ip}` leave from `${sms_ip}` with a source port between 600 and 1023.
+Other users can't reach the OpenCHAMI container networks directly, which would
+bypass haproxy. The networks' subnets are read from podman. A dedicated unit
+loads the rules at boot, not `nftables.service`: stopping or reloading that
+service flushes the whole ruleset, podman's own rules included.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Head node source-port rules for cloud-init -->
+```bash
+podman_nets=$(podman network inspect \
+	--format '{%raw%}{{range .Subnets}}{{.Subnet}} {{end}}{%endraw%}' \
+	$(podman network ls --format '{%raw%}{{.Name}}{%endraw%}' | grep '^openchami-') \
+	| tr ' ' '\n' | grep '^[0-9.]*/[0-9]*$' | paste -sd, -)
+if [[ -z "${podman_nets}" ]]; then
+	echo "ERROR: no OpenCHAMI podman network subnets found" >&2
+	exit 1
+fi
+cat > /etc/nftables/ohpc-sport.nft <<EOF
+table inet ohpc_sport
+delete table inet ohpc_sport
+table inet ohpc_sport {
+	chain output {
+		type filter hook output priority mangle; policy accept;
+		ip daddr ${sms_ip} tcp dport { 8081, 8443 } meta skuid 0 \\
+			meta mark set 0x421
+		ip daddr { ${podman_nets} } meta skuid != 0 \\
+			reject with icmpx admin-prohibited
+	}
+	chain postrouting {
+		type nat hook postrouting priority srcnat; policy accept;
+		meta mark 0x421 meta l4proto tcp snat ip to ${sms_ip}:600-1023
+	}
+}
+EOF
+cat > /etc/systemd/system/ohpc-sport.service <<EOF
+[Unit]
+Description=OpenHPC source-port rules for cloud-init
+After=nftables.service
+Before=network-pre.target haproxy.service
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/nft -f /etc/nftables/ohpc-sport.nft
+ExecStop=/usr/sbin/nft delete table inet ohpc_sport
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable --now ohpc-sport.service
+```
+<!-- ohpc_end -->
