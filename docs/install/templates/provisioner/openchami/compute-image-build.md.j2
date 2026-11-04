@@ -198,6 +198,37 @@ You can keep adding layers as you see fit, and branch off if so desired. We will
 use the next layer to add additional packages later on so no need to build it
 just yet.
 
+The head node answers cloud-init requests only from privileged source ports
+(see [Limiting Access to cloud-init](#limiting-access-to-cloud-init)). The
+production layer installs these nftables rules as the image's
+`/etc/sysconfig/nftables.conf`: they give root's connections to ports 8081 and
+8443 on the head node a source port between 600 and 1023, which other users
+cannot get. `nftables.service` loads them before the network comes up, so they
+are in place before cloud-init fetches the node's configuration.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Define the compute nodes' cloud-init source-port rules -->
+```bash
+sms_addrs="${sms_ip}"
+if [[ ${enable_ipoib} -eq 1 ]]; then
+	sms_addrs="${sms_addrs}, ${sms_ipoib}"
+fi
+cat > /opt/ohpc/admin/images/data/ohpc-sport.nft <<EOF
+table inet ohpc_sport {
+	chain output {
+		type filter hook output priority mangle; policy accept;
+		ip daddr { ${sms_addrs} } tcp dport { 8081, 8443 } meta skuid 0 \\
+			meta mark set 0x421
+	}
+	chain postrouting {
+		type nat hook postrouting priority srcnat; policy accept;
+		meta mark 0x421 meta l4proto tcp masquerade to :600-1023
+	}
+}
+EOF
+```
+<!-- ohpc_end -->
+
 <!-- ohpc_begin -->
 <!-- ohpc_comment Define a production compute layer -->
 ```bash
@@ -231,6 +262,8 @@ copyfiles:
     dest: '/etc/hosts'
   - src: '/data/slurmd'
     dest: '/etc/sysconfig/slurmd'
+  - src: '/data/ohpc-sport.nft'
+    dest: '/etc/sysconfig/nftables.conf'
 packages:
   - ohpc-base-compute
   - ohpc-slurm-client
@@ -254,6 +287,8 @@ cmds:
   - cmd: echo "account required pam_slurm.so" >> /etc/pam.d/sshd
     loglevel: INFO
   - cmd: systemctl enable munge.service slurmd.service
+    loglevel: INFO
+  - cmd: systemctl enable nftables.service
     loglevel: INFO
   - cmd: ln -sf ../usr/share/zoneinfo/UTC /etc/localtime
     loglevel: INFO
