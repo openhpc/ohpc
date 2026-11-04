@@ -59,10 +59,10 @@ cloud-init client, to provide post-boot configurations. The configuration below
 is a minimal configuration that should at least let the root user login using
 the public key and distribute the munge key file to all compute nodes.
 
-The cloud-init server answers any process on a compute node, so the `bootcmd`
-below lets only root on the compute nodes reach it (ports 8081 and 8443 on the
-head node). Otherwise any user on a compute node could read the munge key from
-the server.
+The head node answers cloud-init only from privileged source ports (see
+[Limiting Access to cloud-init](#limiting-access-to-cloud-init)). The `bootcmd`
+below adds the same limit on the compute nodes themselves: only root can reach
+ports 8081 and 8443 on the head node.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Cloudinit -->
