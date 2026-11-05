@@ -5,6 +5,15 @@ should be installed. Next, we need to update the configuration to allow Warewulf
 to work with {{ distro_full_name }}, and to support local provisioning using a
 second private interface (refer to Figure 1).
 
+warewulfd serves each node a system overlay and a runtime overlay. With
+`secure: true` in `warewulf.conf`, it serves the runtime overlay only to
+requests from privileged source ports (1-1023), which only root can use. The
+system overlay is served to any client, so files that only root on a node may
+read go in runtime overlays. A node reads this setting from its system overlay
+when it boots, so the steps below set it before warewulfd first starts and
+before any node boots. A node booted before the change fetches its runtime
+overlay again only after a reboot.
+
 <!-- ohpc_begin -->
 <!-- ohpc_comment Complete basic Warewulf setup for head node -->
 ```bash
@@ -25,6 +34,9 @@ sed -i "s/defaults,noauto,nofail,ro/defaults,nofail,ro/" \
 yq -i '.nodeprofiles.default.kernel.args -= ["quiet"]' \
 	/etc/warewulf/nodes.conf
 echo "log-debug" >> /etc/dnsmasq.d/ww4-debug.conf
+
+# Serve the runtime overlay only to privileged source ports (root)
+yq -i '.warewulf.secure = true' /etc/warewulf/warewulf.conf
 
 # Enable and start the warewulfd service before using wwctl.
 systemctl enable --now warewulfd.service
