@@ -1,12 +1,16 @@
 ## Pack the Compute Image
 
 The compute image is now complete. Pack it and associate it with the *compute*
-group so the nodes have something to boot.
+group so the nodes have something to boot. `--nosyncfiles` keeps the synclist's
+files out of the packed image; the nodes receive them at boot. A site that sets
+a root password in the xCAT `passwd` table should also set `chdef -t site
+secureroot=1`, so that `packimage` does not write that password hash into the
+image.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Pack compute image and associate it with the compute group -->
 ```bash
-packimage ${xcat_osimage}
+packimage --nosyncfiles ${xcat_osimage}
 
 # Associate provisioning image for compute group
 nodeset compute osimage=${xcat_osimage}

@@ -12,3 +12,25 @@ that applies this after boot starts `slurmd` with it already in place.
 {{ compute_service_enable("slurmd.service") }}
 ```
 <!-- ohpc_end -->
+{%- if is_xcat_stateless %}
+
+The image carries no munge key, so at boot `munge` and `slurmd` start before the
+synclist delivers it. Add a short script to the synclist that xCAT runs on the
+node after every sync, to start them once the key is in place:
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Start munge and slurmd once the synced key is in place -->
+```bash
+cat > ${xcat_synclist_dir}/ohpc-postsync << 'EOF'
+#!/bin/sh
+systemctl is-active -q munge.service  || systemctl restart munge.service
+systemctl is-active -q slurmd.service || systemctl restart slurmd.service
+EOF
+chmod 755 ${xcat_synclist_dir}/ohpc-postsync
+echo "${xcat_synclist_dir}/ohpc-postsync -> /usr/local/sbin/ohpc-postsync" \
+    >> ${xcat_synclist_dir}/compute.synclist
+echo "EXECUTEALWAYS:" >> ${xcat_synclist_dir}/compute.synclist
+echo "${xcat_synclist_dir}/ohpc-postsync" >> ${xcat_synclist_dir}/compute.synclist
+```
+<!-- ohpc_end -->
+{%- endif %}
