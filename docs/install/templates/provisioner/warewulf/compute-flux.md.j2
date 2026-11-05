@@ -15,7 +15,10 @@ on the nodes. A systemd drop-in has munge and the Flux broker start after
 wwctl overlay import --parents nodeconfig /etc/flux/system/conf.d/system.toml
 wwctl overlay import --parents nodeconfig /etc/flux/imp/conf.d/imp.toml
 
-# The CURVE certificate in the runtime overlay, readable by flux only
+# The CURVE certificate in the runtime overlay, readable by flux only.
+# Make its directories 0755 first: "import --parents" would give them
+# the file's mode (0500), which the nodes' /etc/flux would then take.
+wwctl overlay mkdir secrets /etc/flux/system
 wwctl overlay import --parents secrets /etc/flux/system/curve.cert
 wwctl overlay chown secrets /etc/flux/system/curve.cert \
 	"$(id -u flux):$(id -g flux)"
