@@ -163,6 +163,7 @@ dnf -y --installroot="${CHROOT}" upgrade "ohpc-base-compute"
    rebuild. Reboot the compute nodes when convenient to pick up the new image.
 
 ```bash
+rm -f ${CHROOT}/etc/munge/munge.key
 packimage --nosyncfiles ${xcat_osimage}
 nodeset compute osimage=${xcat_osimage}
 ```

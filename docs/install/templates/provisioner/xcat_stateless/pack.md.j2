@@ -2,14 +2,18 @@
 
 The compute image is now complete. Pack it and associate it with the *compute*
 group so the nodes have something to boot. `--nosyncfiles` keeps the synclist's
-files out of the packed image; the nodes receive them at boot. A site that sets
-a root password in the xCAT `passwd` table should also set `chdef -t site
-secureroot=1`, so that `packimage` does not write that password hash into the
-image.
+files out of the packed image; the nodes receive them at boot. The image build
+also leaves a munge key of its own in the chroot (the Slurm packages create one
+when none exists). Remove it, so that munge on the nodes starts only with the
+head's key. A site that sets a root password in the xCAT `passwd` table should
+also set `chdef -t site secureroot=1`, so that `packimage` does not write that
+password hash into the image.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Pack compute image and associate it with the compute group -->
 ```bash
+# The nodes get the munge key from the head at boot, not from the image
+rm -f ${CHROOT}/etc/munge/munge.key
 packimage --nosyncfiles ${xcat_osimage}
 
 # Associate provisioning image for compute group
