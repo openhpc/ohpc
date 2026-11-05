@@ -81,8 +81,9 @@ ochami discover static \
 node xname), and group membership from the `nodes.yaml` file in a single step.
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment FIXME: cloud-init-server reloads its node list from SMD once a minute, so a -->
-<!-- ohpc_comment node that boots right after discovery gets no cloud-init data. Remove this -->
-<!-- ohpc_comment wait once OpenCHAMI's cloud-init refreshes the list on a lookup miss. -->
+<!-- ohpc_comment Wait for cloud-init to see the new nodes -->
+<!-- ohpc_command # FIXME: cloud-init-server reloads its node list from SMD once a minute, -->
+<!-- ohpc_command # so a node that boots right after discovery gets no cloud-init data. -->
+<!-- ohpc_command # Remove once OpenCHAMI's cloud-init refreshes the list on a miss. -->
 <!-- ohpc_command sleep 70 -->
 <!-- ohpc_end -->
