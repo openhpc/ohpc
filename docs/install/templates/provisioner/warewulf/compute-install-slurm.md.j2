@@ -5,6 +5,10 @@ wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
   # Add Slurm client support meta-package
   dnf -y install ohpc-slurm-client
 
+  # Remove the munge key the packages generate: the nodes get the
+  # head node's key from the runtime overlay
+  rm -f /etc/munge/munge.key
+
   # Enable services to start on boot
   systemctl enable munge.service
   systemctl enable slurmd.service
