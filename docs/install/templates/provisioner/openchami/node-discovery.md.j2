@@ -79,3 +79,10 @@ ochami discover static \
 
 `ochami discover static` populates SMD components, EthernetInterfaces (under the correct
 node xname), and group membership from the `nodes.yaml` file in a single step.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment FIXME: cloud-init-server reloads its node list from SMD once a minute, so a -->
+<!-- ohpc_comment node that boots right after discovery gets no cloud-init data. Remove this -->
+<!-- ohpc_comment wait once OpenCHAMI's cloud-init refreshes the list on a lookup miss. -->
+<!-- ohpc_command sleep 70 -->
+<!-- ohpc_end -->
