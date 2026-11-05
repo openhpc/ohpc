@@ -5,6 +5,10 @@ wwctl image exec --build=false {{ baseos }} -- /bin/bash -ex <<- EOF
   # Add Flux client support meta-package
   dnf -y install ohpc-flux-client
 
+  # Remove the munge key the packages generate: the nodes get the
+  # head node's key from the runtime overlay
+  rm -f /etc/munge/munge.key
+
   # Enable services to start on boot
   systemctl enable munge.service
   systemctl enable flux.service
