@@ -11,9 +11,11 @@ sees them as the client sent them.
 Root on the compute nodes gets a privileged source port from the nftables rules
 in the compute image (see [Building the Base OS
 Image](#building-the-base-os-image)). Root on the head node gets one from the
-rules below, so `ochami cloud-init` commands keep working when run as root
-against `${sms_ip}` (the address in the `ochami` configuration). They don't work
-as another user, or through `127.0.0.1`.
+rules below, so `ochami cloud-init` commands keep working when run as root.
+`ochami` connects to `https://${sms_name}:8443`, and the rules match
+`${sms_ip}`, so `${sms_name}` must resolve to `${sms_ip}` and nothing else (the
+base OS setup adds it to `/etc/hosts`); the first step below checks that. They
+don't work as another user, or through `127.0.0.1`.
 
 This is the same trust model as Warewulf's secure mode. It assumes ports below
 1024 are root-only on the head and compute nodes, so both pin
@@ -23,6 +25,11 @@ on the provisioning network is trusted.
 <!-- ohpc_begin -->
 <!-- ohpc_comment Keep ports below 1024 root-only on the head node -->
 ```bash
+sms_resolves=$(getent ahosts "${sms_name}" | awk '{print $1}' | sort -u)
+[[ "${sms_resolves}" == "${sms_ip}" ]] || {
+	echo "ERROR: ${sms_name} resolves to '${sms_resolves}', not ${sms_ip}" >&2
+	exit 1
+}
 echo "net.ipv4.ip_unprivileged_port_start = 1024" \
 	> /etc/sysctl.d/90-ohpc-privports.conf
 sysctl -q -p /etc/sysctl.d/90-ohpc-privports.conf
