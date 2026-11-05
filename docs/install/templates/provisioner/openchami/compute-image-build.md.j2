@@ -204,7 +204,11 @@ production layer installs these nftables rules as the image's
 `/etc/sysconfig/nftables.conf`: they give root's connections to ports 8081 and
 8443 on the head node a source port between 600 and 1023, which other users
 cannot get. `nftables.service` loads them before the network comes up, so they
-are in place before cloud-init fetches the node's configuration.
+are in place before cloud-init fetches the node's configuration. This relies on
+ports below 1024 being root-only, so the layer also pins
+`net.ipv4.ip_unprivileged_port_start` (which covers IPv6 too) at its default of
+1024: a site that lowers it, for example for rootless containers, would let any
+user on a compute node fetch its configuration.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Define the compute nodes' cloud-init source-port rules -->
@@ -226,6 +230,8 @@ table inet ohpc_sport {
 	}
 }
 EOF
+echo "net.ipv4.ip_unprivileged_port_start = 1024" \
+	> /opt/ohpc/admin/images/data/90-ohpc-privports.conf
 ```
 <!-- ohpc_end -->
 
@@ -264,6 +270,8 @@ copyfiles:
     dest: '/etc/sysconfig/slurmd'
   - src: '/data/ohpc-sport.nft'
     dest: '/etc/sysconfig/nftables.conf'
+  - src: '/data/90-ohpc-privports.conf'
+    dest: '/etc/sysctl.d/90-ohpc-privports.conf'
 packages:
   - ohpc-base-compute
   - ohpc-slurm-client
