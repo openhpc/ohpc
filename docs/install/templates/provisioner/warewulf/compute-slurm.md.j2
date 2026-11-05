@@ -2,7 +2,8 @@
 
 Similarly, we can configure Slurm and import the cryptographic key that is
 required by the *munge* authentication library to be available on every host in
-the resource management pool, issue the following:
+the resource management pool. The key goes in the `secrets` runtime overlay,
+which warewulfd serves only to root on the nodes. Issue the following:
 
 <!-- ohpc_begin -->
 ```bash
@@ -14,10 +15,11 @@ wwctl overlay import --parents nodeconfig \
 # Set the value of the slurmctld tag to the $sms_ip for the nodes profile.
 wwctl profile set --yes nodes --tagadd slurmctld="${sms_ip}"
 
-# Configure munge
-wwctl overlay import --parents nodeconfig /etc/munge/munge.key
-wwctl overlay chown nodeconfig /etc/munge/munge.key "$(id -u munge):$(id -g munge)"
-wwctl overlay chown nodeconfig /etc/munge "$(id -u munge):$(id -g munge)"
-wwctl overlay chmod nodeconfig /etc/munge 0700
+# Configure munge: the key in the runtime overlay, readable by munge only
+wwctl overlay import --parents secrets /etc/munge/munge.key
+wwctl overlay chown secrets /etc/munge/munge.key "$(id -u munge):$(id -g munge)"
+wwctl overlay chown secrets /etc/munge "$(id -u munge):$(id -g munge)"
+wwctl overlay chmod secrets /etc/munge 0700
+wwctl overlay chmod secrets /etc/munge/munge.key 0400
 ```
 <!-- ohpc_end -->
