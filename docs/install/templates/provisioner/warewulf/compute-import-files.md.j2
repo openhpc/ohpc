@@ -6,6 +6,13 @@ provisioning server for distribution to managed hosts through a system called
 by default.  Here we add directories and files to the `nodesconfig` overlay that
 is applied to all nodes.
 
+The SSH host keys come in the runtime overlay, which `wwclient` applies on the
+node. With two-stage provisioning the node's initramfs applies it first, before
+systemd starts; when the node boots in one stage from iPXE, `wwclient` is the
+first to apply it. A systemd drop-in has sshd and its host key generation start
+after `wwclient`, so sshd serves the host keys from the head node rather than
+new ones. With two-stage provisioning it delays sshd by a few seconds.
+
 <!-- ohpc_begin -->
 <!-- ohpc_comment Import files -->
 ```bash
@@ -22,5 +29,15 @@ wwctl profile set --yes nodes --tagadd ntpserver="${sms_ip}"
 wwctl overlay import --parents nodeconfig \
  /opt/ohpc/pub/examples/network/NetworkManager-wait-online.service.d/override.conf \
  /etc/systemd/system/NetworkManager-wait-online.service.d/override.conf
+
+# Start sshd after wwclient has applied the runtime overlay (SSH host keys)
+mkdir -p /opt/ohpc/admin/warewulf
+printf '[Unit]\nWants=wwclient.service\nAfter=wwclient.service\n' \
+	> /opt/ohpc/admin/warewulf/wait-wwclient.conf
+for unit in sshd.service sshd-keygen@.service; do
+	wwctl overlay import --parents nodeconfig \
+		/opt/ohpc/admin/warewulf/wait-wwclient.conf \
+		/etc/systemd/system/${unit}.d/wait-wwclient.conf
+done
 ```
 <!-- ohpc_end -->

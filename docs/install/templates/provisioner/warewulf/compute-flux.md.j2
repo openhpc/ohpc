@@ -23,5 +23,10 @@ wwctl overlay chown secrets /etc/munge/munge.key "$(id -u munge):$(id -g munge)"
 wwctl overlay chown secrets /etc/munge "$(id -u munge):$(id -g munge)"
 wwctl overlay chmod secrets /etc/munge 0700
 wwctl overlay chmod secrets /etc/munge/munge.key 0400
+
+# Start munge after wwclient has applied the runtime overlay (munge key)
+wwctl overlay import --parents nodeconfig \
+	/opt/ohpc/admin/warewulf/wait-wwclient.conf \
+	/etc/systemd/system/munge.service.d/wait-wwclient.conf
 ```
 <!-- ohpc_end -->
