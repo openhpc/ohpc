@@ -49,10 +49,13 @@ wwctl profile add nodes --profile default --comment "Nodes profile"
 # configuration files, inherit the timezone settings
 # from the SMS, and use the syncuser overlay.
 # The "secrets" runtime overlay holds files only root may read.
+# Its /etc is made 0755 here: "import --parents" would give it the
+# mode of the first key imported (0500), and the nodes' /etc with it.
 # The SSH host keys move from the system overlays to the runtime
 # overlays ("~" removes an overlay inherited from "default").
 wwctl overlay create nodeconfig
 wwctl overlay create secrets
+wwctl overlay mkdir secrets /etc
 wwctl profile set --yes nodes \
 	--system-overlays nodeconfig,localtime,~ssh.host_keys \
 	--runtime-overlays syncuser,secrets,ssh.host_keys
