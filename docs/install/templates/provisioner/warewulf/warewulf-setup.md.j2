@@ -47,9 +47,11 @@ wwctl profile add nodes --profile default --comment "Nodes profile"
 # Create a new "nodeconfig" overlay to store node
 # configuration files, inherit the timezone settings
 # from the SMS, and use the syncuser overlay.
+# The "secrets" runtime overlay holds files only root may read.
 wwctl overlay create nodeconfig
+wwctl overlay create secrets
 wwctl profile set --yes nodes --system-overlays nodeconfig,localtime \
-	--runtime-overlays syncuser
+	--runtime-overlays syncuser,secrets
 
 # Set default network configuration
 wwctl profile set -y nodes --netname=default --netdev="${eth_provision}"
