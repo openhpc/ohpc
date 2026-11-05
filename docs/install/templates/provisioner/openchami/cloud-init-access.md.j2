@@ -15,6 +15,20 @@ rules below, so `ochami cloud-init` commands keep working when run as root
 against `${sms_ip}` (the address in the `ochami` configuration). They don't work
 as another user, or through `127.0.0.1`.
 
+This is the same trust model as Warewulf's secure mode. It assumes ports below
+1024 are root-only on the head and compute nodes, so both pin
+`net.ipv4.ip_unprivileged_port_start` at 1024, and that root on any other host
+on the provisioning network is trusted.
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Keep ports below 1024 root-only on the head node -->
+```bash
+echo "net.ipv4.ip_unprivileged_port_start = 1024" \
+	> /etc/sysctl.d/90-ohpc-privports.conf
+sysctl -q -p /etc/sysctl.d/90-ohpc-privports.conf
+```
+<!-- ohpc_end -->
+
 First add the access rules to haproxy's `openchami` frontend, next to the
 `/cloud-init` path rule, check the configuration, and reload haproxy in place.
 haproxy's master process re-reads its configuration on `SIGUSR2`. Restarting
