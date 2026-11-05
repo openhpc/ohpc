@@ -9,10 +9,11 @@ warewulfd serves each node a system overlay and a runtime overlay. With
 `secure: true` in `warewulf.conf`, it serves the runtime overlay only to
 requests from privileged source ports (1-1023), which only root can use. The
 system overlay is served to any client, so files that only root on a node may
-read go in runtime overlays. A node reads this setting from its system overlay
-when it boots, so the steps below set it before warewulfd first starts and
-before any node boots. A node booted before the change fetches its runtime
-overlay again only after a reboot.
+read go in runtime overlays: the munge key, and the SSH host keys, which
+Warewulf's `default` profile puts in the system overlay. A node reads this
+setting from its system overlay when it boots, so the steps below set it before
+warewulfd first starts and before any node boots. A node booted before the
+change fetches its runtime overlay again only after a reboot.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Complete basic Warewulf setup for head node -->
@@ -48,10 +49,13 @@ wwctl profile add nodes --profile default --comment "Nodes profile"
 # configuration files, inherit the timezone settings
 # from the SMS, and use the syncuser overlay.
 # The "secrets" runtime overlay holds files only root may read.
+# The SSH host keys move from the system overlays to the runtime
+# overlays ("~" removes an overlay inherited from "default").
 wwctl overlay create nodeconfig
 wwctl overlay create secrets
-wwctl profile set --yes nodes --system-overlays nodeconfig,localtime \
-	--runtime-overlays syncuser,secrets
+wwctl profile set --yes nodes \
+	--system-overlays nodeconfig,localtime,~ssh.host_keys \
+	--runtime-overlays syncuser,secrets,ssh.host_keys
 
 # Set default network configuration
 wwctl profile set -y nodes --netname=default --netdev="${eth_provision}"
