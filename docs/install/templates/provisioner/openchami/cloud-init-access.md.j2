@@ -19,7 +19,9 @@ First add the access rules to haproxy's `openchami` frontend, next to the
 `/cloud-init` path rule, check the configuration, and reload haproxy in place.
 haproxy's master process re-reads its configuration on `SIGUSR2`. Restarting
 `haproxy.service` instead also restarts the other services in
-`openchami.target`.
+`openchami.target`. Right after start-up those services can still be
+restarting, so the check and reload are retried until haproxy's container
+stays up long enough for both.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Limit cloud-init to privileged source ports and its admin API to the head -->
@@ -41,8 +43,14 @@ if ! grep -q 'acl SRC_privport' "${haproxy_cfg}"; then
 fi
 grep -q 'acl SRC_privport' "${haproxy_cfg}" \
 	|| { echo "ERROR: cloud-init access rules not in ${haproxy_cfg}" >&2; exit 1; }
-podman exec haproxy haproxy -c -f /usr/local/etc/haproxy/haproxy.cfg
-podman kill --signal USR2 haproxy
+for ((t=0; ; t++)); do
+	podman exec haproxy haproxy -c -q -f /usr/local/etc/haproxy/haproxy.cfg \
+		&& podman kill --signal USR2 haproxy >/dev/null && break
+	(( t < 12 )) || { echo "haproxy: reload FAILED"; exit 1; }
+	echo "Waiting for haproxy..."
+	sleep 5
+done
+echo "haproxy: reloaded"
 ```
 <!-- ohpc_end -->
 
