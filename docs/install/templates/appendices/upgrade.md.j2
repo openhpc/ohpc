@@ -181,7 +181,11 @@ nodeset compute osimage=${xcat_osimage}
 4. Rebuild image(s)
 
 {% if is_warewulf %}
+The upgrade can recreate a munge key in the image (the munge key reaches the
+nodes in the `secrets` runtime overlay instead), so remove it before rebuilding:
+
 ```bash
+rm -f ${CHROOT}/etc/munge/munge.key
 wwvnfs --chroot $CHROOT
 ```
 {% endif %}
