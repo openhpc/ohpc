@@ -23,7 +23,14 @@ node after every sync, to start them once the key is in place:
 ```bash
 cat > ${xcat_synclist_dir}/ohpc-postsync << 'EOF'
 #!/bin/sh
-systemctl is-active -q munge.service  || systemctl restart munge.service
+# Restart munge when the synced key changed (or munge is down), then slurmd
+key=/etc/munge/munge.key
+sum=$(sha256sum "$key" 2>/dev/null | cut -d' ' -f1)
+if ! systemctl is-active -q munge.service || \
+	[ "$sum" != "$(cat /run/ohpc-munge.sum 2>/dev/null)" ]; then
+	systemctl restart munge.service && echo "$sum" > /run/ohpc-munge.sum
+	systemctl restart slurmd.service
+fi
 systemctl is-active -q slurmd.service || systemctl restart slurmd.service
 EOF
 chmod 755 ${xcat_synclist_dir}/ohpc-postsync
