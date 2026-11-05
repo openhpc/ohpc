@@ -3,7 +3,10 @@
 xCAT includes functionality to synchronize files from the head node to managed
 hosts via *synclists*. This is one way to distribute user credentials to compute
 nodes.
-{%- if is_xcat_stateless %} The synclist is applied when the compute image
+{%- if is_xcat_stateless %} The compute image itself carries none of these
+files: the packed image is served over HTTP to any host on the provisioning
+network, so the account database and the munge key must not be in it. Each
+node instead receives them from the head node over root ssh every time it
 boots.{% else %} The default `syncfiles` postscript applies the synclist during
 the install, and changes can be pushed on demand afterwards with
 `updatenode`.{% endif %} Enable the synclist feature and register credential
