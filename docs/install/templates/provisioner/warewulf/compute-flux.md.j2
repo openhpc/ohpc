@@ -4,18 +4,22 @@ Similarly, the Flux brokers on the compute nodes need the same system instance
 configuration, CURVE certificate and IMP configuration as the *head node*, as
 well as the cryptographic key that is required by the *munge* authentication
 library to be available on every host in the resource management pool. The
-munge key goes in the `secrets` runtime overlay, which warewulfd serves only to
-root on the nodes. To import these, issue the following:
+CURVE certificate holds the system instance's secret key, so it goes with the
+munge key in the `secrets` runtime overlay, which warewulfd serves only to root
+on the nodes. A systemd drop-in has munge and the Flux broker start after
+`wwclient` has applied it. To import these, issue the following:
 
 <!-- ohpc_begin -->
 ```bash
-# Configure the Flux system instance, its CURVE certificate and the IMP
+# Configure the Flux system instance and the IMP
 wwctl overlay import --parents nodeconfig /etc/flux/system/conf.d/system.toml
-wwctl overlay import --parents nodeconfig /etc/flux/system/curve.cert
-wwctl overlay chown nodeconfig /etc/flux/system/curve.cert \
-	"$(id -u flux):$(id -g flux)"
-wwctl overlay chmod nodeconfig /etc/flux/system/curve.cert 0400
 wwctl overlay import --parents nodeconfig /etc/flux/imp/conf.d/imp.toml
+
+# The CURVE certificate in the runtime overlay, readable by flux only
+wwctl overlay import --parents secrets /etc/flux/system/curve.cert
+wwctl overlay chown secrets /etc/flux/system/curve.cert \
+	"$(id -u flux):$(id -g flux)"
+wwctl overlay chmod secrets /etc/flux/system/curve.cert 0400
 
 # Configure munge: the key in the runtime overlay, readable by munge only
 wwctl overlay import --parents secrets /etc/munge/munge.key
@@ -24,9 +28,12 @@ wwctl overlay chown secrets /etc/munge "$(id -u munge):$(id -g munge)"
 wwctl overlay chmod secrets /etc/munge 0700
 wwctl overlay chmod secrets /etc/munge/munge.key 0400
 
-# Start munge after wwclient has applied the runtime overlay (munge key)
-wwctl overlay import --parents nodeconfig \
-	/opt/ohpc/admin/warewulf/wait-wwclient.conf \
-	/etc/systemd/system/munge.service.d/wait-wwclient.conf
+# Start munge and flux after wwclient has applied the runtime overlay
+# (munge key, CURVE certificate)
+for unit in munge.service flux.service; do
+	wwctl overlay import --parents nodeconfig \
+		/opt/ohpc/admin/warewulf/wait-wwclient.conf \
+		/etc/systemd/system/${unit}.d/wait-wwclient.conf
+done
 ```
 <!-- ohpc_end -->
