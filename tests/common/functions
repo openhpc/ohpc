@@ -401,6 +401,15 @@ run_serial_binary() {
 # Run MPI binary through resource manager
 run_mpi_binary() {
 
+	# The library test Makefiles export FI_TCP_IFACE=lo for the MPI programs
+	# they run on the head node (see their AM_TESTS_ENVIRONMENT). The job
+	# submission below forwards the environment to the compute nodes, where
+	# loopback cannot carry an MPI job, so remove exactly that value. A
+	# site's own FI_TCP_IFACE setting passes through unchanged.
+	if [ "${FI_TCP_IFACE}" = "lo" ]; then
+		unset FI_TCP_IFACE
+	fi
+
 	# Parse optional arguments
 	input_file=""
 	output_file=""
