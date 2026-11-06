@@ -59,6 +59,9 @@ same entry. It asks the server's container directly rather than through
 haproxy, because haproxy replaces `X-Forwarded-For` with the address the
 request came from, so through it the server would look up the head node
 instead. The node's own request through haproxy is tested when it boots.
+The container's address exists only on the head node, so the check tells
+curl to ignore an `http_proxy` set in the environment; a proxy cannot reach
+the podman network and the request would time out there.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Verify the cloud-init server resolves each compute node -->
@@ -68,7 +71,7 @@ cloud_init_ip=$(podman inspect --format \
 	cloud-init-server)
 for ((i=0; i<num_computes; i++)); do
 	for ((t=0; ; t++)) ; do
-		curl -fsS -m 5 -o /dev/null \
+		curl -fsS -m 5 -o /dev/null --noproxy '*' \
 			-H "X-Forwarded-For: ${c_ip[$i]}" \
 			"http://${cloud_init_ip}:27777/meta-data" && break
 		(( t < 18 )) || {
