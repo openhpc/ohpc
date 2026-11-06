@@ -1,3 +1,10 @@
+# The tests below run MPI programs on the head node, where MPICH can pick a
+# container bridge interface (podman0, ...) as its default NIC and fail. The
+# loopback interface exists on every host and is enough for a single process.
+# run_mpi_binary removes this value before it submits a job, so the
+# rm_execution jobs on the compute nodes are not pinned to it.
+AM_TESTS_ENVIRONMENT = FI_TCP_IFACE=lo; export FI_TCP_IFACE;
+
 
 LDADD                   = ${LIBS}
 
