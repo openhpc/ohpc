@@ -1,0 +1,29 @@
+## MPI on the Head Node
+
+The {{ provisioner_name }} services run in podman networks, so the head node
+carries their bridge interfaces (`podman0`, `podman1`, ...) next to its real
+ones. libfabric's *tcp* provider enumerates every interface that is up, and
+MPICH can pick one of the bridges as its default NIC. An MPI program started
+on the head node then fails with an error such as:
+
+```
+OFI call tsenddata failed (default nic=podman3: No such file or directory)
+```
+
+Jobs run through the resource manager are not affected, because the compute
+nodes carry no podman interfaces. Running MPI programs on the head node
+itself is unusual; the OpenHPC test suite does it, and pins libfabric to the
+loopback interface for exactly those tests. For an interactive MPI run on
+the head node, pin libfabric's *tcp* provider to an interface for that
+session, for example:
+
+```bash
+export FI_TCP_IFACE=${sms_eth_internal}
+```
+
+::: {.tip}
+**Note:** job launchers forward the environment, so `FI_TCP_IFACE` set in a
+login shell also reaches the jobs submitted from it. Do not set it
+permanently, for example in `/etc/profile.d`, unless the compute nodes'
+internal interface has the same name as the head node's.
+:::
