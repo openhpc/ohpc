@@ -90,6 +90,9 @@ Requires:  numactl
 Requires:  python3
 Requires:  %{python_prefix}
 Requires:  attr
+# R's Sys.which() runs /usr/bin/which on every utils package load. R reaches
+# the compute nodes over NFS, so its own package dependencies do not.
+Requires:  which
 %if 0%{?rhel} || 0%{?openEuler}
 Requires:  hostname
 Requires:  yaml-cpp
