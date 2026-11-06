@@ -13,11 +13,13 @@ own) take the same UIDs and GIDs as the head. Without this, the boot-time syncli
 the head's credentials over image-local UIDs, leaving munge's on-disk state
 orphaned so that the service fails to start.
 
-`genimage` builds the image with `gpgcheck=0` for every repository (base and
-extra alike), so the OpenHPC packages -- though signed -- are not
-signature-verified at build time, consistent with how xCAT builds the base
-image. Sites requiring verification should install OpenHPC on the booted nodes
-instead (see the stateful recipe) or patch xCAT's `genimage`.
+`genimage` does not check package signatures by default, for the base OS and
+the OpenHPC repositories alike. xCAT 2.19.2 and later can verify them: import
+the signing key of every repository the image uses on the head node (`genimage`
+trusts the keys that `rpm -q gpg-pubkey` lists), then set `gpgcheck=yes` on the
+osimage with `chdef -t osimage ${xcat_osimage} gpgcheck=yes` before running
+`genimage`. An unsigned package, or one signed by a key that is not imported,
+makes `genimage` fail.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Register OpenHPC components as otherpkgs on the osimage -->
