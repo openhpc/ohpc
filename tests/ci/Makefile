@@ -371,7 +371,7 @@ shfmt-lint:
 
 clang-format-lint:
 	@echo "Running 'clang-format' on selected source code files"
-	clang-format --dry-run --Werror \
+	clang-format --dry-run --Werror --style=file:.clang-format \
 		../libs/boost-mpi/tests/mpi/test/*.cpp \
 		../libs/boost-mpi/tests/mpi/test/*.hpp \
 		../libs/netcdf/tests/*.cpp \
