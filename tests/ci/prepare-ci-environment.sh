@@ -142,7 +142,7 @@ print_env() {
 		EPEL_RELEASE CRB_REPO \
 		OBS_SERVER PROJECT REPOSITORY_URL \
 		FACTORY_VERSION FACTORY_REPOSITORY FACTORY_REPOSITORY_DESTINATION \
-		OHPC_RELEASE; do
+		COPR_REPOSITORY OHPC_RELEASE; do
 		echo "${var}=${!var-}"
 	done
 	group_end
@@ -203,7 +203,16 @@ fi
 group_start "Install common packages"
 loop_command "${PKG_MANAGER}" "${YES}" install "${COMMON_PKGS}"
 group_end
-if [ "${PRE_RELEASE}" != "yes" ]; then
+
+# OpenHPC publishes neither a release RPM nor an OBS Factory repository for EL
+# on ppc64le. The copr project adrian/ohpc-ppc64le contains ppc64le builds of
+# the OpenHPC packages, and its repository replaces both on ppc64le.
+COPR_REPOSITORY=""
+if [ "${PKG_MANAGER}" = "dnf" ] && [ "${ID}" != "openEuler" ] && [ "${UNAME_M}" = "ppc64le" ]; then
+	COPR_REPOSITORY="https://copr.fedorainfracloud.org/coprs/adrian/ohpc-ppc64le/repo/rhel+epel-10/adrian-ohpc-ppc64le-rhel+epel-10.repo"
+fi
+
+if [ "${PRE_RELEASE}" != "yes" ] && [ -z "${COPR_REPOSITORY}" ]; then
 	if [ "${PKG_MANAGER}" = "dnf" ]; then
 		# If there is a release, this is the place to install the corresponding
 		# release RPM. As long as there is no release RPM only the OBS repository
@@ -245,7 +254,11 @@ dnf_rhel() {
 	group_start "Enable the ${CRB_REPO} repository"
 	loop_command "${PKG_MANAGER}" config-manager --set-enabled "${CRB_REPO}"
 	group_end
-	if [ "${FACTORY_VERSION}" != "" ]; then
+	if [ -n "${COPR_REPOSITORY}" ]; then
+		group_start "Add the ppc64le copr repository"
+		loop_command wget "${COPR_REPOSITORY}" -O /etc/yum.repos.d/ohpc-ppc64le.repo
+		group_end
+	elif [ "${FACTORY_VERSION}" != "" ]; then
 		group_start "Add the OBS Factory repository"
 		loop_command wget "${FACTORY_REPOSITORY}" -O "${FACTORY_REPOSITORY_DESTINATION}"
 		group_end

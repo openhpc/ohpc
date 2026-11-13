@@ -71,6 +71,7 @@ This directory contains scripts, tools, and configurations used for OpenHPC's co
 - Multi-distribution support (RHEL/Rocky/AlmaLinux, SUSE/openSUSE, openEuler)
 - Automatic package manager detection (dnf vs zypper)
 - OpenHPC repository configuration
+- Uses the `adrian/ohpc-ppc64le` copr repository on EL ppc64le, where OpenHPC publishes no packages
 - Intel OneAPI toolkit integration
 - Environment information reporting for debugging
 
