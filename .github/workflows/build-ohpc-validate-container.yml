@@ -11,11 +11,18 @@ env:
 
 jobs:
   build:
+    # The IBM ppc64le runners only run jobs for openhpc/ohpc. In a fork, the
+    # ppc64le job waits for a runner until GitHub cancels it after 24 hours.
+    # A fork cannot push to ghcr.io/openhpc either, so the whole job is
+    # skipped there.
+    if: github.repository == 'openhpc/ohpc'
     runs-on: ${{ matrix.runs-on }}
     permissions:
       contents: read
       packages: write
     strategy:
+      # A failed ppc64le build must not cancel the x86_64 and aarch64 builds.
+      fail-fast: false
       matrix:
         distro: [ almalinux, openeuler ]
         arch: [ x86_64, aarch64 ]
@@ -24,9 +31,15 @@ jobs:
             runs-on: ubuntu-24.04
           - arch: aarch64
             runs-on: ubuntu-24.04-arm
+          # The ppc64le packages come from a copr project that only contains
+          # EL packages, so openEuler is not built on ppc64le.
+          - distro: almalinux
+            arch: ppc64le
+            runs-on: ubuntu-24.04-ppc64le-p10
     outputs:
       almalinux-digest-x86_64: ${{ steps.export.outputs.almalinux-digest-x86_64 }}
       almalinux-digest-aarch64: ${{ steps.export.outputs.almalinux-digest-aarch64 }}
+      almalinux-digest-ppc64le: ${{ steps.export.outputs.almalinux-digest-ppc64le }}
       openeuler-digest-x86_64: ${{ steps.export.outputs.openeuler-digest-x86_64 }}
       openeuler-digest-aarch64: ${{ steps.export.outputs.openeuler-digest-aarch64 }}
     steps:
@@ -71,6 +84,9 @@ jobs:
   publish:
     runs-on: ubuntu-24.04
     needs: build
+    # The ppc64le runners are an external service. A failed ppc64le build
+    # must not stop the update of the x86_64 and aarch64 images.
+    if: ${{ !cancelled() && github.repository == 'openhpc/ohpc' }}
     permissions:
       contents: read
       packages: write
@@ -89,11 +105,24 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create and push manifest
+        env:
+          DISTRO: ${{ matrix.distro }}
+          IMAGE: ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}
+          DIGEST_X86_64: ${{ needs.build.outputs[format('{0}-digest-x86_64', matrix.distro)] }}
+          DIGEST_AARCH64: ${{ needs.build.outputs[format('{0}-digest-aarch64', matrix.distro)] }}
+          DIGEST_PPC64LE: ${{ needs.build.outputs[format('{0}-digest-ppc64le', matrix.distro)] }}
         run: |
-          docker buildx imagetools create \
-            --tag ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}:latest \
-            ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}@${{ needs.build.outputs[format('{0}-digest-x86_64', matrix.distro)] }} \
-            ${{ env.REGISTRY }}/openhpc/ohpc-validate-${{ matrix.distro }}@${{ needs.build.outputs[format('{0}-digest-aarch64', matrix.distro)] }}
+          if [ -z "${DIGEST_X86_64}" ] || [ -z "${DIGEST_AARCH64}" ]; then
+            echo "::error::The x86_64 or aarch64 build failed, ${IMAGE}:latest is not updated"
+            exit 1
+          fi
+          sources=("${IMAGE}@${DIGEST_X86_64}" "${IMAGE}@${DIGEST_AARCH64}")
+          if [ -n "${DIGEST_PPC64LE}" ]; then
+            sources+=("${IMAGE}@${DIGEST_PPC64LE}")
+          elif [ "${DISTRO}" = "almalinux" ]; then
+            echo "::warning::The ppc64le build failed, ${IMAGE}:latest contains no ppc64le image"
+          fi
+          docker buildx imagetools create --tag "${IMAGE}:latest" "${sources[@]}"
 
       - name: Output image details
         run: |
