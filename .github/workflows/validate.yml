@@ -105,7 +105,6 @@ jobs:
         if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
         # The Intel packages only build on x86_64. cuda-devel only builds on
@@ -225,7 +224,6 @@ jobs:
         if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
         # The Intel packages only build on x86_64. cuda-devel only builds on
@@ -414,7 +412,6 @@ jobs:
         if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
         if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
@@ -494,7 +491,6 @@ jobs:
         if [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ]; then
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
-          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
         if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
