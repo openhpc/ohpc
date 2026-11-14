@@ -19,6 +19,12 @@ permissions:
   contents: read
   pull-requests: read
 
+concurrency:
+  # A new push to a pull request cancels the run for the previous push.
+  # Pushes to 4.x and manual runs get a unique group and are never cancelled.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 env:
   SKIP_CI_SPECS: |
     components/fs/lustre-client/SPECS/lustre.spec
