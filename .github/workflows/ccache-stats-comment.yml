@@ -15,7 +15,11 @@ jobs:
   comment:
     name: Post CCache Stats
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.event == 'pull_request'
+    # A cancelled Validate run still uploads the ccache statistics it has so
+    # far. Those statistics are incomplete, so they are not posted.
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion != 'cancelled'
 
     steps:
     - name: Download artifacts
