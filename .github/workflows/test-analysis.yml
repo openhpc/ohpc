@@ -12,7 +12,11 @@ jobs:
   test-results:
     name: Test Results
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion != 'skipped'
+    # A cancelled Validate run still uploads the test results it has so far.
+    # Partial results must not appear as the test results of a commit.
+    if: >-
+      github.event.workflow_run.conclusion != 'skipped' &&
+      github.event.workflow_run.conclusion != 'cancelled'
 
     permissions:
       checks: write
