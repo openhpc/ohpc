@@ -264,6 +264,35 @@ add_versatushpc_repository() {
 	EOF
 }
 
+# The copr builds against RHEL 10.3. The CI container uses AlmaLinux 10, which
+# is at 10.2 until AlmaLinux 10.3 is released. Open MPI 5 and MPICH from the
+# copr require libfabric.so.1(FABRIC_1.9). libfabric 2.5.1 from 10.3 provides
+# that symbol version, and libfabric 2.3.1 from 10.2 does not. The AlmaLinux
+# 10.3 beta repositories contain libfabric 2.5.1, and includepkgs limits them
+# to the libfabric packages.
+#
+# These repositories are a temporary workaround. Remove them once AlmaLinux
+# 10.3 is released.
+add_almalinux_beta_libfabric_repositories() {
+	cat >/etc/yum.repos.d/almalinux-10.3-beta-libfabric.repo <<-'EOF'
+		[almalinux-10.3-beta-appstream]
+		name=AlmaLinux 10.3 beta - AppStream (libfabric only)
+		baseurl=https://vault.almalinux.org/10.3-beta/AppStream/$basearch/os/
+		enabled=1
+		gpgcheck=1
+		gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-10
+		includepkgs=libfabric*
+
+		[almalinux-10.3-beta-crb]
+		name=AlmaLinux 10.3 beta - CRB (libfabric only)
+		baseurl=https://vault.almalinux.org/10.3-beta/CRB/$basearch/os/
+		enabled=1
+		gpgcheck=1
+		gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-10
+		includepkgs=libfabric*
+	EOF
+}
+
 dnf_rhel() {
 	# Enable keepcache for dnf if OneAPI is enabled to cache large Intel packages
 	if [ -n "${ENABLE_ONEAPI}" ]; then
@@ -281,6 +310,9 @@ dnf_rhel() {
 		group_end
 		group_start "Add the VersatusHPC updates repository (temporary)"
 		add_versatushpc_repository
+		group_end
+		group_start "Add libfabric from the AlmaLinux 10.3 beta (temporary)"
+		add_almalinux_beta_libfabric_repositories
 		group_end
 	elif [ "${FACTORY_VERSION}" != "" ]; then
 		group_start "Add the OBS Factory repository"

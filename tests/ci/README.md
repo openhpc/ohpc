@@ -71,7 +71,7 @@ This directory contains scripts, tools, and configurations used for OpenHPC's co
 - Multi-distribution support (RHEL/Rocky/AlmaLinux, SUSE/openSUSE, openEuler)
 - Automatic package manager detection (dnf vs zypper)
 - OpenHPC repository configuration
-- Uses the `adrian/ohpc-ppc64le` copr repository on EL ppc64le, where OpenHPC publishes no packages, and the VersatusHPC updates repository at a lower priority for the packages that the copr does not contain
+- On EL ppc64le, where OpenHPC publishes no packages, uses the `adrian/ohpc-ppc64le` copr repository, the VersatusHPC updates repository at a lower priority for the packages that the copr does not contain, and libfabric from the AlmaLinux 10.3 beta repositories
 - Intel OneAPI toolkit integration
 - Environment information reporting for debugging
 
