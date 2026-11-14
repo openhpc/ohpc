@@ -243,6 +243,27 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/${PROJECT}${FACTORY_VERSION}:Factory.repo"
 fi
 
+# The copr builds use packages from the VersatusHPC updates repository that the
+# copr does not contain itself, for example pmix-ohpc for slurm-ohpc. dnf
+# ignores a package in a repository with a higher priority value when a
+# repository with a lower value contains a package of the same name. The
+# default priority is 99, so with 150 the VersatusHPC repository only adds
+# packages that no other repository contains.
+#
+# This repository is a temporary workaround. Remove it once the copr contains
+# pmix-ohpc and every other package that its builds take from VersatusHPC.
+add_versatushpc_repository() {
+	cat >/etc/yum.repos.d/versatushpc-openhpc-updates.repo <<-EOF
+		[versatushpc-openhpc-updates]
+		name=VersatusHPC - OpenHPC 4.x updates for ppc64le (EL10)
+		baseurl=https://repos.versatushpc.com.br/openhpc/versatushpc-4/updates/EL_10/
+		enabled=1
+		gpgcheck=1
+		gpgkey=https://repos.versatushpc.com.br/openhpc/versatushpc-4/RPM-GPG-KEY-VersatusHPC
+		priority=150
+	EOF
+}
+
 dnf_rhel() {
 	# Enable keepcache for dnf if OneAPI is enabled to cache large Intel packages
 	if [ -n "${ENABLE_ONEAPI}" ]; then
@@ -257,6 +278,9 @@ dnf_rhel() {
 	if [ -n "${COPR_REPOSITORY}" ]; then
 		group_start "Add the ppc64le copr repository"
 		loop_command wget "${COPR_REPOSITORY}" -O /etc/yum.repos.d/ohpc-ppc64le.repo
+		group_end
+		group_start "Add the VersatusHPC updates repository (temporary)"
+		add_versatushpc_repository
 		group_end
 	elif [ "${FACTORY_VERSION}" != "" ]; then
 		group_start "Add the OBS Factory repository"
