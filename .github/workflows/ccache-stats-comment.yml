@@ -144,6 +144,14 @@ jobs:
           echo "| 💪 aarch64 / gnu16 | $(format_hit_rate "$rhel_arm_rate") | $(format_hit_rate "$euler_arm_rate") |" >> artifacts/comment.md
         fi
 
+        # ppc64le/gnu16
+        rhel_ppc_rate=$(get_value "artifacts/ccache-stats-rhel-ppc64le-gnu16-slurm/data.txt" "hit_rate")
+        if [ "$has_leap" = true ]; then
+          echo "| ⚡ ppc64le / gnu16 | $(format_hit_rate "$rhel_ppc_rate") | - | - |" >> artifacts/comment.md
+        else
+          echo "| ⚡ ppc64le / gnu16 | $(format_hit_rate "$rhel_ppc_rate") | - |" >> artifacts/comment.md
+        fi
+
         echo "" >> artifacts/comment.md
 
         # Add collapsible raw output section
