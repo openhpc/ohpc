@@ -111,7 +111,8 @@ install_packages() {
 		"${rms_pkgs[@]}"
 	)
 
-	if [ "$(uname -m)" != "aarch64" ]; then
+	# OpenHPC only provides mvapich2 on x86_64.
+	if [ "$(uname -m)" = "x86_64" ]; then
 		install_pkgs+=(mvapich2-"${COMPILER_FAMILY}"-ohpc)
 	fi
 
