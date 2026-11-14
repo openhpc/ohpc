@@ -490,7 +490,8 @@ for spec in specfiles:
             families = [args.mpi_family]
 
         for family in families:
-            if family == "mvapich2" and os.uname().machine == "aarch64":
+            # OpenHPC only provides mvapich2 on x86_64.
+            if family == "mvapich2" and os.uname().machine != "x86_64":
                 continue
             label = f"{just_spec} ({args.compiler_family}, {family})"
             with log_group(f"Building {label}"):
