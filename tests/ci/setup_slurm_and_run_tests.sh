@@ -71,7 +71,8 @@ INSTALL_PKGS=(
 	slurm-ohpc
 )
 
-if [ "$(uname -m)" != "aarch64" ]; then
+# OpenHPC only provides mvapich2 on x86_64.
+if [ "$(uname -m)" = "x86_64" ]; then
 	INSTALL_PKGS+=(mvapich2-"${COMPILER_FAMILY}"-ohpc)
 fi
 
