@@ -61,12 +61,12 @@ jobs:
             compiler: intel
     runs-on: ${{ matrix.os }}
     name: Build on RHEL (${{ matrix.arch }}/${{ matrix.compiler }})
-    container:
+    container: &rhel-build-container
       image: ghcr.io/openhpc/ohpc-validate-almalinux:latest
       volumes:
         - /usr:/host/usr
         - /opt:/host/opt
-    steps:
+    steps: &rhel-build-steps
     - name: Delete unneeded tools on the host
       # Needed to have enough space to install the Intel compiler
       run: |
@@ -108,6 +108,13 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
+        # The Intel packages only build on x86_64. cuda-devel only builds on
+        # x86_64 and aarch64.
+        if [ "${{ matrix.arch }}" == "ppc64le" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/dev-tools/cuda-devel/SPECS/cuda-devel.spec"
+        fi
         if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
         tests/ci/run_build.py ohpc ${{ steps.files.outputs.added_modified }} --compiler-family ${{ matrix.compiler }}
         touch /tmp/empty
@@ -118,6 +125,7 @@ jobs:
         path: |
           /home/ohpc/rpmbuild/RPMS/aarch64/*rpm
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
+          /home/ohpc/rpmbuild/RPMS/ppc64le/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
     - name: Save oneAPI package cache
@@ -157,18 +165,18 @@ jobs:
             compiler: intel
     runs-on: ${{ matrix.os }}
     name: Test on RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }}${{ matrix.name_suffix }})
-    env:
+    env: &rhel-test-env
       MODULES_PACKAGE: ${{ matrix.modules }}
       JOB_SKIP_CI_SPECS: |
         components/perf-tools/likwid/SPECS/likwid.spec
-    container:
+    container: &rhel-test-container
       image: ghcr.io/openhpc/ohpc-validate-almalinux:latest
       options: --privileged --security-opt seccomp=unconfined --security-opt apparmor=unconfined
       volumes:
         - /usr:/host/usr
         - /opt:/host/opt
     needs: build_on_rhel
-    steps:
+    steps: &rhel-test-steps
     - name: Delete unneeded tools on the host
       # Needed to have enough space to install the Intel compiler
       run: |
@@ -220,6 +228,13 @@ jobs:
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/geopm/SPECS/geopm.spec"
           export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/perf-tools/likwid/SPECS/likwid.spec"
         fi
+        # The Intel packages only build on x86_64. cuda-devel only builds on
+        # x86_64 and aarch64.
+        if [ "${{ matrix.arch }}" == "ppc64le" ]; then
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/compiler-families/intel-compilers-devel/SPECS/intel-compilers-devel.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/mpi-families/impi-devel/SPECS/intel-mpi.spec"
+          export SKIP_CI_SPECS="${SKIP_CI_SPECS} components/dev-tools/cuda-devel/SPECS/cuda-devel.spec"
+        fi
         if [ -e /etc/profile.d/modules.sh ]; then . /etc/profile.d/modules.sh; else . /etc/profile.d/lmod.sh; fi
         chown ohpc -R tests
         if [ "${{ matrix.rms }}" == "flux" ]; then
@@ -258,6 +273,40 @@ jobs:
       with:
         job-name: "RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }}${{ matrix.name_suffix }})"
         artifact-suffix: rhel-${{ matrix.arch }}-${{ matrix.compiler }}-${{ matrix.rms }}${{ matrix.artifact_suffix }}
+
+  # The IBM ppc64le runners only run jobs for openhpc/ohpc, which includes
+  # pull requests from forks. In a workflow run inside a fork, a ppc64le job
+  # waits for a runner until GitHub cancels it after 24 hours. A job-level
+  # condition cannot read the matrix, so ppc64le runs in separate jobs. These
+  # jobs reuse the container and steps of build_on_rhel and test_on_rhel.
+  build_on_rhel_ppc64le:
+    if: github.repository == 'openhpc/ohpc'
+    strategy:
+      matrix:
+        os: [ubuntu-24.04-ppc64le-p10]
+        arch: [ppc64le]
+        compiler: [gnu16]
+    runs-on: ${{ matrix.os }}
+    name: Build on RHEL (${{ matrix.arch }}/${{ matrix.compiler }})
+    container: *rhel-build-container
+    steps: *rhel-build-steps
+
+  test_on_rhel_ppc64le:
+    if: github.repository == 'openhpc/ohpc'
+    strategy:
+      matrix:
+        os: [ubuntu-24.04-ppc64le-p10]
+        arch: [ppc64le]
+        compiler: [gnu16]
+        # The ppc64le copr contains no Flux packages.
+        rms: [slurm]
+        modules: [lmod-ohpc]
+    runs-on: ${{ matrix.os }}
+    name: Test on RHEL (${{ matrix.arch }}/${{ matrix.compiler }}/${{ matrix.rms }})
+    env: *rhel-test-env
+    container: *rhel-test-container
+    needs: build_on_rhel_ppc64le
+    steps: *rhel-test-steps
 
   integration_test:
     strategy:
