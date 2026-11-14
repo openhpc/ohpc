@@ -16,6 +16,7 @@ jobs:
     # A fork cannot push to ghcr.io/openhpc either, so the whole job is
     # skipped there.
     if: github.repository == 'openhpc/ohpc'
+    name: build (${{ matrix.distro }}, ${{ matrix.arch }})
     runs-on: ${{ matrix.runs-on }}
     permissions:
       contents: read
