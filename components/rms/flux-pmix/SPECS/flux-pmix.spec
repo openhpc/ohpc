@@ -7,7 +7,6 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-# OpenHPC:check-updates:version-pin 0.7.1
 
 %include %{_sourcedir}/OHPC_macros
 %global pname flux-pmix

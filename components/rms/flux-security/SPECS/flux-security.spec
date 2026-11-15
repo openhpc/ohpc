@@ -7,7 +7,6 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-# OpenHPC:check-updates:version-pin 0.15.0
 
 %include %{_sourcedir}/OHPC_macros
 %global pname flux-security
