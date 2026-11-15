@@ -441,7 +441,7 @@ jobs:
   test_on_leap:
     strategy:
       matrix:
-        compiler: [gnu15]
+        compiler: [gnu16]
         os: [ubuntu-latest, ubuntu-24.04-arm]
         include:
           - os: ubuntu-latest
