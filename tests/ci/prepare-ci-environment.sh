@@ -5,7 +5,7 @@
 set -x
 set -e
 
-FACTORY_VERSION=3.5
+FACTORY_VERSION=3.7
 ENABLE_ONEAPI=""
 if [ $# -eq 1 ]; then
 	if [ "${1}" = "intel" ]; then
