@@ -5,6 +5,9 @@ provisioner_name: "OpenCHAMI"
 is_openchami: true
 
 # OpenCHAMI component versions
+# OpenHPC:check-updates:source https://github.com/OpenCHAMI/release/releases
 openchami_version: "0.1.7"
+# OpenHPC:check-updates:source https://github.com/OpenCHAMI/ochami/releases
 ochami_version: "0.7.2"
+# OpenHPC:check-updates:source https://github.com/seaweedfs/seaweedfs/releases
 seaweedfs_version: "4.50"

@@ -1,7 +1,9 @@
 # check_for_package_updates.py
 
 Check for newer upstream releases of OpenHPC packages by analyzing RPM
-spec files under `components/`.
+spec files under `components/`. The script also checks the component
+versions that the install documentation sets in `docs/install/config/`,
+see [Documentation versions](#documentation-versions).
 
 The script extracts the package name, version, and source URL from each
 spec file using the
@@ -26,6 +28,7 @@ match wins; if none match, [release-monitoring.org](https://release-monitoring.o
 | PnetCDF download page | pnetcdf |
 | Open MPI GitHub tags | openmpi |
 | GNU FTP mirror | gcc, gmp, mpc, mpfr |
+| Lenovo HPC yum repository | Confluent repository release in the documentation |
 | release-monitoring.org | cmake, gsl, valgrind, mpich |
 
 ## Requirements
@@ -53,13 +56,13 @@ check_for_package_updates.py [-h] [-v] [-p] [-o {table,json,markdown}]
 
 | Option | Description |
 |--------|-------------|
-| `package` | Check only packages whose spec file path contains this string (case-insensitive) |
+| `package` | Check only packages whose spec file path contains this string (case-insensitive), and documentation versions whose config file path or `docs:<key>` name contains it |
 | `-v`, `--verbose` | Enable verbose output (shows which upstream source is queried) |
 | `-p`, `--prereleases` | Include pre-release versions in checks |
 | `-o`, `--output` | Output format: `table` (default), `json`, or `markdown` |
 | `-t`, `--token` | GitHub API token (or set `GITHUB_TOKEN` env var) |
 | `--no-glow` | Disable [glow](https://github.com/charmbracelet/glow) rendering for markdown output |
-| `--update` | Automatically update spec files with the newer detected version |
+| `--update` | Automatically update spec files with the newer detected version. Documentation versions are not updated |
 
 ### Exit codes
 
@@ -214,9 +217,53 @@ python3 misc/check_for_package_updates.py -t ghp_...
 | `UP_TO_DATE` | Current version matches the latest upstream release |
 | `UPDATE_AVAILABLE` | A newer version is available upstream |
 | `AHEAD` | The packaged version is newer than the latest upstream release |
+| `SKIPPED` | A `skip` tag excludes the package or documentation version |
 | `ERROR` | Failed to query the upstream source |
 | `RATE_LIMITED` | GitHub API rate limit was exceeded |
 | `NOT_FOUND` | No upstream source could be identified |
+
+## Spec file tags
+
+Comment lines in a spec file change how the script checks the package:
+
+| Tag | Effect |
+|-----|--------|
+| `# OpenHPC:check-updates:skip [reason]` | The package is reported as `SKIPPED` with the reason |
+| `# OpenHPC:check-updates:version-pin <prefix>` | Only versions that equal `<prefix>` or start with `<prefix>.` count, for example `26.05` for Slurm 26.05.x |
+
+## Documentation versions
+
+The install documentation takes some component versions from keys in
+`docs/install/config/`, for example `ochami_version` in
+`provisioner/openchami.yaml`. The script checks a key when the comment
+lines directly above it name the upstream source:
+
+```yaml
+# OpenHPC:check-updates:source https://github.com/OpenCHAMI/ochami/releases
+ochami_version: "0.7.2"
+```
+
+The source URL is checked against the same upstream sources as the
+`Source0` URL of a spec file, except release-monitoring.org, which finds
+projects by package name. The `skip` and `version-pin` tags work as in
+spec files. A blank line between the tags and the key discards the
+tags.
+
+The results appear as `docs:<key>`:
+
+```bash
+python3 misc/check_for_package_updates.py docs:ochami
+```
+
+```
+PACKAGE                             CURRENT         LATEST                    STATUS               REPOSITORY
+----------------------------------- --------------- ------------------------- -------------------- --------------------------------------------------
+docs:ochami_version                 0.7.2           v0.11.0                   UPDATE_AVAILABLE     OpenCHAMI/ochami
+```
+
+`--update` does not change documentation versions. A new provisioner
+version can change the commands that the documentation shows, so change
+the key by hand and check the generated recipe.
 
 ## Adding upstream source mappings
 
