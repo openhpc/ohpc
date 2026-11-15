@@ -54,6 +54,7 @@ RELEASE_MONITORING_MAP = {
     "gsl": "id:1267",
     "cmake": "id:306",
     "environment-modules": "id:700",
+    "golang": "id:1227",
 }
 
 
