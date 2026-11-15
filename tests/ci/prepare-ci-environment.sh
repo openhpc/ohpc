@@ -24,7 +24,7 @@ usage() {
 	echo " MODULES_PACKAGE Module tool package to install (default: lmod-ohpc)"
 }
 
-FACTORY_VERSION=4.2
+FACTORY_VERSION=4.3
 MODULES_PACKAGE="${MODULES_PACKAGE:-lmod-ohpc}"
 ENABLE_ONEAPI=""
 PRE_RELEASE=""
