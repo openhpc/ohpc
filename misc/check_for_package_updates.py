@@ -2,9 +2,12 @@
 
 """Check for newer releases of OpenHPC packages by analyzing spec files.
 
+Also checks the component versions in the documentation config files
+(docs/install/config) that carry an OpenHPC:check-updates:source tag.
+
 Supports GitHub, GitLab, PyPI, JSC perftools, UOregon TAU/PDT,
-BSC tools FTP, PnetCDF, Open MPI, GNU FTP, and
-release-monitoring.org (Anitya) as a fallback.
+BSC tools FTP, PnetCDF, Open MPI, GNU FTP, the Lenovo HPC yum
+repository, and release-monitoring.org (Anitya) as a fallback.
 """
 
 import argparse
@@ -76,6 +79,7 @@ class Result:
     """Container for a single package-check result."""
 
     __slots__ = (
+        "config_file",
         "current_version",
         "latest_version",
         "name",
@@ -94,6 +98,7 @@ class Result:
         repo,
         spec_file=None,
         version_pin=None,
+        config_file=None,
     ):
         self.name = name
         self.current_version = current_version
@@ -102,6 +107,7 @@ class Result:
         self.repo = repo
         self.spec_file = spec_file
         self.version_pin = version_pin
+        self.config_file = config_file
 
 
 # ---------------------------------------------------------------------------
@@ -136,30 +142,95 @@ def debug_warn(msg, verbose):
 # ---------------------------------------------------------------------------
 
 
-def parse_spec_tags(spec_file):
-    """Scan *spec_file* for ``OpenHPC:check-updates`` comment tags.
+_CHECK_UPDATES_TAG = re.compile(r"^#\s*OpenHPC:check-updates:([a-z-]+)(?:\s+(.*))?$")
 
-    Recognised tags (placed in RPM comment lines)::
+
+def parse_tag_line(line):
+    """Return ``(key, value)`` for an ``OpenHPC:check-updates`` comment line.
+
+    Recognised tags::
 
         # OpenHPC:check-updates:skip [optional reason]
         # OpenHPC:check-updates:version-pin <prefix>
+        # OpenHPC:check-updates:source <url>
 
-    Returns a dict with optional ``skip`` and ``version_pin`` keys.
+    Returns ``None`` for any other line, and for a ``version-pin`` or
+    ``source`` tag without a value.
+    """
+    m = _CHECK_UPDATES_TAG.match(line.strip())
+    if not m:
+        return None
+    tag = m.group(1)
+    value = (m.group(2) or "").strip()
+    if tag == "skip":
+        return ("skip", value or None)
+    if tag in ("version-pin", "source") and value:
+        return (tag.replace("-", "_"), value.split()[0])
+    return None
+
+
+def parse_spec_tags(spec_file):
+    """Scan *spec_file* for ``OpenHPC:check-updates`` comment tags.
+
+    Returns a dict with optional ``skip`` and ``version_pin`` keys.  A spec
+    file names its upstream source in ``Source0``, so a ``source`` tag in
+    a spec file is ignored.
     """
     tags = {}
     with open(spec_file) as f:
         for line in f:
-            line = line.strip()
-            if not line.startswith("#"):
-                continue
-            m = re.match(r"^#\s*OpenHPC:check-updates:skip(?:\s+(.*))?$", line)
-            if m:
-                tags["skip"] = (m.group(1) or "").strip() or None
-                continue
-            m = re.match(r"^#\s*OpenHPC:check-updates:version-pin\s+(\S+)", line)
-            if m:
-                tags["version_pin"] = m.group(1)
+            tag = parse_tag_line(line)
+            if tag and tag[0] in ("skip", "version_pin"):
+                tags[tag[0]] = tag[1]
     return tags
+
+
+def find_doc_versions(config_files):
+    """Return the tagged version keys in the documentation config files.
+
+    The documentation templates take component versions from YAML keys
+    such as ``ochami_version: "0.7.2"``.  A key is checked when the
+    comment lines directly above it contain ``OpenHPC:check-updates``
+    tags.  A blank line between the tags and the key discards the tags.
+
+    Returns a list of dicts with the keys ``file``, ``key``, ``version``
+    and ``tags``.
+    """
+    key_re = re.compile(
+        r"""^([A-Za-z_][A-Za-z0-9_]*):\s*["']?([^"'\s#]+)["']?\s*(?:#.*)?$"""
+    )
+    entries = []
+    for path in config_files:
+        tags = {}
+        with open(path) as f:
+            for lineno, raw in enumerate(f, 1):
+                line = raw.strip()
+                if not line:
+                    tags = {}
+                    continue
+                if line.startswith("#"):
+                    tag = parse_tag_line(line)
+                    if tag:
+                        tags[tag[0]] = tag[1]
+                    continue
+                if tags:
+                    m = key_re.match(line)
+                    if m:
+                        entries.append(
+                            {
+                                "file": path,
+                                "key": m.group(1),
+                                "version": m.group(2),
+                                "tags": tags,
+                            }
+                        )
+                    else:
+                        log_warn(
+                            f"{path}:{lineno}: check-updates tags are not "
+                            "followed by a 'key: value' line"
+                        )
+                tags = {}
+    return entries
 
 
 def _matches_version_pin(version, pin):
@@ -337,6 +408,11 @@ def parse_bsc_ftp_package(url):
     if m:
         return (m.group(1), m.group(2))
     return None
+
+
+def is_lenovo_hpc_yum(url):
+    """Return True if *url* is the index of the Lenovo HPC yum repository."""
+    return re.match(r"https?://hpc\.lenovo\.com/yum/?$", url) is not None
 
 
 # ---------------------------------------------------------------------------
@@ -714,6 +790,34 @@ def get_latest_bsc_ftp_version(
         return None
 
     # Sort and return the highest version
+    versions.sort(key=_version_sort_key)
+    return versions[-1]
+
+
+def get_latest_lenovo_hpc_yum_release(verbose, version_pin=None):
+    """Return the newest release directory of the Lenovo HPC yum repository.
+
+    Current releases are directories such as ``26.7`` or ``26.11.2``.
+    Releases before 2025 use names such as ``24b.1``, and the repository
+    also contains ``beta`` and ``latest``.  Only the numeric names are
+    compared, so the old names and ``latest`` never count as the newest
+    release.
+    """
+    base_url = "https://hpc.lenovo.com/yum/"
+    debug_info(f"Checking Lenovo HPC yum directory listing at {base_url}", verbose)
+
+    r = requests.get(base_url, timeout=30)
+    if not r.ok:
+        debug_warn("Failed to fetch the Lenovo HPC yum directory listing", verbose)
+        return None
+
+    versions = re.findall(r'href="(\d+(?:\.\d+)+)/"', r.text)
+    if version_pin:
+        versions = [v for v in versions if _matches_version_pin(v, version_pin)]
+    if not versions:
+        debug_warn("No release directories found in the Lenovo HPC yum", verbose)
+        return None
+
     versions.sort(key=_version_sort_key)
     return versions[-1]
 
@@ -1204,6 +1308,28 @@ def try_bsc_ftp(source_url, name, current_version, config, version_pin=None):
     return [Result(name, current_version, latest_version, status, repo_id)]
 
 
+def try_lenovo_hpc_yum(source_url, name, current_version, config, version_pin=None):
+    """Check the Lenovo HPC yum repository for a newer release directory."""
+    if not is_lenovo_hpc_yum(source_url):
+        return None
+
+    latest_version = get_latest_lenovo_hpc_yum_release(
+        config.verbose, version_pin=version_pin
+    )
+    repo_id = "hpc.lenovo.com/yum"
+
+    if latest_version is None:
+        return [Result(name, current_version, ERROR, ERROR, repo_id)]
+
+    cmp = compare_versions(current_version, latest_version)
+    status = _status_from_comparison(cmp)
+    debug_info(
+        f"Result: {name} {current_version} -> {latest_version} ({status})",
+        config.verbose,
+    )
+    return [Result(name, current_version, latest_version, status, repo_id)]
+
+
 def try_pnetcdf(source_url, name, current_version, config, version_pin=None):
     """Check PnetCDF download page for a newer version."""
     if parse_pnetcdf_source(source_url) is None:
@@ -1599,6 +1725,7 @@ CHECKERS = [
     try_uoregon_tau,
     try_bsc_ftp,
     try_pnetcdf,
+    try_lenovo_hpc_yum,
     try_release_monitoring,  # always returns a result (fallback)
 ]
 
@@ -1680,6 +1807,68 @@ def process_spec_file(spec_file, config):
     return [Result(name, current_version, "-", NOT_FOUND, "N/A", spec_file=spec_file)]
 
 
+def process_doc_version(entry, config):
+    """Check one tagged version key from a documentation config file.
+
+    *entry* is a dict returned by ``find_doc_versions``.  Returns a list
+    of Result objects.  Raises ``RateLimitError`` if processing should
+    stop due to rate limits.
+    """
+    name = f"docs:{entry['key']}"
+    current_version = entry["version"]
+    tags = entry["tags"]
+    config_file = entry["file"]
+
+    if "skip" in tags:
+        return [
+            Result(
+                name,
+                current_version,
+                "-",
+                SKIPPED,
+                tags["skip"] or "skipped via config tag",
+                config_file=config_file,
+            )
+        ]
+
+    source_url = tags.get("source")
+    version_pin = tags.get("version_pin")
+    if not source_url:
+        log_warn(f"{config_file}: {entry['key']} has no source tag")
+        return [
+            Result(
+                name, current_version, "-", NOT_FOUND, "N/A", config_file=config_file
+            )
+        ]
+
+    for checker in CHECKERS:
+        # release-monitoring.org looks a project up by its package name.
+        # A documentation key is not a package name, so the lookup would
+        # return an unrelated project or none.
+        if checker is try_release_monitoring:
+            continue
+        results = checker(
+            source_url,
+            name,
+            current_version,
+            config,
+            version_pin=version_pin,
+        )
+        if results is not None:
+            for r in results:
+                if r.status == RATE_LIMITED:
+                    raise RateLimitError("Rate limit reached")
+            for r in results:
+                r.config_file = config_file
+                r.version_pin = version_pin
+            return results
+
+    log_warn(f"{config_file}: no supported upstream source for {source_url}")
+    return [
+        Result(name, current_version, "-", NOT_FOUND, "N/A", config_file=config_file)
+    ]
+
+
 # ---------------------------------------------------------------------------
 # Output formatting
 # ---------------------------------------------------------------------------
@@ -1727,6 +1916,8 @@ def display_results_json(results):
         }
         if r.spec_file is not None:
             entry["spec_file"] = r.spec_file
+        if r.config_file is not None:
+            entry["config_file"] = r.config_file
         if r.version_pin:
             entry["version_pin"] = r.version_pin
         data.append(entry)
@@ -1737,6 +1928,7 @@ _REPO_URL_MAP = {
     "gnu.org/": "https://ftpmirror.gnu.org/gnu/",
     "cs.uoregon.edu/research/tau/": "https://www.cs.uoregon.edu/research/tau/",
     "ftp.tools.bsc.es/": "https://ftp.tools.bsc.es/",
+    "hpc.lenovo.com/yum": "https://hpc.lenovo.com/yum",
     "pypi.org/project/": "https://pypi.org/project/",
     "perftools.pages.jsc.fz-juelich.de/cicd/": (
         "https://perftools.pages.jsc.fz-juelich.de/cicd/"
@@ -1901,9 +2093,11 @@ def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description=(
             "Check for newer releases of OpenHPC packages by analyzing "
-            "spec files.  Supports GitHub, GitLab, PyPI, JSC perftools, "
-            "UOregon TAU/PDT, BSC tools FTP, PnetCDF, Open MPI, GNU FTP, "
-            "and release-monitoring.org (Anitya) as a fallback."
+            "spec files, and of the tagged component versions in "
+            "docs/install/config.  Supports GitHub, GitLab, PyPI, JSC "
+            "perftools, UOregon TAU/PDT, BSC tools FTP, PnetCDF, Open MPI, "
+            "GNU FTP, the Lenovo HPC yum repository, and "
+            "release-monitoring.org (Anitya) as a fallback."
         ),
     )
     parser.add_argument(
@@ -1943,7 +2137,8 @@ def parse_args(argv=None):
         nargs="?",
         default=None,
         help="Check only a specific package (matched against spec file path "
-        "or package name)",
+        "or package name, or against documentation config file path or "
+        "docs:<key>)",
     )
     return parser.parse_args(argv)
 
@@ -1959,6 +2154,9 @@ def main(argv=None):
     log_info("Scanning for OpenHPC packages with supported upstream sources...")
 
     spec_files = sorted(glob.glob("components/**/*.spec", recursive=True))
+    doc_versions = find_doc_versions(
+        sorted(glob.glob("docs/install/config/**/*.yaml", recursive=True))
+    )
 
     if config.package:
         needle = config.package.lower()
@@ -1978,12 +2176,20 @@ def main(argv=None):
                 for s in spec_files
                 if needle in os.path.splitext(os.path.basename(s))[0].lower()
             ]
-        if not filtered:
-            log_error(f"No spec files matched '{config.package}'")
-            sys.exit(1)
         spec_files = filtered
+        doc_versions = [
+            d
+            for d in doc_versions
+            if needle in d["file"].lower() or needle in f"docs:{d['key']}".lower()
+        ]
+        if not spec_files and not doc_versions:
+            log_error(
+                f"No spec files or documentation versions matched '{config.package}'"
+            )
+            sys.exit(1)
 
     log_info(f"Found {len(spec_files)} spec files to process")
+    log_info(f"Found {len(doc_versions)} documentation versions to process")
 
     all_results = []
     processed = 0
@@ -2016,6 +2222,25 @@ def main(argv=None):
         all_results.extend(results)
         processed += 1
 
+    if not rate_limited:
+        for entry in doc_versions:
+            try:
+                all_results.extend(process_doc_version(entry, config))
+            except RateLimitError:
+                all_results.append(
+                    Result(
+                        f"docs:{entry['key']}",
+                        entry["version"],
+                        RATE_LIMITED,
+                        RATE_LIMITED,
+                        "N/A",
+                        config_file=entry["file"],
+                    )
+                )
+                rate_limited = True
+                log_warn("Rate limit reached. Stopping further GitHub API requests.")
+                break
+
     if rate_limited:
         log_warn("Processing stopped due to GitHub API rate limiting")
         log_info("To process all packages, set GITHUB_TOKEN environment variable")
@@ -2042,6 +2267,15 @@ def main(argv=None):
     # Apply updates if requested
     if config.update:
         updatable = [r for r in all_results if r.status == UPDATE_AVAILABLE]
+        # A new provisioner version can change the commands that the
+        # documentation shows, so the version is only changed by hand.
+        for r in updatable:
+            if r.config_file is not None:
+                log_info(
+                    f"Not updating {r.name} in {r.config_file}, "
+                    "documentation versions are updated by hand"
+                )
+        updatable = [r for r in updatable if r.config_file is None]
         if not updatable:
             log_info("No updates to apply")
         else:
