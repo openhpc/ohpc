@@ -51,6 +51,7 @@ BuildRequires:	sqlite-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	lua
 BuildRequires:	lua-devel
+BuildRequires:	lua-posix
 BuildRequires:	python3-devel
 BuildRequires:	python3-cffi
 BuildRequires:	python3-ply
