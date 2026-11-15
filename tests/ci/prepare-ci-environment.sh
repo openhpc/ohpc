@@ -243,27 +243,6 @@ if [ "${FACTORY_VERSION}" != "" ]; then
 	FACTORY_REPOSITORY="${FACTORY_REPOSITORY}/${PROJECT}${FACTORY_VERSION}:Factory.repo"
 fi
 
-# The copr builds use packages from the VersatusHPC updates repository that the
-# copr does not contain itself, for example pmix-ohpc for slurm-ohpc. dnf
-# ignores a package in a repository with a higher priority value when a
-# repository with a lower value contains a package of the same name. The
-# default priority is 99, so with 150 the VersatusHPC repository only adds
-# packages that no other repository contains.
-#
-# This repository is a temporary workaround. Remove it once the copr contains
-# pmix-ohpc and every other package that its builds take from VersatusHPC.
-add_versatushpc_repository() {
-	cat >/etc/yum.repos.d/versatushpc-openhpc-updates.repo <<-EOF
-		[versatushpc-openhpc-updates]
-		name=VersatusHPC - OpenHPC 4.x updates for ppc64le (EL10)
-		baseurl=https://repos.versatushpc.com.br/openhpc/versatushpc-4/updates/EL_10/
-		enabled=1
-		gpgcheck=1
-		gpgkey=https://repos.versatushpc.com.br/openhpc/versatushpc-4/RPM-GPG-KEY-VersatusHPC
-		priority=150
-	EOF
-}
-
 # The copr builds against RHEL 10.3. The CI container uses AlmaLinux 10, which
 # is at 10.2 until AlmaLinux 10.3 is released. Open MPI 5 and MPICH from the
 # copr require libfabric.so.1(FABRIC_1.9). libfabric 2.5.1 from 10.3 provides
@@ -307,9 +286,6 @@ dnf_rhel() {
 	if [ -n "${COPR_REPOSITORY}" ]; then
 		group_start "Add the ppc64le copr repository"
 		loop_command wget "${COPR_REPOSITORY}" -O /etc/yum.repos.d/ohpc-ppc64le.repo
-		group_end
-		group_start "Add the VersatusHPC updates repository (temporary)"
-		add_versatushpc_repository
 		group_end
 		group_start "Add libfabric from the AlmaLinux 10.3 beta (temporary)"
 		add_almalinux_beta_libfabric_repositories
