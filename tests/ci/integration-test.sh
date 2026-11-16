@@ -141,8 +141,13 @@ dnf -y install docs-ohpc
 
 # ---------------------------------------------------------------------------
 # Install VM and networking dependencies
+#
+# systemd-udev owns /etc/sysctl.d, which the recipe writes to, and runs
+# systemd-sysctl. Every installed head node has it (kernel-core and dracut
+# require it); the head container does not, and the packages the recipe
+# installs no longer pull it in.
 # ---------------------------------------------------------------------------
-dnf -y install qemu-kvm ipxe-roms-qemu iproute initscripts-service fuse-overlayfs nftables
+dnf -y install qemu-kvm ipxe-roms-qemu iproute initscripts-service fuse-overlayfs nftables systemd-udev
 
 # ---------------------------------------------------------------------------
 # Compute node definitions
