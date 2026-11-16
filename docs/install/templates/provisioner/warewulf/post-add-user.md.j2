@@ -9,17 +9,31 @@ useradd -m test
 ```
 <!-- ohpc_end -->
 
-Warewulf installs a utility on the compute nodes to automatically synchronize
-overlay files from the provisioning server at one minute intervals. To rebuild
-the overlay, run the following:
+Warewulf's `wwclient` on each compute node pulls the runtime overlay, which
+carries the user and group files, every `update interval` seconds set in
+`warewulf.conf`. Rebuild the overlay, then have `wwclient` pull it now rather
+than at its next interval:
 
 <!-- ohpc_begin -->
 ```bash
 wwctl overlay build
+pdsh -w "${compute_prefix}[1-${num_computes}]" systemctl reload wwclient
 ```
-<!-- ohpc_comment Wait for wwclient to pull overlays (pulls every 60 seconds) -->
-<!-- ohpc_command sleep 90 -->
 <!-- ohpc_end -->
 
-After re-syncing to notify Warewulf of file modifications made on the *head
-node*, it should take approximately one minute for the changes to propagate.
+Continue after the user is present on every compute node. To check one node:
+
+```bash
+ssh ${compute_prefix}1 getent passwd test
+```
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait for the new user on the compute nodes -->
+<!-- ohpc_command for ((t=0; ; t++)) ; do -->
+<!-- ohpc_command     pdsh -S -w "${compute_prefix}[1-${num_computes}]" "getent passwd test" \ -->
+<!-- ohpc_command         >/dev/null 2>&1 && { echo "user test on compute nodes: OK"; break; } -->
+<!-- ohpc_command     (( t < 12 )) || { echo "user test on compute nodes: FAILED after 60s"; exit 1; } -->
+<!-- ohpc_command     echo "Waiting for wwclient to sync the user..." -->
+<!-- ohpc_command     sleep 5 -->
+<!-- ohpc_command done -->
+<!-- ohpc_end -->

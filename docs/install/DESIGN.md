@@ -306,10 +306,52 @@ dnf -y groupinstall "InfiniBand Support"
 <!-- ohpc_end -->
 ```
 
+**Who reads what.** The guide's reader sees the prose and the bash blocks;
+the recipe also runs the `ohpc_command` lines, which the reader never sees.
+So the prose describes what a person does, and never the hidden code; what
+only the recipe does is described in `ohpc_comment` lines.
+
+- **A `#` comment labels what the code below it does**, in one line, like an
+  `ohpc_comment` ("Limit cloud-init to privileged source ports and its admin
+  API to the head"). The why and how it works go in the prose above.
+- **Say a thing once.** The prose gives the reason and the condition, the
+  comment labels the code; neither repeats the other.
+- **Avoid unnecessary escaping.** A backslash is something the reader has to
+  decode; pick the quotes that make it unneeded. In a command that runs on
+  another node, single quotes leave a variable for that node and double quotes
+  expand the head node's settings, and a command that needs both joins the two
+  (`pdsh … 'rc=$?; [ $rc -eq 0 ] && grep -q '"${sms_ip}"' /etc/hosts'`).
+
 **Runtime vs. build-time conditionals:** `ohpc_if_set`/`ohpc_if` produce
 shell conditionals evaluated at install time (controlled by `input.local`
 variables). Jinja2 `{% if ... %}` controls what appears in the document
 at build time (controlled by recipe YAML flags). Use both as appropriate.
+
+#### Waiting for nodes and services
+
+A recipe waits for something to become true; it never sleeps for a fixed
+time. A fixed sleep is too long on a fast cluster and too short on a slow
+one, and it hides a failure until a later step trips over it.
+
+- **Poll a condition that can be observed**: a node finished booting, a
+  service answers, a user exists on every node. Bound the loop: a wait on
+  provisioning by a named timeout in `input.local.template`
+  (`node_boot_timeout`), a short step after the nodes are up by a fixed
+  limit. End it with a `FAILED` line that says what to check.
+- **Hide the loop, not the condition.** The loop goes in `ohpc_command`
+  lines, since a person at a shell waits by looking, not by looping. The
+  prose says what is being waited for in general terms ("After the nodes
+  boot and complete their install") and shows one command for one node
+  that a reader can copy and repeat, such as `ssh c1 systemctl
+  is-system-running`. Use hidden loops only for waits.
+- **Check every node**, with `pdsh -S -w "${compute_prefix}[1-${num_computes}]"`,
+  which fails if any node fails.
+- **One wait per condition.** The node boot wait is `boot/wait.md.j2`, which
+  every provisioner includes after its own deployment step; don't repeat it
+  in a provisioner's template.
+- **When nothing can be observed**, the fix belongs upstream in the
+  component. Until it lands, keep a fixed sleep with a `FIXME` comment that
+  links the upstream issue, and remove it when the fix ships.
 
 ### Site Pre-processing Placeholders
 

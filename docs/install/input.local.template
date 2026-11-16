@@ -40,16 +40,21 @@ has_ipmi="${has_ipmi:-1}"
 bmc_username="${bmc_username:-unknown}"
 bmc_password="${bmc_password:-unknown}"
 
-# Additional time to wait for compute nodes to provision (seconds)
-provision_wait="${provision_wait:-180}"
-
-# Time allowed for a compute node to boot far enough to answer SSH, in seconds,
-# measured from the end of the provision_wait sleep above. (OpenCHAMI only)
+# Time allowed for the compute nodes to finish booting, in seconds, measured
+# from when the recipe starts waiting for them
 node_boot_timeout="${node_boot_timeout:-600}"
 
-# Time allowed for cloud-init to finish on a compute node, in seconds. Raise it
-# if a large cluster's nodes all fetch their payload at once. (OpenCHAMI only)
-cloud_init_timeout="${cloud_init_timeout:-600}"
+# States of `systemctl is-system-running` that count as booted, separated by
+# "|". A node that boots into any other state fails the wait at once; set
+# "running" on a cluster whose nodes should have no failed units.
+node_boot_states="${node_boot_states:-running|degraded}"
+
+# Time allowed for an install to disk to finish on every compute node, in
+# seconds (xCAT stateful, Confluent)
+install_timeout="${install_timeout:-1800}"
+
+# Time allowed for every compute node to reach the installer (xCAT stateful)
+install_start_timeout="${install_start_timeout:-600}"
 
 # DNS settings
 dns_servers="${dns_servers:-172.30.0.254}"

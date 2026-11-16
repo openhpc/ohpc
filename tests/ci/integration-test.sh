@@ -234,8 +234,6 @@ has_ipmi="${has_ipmi:-1}"
 bmc_username="${bmc_username:-admin}"
 bmc_password="${bmc_password:-password}"
 
-provision_wait="${provision_wait:-0}"
-
 eth_provision="${eth_provision:-eth0}"
 
 enable_ib="${enable_ib:-0}"
@@ -559,60 +557,9 @@ if ! bash -x "${RECIPE}" 2> >(grep -v -e 'Unrecognised xattr prefix' -e '/dev/km
 fi
 
 # ---------------------------------------------------------------------------
-# Wait for compute nodes to boot and become reachable via SSH
+# The recipe has waited for the compute nodes to boot and to be idle in Slurm
 # ---------------------------------------------------------------------------
-MAX_RETRIES=60
-SLEEP_INTERVAL=10
-
-all_up=1
-for ((i = 0; i < num_computes; i++)); do
-	echo "Waiting for ${c_name[${i}]} (${c_ip[${i}]}) to become reachable..."
-	node_up=0
-	for ((try = 1; try <= MAX_RETRIES; try++)); do
-		if ssh -o StrictHostKeyChecking=no \
-			-o UserKnownHostsFile=/dev/null \
-			-o ConnectTimeout=5 \
-			"${c_ip[${i}]}" hostname 2>/dev/null; then
-			echo "${c_name[${i}]} is up after ${try} attempts"
-			node_up=1
-			break
-		fi
-		echo "  attempt ${try}/${MAX_RETRIES}..."
-		sleep "${SLEEP_INTERVAL}"
-	done
-	if [[ "${node_up}" -ne 1 ]]; then
-		echo "ERROR: ${c_name[${i}]} did not come up" >&2
-		all_up=0
-	fi
-done
-
-if [[ "${all_up}" -ne 1 ]]; then
-	dump_diagnostics
-fi
-
-# ---------------------------------------------------------------------------
-# Mark compute nodes as idle in Slurm
-# ---------------------------------------------------------------------------
-# shellcheck source=/dev/null
-source "${INPUT_LOCAL}"
 sinfo
-
-retry_counter=0
-max_retries=5
-
-while true; do
-	((retry_counter += 1))
-	if [ "${retry_counter}" -gt "${max_retries}" ]; then
-		exit 1
-	fi
-	scontrol update nodename=c[1-2] state=idle && break
-	sinfo
-
-	# In case it is a network error let's wait a bit.
-	echo "Retrying scontrol attempt ${retry_counter}"
-	sleep "${retry_counter}"
-done
-
 srun -N2 hostname
 
 # ---------------------------------------------------------------------------
@@ -696,11 +643,6 @@ done
 
 if [ -n "${LOCAL_RPMS_HTTP_PID}" ]; then
 	kill "${LOCAL_RPMS_HTTP_PID}" 2>/dev/null || true
-fi
-
-if [[ "${all_up}" -ne 1 ]]; then
-	echo "FAIL: Not all compute nodes came up" >&2
-	exit 1
 fi
 
 if [ "${TESTS_FAILED}" -ne 0 ]; then
