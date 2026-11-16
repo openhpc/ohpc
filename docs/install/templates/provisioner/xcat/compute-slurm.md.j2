@@ -15,29 +15,21 @@ that applies this after boot starts `slurmd` with it already in place.
 {%- if is_xcat_stateless %}
 
 The image carries no munge key, so at boot `munge` and `slurmd` start before the
-synclist delivers it. Add a short script to the synclist that xCAT runs on the
-node after every sync, to start them once the key is in place:
+synclist delivers it. xCAT runs a file's `.post` script on a node whenever the
+synclist updates that file there, so a script next to the key restarts both
+once the key arrives, and again whenever a new key is synced with
+`updatenode -F`:
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment Start munge and slurmd once the synced key is in place -->
+<!-- ohpc_comment Restart munge and slurmd when the synclist delivers a new munge key -->
 ```bash
-cat > ${xcat_synclist_dir}/ohpc-postsync << 'EOF'
+cat > /etc/munge/munge.key.post << 'EOF'
 #!/bin/sh
-# Restart munge when the synced key changed (or munge is down), then slurmd
-key=/etc/munge/munge.key
-sum=$(sha256sum "$key" 2>/dev/null | cut -d' ' -f1)
-if ! systemctl is-active -q munge.service || \
-	[ "$sum" != "$(cat /run/ohpc-munge.sum 2>/dev/null)" ]; then
-	systemctl restart munge.service && echo "$sum" > /run/ohpc-munge.sum
-	systemctl restart slurmd.service
-fi
-systemctl is-active -q slurmd.service || systemctl restart slurmd.service
+systemctl restart munge.service slurmd.service
 EOF
-chmod 755 ${xcat_synclist_dir}/ohpc-postsync
-echo "${xcat_synclist_dir}/ohpc-postsync -> /usr/local/sbin/ohpc-postsync" \
-    >> ${xcat_synclist_dir}/compute.synclist
-echo "EXECUTEALWAYS:" >> ${xcat_synclist_dir}/compute.synclist
-echo "${xcat_synclist_dir}/ohpc-postsync" >> ${xcat_synclist_dir}/compute.synclist
+chmod 700 /etc/munge/munge.key.post
+echo "EXECUTE:" >> ${xcat_synclist_dir}/compute.synclist
+echo "/etc/munge/munge.key.post" >> ${xcat_synclist_dir}/compute.synclist
 ```
 <!-- ohpc_end -->
 {%- endif %}

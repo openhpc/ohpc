@@ -1,4 +1,40 @@
+## Wait for Compute Nodes
+
+Continue after the compute nodes boot and complete their install. A node has
+booted when `systemd` has finished starting it, and reports `running`, or
+`degraded` if a unit failed. To check one node, and to list its failed units:
+
+```bash
+ssh ${compute_prefix}1 systemctl is-system-running
+ssh ${compute_prefix}1 systemctl --failed
+```
+
+A node that never answers has failed to provision; check its console.
+
 <!-- ohpc_begin -->
-<!-- ohpc_comment Allow for optional sleep to wait for provisioning to complete -->
-<!-- ohpc_command sleep "${provision_wait}" -->
+<!-- ohpc_comment Wait up to node_boot_timeout for every compute node to report a state in -->
+<!-- ohpc_comment node_boot_states; fail at once on a node that finished booting in another state. -->
+<!-- ohpc_comment A node that is still booting reports starting, and one that is down reports nothing. -->
+<!-- ohpc_command nodes="${compute_prefix}[1-${num_computes}]" -->
+<!-- ohpc_command ok="${node_boot_states:-running|degraded}" -->
+<!-- ohpc_command deadline=$(( SECONDS + ${node_boot_timeout:-600} )) -->
+<!-- ohpc_command while true; do -->
+<!-- ohpc_command     states=$(pdsh -w "${nodes}" systemctl is-system-running 2>/dev/null | sort) -->
+<!-- ohpc_command     if grep -E ': (degraded|maintenance)$' <<< "${states}" | grep -qvE ": (${ok})$"; then -->
+<!-- ohpc_command         echo "compute nodes: FAILED, booted into a state not in node_boot_states:"; echo "${states}" -->
+<!-- ohpc_command         pdsh -w "${nodes}" systemctl --failed --no-legend -->
+<!-- ohpc_command         exit 1 -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command     ready=$(grep -cE ": (${ok})$" <<< "${states}" || true) -->
+<!-- ohpc_command     (( ready == num_computes )) && break -->
+<!-- ohpc_command     if (( SECONDS >= deadline )); then -->
+<!-- ohpc_command         echo "compute nodes: FAILED, ${ready} of ${num_computes} booted in ${node_boot_timeout:-600}s; check the node consoles"; echo "${states}" -->
+<!-- ohpc_command         exit 1 -->
+<!-- ohpc_command     fi -->
+<!-- ohpc_command     echo "Waiting for compute nodes... (${ready} of ${num_computes} booted)" -->
+<!-- ohpc_command     sleep 10 -->
+<!-- ohpc_command done -->
+<!-- ohpc_comment Record each node's state, and the failed units of a degraded node -->
+<!-- ohpc_command echo "compute nodes: OK"; echo "${states}" -->
+<!-- ohpc_command pdsh -w "${nodes}" systemctl --failed --no-legend -->
 <!-- ohpc_end -->
