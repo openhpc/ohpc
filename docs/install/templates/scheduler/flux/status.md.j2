@@ -11,6 +11,23 @@ flux overlay status
 flux resource status
 ```
 
+Continue after every compute node is free for jobs. To check:
+
+```bash
+flux resource list -s free
+```
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait for the compute nodes to be free in Flux -->
+<!-- ohpc_command for ((t=0; ; t++)) ; do -->
+<!-- ohpc_command     [ "$(flux resource list -s free -no '{nnodes}')" -ge "${num_computes}" ] \ -->
+<!-- ohpc_command         && { echo "Flux compute nodes: OK"; break; } -->
+<!-- ohpc_command     (( t < 30 )) || { echo "Flux compute nodes: FAILED, not free after 300s"; flux resource status; exit 1; } -->
+<!-- ohpc_command     echo "Waiting for the compute nodes to be free in Flux..." -->
+<!-- ohpc_command     sleep 10 -->
+<!-- ohpc_command done -->
+<!-- ohpc_end -->
+
 In case of additional Flux issues, ensure that `munge.service` and
 `flux.service` are running on the affected nodes, that the hostname of each node
 exactly matches its entry in the `hosts` array of

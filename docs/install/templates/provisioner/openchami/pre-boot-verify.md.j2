@@ -50,10 +50,9 @@ The server answers `/cloud-init/meta-data` from an in-memory map of SMD's
 Ethernet interfaces that it refreshes on a timer, so a node registered a moment
 ago is not visible to it yet. A node that boots into that window gets no
 cloud-init data at all, which means no root SSH key and no munge key, and it
-never becomes reachable. Wait for the lookup to succeed before powering the
-nodes on.
+never becomes reachable. Continue after the server resolves every node.
 
-The check below asks the cloud-init server the question the node will ask, with
+The check asks the cloud-init server the question the node will ask, with
 `X-Forwarded-For` carrying the node's address so that the server resolves the
 same entry. It asks the server's container directly rather than through
 haproxy, because haproxy replaces `X-Forwarded-For` with the address the
@@ -61,27 +60,33 @@ request came from, so through it the server would look up the head node
 instead. The node's own request through haproxy is tested when it boots.
 The container's address exists only on the head node, so the check tells
 curl to ignore an `http_proxy` set in the environment; a proxy cannot reach
-the podman network and the request would time out there.
+the podman network and the request would time out there. To check one node:
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment Verify the cloud-init server resolves each compute node -->
+<!-- ohpc_comment Find the cloud-init server's container address -->
 ```bash
 cloud_init_ip=$(podman inspect --format \
 	'{%raw%}{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}{%endraw%}' \
 	cloud-init-server)
-for ((i=0; i<num_computes; i++)); do
-	for ((t=0; ; t++)) ; do
-		curl -fsS -m 5 -o /dev/null --noproxy '*' \
-			-H "X-Forwarded-For: ${c_ip[$i]}" \
-			"http://${cloud_init_ip}:27777/meta-data" && break
-		(( t < 18 )) || {
-			echo "cloud-init node: FAILED for ${c_name[$i]}"
-			exit 1
-		}
-		echo "Waiting for cloud-init to resolve ${c_name[$i]}..."
-		sleep 5
-	done
-done
-echo "cloud-init node: OK"
 ```
+<!-- ohpc_end -->
+
+```bash
+curl -fsS --noproxy '*' -H "X-Forwarded-For: ${c_ip[0]}" \
+	"http://${cloud_init_ip}:27777/meta-data"
+```
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait for the cloud-init server to resolve each compute node -->
+<!-- ohpc_command for ((i=0; i<num_computes; i++)); do -->
+<!-- ohpc_command     for ((t=0; ; t++)) ; do -->
+<!-- ohpc_command         curl -fsS -m 5 -o /dev/null --noproxy '*' \ -->
+<!-- ohpc_command             -H "X-Forwarded-For: ${c_ip[$i]}" \ -->
+<!-- ohpc_command             "http://${cloud_init_ip}:27777/meta-data" && break -->
+<!-- ohpc_command         (( t < 18 )) || { echo "cloud-init node: FAILED for ${c_name[$i]}"; exit 1; } -->
+<!-- ohpc_command         echo "Waiting for cloud-init to resolve ${c_name[$i]}..." -->
+<!-- ohpc_command         sleep 5 -->
+<!-- ohpc_command     done -->
+<!-- ohpc_command done -->
+<!-- ohpc_command echo "cloud-init node: OK" -->
 <!-- ohpc_end -->

@@ -1,12 +1,29 @@
 ## Check Cluster Status
 
 After this, check status of the nodes within Slurm by using the `sinfo` command.
-All compute nodes should be in an *idle* state (without asterisk). If the state
-is reported as *unknown*, the following might help:
+Continue after every compute node is in an *idle* state (without asterisk). To
+check one node:
+
+```bash
+sinfo -N -n ${compute_prefix}1
+```
+
+If the state is reported as *unknown*, the following might help:
 
 ```bash
 scontrol update partition=normal state=idle
 ```
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Wait for the compute nodes to be idle in Slurm -->
+<!-- ohpc_command for ((t=0; ; t++)) ; do -->
+<!-- ohpc_command     [ "$(sinfo -h -r -N -t idle -o '%N' | sort -u | wc -l)" -ge "${num_computes}" ] \ -->
+<!-- ohpc_command         && { echo "Slurm compute nodes: OK"; break; } -->
+<!-- ohpc_command     (( t < 30 )) || { echo "Slurm compute nodes: FAILED, not idle after 300s"; sinfo; exit 1; } -->
+<!-- ohpc_command     echo "Waiting for the compute nodes to be idle in Slurm..." -->
+<!-- ohpc_command     sleep 10 -->
+<!-- ohpc_command done -->
+<!-- ohpc_end -->
 
 In case of additional Slurm issues, ensure that the configuration file fits your
 hardware and that it is identical across the nodes. Also, verify that the Slurm
