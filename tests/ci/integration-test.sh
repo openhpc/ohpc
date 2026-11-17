@@ -538,14 +538,20 @@ elif [[ "${PROVISIONER}" == "openchami" ]]; then
 		[storage]
 		driver = "vfs"
 	STOREOF
+	# The image-build containers keep their storage in /home/builder, so
+	# every file of the compute image inherits its ACL. The runner's /home
+	# has a default ACL for the runner user, which is not mapped in the
+	# rootless image build, so copying that ACL fails (EINVAL) and
+	# dracut-install fails on nearly every file of the initramfs. Remove it.
+	dnf -y install acl
 	mkdir -p /home/builder
 	chmod 777 /home/builder
+	setfacl -b -k /home/builder
 	rm -rf /opt/ohpc/admin/data/
 	sed -i \
 		-e 's/console=ttyS0,115200/console=hvc0 loglevel=5/' \
 		-e 's/\(systemctl restart rsyslog\.service\)/\1 || true/' \
 		-e 's|--network host \\|--network host \\\n        -v /etc/containers/storage.conf:/etc/containers/storage.conf:ro \\\n        -v /home/builder:/home/builder/.local \\|' \
-		-e 's|dracut --add "dmsquash-live livenet network-manager"|dracut --add "dmsquash-live livenet network-manager" --install "/usr/lib/systemd/systemd-sysroot-fstab-check"|' \
 		"${RECIPE}"
 	if [ -n "${OPENCHAMI_REPO_YAML}" ]; then
 		# compute-base.yaml installs the ohpc-release RPM from the
