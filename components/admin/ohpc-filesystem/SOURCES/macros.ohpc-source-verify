@@ -23,7 +23,7 @@
 # so this macro file is simply absent and verification is skipped.
 #
 # Generate the manifest with:  misc/gen_sources_checksum.sh <specfile>
-# Verify manually with:        cd SOURCES && sha512sum --check sources
+# Verify manually with:        cd SOURCES && sha512sum --check ohpc.checksums
 #
 # rpm 4.16 and older stop reading a macro definition at the first empty
 # line, even when a %{lua:} block is still open.  EL9 ships rpm 4.16 and
@@ -51,7 +51,7 @@
         )
         if not file or not expected then
             table.insert(errors,
-                "malformed line in sources manifest: " .. line)
+                "malformed line in ohpc.checksums: " .. line)
             goto continue
         end
         -- Compute the actual checksum of the source file.
