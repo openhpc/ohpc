@@ -10,8 +10,9 @@ useradd -m test
 <!-- ohpc_end -->
 
 Next, the user's credentials need to be distributed across the cluster.
-Confluent's `nodeapply` has a merge functionality that adds new entries into
-credential files on *compute* nodes:
+Listed under the `MERGE:` line added earlier, these files are merged by
+`nodeapply`, which adds the new entries to the credential files on *compute*
+nodes:
 
 <!-- ohpc_begin -->
 ```bash

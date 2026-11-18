@@ -50,13 +50,16 @@ osdeploy updateboot ${distro_id}
 
 If needing to copy files from the head node to the compute nodes during
 deployment, this can be done by modifying the syncfiles file that is created
-when `osdeploy import` command is run. For an environment that has no DNS server
-and needs to have /etc/hosts file synced amongst all the nodes, the following
-command should be run.
+when `osdeploy import` command is run. A file listed after a `MERGE:` line is
+merged into the node's own copy rather than replacing it, which is what
+`/etc/hosts`, `/etc/passwd` and `/etc/group` need. For an environment that has
+no DNS server and needs to have /etc/hosts file synced amongst all the nodes,
+the following commands should be run.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Sync the hosts file in cluster -->
 ```bash
+echo "MERGE:" >> /var/lib/confluent/public/os/${distro_id}/syncfiles
 echo "/etc/hosts -> /etc/hosts" >> \
 	/var/lib/confluent/public/os/${distro_id}/syncfiles
 ```
