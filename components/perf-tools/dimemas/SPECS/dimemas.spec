@@ -39,6 +39,12 @@ BuildRequires: flex%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
+%if "%{compiler_family}" == "intel" && 0%{?suse_version}
+# dimemas includes <execution>, which the GCC 7 libstdc++ headers on Leap 15
+# do not provide. icpx uses the headers of the newest installed GCC.
+BuildRequires: gcc14-c++
+BuildRequires: libstdc++6-devel-gcc14
+%endif
 #!BuildIgnore: post-build-checks
 
 # Default library install path
