@@ -24,26 +24,27 @@
 #
 # Generate the manifest with:  misc/gen_sources_checksum.sh <specfile>
 # Verify manually with:        cd SOURCES && sha512sum --check sources
+#
+# rpm 4.16 and older stop reading a macro definition at the first empty
+# line, even when a %{lua:} block is still open.  EL9 ships rpm 4.16 and
+# Leap 15 ships rpm 4.14.  The Lua code below therefore contains no empty
+# lines.
 
 %__spec_prep_pre %{lua:
     local src_dir  = rpm.expand("%{_sourcedir}")
     local manifest = src_dir .. "/ohpc.checksums"
-
     local fh = io.open(manifest, "r")
     if not fh then
         -- no manifest present; nothing to verify
         return
     end
-
     local errors = {}
     local verified = {}
-
     for line in fh:lines() do
         -- skip blank lines and comments
         if line:match("^%s*$") or line:match("^#") then
             goto continue
         end
-
         -- BSD-style: SHA512 (filename) = <hash>
         local file, expected = line:match(
             "^SHA512 %((.+)%) = (%x+)$"
@@ -53,7 +54,6 @@
                 "malformed line in sources manifest: " .. line)
             goto continue
         end
-
         -- Compute the actual checksum of the source file.
         local path = src_dir .. "/" .. file
         local cmd  = 'sha512sum --tag "' .. path .. '"'
@@ -63,17 +63,14 @@
                 "failed to execute sha512sum for " .. file)
             goto continue
         end
-
         local output = ph:read("*a")
         ph:close()
-
         local actual = output:match("= (%x+)")
         if not actual then
             table.insert(errors,
                 "source file missing or unreadable: " .. file)
             goto continue
         end
-
         if actual ~= expected then
             table.insert(errors,
                 "checksum mismatch for " .. file ..
@@ -82,11 +79,9 @@
         else
             table.insert(verified, file)
         end
-
         ::continue::
     end
     fh:close()
-
     if #errors > 0 then
         local msg = "source verification failed:\\n" ..
             table.concat(errors, "\\n")
