@@ -6,8 +6,10 @@ the Confluent database. These hosts are grouped logically into a group named
 compute group has to be defined first before we can add any nodes to the group
 using the `nodegroup define` command. Note the use of variable names for the
 desired compute hostnames, node IPs, MAC addresses, and BMC login credentials,
-which should be modified to accommodate local settings and hardware. To enable
-serial console access via Confluent, `console.method` property is also defined.
+which should be modified to accommodate local settings and hardware. The BMCs
+are managed over IPMI (`hardwaremanagement.method`), which Confluent no longer
+assumes when the method is unset. To enable serial console access via
+Confluent, `console.method` property is also defined.
 
 <!-- ohpc_begin -->
 <!-- ohpc_comment Add hosts to cluster -->
@@ -18,7 +20,7 @@ nodegroupdefine compute
 # Define nodes as objects in Confluent database
 for ((i=0; i<$num_computes; i++)) ; do
 	nodedefine ${c_name[$i]} groups=everything,compute \
-	hardwaremanagement.manager=${c_bmc[$i]} \
+	hardwaremanagement.method=ipmi hardwaremanagement.manager=${c_bmc[$i]} \
 	secret.hardwaremanagementuser=${bmc_username} \
 	secret.hardwaremanagementpassword=${bmc_password} \
 	net.hwaddr=${c_mac[$i]} net.bootable=true net.ipv4_method=static \
