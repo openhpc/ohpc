@@ -66,6 +66,15 @@
 %global gnu_version %{gnu16_version}
 %endif
 
+%if 0%{?openEuler}
+# The brp-strip script in rpm 4.17 and 4.18 runs several strip processes in
+# parallel. GCC installs g++ and c++ as hard links of one file, and two strip
+# processes can rewrite that file at the same time. strip then fails with
+# "file format not recognized". rpm 4.19 strips hard-linked files serially
+# (upstream commit ae2e75a129), but openEuler 22.03 and 24.03 ship older rpm.
+%global __brp_strip RPM_BUILD_NCPUS=1 %{_rpmconfigdir}/brp-strip %{__strip}
+%endif
+
 Source0:   %{mirror_url}gcc/gcc-%{gnu12_version}/gcc-%{gnu12_version}.tar.xz
 Source1:   %{mirror_url}gmp/gmp-%{gnu12_gmp_version}.tar.bz2
 Source2:   %{mirror_url}mpc/mpc-%{gnu12_mpc_version}.tar.gz
