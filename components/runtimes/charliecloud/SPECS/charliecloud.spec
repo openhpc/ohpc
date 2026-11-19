@@ -42,6 +42,16 @@ Requires: bash
 Requires: wget
 Requires: python3
 
+%if 0%{?suse_version}
+# The build runs test/entrypoint-cmd-auto, which imports dataclasses.
+# Python 3.6 on Leap 15 has no dataclasses module, so the build fails with
+# python3. configure writes the --with-python path into the shebang of
+# ch-image, ch-run-oci and the test scripts that the build generates.
+BuildRequires: python311
+Requires: python311
+%global ch_python --with-python=/usr/bin/python3.11
+%endif
+
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
@@ -64,7 +74,7 @@ For more information: %{URL}
 
 %build
 export CFLAGS="$CFLAGS -Wno-error=format-security"
-./configure --prefix=%{install_path} --enable-buggy-build
+./configure --prefix=%{install_path} --enable-buggy-build %{?ch_python}
 make %{?mflags}
 
 
