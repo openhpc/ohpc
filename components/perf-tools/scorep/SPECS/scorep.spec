@@ -186,10 +186,6 @@ rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.a
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*.la
 
-%if 0%{?suse_version}
-%fdupes -s %{buildroot}%{install_path}
-%endif
-
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
