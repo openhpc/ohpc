@@ -64,9 +64,20 @@ sparse matrix ordering.
 %ohpc_setup_compiler
 module load cmake
 
+# FindMPI runs the MPI compiler wrapper with MPICH_CC set to the C compiler of
+# CMake. With CC="ccache gcc", that compiler is ccache. The MPICH mpicc then
+# runs "ccache -showme:compile". ccache 3 reads "-showme:compile" as its own
+# options, prints its statistics and exits with 0. FindMPI takes that output
+# as the compile line, does not find MPICH, and the PT-Scotch build stops.
+# Remove ccache from CC and pass it to CMake as the compiler launcher.
+export CC=$(echo $CC | sed 's/^ccache //')
+
 cmake -S . -B build \
     -DCMAKE_INSTALL_PREFIX=%{install_path} \
     -DCMAKE_BUILD_TYPE=Release \
+%if "%{?OHPC_USE_CCACHE}" == "yes"
+    -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+%endif
     -DCMAKE_C_FLAGS="${CFLAGS} -fPIC" \
     -DBUILD_SHARED_LIBS=ON \
 %if 0%{?ohpc_mpi_dependent}
