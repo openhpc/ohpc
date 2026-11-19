@@ -21,14 +21,31 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 # Base package name
 %define pname numpy
 
-# openEuler's python3 is still 3.11; numpy >= 2.5 requires >= 3.12.
-# Keep openEuler on the last version that supports 3.11 until openEuler
-# ships a newer python3. Both versions are listed unconditionally (as
-# separate SourceN tags, like gnu-compilers.spec does for its per-family
-# gcc tarballs) so the source-fetching/checksum tooling, which parses
-# this spec without the openEuler macro defined, finds and verifies both.
-%global numpy_version_default 2.5.4
-%global numpy_version_openeuler 2.4.4
+# numpy builds with Python 3.11 on EL 9 and Leap 15. numpy 2.5 requires
+# Python 3.12 or newer, so EL 9 and Leap 15 build numpy 2.4.4. openEuler
+# 22.03 has Python 3.9. numpy 2.1 requires Python 3.10 or newer, so
+# openEuler builds numpy 2.0.2.
+# The OBS download_files service and misc/gen_sources_checksum.sh read the
+# Source tags without the openEuler macro. Source0 and Source1 therefore
+# name both numpy tarballs without a condition. OBS then adds both
+# tarballs to the package, and ohpc.checksums contains the SHA-512 of both.
+%global numpy_version_default 2.4.4
+%global numpy_version_openeuler 2.0.2
+
+# EL 9, Leap 15 and openEuler 22.03 have no meson-python for the Python
+# version that numpy builds with. The build adds meson-python and the
+# pure Python packages it imports to PYTHONPATH from their source trees.
+# Nothing installs them, so the numpy package does not contain them.
+# numpy runs the copy of meson in its own source tree. tomli is only
+# imported with Python < 3.11. openEuler 22.03 has pip 21.3.1, which does
+# not support the -C option of "pip wheel", so the build also uses a
+# newer pip from its source tree.
+%global meson_python_version 0.21.1
+%global pyproject_metadata_version 0.12.1
+%global packaging_version 26.3
+%global tomli_version 2.5.0
+%global pip_version 26.0.1
+%global build_tools_dir %{_builddir}/numpy-build-tools
 
 %if 0%{?openEuler}
 %global numpy_version %{numpy_version_openeuler}
@@ -45,11 +62,19 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        https://github.com/numpy/numpy/releases/download/v%{numpy_version_default}/numpy-%{numpy_version_default}.tar.gz
 Source1:        https://github.com/numpy/numpy/releases/download/v%{numpy_version_openeuler}/numpy-%{numpy_version_openeuler}.tar.gz
+Source2:        https://files.pythonhosted.org/packages/source/m/meson-python/meson_python-%{meson_python_version}.tar.gz
+Source3:        https://files.pythonhosted.org/packages/source/p/pyproject-metadata/pyproject_metadata-%{pyproject_metadata_version}.tar.gz
+Source4:        https://files.pythonhosted.org/packages/source/p/packaging/packaging-%{packaging_version}.tar.gz
+Source5:        https://files.pythonhosted.org/packages/source/t/tomli/tomli-%{tomli_version}.tar.gz
+Source6:        https://files.pythonhosted.org/packages/source/p/pip/pip-%{pip_version}.tar.gz
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
-BuildRequires:  python3-meson-python
 BuildRequires:  %{python_prefix}-pip
+%if 0%{?suse_version}
+BuildRequires:  ninja
+%else
 BuildRequires:  ninja-build
+%endif
 BuildRequires:  pkg-config
 BuildRequires:  gcc
 %if 0%{?suse_version}
@@ -78,8 +103,10 @@ basic linear algebra and random number generation.
 %else
 %setup -T -q -n %{pname}-%{version} -b0
 %endif
-# Convert PEP 639 license string to old-style dict for older meson-python
-sed -i "s|^license = '\(.*\)'|license = {text = '\1'}|" pyproject.toml
+mkdir -p %{build_tools_dir}
+for src in %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6}; do
+	tar -xzf "${src}" -C %{build_tools_dir}
+done
 %ifarch ppc64le
 # Fix VSX3 intrinsics used when building with the -mcpu=power9 baseline (numpy PR #29627).
 # Applied as asserted in-place edits rather than a context patch: each substitution is
@@ -113,6 +140,13 @@ fi
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+
+PYTHONPATH=%{build_tools_dir}/meson_python-%{meson_python_version}
+PYTHONPATH=${PYTHONPATH}:%{build_tools_dir}/pyproject_metadata-%{pyproject_metadata_version}
+PYTHONPATH=${PYTHONPATH}:%{build_tools_dir}/packaging-%{packaging_version}/src
+PYTHONPATH=${PYTHONPATH}:%{build_tools_dir}/tomli-%{tomli_version}/src
+PYTHONPATH=${PYTHONPATH}:%{build_tools_dir}/pip-%{pip_version}/src
+export PYTHONPATH
 
 %if "%{compiler_family}" == "arm1"
 %__python -m pip wheel --no-build-isolation --wheel-dir=dist \
