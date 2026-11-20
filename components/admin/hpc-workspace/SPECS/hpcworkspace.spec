@@ -41,20 +41,6 @@ Requires: python3-pyyaml
 # should not be used in production, so keep this a weak dependency
 # rather than a hard Requires.
 Suggests: lua5.1
-%if 0%{?suse_version}
-Requires: libboost_system
-Requires: libboost_filesystem
-Requires: libboost_regex
-Requires: libboost_program_options
-%else
-Requires: boost-system
-Requires: boost-filesystem
-Requires: boost-regex
-Requires: boost-program-options
-%endif
-Requires: ncurses
-Requires: libcap
-Requires: yaml-cpp
 
 
 # Default library install path
