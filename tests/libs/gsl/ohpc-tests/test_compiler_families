@@ -17,9 +17,6 @@ export BATS_JUNIT_CLASS=GSL
 
 for compiler in $COMPILER_FAMILIES ; do
 
-    # gnu families only
-    [[ ! $compiler =~ gnu ]] && continue
-
     echo " "
     echo " "
     echo "----------------------------------------------------------"
