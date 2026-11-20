@@ -51,11 +51,19 @@ lends itself to being used in very high level languages (VHLLs).
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+# OHPC_setup_compiler sets -O3, and on some distributions also -march. The GSL
+# tests in rng fail with -O3. On EL 10, -march is x86-64-v3, and the GSL tests
+# in specfunc and multifit fail with it. Build with -O2 and without -march,
+# and keep the other OpenHPC flags.
+CFLAGS=$(echo "${CFLAGS}" | sed -e 's/-O3/-O2/g' -e 's/-march=[^ ]*//g')
+
 %if "%{compiler_family}" == "intel"
+# Without -fp-model strict, the GSL tests in specfunc and multifit fail with
+# the Intel compiler.
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-./configure CFLAGS="-O2" --prefix=%{install_path} \
+./configure CFLAGS="${CFLAGS}" --prefix=%{install_path} \
             --libdir=%{install_path}/lib \
             --disable-static || { cat config.log && exit 1; }
 make %{?_smp_mflags}
