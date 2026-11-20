@@ -16,7 +16,7 @@
 
 Name: ohpc-filesystem
 Version: %{version}
-Release: %{?dist}.4
+Release: %{?dist}.5
 Summary: Common top-level OpenHPC directories
 
 Group:   ohpc/admin
@@ -69,6 +69,12 @@ install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 install -p -m 644 %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/rpm/macros.d
 
 %{__mkdir_p} %{buildroot}/usr/lib/rpm/fileattrs/
+# file(1) describes an ELF binary with the setuid bit as "setuid ELF 64-bit".
+# __elf_exclude_path turns off the ELF dependency generator of rpm for the
+# paths in __ohpc_path. The OpenHPC generator reads the ELF files in the
+# __ohpc_path paths instead. __ohpc_magic therefore accepts the same setuid,
+# setgid and sticky prefixes as the ELF magic of rpm. Without the prefixes,
+# the setuid binaries of hpc-workspace get no library dependencies.
 %{__cat} <<EOF > %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
 %%__ohpc_provides        /usr/lib/rpm/ohpc-find-provides
 %%__ohpc_requires        /usr/lib/rpm/ohpc-find-requires %%{buildroot} %{OHPC_HOME}
@@ -76,7 +82,7 @@ install -p -m 644 %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/rpm/macros.d
 %%__ohpc_path            ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)|(/usr/lib64/slurm/mpi_pmix.*so)|(/opt/pbs/sbin/pbs.*)$
 %%__elf_exclude_path     ^(%{OHPC_HOME})|(/usr/sbin/slurm.*)|(/usr/lib64/slurm/mpi_pmix.*so)|(/opt/pbs/sbin/pbs.*)$
 
-%%__ohpc_magic           ^ELF (32|64)-bit.*$
+%%__ohpc_magic           ^(setuid,? )?(setgid,? )?(sticky )?ELF (32|64)-bit.*$
 %%__ohpc_flags           magic_and_path
 EOF
 
