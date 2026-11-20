@@ -34,7 +34,11 @@ BuildRequires: yaml-cpp-devel
 BuildRequires: ncurses-devel
 BuildRequires: cmake
 Requires: python3
+%if 0%{?suse_version}
+Requires: python3-PyYAML
+%else
 Requires: python3-pyyaml
+%endif
 # LUACALLOUTS is off by default upstream and this build does not pass
 # -DLUACALLOUTS=TRUE, so the binaries never link against lua5.1.
 # Upstream itself cautions the feature "does not work fully" and
