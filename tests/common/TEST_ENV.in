@@ -24,3 +24,17 @@ SCAN_MPI_LAUNCHER=prun
 #------------------------
 #
 export OMP_NUM_THREADS=2
+
+#------------------------
+# OpenHPC autotools
+#------------------------
+#
+# Many configure.ac files of the test suite require autoconf 2.71, and EL9
+# provides autoconf 2.69. The autotools module adds the OpenHPC autoconf 2.71
+# to PATH. The test scripts run "module purge" before "./bootstrap", and
+# "module purge" unloads the autotools module. Lmod keeps a PATH entry that a
+# module did not add. The OpenHPC autotools therefore stay in PATH after
+# "module purge".
+if [ -d /opt/ohpc/pub/utils/autotools/bin ]; then
+	export PATH="/opt/ohpc/pub/utils/autotools/bin:${PATH}"
+fi
