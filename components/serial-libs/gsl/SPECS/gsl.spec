@@ -61,6 +61,13 @@ CFLAGS=$(echo "${CFLAGS}" | sed -e 's/-O3/-O2/g' -e 's/-march=[^ ]*//g')
 # Without -fp-model strict, the GSL tests in specfunc and multifit fail with
 # the Intel compiler.
 export CFLAGS="-fp-model strict $CFLAGS"
+%else
+# GCC compiles a multiplication followed by an addition into one fused
+# multiply-add (FMA) instruction if the CPU supports FMA. Every ppc64le CPU
+# supports FMA. An FMA instruction rounds once instead of twice and changes
+# the last bits of a result. The GSL tests in multifit, rstat and specfunc
+# fail on ppc64le with the changed results.
+export CFLAGS="-ffp-contract=off $CFLAGS"
 %endif
 
 ./configure CFLAGS="${CFLAGS}" --prefix=%{install_path} \
