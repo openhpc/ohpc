@@ -1,6 +1,6 @@
 /* rstat/test.c
  * 
- * Copyright (C) 2015 Patrick Alken
+ * Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Patrick Alken
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,48 +30,93 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_ieee_utils.h>
 
-double *
-random_data(const size_t n, gsl_rng *r)
+int
+random_data(const size_t n, double data[], gsl_rng *r)
 {
   size_t i;
-  double *data = malloc(n * sizeof(double));
 
   for (i = 0; i < n; ++i)
-    data[i] = gsl_rng_uniform(r);
+    data[i] = 2.0 * gsl_rng_uniform(r) - 1.0;
 
-  return data;
+  return 0;
 }
 
 void
-test_basic(const size_t n, const double data[], const double tol)
+test_basic(const size_t n, const double data[], const double tol, const char * desc)
 {
   gsl_rstat_workspace *rstat_workspace_p = gsl_rstat_alloc();
   const double expected_mean = gsl_stats_mean(data, 1, n);
-  const double expected_var = gsl_stats_variance(data, 1, n);
-  const double expected_sd = gsl_stats_sd(data, 1, n);
   const double expected_skew = gsl_stats_skew(data, 1, n);
   const double expected_kurtosis = gsl_stats_kurtosis(data, 1, n);
-  double mean, var, sd, skew, kurtosis;
-  size_t i;
+  double expected_rms = 0.0;
+  double expected_norm;
+  double mean, var, sd, sd_mean, rms, skew, kurtosis, norm;
+  size_t i, num;
+  int status;
+
+  /* compute expected rms */
+  for (i = 0; i < n; ++i)
+    expected_rms += data[i] * data[i];
+
+  expected_norm = sqrt(expected_rms);
+  expected_rms = sqrt(expected_rms / n);
 
   /* add data to rstat workspace */
   for (i = 0; i < n; ++i)
     gsl_rstat_add(data[i], rstat_workspace_p);
 
-  mean = gsl_rstat_mean(rstat_workspace_p);
-  var = gsl_rstat_variance(rstat_workspace_p);
-  sd = gsl_rstat_sd(rstat_workspace_p);
-  skew = gsl_rstat_skew(rstat_workspace_p);
+  mean     = gsl_rstat_mean(rstat_workspace_p);
+  rms      = gsl_rstat_rms(rstat_workspace_p);
+  norm     = gsl_rstat_norm(rstat_workspace_p);
+  skew     = gsl_rstat_skew(rstat_workspace_p);
   kurtosis = gsl_rstat_kurtosis(rstat_workspace_p);
+  num      = gsl_rstat_n(rstat_workspace_p);
 
-  gsl_test_rel(mean, expected_mean, tol, "mean n=%zu", n);
-  gsl_test_rel(var, expected_var, tol, "variance n=%zu", n);
-  gsl_test_rel(sd, expected_sd, tol, "stddev n=%zu", n);
-  gsl_test_rel(skew, expected_skew, tol, "skew n=%zu", n);
-  gsl_test_rel(kurtosis, expected_kurtosis, tol, "kurtosis n=%zu", n);
+  gsl_test_int(num, n, "%s n n=%zu", desc, n);
+  gsl_test_rel(mean, expected_mean, tol, "%s mean n=%zu", desc, n);
+  gsl_test_rel(rms, expected_rms, tol, "%s rms n=%zu", desc, n);
+  gsl_test_rel(norm, expected_norm, tol, "%s norm n=%zu", desc, n);
+  gsl_test_rel(skew, expected_skew, tol, "%s skew n=%zu", desc, n);
+  gsl_test_rel(kurtosis, expected_kurtosis, tol, "%s kurtosis n=%zu", desc, n);
+  
+  if (n > 1)
+    {
+      const double expected_var = gsl_stats_variance(data, 1, n);
+      const double expected_sd = gsl_stats_sd(data, 1, n);
+      const double expected_sd_mean = expected_sd / sqrt((double) n);
+
+      var      = gsl_rstat_variance(rstat_workspace_p);
+      sd       = gsl_rstat_sd(rstat_workspace_p);
+      sd_mean  = gsl_rstat_sd_mean(rstat_workspace_p);
+
+      gsl_test_rel(var, expected_var, tol, "%s variance n=%zu", desc, n);
+      gsl_test_rel(sd, expected_sd, tol, "%s stddev n=%zu", desc, n);
+      gsl_test_rel(sd_mean, expected_sd_mean, tol, "%s stddev_mean n=%zu", desc, n);
+    }
+
+  if (n <= 5)
+    {
+      /* median should be exact for n <= 5 */
+      double * data_copy = malloc(n * sizeof(double));
+      double expected_median, median;
+
+      memcpy(data_copy, data, n * sizeof(double));
+      expected_median = gsl_stats_median(data_copy, 1, n);
+      median = gsl_rstat_median(rstat_workspace_p);
+
+      gsl_test_rel(median, expected_median, tol, "%s median n=%zu", desc, n);
+
+      free(data_copy);
+    }
+
+  status = gsl_rstat_reset(rstat_workspace_p);
+  gsl_test_int(status, GSL_SUCCESS, "%s: rstat returned success", desc);
+  num = gsl_rstat_n(rstat_workspace_p);
+
+  gsl_test_int(num, 0, "n n=%zu" , n);
 
   gsl_rstat_free(rstat_workspace_p);
-} /* test_basic() */
+}
 
 void
 test_quantile(const double p, const double data[], const size_t n,
@@ -92,7 +137,7 @@ test_quantile(const double p, const double data[], const size_t n,
     gsl_test_rel(result, expected, tol, "%s p=%g", desc, p);
 
   gsl_rstat_quantile_free(w);
-} /* test_quantile() */
+}
 
 int
 main()
@@ -105,22 +150,44 @@ main()
 
   {
     const size_t N = 2000000;
-    double *data = random_data(N, r);
-    double data2[] = { 4.0, 7.0, 13.0, 16.0 };
-    size_t i;
+    double *data = malloc(N * sizeof(double));
+    double data2[5];
+    size_t i, j;
+    char buf[64];
 
-    test_basic(100, data, tol1);
-    test_basic(1000, data, tol1);
-    test_basic(10000, data, tol1);
-    test_basic(50000, data, tol1);
-    test_basic(80000, data, tol1);
-    test_basic(1500000, data, tol1);
-    test_basic(2000000, data, tol1);
+    /* test1: test on small datasets n <= 5 (median will be exact in this case) */
+    for (i = 0; i < 100; ++i)
+      {
+        random_data(5, data2, r);
 
-    for (i = 0; i < 4; ++i)
+        for (j = 1; j <= 5; ++j)
+          {
+            sprintf(buf, "test1 j=%zu", j);
+            test_basic(j, data2, tol1, buf);
+          }
+      }
+
+    /* test2: test on large datasets */
+
+    random_data(N, data, r);
+
+    for (i = 1; i <= 10; ++i)
+      test_basic(i, data, tol1, "test2");
+
+    test_basic(100, data, tol1, "test2");
+    test_basic(1000, data, tol1, "test2");
+    test_basic(10000, data, tol1, "test2");
+    test_basic(50000, data, tol1, "test2");
+    test_basic(80000, data, tol1, "test2");
+    test_basic(1500000, data, tol1, "test2");
+    test_basic(2000000, data, tol1, "test2");
+
+    /* test3: add large constant */
+
+    for (i = 0; i < 5; ++i)
       data2[i] += 1.0e9;
 
-    test_basic(4, data2, tol1);
+    test_basic(5, data2, 1.0e-6, "test3");
 
     free(data);
   }
