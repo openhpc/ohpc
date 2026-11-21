@@ -272,7 +272,7 @@ tests = ""
 admin_tests = ""
 pkgs = ""
 
-for i in args.specs:
+for i in specs_to_process:
     if i in test_map:
         if len(tests) > 0:
             tests += " "
@@ -287,6 +287,12 @@ for i in args.specs:
         if len(test_map[i][1]) > 0:
             admin_tests += f"--enable-{test_map[i][1]}"
         pkgs += test_map[i][2]
+
+# Add additional packages when running ALL tests
+if args.specs == ["ALL"] and all_test_packages:
+    if pkgs:
+        pkgs += " "
+    pkgs += " ".join(all_test_packages)
 
 pkgs = pkgs.replace("python3", python_prefix)
 
