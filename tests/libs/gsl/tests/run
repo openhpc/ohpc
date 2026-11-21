@@ -2,9 +2,13 @@
 
 cd "$(dirname "$0")" || exit 1
 
-pushd ohpc_module
-./test_module
-popd
+status=0
 
-./build
-./rm_execution
+pushd ohpc_module || exit 1
+./test_module || status=1
+popd || exit 1
+
+./build || status=1
+./rm_execution || status=1
+
+exit "${status}"
