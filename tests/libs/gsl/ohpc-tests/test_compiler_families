@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
@@ -30,7 +31,7 @@ for compiler in $COMPILER_FAMILIES ; do
     ./configure                 || exit 1
     make clean     >& /dev/null || exit 1
     pushd tests    >& /dev/null || exit 1
-    ./run
+    ./run || status=1
 
     for tdir in *; do
 	if [ -d "$tdir" ]; then
@@ -42,3 +43,5 @@ for compiler in $COMPILER_FAMILIES ; do
     make distclean >& /dev/null
 
 done
+
+exit "${status}"
