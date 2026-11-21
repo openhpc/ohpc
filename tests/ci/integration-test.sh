@@ -463,6 +463,10 @@ fi
 
 # Run admin-level tests as root
 export USER=root
+# The root shell of this script has no modules loaded. tests/configure.ac
+# requires autoconf 2.71, and EL9 provides autoconf 2.69. The OpenHPC
+# autotools provide autoconf 2.71.
+export PATH=/opt/ohpc/pub/utils/autotools/bin:${PATH}
 cd /home/ohpc-test/tests/
 ./bootstrap
 ./configure --disable-all --disable-bos --disable-oob --disable-spack
