@@ -52,6 +52,11 @@ CPPFLAGS="-I.."
 
 if test "$LMOD_FAMILY_COMPILER" = "intel"; then
    CFLAGS="${CFLAGS} -fp-model strict"
+else
+   # The gsl package is built with -ffp-contract=off. The multifit tests
+   # compute their model functions in the test program, so the test program
+   # needs the same flag.
+   CFLAGS="${CFLAGS} -ffp-contract=off"
 fi
 
 AM_CONDITIONAL(USE_GNU_COMPILER, test "$LMOD_FAMILY_COMPILER" = "gnu")
