@@ -20,7 +20,7 @@
 
 Summary:   The Go programming language toolchain
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.26.8
+Version:   1.27.4
 Release:   %{?dist}.1
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/dev-tools
