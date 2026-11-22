@@ -20,13 +20,9 @@ setup_file() {
 	export NODES TASKS ARGS TIMEOUT TESTNAME
 }
 
-# Skip tests requiring hardware counters on aarch64 in SIMPLE_CI
-skip_if_aarch64_ci() {
-	[[ -n "${SIMPLE_CI}" && "$(uname -m)" == "aarch64" ]] && skip "Skipping on aarch64 in SIMPLE_CI"
-	return 0
-}
-
-# Skip tests requiring hardware counters in SIMPLE_CI (all arches)
+# Skip tests requiring hardware counters in SIMPLE_CI (all arches). The CPU
+# of a CI runner differs between jobs. PAPI reports no hardware events on a
+# CPU that its libpfm4 does not support.
 skip_if_simple_ci() {
 	[[ -n "${SIMPLE_CI}" ]] && skip "Skipping in SIMPLE_CI mode"
 	return 0
@@ -90,7 +86,7 @@ skip_if_simple_ci() {
 }
 
 @test "[${TESTNAME}] FORTRAN start/stop and read under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
-	skip_if_aarch64_ci
+	skip_if_simple_ci
 
 	if [ ! -s cost ]; then
 		flunk "cost binary does not exist"
@@ -101,7 +97,7 @@ skip_if_simple_ci() {
 }
 
 @test "[${TESTNAME}] FORTRAN multiplex under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
-	skip_if_aarch64_ci
+	skip_if_simple_ci
 
 	if [ ! -s fmultiplex1 ]; then
 		flunk "fmultiplex1 binary does not exist"
@@ -130,7 +126,7 @@ skip_if_simple_ci() {
 }
 
 @test "[${TESTNAME}] FORTRAN L1 cache miss under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
-	skip_if_aarch64_ci
+	skip_if_simple_ci
 
 	if [ ! -s tenth ]; then
 		flunk "tenth binary does not exist"
@@ -141,7 +137,7 @@ skip_if_simple_ci() {
 }
 
 @test "[${TESTNAME}] FORTRAN start, stop and timer under resource manager (${RESOURCE_MANAGER}/${LMOD_FAMILY_COMPILER})" {
-	skip_if_aarch64_ci
+	skip_if_simple_ci
 
 	if [ ! -s zero ]; then
 		flunk "zero binary does not exist"
