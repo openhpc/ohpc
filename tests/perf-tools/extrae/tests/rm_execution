@@ -65,7 +65,7 @@ setup_file() {
 
 	rm -f job.out
 
-	run_mpi_binary -t "${TIMEOUT}" -o "job.out" "mpimpi2prv -syn -f TRACE.mpits -o trace.prv" "" "${NODES}" "${TASKS}"
+	run_mpi_binary -t "${TIMEOUT}" -o "job.out" "mpimpi2prv -f TRACE.mpits -o trace.prv" "" "${NODES}" "${TASKS}"
 	assert_success
 
 	run ls trace.prv
