@@ -9,7 +9,6 @@ on:
       - 3.x
 
 permissions:
-  actions: write
   contents: read
 
 concurrency:
@@ -77,6 +76,10 @@ jobs:
         key: ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
         restore-keys: |
           ccache-rhel-${{ matrix.os }}-${{ matrix.compiler }}-
+    # The 3.x jobs only restore the oneAPI package cache that the 4.x jobs
+    # save. GitHub lets a run restore the caches of the default branch 4.x.
+    # The save mode of oneapi-cache deletes the oneAPI cache entries of all
+    # branches, including the 4.x entry.
     - name: Restore oneAPI package cache
       if: matrix.compiler == 'intel'
       uses: ./.github/actions/oneapi-cache
@@ -112,11 +115,6 @@ jobs:
           /home/ohpc/rpmbuild/RPMS/noarch/*rpm
           /home/ohpc/rpmbuild/RPMS/x86_64/*rpm
           /tmp/empty
-    - name: Save oneAPI package cache
-      if: always() && matrix.compiler == 'intel'
-      uses: ./.github/actions/oneapi-cache
-      with:
-        mode: save
     - name: Save ccache
       if: always()
       uses: actions/cache/save@v6
@@ -217,11 +215,6 @@ jobs:
         name: test-results-${{ matrix.compiler }}-${{ matrix.os }}
         retention-days: 1
         path: tests/**/*.log.xml
-    - name: Save oneAPI package cache
-      if: always() && matrix.compiler == 'intel'
-      uses: ./.github/actions/oneapi-cache
-      with:
-        mode: save
     - name: Save ccache
       if: always()
       uses: actions/cache/save@v6

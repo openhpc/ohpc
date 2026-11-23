@@ -14,7 +14,7 @@ runs:
     - name: Restore oneAPI package cache
       if: inputs.mode == 'restore'
       id: restore-oneapi
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: /var/cache/dnf/oneAPI-*/packages
         key: dnf-oneapi-rhel
@@ -42,7 +42,7 @@ runs:
         done
     - name: Save oneAPI package cache
       if: inputs.mode == 'save'
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: /var/cache/dnf/oneAPI-*/packages
         key: dnf-oneapi-rhel-${{ github.run_id }}
