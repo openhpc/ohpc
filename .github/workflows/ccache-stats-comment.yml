@@ -98,6 +98,19 @@ jobs:
           fi
         }
 
+        # The 4.x branch runs the RHEL tests with Slurm and with Flux, and the
+        # names of its RHEL artifacts end in "-slurm" or "-flux". The 3.x
+        # branch tests only with Slurm, and its RHEL artifact names have no
+        # suffix. A pull request for 3.x runs this workflow from the default
+        # branch, so rhel_data falls back to the name without "-slurm".
+        rhel_data() {
+          if [ -d "artifacts/ccache-stats-rhel-$1-slurm" ]; then
+            echo "artifacts/ccache-stats-rhel-$1-slurm/data.txt"
+          else
+            echo "artifacts/ccache-stats-rhel-$1/data.txt"
+          fi
+        }
+
         # Start building the comment
         echo '## 🚀 CCache Statistics' > artifacts/comment.md
         echo '' >> artifacts/comment.md
@@ -121,7 +134,7 @@ jobs:
         fi
 
         # x86_64/gnu16
-        rhel_rate=$(get_value "artifacts/ccache-stats-rhel-x86_64-gnu16-slurm/data.txt" "hit_rate")
+        rhel_rate=$(get_value "$(rhel_data x86_64-gnu16)" "hit_rate")
         euler_rate=$(get_value "artifacts/ccache-stats-openeuler-x86_64/data.txt" "hit_rate")
         leap_rate=$(get_value "artifacts/ccache-stats-leap-x86_64-gnu16/data.txt" "hit_rate")
         if [ "$has_leap" = true ]; then
@@ -131,7 +144,7 @@ jobs:
         fi
 
         # x86_64/intel
-        rhel_intel_rate=$(get_value "artifacts/ccache-stats-rhel-x86_64-intel-slurm/data.txt" "hit_rate")
+        rhel_intel_rate=$(get_value "$(rhel_data x86_64-intel)" "hit_rate")
         if [ "$has_leap" = true ]; then
           echo "| 🖥️ x86_64 / intel | $(format_hit_rate "$rhel_intel_rate") | - | - |" >> artifacts/comment.md
         else
@@ -139,7 +152,7 @@ jobs:
         fi
 
         # aarch64/gnu16
-        rhel_arm_rate=$(get_value "artifacts/ccache-stats-rhel-aarch64-gnu16-slurm/data.txt" "hit_rate")
+        rhel_arm_rate=$(get_value "$(rhel_data aarch64-gnu16)" "hit_rate")
         euler_arm_rate=$(get_value "artifacts/ccache-stats-openeuler-aarch64/data.txt" "hit_rate")
         leap_arm_rate=$(get_value "artifacts/ccache-stats-leap-aarch64-gnu16/data.txt" "hit_rate")
         if [ "$has_leap" = true ]; then
@@ -149,7 +162,7 @@ jobs:
         fi
 
         # ppc64le/gnu16
-        rhel_ppc_rate=$(get_value "artifacts/ccache-stats-rhel-ppc64le-gnu16-slurm/data.txt" "hit_rate")
+        rhel_ppc_rate=$(get_value "$(rhel_data ppc64le-gnu16)" "hit_rate")
         if [ "$has_leap" = true ]; then
           echo "| ⚡ ppc64le / gnu16 | $(format_hit_rate "$rhel_ppc_rate") | - | - |" >> artifacts/comment.md
         else
