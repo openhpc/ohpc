@@ -83,8 +83,11 @@ setup_file() {
 	run ls job.out
 	assert_success
 
-	run tail -1 job.out
-	assert_output "mpi2prv: Congratulations! trace.prv has been generated."
+	# Every MPI task of mpi2prv writes to job.out. The lines of the tasks
+	# arrive in no fixed order, so the success message is not always the
+	# last line.
+	run grep -Fx "mpi2prv: Congratulations! trace.prv has been generated." job.out
+	assert_success
 
 	rm -rf profile*
 	rm -f pingtmp?
