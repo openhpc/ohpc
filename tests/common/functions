@@ -76,7 +76,27 @@ get_python_vars() {
 	if [ "${__PYTHON_FAMILY}" == "python3" ]; then
 		export _python=python3
 		export python_module_prefix=py3
-		export python_package_prefix=python3
+		# OpenHPC 3 builds its Python packages for Python 3.11 on EL9 and
+		# Leap. The package names contain that version: python_prefix in
+		# components/OHPC_macros is python3.11 on EL9 and python311 on
+		# Leap. Read /etc/os-release in a subshell, so that its variables
+		# do not replace variables of the caller.
+		local os_ids=""
+		if [ -r /etc/os-release ]; then
+			# shellcheck source=/dev/null
+			os_ids="$(. /etc/os-release && echo "${ID-} ${ID_LIKE-}")"
+		fi
+		case " ${os_ids} " in
+		*" rhel "*)
+			export python_package_prefix=python3.11
+			;;
+		*" suse "*)
+			export python_package_prefix=python311
+			;;
+		*)
+			export python_package_prefix=python3
+			;;
+		esac
 	fi
 }
 
