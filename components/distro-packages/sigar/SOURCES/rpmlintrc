@@ -1,3 +1,0 @@
-addFilter("devel-file-in-non-devel-package")
-addFilter("shlib-policy-name-error")
-addFilter("library-without-ldconfig-postin")
