@@ -534,6 +534,16 @@ elif [[ "${PROVISIONER}" == "openchami" ]]; then
 		[network]
 		default_subnet = "10.99.0.0/16"
 	CONTEOF
+	# On EL9, the OpenCHAMI recipe installs podman together with
+	# iptables-legacy from EPEL. netavark then creates its firewall rules
+	# with legacy iptables, which needs the ip_tables kernel module. The
+	# kernel of the GitHub runner has no ip_tables module, so the recipe's
+	# containers fail to start. EL10 installs iptables-nft instead. echo
+	# appends the setting to the [network] table, because [network] is the
+	# last table in containers.conf.
+	if [[ "${PLATFORM_ID}" == "platform:el9" ]]; then
+		echo 'firewall_driver = "nftables"' >>/etc/containers/containers.conf
+	fi
 	cat >/etc/containers/storage.conf <<-'STOREOF'
 		[storage]
 		driver = "vfs"
