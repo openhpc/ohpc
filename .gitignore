@@ -94,7 +94,6 @@ components/parallel-libs/fftw/SOURCES/fftw-*.tar.gz
 components/parallel-libs/hypre/SOURCES/hypre-*.tar.gz
 components/parallel-libs/mfem/SOURCES/mfem-*.tar
 components/parallel-libs/mumps/SOURCES/MUMPS*.tar.gz
-components/parallel-libs/opencoarrays/SOURCES/*.tar.gz
 components/parallel-libs/petsc/SOURCES/petsc-*.tar.gz
 components/parallel-libs/ptscotch/SOURCES/scotch*.bz2
 components/parallel-libs/ptscotch/SOURCES/scotch*.tar.gz
