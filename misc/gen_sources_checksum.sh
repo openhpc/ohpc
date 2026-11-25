@@ -43,19 +43,32 @@ sources_dir="$(cd "${sources_dir}" && pwd)"
 
 manifest="${sources_dir}/ohpc.checksums"
 
+# The spec files include %{_sourcedir}/OHPC_macros, and OHPC_macros is in
+# components/. Without the define, rpmspec looks for it in
+# ~/rpmbuild/SOURCES and fails on a host that has no copy there.
+components_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../components" && pwd)"
+
+tmpfile="$(mktemp)"
+rpmspec_errors="$(mktemp)"
+trap 'rm -f "${tmpfile}" "${rpmspec_errors}"' EXIT
+
 # Collect Source file basenames from the parsed spec.
 # "rpmspec --parse" expands all macros/conditionals so we see the
 # final Source lines regardless of %if guards or %include files.
+# rpmspec warns about macros in the comments of some spec files. Print its
+# messages only when it fails, so that a caller can treat any message on
+# stderr as a problem with the manifest.
+if ! parsed="$(rpmspec --parse --define "_sourcedir ${components_dir}" \
+	"${specfile}" 2>"${rpmspec_errors}")"; then
+	cat "${rpmspec_errors}" >&2
+	die "rpmspec --parse failed for ${specfile}"
+fi
 mapfile -t source_urls < <(
-	rpmspec --parse "${specfile}" 2>/dev/null |
-		grep -iE '^Source[0-9]*\s*:' |
+	grep -iE '^Source[0-9]*\s*:' <<<"${parsed}" |
 		sed 's/^[^:]*:\s*//'
 )
 
 [[ ${#source_urls[@]} -gt 0 ]] || die "no Source tags found in ${specfile}"
-
-tmpfile="$(mktemp)"
-trap 'rm -f "${tmpfile}"' EXIT
 
 count=0
 for url in "${source_urls[@]}"; do
