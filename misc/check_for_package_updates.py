@@ -1084,6 +1084,21 @@ def strip_ohpc_suffixes(name):
     return name
 
 
+def display_name(name):
+    """Return the name that the output shows for the result *name*.
+
+    The script checks one build of each package against upstream.  The
+    ``-ohpc`` suffix, the compiler and MPI families and the MPICH
+    transport (``ofi`` or ``ucx``) only identify that build, so the
+    output leaves them out.  A GNU compiler component appears as gcc,
+    gmp, mpc or mpfr.
+    """
+    m = re.match(r"^gnu\d+-compilers-(gcc|gmp|mpc|mpfr)$", name)
+    if m:
+        return m.group(1)
+    return re.sub(r"-(?:ofi|ucx)$", "", strip_ohpc_suffixes(name))
+
+
 # ---------------------------------------------------------------------------
 # Checker dispatch helpers
 # ---------------------------------------------------------------------------
@@ -1659,7 +1674,7 @@ def commit_updates(updated_results):
     body_lines = []
     for r in updated_results:
         latest = normalize_version(r.latest_version)
-        name = strip_ohpc_suffixes(r.name)
+        name = display_name(r.name)
         body_lines.append(f"- {name}: {r.current_version} -> {latest}")
         body_lines.append(f"  upstream: {r.repo}")
 
@@ -1898,7 +1913,14 @@ def display_results_table(results):
             status = f"{status} (pin:{r.version_pin})"
         print(
             f"{color}"
-            + fmt % (r.name, r.current_version, r.latest_version, status, r.repo)
+            + fmt
+            % (
+                display_name(r.name),
+                r.current_version,
+                r.latest_version,
+                status,
+                r.repo,
+            )
             + f"{reset}"
         )
 
@@ -1908,7 +1930,7 @@ def display_results_json(results):
     data = []
     for r in results:
         entry = {
-            "name": r.name,
+            "name": display_name(r.name),
             "current_version": r.current_version,
             "latest_version": r.latest_version,
             "status": r.status,
@@ -1999,7 +2021,7 @@ def display_results_markdown(results, no_glow):
             url = _repo_url(r.repo)
             repo_cell = f"[{r.repo}]({url})"
         lines.append(
-            f"| {r.name:<30s} "
+            f"| {display_name(r.name):<30s} "
             f"| {r.current_version:<15s} "
             f"| {r.latest_version:<20s} "
             f"| {emoji} {status:<25s} "
@@ -2248,8 +2270,9 @@ def main(argv=None):
 
     log_info(f"Processed {processed} spec files")
 
-    # Sort results alphabetically by package name
-    all_results.sort(key=lambda r: r.name)
+    # Sort by the shown name. The full package names would put netcdf
+    # after netcdf-fortran, because "-gnu16" sorts after "-fortran".
+    all_results.sort(key=lambda r: display_name(r.name))
 
     # Display results
     if all_results:
@@ -2272,7 +2295,7 @@ def main(argv=None):
         for r in updatable:
             if r.config_file is not None:
                 log_info(
-                    f"Not updating {r.name} in {r.config_file}, "
+                    f"Not updating {display_name(r.name)} in {r.config_file}, "
                     "documentation versions are updated by hand"
                 )
         updatable = [r for r in updatable if r.config_file is None]
@@ -2282,7 +2305,9 @@ def main(argv=None):
             updated = []
             for r in updatable:
                 if r.spec_file is None:
-                    log_warn(f"No spec file recorded for {r.name}, skipping")
+                    log_warn(
+                        f"No spec file recorded for {display_name(r.name)}, skipping"
+                    )
                     continue
                 latest = normalize_version(r.latest_version)
                 if (

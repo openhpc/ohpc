@@ -11,6 +11,12 @@ spec file using the
 library, then queries the appropriate upstream source to find the latest
 available version.
 
+The output names a package without the `-ohpc` suffix, the compiler and
+MPI families and the MPICH transport (`ofi` or `ucx`). For example,
+`adios2-gnu16-openmpi5-ohpc` appears as `adios2` and
+`mpich-ofi-gnu16-ohpc` as `mpich`. The components of the GNU compiler
+suite appear as `gcc`, `gmp`, `mpc` and `mpfr`.
+
 ## Supported upstream sources
 
 The following sources are tried in order for each package.  The first
@@ -90,7 +96,7 @@ python3 misc/check_for_package_updates.py gsl
 ```
 PACKAGE                             CURRENT         LATEST                    STATUS               REPOSITORY
 ----------------------------------- --------------- ------------------------- -------------------- --------------------------------------------------
-gsl-gnu15-ohpc                      2.8             2.8                       UP_TO_DATE           release-monitoring.org/1267
+gsl                                 2.8             2.8                       UP_TO_DATE           release-monitoring.org/1267
 ```
 
 You can also use a longer path fragment:
@@ -112,10 +118,10 @@ python3 misc/check_for_package_updates.py gnu-compilers
 ```
 PACKAGE                             CURRENT         LATEST                    STATUS               REPOSITORY
 ----------------------------------- --------------- ------------------------- -------------------- --------------------------------------------------
-gnu15-compilers-gcc                 15.2.0          15.2.0                    UP_TO_DATE           gnu.org/gcc
-gnu15-compilers-gmp                 6.3.0           6.3.0                     UP_TO_DATE           gnu.org/gmp
-gnu15-compilers-mpc                 1.3.1           1.3.1                     UP_TO_DATE           gnu.org/mpc
-gnu15-compilers-mpfr                4.2.2           4.2.2                     UP_TO_DATE           gnu.org/mpfr
+gcc                                 15.2.0          15.2.0                    UP_TO_DATE           gnu.org/gcc
+gmp                                 6.3.0           6.3.0                     UP_TO_DATE           gnu.org/gmp
+mpc                                 1.3.1           1.3.1                     UP_TO_DATE           gnu.org/mpc
+mpfr                                4.2.2           4.2.2                     UP_TO_DATE           gnu.org/mpfr
 ```
 
 ### Verbose output
@@ -147,7 +153,7 @@ python3 misc/check_for_package_updates.py -o json gsl
 ```json
 [
   {
-    "name": "gsl-gnu15-ohpc",
+    "name": "gsl",
     "current_version": "2.8",
     "latest_version": "2.8",
     "status": "UP_TO_DATE",
@@ -172,7 +178,7 @@ Otherwise raw Markdown is printed:
 
 | Package | Current | Latest | Status | Repository |
 |---------|---------|--------|--------|------------|
-| gsl-gnu15-ohpc | 2.8 | 2.8 | UP_TO_DATE | [release-monitoring.org/1267](...) |
+| gsl | 2.8 | 2.8 | UP_TO_DATE | [release-monitoring.org/1267](...) |
 ```
 
 ### Update a spec file
