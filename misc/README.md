@@ -183,21 +183,56 @@ Otherwise raw Markdown is printed:
 
 ### Update a spec file
 
-When `--update` is passed, the script modifies any spec file where an
-update is available.  For standard packages it uses the `specfile`
-library to update the `Version:` tag.  For GNU compiler components it
-updates the corresponding `%global` macro directly.
+`--update` sets each spec file that has a newer upstream release to that
+release and commits the change. The commit contains everything that is
+staged in the git index, so unstage other changes before you run it.
 
 ```bash
-# See what would be updated (dry run -- omit --update)
+# Check the package without changing anything
 python3 misc/check_for_package_updates.py cmake
 
-# Apply the update
+# Update the spec file and commit the change
 python3 misc/check_for_package_updates.py --update cmake
 
-# Review the change
-git diff components/dev-tools/cmake/SPECS/cmake.spec
+# Review the commit
+git show --stat
 ```
+
+For each package with a newer release, the script:
+
+1. Sets the `Version:` tag of the spec file. For a GNU compiler component
+   it sets the matching `%global` macro instead, for example
+   `gnu16_version` for gcc or `gnu16_gmp_version` for gmp.
+2. Downloads the new sources with `misc/get_source.sh` and writes their
+   checksums to `SOURCES/ohpc.checksums` with
+   `misc/gen_sources_checksum.sh`.
+
+If either script fails, the commit contains the spec file without the
+new checksums. `SOURCES/ohpc.checksums` then still names the previous
+source tarball, and a build that does not have that tarball fails the
+checksum verification before `%prep`. Errors of `get_source.sh` appear
+as warnings. Errors of `gen_sources_checksum.sh` appear only with `-v`.
+For a package that has a `SOURCES/ohpc.checksums` file, check that
+`git show --stat` lists it.
+
+The script creates one commit for all updated spec files and their
+checksum files. The `Signed-off-by` line uses `user.name` and
+`user.email` from your git configuration:
+
+```
+dev-tools: update cmake to 4.5.1 ⬆️
+
+- cmake: 4.5.0 -> 4.5.1
+  upstream: release-monitoring.org/306
+
+Command: `misc/check_for_package_updates.py --update cmake`
+
+Signed-off-by: Jane Smith <jane.smith@example.org>
+```
+
+A run that updates several spec files creates a single commit with a
+subject that ends in `update packages to latest versions ⬆️`. To get one
+commit per package, run `--update` once for each package.
 
 ### Using a GitHub token
 
