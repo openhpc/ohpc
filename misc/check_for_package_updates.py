@@ -1583,10 +1583,15 @@ def regenerate_source_checksums(spec_file, verbose):
         )
         if result.returncode == 0:
             log_info(result.stdout.strip())
+            # gen_sources_checksum.sh skips a source file that is not
+            # downloaded and still succeeds. The manifest then has no
+            # checksum for that file.
+            for line in result.stderr.strip().splitlines():
+                log_warn(f"gen_sources_checksum.sh: {line}")
         else:
-            debug_info(
-                f"gen_sources_checksum.sh: {result.stderr.strip()}",
-                verbose,
+            log_warn(
+                f"gen_sources_checksum.sh failed for {spec_file}: "
+                f"{result.stderr.strip()}"
             )
     except FileNotFoundError:
         debug_info("bash not available to run gen_sources_checksum.sh", verbose)

@@ -207,13 +207,18 @@ For each package with a newer release, the script:
    checksums to `SOURCES/ohpc.checksums` with
    `misc/gen_sources_checksum.sh`.
 
-If either script fails, the commit contains the spec file without the
-new checksums. `SOURCES/ohpc.checksums` then still names the previous
-source tarball, and a build that does not have that tarball fails the
-checksum verification before `%prep`. Errors of `get_source.sh` appear
-as warnings. Errors of `gen_sources_checksum.sh` appear only with `-v`.
-For a package that has a `SOURCES/ohpc.checksums` file, check that
-`git show --stat` lists it.
+The script reports a problem in either step as a warning and still
+commits the spec file:
+
+- If `gen_sources_checksum.sh` fails, `SOURCES/ohpc.checksums` keeps the
+  checksum of the previous source tarball. A build that does not have
+  that tarball fails the checksum verification before `%prep`.
+- If `get_source.sh` cannot download a source file,
+  `SOURCES/ohpc.checksums` has no checksum for that file, and the build
+  does not verify it.
+
+After an update, check that `SOURCES/ohpc.checksums` in the commit has
+a line for the new source tarball.
 
 The script creates one commit for all updated spec files and their
 checksum files. The `Signed-off-by` line uses `user.name` and
