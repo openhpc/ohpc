@@ -18,14 +18,14 @@
 
 Summary: LBNL Node Health Check
 Name: %{pname}%{PROJ_DELIM}
-Version: 1.4.3
+Version: 1.5.1
 Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/mej/nhc/
 Source0: https://github.com/mej/nhc/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Patch0: nhc-ps-chronyd.patch
-Patch1: 5e18b7f-speedup-read-cpuinfo.patch
+Patch1: nhc-export-nhc-rm.patch
 Requires: bash
 BuildRequires: automake autoconf
 BuildRequires: make
@@ -63,7 +63,6 @@ perl -pi -e "s/check_ps_service -u root -S sshd/check_ps_service -m 'sshd:' -u r
 %files
 %doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
 %dir %{_sysconfdir}/%{pname}/
-%dir %{_localstatedir}/lib/%{pname}/
 %dir %{_localstatedir}/run/%{pname}/
 %dir %{nhc_script_dir}/
 %dir %{nhc_helper_dir}/
