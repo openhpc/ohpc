@@ -7,14 +7,14 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-# OpenHPC:check-updates:version-pin 4.2
+# OpenHPC:check-updates:version-pin 5.0
 
 %include %{_sourcedir}/OHPC_macros
 %global pname pmix
 
 Summary: An extended/exascale implementation of PMI
 Name: %{pname}%{PROJ_DELIM}
-Version: 4.2.9
+Version: 5.0.11
 Release: 1%{?dist}
 License: BSD
 URL: https://pmix.org/

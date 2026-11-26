@@ -14,7 +14,7 @@
 Summary:	PMIx support for the Flux resource manager
 Name:		%{pname}%{PROJ_DELIM}
 Version:	0.7.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	LGPL-3.0
 Group:		%{PROJ_NAME}/rms
 URL:		https://github.com/flux-framework/flux-pmix
