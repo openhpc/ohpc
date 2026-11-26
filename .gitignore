@@ -51,6 +51,7 @@ components/dev-tools/automake/SOURCES/automake-*.tar.gz
 components/dev-tools/cmake/SOURCES/cmake-*.tar.gz
 components/dev-tools/cuda-devel/SOURCES/cuda*repo
 components/dev-tools/easybuild/SOURCES/easybuild*.tar.gz
+components/dev-tools/golang/SOURCES/go*.src.tar.gz
 components/dev-tools/hwloc/SOURCES/hwloc-*.tar.bz2
 components/dev-tools/libtool/SOURCES/libtool-*.tar.gz
 components/dev-tools/mpi4py/SOURCES/mpi4py-*.tar.gz
@@ -75,6 +76,7 @@ components/fs/shine/SOURCES/v*.tar.gz
 # ---- Components: source tarballs (io-libs) ----
 components/io-libs/*hdf5/SOURCES/hdf5*.tar.*
 components/io-libs/adios2/SOURCES/*.tar.gz
+components/io-libs/cubew/SOURCES/cubew-*.tar.gz
 components/io-libs/netcdf-cxx/SOURCES/v*.tar.gz
 components/io-libs/netcdf-fortran/SOURCES/v*.tar.gz
 components/io-libs/netcdf/SOURCES/v*.tar.gz
