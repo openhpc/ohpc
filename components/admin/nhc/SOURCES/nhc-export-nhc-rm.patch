@@ -1,0 +1,16 @@
+nhc 1.5 detects the resource manager and stores its name in NHC_RM, but
+does not export the variable. The helpers node-mark-offline and
+node-mark-online read NHC_RM from the environment. Without the export
+they print "No resource manager configured; nothing to do." and exit,
+and a failed check does not drain the node.
+
+--- a/nhc
++++ b/nhc
+@@ -1060,6 +1060,7 @@
+ 
+     ### FIXME:  These shouldn't *need* to be exported, right?
+     #export NAME CONFDIR CONFFILE INCDIR HELPERDIR ONLINE_NODE OFFLINE_NODE LOGFILE DEBUG NHC_TS SILENT TIMEOUT NHC_RM
++    export NHC_RM
+ }
+ 
+ function nhcmain_find_rm() {
