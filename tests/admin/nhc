@@ -8,6 +8,32 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
+# The drain test runs nhc on one compute node. On a host that is its own
+# Slurm node, as in a single container, the commands run without ssh.
+on_node() {
+    local node=$1
+    shift
+    if [ "$node" == "$(hostname -s)" ]; then
+        bash -c "$*"
+    else
+        ssh "$node" "$*"
+    fi
+}
+
+NHC_DRAIN_CONF=/etc/nhc/nhc.conf.drain-test
+NHC_DRAIN_NODE_FILE="${BATS_FILE_TMPDIR}/nhc-drain-node"
+
+teardown_file() {
+    local node
+    [ -s "$NHC_DRAIN_NODE_FILE" ] || return 0
+    node=$(cat "$NHC_DRAIN_NODE_FILE")
+    on_node "$node" rm -f "$NHC_DRAIN_CONF"
+    # A failed test leaves the node drained. The later tests need the node.
+    if [[ "$(sinfo -h -n "$node" -o '%E')" == NHC:* ]]; then
+        scontrol update NodeName="$node" State=RESUME
+    fi
+}
+
 @test "[nhc] check for RPM" {
     run check_if_rpm_installed "nhc${DELIM}"
     assert_success
@@ -34,4 +60,32 @@ fi
     assert_failure
     run systemctl status rsyslog
     assert_success
+}
+
+@test "[nhc] failed check drains a Slurm node and passing check resumes it" {
+    if [ ! -s /etc/slurm/slurm.conf ]; then
+        skip "nhc drains nodes only with Slurm in this test"
+    fi
+    node=$(sinfo -h -N -t idle -o '%N' | head -1)
+    if [ -z "$node" ]; then
+        skip "no idle Slurm node"
+    fi
+    if ! on_node "$node" rpm -q --quiet "nhc${DELIM}"; then
+        skip "nhc${DELIM} is not installed on $node"
+    fi
+    echo "$node" > "$NHC_DRAIN_NODE_FILE"
+
+    on_node "$node" "echo ' * || check_file_test -f /nonexistent-nhc-drain-test' > $NHC_DRAIN_CONF"
+    run on_node "$node" nhc -c "$NHC_DRAIN_CONF"
+    assert_failure
+    run sinfo -h -n "$node" -o '%T %E'
+    assert_success
+    [[ "$output" == drain*" NHC:"* ]] || flunk "node $node not drained by nhc: $output"
+
+    on_node "$node" "echo ' * || check_file_test -d /' > $NHC_DRAIN_CONF"
+    run on_node "$node" nhc -c "$NHC_DRAIN_CONF"
+    assert_success
+    run sinfo -h -n "$node" -o '%T %E'
+    assert_success
+    [[ "$output" != drain* ]] || flunk "node $node still drained: $output"
 }
