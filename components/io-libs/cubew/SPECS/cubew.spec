@@ -17,7 +17,7 @@
 
 Summary:        CUBE Uniform Behavioral Encoding generic presentation writer component
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        4.9.1
+Version:        4.10
 Release:        1%{?dist}
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/io-libs
