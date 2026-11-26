@@ -64,7 +64,6 @@ components/dev-tools/valgrind/SOURCES/valgrind-*.tar.bz2
 
 # ---- Components: source tarballs (distro-packages) ----
 components/distro-packages/confuse/SOURCES/confuse-*.tar.gz
-components/distro-packages/flex/SOURCES/flex-*.tar.gz
 components/distro-packages/ipmiutil/SOURCES/ipmiutil-*.tar.gz
 components/distro-packages/python-Cython/SOURCES/?ython-*.tar.gz
 components/distro-packages/python-setuptools/SOURCES/setuptools-*.tar.gz

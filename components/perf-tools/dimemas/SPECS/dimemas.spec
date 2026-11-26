@@ -28,14 +28,8 @@ Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison make
-%if 0%{?rhel} || 0%{?openEuler}
 BuildRequires: flex-devel
 BuildRequires: flex
-%endif
-%if 0%{?suse_version}
-BuildRequires: libfl-devel
-BuildRequires: flex%{PROJ_DELIM}
-%endif
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
@@ -65,10 +59,6 @@ module load boost
 
 #./bootstrap
 
-%if 0%{?suse_version}
-module load flex
-export LDFLAGS="-L$FLEX_LIB"
-%endif
 # Silence warnings from dimemas' own source; these should really be
 # fixed upstream rather than papered over here.
 export CFLAGS="${CFLAGS} -Wno-implicit-int"
