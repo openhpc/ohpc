@@ -7,6 +7,9 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+# cubew and cubelib are released together and are kept at the same version.
+# cubelib stays at 4.9, because Score-P 10.1 does not build with cubelib 4.10.
+# OpenHPC:check-updates:version-pin 4.9
 
 # Build that is dependent on compiler toolchains
 %define ohpc_compiler_dependent 1
@@ -17,7 +20,7 @@
 
 Summary:        CUBE Uniform Behavioral Encoding generic presentation writer component
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        4.10
+Version:        4.9.1
 Release:        1%{?dist}
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/io-libs

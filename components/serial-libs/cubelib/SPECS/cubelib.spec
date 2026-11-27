@@ -7,6 +7,10 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+# Score-P 10.1 requires the library interface of cubelib 4.9. cubelib 4.10
+# has a new library interface and a new soname, and the configure script of
+# Score-P 10.1 rejects it.
+# OpenHPC:check-updates:version-pin 4.9
 
 # Build that is dependent on compiler toolchains
 %define ohpc_compiler_dependent 1
@@ -17,14 +21,13 @@
 
 Summary:        CUBE Uniform Behavioral Encoding generic presentation library component
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        4.10
+Version:        4.9.1
 Release:        1%{?dist}
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 URL:            http://www.scalasca.org/software/cube-4.x/download.html
 Source0:        https://perftools.pages.jsc.fz-juelich.de/cicd/cubelib/tags/cubelib-%{version}/cubelib-%{version}.tar.gz
-Patch0:         cubelib-skip-json-diff.patch
-Patch1:         cubelib-dump-shift-by-64.patch
+Patch0:         cubelib-dump-shift-by-64.patch
 BuildRequires:  chrpath
 BuildRequires:  file
 BuildRequires:  gcc-c++
@@ -54,18 +57,7 @@ the profiling infrastructure.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch -P1 -p1
-
-# The cube_dump self-test compares the JSON output of cube_dump with a file
-# that was generated with GCC on x86_64. The comparison fails with the Intel
-# compilers, because some values differ in the last digit. The comparison
-# has never run on ppc64le.
-%ifarch ppc64le
 %patch -P0 -p1
-%endif
-%if "%{compiler_family}" == "intel"
-%patch -P0 -p1
-%endif
 
 %build
 
