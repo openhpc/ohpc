@@ -19,7 +19,7 @@
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2021.11
+Version:   2021.12
 Release:   1%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
