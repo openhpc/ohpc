@@ -23,6 +23,8 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 URL:            http://www.scalasca.org/software/cube-4.x/download.html
 Source0:        https://perftools.pages.jsc.fz-juelich.de/cicd/cubelib/tags/cubelib-%{version}/cubelib-%{version}.tar.gz
+Patch0:         cubelib-skip-json-diff.patch
+Patch1:         cubelib-dump-shift-by-64.patch
 BuildRequires:  chrpath
 BuildRequires:  file
 BuildRequires:  gcc-c++
@@ -52,6 +54,18 @@ the profiling infrastructure.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch -P1 -p1
+
+# The cube_dump self-test compares the JSON output of cube_dump with a file
+# that was generated with GCC on x86_64. The comparison fails with the Intel
+# compilers, because some values differ in the last digit. The comparison
+# has never run on ppc64le.
+%ifarch ppc64le
+%patch -P0 -p1
+%endif
+%if "%{compiler_family}" == "intel"
+%patch -P0 -p1
+%endif
 
 %build
 
@@ -87,7 +101,12 @@ make %{?_smp_mflags} V=1
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-make check
+# The output of "make check" names a failed test and not the reason.
+# test-suite.log contains the output of the failed test.
+if ! make check; then
+    find . -name test-suite.log -exec cat {} +
+    exit 1
+fi
 
 %install
 

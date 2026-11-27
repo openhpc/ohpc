@@ -1,0 +1,30 @@
+is_bit_set() and set_bit() shift a 64-bit value by "64 - bit". For bit 0
+that is a shift by 64, which is undefined behavior in C++. x86_64 and
+aarch64 use only the lower 6 bits of the shift count, so the shift by 64
+is a shift by 0. ppc64le shifts all bits out and the result is 0.
+is_bit_set() then returns true for bit 0, and "cube_dump -w calltree"
+prints a "|" in front of every line below the root of the call tree. The
+cube_dump self-test fails on ppc64le because of that.
+
+Shift by "63 - bit", which is in the range 0 to 63 for every bit.
+
+--- a/src/tools/tools/002k.Dump/cube4_dump_Printer.cpp
++++ b/src/tools/tools/002k.Dump/cube4_dump_Printer.cpp
+@@ -137,7 +137,7 @@
+         bits.push_back( 0x0000000000000000ULL );
+     }
+     uint64_t byte     = bits[ bytenum ];
+-    uint64_t testbyte = ( uint64_t )( 0x0000000000000001ULL ) << ( 64 - bit );
++    uint64_t testbyte = ( uint64_t )( 0x0000000000000001ULL ) << ( 63 - bit );
+     return ( testbyte & byte ) == testbyte;
+ }
+ 
+@@ -153,7 +153,7 @@
+     {
+         bits.push_back( 0x0000000000000000ULL );
+     }
+-    uint64_t testbyte = ( uint64_t )( 0x0000000000000001ULL ) << ( 64 - bit );
++    uint64_t testbyte = ( uint64_t )( 0x0000000000000001ULL ) << ( 63 - bit );
+     bits[ bytenum ] = bits[ bytenum ] | testbyte;
+ }
+ 
