@@ -28,7 +28,7 @@ Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:	Graph, mesh and hypergraph partitioning library
 Group:		%{PROJ_NAME}/serial-libs
 %endif
-Version:	7.0.17
+Version:	7.0.18
 Release:	1%{?dist}
 License:	CeCILL-C
 URL:		https://gitlab.inria.fr/scotch/scotch
@@ -91,15 +91,6 @@ cmake -S . -B build \
     -DIDXSIZE=64 \
     -DSCOTCH_DETERMINISTIC=FIXED_SEED
 
-# The rule that generates parser_ll.c depends on parser_ly.h. CMake therefore
-# adds the rule that generates parser_yy.c and parser_ly.h to the parser_ll_c
-# target as well as to the parser_yy_c target. No dependency orders
-# parser_ll_c after parser_yy_c, so a parallel build can run the parser_yy.c
-# rule twice at the same time. With Bison older than 3.8.2, the rule runs
-# "cmake -E copy" on the files in src/libscotch/last_resort. One of the two
-# copy commands can then fail with "No such file or directory". Build
-# parser_yy_c first, so that the rule runs once.
-cmake --build build --target parser_yy_c
 cmake --build build %{?_smp_mflags}
 
 %install
