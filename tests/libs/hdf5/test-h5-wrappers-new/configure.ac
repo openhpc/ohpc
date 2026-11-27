@@ -115,6 +115,13 @@ if test "$rem" != "0";then
 fi
 H5_LIBVER_DIR=${H5_MAJORVER}${H5_MINORVER}
 
+# The testfiles directories contain one set of reference files for HDF5 2.x,
+# in the directory "22". Without this, HDF5 2.3 selects the directory "24",
+# which does not exist, and every comparison fails.
+if test "$H5_MAJORVER" = "2"; then
+ H5_LIBVER_DIR=22
+fi
+
 # Test whether one version ($1) is greater than or equal to other ($2).
 function version_gt {
     test "`printf '%s\n' "$@" | sort -V | head -n 1`" != "$1";
