@@ -16,7 +16,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   9.4.5
+Version:   9.5
 Release:   %{?dist}.1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
@@ -58,6 +58,7 @@ Requires(postun): %{_sbindir}/update-alternatives
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
+Patch3: lmod-symlink-lstat.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
 
@@ -85,6 +86,9 @@ sed -i -e '/^#!/d' init/*.in
 # OpenHPC patches
 %patch -P 1 -p1
 %patch -P 2 -p1
+# Lmod 9.5 does not resolve a symbolic link to one of its commands, and
+# /usr/bin/modulecmd fails. https://github.com/TACC/Lmod/issues/872
+%patch -P 3 -p1
 
 %build
 unset MODULEPATH
