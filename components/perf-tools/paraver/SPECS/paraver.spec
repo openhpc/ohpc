@@ -16,7 +16,7 @@
 
 Summary:       Paraver
 Name:          %{pname}%{PROJ_DELIM}
-Version:       4.12.0
+Version:       4.13.2
 Release:       1%{?dist}
 License:       LGPL-2.1
 Group:         %{PROJ_NAME}/perf-tools
