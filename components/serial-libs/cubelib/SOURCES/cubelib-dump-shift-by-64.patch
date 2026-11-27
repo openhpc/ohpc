@@ -4,7 +4,7 @@ aarch64 use only the lower 6 bits of the shift count, so the shift by 64
 is a shift by 0. ppc64le shifts all bits out and the result is 0.
 is_bit_set() then returns true for bit 0, and "cube_dump -w calltree"
 prints a "|" in front of every line below the root of the call tree. The
-cube_dump self-test fails on ppc64le because of that.
+cube_dump self-test of cubelib 4.10 fails on ppc64le because of that.
 
 Shift by "63 - bit", which is in the range 0 to 63 for every bit.
 
