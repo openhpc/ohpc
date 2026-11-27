@@ -69,12 +69,15 @@ yq -i '.nodes[] |= (.groups += ["ipoib-" + .name])' \
 
 Now use the generated file to populate the SMD database.
 
-<!-- ohpc_begin -->
-<!-- ohpc_comment Passing ochami the nodes -->
 ```bash
 ochami discover static \
 	-f yaml -d @/opt/ohpc/admin/nodes/nodes.yaml
 ```
+
+<!-- ohpc_begin -->
+<!-- ohpc_comment Passing ochami the nodes -->
+<!-- ohpc_command # FIXME: discover static exits 1 on a 409 for each BMC although every record is written (upstream issue to come) -->
+<!-- ohpc_command ochami discover static -f yaml -d @/opt/ohpc/admin/nodes/nodes.yaml || true -->
 <!-- ohpc_end -->
 
 `ochami discover static` populates SMD components, EthernetInterfaces (under the correct

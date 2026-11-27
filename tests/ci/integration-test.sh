@@ -462,23 +462,29 @@ dump_diagnostics() {
 	echo "=== containers ==="
 	podman ps -a || true
 
-	# The cloud-init server resolves a node by the source address of its
+	# The metadata-service resolves a node by the source address of its
 	# request, which haproxy passes on in X-Forwarded-For. Ask it the same
-	# question each compute node asks, so a 422 here names the node the
-	# server cannot resolve. Ask the server directly: haproxy replaces
-	# X-Forwarded-For with the address the request came from.
-	cloud_init_ip=$(podman inspect --format \
+	# question each compute node asks, so the instance-id here shows which
+	# node the server took the request for. Ask the server directly:
+	# haproxy replaces X-Forwarded-For with the address the request came
+	# from. The boot-service's answer for each node's MAC is the iPXE
+	# script the node got.
+	metadata_ip=$(podman inspect --format \
 		'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \
-		cloud-init-server 2>/dev/null) || true
+		metadata-service 2>/dev/null) || true
 	for ((i = 0; i < num_computes; i++)); do
-		echo "=== cloud-init meta-data as ${c_name[${i}]} ==="
-		curl -sS -m 5 -o /dev/null -w '%{http_code}\n' \
+		echo "=== metadata-service meta-data as ${c_name[${i}]} ==="
+		curl -sS -m 5 --noproxy '*' \
 			-H "X-Forwarded-For: ${c_ip[${i}]}" \
-			"http://${cloud_init_ip}:27777/meta-data" ||
+			"http://${metadata_ip}:8080/meta-data" |
+			grep '^instance-id:' || true
+		echo "=== boot-service bootscript for ${c_name[${i}]} ==="
+		curl -sS -m 5 --noproxy '*' \
+			"http://127.0.0.1:8081/boot-service/bootscript?mac=${c_mac[${i}]}" ||
 			true
 	done
 
-	for container in cloud-init-server smd bss haproxy; do
+	for container in metadata-service boot-service smd haproxy; do
 		echo "=== podman logs ${container} ==="
 		podman logs --tail 200 "${container}" 2>&1 || true
 	done

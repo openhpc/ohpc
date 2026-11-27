@@ -1,7 +1,7 @@
 ## Setting Boot Parameters
 
-Boot Script Service (BSS) is what provides the path to vmlinuz and the initrd,
-and provides the kernel parameters to the node during iPXE.
+The boot service (`boot-service`) is what provides the path to vmlinuz and the
+initrd, and provides the kernel parameters to the node during iPXE.
 
 First check that the boot images are available.
 <!-- ohpc_begin -->
@@ -11,29 +11,31 @@ s3cmd ls -Hr s3://boot-images/
 ```
 <!-- ohpc_end -->
 
-Get some data from our images to create our BSS payload.
+Get some data from our images to create our boot-service payload.
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment Get info from image to use for BSS -->
+<!-- ohpc_comment Get info from image to use for boot-service -->
 ```bash
 export s3Output=$(s3cmd ls -Hr s3://boot-images/)
 export os=$(echo "$s3Output" | awk '{print $4}' | grep 'boot-images/compute')
 export ramfs=$(echo "$s3Output" | awk '{print $4}' | grep 'initram')
 export hdrs=$(echo "$s3Output" | awk '{print $4}' | grep 'vmlinuz')
-export params="ds=nocloud-net;s=http://${sms_ip}:8081/cloud-init/ \
+export params="ds=nocloud-net;s=http://${sms_ip}:8081/metadata-service/ \
 nomodeset ro root=live:http://${sms_ip}:9000/${os:5} ip=dhcp \
 overlayroot=tmpfs overlayroot_cfgdisk=disabled apparmor=0 selinux=0 \
 console=ttyS0,115200 ip6=off cloud-init=enabled"
 ```
 <!-- ohpc_end -->
 
-Create a YAML payload for BSS.
+Create a YAML payload for boot-service. A boot configuration carries a `name`,
+and the kernel, initrd, params and the MACs it applies to.
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment Define the BSS payload -->
+<!-- ohpc_comment Define the boot-service payload -->
 ```bash
 mkdir -p /opt/ohpc/admin/nodes
 cat > /opt/ohpc/admin/nodes/compute-boot.yaml <<EOF
+name: compute
 kernel: 'http://${sms_ip}:9000/${hdrs:5}'
 initrd: 'http://${sms_ip}:9000/${ramfs:5}'
 params: '${params}'
@@ -49,9 +51,9 @@ done
 And then finally upload our payload.
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment Upload the BSS payload -->
+<!-- ohpc_comment Upload the boot-service payload -->
 ```bash
-ochami -k bss boot params set \
+ochami -k boot config add \
 	-f yaml -d @/opt/ohpc/admin/nodes/compute-boot.yaml
 ```
 <!-- ohpc_end -->

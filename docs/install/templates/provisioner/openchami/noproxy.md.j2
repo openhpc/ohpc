@@ -1,26 +1,25 @@
+
 ## Setting no proxy
 
 {{ provisioner_name }} runs its own internal proxy for services which may not
 interact well if you run another httpd server. Here we set the no proxy variable
 to prevent lookups. The list contains the service names as well as the head
 node's own name and address, so that requests to local services never go
-through a site proxy.
+through a site proxy. The setting goes in a profile script, so every new login
+shell on the head node has it too.
 
 <!-- ohpc_begin -->
-<!-- ohpc_comment OpenCHAMI No Proxy Settings -->
+<!-- ohpc_comment OpenCHAMI no proxy settings -->
 ```bash
-export additional_no_proxy="${sms_name},${sms_ip},localhost,127.0.0.1,\
-opaal,opaal-idp,smd,smd-init,hydra,cloud-init,acme-deploy,bss,haproxy,\
-postgres,step-ca,configurator"
-if [ -z "$no_proxy" ]; then
-    export no_proxy="$additional_no_proxy"
-else
-    export no_proxy="$no_proxy,$additional_no_proxy"
-fi
-if [ -z "$NO_PROXY" ]; then
-    export NO_PROXY="$additional_no_proxy"
-else
-    export NO_PROXY="$NO_PROXY,$additional_no_proxy"
-fi
+cat > /etc/profile.d/ohpc-openchami-noproxy.sh <<EOF
+openchami_hosts="${sms_name},${sms_ip},localhost,127.0.0.1,smd,smd-init,\
+boot-service,metadata-service,tokensmith,acme-deploy,acme-register,haproxy,\
+postgres,step-ca,coresmd-coredhcp,coresmd-coredns"
+EOF
+cat >> /etc/profile.d/ohpc-openchami-noproxy.sh <<'EOF'
+export no_proxy="${no_proxy:+${no_proxy},}${openchami_hosts}"
+export NO_PROXY="${NO_PROXY:+${NO_PROXY},}${openchami_hosts}"
+EOF
+. /etc/profile.d/ohpc-openchami-noproxy.sh
 ```
 <!-- ohpc_end -->

@@ -12,36 +12,34 @@ up when the interface appears. Each node joins its group when it is discovered
 for ((i=0; i<num_computes; i++)) ; do
 	gf=/opt/ohpc/admin/cloud-init/ipoib-${c_name[$i]}.yaml
 	cat > "${gf}" <<EOF
-- name: ipoib-${c_name[$i]}
-  description: "IPoIB on ${c_name[$i]}"
-  file:
-    encoding: plain
-    content: |
-      #cloud-config
-      merge_how:
-      - name: list
-        settings: [append]
-      - name: dict
-        settings: [no_replace, recurse_list]
-      write_files:
-        - path: /etc/NetworkManager/system-connections/${ipoib_dev}.nmconnection
-          permissions: '0600'
-          content: |
-            [connection]
-            id=${ipoib_dev}
-            type=infiniband
-            interface-name=${ipoib_dev}
+name: ipoib-${c_name[$i]}
+description: "IPoIB on ${c_name[$i]}"
+template: |
+  #cloud-config
+  merge_how:
+  - name: list
+    settings: [append]
+  - name: dict
+    settings: [no_replace, recurse_list]
+  write_files:
+    - path: /etc/NetworkManager/system-connections/${ipoib_dev}.nmconnection
+      permissions: '0600'
+      content: |
+        [connection]
+        id=${ipoib_dev}
+        type=infiniband
+        interface-name=${ipoib_dev}
 
-            [infiniband]
-            transport-mode=datagram
+        [infiniband]
+        transport-mode=datagram
 
-            [ipv4]
-            method=manual
-            address1=${c_ipoib[$i]}/${ipoib_prefix_length}
-      runcmd:
-        - nmcli connection reload
+        [ipv4]
+        method=manual
+        address1=${c_ipoib[$i]}/${ipoib_prefix_length}
+  runcmd:
+    - nmcli connection reload
 EOF
-	ochami -k cloud-init group set -f yaml -d @"${gf}"
+	ochami -k metadata group add -f yaml -d @"${gf}"
 done
 ```
 <!-- ohpc_fi -->

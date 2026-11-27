@@ -1,7 +1,8 @@
-## Building cloud-init Image
+## Building cloud-init Configuration
 
-{{ provisioner_name }} uses cloud-init for post-boot node configuration. We will
-establish some basic cloud-init configurations here.
+{{ provisioner_name }} serves per-node cloud-init data from its
+`metadata-service`, and the compute nodes run the cloud-init client to consume
+it. We will establish some basic cloud-init configurations here.
 
 ### Create Default Configuration
 
@@ -29,14 +30,14 @@ Now we can define the payload to update the defaults.
 <!-- ohpc_comment Create cloud-init payload -->
 ```bash
 cat > /opt/ohpc/admin/cloud-init/defaults.yaml <<EOF
-base-url: "http://${sms_ip}:8081/cloud-init"
-cluster-name: "CLUSTER"
-nid-length: 1
-public-keys: []
-short-name: "${compute_prefix}"
+base_url: http://${sms_ip}:8081/metadata-service
+cluster_name: CLUSTER
+nid_length: 1
+public_keys: []
+short_name: ${compute_prefix}
 EOF
 for i in /root/.ssh/id*pub; do
-	key=$(cat "$i") yq '.public-keys += [strenv(key)]' \
+	key=$(cat "$i") yq '.public_keys += [strenv(key)]' \
 		-i /opt/ohpc/admin/cloud-init/defaults.yaml
 done
 ```
@@ -47,15 +48,15 @@ And then finally upload our payload.
 <!-- ohpc_begin -->
 <!-- ohpc_comment Upload the cloud-init defaults -->
 ```bash
-ochami -k cloud-init defaults set \
+ochami -k metadata defaults add \
 	-f yaml -d @/opt/ohpc/admin/cloud-init/defaults.yaml
 ```
 <!-- ohpc_end -->
 
 ### Configure Munge
 
-OpenCHAMI provides a cloud-init server that can be used, in conjunction with the
-cloud-init client, to provide post-boot configurations. The configuration below
+OpenCHAMI's `metadata-service` can be used, in conjunction with the cloud-init
+client, to provide post-boot configurations. The configuration below
 is a minimal configuration that should at least let the root user login using
 the public key and distribute the munge key file to all compute nodes.
 
@@ -74,45 +75,47 @@ if [[ ${enable_ipoib} -eq 1 ]]; then
 	sms_addrs="${sms_addrs}, ${sms_ipoib}"
 fi
 cat > /opt/ohpc/admin/cloud-init/compute.yaml <<EOF
-- name: compute
-  description: "compute template"
-  file:
-    encoding: plain
-    content: |
-      ## template: jinja
-      #cloud-config
-      merge_how:
-      - name: list
-        settings: [append]
-      - name: dict
-        settings: [no_replace, recurse_list]
-      users:
-        - name: root
-          ssh_authorized_keys: {%raw%}{{ ds.meta_data.instance_data.v1.public_keys }}{%endraw%}
-      bootcmd:
-        - nft add table inet ohpc
-        - nft 'add chain inet ohpc output { type filter hook output priority 0 ; }'
-        - >-
-          nft 'add rule inet ohpc output ip daddr { ${sms_addrs} }
-          tcp dport { 8081, 8443 } meta skuid != 0 reject'
-      write_files:
-        - content: ${munge_key}
-          path: /etc/munge/munge.key
-          permissions: '0400'
-          owner: munge:munge
-          encoding: base64
-      runcmd:
-        - systemctl restart munge.service
+name: compute
+description: compute template
+template: |
+  ## template: jinja
+  #cloud-config
+  merge_how:
+  - name: list
+    settings: [append]
+  - name: dict
+    settings: [no_replace, recurse_list]
+  users:
+    - name: root
+      ssh_authorized_keys: {% raw %}{{ ds.meta_data.instance_data.v1.public_keys }}{% endraw %}
+  bootcmd:
+    - |
+      nft -f - <<'NFT'
+      table inet ohpc {
+        chain output {
+          type filter hook output priority 0;
+          ip daddr { ${sms_addrs} } tcp dport { 8081, 8443 } meta skuid != 0 reject
+        }
+      }
+      NFT
+  write_files:
+    - content: ${munge_key}
+      path: /etc/munge/munge.key
+      permissions: '0400'
+      owner: munge:munge
+      encoding: base64
+  runcmd:
+    - systemctl restart munge.service
 EOF
 ```
 <!-- ohpc_end -->
 
-Once you are done updating cloud-init you can post the file to the cloud-init
-server.
+Once you are done updating the group you can post the file to the
+`metadata-service`.
 
 <!-- ohpc_begin -->
 ```bash
-ochami -k cloud-init group set \
+ochami -k metadata group add \
 	-f yaml -d @/opt/ohpc/admin/cloud-init/compute.yaml
 ```
 <!-- ohpc_end -->

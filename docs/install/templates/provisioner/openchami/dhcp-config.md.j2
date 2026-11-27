@@ -19,8 +19,12 @@ server4:
     - router: ${ipv4_gateway}
     - dns: ${dns_servers}
     - netmask: ${internal_netmask}
-    - coresmd: https://${sms_name}:8443 http://${sms_ip}:8081 \
-/root_ca/root_ca.crt 30s 1h false
+    - coresmd: |
+        svc_base_uri=https://${sms_name}:8443
+        ipxe_uri=http://${sms_ip}:8081/boot-service/bootscript
+        ca_cert=/root_ca/root_ca.crt
+        cache_valid=30s
+        lease_time=1h
 EOF
 ```
 <!-- ohpc_end -->
