@@ -10,7 +10,7 @@ any `cc_*` module warning produces, and lets the node through.
 ```bash
 pdsh -S -w "${compute_prefix}[1-${num_computes}]" \
 	'cloud-init status >/dev/null; rc=$?; [ $rc -eq 0 ] || [ $rc -eq 2 ]' \
-	|| { echo "cloud-init: FAILED; check podman logs cloud-init-server"; exit 1; }
+	|| { echo "cloud-init: FAILED; check podman logs metadata-service"; exit 1; }
 ```
 <!-- ohpc_end -->
 
