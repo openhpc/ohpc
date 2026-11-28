@@ -10,4 +10,4 @@ openchami_version: "0.2.1"
 # OpenHPC:check-updates:source https://github.com/OpenCHAMI/ochami/releases
 ochami_version: "0.10.4"
 # OpenHPC:check-updates:source https://github.com/seaweedfs/seaweedfs/releases
-seaweedfs_version: "4.50"
+seaweedfs_version: "4.55"
