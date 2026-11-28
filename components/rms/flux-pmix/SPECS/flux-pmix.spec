@@ -13,7 +13,7 @@
 
 Summary:	PMIx support for the Flux resource manager
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.7.1
+Version:	0.9.0
 Release:	2%{?dist}
 License:	LGPL-3.0
 Group:		%{PROJ_NAME}/rms
@@ -36,17 +36,20 @@ Source0:	https://github.com/flux-framework/flux-pmix/releases/download/v%{versio
 # either one. Filter that bare auto-Requires out; the explicit
 # "Requires: pmix-ohpc" below, an RPM name rather than a soname, is
 # unambiguous and is meant to be the only way this dependency is
-# expressed.
-%global __requires_exclude ^libpmix\\.so.*$
+# expressed. The same applies to libhwloc.so.15, which the base
+# distro's hwloc-libs package also provides.
+%global __requires_exclude ^lib(pmix|hwloc)\\.so.*$
 
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig
 BuildRequires:	jansson-devel
 BuildRequires:	pmix-ohpc
+BuildRequires:	hwloc-ohpc
 BuildRequires:	flux-core-ohpc
 
 Requires:	pmix-ohpc
+Requires:	hwloc-ohpc
 Requires:	flux-core-ohpc
 
 #!BuildIgnore: post-build-checks
@@ -73,8 +76,10 @@ the plugin is requested per job with "flux run -o pmi=pmix ...".
 # first so a build host's sticky default module collection (e.g. from
 # modules-defaults-*-ohpc) can't silently swap in one of those instead.
 module purge
-module load pmix
-export PKG_CONFIG_PATH="${PMIX_LIB}/pkgconfig:${PKG_CONFIG_PATH}"
+module load pmix hwloc
+# The pmix and hwloc modules do not set PKG_CONFIG_PATH. Without the
+# hwloc directory, configure fails with "Package 'hwloc' ... not found".
+export PKG_CONFIG_PATH="${PMIX_LIB}/pkgconfig:${HWLOC_LIB}/pkgconfig:${PKG_CONFIG_PATH}"
 
 # Filtering the auto-Requires above only affects package-level
 # dependency resolution; without this, the dynamic linker itself
@@ -83,7 +88,7 @@ export PKG_CONFIG_PATH="${PMIX_LIB}/pkgconfig:${PKG_CONFIG_PATH}"
 # e.g. if something else on the system pulls the distro package in.
 # An explicit RPATH makes the actual loaded library unambiguous too,
 # regardless of what else happens to be installed.
-export LDFLAGS="${LDFLAGS} -Wl,-rpath,${PMIX_LIB}"
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,${PMIX_LIB} -Wl,-rpath,${HWLOC_LIB}"
 
 %configure --without-openmpi
 %{__make} %{?_smp_mflags} CFLAGS="%{optflags} -Wno-error=strict-aliasing"
@@ -93,7 +98,14 @@ export LDFLAGS="${LDFLAGS} -Wl,-rpath,${PMIX_LIB}"
 
 find %{buildroot} -name '*.la' -delete
 
+# flux-pmix installs a Wireshark dissector for the PMIx wire protocol.
+# It is a debugging aid for developers, and its directory belongs to the
+# wireshark package, which this package does not require.
+rm -r %{buildroot}%{_libdir}/wireshark
+
 %files
 %{_libdir}/flux
+%{_libexecdir}/flux-pmix
+%{_mandir}/man7/flux-shell-pmix.7*
 %doc README.md NEWS.md
 %license LICENSE
