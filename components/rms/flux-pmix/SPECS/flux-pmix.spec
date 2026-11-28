@@ -44,6 +44,8 @@ BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig
 BuildRequires:	jansson-devel
+BuildRequires:	python3-sphinx
+BuildRequires:	python3-docutils
 BuildRequires:	pmix-ohpc
 BuildRequires:	hwloc-ohpc
 BuildRequires:	flux-core-ohpc
@@ -90,7 +92,10 @@ export PKG_CONFIG_PATH="${PMIX_LIB}/pkgconfig:${HWLOC_LIB}/pkgconfig:${PKG_CONFI
 # regardless of what else happens to be installed.
 export LDFLAGS="${LDFLAGS} -Wl,-rpath,${PMIX_LIB} -Wl,-rpath,${HWLOC_LIB}"
 
-%configure --without-openmpi
+# configure skips the man page without an error when sphinx or docutils
+# is missing, and the %%files list then names a file that does not exist.
+# With --enable-docs configure fails instead.
+%configure --without-openmpi --enable-docs
 %{__make} %{?_smp_mflags} CFLAGS="%{optflags} -Wno-error=strict-aliasing"
 
 %install
