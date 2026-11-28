@@ -13,7 +13,7 @@
 
 Summary:	Fluxion graph-based scheduler for the Flux resource manager
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.55.0
+Version:	0.57.0
 Release:	1%{?dist}
 License:	LGPL-3.0
 Group:		%{PROJ_NAME}/rms
