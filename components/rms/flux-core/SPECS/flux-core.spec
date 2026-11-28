@@ -13,7 +13,7 @@
 
 Summary:	Core components of the Flux resource manager framework
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.89.0
+Version:	0.91.0
 Release:	1%{?dist}
 License:	LGPL-3.0
 Group:		%{PROJ_NAME}/rms
