@@ -55,6 +55,10 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %setup -q -n %{pname}-%{version}
 
 %build
+# libpmix.so links libhwloc.so of hwloc-ohpc, which is outside the default
+# library search path. Without the rpath, a program that loads libpmix.so
+# finds libhwloc.so only when the hwloc module is loaded.
+export LDFLAGS="${LDFLAGS} -Wl,-rpath,%{OHPC_LIBS}/hwloc/lib"
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path} \
              --with-hwloc=%{OHPC_LIBS}/hwloc || { cat config.log && exit 1; }
 %{__make} %{?_smp_mflags}
